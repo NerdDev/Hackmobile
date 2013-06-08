@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>10.0.20506</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{DC7C9B63-E6EC-339C-7E81-046469D44C7F}</ProjectGuid>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace></RootNamespace>
+	<AssemblyName>Assembly-UnityScript</AssemblyName>
+	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>Temp\bin\Debug\</OutputPath>
+	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_1_3;UNITY_4_1;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<OutputPath>Temp\bin\Release\</OutputPath>
+	<DefineConstants>TRACE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+    <Reference Include="System.XML" />
+	<Reference Include="System.Core" />
+	<Reference Include="UnityEngine">
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	</Reference>
+	<Reference Include="UnityEditor">
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter1\DemoCharacter1_Script.js" />
+     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter2\DemoCharacter2_Script.js" />
+     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter3\DemoCharacter3_Script.js" />
+     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter4\DemoCharacter4_Script.js" />
+     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter5\DemoCharacter5_Script.js" />
+     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter6\DemoCharacter6_Script.js" />
+     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoScript.js" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\dynamon animations.txt" />
+     <None Include="Assets\AudioToolkit\Readme.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 3 animations.txt" />
+     <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc3 female animations.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc2 scholar animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\Arteria3d cartoon fantasy pack 1 README.txt" />
+     <None Include="Assets\Frogames_Warriors_&amp;_Commoners\ReadMe.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 1 animations.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc1 baker animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 2 animations.txt" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutlineHard.shader" />
+     <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\peasant animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 4 animations.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\gigon animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 5 animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\ogre 1 animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc5 blacksmith animations.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
+     <None Include="Assets\TransitionsManager\ReadMe.txt" />
+     <None Include="Assets\iTweenEditor\README.txt" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimLight.shader" />
+     <None Include="Assets\NGUI\ReadMe - 2.0.3d.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (HardClip).shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
+     <None Include="Assets\NGUI\Examples\Other\English.txt" />
+     <None Include="Assets\NGUI\Examples\Other\French.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 1 animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\ogre 2 animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc4 knight animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 3 animations.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimAlpha.shader" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2 animations.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
+     <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutline.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch.shader" />
+     <None Include="Assets\IMPORT\Fantasy Weapons\knife1\knife1.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\guard animations.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
+     <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\Priest animations.txt" />
+     <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2_&amp;_santa_animations.txt" />
+ <Reference Include="AudioToolkit_FreeVersion">
+ <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>
