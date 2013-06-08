@@ -1,0 +1,12 @@
+Gigon Animations
+
+Idle          = 0,155
+Walk          = 156,196
+Death         = 209,284
+Provoke       = 286,546
+Attack        = 547,600
+Attack run    = 601,624 
+
+
+
+

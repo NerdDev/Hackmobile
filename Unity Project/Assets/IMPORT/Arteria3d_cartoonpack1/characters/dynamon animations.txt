@@ -1,0 +1,10 @@
+
+Dynomon Animations
+
+
+Idle         = 460,1105
+Walk         = 0,20
+attack       = 21,459
+death        = 1106,1120
+
+

@@ -1,0 +1,8 @@
+NPC4 Knigt animations
+
+
+Idle       = 68,198
+Walk       = 199,236 
+Attack     = 368,400
+Death      = 236,312
+

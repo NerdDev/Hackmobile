@@ -1,0 +1,8 @@
+Ogre 1 animations
+
+
+Idle        = 0,647
+Walk        = 737,776
+Attack      = 341,366
+Death       = 648,723
+

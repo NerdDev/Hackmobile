@@ -1,0 +1,8 @@
+Monster 1 Animations
+
+
+idle         = 111,240
+Walk         = 316,354 
+Attack       = 355,415
+Death        = 0,80
+

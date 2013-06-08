@@ -1,0 +1,15 @@
+# Wavefront MTL file
+# Creator: Ultimate Unwrap3D Pro v3.10
+# Time: Sun Nov 30 15:54:31 2008
+# num_materials: 1
+
+newmtl twnhose
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+d 1.000000
+illum 2
+Ns 1.000000
+map_Kd twnhouse.jpg
+
+# num_materials: 1

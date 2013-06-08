@@ -1,0 +1,8 @@
+Peasant animations
+
+
+Idle        = 111,240
+Walk        = 316,354 
+Attack      = 355,416
+Death       = 0,80
+

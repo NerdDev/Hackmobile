@@ -1,0 +1,10 @@
+Monster 2 animations
+
+
+
+Idle        = 0,49
+Walk        = 50,71 
+Attack      = 121,184
+Death       = 73,119
+
+

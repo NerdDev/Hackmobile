@@ -1,0 +1,9 @@
+Monster 4 animations
+
+
+Idle          = 111,240
+Walk          = 316,354 
+Attack        = 355,415
+Death         = 0,80
+
+

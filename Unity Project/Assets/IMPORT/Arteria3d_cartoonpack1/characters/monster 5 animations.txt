@@ -1,0 +1,10 @@
+Monster 5 animations
+
+
+
+Idle        = 23,56
+Walk        = 0,22 
+Attack      = 57,136
+Death       = 137,184
+
+

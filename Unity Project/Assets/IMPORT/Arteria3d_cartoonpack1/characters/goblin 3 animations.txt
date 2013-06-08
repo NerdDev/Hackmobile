@@ -1,0 +1,11 @@
+Goblin 3 animations
+
+
+
+
+Idle        = 0,127
+Walk        = 128,164 
+Attack      = 165,224
+Death       = 225,303
+
+

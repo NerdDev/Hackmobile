@@ -1,0 +1,8 @@
+Priest Animations
+
+
+Idle         = 0,129
+Walk         = 131,167 
+attack       = 168,234
+Death        = 230,303
+
