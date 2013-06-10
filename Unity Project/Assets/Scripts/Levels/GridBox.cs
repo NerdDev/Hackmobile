@@ -16,5 +16,10 @@ public class GridBox : MonoBehaviour {
 	void Start () {
 	
 	}
+
+    public GridType getGridType()
+    {
+        return prototype.type;
+    }
 	
 }
