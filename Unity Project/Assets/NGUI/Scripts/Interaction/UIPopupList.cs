@@ -12,6 +12,7 @@ using System.Collections.Generic;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Popup List")]
+#pragma warning disable 0618
 public class UIPopupList : MonoBehaviour
 {
 	const float animSpeed = 0.15f;
@@ -565,3 +566,4 @@ public class UIPopupList : MonoBehaviour
 		else OnSelect(false);
 	}
 }
+#pragma warning restore 0618

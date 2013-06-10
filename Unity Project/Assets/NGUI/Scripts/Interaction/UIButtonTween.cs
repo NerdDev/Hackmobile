@@ -11,6 +11,7 @@ using AnimationOrTween;
 /// </summary>
 
 [AddComponentMenu("NGUI/Interaction/Button Tween")]
+#pragma warning disable 0618
 public class UIButtonTween : MonoBehaviour
 {
 	public GameObject tweenTarget;
@@ -149,3 +150,4 @@ public class UIButtonTween : MonoBehaviour
 		}
 	}
 }
+#pragma warning restore 0618

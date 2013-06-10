@@ -10,6 +10,7 @@ using UnityEngine;
 /// </summary>
 
 [AddComponentMenu("NGUI/UI/Input (Basic)")]
+#pragma warning disable 0618
 public class UIInput : MonoBehaviour
 {
 	static public UIInput current;
@@ -282,3 +283,4 @@ public class UIInput : MonoBehaviour
 		}
 	}
 }
+#pragma warning restore 0618

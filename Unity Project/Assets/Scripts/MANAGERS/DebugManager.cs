@@ -19,10 +19,8 @@ public class DebugManager : MonoBehaviour {
     static string debugFolder = @"Debug Logs\";
     static string depthStrExtra = "  ";
     static string depthStr = "|   ";
-    static string headerStrTop = @"/=================================================\";
     static string headerStrMid = @"/=============  ";
     static string headerStrMid2 = @"  =============\";
-    static string headerStrBot = @"|=================================================/";
     static string headerStrFoot = @"\=================================================/";
 
     // Global Debug Flags

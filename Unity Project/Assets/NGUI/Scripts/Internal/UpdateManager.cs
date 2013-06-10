@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Internal/Update Manager")]
+#pragma warning disable 0618
 public class UpdateManager : MonoBehaviour
 {
 	public delegate void OnUpdate (float delta);
@@ -256,3 +257,4 @@ public class UpdateManager : MonoBehaviour
 		else DestroyImmediate(obj);
 	}
 }
+#pragma warning restore 0618

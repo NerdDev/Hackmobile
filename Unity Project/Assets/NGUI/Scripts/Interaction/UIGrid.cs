@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Grid")]
+#pragma warning disable 0618
 public class UIGrid : MonoBehaviour
 {
 	public enum Arrangement
@@ -99,3 +100,4 @@ public class UIGrid : MonoBehaviour
 		if (drag != null) drag.UpdateScrollbars(true);
 	}
 }
+#pragma warning restore 0618

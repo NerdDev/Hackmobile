@@ -11,6 +11,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Scroll Bar")]
+#pragma warning disable 0618
 public class UIScrollBar : MonoBehaviour
 {
 	public enum Direction
@@ -172,14 +173,14 @@ public class UIScrollBar : MonoBehaviour
 		{
 			if (mFG != null)
 			{
-				mFG.alpha = value;
+                mFG.alpha = value;
 				mFG.gameObject.active = mFG.alpha > 0.001f;
 			}
 
 			if (mBG != null)
 			{
 				mBG.alpha = value;
-				mBG.gameObject.active = mBG.alpha > 0.001f;
+                mBG.gameObject.active = mBG.alpha > 0.001f;
 			}
 		}
 	}
@@ -353,3 +354,4 @@ public class UIScrollBar : MonoBehaviour
 		}
 	}
 }
+#pragma warning restore 0618

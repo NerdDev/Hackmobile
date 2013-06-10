@@ -10,6 +10,7 @@ using UnityEngine;
 /// </summary>
 
 [AddComponentMenu("NGUI/Interaction/Button Message")]
+#pragma warning disable 0618
 public class UIButtonMessage : MonoBehaviour
 {
 	public enum Trigger
@@ -91,3 +92,4 @@ public class UIButtonMessage : MonoBehaviour
 		}
 	}
 }
+#pragma warning restore 0618

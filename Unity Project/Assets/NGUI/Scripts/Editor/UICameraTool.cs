@@ -181,8 +181,10 @@ public class UICameraTool : EditorWindow
 		if (cam != null) NGUIEditorTools.HighlightLine(new Color(0.6f, 0.6f, 0.6f));
 
 		GUILayout.BeginHorizontal();
-		{
-			bool enabled = (cam == null || (cam.gameObject.active && cam.enabled));
+        {
+            #pragma warning disable 0618
+            bool enabled = (cam == null || (cam.gameObject.active && cam.enabled));
+            #pragma warning restore 0618
 
 			GUI.color = Color.white;
 

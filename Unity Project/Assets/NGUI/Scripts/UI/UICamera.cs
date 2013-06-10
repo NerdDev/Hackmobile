@@ -27,6 +27,7 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/UI/Camera")]
 [RequireComponent(typeof(Camera))]
+#pragma warning disable 0618
 public class UICamera : MonoBehaviour
 {
 	/// <summary>
@@ -907,3 +908,4 @@ public class UICamera : MonoBehaviour
 		if (!val) mTooltip = null;
 	}
 }
+#pragma warning restore 0618

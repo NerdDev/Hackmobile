@@ -12,6 +12,7 @@ using System.Collections;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Drag Panel Contents")]
+#pragma warning disable 0618
 public class UIDragPanelContents : MonoBehaviour
 {
 	/// <summary>
@@ -93,3 +94,4 @@ public class UIDragPanelContents : MonoBehaviour
 		}
 	}
 }
+#pragma warning disable 0618

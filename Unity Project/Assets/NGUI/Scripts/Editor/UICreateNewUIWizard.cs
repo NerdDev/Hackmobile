@@ -110,10 +110,12 @@ public class UICreateNewUIWizard : EditorWindow
 				// Automatically exclude the specified layer mask from the camera if it can see more than that layer
 				if (layer != 0 && c.cullingMask != mask) c.cullingMask = (c.cullingMask & (~mask));
 
-				// Only consider this object if it's active
-				if (c.enabled && c.gameObject.active) clearColor = false;
+                // Only consider this object if it's active
+                #pragma warning disable 0618
+                if (c.enabled && c.gameObject.active) clearColor = false;
+                #pragma warning restore 0618
 
-				// If this camera has an audio listener, we won't need to add one
+                // If this camera has an audio listener, we won't need to add one
 				if (c.GetComponent<AudioListener>() != null) audioListener = false;
 			}
 

@@ -12,6 +12,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 [RequireComponent(typeof(UIPanel))]
 [AddComponentMenu("NGUI/Interaction/Draggable Panel")]
+#pragma warning disable 0618
 public class UIDraggablePanel : IgnoreTimeScale
 {
 	public enum DragEffect
@@ -643,3 +644,4 @@ public class UIDraggablePanel : IgnoreTimeScale
 	}
 #endif
 }
+#pragma warning restore 0618

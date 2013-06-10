@@ -14,6 +14,7 @@ using System.Collections.Generic;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Table")]
+#pragma warning disable 0618
 public class UITable : MonoBehaviour
 {
 	public int columns = 0;
@@ -153,3 +154,4 @@ public class UITable : MonoBehaviour
 		}
 	}
 }
+#pragma warning restore 0618

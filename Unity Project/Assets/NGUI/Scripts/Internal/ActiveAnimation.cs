@@ -13,6 +13,7 @@ using AnimationOrTween;
 
 [RequireComponent(typeof(Animation))]
 [AddComponentMenu("NGUI/Internal/Active Animation")]
+#pragma warning disable 0618
 public class ActiveAnimation : IgnoreTimeScale
 {
 	/// <summary>
@@ -185,3 +186,4 @@ public class ActiveAnimation : IgnoreTimeScale
 		return Play(anim, null, playDirection, EnableCondition.DoNothing, DisableCondition.DoNotDisable);
 	}
 }
+#pragma warning restore 0618
