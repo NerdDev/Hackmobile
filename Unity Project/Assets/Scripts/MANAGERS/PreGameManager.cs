@@ -21,6 +21,15 @@ public class PreGameManager : MonoBehaviour {
 //		//load resources folder and prep next scene
 //		yield return null;	
 //	}
+
+    void onStart()
+    {
+        justinTestingFunction();
+    }
+
+    void justinTestingFunction()
+    {
+    }
 	
 	// Update is called once per frame
 	void Update () 

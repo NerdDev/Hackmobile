@@ -9,9 +9,11 @@ public class DebugManager : MonoBehaviour {
     // Types of logs supported and their filenames
     public enum Logs
     {
-        Main
+        Main,
+        LevelGen
     };
-    static string[] logPaths = { "=== Main ===" };
+    static string[] logPaths = { "=== Main ==="
+                               , "LevelGen/LevelGen"};
 
     // Constants
     static string debugFolder = @"Debug Logs\";
@@ -46,16 +48,6 @@ public class DebugManager : MonoBehaviour {
         if (DebugManager.logging(DebugManager.Logs.Main))
         {
             DebugManager.w(DebugManager.Logs.Main, "Debug Manager Started.");
-            DebugManager.w(DebugManager.Logs.Main, "Test 1");
-            DebugManager.printHeader(DebugManager.Logs.Main, "Function Call 1");
-            DebugManager.w(DebugManager.Logs.Main, "Sub List");
-            DebugManager.w(DebugManager.Logs.Main, 1, "Dah");
-            DebugManager.w(DebugManager.Logs.Main, 1, "Dee");
-            DebugManager.w(DebugManager.Logs.Main, 1, "Dah");
-            DebugManager.printHeader(DebugManager.Logs.Main, "Function Call 2");
-            DebugManager.w(DebugManager.Logs.Main, "Doing stuuuff");
-            DebugManager.printFooter(DebugManager.Logs.Main);
-            DebugManager.printFooter(DebugManager.Logs.Main);
         }
 	}
 	
@@ -118,7 +110,10 @@ public class DebugManager : MonoBehaviour {
     {
         foreach (Log l in logs)
         {
-            l.close();
+            if (l != null)
+            {
+                l.close();
+            }
         }
     }
 

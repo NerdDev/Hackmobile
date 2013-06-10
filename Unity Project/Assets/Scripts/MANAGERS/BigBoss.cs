@@ -47,11 +47,17 @@ public class BigBoss : MonoBehaviour
     {
         get { return inputManager; }
     }
-	
-	private static LevelLoadManager levelLoadManager;
-    public static LevelLoadManager LevelHandler
+
+    private static LevelLoadManager levelLoadManager;
+    public static LevelLoadManager LevelLoadHandler
     {
         get { return levelLoadManager; }
+    }
+
+    private static LevelManager levelManager;
+    public static LevelManager LevelHandler
+    {
+        get { return levelManager; }
     }
 	
 	private static TimeManager timeManager;

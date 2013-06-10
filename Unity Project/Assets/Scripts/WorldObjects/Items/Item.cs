@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Item : MonoBehaviour {
+public class Item : WorldObject {
 	
 	//consider some abtract/virtual methods and variables here for cleanliness
 	//ex:  register my existence and key information to the item master singleton so i'm not lost in the game world

@@ -117,7 +117,7 @@ GameObject:
   - 4: {fileID: 144}
   - 114: {fileID: 260}
   m_Layer: 0
-  m_Name: LevelManager
+  m_Name: LevelLoadManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -473,6 +473,7 @@ Transform:
   - {fileID: 145}
   - {fileID: 783925647}
   - {fileID: 144}
+  - {fileID: 1136929213}
   - {fileID: 143}
   - {fileID: 148}
   - {fileID: 1638430980}
@@ -5567,11 +5568,53 @@ Prefab:
       propertyPath: PlayerChosenProfession
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: m_Name
+      value: LevelLoadManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
   m_RootGameObject: {fileID: 91}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &1136929212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1136929213}
+  - 114: {fileID: 1136929214}
+  m_Layer: 0
+  m_Name: LevelGenManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1136929213
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1136929212}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 153}
+--- !u!114 &1136929214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400010, guid: ae5211becf43c9b4398deef128251d7d,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1136929212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a481f2cbcee4164e8575888c6e5e653, type: 3}
+  m_Name: 
 --- !u!1 &1137411576
 GameObject:
   m_ObjectHideFlags: 0
@@ -9244,6 +9287,72 @@ Prefab:
   m_RootGameObject: {fileID: 686786074}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &1889296529
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1889296533}
+  - 33: {fileID: 1889296532}
+  - 135: {fileID: 1889296531}
+  - 23: {fileID: 1889296530}
+  m_Layer: 0
+  m_Name: Script Testing Sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1889296530
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889296529}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10302, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+--- !u!135 &1889296531
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889296529}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: .5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1889296532
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889296529}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1889296533
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889296529}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.2233486, y: 4.52381802, z: 13.835207}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &1895207380
 GameObject:
   m_ObjectHideFlags: 0
