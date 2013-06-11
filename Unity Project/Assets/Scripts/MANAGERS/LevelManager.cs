@@ -4,11 +4,10 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 
-    Level[] levels = new Level[50];
-
-    void onStart()
+    void Start()
     {
-
+        LevelGenerator gen = new LevelGenerator();
+        gen.generateLayout(1);
     }
 
 }

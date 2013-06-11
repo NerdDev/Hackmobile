@@ -42,7 +42,6 @@ public class DebugManager : MonoBehaviour {
         }
 
         // Test output
-        Debug.Log("Debug Manager Started");
         if (DebugManager.logging(DebugManager.Logs.Main))
         {
             DebugManager.w(DebugManager.Logs.Main, "Debug Manager Started.");
