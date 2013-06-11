@@ -6,8 +6,6 @@ public class Room : LayoutObject {
 
     static int max = 20;
     static int min = 5;
-    int relativeX = 0;
-    int relativeY = 0;
 
     public void generate()
     {
@@ -16,7 +14,7 @@ public class Room : LayoutObject {
         int height = LevelGenerator.rand.Next(min, max);
         int width = LevelGenerator.rand.Next(min, max);
         DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
-        generateBox(GridType.Wall, width, height);
+        BoxStroke(GridType.Wall, width, height);
 		
         toLog(DebugManager.Logs.LevelGen);
         DebugManager.printFooter(DebugManager.Logs.LevelGen);

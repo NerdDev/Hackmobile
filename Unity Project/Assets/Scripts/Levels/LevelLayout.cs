@@ -19,4 +19,9 @@ public class LevelLayout {
     {
         rooms.AddRange(rs);
     }
+	
+	public List<Room> getRooms()
+	{
+		return new List<Room>(rooms);
+	}
 }

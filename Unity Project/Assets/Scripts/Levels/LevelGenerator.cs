@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class LevelGenerator {
 
-    static int minRooms = 10;
-    static int maxRooms = 25;
+    static int minRooms = 8;
+    static int maxRooms = 15;
     LevelLayout lev = new LevelLayout();
     public static System.Random rand = new System.Random();
 
@@ -32,7 +32,7 @@ public class LevelGenerator {
         DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
 
         LevelLayout layout = new LevelLayout();
-        List<Room> rooms = generateRooms();
+        layout.addRooms(generateRooms());
 
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
         return layout;
@@ -61,7 +61,6 @@ public class LevelGenerator {
     {
         DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Rooms");
         
-
 
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
     }

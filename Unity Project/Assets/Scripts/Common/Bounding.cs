@@ -18,6 +18,12 @@ public class Bounding {
 
     public void absorb(int x, int y)
     {
+        absorbX(x);
+        absorbY(y);
+    }
+
+    public void absorbX(int x)
+    {
         if (domainMin > x)
         {
             domainMin = x;
@@ -26,6 +32,10 @@ public class Bounding {
         {
             domainMax = x;
         }
+    }
+
+    public void absorbY(int y)
+    {
         if (rangeMin > y)
         {
             rangeMin = y;
@@ -35,4 +45,14 @@ public class Bounding {
             rangeMax = y;
         }
     }
+	
+	public int width()
+	{
+		return domainMax - domainMin;
+	}
+	
+	public int height()
+	{
+		return rangeMax - rangeMin;	
+	}
 }
