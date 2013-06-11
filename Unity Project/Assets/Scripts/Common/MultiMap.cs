@@ -1,9 +1,10 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class MultiMap<T> {
-    Dictionary<int, Dictionary<int, T>> multimap = new Dictionary<int, Dictionary<int, T>>();
+    SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
 
     public T get(int x, int y)
     {
@@ -12,28 +13,33 @@ public class MultiMap<T> {
         return val;
     }
 
-    Dictionary<int, T> get(int x)
+    public SortedDictionary<int, T> getRow(int y)
     {
-        return multimap[x];
+        return multimap[y];
+    }
+
+    public List<SortedDictionary<int, T>> getRows()
+    {
+        return new List<SortedDictionary<int, T>>(multimap.Values);
     }
 
     public void put(T val, int x, int y)
     {
-        Dictionary<int, T> col;
-        if (!multimap.TryGetValue(x, out col))
+        SortedDictionary<int, T> row;
+        if (!multimap.TryGetValue(y, out row))
         {
-            col = new Dictionary<int, T>();
-            multimap[x] = col;
+            row = new SortedDictionary<int, T>();
+            multimap[y] = row;
         }
-        col[y] = val;
+        row[x] = val;
     }
 
     public bool TryGetValue(int x, int y, out T val)
     {
-        Dictionary<int, T> col;
-        if (multimap.TryGetValue(x, out col))
+        SortedDictionary<int, T> row;
+        if (multimap.TryGetValue(y, out row))
         {
-            if (col.TryGetValue(y, out val))
+            if (row.TryGetValue(x, out val))
             {
                 return true;
             }
@@ -44,13 +50,21 @@ public class MultiMap<T> {
 
     public void putAll(MultiMap<T> rhs)
     {
-        foreach (int x in rhs.multimap.Keys)
+        foreach (int y in rhs.multimap.Keys)
         {
-            Dictionary<int, T> col = get(x);
-            foreach (KeyValuePair<int, T> pair in rhs.get(x))
+            SortedDictionary<int, T> row = getRow(y);
+            foreach (KeyValuePair<int, T> pair in rhs.getRow(y))
             {
-                col.Add(pair.Key, pair.Value);
+                row.Add(pair.Key, pair.Value);
             }
         }
     }
+
+    public Bounding getBounding()
+    {
+        Bounding ret = new Bounding();
+        throw new NotImplementedException();
+        return ret;
+    }
+
 }

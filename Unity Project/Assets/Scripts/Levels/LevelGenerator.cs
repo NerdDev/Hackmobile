@@ -7,7 +7,7 @@ public class LevelGenerator {
     static int minRooms = 10;
     static int maxRooms = 25;
     LevelLayered lev = new LevelLayered();
-    System.Random rand = new System.Random();
+    public static System.Random rand = new System.Random();
 
 
     public Level generate(int levelDepth)
@@ -29,8 +29,29 @@ public class LevelGenerator {
         int numRooms = rand.Next(minRooms, maxRooms);
         DebugManager.w(DebugManager.Logs.LevelGen, "Generating " + numRooms + " rooms.");
 
+        for (int i = 0; i < numRooms; i++)
+        {
+            Room room = new Room();
+            room.generate();
+            ret.Add(room);
+        }
+
+        logRooms(ret);
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
         return ret;
+    }
+
+    void logRooms(List<Room> rooms)
+    {
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            int i = 1;
+            foreach (Room r in rooms)
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, i + ": ");
+                r.toLog(DebugManager.Logs.LevelGen);
+            }
+        }
     }
 
     void placeRooms()

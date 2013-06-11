@@ -3,11 +3,11 @@ using System.Collections;
 
 public class LevelFlat : Level {
 
-    MultiMap<GridBox> grids = new MultiMap<GridBox>();
+    MultiMap<GridInstance> grids = new MultiMap<GridInstance>();
 
-    public override GridBox get(int x, int y)
+    public override GridInstance get(int x, int y)
     {
-        GridBox val;
+        GridInstance val;
         if (grids.TryGetValue(x, y, out val))
         {
             return val;
@@ -15,17 +15,17 @@ public class LevelFlat : Level {
         return null;
     }
 
-    public void put(GridBox box, int x, int y)
+    public void put(GridInstance box, int x, int y)
     {
         grids.put(box, x, y);
     }
 
-    public void putAll(MultiMap<GridBox> rhs)
+    public void putAll(MultiMap<GridInstance> rhs)
     {
         grids.putAll(rhs);
     }
 
-    public override MultiMap<GridBox> getFlat()
+    public override MultiMap<GridInstance> getFlat()
     {
         return grids;
     }

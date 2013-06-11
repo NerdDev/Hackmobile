@@ -5,12 +5,12 @@ using System;
 
 public class Path : MapObject {
 
-    public override GridBox get(int x, int y)
+    public override GridInstance get(int x, int y)
     {
         throw new NotImplementedException();
     }
 
-    public override MultiMap<GridBox> getFlat()
+    public override MultiMap<GridInstance> getFlat()
     {
         throw new NotImplementedException();
     }

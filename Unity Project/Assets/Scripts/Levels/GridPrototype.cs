@@ -1,14 +1,39 @@
 using UnityEngine;
 using System.Collections;
 
-public class GridPrototype {
+public class GridPrototype : MonoBehaviour, Grid
+{
 
-    string name;
-    public GridType type { get; private set; }
+    public string name;
+    public string asciiRep_;
+    public GridType type_;
 
-    GridPrototype(string name, GridType typeIn)
+    GridPrototype(string name, string asciiRep, GridType typeIn)
     {
         this.name = name;
-        type = typeIn;
+        if (asciiRep.Length > 1)
+        {
+            asciiRep = asciiRep.Substring(0, 1);
+        }
+        asciiRep_ = asciiRep;
+        type_ = typeIn;
+    }
+
+    public GridType type
+    {
+        get
+        {
+            return type_;
+        }
+
+    }
+
+    public string ascii
+    {
+        get
+        {
+            return asciiRep_;
+        }
+
     }
 }

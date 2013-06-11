@@ -10,7 +10,7 @@ public class LevelLayered : Level {
     public LevelLayered () {
     }
 
-    public override MultiMap<GridBox> getFlat()
+    public override MultiMap<GridInstance> getFlat()
     {
         return getFlatLevel().getFlat();
     }
@@ -32,7 +32,7 @@ public class LevelLayered : Level {
         rooms.AddRange(rs);
     }
 
-    public override GridBox get(int x, int y)
+    public override GridInstance get(int x, int y)
     {
         throw new NotImplementedException();
     }
