@@ -6,19 +6,36 @@ public class LevelGenerator {
 
     static int minRooms = 10;
     static int maxRooms = 25;
-    LevelLayered lev = new LevelLayered();
+    LevelLayout lev = new LevelLayout();
     public static System.Random rand = new System.Random();
 
+    public static char getAscii(GridType type) {
+        switch (type)
+        {
+            case GridType.Floor:
+                return '.';
+            case GridType.TrapDoor:
+                return 'T';
+            case GridType.Door:
+                return '|';
+            case GridType.Wall:
+                return '#';
+            case GridType.NULL:
+                return ' ';
+            default:
+                return '?';
+        }
+    }
 
-    public Level generate(int levelDepth)
+    public LevelLayout generateLayout(int levelDepth)
     {
         DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
 
+        LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
-        LevelFlat flat = lev.getFlatLevel();
 
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
-        return flat;
+        return layout;
     }
 
     List<Room> generateRooms()
@@ -36,22 +53,8 @@ public class LevelGenerator {
             ret.Add(room);
         }
 
-        logRooms(ret);
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
         return ret;
-    }
-
-    void logRooms(List<Room> rooms)
-    {
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            int i = 1;
-            foreach (Room r in rooms)
-            {
-                DebugManager.w(DebugManager.Logs.LevelGen, i + ": ");
-                r.toLog(DebugManager.Logs.LevelGen);
-            }
-        }
     }
 
     void placeRooms()

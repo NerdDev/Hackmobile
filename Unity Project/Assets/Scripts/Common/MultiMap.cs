@@ -13,9 +13,9 @@ public class MultiMap<T> {
         return val;
     }
 
-    public SortedDictionary<int, T> getRow(int y)
+    public void getRow(int y, out SortedDictionary<int, T> val)
     {
-        return multimap[y];
+        multimap.TryGetValue(y, out val);
     }
 
     public List<SortedDictionary<int, T>> getRows()
@@ -52,8 +52,8 @@ public class MultiMap<T> {
     {
         foreach (int y in rhs.multimap.Keys)
         {
-            SortedDictionary<int, T> row = getRow(y);
-            foreach (KeyValuePair<int, T> pair in rhs.getRow(y))
+            SortedDictionary<int, T> row = multimap[y];
+            foreach (KeyValuePair<int, T> pair in rhs.multimap[y])
             {
                 row.Add(pair.Key, pair.Value);
             }
@@ -63,8 +63,21 @@ public class MultiMap<T> {
     public Bounding getBounding()
     {
         Bounding ret = new Bounding();
+        if (multimap.Count > 0)
+        {
+            IEnumerator<int> ys = multimap.Keys.GetEnumerator();
+            bool first = true;
+            while (ys.MoveNext())
+            {
+                if (first)
+                {
+                    first = false;
+                    ret.rangeMin = ys.Current;
+                }
+                ret.rangeMax = ys.Current;
+            }
+        }
         throw new NotImplementedException();
-        return ret;
     }
 
 }

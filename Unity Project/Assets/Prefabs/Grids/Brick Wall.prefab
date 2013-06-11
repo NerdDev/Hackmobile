@@ -75,9 +75,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dbe394d67b8e9749838808e0c23e29e, type: 3}
+  m_Script: {fileID: 11500000, guid: b80a6ec7680cbdf4aa114703e0a60a6a, type: 3}
   m_Name: 
-  prototype: {fileID: 11400000, guid: ccdbff05ce06a3c4582ba0f19af98466, type: 2}
+  name_: Brick Wall
+  type_: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
