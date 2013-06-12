@@ -5,7 +5,7 @@ public class GridSpace : MonoBehaviour
 {
 
     [SerializeField] private string name_;
-    public string name
+    public string gridName
     {
         get { return name_; }
     }

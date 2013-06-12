@@ -22,6 +22,8 @@ public class DebugManager : MonoBehaviour {
     static string headerStrMid = @"/=============  ";
     static string headerStrMid2 = @"  =============\";
     static string headerStrFoot = @"\=================================================/";
+    static string breaker =  @"___________________________________________________";
+    static string breaker2 = @"|/////////////////////////////////////////////////|";
 
     // Global Debug Flags
     static bool globalLoggingOn = true;
@@ -58,6 +60,14 @@ public class DebugManager : MonoBehaviour {
     {
         DebugManager.close();
     }
+	
+	public static void nl(Logs e)
+	{
+        if (logging(e))
+        {
+			w (e, "");	
+        }
+	}
 
     public static void w(Logs e, string line)
     {
@@ -90,6 +100,43 @@ public class DebugManager : MonoBehaviour {
             get(e).printFooter();
         }
     }
+
+    public static void printBreakers(Logs e, int num)
+    {
+        if (logging(e))
+        {
+            get(e).printBreakers(num);
+        }
+    }
+	
+	public static void logException(Logs e)
+	{
+		
+	}
+	
+	public static void incrementDepth(Logs e)
+	{
+        if (logging(e))
+        {
+            get(e).incrementDepth();
+        }
+	}
+	
+	public static void decrementDepth(Logs e)
+	{
+        if (logging(e))
+        {
+            get(e).decrementDepth();
+        }
+	}
+	
+	public static void resetDepth(Logs e)
+	{
+        if (logging(e))
+        {
+            get(e).resetDepth();
+        }
+	}
 
     static Log get(Logs e)
     {
@@ -159,12 +206,21 @@ public class DebugManager : MonoBehaviour {
         public void printHeader(string line)
         {
             w("");
-            //w(headerStrTop);
             w(headerStrMid + line + headerStrMid2);
-            //w(headerStrBot);
             incrementDepth();
         }
-
+		
+		public void printBreakers(int num)
+		{
+            w("");
+            for (int i = 0; i < num; i++)
+            {
+                w(breaker);
+                w(breaker2);
+            }
+            w("");	
+		}
+		
         public void printFooter()
         {
             decrementDepth();
@@ -216,6 +272,11 @@ public class DebugManager : MonoBehaviour {
         {
             depth = depthStr + depth;
         }
+		
+		public void resetDepth()
+		{
+			depth = "";	
+		}
 
         public void close()
         {

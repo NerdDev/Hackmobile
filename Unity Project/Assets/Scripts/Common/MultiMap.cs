@@ -3,8 +3,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MultiMap<T> {
+public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T>>> {
+
     SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
+    public SortedDictionary<int, SortedDictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
+    public SortedDictionary<int, SortedDictionary<int, T>>.ValueCollection Values { get { return multimap.Values; } }
+
+    public MultiMap()
+    {
+    }
+
+    public MultiMap(MultiMap<T> rhs) : this()
+    {
+        putAll(rhs);
+    }
+
+    public MultiMap(MultiMap<T> rhs, Point shift)
+    {
+        putAll(rhs, shift);
+    }
+
+    public MultiMap(MultiMap<T> rhs, int xShift, int yShift)
+    {
+        putAll(rhs, xShift, yShift);
+    }
 
     public T get(int x, int y)
     {
@@ -29,15 +51,39 @@ public class MultiMap<T> {
         return row;
     }
 
-    public List<SortedDictionary<int, T>> getRows()
-    {
-        return new List<SortedDictionary<int, T>>(multimap.Values);
-    }
-
     public void put(T val, int x, int y)
     {
         SortedDictionary<int, T> row = GetRowCreate(y);
         row[x] = val;
+    }
+
+    public void putAll(MultiMap<T> rhs)
+    {
+        foreach (KeyValuePair<int, SortedDictionary<int, T>> rowRhs in rhs)
+        {
+            SortedDictionary<int, T> row = GetRowCreate(rowRhs.Key);
+            foreach (KeyValuePair<int, T> rhsItem in rowRhs.Value)
+            {
+                row[rhsItem.Key] = rhsItem.Value;
+            }
+        }
+    }
+
+    public void putAll(MultiMap<T> rhs, Point shift)
+    {
+        putAll(rhs, shift.x, shift.y);
+    }
+
+    public void putAll(MultiMap<T> rhs, int xShift, int yShift)
+    {
+        foreach (KeyValuePair<int, SortedDictionary<int, T>> rowRhs in rhs)
+        {
+            SortedDictionary<int, T> row = GetRowCreate(rowRhs.Key + yShift);
+            foreach (KeyValuePair<int, T> rhsItem in rowRhs.Value)
+            {
+                row[rhsItem.Key + xShift] = rhsItem.Value;
+            }
+        }
     }
 
     public void putRow(T t, int xl, int xr, int y)
@@ -45,7 +91,7 @@ public class MultiMap<T> {
         SortedDictionary<int, T> row = GetRowCreate(y);
         for (; xl <= xr; xl++)
         {
-            row.Add(xl, t);
+            row[xl] = t;
         }
 	}
 
@@ -79,18 +125,6 @@ public class MultiMap<T> {
         return false;
     }
 
-    public void putAll(MultiMap<T> rhs)
-    {
-        foreach (int y in rhs.multimap.Keys)
-        {
-            SortedDictionary<int, T> row = multimap[y];
-            foreach (KeyValuePair<int, T> pair in rhs.multimap[y])
-            {
-                row.Add(pair.Key, pair.Value);
-            }
-        }
-    }
-
     public Bounding getBounding()
     {
         Bounding ret = new Bounding();
@@ -103,12 +137,21 @@ public class MultiMap<T> {
                 if (first)
                 {
                     first = false;
-                    ret.rangeMin = ys.Current;
+                    ret.yMin = ys.Current;
                 }
-                ret.rangeMax = ys.Current;
+                ret.yMax = ys.Current;
             }
         }
         throw new NotImplementedException();
     }
 
+    public IEnumerator<KeyValuePair<int, SortedDictionary<int, T>>> GetEnumerator()
+    {
+        return multimap.GetEnumerator();
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
+    }
 }
