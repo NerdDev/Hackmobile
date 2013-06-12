@@ -4,9 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-public class DebugManager : MonoBehaviour {
+public class DebugManager : MonoBehaviour
+{
 
-    // Types of logs supported and their filenames
+    #region LogTypes
     public enum Logs
     {
         Main,
@@ -14,8 +15,9 @@ public class DebugManager : MonoBehaviour {
     };
     static string[] logPaths = { "=== Main ==="
                                , "LevelGen/LevelGen"};
+    #endregion
 
-    // Constants
+    #region StringConstants
     static string debugFolder = @"Debug Logs\";
     static string depthStrExtra = "  ";
     static string depthStr = "|   ";
@@ -24,8 +26,8 @@ public class DebugManager : MonoBehaviour {
     static string headerStrFoot = @"\=================================================/";
     static string breaker =  @"___________________________________________________";
     static string breaker2 = @"|/////////////////////////////////////////////////|";
+    #endregion
 
-    // Global Debug Flags
     static bool globalLoggingOn = true;
     static public bool lineNumbersOn { get; set; }
 
@@ -61,6 +63,7 @@ public class DebugManager : MonoBehaviour {
         DebugManager.close();
     }
 	
+    #region Accessors
 	public static void nl(Logs e)
 	{
         if (logging(e))
@@ -180,11 +183,9 @@ public class DebugManager : MonoBehaviour {
     {
         get(e).on = logging;
     }
+    #endregion
 
-    //////////////////////
-    //     Log Class 
-    //////////////////////
-
+    #region LogClass
     class Log
     {
         public bool on { get; set; }
@@ -283,4 +284,5 @@ public class DebugManager : MonoBehaviour {
             writer.Close();
         }
     }
+    #endregion LogClass
 }

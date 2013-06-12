@@ -2,38 +2,21 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LevelGenerator {
+public class LevelGenerator
+{
 
-    //// ===== Static generation variables ===== ////
+    #region GlobalGenVariables
     // Number of Rooms
     static int minRooms = 8;
     static int maxRooms = 16;  //Max not inclusive
 
     // Amount to shift rooms
     static int shiftRange = 10;   //Max not inclusive
-    //////////////////////////////////////////////////
+    #endregion
 
     LevelLayout lev = new LevelLayout();
     public static System.Random rand = new System.Random();
     public static Random unityRand = new Random();
-
-    public static char getAscii(GridType type) {
-        switch (type)
-        {
-            case GridType.Floor:
-                return '.';
-            case GridType.TrapDoor:
-                return 'T';
-            case GridType.Door:
-                return '|';
-            case GridType.Wall:
-                return '#';
-            case GridType.NULL:
-                return ' ';
-            default:
-                return '?';
-        }
-    }
 
     public LevelLayout generateLayout(int levelDepth)
     {

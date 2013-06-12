@@ -9,6 +9,7 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
     public SortedDictionary<int, SortedDictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
     public SortedDictionary<int, SortedDictionary<int, T>>.ValueCollection Values { get { return multimap.Values; } }
 
+    #region Ctors
     public MultiMap()
     {
     }
@@ -27,7 +28,9 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
     {
         putAll(rhs, xShift, yShift);
     }
+    #endregion
 
+    #region GetSet
     public T get(int x, int y)
     {
         T val;
@@ -144,7 +147,9 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
         }
         throw new NotImplementedException();
     }
+    #endregion
 
+    #region Iteration
     public IEnumerator<KeyValuePair<int, SortedDictionary<int, T>>> GetEnumerator()
     {
         return multimap.GetEnumerator();
@@ -154,4 +159,5 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
     {
         return this.GetEnumerator();
     }
+    #endregion
 }

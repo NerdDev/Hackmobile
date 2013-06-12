@@ -4,16 +4,11 @@ using System;
 
 public class Point {
 
-	public int x {
-		get;
-		set;
-	}
-	public int y {
-		get;
-		set;
-	}
-	
-	public Point() {
+	public int x { get; set; }
+	public int y { get; set; }
+
+    #region Ctors
+    public Point() {
 		x = 0;
 		y = 0;
 	}
@@ -34,8 +29,10 @@ public class Point {
 	{
 		
 	}
-	
-	public void shift(int x, int y)
+    #endregion Ctors
+
+    #region Shifts
+    public void shift(int x, int y)
 	{
 		this.x += x;
 		this.y += y;
@@ -55,8 +52,9 @@ public class Point {
 	{
 		shift (p.x, p.y);	
 	}
-	
-	public bool isZero()
+    #endregion Shifts
+
+    public bool isZero()
 	{
 		return x == 0 && y == 0;	
 	}

@@ -6,7 +6,7 @@ public class LayoutObjectLeaf : LayoutObject {
     MultiMap<GridType> grids = new MultiMap<GridType>();
     private Bounding bound = new Bounding();
 
-    // Public shifting get/setters
+    #region GetSet
     public GridType get(int x, int y)
     {
         x -= shiftP.x;
@@ -60,8 +60,9 @@ public class LayoutObjectLeaf : LayoutObject {
 	public override Bounding getBoundsInternal() {
 		return bound;	
 	}
-	
-    // Filling methods
+    #endregion GetSet
+
+    #region FillMethods
     public void BoxStroke(GridType t, int width, int height)
     {
         BoxStroke(t, 0, width - 1, 0, height - 1);
@@ -115,4 +116,5 @@ public class LayoutObjectLeaf : LayoutObject {
         bound.absorbY(yt);
         grids.putSquare(t, xl, xr, yb, yt);
     }
+    #endregion FillMethods
 }

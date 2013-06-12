@@ -6,8 +6,9 @@ using System;
 abstract public class LayoutObject {
 
     protected Point shiftP = new Point();
-	
-	public void shift(int x, int y)
+
+    #region Shifts
+    public void shift(int x, int y)
 	{
 		shiftP.shift(x,y);
 	}
@@ -27,8 +28,8 @@ abstract public class LayoutObject {
         shiftP.x = rhs.shiftP.x;
         shiftP.y = rhs.shiftP.y;
     }
-	
-	public void ShiftOutside(LayoutObject rhs, Point dir)
+
+    public void ShiftOutside(LayoutObject rhs, Point dir)
     {
         Point reduc = dir.reduce();
 		#region DEBUG
@@ -59,7 +60,9 @@ abstract public class LayoutObject {
         }
         #endregion
     }
-	
+    #endregion Shifts
+
+    #region UNUSED
     public void ShiftOutsideBulk(LayoutObject rhs, Point dir)
     { // Unused atm, broken
         DebugManager.printHeader(DebugManager.Logs.LevelGen, "Shift Outside Bulk");
@@ -97,7 +100,9 @@ abstract public class LayoutObject {
         }
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
     }
-	
+    #endregion
+
+    #region Bounds
     public Bounding getBounds()
     {
         Bounding bound = new Bounding(getBoundsInternal());
@@ -109,12 +114,15 @@ abstract public class LayoutObject {
     }
 	
 	public abstract Bounding getBoundsInternal();
+    #endregion Bounds
 
+    #region GetSet
     public abstract MultiMap<GridType> getMap();
 
     public abstract MultiMap<GridType> getBakedMap();
+    #endregion GetSet
 
-    // Intersect Methods
+    #region Intersects
     public bool intersects(LayoutObject rhs)
     {
         return getBounds().intersects(rhs.getBounds());
@@ -136,9 +144,10 @@ abstract public class LayoutObject {
         }
         return null;
 	}
+    #endregion Intersects
 
-    // Printing Methods
-	public override string ToString() {
+    #region Printing
+    public override string ToString() {
 		return "Layout Object";
 	}
 	
@@ -167,7 +176,7 @@ abstract public class LayoutObject {
             {
                 if (row != null && row.TryGetValue(x, out t))
                 {
-                    rowStr += LevelGenerator.getAscii(t);
+                    rowStr += getAscii(t);
                 }
                 else
                 {
@@ -177,6 +186,25 @@ abstract public class LayoutObject {
             ret.Add(rowStr);
         }
         return ret;
+    }
+
+    public static char getAscii(GridType type)
+    {
+        switch (type)
+        {
+            case GridType.Floor:
+                return '.';
+            case GridType.TrapDoor:
+                return 'T';
+            case GridType.Door:
+                return '|';
+            case GridType.Wall:
+                return '#';
+            case GridType.NULL:
+                return ' ';
+            default:
+                return '?';
+        }
     }
 
     public virtual void toLog(DebugManager.Logs log)
@@ -192,5 +220,5 @@ abstract public class LayoutObject {
 			DebugManager.printFooter(log);
         }
     }
-
+    #endregion Printing
 }

@@ -9,6 +9,7 @@ public class Bounding {
     public int yMin { get; set; }
     public int yMax { get; set; }
 
+    #region Ctors
     public Bounding()
     {
         xMin = 0;
@@ -29,7 +30,9 @@ public class Bounding {
         : this(rhs.xMin, rhs.xMax, rhs.yMin, rhs.yMax)
     {
     }
+    #endregion Ctors
 
+    #region Absorbs
     public void absorb(int x, int y)
     {
         absorbX(x);
@@ -65,8 +68,10 @@ public class Bounding {
             yMax = y;
         }
     }
-	
-	public int width()
+    #endregion Absorbs
+
+    #region GetSet
+    public int width()
 	{
 		return xMax - xMin;
 	}
@@ -80,7 +85,9 @@ public class Bounding {
     {
         return width() * height();
     }
+    #endregion GetSet
 
+    #region Intersects
     public void boundingDimensions(Bounding rhs, out int width, out int height)
     {
         width = System.Math.Min(xMax - rhs.xMin, rhs.xMax - xMin);
@@ -117,7 +124,9 @@ public class Bounding {
         ret.yMax = height;
         return ret;
     }
+    #endregion Intersects
 
+    #region UNUSED
     // Returns bounding box of intersection, maintaining correct position.
     public Bounding intersectBoundingAbsolute(Bounding rhs)
     {
@@ -130,9 +139,12 @@ public class Bounding {
 
         throw new NotImplementedException();
     }
+    #endregion
 
+    #region Printing
     public override string ToString()
     {
         return "(" + xMin + "," + yMin + ") (" + xMax + "," + yMax + ")";
     }
+    #endregion Printing
 }
