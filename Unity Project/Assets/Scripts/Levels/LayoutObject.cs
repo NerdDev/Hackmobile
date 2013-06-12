@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -12,11 +11,6 @@ abstract public class LayoutObject {
 	{
 		shiftP.shift(x,y);
 	}
-
-    public void shift(Vector2 vect)
-    {
-        shiftP.shift(vect);
-    }
 	
 	public void shift(Point p)
 	{
