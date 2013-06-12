@@ -7,14 +7,17 @@ public class LevelGenerator
 
     #region GlobalGenVariables
     // Number of Rooms
-    static int minRooms = 8;
-    static int maxRooms = 16;  //Max not inclusive
+	public static int minRooms { get { return 8; }}
+	public static int maxRooms { get { return 16; }} //Max not inclusive
+	
+	// Box Room Size (including walls)
+	public static int minRectSize { get { return 5; }}
+	public static int maxRectSize { get { return 20; }}
 
     // Amount to shift rooms
-    static int shiftRange = 10;   //Max not inclusive
+	public static int shiftRange { get { return 10; }} //Max not inclusive
     #endregion
 
-    LevelLayout lev = new LevelLayout();
     public static System.Random rand = new System.Random();
     public static Random unityRand = new Random();
 
@@ -67,6 +70,7 @@ public class LevelGenerator
             // Find room it will start from
             int roomNum = rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
+            room.setShift(startRoom);
             // Find where it will shift away
             Point shiftMagn = generateShiftMagnitude(shiftRange);
             #region DEBUG
@@ -77,8 +81,6 @@ public class LevelGenerator
                 DebugManager.w(DebugManager.Logs.LevelGen, "Shift: " + shiftMagn);
             }
             #endregion
-            // Move to initial start room
-        	room.setShift(startRoom);
             // Keep moving until room doesn't overlap any other rooms
 			LayoutObject intersect;
             while ((intersect = room.intersectObj(placedRooms)) != null)

@@ -22,16 +22,6 @@ public class LevelLayout : LayoutObjectContainer {
 		return ret;
 	}
 
-    public override MultiMap<GridType> getBakedMap()
-    {
-        MultiMap<GridType> ret = new MultiMap<GridType>();
-        foreach (Room room in rooms)
-        {
-            ret.putAll(room.getBakedMap());
-        }
-        return ret;
-    }
-
     public override IEnumerator<LayoutObject> GetEnumerator()
     {
         foreach (Room room in rooms)

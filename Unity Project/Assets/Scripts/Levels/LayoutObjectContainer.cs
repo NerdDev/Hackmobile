@@ -13,7 +13,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         MultiMap<GridType> ret = new MultiMap<GridType>();
         foreach(LayoutObject obj in this)
         {
-            ret.putAll(obj.getBakedMap());
+            ret.putAll(obj.getBakedMap(), GridTypeComparator.get());
         }
         return ret;
     }

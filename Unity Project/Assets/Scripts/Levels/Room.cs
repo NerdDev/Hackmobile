@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Room : LayoutObjectLeaf {
 
-    static int max = 20;
-    static int min = 5;
     public int roomNum {
     	get;
     	private set;
@@ -37,8 +35,8 @@ public class Room : LayoutObjectLeaf {
     {
         DebugManager.printHeader(DebugManager.Logs.LevelGen, "Room -> Generate");
 
-        int height = LevelGenerator.rand.Next(min, max);
-        int width = LevelGenerator.rand.Next(min, max);
+        int height = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int width = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
         DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
         BoxStrokeAndFill(GridType.Wall, GridType.Floor, width, height);
 		

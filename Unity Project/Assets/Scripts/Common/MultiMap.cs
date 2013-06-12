@@ -72,6 +72,26 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
         }
     }
 
+    public void putAll(MultiMap<T> rhs, Comparator<T> compare)
+    {
+        foreach (KeyValuePair<int, SortedDictionary<int, T>> rowRhs in rhs)
+        {
+            SortedDictionary<int, T> row = GetRowCreate(rowRhs.Key);
+            foreach (KeyValuePair<int, T> rhsItem in row)
+            {
+                T curVal = row[rhsItem.Key];
+                switch (compare.compare(rhsItem.Value, curVal))
+                {
+                    case 1:
+                        row[rhsItem.Key] = rhsItem.Value;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
     public void putAll(MultiMap<T> rhs, Point shift)
     {
         putAll(rhs, shift.x, shift.y);
