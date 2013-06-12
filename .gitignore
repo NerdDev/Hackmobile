@@ -8,6 +8,7 @@ Unity Project/Library/
 *.csproj
 *.sln
 *.userprefs
+Unity Project\ProjectSettings\ProjectSettings.asset
 
 
 #################
