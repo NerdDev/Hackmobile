@@ -16,6 +16,10 @@ public class LevelGenerator
 
     // Amount to shift rooms
 	public static int shiftRange { get { return 10; }} //Max not inclusive
+
+    // Number of doors per room
+    public static int doorsMin { get { return 1; } }
+    public static int doorsMax { get { return 4; } } //Max not inclusive
     #endregion
 
     public static System.Random rand = new System.Random();
@@ -29,6 +33,7 @@ public class LevelGenerator
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         placeRooms(rooms, layout);
+        placeDoors(layout);
         #region DEBUG
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
         #endregion
@@ -107,6 +112,14 @@ public class LevelGenerator
         #region DEBUG
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
         #endregion
+    }
+
+    void placeDoors(LevelLayout layout)
+    {
+        foreach (Room room in layout.getRooms())
+        {
+
+        }
     }
 
     Point generateShiftMagnitude(int mag)

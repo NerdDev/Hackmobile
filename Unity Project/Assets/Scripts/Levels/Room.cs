@@ -2,7 +2,10 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class Room : LayoutObjectLeaf {
+public class Room : LayoutObjectContainer {
+
+    LayoutObjectLeaf floors = new LayoutObjectLeaf();
+    LayoutObjectLeaf walls = new LayoutObjectLeaf();
 
     public int roomNum {
     	get;
@@ -14,39 +17,67 @@ public class Room : LayoutObjectLeaf {
         roomNum = num;
     }
 
-    protected override List<string> ToRowStrings() 
-    {
-        List<string> ret = base.ToRowStrings();
-        int vert = ret.Count / 2;
-        if (vert > 1)
-        {
-            string str = ret[vert];
-			string roomNumStr = roomNum.ToString();
-            int horiz = str.Length / 2;
-            if (horiz > roomNumStr.Length)
-            {
-                ret[vert] = str.Substring(0, horiz) + roomNumStr + str.Substring(horiz + roomNumStr.Length);
-            }
-        }
-        return ret;
-    }
+    #region UNUSED
+    //protected override List<string> ToRowStrings() 
+    //{
+    //    List<string> ret = base.ToRowStrings();
+    //    int vert = ret.Count / 2;
+    //    if (vert > 1)
+    //    {
+    //        string str = ret[vert];
+    //        string roomNumStr = roomNum.ToString();
+    //        int horiz = str.Length / 2;
+    //        if (horiz > roomNumStr.Length)
+    //        {
+    //            ret[vert] = str.Substring(0, horiz) + roomNumStr + str.Substring(horiz + roomNumStr.Length);
+    //        }
+    //    }
+    //    return ret;
+    //}
+    #endregion
 
     public void generate()
     {
-        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Room -> Generate");
-
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Room -> Generate");
+        }
+        #endregion
         int height = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
         int width = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
-        BoxStrokeAndFill(GridType.Wall, GridType.Floor, width, height);
-		
-        toLog(DebugManager.Logs.LevelGen);
-        DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
+        }
+        #endregion
+        walls.BoxStroke(GridType.Wall, width, height);
+        floors.BoxFill(GridType.Floor, width - 1, height - 1);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            toLog(DebugManager.Logs.LevelGen);
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
 	
 	public override string ToString()
 	{
 		return "Room " + roomNum;
 	}
+
+
+    protected override Bounding getBoundsInternal()
+    {
+        return walls.getBounds();
+    }
+
+    public override IEnumerator<LayoutObject> GetEnumerator()
+    {
+        yield return floors;
+        yield return walls;
+    }
 
 }
