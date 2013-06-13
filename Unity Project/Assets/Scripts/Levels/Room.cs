@@ -4,17 +4,19 @@ using System.Collections.Generic;
 
 public class Room : LayoutObjectContainer {
 
-    LayoutObjectLeaf floors = new LayoutObjectLeaf();
-    LayoutObjectLeaf walls = new LayoutObjectLeaf();
+    // Testings
 
-    public int roomNum {
-    	get;
-    	private set;
-	}
+    public LayoutObjectLeaf floors { get; set; }
+    public LayoutObjectLeaf walls { get; set; }
+    public LayoutObjectLeaf doors { get; set; }
+    public int roomNum { get; private set; }
 
     public Room(int num)
     {
         roomNum = num;
+        floors = new LayoutObjectLeaf();
+        walls = new LayoutObjectLeaf();
+        doors = new LayoutObjectLeaf();
     }
 
     #region UNUSED
@@ -78,6 +80,7 @@ public class Room : LayoutObjectContainer {
     {
         yield return floors;
         yield return walls;
+        yield return doors;
     }
 
 }
