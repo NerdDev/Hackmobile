@@ -77,17 +77,13 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
         foreach (KeyValuePair<int, SortedDictionary<int, T>> rowRhs in rhs)
         {
             SortedDictionary<int, T> row = GetRowCreate(rowRhs.Key);
-            foreach (KeyValuePair<int, T> rhsItem in row)
+            foreach (KeyValuePair<int, T> rhsItem in rowRhs.Value)
             {
-                T curVal = row[rhsItem.Key];
-                switch (compare.compare(rhsItem.Value, curVal))
-                {
-                    case 1:
-                        row[rhsItem.Key] = rhsItem.Value;
-                        break;
-                    default:
-                        break;
-                }
+				if (!row.ContainsKey(rhsItem.Key) // If row has no value already
+					|| 1 == compare.compare(rhsItem.Value, row[rhsItem.Key])) // Or replacing value is greater
+				{
+	                row[rhsItem.Key] = rhsItem.Value; // Place replacing value
+				}
             }
         }
     }
