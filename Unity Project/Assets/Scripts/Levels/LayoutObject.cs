@@ -118,17 +118,7 @@ abstract public class LayoutObject {
 	
     public GridType[,] getArr()
     {
-		GridMap map = getMap();
-		Bounding bound = getBounds();
-		GridType[,] arr = new GridType[bound.height() + 1, bound.width() + 1];
-		foreach (KeyValuePair<int, SortedDictionary<int, GridType>> row in map)
-		{
-			foreach (KeyValuePair<int, GridType> val in row.Value)
-			{
-				arr[row.Key - bound.yMin, val.Key - bound.xMin] = val.Value;
-			}
-		}
-        return arr;
+        return getMap().getArr();
     }
     #endregion GetSet
 

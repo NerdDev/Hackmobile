@@ -10,7 +10,8 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     public override GridMap getBakedMap()
     {
-        GridMap ret = new GridMap();
+        Bounding bounds = getBoundsInternal();
+        GridMap ret = new GridMap(bounds.width(), bounds.height());
         foreach(LayoutObject obj in this)
         {
             ret.putAll(obj.getBakedMap(), shiftP);

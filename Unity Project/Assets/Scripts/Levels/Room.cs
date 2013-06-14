@@ -11,10 +11,11 @@ public class Room : LayoutObjectContainer {
 
     public Room(int num)
     {
+        int size = LevelGenerator.maxRectSize * 2;
         roomNum = num;
-        floors = new LayoutObjectLeaf();
-        walls = new LayoutObjectLeaf();
-        doors = new LayoutObjectLeaf();
+        floors = new LayoutObjectLeaf(size, size);
+        walls = new LayoutObjectLeaf(size, size);
+        doors = new LayoutObjectLeaf(size, size);
     }
 
     #region UNUSED

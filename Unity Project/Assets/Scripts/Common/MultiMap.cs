@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T>>> {
+public class MultiMap<T> : Container2D<T>, IEnumerable<KeyValuePair<int, SortedDictionary<int, T>>> {
 
     SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
     public SortedDictionary<int, SortedDictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
@@ -37,7 +37,7 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
     #endregion
 
     #region GetSet
-    public T get(int x, int y)
+    public override T get(int x, int y)
     {
         T val;
         TryGetValue(x, y, out val);
@@ -48,6 +48,11 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
     {
         bool ret = multimap.TryGetValue(y, out val);
         return ret;
+    }
+
+    public override bool inRange(int x, int y)
+    {
+        return true;
     }
 
     SortedDictionary<int, T> GetRowCreate(int y)
@@ -62,6 +67,11 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
     }
 
     public void put(T val, int x, int y)
+    {
+        putInternal(val, x, y);
+    }
+
+    public override void putInternal(T val, int x, int y)
     {
         SortedDictionary<int, T> row = GetRowCreate(y);
         put(row, val, x);
@@ -145,7 +155,7 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
         return false;
     }
 
-    public Bounding getBounding()
+    public override Bounding getBounding()
     {
         Bounding ret = new Bounding();
         if (multimap.Count > 0)
@@ -162,6 +172,11 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
                 ret.yMax = ys.Current;
             }
         }
+        throw new NotImplementedException();
+    }
+
+    public override T[,] getArr()
+    {
         throw new NotImplementedException();
     }
     #endregion

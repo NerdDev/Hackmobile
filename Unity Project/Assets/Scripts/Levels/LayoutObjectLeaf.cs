@@ -2,8 +2,13 @@ using System.Collections;
 
 public class LayoutObjectLeaf : LayoutObject {
 
-    GridMap grids = new GridMap();
+    GridMap grids;
     private Bounding bound = new Bounding();
+
+    public LayoutObjectLeaf(int width, int height)
+    {
+        grids = new GridMap(width, height);
+    }
 
     #region GetSet
     public GridType get(int x, int y)
