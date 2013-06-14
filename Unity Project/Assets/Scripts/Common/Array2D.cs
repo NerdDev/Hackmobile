@@ -14,7 +14,7 @@ public class Array2Dcoord<T> : Container2D<T> {
 
     public Array2Dcoord(int width, int height) : base()
     {
-        arr = new T[width, height];
+        arr = new T[height, width];
         xShift = width / 2;
         yShift = height / 2;
     }
@@ -75,8 +75,7 @@ public class Array2Dcoord<T> : Container2D<T> {
     {
 		x += xShift;
 		y += yShift;
-        if (
-			inRangeInternal(x, y)
+        if (inRangeInternal(x, y)
 			&& (comparator == null
             || 1 == comparator.compare(val, arr[y,x]))) {
             arr[y,x] = val;

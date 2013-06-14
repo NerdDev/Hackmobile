@@ -39,7 +39,6 @@ public class Room : LayoutObjectContainer {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-			walls.toLog(DebugManager.Logs.LevelGen);
             toLog(DebugManager.Logs.LevelGen);
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
