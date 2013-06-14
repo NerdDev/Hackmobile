@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -118,45 +119,15 @@ abstract public class LayoutObject {
     public GridType[,] getArr()
     {
 		GridMap map = getMap();
-		Bounding bound = new Bounding(0, 5, 0, 16);
-		GridType[,] arr = new GridType[bound.height(), bound.width()];
-		for (int y = bound.yMin, yarr = 0; y < bound.yMax; y++, yarr++)
-        {
-            SortedDictionary<int, GridType> row = null;
-            map.getRow(y, out row);
-            GridType t;
-            for (int x = bound.xMin, xarr = 0; x < bound.xMax; x++, xarr++)
-            {
-                if (row != null && row.TryGetValue(x, out t))
-                {
-                    arr[xarr, yarr] = t;
-                }
-            }
-        }
-			
-		int wer = 23;
-			
-//        GridMap map = getMap();
-//        Bounding bound = getBoundsInternal();
-//        GridType[,] arr = new GridType[bound.width(), bound.height()];
-//		int xarr = 0;
-//		int yarr = 0;
-//        for (int y = bound.yMin; y <= bound.yMax; y++)
-//        {
-//            SortedDictionary<int, GridType> row = null;
-//            map.getRow(y, out row);
-//            GridType t;
-//            for (int x = bound.xMin; x <= bound.xMax; x++)
-//            {
-//                arr[xarr, yarr] = GridType.NULL;
-//                if (row != null && row.TryGetValue(x, out t))
-//                {
-//                    arr[xarr, yarr] = t;
-//                }
-//				xarr++;
-//            }
-//			
-//        }
+		Bounding bound = getBounds();
+		GridType[,] arr = new GridType[bound.height() + 1, bound.width() + 1];
+		foreach (KeyValuePair<int, SortedDictionary<int, GridType>> row in map)
+		{
+			foreach (KeyValuePair<int, GridType> val in row.Value)
+			{
+				arr[row.Key - bound.yMin, val.Key - bound.xMin] = val.Value;
+			}
+		}
         return arr;
     }
     #endregion GetSet
@@ -202,28 +173,15 @@ abstract public class LayoutObject {
 
     protected virtual List<string> ToRowStrings()
     {
-        GridMap grids = getMap();
+		GridType[,] array = getArr ();
         List<string> ret = new List<string>();
-		Bounding bound = getBounds ();
-        for (int y = bound.yMin; y <= bound.yMax; y++)
-        {
-            SortedDictionary<int, GridType> row = null;
-            grids.getRow(y, out row);
+		for (int y = 0; y < array.GetLength(0); y += 1) {
             string rowStr = "";
-            GridType t;
-            for (int x = bound.xMin; x <= bound.xMax; x++)
-            {
-                if (row != null && row.TryGetValue(x, out t))
-                {
-                    rowStr += getAscii(t);
-                }
-                else
-                {
-                    rowStr += " ";
-                }
-            }
+    		for (int x = 0; x < array.GetLength(1); x += 1) {
+        		rowStr += getAscii(array[y,x]);
+    		}
             ret.Add(rowStr);
-        }
+		}
         return ret;
     }
 
