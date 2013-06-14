@@ -8,11 +8,11 @@ public class Array2Dcoord<T> : Container2D<T> {
     int yShift;
 
     #region Ctors
-    protected Array2Dcoord()
+    protected Array2Dcoord() : base()
     {
     }
 
-    public Array2Dcoord(int width, int height)
+    public Array2Dcoord(int width, int height) : base()
     {
         arr = new T[width, height];
         xShift = width / 2;
@@ -36,6 +36,12 @@ public class Array2Dcoord<T> : Container2D<T> {
     {
         putAll(rhs, xShift, yShift);
     }
+	
+	public Array2Dcoord(Bounding bound)
+		: this((Mathf.Max(Mathf.Abs(bound.xMin), Mathf.Abs(bound.xMax) + 1) * 2)
+			,(Mathf.Max(Mathf.Abs(bound.yMin), Mathf.Abs(bound.yMax)) + 1) * 2)
+	{
+	}
     #endregion
 
     #region GetSet
@@ -64,35 +70,45 @@ public class Array2Dcoord<T> : Container2D<T> {
             && y >= 0
             && x >= 0;
     }
-
+	
+    public override void put(T val, int x, int y)
+    {
+		x += xShift;
+		y += yShift;
+        if (
+			inRangeInternal(x, y)
+			&& (comparator == null
+            || 1 == comparator.compare(val, arr[y,x]))) {
+            arr[y,x] = val;
+        }
+    }
+	
     public override void putInternal(T val, int x, int y)
     {
+		x += xShift;
+		x += yShift;
         arr[y, x] = val;
     }
 
     public void putAll(Array2Dcoord<T> rhs)
     {
-        int yshift = yShift;
         for (int y = 0; y < rhs.arr.GetLength(0); y++)
         {
             for (int x = 0; x < rhs.arr.GetLength(1); x++)
             {
-                put(rhs.arr[yshift, x + xShift], x, y);
+                put(rhs.arr[y, x], x - rhs.xShift, y - rhs.yShift);
             }
-            yshift++;
         }
     }
 
     public void putAll(Array2Dcoord<T> rhs, int additionalXshift, int additionalYshift)
     {
-        int yshift = yShift;
         for (int y = 0; y < rhs.arr.GetLength(0); y++)
         {
             for (int x = 0; x < rhs.arr.GetLength(1); x++)
             {
-                put(rhs.arr[yshift, x + xShift], x + additionalXshift, y + additionalYshift);
-            }
-            yshift++;
+                put(rhs.arr[y, x], x - rhs.xShift + additionalXshift, y - rhs.yShift + additionalYshift);
+			}
         }
     }
 
@@ -108,7 +124,7 @@ public class Array2Dcoord<T> : Container2D<T> {
         y += yShift;
         for (; xl <= xr; xl++)
         {
-            arr[xl, y] = t;
+            arr[y, xl] = t;
         }
     }
 
@@ -119,7 +135,7 @@ public class Array2Dcoord<T> : Container2D<T> {
         y2 += yShift;
         for (; y1 <= y2; y1++)
         {
-            putInternal(t, x, y1);
+            arr[y1, x] = t;
         }
     }
 

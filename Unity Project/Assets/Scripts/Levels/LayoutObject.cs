@@ -165,7 +165,7 @@ abstract public class LayoutObject {
     {
 		GridType[,] array = getArr ();
         List<string> ret = new List<string>();
-		for (int y = 0; y < array.GetLength(0); y += 1) {
+		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
             string rowStr = "";
     		for (int x = 0; x < array.GetLength(1); x += 1) {
         		rowStr += getAscii(array[y,x]);

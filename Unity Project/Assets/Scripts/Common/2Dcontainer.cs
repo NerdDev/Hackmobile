@@ -4,13 +4,23 @@ using System.Collections;
 abstract public class Container2D<T> {
 
     protected Comparator<T> comparator;
-
+	
+    protected Container2D()
+    {
+		comparator = getDefaultComparator();
+    }
+	protected virtual Comparator<T> getDefaultComparator()
+	{	
+		return null;
+	}
     public abstract T get(int x, int y);
     public abstract bool inRange(int x, int y);
     public virtual void put(T val, int x, int y)
     {
-        if (comparator == null
-            || 1 == comparator.compare(val, get(x,y))) {
+        if (
+			inRange(x, y)
+			&& (comparator == null
+            || 1 == comparator.compare(val, get(x,y)))) {
             putInternal(val, x, y);
         }
     }

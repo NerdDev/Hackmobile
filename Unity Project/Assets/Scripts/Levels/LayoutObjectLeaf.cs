@@ -3,7 +3,7 @@ using System.Collections;
 public class LayoutObjectLeaf : LayoutObject {
 
     GridMap grids;
-    private Bounding bound = new Bounding();
+	Bounding bound = new Bounding();
 
     public LayoutObjectLeaf(int width, int height)
     {
@@ -58,12 +58,16 @@ public class LayoutObjectLeaf : LayoutObject {
 
     public override GridMap getBakedMap()
     {
-        return new GridMap(grids, shiftP);
+		if (!shiftP.isZero()){
+        	return new GridMap(grids, shiftP);
+		} else {
+			return grids;	
+		}
     }
 
     protected override Bounding getBoundsInternal()
     {
-		return bound;	
+		return bound;
 	}
     #endregion GetSet
 

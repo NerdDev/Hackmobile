@@ -18,25 +18,6 @@ public class Room : LayoutObjectContainer {
         doors = new LayoutObjectLeaf(size, size);
     }
 
-    #region UNUSED
-    //protected override List<string> ToRowStrings() 
-    //{
-    //    List<string> ret = base.ToRowStrings();
-    //    int vert = ret.Count / 2;
-    //    if (vert > 1)
-    //    {
-    //        string str = ret[vert];
-    //        string roomNumStr = roomNum.ToString();
-    //        int horiz = str.Length / 2;
-    //        if (horiz > roomNumStr.Length)
-    //        {
-    //            ret[vert] = str.Substring(0, horiz) + roomNumStr + str.Substring(horiz + roomNumStr.Length);
-    //        }
-    //    }
-    //    return ret;
-    //}
-    #endregion
-
     public void generate()
     {
         #region DEBUG
@@ -58,6 +39,7 @@ public class Room : LayoutObjectContainer {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
+			walls.toLog(DebugManager.Logs.LevelGen);
             toLog(DebugManager.Logs.LevelGen);
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
