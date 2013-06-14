@@ -74,7 +74,10 @@ public class LayoutObjectLeaf : LayoutObject {
     #region FillMethods
     public void BoxStroke(GridType t, int width, int height)
     {
-        BoxStroke(t, 0, width - 1, 0, height - 1);
+		int centerShiftX = width / 2;
+		int centerShiftY = height / 2;
+        BoxStroke(t, - centerShiftX, width - centerShiftX - 1
+			, -centerShiftY, height - centerShiftY - 1);
     }
 
     public void BoxStroke(GridType t, int xl, int xr, int yb, int yt)
@@ -89,7 +92,10 @@ public class LayoutObjectLeaf : LayoutObject {
 
     public void BoxStrokeAndFill(GridType stroke, GridType fill, int width, int height)
     {
-        BoxStrokeAndFill(stroke, fill, 0, width - 1, 0, height - 1);
+		int centerShiftX = width / 2;
+		int centerShiftY = height / 2;
+        BoxStrokeAndFill(stroke, fill, - centerShiftX, width - centerShiftX - 1
+			, -centerShiftY, height - centerShiftY - 1);
     }
 
     public void BoxStrokeAndFill(GridType stroke, GridType fill, int xl, int xr, int yb, int yt)
@@ -115,7 +121,10 @@ public class LayoutObjectLeaf : LayoutObject {
 
     public void BoxFill(GridType t, int width, int height)
     {
-        BoxFill(t, 0, width - 1, 0, height - 1);
+		int centerShiftX = width / 2;
+		int centerShiftY = height / 2;
+        BoxFill(t, - centerShiftX, width - centerShiftX - 1
+			, -centerShiftY, height - centerShiftY - 1);
     }
 
     public void BoxFill(GridType t, int xl, int xr, int yb, int yt)
