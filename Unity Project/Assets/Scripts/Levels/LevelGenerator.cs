@@ -117,10 +117,10 @@ public class LevelGenerator
     void placeDoors(LevelLayout layout)
     {
         foreach (Room room in layout.getRooms())
-        {
+        { 
             LayoutObjectLeaf walls = room.walls;
             LayoutObjectLeaf doors = room.doors;
-
+			room.getArr();
         }
     }
 

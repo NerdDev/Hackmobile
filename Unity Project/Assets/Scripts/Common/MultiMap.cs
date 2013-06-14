@@ -44,9 +44,10 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
         return val;
     }
 
-    public void getRow(int y, out SortedDictionary<int, T> val)
+    public bool getRow(int y, out SortedDictionary<int, T> val)
     {
-        multimap.TryGetValue(y, out val);
+        bool ret = multimap.TryGetValue(y, out val);
+        return ret;
     }
 
     SortedDictionary<int, T> GetRowCreate(int y)

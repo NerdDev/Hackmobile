@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Room : LayoutObjectContainer {
 
-    // Testings
-
     public LayoutObjectLeaf floors { get; set; }
     public LayoutObjectLeaf walls { get; set; }
     public LayoutObjectLeaf doors { get; set; }

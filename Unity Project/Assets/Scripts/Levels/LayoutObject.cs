@@ -114,6 +114,51 @@ abstract public class LayoutObject {
     public abstract GridMap getMap();
 
     public abstract GridMap getBakedMap();
+	
+    public GridType[,] getArr()
+    {
+		GridMap map = getMap();
+		Bounding bound = new Bounding(0, 5, 0, 16);
+		GridType[,] arr = new GridType[bound.height(), bound.width()];
+		for (int y = bound.yMin, yarr = 0; y < bound.yMax; y++, yarr++)
+        {
+            SortedDictionary<int, GridType> row = null;
+            map.getRow(y, out row);
+            GridType t;
+            for (int x = bound.xMin, xarr = 0; x < bound.xMax; x++, xarr++)
+            {
+                if (row != null && row.TryGetValue(x, out t))
+                {
+                    arr[xarr, yarr] = t;
+                }
+            }
+        }
+			
+		int wer = 23;
+			
+//        GridMap map = getMap();
+//        Bounding bound = getBoundsInternal();
+//        GridType[,] arr = new GridType[bound.width(), bound.height()];
+//		int xarr = 0;
+//		int yarr = 0;
+//        for (int y = bound.yMin; y <= bound.yMax; y++)
+//        {
+//            SortedDictionary<int, GridType> row = null;
+//            map.getRow(y, out row);
+//            GridType t;
+//            for (int x = bound.xMin; x <= bound.xMax; x++)
+//            {
+//                arr[xarr, yarr] = GridType.NULL;
+//                if (row != null && row.TryGetValue(x, out t))
+//                {
+//                    arr[xarr, yarr] = t;
+//                }
+//				xarr++;
+//            }
+//			
+//        }
+        return arr;
+    }
     #endregion GetSet
 
     #region Intersects
