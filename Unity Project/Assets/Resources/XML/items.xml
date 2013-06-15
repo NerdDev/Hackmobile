@@ -1,0 +1,12 @@
+<items>
+	<weapons>
+		<weapon name="axe2">
+				<damage>2d6</damage>
+				<material>steel</material>
+				<weight>15</weight>
+				<cost>20</cost>
+				<model>weapons/axe2/axe2</model>
+				<modeltexture>weapons/axe2/mat_axe2_1</modeltexture>
+		</weapon>
+	</weapons>
+ </items>

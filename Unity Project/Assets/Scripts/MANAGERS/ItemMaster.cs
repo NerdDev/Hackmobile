@@ -36,22 +36,18 @@ public class ItemMaster : MonoBehaviour {
 	
 		TotalItemsInExistence.Remove(theItemScript);//look up this generic method and see if we leave a memory leak
 	}
-	
-	public Potion CreatePotion(Vector3 location,Potion.Size size)
+
+    public Item CreateItem(Vector3 location, string itemName)
 	{
-		//Instantiation:
-		GameObject go = Instantiate(BigBoss.Prefabs.potion)as GameObject;
-		//Relocating to desired place:
+        GameObject go = new GameObject();
 		go.transform.position = location;
-		//Capturing reference to script:
-		Potion thePotionScript = (Potion)go.GetComponent(typeof(Potion));
-		thePotionScript.potionSize = size;
-		//This part is a bit ghetto but we'll come back to it:
-		if (thePotionScript.potionSize == Potion.Size.Small)
-		{
-			thePotionScript.restoreHealthAmount = 25;	
-		}
-		//returning a reference to the instance of this exact potion
-		return thePotionScript;
+        Item item = go.AddComponent<Item>();
+        item.setData(itemName);
+        MeshFilter mf = go.AddComponent<MeshFilter>();
+        mf.mesh = (Resources.Load(item.Model) as GameObject).GetComponent<MeshFilter>().mesh;
+        MeshRenderer mr = go.AddComponent<MeshRenderer>();
+        Debug.Log(item.ModelTexture);
+        mr.material = Resources.Load(item.ModelTexture) as Material;
+		return item;
 	}
 }

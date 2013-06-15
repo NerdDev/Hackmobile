@@ -78,8 +78,8 @@ public class BigBoss : MonoBehaviour
         get { return playerManager; }
     }
 	
-	private static EnemyManager enemyManager;
-    public static EnemyManager Enemy
+	private static NPCManager enemyManager;
+    public static NPCManager Enemy
     {
         get { return enemyManager; }
     } 
@@ -117,6 +117,18 @@ public class BigBoss : MonoBehaviour
     {
         get { return debugManager; }
     }
+
+    private static DataManager dataManager;
+    public static DataManager DataManager
+    {
+        get { return dataManager; }
+    }
+
+    private static NPCManager npcManager;
+    public static NPCManager NPCManager
+    {
+        get { return npcManager; }
+    }
  
     // Use this for initialization
     void Awake ()
@@ -142,13 +154,15 @@ public class BigBoss : MonoBehaviour
  		timeManager = GetComponentInChildren<TimeManager>() as TimeManager;
 		gameManager = GetComponentInChildren<GameStateManager>() as GameStateManager;
 		playerManager = GetComponentInChildren<PlayerManager>() as PlayerManager;
-		enemyManager = GetComponentInChildren<EnemyManager>() as EnemyManager;
+		enemyManager = GetComponentInChildren<NPCManager>() as NPCManager;
 		camManager = GetComponentInChildren<CameraManager>() as CameraManager;
 		preGameManager = GetComponentInChildren<PreGameManager>() as PreGameManager;
         dungeonMaster = GetComponentInChildren<DungeonMaster>() as DungeonMaster;
 		itemMaster = GetComponentInChildren<ItemMaster>() as ItemMaster;
 		equipmentMaster = GetComponentInChildren<EquipmentMaster >() as EquipmentMaster;
 		debugManager = GetComponentInChildren<DebugManager>() as DebugManager;
+        dataManager = GetComponentInChildren<DataManager>() as DataManager;
+        npcManager = GetComponentInChildren<NPCManager>() as NPCManager;
 
 		//Make this game object persistent
         DontDestroyOnLoad(gameObject);

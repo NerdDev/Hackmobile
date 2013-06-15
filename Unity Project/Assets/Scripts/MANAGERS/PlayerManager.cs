@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /*   As long as this isn't an MMO, this Player class should be able to hold most if not all of player information.
  
@@ -31,11 +32,47 @@ public class PlayerManager : MonoBehaviour {
 	public int PlayerWisdom{get{ return playerMaxHealth;}}  //read only - change through Adjust()
 	
 	#endregion
-	
-	
-	#region ENUMERATIONS OF ALL SORTS
-	
-	public enum PlayerProfessions 
+
+    #region INVENTORY MANAGEMENT
+
+    Dictionary<Item, int> inventory = new Dictionary<Item, int>();
+
+    public void addToInventory(Item item)
+    {
+        if (inventory.ContainsKey(item))
+        {
+            inventory[item] += 1;
+        }
+        else
+        {
+            inventory.Add(item, 1);
+        }
+    }
+
+    public void removeFromInventory(Item item)
+    {
+        if (inventory.ContainsKey(item))
+        {
+            if (inventory[item] <= 1)
+            {
+                inventory.Remove(item);
+            }
+            else
+            {
+                inventory[item] -= 1;
+            }
+        }
+        else
+        {
+            //do nothing, the item isn't there
+        }
+    }
+
+    #endregion
+
+    #region ENUMERATIONS OF ALL SORTS
+
+    public enum PlayerProfessions 
 	{
 		Warrior,
 		Mage,
