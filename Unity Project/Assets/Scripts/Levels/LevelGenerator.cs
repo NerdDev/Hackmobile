@@ -119,11 +119,8 @@ public class LevelGenerator
         DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
         foreach (Room room in layout.getRooms())
         { 
-            LayoutObjectLeaf doors = room.doors;
             MultiMap<GridType> potentialDoors = room.getWalls();
-            doors.putAll(potentialDoors);
-            potentialDoors.RemoveAll(room.walls.getCorneredBy(GridType.Wall, GridType.Wall));
-            doors.toLog(DebugManager.Logs.LevelGen);
+            potentialDoors.RemoveAll(room.getCorneredBy(GridType.Wall, GridType.Wall));
         }
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
     }

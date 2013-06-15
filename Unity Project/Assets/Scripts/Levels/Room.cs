@@ -2,20 +2,14 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class Room : LayoutObjectContainer {
+public class Room : LayoutObjectLeaf {
 
-    public LayoutObjectLeaf floors { get; set; }
-    public LayoutObjectLeaf walls { get; set; }
-    public LayoutObjectLeaf doors { get; set; }
     public int roomNum { get; private set; }
 	
     public Room(int num)
+		: base(LevelGenerator.maxRectSize, LevelGenerator.maxRectSize)
     {
-        int size = LevelGenerator.maxRectSize;
         roomNum = num;
-        floors = new LayoutObjectLeaf(size, size);
-        walls = new LayoutObjectLeaf(size, size);
-        doors = new LayoutObjectLeaf(size, size);
     }
 
     public void generate()
@@ -34,8 +28,8 @@ public class Room : LayoutObjectContainer {
             DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
         }
         #endregion
-        walls.BoxStroke(GridType.Wall, width, height);
-        floors.BoxFill(GridType.Floor, width - 1, height - 1);
+        BoxFill(GridType.Floor, width - 1, height - 1);
+        BoxStroke(GridType.Wall, width, height);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
@@ -46,33 +40,20 @@ public class Room : LayoutObjectContainer {
     }
 	
 	public MultiMap<GridType> getWalls() {
-		return walls.getTypes(GridType.Wall);
+		return getTypes(GridType.Wall);
 	}
 	
 	public MultiMap<GridType> getFloors() {
-		return floors.getTypes(GridType.Floor);
+		return getTypes(GridType.Floor);
 	}
 	
 	public MultiMap<GridType> getDoors() {
-		return doors.getTypes(GridType.Door);
+		return getTypes(GridType.Door);
 	}
 	
 	public override string ToString()
 	{
 		return "Room " + roomNum;
 	}
-
-
-    protected override Bounding getBoundsInternal()
-    {
-        return walls.getBounds();
-    }
-
-    public override IEnumerator<LayoutObject> GetEnumerator()
-    {
-        yield return floors;
-        yield return walls;
-        yield return doors;
-    }
 
 }
