@@ -206,7 +206,15 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public override T[,] GetArr()
     {
-        throw new NotImplementedException();
+		Bounding bounds = GetBounding();
+		T[,] arr = new T[bounds.width(), bounds.height()];
+        foreach (KeyValuePair<int, SortedDictionary<int, T>> row in multimap)
+        {
+            foreach (KeyValuePair<int, T> val in row.Value)
+            {
+                arr[row.Key - bounds.yMin, val.Key - bounds.xMin] = val.Value;
+            }
+        }
     }
     #endregion
 

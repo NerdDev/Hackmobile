@@ -93,7 +93,7 @@ public class LevelGenerator
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
                 {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "This layout led to an overlap: " + room.getBounds());
+                    DebugManager.w(DebugManager.Logs.LevelGen, "This layout led to an overlap: " + room.GetBounding());
                     layout.toLog(DebugManager.Logs.LevelGen);
                 }
                 #endregion
@@ -103,7 +103,7 @@ public class LevelGenerator
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
 			{
-                DebugManager.w(DebugManager.Logs.LevelGen, "Layout after placing room at: " + room.getBounds());
+                DebugManager.w(DebugManager.Logs.LevelGen, "Layout after placing room at: " + room.GetBounding());
                 layout.toLog(DebugManager.Logs.LevelGen);
                 DebugManager.printBreakers(DebugManager.Logs.LevelGen, 4);
             }
@@ -120,7 +120,20 @@ public class LevelGenerator
         foreach (Room room in layout.getRooms())
         { 
             MultiMap<GridType> potentialDoors = room.getWalls();
+			#region DEBUG
+			if (DebugManager.logging(DebugManager.Logs.LevelGen))
+			{
+				potentialDoors.toLog(DebugManager.Logs.LevelGen);
+			}
+			#endregion
             potentialDoors.RemoveAll(room.getCorneredBy(GridType.Wall, GridType.Wall));
+			#region DEBUG
+			if (DebugManager.logging(DebugManager.Logs.LevelGen))
+			{
+				potentialDoors.toLog(DebugManager.Logs.LevelGen);
+			}
+			#endregion
+			potentialDoors.toLog(DebugManager.Logs.LevelGen);
         }
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
     }

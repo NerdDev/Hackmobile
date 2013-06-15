@@ -8,6 +8,15 @@ public class Bounding {
     public int xMax { get; set; }
     public int yMin { get; set; }
     public int yMax { get; set; }
+	public int width {
+		get { return xMax - xMin; }
+	}
+	public int height {
+		get { return xMax - xMin; }
+	}
+	public int area {
+		get { return width * height; }
+	}
 
     #region Ctors
     public Bounding()
@@ -69,23 +78,6 @@ public class Bounding {
         }
     }
     #endregion Absorbs
-
-    #region GetSet
-    public int width()
-	{
-		return xMax - xMin;
-	}
-	
-	public int height()
-	{
-		return yMax - yMin;	
-	}
-
-    public int area()
-    {
-        return width() * height();
-    }
-    #endregion GetSet
 
     #region Intersects
     public void boundingDimensions(Bounding rhs, out int width, out int height)

@@ -50,5 +50,33 @@ abstract public class Container2D<T> {
         }
     }
     public abstract T[,] GetArr();
+	
+	public List<String> ToRowStrings()
+	{
+		T[,] array = GetArr ();
+        List<string> ret = new List<string>();
+		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
+            string rowStr = "";
+    		for (int x = 0; x < array.GetLength(1); x += 1) {
+        		rowStr += array[y,x].ToString();
+    		}
+            ret.Add(rowStr);
+		}
+        return ret;	
+	}
+	
+	public virtual void toLog(DebugManager.Logs log)
+    {
+        if (DebugManager.logging(log))
+        {
+			DebugManager.printHeader(log, ToString()); 
+            foreach (string s in ToRowStrings())
+            {
+                DebugManager.w(log, s);
+            }
+            DebugManager.w(log, "Bounds: " + GetBounding().ToString());
+			DebugManager.printFooter(log);
+        }
+    }
 
 }
