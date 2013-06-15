@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
-    static int growth = 20;
+    static int growth = 10;
     protected T[,] arr;
     int xShift;
     int yShift;
@@ -84,19 +84,27 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return arr.GetLength(0);
     }
 	
+	static int tmp = 0;
     public override void Put(T val, int x, int y)
     {
-		x += xShift;
-		y += yShift;
-        if (InRangeInternal(x, y))
+        if (InRange(x, y))
         {
+			x += xShift;
+			y += yShift;
             if (comparator == null || 1 == comparator.compare(val, arr[y, x]))
             {
                 arr[y, x] = val;
             }
+			tmp = 0;
         }
         else
         {
+			tmp = tmp + 1;
+			if (tmp > 5)
+			{
+				int wer = 23;	
+			}
+			DebugManager.w (DebugManager.Logs.LevelGen, "Couldnt fit: " + x + "  " + y + "   " + tmp);
             expandToFit(x, y);
             Put(val, x, y);
         }
@@ -104,7 +112,10 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public void expandToFit(int x, int y)
     {
-        Array2Dcoord<T> tmp = new Array2Dcoord<T>(x * 2, y * 2, this);
+        Array2Dcoord<T> tmp = new Array2Dcoord<T>(
+			Math.Max(Math.Abs(x * 2), getWidth ()) + growth,
+			Math.Max (Math.Abs (y * 2), getHeight()) + growth,
+			this);
         arr = tmp.arr;
         xShift = tmp.xShift;
         yShift = tmp.yShift;
