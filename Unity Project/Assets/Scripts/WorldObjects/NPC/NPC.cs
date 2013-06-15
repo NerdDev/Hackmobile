@@ -22,20 +22,33 @@ public class NPC : WorldObject
     }
     #endregion
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    Attributes currentAttributes;
+    Attributes maxAttributes;
+    Stats stats;
 
     public void setData(NPC npc)
     {
-        //add properties here.
+        this.currentAttributes = npc.currentAttributes;
+        this.maxAttributes = npc.maxAttributes;
+        this.stats = npc.stats;
     }
+}
+
+struct Attributes
+{
+    public int strength;
+    public int charisma;
+    public int wisdom;
+    public int dexterity;
+    public int intelligence;
+    public int constitution;
+}
+
+struct Stats
+{
+    public int baseHealth;
+    public int currentHealth;
+    public int basePower;
+    public int currentPower;
+    public int nutrition;
 }
