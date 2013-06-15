@@ -58,13 +58,21 @@ public class InputManager : MonoBehaviour {
 			BigBoss.ItemMaster.CreatePotion(place,Potion.Size.Small);
 			Debug.Log("X");
 		}
-		if (Input.GetKeyDown(KeyCode.Alpha1))
+		if (Input.GetKeyDown(KeyCode.W))
 		{
-			BigBoss.PlayerInfo.GainLevel();
+			BigBoss.PlayerInfo.PlayerMoveForward();
 		}
-		if (Input.GetKeyDown(KeyCode.Q))
+		if (Input.GetKeyDown(KeyCode.A))
 		{
-			BigBoss.PlayerInfo.GetXPToNextLevel();
+			
+		}
+		if (Input.GetKeyDown(KeyCode.S))
+		{
+			
+		}
+		if (Input.GetKeyDown(KeyCode.D))
+		{
+			
 		}
 			
 		
