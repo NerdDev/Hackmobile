@@ -36,5 +36,12 @@ public class GridMap : Array2Dcoord<GridType> {
 		return GridTypeComparator.get();
 	}
     #endregion
-
+	
+    public override void Put(GridType val, int x, int y)
+    {
+		if (val != GridType.NULL)
+		{
+			base.Put(val, x, y);
+		}
+    }
 }

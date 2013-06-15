@@ -196,7 +196,7 @@ abstract public class LayoutObject {
 
     public virtual void toLog(DebugManager.Logs log)
     {
-        if (DebugManager.logging(log))
+         if (DebugManager.logging(log))
         {
 			DebugManager.printHeader(log, ToString()); 
             foreach (string s in ToRowStrings())

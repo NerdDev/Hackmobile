@@ -8,7 +8,7 @@ public class Room : LayoutObjectContainer {
     public LayoutObjectLeaf walls { get; set; }
     public LayoutObjectLeaf doors { get; set; }
     public int roomNum { get; private set; }
-
+	
     public Room(int num)
     {
         int size = LevelGenerator.maxRectSize * 2;

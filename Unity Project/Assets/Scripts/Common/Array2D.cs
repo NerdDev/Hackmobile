@@ -17,9 +17,9 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public Array2Dcoord(int width, int height) : base()
     {
-        arr = new T[height, width];
-        xShift = width / 2;
-        yShift = height / 2;
+        arr = new T[height * 2 + 1, width * 2 + 1];
+        xShift = width;
+        yShift = height;
     }
 
     public Array2Dcoord(int width, int height, Array2Dcoord<T> rhs)
@@ -41,8 +41,8 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     }
 	
 	public Array2Dcoord(Bounding bound)
-		: this((Mathf.Max(Mathf.Abs(bound.xMin), Mathf.Abs(bound.xMax) + 1) * 2)
-			,(Mathf.Max(Mathf.Abs(bound.yMin), Mathf.Abs(bound.yMax)) + 1) * 2)
+		: this(Mathf.Max(Mathf.Abs(bound.xMin), Mathf.Abs(bound.xMax))
+			,Mathf.Max(Mathf.Abs(bound.yMin), Mathf.Abs(bound.yMax)))
 	{
 	}
     #endregion
@@ -76,12 +76,12 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public int getWidth()
     {
-        return arr.GetLength(1);
+        return arr.GetLength(1) - xShift - 1;
     }
 
     public int getHeight()
     {
-        return arr.GetLength(0);
+        return arr.GetLength(0) - yShift - 1;
     }
 	
 	static int tmp = 0;
@@ -113,8 +113,8 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     public void expandToFit(int x, int y)
     {
         Array2Dcoord<T> tmp = new Array2Dcoord<T>(
-			Math.Max(Math.Abs(x * 2), getWidth ()) + growth,
-			Math.Max (Math.Abs (y * 2), getHeight()) + growth,
+			Math.Max(Math.Abs(x), getWidth ()),
+			Math.Max (Math.Abs (y), getHeight()),
 			this);
         arr = tmp.arr;
         xShift = tmp.xShift;
