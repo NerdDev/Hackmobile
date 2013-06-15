@@ -6,12 +6,12 @@ public class NPCManager : MonoBehaviour {
 
 	public List<NPC> totalNumberOfNPCs;
 
-    public void AddItemToMasterList(NPC npc)
+    public void AddNPCToMasterList(NPC npc)
     {
         totalNumberOfNPCs.Add(npc);
     }
 
-    public void RemoveItemFromMasterList(NPC npc)
+    public void RemoveNPCFromMasterList(NPC npc)
     {
         totalNumberOfNPCs.Remove(npc);//look up this generic method and see if we leave a memory leak
     }
