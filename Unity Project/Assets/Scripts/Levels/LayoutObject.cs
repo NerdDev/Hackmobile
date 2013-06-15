@@ -118,7 +118,7 @@ abstract public class LayoutObject {
 	
     public GridType[,] getArr()
     {
-        return getMap().getArr();
+        return getMap().GetArr();
     }
     #endregion GetSet
 

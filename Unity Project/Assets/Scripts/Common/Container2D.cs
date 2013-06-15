@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 abstract public class Container2D<T> {
 
@@ -13,31 +15,31 @@ abstract public class Container2D<T> {
 	{	
 		return null;
 	}
-    public abstract T get(int x, int y);
-    public abstract bool inRange(int x, int y);
-    public virtual void put(T val, int x, int y)
+    public abstract T Get(int x, int y);
+    public abstract bool InRange(int x, int y);
+    public virtual void Put(T val, int x, int y)
     {
         if (
-			inRange(x, y)
+			InRange(x, y)
 			&& (comparator == null
-            || 1 == comparator.compare(val, get(x,y)))) {
-            putInternal(val, x, y);
+            || 1 == comparator.compare(val, Get(x,y)))) {
+            PutInternal(val, x, y);
         }
     }
-    public abstract void putInternal(T val, int x, int y);
-    public abstract Bounding getBounding();
+    public abstract void PutInternal(T val, int x, int y);
+    public abstract Bounding GetBounding();
     public virtual void putRow(T t, int xl, int xr, int y)
     {
         for (; xl <= xr; xl++)
         {
-            put(t, xl, y);
+            Put(t, xl, y);
         }
     }
-    public virtual void putCol(T t, int y1, int y2, int x)
+    public virtual void PutCol(T t, int y1, int y2, int x)
     {
         for (; y1 <= y2; y1++)
         {
-            put(t, x, y1);
+            Put(t, x, y1);
         }
     }
     public virtual void putSquare(T t, int xl, int xr, int yb, int yt)
@@ -47,6 +49,6 @@ abstract public class Container2D<T> {
             putRow(t, xl, xr, yb);
         }
     }
-    public abstract T[,] getArr();
+    public abstract T[,] GetArr();
 
 }

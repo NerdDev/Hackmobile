@@ -116,12 +116,16 @@ public class LevelGenerator
 
     void placeDoors(LevelLayout layout)
     {
+        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
         foreach (Room room in layout.getRooms())
         { 
-            LayoutObjectLeaf walls = room.walls;
             LayoutObjectLeaf doors = room.doors;
-			room.getArr();
+            MultiMap<GridType> potentialDoors = room.walls.getType(GridType.Wall);
+            doors.putAll(potentialDoors);
+            potentialDoors.RemoveAll(room.walls.getCorneredBy(GridType.Wall, GridType.Wall));
+            doors.toLog(DebugManager.Logs.LevelGen);
         }
+        DebugManager.printFooter(DebugManager.Logs.LevelGen);
     }
 
     Point generateShiftMagnitude(int mag)

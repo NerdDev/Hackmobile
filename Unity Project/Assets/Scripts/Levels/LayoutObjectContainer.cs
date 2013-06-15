@@ -14,7 +14,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         foreach(LayoutObject obj in this)
         {
 			GridMap bakedObj = obj.getBakedMap();
-            ret.putAll(bakedObj, shiftP);
+            ret.PutAll(bakedObj, shiftP);
         }
         return ret;
     }

@@ -1,8 +1,11 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
-public class Array2Dcoord<T> : Container2D<T> {
-    
+public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
+
+    static int growth = 20;
     protected T[,] arr;
     int xShift;
     int yShift;
@@ -22,19 +25,19 @@ public class Array2Dcoord<T> : Container2D<T> {
     public Array2Dcoord(int width, int height, Array2Dcoord<T> rhs)
         : this(width, height)
     {
-        putAll(rhs);
+        PutAll(rhs);
     }
 
     public Array2Dcoord(int width, int height, Array2Dcoord<T> rhs, Point shift)
         : this(width, height)
     {
-        putAll(rhs, shift);
+        PutAll(rhs, shift);
     }
 
     public Array2Dcoord(int width, int height, Array2Dcoord<T> rhs, int xShift, int yShift)
         : this(width, height)
     {
-        putAll(rhs, xShift, yShift);
+        PutAll(rhs, xShift, yShift);
     }
 	
 	public Array2Dcoord(Bounding bound)
@@ -45,78 +48,103 @@ public class Array2Dcoord<T> : Container2D<T> {
     #endregion
 
     #region GetSet
-    public override T get(int x, int y)
+    public override T Get(int x, int y)
     {
         x += xShift;
         y += yShift;
-        if (inRangeInternal(x, y))
+        if (InRangeInternal(x, y))
         {
             return arr[y, x];
         }
         return default(T);
     }
 
-    public override bool inRange(int x, int y)
+    public override bool InRange(int x, int y)
     {
         x += xShift;
         y += yShift;
-        return inRangeInternal(x, y);
+        return InRangeInternal(x, y);
     }
 
-    protected bool inRangeInternal(int x, int y)
+    protected bool InRangeInternal(int x, int y)
     {
         return y < arr.GetLength(0)
             && x < arr.GetLength(1)
             && y >= 0
             && x >= 0;
     }
+
+    public int getWidth()
+    {
+        return arr.GetLength(1);
+    }
+
+    public int getHeight()
+    {
+        return arr.GetLength(0);
+    }
 	
-    public override void put(T val, int x, int y)
+    public override void Put(T val, int x, int y)
     {
 		x += xShift;
 		y += yShift;
-        if (inRangeInternal(x, y)
-			&& (comparator == null
-            || 1 == comparator.compare(val, arr[y,x]))) {
-            arr[y,x] = val;
+        if (InRangeInternal(x, y))
+        {
+            if (comparator == null || 1 == comparator.compare(val, arr[y, x]))
+            {
+                arr[y, x] = val;
+            }
+        }
+        else
+        {
+            expandToFit(x, y);
+            Put(val, x, y);
         }
     }
+
+    public void expandToFit(int x, int y)
+    {
+        Array2Dcoord<T> tmp = new Array2Dcoord<T>(x * 2, y * 2, this);
+        arr = tmp.arr;
+        xShift = tmp.xShift;
+        yShift = tmp.yShift;
+    }
 	
-    public override void putInternal(T val, int x, int y)
+    public override void PutInternal(T val, int x, int y)
     {
 		x += xShift;
 		x += yShift;
         arr[y, x] = val;
     }
 
-    public void putAll(Array2Dcoord<T> rhs)
+    public void PutAll(Array2Dcoord<T> rhs)
     {
         for (int y = 0; y < rhs.arr.GetLength(0); y++)
         {
             for (int x = 0; x < rhs.arr.GetLength(1); x++)
             {
-                put(rhs.arr[y, x], x - rhs.xShift, y - rhs.yShift);
+                Put(rhs.arr[y, x], x - rhs.xShift, y - rhs.yShift);
             }
         }
     }
 
-    public void putAll(Array2Dcoord<T> rhs, int additionalXshift, int additionalYshift)
+    public void PutAll(Array2Dcoord<T> rhs, int additionalXshift, int additionalYshift)
     {
         for (int y = 0; y < rhs.arr.GetLength(0); y++)
         {
             for (int x = 0; x < rhs.arr.GetLength(1); x++)
             {
-                put(rhs.arr[y, x], x - rhs.xShift + additionalXshift, y - rhs.yShift + additionalYshift);
+                Put(rhs.arr[y, x], x - rhs.xShift + additionalXshift, y - rhs.yShift + additionalYshift);
 			}
         }
     }
 
-    public void putAll(Array2Dcoord<T> rhs, Point shift)
+    public void PutAll(Array2Dcoord<T> rhs, Point shift)
     {
-        putAll(rhs, shift.x, shift.y);
+        PutAll(rhs, shift.x, shift.y);
     }
 
-    public void putRow(T t, int xl, int xr, int y)
+    public void PutRow(T t, int xl, int xr, int y)
     {
         xl += xShift;
         xr += xShift;
@@ -127,7 +155,7 @@ public class Array2Dcoord<T> : Container2D<T> {
         }
     }
 
-    public override void putCol(T t, int y1, int y2, int x)
+    public override void PutCol(T t, int y1, int y2, int x)
     {
         x += xShift;
         y1 += yShift;
@@ -138,7 +166,7 @@ public class Array2Dcoord<T> : Container2D<T> {
         }
     }
 
-    public override Bounding getBounding()
+    public override Bounding GetBounding()
     {
         Bounding ret = new Bounding();
         ret.xMin = -xShift;
@@ -148,9 +176,28 @@ public class Array2Dcoord<T> : Container2D<T> {
         return ret;
     }
 
-    public override T[,] getArr()
+    public override T[,] GetArr()
     {
         return arr;
+    }
+    #endregion
+
+    #region Iteration
+    public IEnumerator<Value2D<T>> GetEnumerator()
+    {
+        for (int y = 0; y < arr.GetLength(1); y++)
+        {
+            for (int x = 0; x < arr.GetLength(0); x++)
+            {
+                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]);
+                yield return val;
+            }
+        }
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
     #endregion
 }

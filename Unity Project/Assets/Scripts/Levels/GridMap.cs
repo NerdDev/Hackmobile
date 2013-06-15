@@ -11,19 +11,19 @@ public class GridMap : Array2Dcoord<GridType> {
     public GridMap(GridMap rhs) 
         : base(rhs.arr.GetLength(1), rhs.arr.GetLength(0))
     {
-        putAll(rhs);
+        PutAll(rhs);
     }
 
     public GridMap(GridMap rhs, Point shift)
         : base(rhs.arr.GetLength(1), rhs.arr.GetLength(0))
     {
-        putAll(rhs, shift);
+        PutAll(rhs, shift);
     }
 
     public GridMap(GridMap rhs, int xShift, int yShift)
         : base(rhs.arr.GetLength(1), rhs.arr.GetLength(0))
     {
-        putAll(rhs, xShift, yShift);
+        PutAll(rhs, xShift, yShift);
     }
 	
 	public GridMap(Bounding bounds) : base(bounds)
