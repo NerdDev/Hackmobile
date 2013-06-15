@@ -120,7 +120,7 @@ public class LevelGenerator
         foreach (Room room in layout.getRooms())
         { 
             LayoutObjectLeaf doors = room.doors;
-            MultiMap<GridType> potentialDoors = room.walls.getType(GridType.Wall);
+            MultiMap<GridType> potentialDoors = room.getWalls();
             doors.putAll(potentialDoors);
             potentialDoors.RemoveAll(room.walls.getCorneredBy(GridType.Wall, GridType.Wall));
             doors.toLog(DebugManager.Logs.LevelGen);

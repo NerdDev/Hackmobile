@@ -11,7 +11,7 @@ public class Room : LayoutObjectContainer {
 	
     public Room(int num)
     {
-        int size = LevelGenerator.maxRectSize * 2;
+        int size = LevelGenerator.maxRectSize;
         roomNum = num;
         floors = new LayoutObjectLeaf(size, size);
         walls = new LayoutObjectLeaf(size, size);
@@ -44,6 +44,18 @@ public class Room : LayoutObjectContainer {
         }
         #endregion
     }
+	
+	public MultiMap<GridType> getWalls() {
+		return walls.getTypes(GridType.Wall);
+	}
+	
+	public MultiMap<GridType> getFloors() {
+		return floors.getTypes(GridType.Floor);
+	}
+	
+	public MultiMap<GridType> getDoors() {
+		return doors.getTypes(GridType.Door);
+	}
 	
 	public override string ToString()
 	{

@@ -84,7 +84,6 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return arr.GetLength(0) - yShift - 1;
     }
 	
-	static int tmp = 0;
     public override void Put(T val, int x, int y)
     {
         if (InRange(x, y))
@@ -95,16 +94,9 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
             {
                 arr[y, x] = val;
             }
-			tmp = 0;
         }
         else
         {
-			tmp = tmp + 1;
-			if (tmp > 5)
-			{
-				int wer = 23;	
-			}
-			DebugManager.w (DebugManager.Logs.LevelGen, "Couldnt fit: " + x + "  " + y + "   " + tmp);
             expandToFit(x, y);
             Put(val, x, y);
         }
@@ -112,10 +104,15 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public void expandToFit(int x, int y)
     {
-        Array2Dcoord<T> tmp = new Array2Dcoord<T>(
-			Math.Max(Math.Abs(x), getWidth ()),
-			Math.Max (Math.Abs (y), getHeight()),
-			this);
+		int maxWidth = Math.Max(Math.Abs(x), getWidth ());
+		int maxHeight = Math.Max (Math.Abs (y), getHeight());
+		if (maxWidth != getWidth()) {
+			maxWidth += growth;	
+		}
+		if (maxHeight != getHeight()) {
+			maxHeight += growth;	
+		}
+        Array2Dcoord<T> tmp = new Array2Dcoord<T>(maxWidth, maxHeight, this);
         arr = tmp.arr;
         xShift = tmp.xShift;
         yShift = tmp.yShift;
@@ -200,7 +197,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         {
             for (int x = 0; x < arr.GetLength(0); x++)
             {
-                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]);
+                Value2D<T> val = new Value2D<T>(x - xShift, y - yShift, arr[y, x]);
                 yield return val;
             }
         }
