@@ -76,7 +76,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return row;
     }
 
-    public void Put(T val, int x, int y)
+    public override void Put(T val, int x, int y)
     {
         PutInternal(val, x, y);
     }
@@ -154,7 +154,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         }
     }
 
-    public void PutCol(T t, int y1, int y2, int x)
+    public override void PutCol(T t, int y1, int y2, int x)
     {
         for (; y1 <= y2; y1++)
         {
@@ -186,28 +186,21 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public override Bounding GetBounding()
     {
-        Bounding ret = new Bounding();
-        if (multimap.Count > 0)
+		Bounding bounds = new Bounding();
+        foreach (KeyValuePair<int, SortedDictionary<int, T>> row in multimap)
         {
-            IEnumerator<int> ys = multimap.Keys.GetEnumerator();
-            bool first = true;
-            while (ys.MoveNext())
+            foreach (KeyValuePair<int, T> val in row.Value)
             {
-                if (first)
-                {
-                    first = false;
-                    ret.yMin = ys.Current;
-                }
-                ret.yMax = ys.Current;
+                bounds.absorb(val.Key, row.Key);
             }
         }
-        throw new NotImplementedException();
+		return bounds;
     }
 
     public override T[,] GetArr()
     {
-		Bounding bounds = GetBounding();
-		T[,] arr = new T[bounds.width(), bounds.height()];
+        Bounding bounds = GetBounding();
+        T[,] arr = new T[bounds.height + 1, bounds.width + 1];
         foreach (KeyValuePair<int, SortedDictionary<int, T>> row in multimap)
         {
             foreach (KeyValuePair<int, T> val in row.Value)
@@ -215,6 +208,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
                 arr[row.Key - bounds.yMin, val.Key - bounds.xMin] = val.Value;
             }
         }
+		return arr;
     }
     #endregion
 

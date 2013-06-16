@@ -12,7 +12,7 @@ public class Bounding {
 		get { return xMax - xMin; }
 	}
 	public int height {
-		get { return xMax - xMin; }
+		get { return yMax - yMin; }
 	}
 	public int area {
 		get { return width * height; }

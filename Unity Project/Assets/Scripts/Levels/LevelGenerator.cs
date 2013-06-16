@@ -27,15 +27,28 @@ public class LevelGenerator
 
     public LevelLayout generateLayout(int levelDepth)
     {
+        return generateLayout(levelDepth, rand.Next(), rand.Next());
+    }
+
+    public LevelLayout generateLayout(int levelDepth, int seed, int unitySeed)
+    {
         #region DEBUG
-        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
+            DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
+            DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
+        }
         #endregion
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         placeRooms(rooms, layout);
         placeDoors(layout);
         #region DEBUG
-        DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
         #endregion
         return layout;
     }
@@ -43,12 +56,18 @@ public class LevelGenerator
     List<Room> generateRooms()
     {
         #region DEBUG
-        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generate Rooms");
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generate Rooms");
+        }
         #endregion
         List<Room> rooms = new List<Room>();
         int numRooms = rand.Next(minRooms, maxRooms);
         #region DEBUG
-        DebugManager.w(DebugManager.Logs.LevelGen, "Generating " + numRooms + " rooms.");
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Generating " + numRooms + " rooms.");
+        }
         #endregion
         for (int i = 1; i <= numRooms; i++)
         {
@@ -57,7 +76,10 @@ public class LevelGenerator
 			rooms.Add(room);
         }
         #region DEBUG
-        DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
         #endregion
         return rooms;
     }
@@ -65,7 +87,10 @@ public class LevelGenerator
     void placeRooms(List<Room> rooms, LevelLayout layout)
     {
         #region DEBUG
-        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Rooms");
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Rooms");
+        }
         #endregion
         List<LayoutObject> placedRooms = new List<LayoutObject>();
         placedRooms.Add(new Room(0)); // Seed empty center room to start positioning from.
@@ -116,26 +141,56 @@ public class LevelGenerator
 
     void placeDoors(LevelLayout layout)
     {
-        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
+        }
+        #endregion
         foreach (Room room in layout.getRooms())
-        { 
-            MultiMap<GridType> potentialDoors = room.getWalls();
+        {
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors on " + room);
+            }
+            #endregion
+            GridMap potentialDoors = room.getWalls();
 			#region DEBUG
 			if (DebugManager.logging(DebugManager.Logs.LevelGen))
 			{
+                DebugManager.w(DebugManager.Logs.LevelGen, "Original Room");
 				potentialDoors.toLog(DebugManager.Logs.LevelGen);
 			}
 			#endregion
             potentialDoors.RemoveAll(room.getCorneredBy(GridType.Wall, GridType.Wall));
+            int numDoors = rand.Next(doorsMin, doorsMax);
 			#region DEBUG
 			if (DebugManager.logging(DebugManager.Logs.LevelGen))
-			{
-				potentialDoors.toLog(DebugManager.Logs.LevelGen);
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, "Removing Invalid Locations");
+                potentialDoors.toLog(DebugManager.Logs.LevelGen);
+                DebugManager.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
 			}
-			#endregion
-			potentialDoors.toLog(DebugManager.Logs.LevelGen);
+            #endregion
+            for (int i = 0; i < numDoors; i++)
+            {
+
+            }
+
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            }
+            #endregion
         }
-        DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+		#endregion
     }
 
     Point generateShiftMagnitude(int mag)

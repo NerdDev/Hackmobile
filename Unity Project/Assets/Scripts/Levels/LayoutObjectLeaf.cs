@@ -4,12 +4,12 @@ using System;
 
 public class LayoutObjectLeaf : LayoutObject {
 
-    GridMap grids;
+    GridArray grids;
 	Bounding bound = new Bounding();
 
     public LayoutObjectLeaf(int width, int height)
     {
-        grids = new GridMap(width, height);
+        grids = new GridArray(width, height);
     }
 
     #region GetSet
@@ -28,7 +28,7 @@ public class LayoutObjectLeaf : LayoutObject {
         bound.absorb(x, y);
     }
 
-    public void putAll(MultiMap<GridType> map)
+    public void putAll(GridMap map)
     {
         foreach (Value2D<GridType> vals in map)
         {
@@ -61,15 +61,15 @@ public class LayoutObjectLeaf : LayoutObject {
         grids.Put(t, x, y);
     }
 
-    public override GridMap getMap()
+    public override GridArray getMap()
     {
         return grids;
     }
 
-    public override GridMap getBakedMap()
+    public override GridArray getBakedMap()
     {
 		if (!shiftP.isZero()){
-        	return new GridMap(grids, shiftP);
+        	return new GridArray(grids, shiftP);
 		} else {
 			return grids;	
 		}
@@ -82,9 +82,9 @@ public class LayoutObjectLeaf : LayoutObject {
     #endregion GetSet
 
     #region SpecGet
-    public MultiMap<GridType> getType(GridType t)
+    public GridMap getType(GridType t)
     {
-        MultiMap<GridType> ret = new MultiMap<GridType>();
+        GridMap ret = new GridMap();
         foreach (Value2D<GridType> val in grids)
         {
             if (t == val.val)
@@ -95,14 +95,14 @@ public class LayoutObjectLeaf : LayoutObject {
         return ret;
     }
 
-    public MultiMap<GridType> getTypes(params GridType[] ts)
+    public GridMap getTypes(params GridType[] ts)
     {
         return getTypes(new HashSet<GridType>(ts));
     }
 
-    public MultiMap<GridType> getTypes(HashSet<GridType> ts)
+    public GridMap getTypes(HashSet<GridType> ts)
     {
-        MultiMap<GridType> ret = new MultiMap<GridType>();
+        GridMap ret = new GridMap();
         foreach (Value2D<GridType> val in grids)
         {
             if (ts.Contains(val.val))
@@ -113,16 +113,16 @@ public class LayoutObjectLeaf : LayoutObject {
         return ret;
     }
 
-    public MultiMap<GridType> getCorneredBy(GridType target, params GridType[] by)
+    public GridMap getCorneredBy(GridType target, params GridType[] by)
     {
         return getCorneredBy(target, new HashSet<GridType>(by));
     }
 
-    public MultiMap<GridType> getCorneredBy(GridType target, HashSet<GridType> by)
+    public GridMap getCorneredBy(GridType target, HashSet<GridType> by)
     {
-        MultiMap<GridType> ret = new MultiMap<GridType>();
-        MultiMap<GridType> targets = getType(target);
-        MultiMap<GridType> cornerOptions = getTypes(by);
+        GridMap ret = new GridMap();
+        GridMap targets = getType(target);
+        GridMap cornerOptions = getTypes(by);
         foreach (Value2D<GridType> tval in targets)
         {
             bool corneredHoriz = cornerOptions.Contains(tval.x + 1, tval.y)

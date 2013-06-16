@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutObject> {
 
-    public override GridMap getMap()
+    public override GridArray getMap()
     {
         return getBakedMap();
     }
 
-    public override GridMap getBakedMap()
+    public override GridArray getBakedMap()
     {
-        GridMap ret = new GridMap(getBounds());
+        GridArray ret = new GridArray(GetBounding());
         foreach(LayoutObject obj in this)
         {
-			GridMap bakedObj = obj.getBakedMap();
+			GridArray bakedObj = obj.getBakedMap();
             ret.PutAll(bakedObj, shiftP);
         }
         return ret;
@@ -30,7 +30,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 	{
 		Bounding bound = new Bounding();
 		foreach (LayoutObject obj in this){
-			bound.absorb(obj.getBounds());
+			bound.absorb(obj.GetBounding());
 		}
 		return bound;
 	}

@@ -39,15 +39,15 @@ public class Room : LayoutObjectLeaf {
         #endregion
     }
 	
-	public MultiMap<GridType> getWalls() {
+	public GridMap getWalls() {
 		return getTypes(GridType.Wall);
 	}
 	
-	public MultiMap<GridType> getFloors() {
+	public GridMap getFloors() {
 		return getTypes(GridType.Floor);
 	}
 	
-	public MultiMap<GridType> getDoors() {
+	public GridMap getDoors() {
 		return getTypes(GridType.Door);
 	}
 	

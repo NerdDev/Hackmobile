@@ -51,7 +51,7 @@ abstract public class Container2D<T> {
     }
     public abstract T[,] GetArr();
 	
-	public List<String> ToRowStrings()
+	public virtual List<string> ToRowStrings()
 	{
 		T[,] array = GetArr ();
         List<string> ret = new List<string>();

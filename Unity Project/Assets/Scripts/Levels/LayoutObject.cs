@@ -32,7 +32,7 @@ abstract public class LayoutObject {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Shift Outside " + ToString());
             DebugManager.w(DebugManager.Logs.LevelGen, "Shifting outside of " + rhs.ToString());
             DebugManager.w(DebugManager.Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
-			DebugManager.w (DebugManager.Logs.LevelGen, "Bounds: " + getBounds() + "  RHS bounds: " + rhs.getBounds());
+			DebugManager.w (DebugManager.Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
 		}
 		#endregion
 		while(this.intersects(rhs))
@@ -42,7 +42,7 @@ abstract public class LayoutObject {
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Shifted to: " + getBounds());
+                DebugManager.w(DebugManager.Logs.LevelGen, "Shifted to: " + GetBounding());
             }
             #endregion
 		}
@@ -66,19 +66,19 @@ abstract public class LayoutObject {
         int xMagn = (int)Math.Abs(dir.x);
         int yMagn = (int)Math.Abs(dir.y);
         int xMove, yMove;
-		Bounding bound = getBounds();
-		Bounding rhsBound = rhs.getBounds();
+		Bounding bound = GetBounding();
+		Bounding rhsBound = rhs.GetBounding();
         float magRatio;
         // Find which has largest magnitude and move fully that direction first
         if (xMagn > yMagn)
         { // X larger magnitude
-            xMove = bound.width() / 2 + rhsBound.width() / 2 + 1;
+            xMove = bound.width / 2 + rhsBound.width / 2 + 1;
             magRatio = yMagn == 0 ? 0 : ((float)yMagn) / xMagn;
             yMove = (int)(xMove * magRatio);
         } 
         else
         { // Y larger magnitude
-            yMove = bound.height() / 2 + rhsBound.height() / 2 + 1;
+            yMove = bound.height / 2 + rhsBound.height / 2 + 1;
             magRatio = xMagn == 0 ? 0 : ((float)xMagn) / yMagn;
             xMove = (int)(yMove * magRatio);
         }
@@ -98,7 +98,7 @@ abstract public class LayoutObject {
     #endregion
 
     #region Bounds
-    public Bounding getBounds()
+    public Bounding GetBounding()
     {
         Bounding bound = new Bounding(getBoundsInternal());
         bound.xMin += shiftP.x;
@@ -112,9 +112,9 @@ abstract public class LayoutObject {
     #endregion Bounds
 
     #region GetSet
-    public abstract GridMap getMap();
+    public abstract GridArray getMap();
 
-    public abstract GridMap getBakedMap();
+    public abstract GridArray getBakedMap();
 	
     public GridType[,] getArr()
     {
@@ -125,7 +125,7 @@ abstract public class LayoutObject {
     #region Intersects
     public bool intersects(LayoutObject rhs)
     {
-        return getBounds().intersects(rhs.getBounds());
+        return GetBounding().intersects(rhs.GetBounding());
     }
 
     public bool intersects(List<LayoutObject> list)
@@ -203,7 +203,7 @@ abstract public class LayoutObject {
             {
                 DebugManager.w(log, s);
             }
-            DebugManager.w(log, "Bounds: " + getBounds().ToString());
+            DebugManager.w(log, "Bounds: " + GetBounding().ToString());
 			DebugManager.printFooter(log);
         }
     }
