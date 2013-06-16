@@ -3,6 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+// Array2Dcoord
+// An x-y coordinate container with multidimensional array internal storage.
+// (0,0) is stored at total width / 2 and total height / 2, respectively.
+// Multidimensional array is indexed [y,x].
+// Array automatically expands if a value is put outside its range.
 public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     static int growth = 10;
@@ -15,6 +20,8 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
     }
 
+    // Creates an array with width/height in both directions
+    // away from the origin (0,0)
     public Array2Dcoord(int width, int height) : base()
     {
         arr = new T[height * 2 + 1, width * 2 + 1];
@@ -22,24 +29,29 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         yShift = height;
     }
 
+    // Copy Ctor
     public Array2Dcoord(int width, int height, Array2Dcoord<T> rhs)
         : this(width, height)
     {
         PutAll(rhs);
     }
 
+    // Copy Ctor.  Also shifts points given amount
     public Array2Dcoord(int width, int height, Array2Dcoord<T> rhs, Point shift)
         : this(width, height)
     {
         PutAll(rhs, shift);
     }
 
+    // Copy Ctor.  Also shifts points given amount
     public Array2Dcoord(int width, int height, Array2Dcoord<T> rhs, int xShift, int yShift)
         : this(width, height)
     {
         PutAll(rhs, xShift, yShift);
     }
-	
+
+    // Creates an array with width/height in both directions from the origin.
+    // Uses the max width/height of the bounds in both directions, respectively.
 	public Array2Dcoord(Bounding bound)
 		: this(Mathf.Max(Mathf.Abs(bound.xMin), Mathf.Abs(bound.xMax))
 			,Mathf.Max(Mathf.Abs(bound.yMin), Mathf.Abs(bound.yMax)))
@@ -50,6 +62,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #region GetSet
     public override T Get(int x, int y)
     {
+        // Shift public points to proper internal points
         x += xShift;
         y += yShift;
         if (InRangeInternal(x, y))
@@ -61,6 +74,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public override bool InRange(int x, int y)
     {
+        // Shift public points to proper internal points
         x += xShift;
         y += yShift;
         return InRangeInternal(x, y);
@@ -74,16 +88,23 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
             && x >= 0;
     }
 
+    // Returns how far the array stores away from
+    // the origin in the X direction
     public int getWidth()
     {
         return arr.GetLength(1) - xShift - 1;
     }
 
+    // Returns how far the array stores away from
+    // the origin in the Y direction
     public int getHeight()
     {
         return arr.GetLength(0) - yShift - 1;
     }
 	
+    // Puts value into the array
+    // If outside the range, a new larger array is
+    // made to store the value.
     public override void Put(T val, int x, int y)
     {
         if (InRange(x, y))
@@ -102,23 +123,33 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         }
     }
 
+    // Expands the internal array to fit the values
+    // plus a static growth buffer amount.
     public void expandToFit(int x, int y)
     {
+        // Determine largest of parameter values vs existing values
 		int maxWidth = Math.Max(Math.Abs(x), getWidth ());
 		int maxHeight = Math.Max (Math.Abs (y), getHeight());
+
+        // If dimension needs to be grown, add growth buffer
 		if (maxWidth != getWidth()) {
 			maxWidth += growth;	
 		}
 		if (maxHeight != getHeight()) {
 			maxHeight += growth;	
 		}
+
+        // Make new larger arrray and copy data
         Array2Dcoord<T> tmp = new Array2Dcoord<T>(maxWidth, maxHeight, this);
+
+        // Set internal array to the new copied array
         arr = tmp.arr;
         xShift = tmp.xShift;
         yShift = tmp.yShift;
     }
 	
-    public override void PutInternal(T val, int x, int y)
+    // Unsafe put that does no checking or expanding
+    protected override void PutInternal(T val, int x, int y)
     {
 		x += xShift;
 		x += yShift;
@@ -131,6 +162,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         {
             for (int x = 0; x < rhs.arr.GetLength(1); x++)
             {
+                // Have to shift x/y to "public" realm to call public put function
                 Put(rhs.arr[y, x], x - rhs.xShift, y - rhs.yShift);
             }
         }
@@ -142,18 +174,23 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         {
             for (int x = 0; x < rhs.arr.GetLength(1); x++)
             {
+                // Have to shift x/y to "public" realm to call public put function
+                // Also apply additional desired shifts
                 Put(rhs.arr[y, x], x - rhs.xShift + additionalXshift, y - rhs.yShift + additionalYshift);
 			}
         }
     }
 
+    // Puts in values from another collection with desired shift
     public void PutAll(Array2Dcoord<T> rhs, Point shift)
     {
         PutAll(rhs, shift.x, shift.y);
     }
 
+    // Fills in a row with a desired value
     public void PutRow(T t, int xl, int xr, int y)
     {
+        // Shift public points to proper internal points
         xl += xShift;
         xr += xShift;
         y += yShift;
@@ -163,8 +200,10 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         }
     }
 
+    // Fills in a col with a desired value
     public override void PutCol(T t, int y1, int y2, int x)
     {
+        // Shift public points to proper internal points
         x += xShift;
         y1 += yShift;
         y2 += yShift;
@@ -174,6 +213,8 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         }
     }
 
+    // Gets public bounds of array 
+    // (Expanding equally both directions from the origin)
     public override Bounding GetBounding()
     {
         Bounding ret = new Bounding();

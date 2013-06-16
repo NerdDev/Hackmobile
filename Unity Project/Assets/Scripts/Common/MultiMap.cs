@@ -86,7 +86,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         Put(val.val, val.x, val.y);
     }
 
-    public override void PutInternal(T val, int x, int y)
+    protected override void PutInternal(T val, int x, int y)
     {
         SortedDictionary<int, T> row = GetRowCreate(y);
         Put(row, val, x);
