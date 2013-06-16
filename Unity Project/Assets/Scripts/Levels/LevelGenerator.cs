@@ -19,7 +19,7 @@ public class LevelGenerator
 
     // Number of doors per room
     public static int doorsMin { get { return 1; } }
-    public static int doorsMax { get { return 4; } } //Max not inclusive
+    public static int doorsMax { get { return 5; } } //Max not inclusive
     #endregion
 
     public static System.Random rand = new System.Random();
@@ -175,12 +175,22 @@ public class LevelGenerator
             #endregion
             for (int i = 0; i < numDoors; i++)
             {
-
+                Value2D<GridType> doorSpace = potentialDoors.RandomValue(rand);
+                if (doorSpace != null)
+                {
+                    room.put(GridType.Door, doorSpace.x, doorSpace.y);
+			        #region DEBUG
+			        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                    {
+                        DebugManager.w(DebugManager.Logs.LevelGen, "Generated door at: " + doorSpace);
+                    }
+                    #endregion
+                }
             }
-
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
+                room.toLog(DebugManager.Logs.LevelGen);
                 DebugManager.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion

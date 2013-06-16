@@ -210,6 +210,49 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         }
 		return arr;
     }
+
+    public int Count()
+    {
+        int ret = multimap.Count;
+        foreach (SortedDictionary<int, T> row in multimap.Values)
+        {
+            ret += row.Count;
+        }
+        return ret;
+    }
+
+    public bool isEmpty()
+    {
+        return Count() == 0;
+    }
+
+    public Value2D<T> RandomValue(System.Random rand)
+    {
+        int count = Count();
+        if (count != 0)
+        {
+            int pick = rand.Next(count);
+            return GetNth(pick);
+        }
+        return null;
+    }
+
+    public Value2D<T> GetNth(int n)
+    {
+        if (n >= 0)
+        {
+            int count = 0;
+            foreach (Value2D<T> val in this)
+            {
+                if (count == n)
+                {
+                    return val;
+                }
+                count++;
+            }
+        }
+        return null;
+    }
     #endregion
 
     #region Iteration

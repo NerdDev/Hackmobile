@@ -15,8 +15,8 @@ public class LayoutObjectLeaf : LayoutObject {
     #region GetSet
     public GridType get(int x, int y)
     {
-        x -= shiftP.x;
-        y -= shiftP.y;
+        x += shiftP.x;
+        y += shiftP.y;
         return grids.Get(x, y);
     }
 
@@ -89,6 +89,8 @@ public class LayoutObjectLeaf : LayoutObject {
         {
             if (t == val.val)
             {
+				val.x += shiftP.x;
+				val.y += shiftP.y;
                 ret.Put(val);
             }
         }
@@ -107,6 +109,8 @@ public class LayoutObjectLeaf : LayoutObject {
         {
             if (ts.Contains(val.val))
             {
+				val.x += shiftP.x;
+				val.y += shiftP.y;
                 ret.Put(val);
             }
         }
@@ -131,6 +135,8 @@ public class LayoutObjectLeaf : LayoutObject {
                 || cornerOptions.Contains(tval.x, tval.y - 1);
             if (corneredHoriz && corneredVert)
             {
+				tval.x += shiftP.x;
+				tval.y += shiftP.y;
                 ret.Put(tval);
             }
         }

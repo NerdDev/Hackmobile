@@ -13,4 +13,9 @@ public class Value2D<T> {
         y = y_;
         val = val_;
     }
+
+    public override string ToString()
+    {
+        return "Value2D (" + x + "," + y + ", " + val + ")";
+    }
 }
