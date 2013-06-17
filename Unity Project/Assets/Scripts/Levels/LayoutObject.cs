@@ -194,17 +194,29 @@ abstract public class LayoutObject {
         }
     }
 
-    public virtual void toLog(DebugManager.Logs log)
+    public virtual void toLog(DebugManager.Logs log, params String[] customContent)
     {
-         if (DebugManager.logging(log))
+        if (DebugManager.logging(log))
         {
-			DebugManager.printHeader(log, ToString()); 
+            DebugManager.printHeader(log, ToString());
+            foreach (String s in customContent)
+            {
+                DebugManager.w(log, s);
+            }
             foreach (string s in ToRowStrings())
             {
                 DebugManager.w(log, s);
             }
             DebugManager.w(log, "Bounds: " + GetBounding().ToString());
 			DebugManager.printFooter(log);
+        }
+    }
+
+    public virtual void toLog(DebugManager.Logs log)
+    {
+        if (DebugManager.logging(log))
+        {
+            toLog(log, new String[0]);
         }
     }
     #endregion Printing

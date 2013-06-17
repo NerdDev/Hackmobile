@@ -116,6 +116,17 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         Remove(val.x, val.y);
     }
 
+    public void Remove(int x, int y, int width)
+    {
+        for (int yCur = y - width; yCur <= y + width; yCur++)
+        {
+            for (int xCur = x - width; xCur <= x + width; xCur++)
+            {
+                Remove(xCur, yCur);
+            }
+        }
+    }
+
     public void PutAll(MultiMap<T> rhs)
     {
         foreach (Value2D<T> val in rhs)

@@ -135,8 +135,6 @@ public class LayoutObjectLeaf : LayoutObject {
                 || cornerOptions.Contains(tval.x, tval.y - 1);
             if (corneredHoriz && corneredVert)
             {
-				tval.x += shiftP.x;
-				tval.y += shiftP.y;
                 ret.Put(tval);
             }
         }

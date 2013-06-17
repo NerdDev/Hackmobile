@@ -20,6 +20,7 @@ public class LevelGenerator
     // Number of doors per room
     public static int doorsMin { get { return 1; } }
     public static int doorsMax { get { return 5; } } //Max not inclusive
+    public static int minDoorSpacing { get { return 2; } }
     #endregion
 
     public static System.Random rand = new System.Random();
@@ -156,20 +157,20 @@ public class LevelGenerator
             }
             #endregion
             GridMap potentialDoors = room.getWalls();
+            GridMap corneredAreas = room.getCorneredBy(GridType.Wall, GridType.Wall);
 			#region DEBUG
 			if (DebugManager.logging(DebugManager.Logs.LevelGen))
 			{
-                DebugManager.w(DebugManager.Logs.LevelGen, "Original Room");
-				potentialDoors.toLog(DebugManager.Logs.LevelGen);
+                potentialDoors.toLog(DebugManager.Logs.LevelGen, "Original Room");
+                corneredAreas.toLog(DebugManager.Logs.LevelGen, "Cornered Areas");
 			}
 			#endregion
-            potentialDoors.RemoveAll(room.getCorneredBy(GridType.Wall, GridType.Wall));
+            potentialDoors.RemoveAll(corneredAreas);
             int numDoors = rand.Next(doorsMin, doorsMax);
 			#region DEBUG
 			if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Removing Invalid Locations");
-                potentialDoors.toLog(DebugManager.Logs.LevelGen);
+                potentialDoors.toLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
                 DebugManager.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
 			}
             #endregion
@@ -179,18 +180,26 @@ public class LevelGenerator
                 if (doorSpace != null)
                 {
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
-			        #region DEBUG
-			        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                    potentialDoors.Remove(doorSpace.x, doorSpace.y, minDoorSpacing - 1);
+                    #region DEBUG
+                    if (DebugManager.logging(DebugManager.Logs.LevelGen))
                     {
-                        DebugManager.w(DebugManager.Logs.LevelGen, "Generated door at: " + doorSpace);
+                        room.toLog(DebugManager.Logs.LevelGen, "Generated door at: " + doorSpace);
+                        potentialDoors.toLog(DebugManager.Logs.LevelGen, "Remaining options");
                     }
                     #endregion
                 }
+                #region DEBUG
+                else if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "No door options remain.");
+                }
+                #endregion
             }
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                room.toLog(DebugManager.Logs.LevelGen);
+                room.toLog(DebugManager.Logs.LevelGen, "Final Room After placing doors");
                 DebugManager.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion

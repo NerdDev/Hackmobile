@@ -69,14 +69,28 @@ abstract public class Container2D<T> {
     {
         if (DebugManager.logging(log))
         {
-			DebugManager.printHeader(log, ToString()); 
+            toLog(log, new String[0]);
+        }
+    }
+
+    public virtual void toLog(DebugManager.Logs log, params String[] customContent)
+    {
+        if (DebugManager.logging(log))
+        {
+            DebugManager.printHeader(log, ToString());
+            foreach (String s in customContent)
+            {
+                DebugManager.w(log, s);
+            }
             foreach (string s in ToRowStrings())
             {
                 DebugManager.w(log, s);
             }
             DebugManager.w(log, "Bounds: " + GetBounding().ToString());
-			DebugManager.printFooter(log);
+            DebugManager.printFooter(log);
         }
     }
+
+
 
 }
