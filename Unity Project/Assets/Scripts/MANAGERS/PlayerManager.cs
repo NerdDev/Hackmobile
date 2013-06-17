@@ -8,7 +8,16 @@ using System.Collections.Generic;
  */
 public class PlayerManager : MonoBehaviour {
 	
-	private GameObject bb;//bigboss ref to GO
+	
+	//Name/title info:
+	private string playerChosenName;
+	public string PlayerChosenName{get{ return playerChosenName;}}  //read only - set at char creation
+	
+	private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
+	public string PlayerTitle{get{ return playerTitle;}}  //read only - updated via class info
+	
+	private string playerTitleCombatArea;//wizardry, combat, bushido, medicine, chemistry, sightseeing, etc
+	public string PlayerTitleCombatArea{get{ return playerTitleCombatArea;}}  //read only - updated via class info
 	
 	private GameObject playerAvatar;
 	public GameObject PlayerAvatar{get{return playerAvatar;}}//read only global reference to the hero gameobject
@@ -20,6 +29,12 @@ public class PlayerManager : MonoBehaviour {
 	
 	private int playerCurrentHealth = 50;
 	public int PlayerCurrentHealth{get{ return playerCurrentHealth;}} //read only Player Health - change through Adjust()
+	
+	private int playerMaxWillpower = 100;  //temporarily hard-coded
+	public int PlayerMaxWillpower{get{ return playerMaxWillpower;}}  //read only - change through Adjust()
+	
+	private int playerCurrentWillpower = 50;
+	public int PlayerCurrentWillpower{get{ return playerCurrentWillpower;}} //read only Player Health - change through Adjust()
 	
 	private int playerCurrentXPForThisLevel = 0;  //temporarily hard-coded
 	public int PlayerCurrentXPForThisLevel{get{ return playerCurrentXPForThisLevel;}}  //read only - change through Adjust()
@@ -71,13 +86,21 @@ public class PlayerManager : MonoBehaviour {
 	
 	#region ENUMERATIONS OF ALL SORTS
 	
-	public enum PlayerProfessions 
+	public enum PlayerProfessions //are we keeping all of these?  Rename/rework a couple maybe?
 	{
-		Warrior,
-		Mage,
+		Archaeologist,
+		Barbarian,
+		Caveman,
+		Healer,
+		Knight,
+		Monk,
+		Priest,
 		Ranger,
+		Rogue,
 		Samurai,
-		
+		Tourist,
+		Valkyrie,
+		Wizard
 	}
 	public PlayerProfessions PlayerChosenProfession;
 	
@@ -117,12 +140,19 @@ public class PlayerManager : MonoBehaviour {
 	public enum BodyEventLocations    //This enum is for event use - monster hitting - traps, etc.  Equip locations are below
 	{
 		Head,
-		Arm,
-		Hand,
+		LeftArm,
+		RightArm,
+		LeftHand,
+		RightHand,
 		Chest,
 		Waist,
-		Leg,
-		Feet
+		LeftLeg,
+		RightLeg,
+		LeftKnee,
+		RightKnee,
+		LeftFoot,
+		RightFoot
+		
 		
 	}
 	public enum BodyEquipLocations    //WIP - body inventory equipping purposes
@@ -147,10 +177,11 @@ public class PlayerManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		DecidePlayerTitle();
 		DecidePlayerInventoryMaxWeight();
 		DecideHungerLevel();
 		
-		bb = GameObject.Find ("BIGBOSS");
+		
 		//Debug.Log(bb.gameObject);//working
 		//AdjustPlayerHealth(gameObject,0);
 	}
@@ -229,6 +260,110 @@ public class PlayerManager : MonoBehaviour {
 		Debug.Log("Max weight calculated: " + playerInventoryWeightMax);
 		return true;
 	}
+	public string DecidePlayerTitle()
+	{
+		
+		//Called in order to figure out what the player's title should be given all variables (titles taken verbatim from nethack:
+		switch (PlayerChosenProfession) 
+		{
+			case PlayerProfessions.Archaeologist://I WANT A TREASURE HUNTER/TOMB RAIDER/ RELIC HUNTER
+			{
+				//Trickle if check for level:
+				if (playerCurrentLevel < 2)
+				{
+					playerTitle = "Digger";	
+				}
+				else if (playerCurrentLevel < 5)
+				{
+					playerTitle = "Field Worker";
+				}
+				else if (playerCurrentLevel < 9)
+				{
+					playerTitle = "Investigator";
+				}
+				else if (playerCurrentLevel < 13)
+				{
+					playerTitle = "Exhumer";
+				}
+				else if (playerCurrentLevel < 17)
+				{
+					playerTitle = "Excavator";
+				}
+				else if (playerCurrentLevel < 21)
+				{
+					playerTitle = "Spelunker";
+				}
+				else if (playerCurrentLevel < 25)
+				{
+					playerTitle = "Speleologist";
+				}
+				else if (playerCurrentLevel < 29)
+				{
+					playerTitle = "Collector";
+				}
+				else if (playerCurrentLevel < 30)
+				{
+					playerTitle = "Curator";
+				}
+				break;
+			}//end case
+			case PlayerProfessions.Barbarian:
+			{
+			
+			}
+			case PlayerProfessions.Caveman:
+			{
+				
+			}
+			case PlayerProfessions.Healer:
+			{
+			
+			}
+			case PlayerProfessions.Knight:
+			{
+				
+			}
+			case PlayerProfessions.Monk:
+			{
+			
+			}
+			case PlayerProfessions.Priest:
+			{
+				
+			}
+			case PlayerProfessions.Ranger:
+			{
+			
+			}
+			case PlayerProfessions.Rogue:
+			{
+				
+			}
+			case PlayerProfessions.Samurai:
+			{
+			
+			}
+			case PlayerProfessions.Tourist:
+			{
+				
+			}
+			case PlayerProfessions.Valkyrie:
+			{
+			
+			}
+			case PlayerProfessions.Wizard:
+			{
+				
+			}
+			
+			
+		break;
+		}
+		
+		
+		string finalTitle = playerChosenName + ", " + playerTitle + " of " + playerTitleCombatArea;
+		return finalTitle;
+	}
 	#endregion
 	
 	
@@ -281,5 +416,20 @@ public class PlayerManager : MonoBehaviour {
 		Debug.Log("IncreasePlayerMaxHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
 	}
 	//A STRAIGHT UP SETHEALTH() COMMAND I THINK IS HIGHLY RECOMMENDED JUST IN CASE
+	#endregion
+	
+	#region SETFUCTIONS   //THESE SHOULD BE USED IN GAME ONLY FOR VERY SPECIFIC SITUATIONS AND/OR EVENTS
+	
+	public int SetHealth(GameObject senderObj,int newHealthAmount)
+	{
+		
+		Debug.Log("SetHealth() called from " + senderObj + ".  Target health should be " + newHealthAmount);
+		
+		playerCurrentHealth = newHealthAmount; 
+		BigBoss.Gooey.UpdateHealthBar();
+		Debug.Log("SetHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
+		return playerCurrentHealth;
+	}
+	
 	#endregion
 }
