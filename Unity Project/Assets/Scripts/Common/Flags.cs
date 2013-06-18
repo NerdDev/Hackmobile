@@ -1,5 +1,17 @@
 ﻿using System;
 
+/**
+ * Helper class for dealing with flags.
+ * 
+ * Usage:
+ *  Flags fl = new Flags(SomeEnum.DEFAULT); // use the 0 value or somesuch with all bits cleared.
+ *  fl[SomeEnum.VALUE1] = true; //sets the value1 bit to true.
+ *  if (fl[SomeEnum.VALUE2]) { } //checks if the bit is true or not.
+ *  
+ * All checks can be done with multiple bits, ie;
+ *  fl[SomeEnum.VALUE1 | SomeEnum.VALUE2] = true; //sets both value1 and value2 to true.
+ * 
+ */
 public class Flags
 {
     long flags;
@@ -37,7 +49,10 @@ public class Flags
 
     public Enum Value
     {
-        get { return (Enum)Enum.ToObject(e.GetType(), flags); }
+        get 
+        { 
+            return (Enum) Enum.ToObject(e.GetType(), flags);
+        }
         set
         {
             e = value;
@@ -47,7 +62,7 @@ public class Flags
 
     public static implicit operator Enum(Flags src)
     {
-        return src != null ? src.Value : (Enum)Enum.ToObject(src.e.GetType(), src.flags);
+        return src != null ? src.Value : (Enum) Enum.ToObject(src.e.GetType(), src.flags);
     }
 
     public static implicit operator Flags(Enum src)

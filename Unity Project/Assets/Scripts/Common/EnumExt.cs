@@ -1,7 +1,26 @@
 ﻿using System;
 
 /**
-* Extension methods to make working with Enum values easier.
+* Extension methods to make working with flags Enum values easier.
+ *  Any enums using this should be declared with bit values and marked
+ *  as [Flags] (and values go 0x0, 0x1, 0x2, 0x4, 0x8, 0x10, etc).
+ * 
+ * Example usage:
+ *  NPCFlags flags;
+ *  adds: flags.Add<NPCFlags>(NPCFlags.VALUE);
+ *  includes: flags = flags.Include<NPCFlags>(NPCFlags.VALUE);
+ *  
+ * Removes is opposite of add, expels is opposite of include.
+ *  and flags.Has<NPCFlags>(NPCFlags.VALUE) is the boolean check.
+ * 
+ * All usage can be done with multiple flags, ie,
+ *  flags.Has<NPCFlags>(NPCFlags.VALUE1 | NPCFlags.VALUE2);
+ *   
+ * All values stored in longs/ulongs, which should handle more than enough
+ *  in any of our enumerations (and we can make a second enum for more flags...).
+ *  
+ * This class is not actually used directly; since it extends Enum, any enumerations
+ *  can use the methods without needing to deal with this class.
 */
 public static class EnumExt
 {

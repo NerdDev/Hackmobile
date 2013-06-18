@@ -164,7 +164,8 @@ public class DataManager : MonoBehaviour
             string[] split = temp.Split(',');
             for (int i = 0; i < split.Length; i++) 
             {
-                n.props = n.props.Include<NPCProperties>((NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true));
+                //NPCProperties pr = (NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true);
+                n.props[(NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true)] = true;
             }
 
             //flag parsing
@@ -172,7 +173,8 @@ public class DataManager : MonoBehaviour
             split = temp.Split(',');
             for (int i = 0; i < split.Length; i++) 
             {
-                n.flags = n.flags.Include<NPCFlags>((NPCFlags) Enum.Parse(typeof(NPCFlags), split[i], true));
+                //NPCFlags fl = (NPCFlags) Enum.Parse(typeof(NPCFlags), split[i], true);
+                n.flags[(NPCFlags) Enum.Parse(typeof(NPCFlags), split[i], true)] = true;
             }
 
             //body part data
