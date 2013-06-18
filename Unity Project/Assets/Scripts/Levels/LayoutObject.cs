@@ -100,7 +100,7 @@ abstract public class LayoutObject {
     #region Bounds
     public Bounding GetBounding()
     {
-        Bounding bound = new Bounding(getBoundsInternal());
+        Bounding bound = new Bounding(GetBoundingInternal());
         bound.xMin += shiftP.x;
         bound.xMax += shiftP.x;
         bound.yMin += shiftP.y;
@@ -108,17 +108,27 @@ abstract public class LayoutObject {
         return bound;
     }
 
-    protected abstract Bounding getBoundsInternal();
+    protected abstract Bounding GetBoundingInternal();
     #endregion Bounds
 
     #region GetSet
-    public abstract GridArray getMap();
+    public abstract GridArray GetArray();
 
-    public abstract GridArray getBakedMap();
-	
-    public GridType[,] getArr()
+    public abstract GridArray GetBakedArray();
+
+    public GridType[,] GetMinimizedArray()
     {
-        return getMap().GetArr();
+        GridArray inArr = GetArray();
+        Bounding bounds = GetBoundingInternal();
+        GridType[,] outArr = new GridType[bounds.height + 1, bounds.width + 1];
+        for (int y = bounds.yMin; y <= bounds.yMax; y++)
+        {
+            for (int x = bounds.xMin; x <= bounds.xMax; x++)
+            {
+                outArr[y - bounds.yMin, x - bounds.xMin] = inArr.Get (x, y);
+            }
+        }
+        return outArr;
     }
     #endregion GetSet
 
@@ -163,7 +173,7 @@ abstract public class LayoutObject {
 
     protected virtual List<string> ToRowStrings()
     {
-		GridType[,] array = getArr ();
+		GridType[,] array = GetMinimizedArray();
         List<string> ret = new List<string>();
 		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
             string rowStr = "";
@@ -220,4 +230,5 @@ abstract public class LayoutObject {
         }
     }
     #endregion Printing
+
 }

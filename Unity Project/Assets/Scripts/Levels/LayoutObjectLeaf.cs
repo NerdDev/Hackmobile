@@ -61,12 +61,12 @@ public class LayoutObjectLeaf : LayoutObject {
         grids.Put(t, x, y);
     }
 
-    public override GridArray getMap()
+    public override GridArray GetArray()
     {
         return grids;
     }
 
-    public override GridArray getBakedMap()
+    public override GridArray GetBakedArray()
     {
 		if (!shiftP.isZero()){
         	return new GridArray(grids, shiftP);
@@ -75,7 +75,7 @@ public class LayoutObjectLeaf : LayoutObject {
 		}
     }
 
-    protected override Bounding getBoundsInternal()
+    protected override Bounding GetBoundingInternal()
     {
 		return bound;
 	}
