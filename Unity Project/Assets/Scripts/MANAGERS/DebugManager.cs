@@ -13,8 +13,10 @@ public class DebugManager : MonoBehaviour
         Main,
         LevelGen
     };
-    static string[] logPaths = { "=== Main ==="
-                               , "LevelGen/LevelGen"};
+    static string[] logPaths = { ""
+                               , "LevelGen/"};
+    static string[] logNames = { "=== Main ==="
+                               , "LevelGen"};
     #endregion
 
     #region StringConstants
@@ -76,7 +78,7 @@ public class DebugManager : MonoBehaviour
     {
         if (logging(e))
         {
-            get(e).w(line);
+            Get(e).w(line);
         }
     }
 
@@ -84,7 +86,7 @@ public class DebugManager : MonoBehaviour
     {
         if (logging(e))
         {
-            get(e).w(depthModifier, line);
+            Get(e).w(depthModifier, line);
         }
     }
 
@@ -92,7 +94,7 @@ public class DebugManager : MonoBehaviour
     {
         if (logging(e))
         {
-            get(e).printHeader(line);
+            Get(e).printHeader(line);
         }
     }
 
@@ -100,7 +102,7 @@ public class DebugManager : MonoBehaviour
     {
         if (logging(e))
         {
-            get(e).printFooter();
+            Get(e).printFooter();
         }
     }
 
@@ -108,7 +110,7 @@ public class DebugManager : MonoBehaviour
     {
         if (logging(e))
         {
-            get(e).printBreakers(num);
+            Get(e).printBreakers(num);
         }
     }
 	
@@ -121,7 +123,7 @@ public class DebugManager : MonoBehaviour
 	{
         if (logging(e))
         {
-            get(e).incrementDepth();
+            Get(e).incrementDepth();
         }
 	}
 	
@@ -129,7 +131,7 @@ public class DebugManager : MonoBehaviour
 	{
         if (logging(e))
         {
-            get(e).decrementDepth();
+            Get(e).decrementDepth();
         }
 	}
 	
@@ -137,20 +139,25 @@ public class DebugManager : MonoBehaviour
 	{
         if (logging(e))
         {
-            get(e).resetDepth();
+            Get(e).resetDepth();
         }
 	}
 
-    static Log get(Logs e)
+    static Log Get(Logs e)
     {
         if (logs[(int)e] == null)
-        { // If log doesn't exist, create it.
-            string path = debugFolder + logPaths[(int)e] + ".txt";
-            string dir = System.IO.Path.GetDirectoryName(path);
-            Directory.CreateDirectory(dir);
-            logs[(int)e] = new Log(path);
+        {
+            CreateNewLog(e, logNames[(int) e]);
         }
         return logs[(int)e];
+    }
+
+    public static void CreateNewLog(Logs e, string logName)
+    {
+        logName = debugFolder + logPaths[(int) e] + logName + ".txt";
+        string dir = System.IO.Path.GetDirectoryName(logName);
+        Directory.CreateDirectory(dir);
+        logs[(int)e] = new Log(logName);
     }
 
     public static void close()
@@ -171,7 +178,7 @@ public class DebugManager : MonoBehaviour
 
     public static bool logging(Logs e)
     {
-        return logging() && get(e).on;
+        return logging() && Get(e).on;
     }
 
     public static void logging(bool logging)
@@ -181,7 +188,7 @@ public class DebugManager : MonoBehaviour
 
     public static void logging(bool logging, Logs e)
     {
-        get(e).on = logging;
+        Get(e).on = logging;
     }
     #endregion
 
