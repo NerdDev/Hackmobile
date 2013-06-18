@@ -31,7 +31,7 @@ public class DebugManager : MonoBehaviour
     #endregion
 
     static bool globalLoggingOn = true;
-	static bool lineNumbersOn_ = true;
+	static bool lineNumbersOn_ = false;
     static public bool lineNumbersOn { get { return lineNumbersOn_;} set { lineNumbersOn_ = value; } }
 	static public bool levelGenDFSsteps_ = false;
     static public bool levelGenDFSsteps { get { return levelGenDFSsteps_;} set { ; } }

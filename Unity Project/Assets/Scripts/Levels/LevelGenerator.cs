@@ -262,10 +262,7 @@ public class LevelGenerator
             while (path.Count > 0)
             {
                 Value2D<GridType> point = path.Pop();
-                if (point.val == GridType.NULL)
-                {
-                    grids.Put(GridType.PathFloor, point.x, point.y);
-                }
+                grids.Put(GridType.PathFloor, point.x, point.y);
             }
             grids.toLog(DebugManager.Logs.LevelGen, "Final map with path");
         }
@@ -338,11 +335,30 @@ public class LevelGenerator
             for (int i = 0 ; i < 4 ; i++)
             {
                 Value2D<GridType> dir = directionOptions[i];
-                // Check to see if direction is bad
-                if (blockedPoints.Get(dir.x, dir.y) // If blocked
-                    || !grids.TryGet(dir.x, dir.y, out val) // If out of range
-                    || val != GridType.NULL) // If not open space
+                // Check to see if direction is good
+                if (!blockedPoints.Get(dir.x, dir.y) // If not blocked
+                    && grids.TryGet(dir.x, dir.y, out val) // If not out of range
+                    && (val == GridType.NULL || targets.Contains(val))) // If open space or target
                 {
+	                // If found target, return path we took
+	                if (GridType.NULL != val)
+	                {
+						#region DEBUG
+						if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+						{
+							DebugManager.w (DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
+						}
+						#endregion
+						pathTaken.Push(dir);
+	                    return pathTaken;
+	                }
+					#region DEBUG
+					if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+					{
+						debugGrid.Put(GridType.INTERNAL_RESERVED_ACCEPTED, dir.x, dir.y);
+					}
+					#endregion
+                } else {
                     // Remove direction option
 					#region DEBUG
 					if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -352,13 +368,6 @@ public class LevelGenerator
 					#endregion
                     directionOptions[i] = null;
                     numGoodDirections--;
-                } else {
-					#region DEBUG
-					if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
-					{
-						debugGrid.Put(GridType.INTERNAL_RESERVED_ACCEPTED, dir.x, dir.y);
-					}
-					#endregion
                 }
             }
 			
@@ -393,18 +402,6 @@ public class LevelGenerator
                 // Move that dir
                 startPoint = directionOptions[dirChosen];
                 pathTaken.Push(startPoint);
-
-                // If found target, return path we took
-                if (targets.Contains(startPoint.val))
-                {
-					#region DEBUG
-					if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
-					{
-						DebugManager.w (DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
-					}
-					#endregion
-                    return pathTaken;
-                }
             }
         }
         return pathTaken;
