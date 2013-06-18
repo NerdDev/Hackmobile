@@ -230,6 +230,7 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
+            layout.toLog(DebugManager.Logs.LevelGen);
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
 		#endregion
@@ -240,19 +241,37 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Paths");
         }
         #endregion
+        GridArray grids = layout.GetArray();
+        GridMap doors = layout.getTypes(grids, GridType.Door);
+        foreach (Value2D<GridType> door in doors)
+        {
 
-        GridArray roomArr = layout.GetBakedArray();
-        roomArr.toLog(DebugManager.Logs.LevelGen);
-
+        }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
+    }
+
+    static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    {
+        Stack<Value2D<GridType>> nodesToVisit = new Stack<Value2D<GridType>>();
+        Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
+        Array2Dcoord<bool> blockedPoints = new Array2Dcoord<bool>(grids.GetBounding());
+        pathTaken.Push(startPoint);
+        GridType val;
+        while (pathTaken.Count > 0)
+        {
+            // Don't want to visit the same point on a different route later
+            blockedPoints.Put(true, startPoint.x, startPoint.y);
+            if (grids.TryGet(
+        }
+
     }
 
     Point generateShiftMagnitude(int mag)

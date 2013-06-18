@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour {
     {
         LevelGenerator gen = new LevelGenerator();
         gen.generateLayout(1);
-        gen.generateLayout(0, 73152134, 1017547111);
+        gen.generateLayout(0, 665911697, 1733302797);
     }
 
 }

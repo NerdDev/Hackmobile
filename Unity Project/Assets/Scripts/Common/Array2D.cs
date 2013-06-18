@@ -80,6 +80,19 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return InRangeInternal(x, y);
     }
 
+    public bool TryGet(int x, int y, out T val)
+    {
+        x += xShift;
+        y += yShift;
+        if (InRangeInternal(x, y))
+        {
+            val = arr[y, x];
+            return true;
+        }
+        val = default(T);
+        return false;
+    }
+
     protected bool InRangeInternal(int x, int y)
     {
         return y < arr.GetLength(0)
@@ -234,11 +247,11 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #region Iteration
     public IEnumerator<Value2D<T>> GetEnumerator()
     {
-        for (int y = 0; y < arr.GetLength(1); y++)
+        for (int y = 0; y < arr.GetLength(0); y++)
         {
-            for (int x = 0; x < arr.GetLength(0); x++)
+            for (int x = 0; x < arr.GetLength(1); x++)
             {
-                Value2D<T> val = new Value2D<T>(x - xShift, y - yShift, arr[y, x]);
+                Value2D<T> val = new Value2D<T>(x - xShift, y - yShift, arr[y, x]); 
                 yield return val;
             }
         }

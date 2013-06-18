@@ -81,67 +81,6 @@ public class LayoutObjectLeaf : LayoutObject {
 	}
     #endregion GetSet
 
-    #region SpecGet
-    public GridMap getType(GridType t)
-    {
-        GridMap ret = new GridMap();
-        foreach (Value2D<GridType> val in grids)
-        {
-            if (t == val.val)
-            {
-				val.x += shiftP.x;
-				val.y += shiftP.y;
-                ret.Put(val);
-            }
-        }
-        return ret;
-    }
-
-    public GridMap getTypes(params GridType[] ts)
-    {
-        return getTypes(new HashSet<GridType>(ts));
-    }
-
-    public GridMap getTypes(HashSet<GridType> ts)
-    {
-        GridMap ret = new GridMap();
-        foreach (Value2D<GridType> val in grids)
-        {
-            if (ts.Contains(val.val))
-            {
-				val.x += shiftP.x;
-				val.y += shiftP.y;
-                ret.Put(val);
-            }
-        }
-        return ret;
-    }
-
-    public GridMap getCorneredBy(GridType target, params GridType[] by)
-    {
-        return getCorneredBy(target, new HashSet<GridType>(by));
-    }
-
-    public GridMap getCorneredBy(GridType target, HashSet<GridType> by)
-    {
-        GridMap ret = new GridMap();
-        GridMap targets = getType(target);
-        GridMap cornerOptions = getTypes(by);
-        foreach (Value2D<GridType> tval in targets)
-        {
-            bool corneredHoriz = cornerOptions.Contains(tval.x + 1, tval.y)
-                || cornerOptions.Contains(tval.x - 1, tval.y);
-            bool corneredVert = cornerOptions.Contains(tval.x, tval.y + 1)
-                || cornerOptions.Contains(tval.x, tval.y - 1);
-            if (corneredHoriz && corneredVert)
-            {
-                ret.Put(tval);
-            }
-        }
-        return ret;
-    }
-    #endregion
-
     #region FillMethods
     public void BoxStroke(GridType t, int width, int height)
     {
