@@ -8,5 +8,10 @@ public enum GridType
     PathFloor,
     Wall,
     Door,
-    TrapDoor
+    TrapDoor,
+	
+	INTERNAL_RESERVED_REJECTED,
+	INTERNAL_RESERVED_ACCEPTED,
+	INTERNAL_RESERVED_BLOCKED,
+	INTERNAL_RESERVED_CUR
 }

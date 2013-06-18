@@ -278,6 +278,14 @@ abstract public class LayoutObject {
                 return '#';
             case GridType.NULL:
                 return ' ';
+            case GridType.INTERNAL_RESERVED_REJECTED:
+                return '<';
+            case GridType.INTERNAL_RESERVED_ACCEPTED:
+                return '>';
+            case GridType.INTERNAL_RESERVED_BLOCKED:
+                return '*';
+            case GridType.INTERNAL_RESERVED_CUR:
+                return '%';
             default:
                 return '?';
         }
