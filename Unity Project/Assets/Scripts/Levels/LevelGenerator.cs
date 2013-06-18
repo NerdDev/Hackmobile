@@ -36,6 +36,7 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
+            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/1 - Generate Rooms");
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
             DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
             DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
@@ -43,7 +44,19 @@ public class LevelGenerator
         #endregion
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/2 - Place Rooms");
+        }
+        #endregion
         placeRooms(rooms, layout);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/3 - Place Doors");
+        }
+        #endregion
         placeDoors(layout);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
