@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
-    SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
+    protected SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
     public SortedDictionary<int, SortedDictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
     public SortedDictionary<int, SortedDictionary<int, T>>.ValueCollection Values { get { return multimap.Values; } }
     public Comparator<T> comparator { get; set; }

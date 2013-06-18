@@ -21,10 +21,10 @@ public class Bounding {
     #region Ctors
     public Bounding()
     {
-        xMin = 0;
-        xMax = 0;
-        yMin = 0;
-        yMax = 0;
+        xMin = Int32.MaxValue;
+        xMax = Int32.MinValue;
+        yMin = Int32.MaxValue;
+        yMax = Int32.MinValue;
     }
 
     public Bounding(int xl, int xr, int yb, int yt)
