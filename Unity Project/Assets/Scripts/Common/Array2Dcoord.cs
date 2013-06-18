@@ -52,10 +52,18 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     // Creates an array with width/height in both directions from the origin.
     // Uses the max width/height of the bounds in both directions, respectively.
-	public Array2Dcoord(Bounding bound)
-		: this(Mathf.Max(Mathf.Abs(bound.xMin), Mathf.Abs(bound.xMax))
-			,Mathf.Max(Mathf.Abs(bound.yMin), Mathf.Abs(bound.yMax)))
-	{
+	public Array2Dcoord(Bounding bound) : this()
+    {
+        int width = 0;
+        int height = 0;
+        if (bound.isValid())
+        {
+            width = Mathf.Max(Mathf.Abs(bound.xMin), Mathf.Abs(bound.xMax));
+            height = Mathf.Max(Mathf.Abs(bound.yMin), Mathf.Abs(bound.yMax));
+        }
+        arr = new T[height * 2 + 1, width * 2 + 1];
+        xShift = width;
+        yShift = height;
 	}
     #endregion
 

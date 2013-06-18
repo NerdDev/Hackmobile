@@ -41,11 +41,22 @@ public class Bounding {
     }
     #endregion Ctors
 
+    public bool isValid()
+    {
+        return xMin != Int32.MinValue
+            && yMin != Int32.MinValue;
+    }
+
     #region Absorbs
     public void absorb(int x, int y)
     {
         absorbX(x);
         absorbY(y);
+    }
+
+    public void absorb<T>(Value2D<T> val)
+    {
+        absorb(val.x, val.y);
     }
 	
 	public void absorb(Bounding rhs)	
@@ -60,7 +71,7 @@ public class Bounding {
         {
             xMin = x;
         }
-        else if (xMax < x)
+        if (xMax < x)
         {
             xMax = x;
         }
@@ -72,7 +83,7 @@ public class Bounding {
         {
             yMin = y;
         }
-        else if (yMax < y)
+        if (yMax < y)
         {
             yMax = y;
         }

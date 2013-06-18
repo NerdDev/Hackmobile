@@ -26,6 +26,10 @@ abstract public class Container2D<T> {
             PutInternal(val, x, y);
         }
     }
+    public virtual void Put(Value2D<T> val)
+    {
+        Put(val.val, val.x, val.y);
+    }
     protected abstract void PutInternal(T val, int x, int y);
     public abstract Bounding GetBounding();
     public virtual void putRow(T t, int xl, int xr, int y)
