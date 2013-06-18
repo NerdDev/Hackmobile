@@ -32,6 +32,7 @@ public class DebugManager : MonoBehaviour
 
     static bool globalLoggingOn = true;
     static public bool lineNumbersOn { get; set; }
+    static public bool levelGenDFSsteps { get; set; }
 
     // Log storage
     static Log[] logs;
@@ -46,6 +47,9 @@ public class DebugManager : MonoBehaviour
         {
             Directory.Delete(debugFolder, true);
         }
+		
+		// Set flags
+		levelGenDFSsteps = false;
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))
