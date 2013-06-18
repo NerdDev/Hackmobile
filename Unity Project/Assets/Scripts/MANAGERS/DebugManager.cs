@@ -31,8 +31,10 @@ public class DebugManager : MonoBehaviour
     #endregion
 
     static bool globalLoggingOn = true;
-    static public bool lineNumbersOn { get; set; }
-    static public bool levelGenDFSsteps { get; set; }
+	static bool lineNumbersOn_ = true;
+    static public bool lineNumbersOn { get { return lineNumbersOn_;} set { lineNumbersOn_ = value; } }
+	static public bool levelGenDFSsteps_ = false;
+    static public bool levelGenDFSsteps { get { return levelGenDFSsteps_;} set { ; } }
 
     // Log storage
     static Log[] logs;
@@ -47,22 +49,17 @@ public class DebugManager : MonoBehaviour
         {
             Directory.Delete(debugFolder, true);
         }
-		
-		// Set flags
-		levelGenDFSsteps = false;
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))
         {
             DebugManager.w(DebugManager.Logs.Main, "Debug Manager Started.");
+			if (logging(Logs.LevelGen))
+			{
+            	DebugManager.w(DebugManager.Logs.Main, "Level Gen Debugging On.");
+			}
         }
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-
-    }
 
     void OnDestroy()
     {
@@ -158,17 +155,20 @@ public class DebugManager : MonoBehaviour
 
     public static void CreateNewLog(Logs e, string logName)
     {
-        if (logs[(int)e] != null)
-        { // Close previous log
-            logs[(int)e].close();
-        }
+		Log prev = logs[(int)e];
         // Create actual path
         logName = debugFolder + logPaths[(int)e] + logName + ".txt";
         // Create necessary directories
         string dir = System.IO.Path.GetDirectoryName(logName);
         Directory.CreateDirectory(dir);
         // Create new log
-        logs[(int)e] = new Log(logName);
+		Log newLog = new Log(logName);
+        logs[(int)e] = newLog;
+        if (prev != null)
+        { // Close previous log
+			newLog.on = prev.on;
+            prev.close();
+        }
     }
 
     public static void close()
@@ -182,7 +182,7 @@ public class DebugManager : MonoBehaviour
         }
     }
 
-    static bool logging()
+    public static bool logging()
     {
         return globalLoggingOn;
     }
@@ -197,7 +197,7 @@ public class DebugManager : MonoBehaviour
         globalLoggingOn = logging;
     }
 
-    public static void logging(bool logging, Logs e)
+    public static void logging(Logs e, bool logging)
     {
         Get(e).on = logging;
     }
