@@ -25,7 +25,6 @@ public class NPCManager : MonoBehaviour {
         MeshFilter mf = go.AddComponent<MeshFilter>();
         mf.mesh = (Resources.Load(npc.Model) as GameObject).GetComponent<MeshFilter>().mesh;
         MeshRenderer mr = go.AddComponent<MeshRenderer>();
-        Debug.Log(npc.ModelTexture);
         mr.material = Resources.Load(npc.ModelTexture) as Material;
 		return npc;
 	}

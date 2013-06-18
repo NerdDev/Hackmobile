@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class NPC : WorldObject
 {
@@ -22,33 +23,47 @@ public class NPC : WorldObject
     }
     #endregion
 
-    Attributes currentAttributes;
-    Attributes maxAttributes;
-    Stats stats;
+    //TODO: Refactor base inventory and/or inventory to somewhere else?
+    //  -- do an NPCInstance() class which translates baseInventory into actual inventory?
+    //  -- Refactor all public access to get/set functions? (annoying with unity, can't modify then).
+    //Properties
+    private string name;
+    public string Name
+    {
+        get { return name; }
+        set { this.name = value; }
+    }
+
+    //Local variables
+    List<GameObject> baseInventory;
+    List<GameObject> inventory;
+
+    //All sets of flags
+    public Flags flags = new Flags(NPCFlags.NONE);
+    public Flags resists = new Flags(NPCResistances.NONE);
+    public Flags props = new Flags(NPCProperties.NONE);
+
+    //Enums
+    public NPCRace race;
+    public NPCRole role;
+
+    //Separate classes
+    public NPCStats stats = new NPCStats();
+    public NPCBodyParts bodyparts = new NPCBodyParts();
+
+    public NPC()
+    {
+    }
 
     public void setData(NPC npc)
     {
-        this.currentAttributes = npc.currentAttributes;
-        this.maxAttributes = npc.maxAttributes;
-        this.stats = npc.stats;
+        this.stats.setData(npc.stats);
+        this.bodyparts.setData(npc.bodyparts);
+        this.flags.set(npc.flags);
+        this.resists.set(npc.resists);
+        this.props.set(npc.props);
+        this.race = npc.race;
+        this.role = npc.role;
+        this.inventory.AddRange(npc.inventory);
     }
-}
-
-struct Attributes
-{
-    public int strength;
-    public int charisma;
-    public int wisdom;
-    public int dexterity;
-    public int intelligence;
-    public int constitution;
-}
-
-struct Stats
-{
-    public int baseHealth;
-    public int currentHealth;
-    public int basePower;
-    public int currentPower;
-    public int nutrition;
 }

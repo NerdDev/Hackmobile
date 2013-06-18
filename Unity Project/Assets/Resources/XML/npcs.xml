@@ -1,3 +1,31 @@
 <npcs>
-
+	<npc name="">
+		<role></role>
+		<race></race>
+		<flags></flags>
+		<properties></properties>
+		<stats>
+			<charisma></charisma>
+			<constitution></constitution>
+			<wisdom></wisdom>
+			<dexterity></dexterity>
+			<intelligence></intelligence>
+			<strength></strength>
+		</stats>
+		<model></model>
+		<modeltexture></modeltexture>
+		<inventory>
+			<item>
+				<name></name>
+				<chance></chance>
+				<number></number>
+				<ischanceforall></ischanceforall>
+			</item>
+		</inventory>
+		<bodyparts>
+			<arms></arms>
+			<legs></legs>
+			<heads></heads>
+			<!-- body is implicitly assumed -->
+		</bodyparts>
 </npcs>

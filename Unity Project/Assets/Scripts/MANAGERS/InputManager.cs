@@ -55,7 +55,7 @@ public class InputManager : MonoBehaviour {
 				if (Input.GetKeyDown(KeyCode.X))
 		{
 			Vector3 place = new Vector3(15f,.5f,18);
-			BigBoss.ItemMaster.CreateItem(place,"axe2");
+			BigBoss.NPCManager.CreateNPC(place,"axe2");
 			Debug.Log("X");
 		}
 			

@@ -144,10 +144,54 @@ public class DataManager : MonoBehaviour
             materials.Add(mat.Name, mat);
         }
     }
+
+    void parseNPCs(XMLNode x)
+    {
+        foreach (XMLNode m in x.select("npcs").get())
+        {
+            
+            string npcName = m.select("name").getText();
+            GameObject go = new GameObject(npcName);
+            NPC n = go.AddComponent<NPC>();
+            n.Name = npcName;
+            n.role = (NPCRole) Enum.Parse(typeof(NPCRole), m.select("role").getText(), true);
+            n.race = (NPCRace) Enum.Parse(typeof(NPCRace), m.select("race").getText(), true);
+            n.Model = m.select("model").getText();
+            n.ModelTexture = m.select("modeltexture").getText();
+
+            //property parsing
+            string temp = m.select("properties").getText();
+            string[] split = temp.Split(',');
+            for (int i = 0; i < split.Length; i++) 
+            {
+                n.props = n.props.Include<NPCProperties>((NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true));
+            }
+
+            //flag parsing
+            temp = m.select("flags").getText();
+            split = temp.Split(',');
+            for (int i = 0; i < split.Length; i++) 
+            {
+                n.flags = n.flags.Include<NPCFlags>((NPCFlags) Enum.Parse(typeof(NPCFlags), split[i], true));
+            }
+
+            //body part data
+            n.bodyparts.parseXML(m.select("bodyparts"));
+
+            //write npc stat parser
+            n.stats.parseXML(m.select("stats"));
+
+            //write inventory parser
+            //inventory
+
+            baseNPCs.Add(n.Name, n);
+            
+        }
+    }
     #endregion
 
     #region Map returns (should be abstracted to other methods for most purposes).
-    public Dictionary<string, Item> getItems()
+    Dictionary<string, Item> getItems()
     {
         return baseItems;
     }
