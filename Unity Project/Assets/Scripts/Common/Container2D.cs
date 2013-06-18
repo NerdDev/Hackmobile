@@ -73,12 +73,12 @@ abstract public class Container2D<T> {
         }
     }
 
-    public virtual void toLog(DebugManager.Logs log, params String[] customContent)
+    public virtual void toLog(DebugManager.Logs log, params string[] customContent)
     {
         if (DebugManager.logging(log))
         {
             DebugManager.printHeader(log, ToString());
-            foreach (String s in customContent)
+            foreach (string s in customContent)
             {
                 DebugManager.w(log, s);
             }
@@ -90,7 +90,4 @@ abstract public class Container2D<T> {
             DebugManager.printFooter(log);
         }
     }
-
-
-
 }

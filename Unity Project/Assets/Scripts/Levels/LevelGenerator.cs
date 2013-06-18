@@ -34,30 +34,40 @@ public class LevelGenerator
     public LevelLayout generateLayout(int levelDepth, int seed, int unitySeed)
     {
         #region DEBUG
+        int debugNum = 1;
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/1 - Generate Rooms");
+            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
             DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
             DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
         }
         #endregion
+        rand = new System.Random(seed);
+        Random.seed = unitySeed;
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/2 - Place Rooms");
+            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
         }
         #endregion
         placeRooms(rooms, layout);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/3 - Place Doors");
+            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
         }
         #endregion
         placeDoors(layout);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
+        }
+        #endregion
+        placePaths(layout);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
@@ -223,6 +233,26 @@ public class LevelGenerator
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
 		#endregion
+    }
+
+    void placePaths(LevelLayout layout)
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
+        }
+        #endregion
+
+        GridArray roomArr = layout.GetBakedArray();
+        roomArr.toLog(DebugManager.Logs.LevelGen);
+
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
 
     Point generateShiftMagnitude(int mag)
