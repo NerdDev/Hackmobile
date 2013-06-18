@@ -28,17 +28,12 @@ public class Item : WorldObject
 
     #region Properties of Items
 
+    //Properties
     private string type;
     public string Type
     {
         get { return type; }
         set { this.type = value; }
-    }
-    private string name;
-    public string Name
-    {
-        get { return name; }
-        set { this.name = value; }
     }
     private BUC buc;
     public BUC BUC
@@ -46,12 +41,8 @@ public class Item : WorldObject
         get { return buc; }
         set { this.buc = value; }
     }
-    private int cost;
-    public int Cost
-    {
-        get { return cost; }
-        set { this.cost = value; }
-    }
+
+    //These map to existing values upon a map
     private string damage;
     public Dice Damage
     {
@@ -61,15 +52,15 @@ public class Item : WorldObject
     private string mat;
     public MaterialType Material
     {
-        get { return BigBoss.DataManager.getMaterial(mat); }
+        get { return BigBoss.ItemMaster.getMaterial(mat); }
         set { this.mat = value.Name; }
     }
-    private int weight;
-    public int Weight
-    {
-        get { return weight; }
-        set { this.weight = value; }
-    }
+
+    //flags
+    public Flags itemFlags = new Flags(ItemFlags.NONE);
+
+    //separate classes
+    public ItemStats stats = new ItemStats();
 
     #endregion
 
@@ -80,7 +71,7 @@ public class Item : WorldObject
     #region Data Management for Item Instances
     public void setData(string itemName) 
     {
-        this.setData(BigBoss.DataManager.getItem(itemName));
+        this.setData(BigBoss.ItemMaster.getItem(itemName));
     }
 
     public void setData(Item baseItem)
@@ -88,8 +79,7 @@ public class Item : WorldObject
         base.setData(baseItem);
         this.Name = baseItem.Name;
         this.Type = baseItem.Type;
-        this.Weight = baseItem.Weight;
-        this.Cost = baseItem.Cost;
+        this.stats.setData(baseItem.stats);
         this.BUC = baseItem.BUC;
         this.Damage = baseItem.Damage;
         this.Material = baseItem.Material;
@@ -97,18 +87,28 @@ public class Item : WorldObject
         this.ModelTexture = baseItem.ModelTexture;
     }
 
-    public void setNull()
+    public override void setNull()
     {
         //Initialize to null stats essentially. Needed/Not needed? Dunno.
-        Type = "";
-        Name = "";
+        base.setNull();
         BUC = BUC.CURSED;
-        Cost = 0;
         damage = "d1";
         mat = "null";
-        Weight = 0;
         Model = "";
         ModelTexture = "";
+        stats.setNull();
     }
+
+    #region XML Parsing
+    public void parseXML(XMLNode x)
+    {
+        this.Damage = BigBoss.DataManager.getDice(x.select("damage").getText());
+        this.Material = BigBoss.ItemMaster.getMaterial(x.select("material").getText());
+        this.Model = x.select("model").getText();
+        this.ModelTexture = x.select("modeltexture").getText();
+        stats.parseXML(x.select("stats"));
+    }
+    #endregion
+
     #endregion
 }

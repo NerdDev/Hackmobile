@@ -14,5 +14,31 @@ public class Nifty
         }
 		return a;
 	}
+
+    static public int StringToInt(string toParse)
+    {
+        int temp; 
+        if (int.TryParse(toParse, out temp)) 
+        {
+            return temp;
+        }
+        else 
+        {
+            throw new ArgumentException("String cannot be parsed to integer!");
+        }
+    }
+
+    static public bool StringToBool(string toParse)
+    {
+        bool temp;
+        if (bool.TryParse(toParse, out temp))
+        {
+            return temp;
+        }
+        else
+        {
+            throw new ArgumentException("String cannot be parsed to boolean!");
+        }
+    }
 }
 

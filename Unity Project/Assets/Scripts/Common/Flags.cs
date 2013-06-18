@@ -47,22 +47,9 @@ public class Flags
         return Convert.ToInt64(index);
     }
 
-    public Enum Value
-    {
-        get 
-        { 
-            return (Enum) Enum.ToObject(e.GetType(), flags);
-        }
-        set
-        {
-            e = value;
-            this.flags = conv(value);
-        }
-    }
-
     public static implicit operator Enum(Flags src)
     {
-        return src != null ? src.Value : (Enum) Enum.ToObject(src.e.GetType(), src.flags);
+        return src != null ? src.e : (Enum) Enum.ToObject(src.e.GetType(), src.flags);
     }
 
     public static implicit operator Flags(Enum src)
@@ -73,6 +60,6 @@ public class Flags
     internal void set(Flags flags)
     {
         this.flags = flags.flags;
-        this.e = (Enum) flags.MemberwiseClone();
+        this.e = flags.e;
     }
 }

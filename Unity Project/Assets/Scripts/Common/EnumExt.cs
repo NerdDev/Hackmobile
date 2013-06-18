@@ -20,7 +20,8 @@
  *  in any of our enumerations (and we can make a second enum for more flags...).
  *  
  * This class is not actually used directly; since it extends Enum, any enumerations
- *  can use the methods without needing to deal with this class.
+ *  can use the methods without needing to deal with this class. In general, using
+ *  the Flags class should be faster.
 */
 public static class EnumExt
 {

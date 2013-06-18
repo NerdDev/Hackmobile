@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Flags]
-enum NPCProperties
+public enum NPCProperties
 {
     //store the NPC's properties here
     //ex:

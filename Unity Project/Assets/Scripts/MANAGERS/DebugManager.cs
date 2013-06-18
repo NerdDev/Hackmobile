@@ -11,10 +11,14 @@ public class DebugManager : MonoBehaviour
     public enum Logs
     {
         Main,
-        LevelGen
+        LevelGen,
+        Items,
+        NPCs,
     };
     static string[] logPaths = { "=== Main ==="
-                               , "LevelGen/LevelGen"};
+                               , "LevelGen/LevelGen"
+                               , "Objects/Items"
+                               , "Objects/NPCs" };
     #endregion
 
     #region StringConstants

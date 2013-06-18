@@ -19,12 +19,8 @@ public class NPCBodyParts
 
     public void parseXML(XMLNode x)
     {
-        int numOfParts;
-        int.TryParse(x.select("arms").getText(), out numOfParts);
-        Arms = numOfParts;
-        int.TryParse(x.select("legs").getText(), out numOfParts);
-        Legs = numOfParts;
-        int.TryParse(x.select("heads").getText(), out numOfParts);
-        Heads = numOfParts;
+        Arms = Nifty.StringToInt(x.select("arms").getText());
+        Legs = Nifty.StringToInt(x.select("legs").getText());
+        Heads = Nifty.StringToInt(x.select("heads").getText());
     }
 }

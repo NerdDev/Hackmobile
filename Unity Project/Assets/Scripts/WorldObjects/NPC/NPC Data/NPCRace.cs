@@ -1,6 +1,6 @@
 ﻿using System;
 
-enum NPCRace
+public enum NPCRace
 {
     //races go here
     NONE,
@@ -8,5 +8,6 @@ enum NPCRace
     UNDEAD,
     HUMAN,
     ELF,
+    REPTILE,
     //etc
 }

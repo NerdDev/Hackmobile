@@ -1,7 +1,8 @@
 ﻿using System;
 
-enum NPCRole
+public enum NPCRole
 {
     //NPC roles go here
     NONE,
+    CREATURE,
 }

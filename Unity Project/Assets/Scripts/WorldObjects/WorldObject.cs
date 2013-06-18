@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class WorldObject : UniqueObject {
+public class WorldObject : UniqueObject
+{
 
+    #region Generic Object Properties (graphical info, names, etc).
     private string model;
     public string Model
     {
@@ -15,8 +17,15 @@ public class WorldObject : UniqueObject {
         get { return modelTexture; }
         set { this.modelTexture = value; }
     }
+    private string name;
+    public string Name
+    {
+        get { return name; }
+        set { this.name = value; }
+    }
+    #endregion
 
-	// Use this for initialization
+    // Use this for initialization
 	void Start () {
 	
 	}
@@ -31,6 +40,14 @@ public class WorldObject : UniqueObject {
     {
         this.Model = wo.Model;
         this.ModelTexture = wo.ModelTexture;
+        this.Name = wo.Name;
+    }
+
+    public virtual void setNull()
+    {
+        this.Model = "";
+        this.ModelTexture = "";
+        this.Name = "null";
     }
     #endregion
 }

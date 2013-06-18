@@ -1,7 +1,7 @@
 ﻿using System;
 using XML;
 
-class NPCStats
+public class NPCStats
 {
     //store stat data here
     private int strength;
@@ -52,6 +52,11 @@ class NPCStats
 
     public void parseXML(XMLNode x)
     {
-
+        this.Strength = Nifty.StringToInt(x.select("strength").getText());
+        this.Charisma = Nifty.StringToInt(x.select("charisma").getText());
+        this.Intelligence = Nifty.StringToInt(x.select("intelligence").getText());
+        this.Wisdom = Nifty.StringToInt(x.select("wisdom").getText());
+        this.Dexterity = Nifty.StringToInt(x.select("dexterity").getText());
+        this.Constitution = Nifty.StringToInt(x.select("constitution").getText());
     }
 }
