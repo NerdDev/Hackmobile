@@ -154,9 +154,16 @@ public class DebugManager : MonoBehaviour
 
     public static void CreateNewLog(Logs e, string logName)
     {
-        logName = debugFolder + logPaths[(int) e] + logName + ".txt";
+        if (logs[(int)e] != null)
+        { // Close previous log
+            logs[(int)e].close();
+        }
+        // Create actual path
+        logName = debugFolder + logPaths[(int)e] + logName + ".txt";
+        // Create necessary directories
         string dir = System.IO.Path.GetDirectoryName(logName);
         Directory.CreateDirectory(dir);
+        // Create new log
         logs[(int)e] = new Log(logName);
     }
 
