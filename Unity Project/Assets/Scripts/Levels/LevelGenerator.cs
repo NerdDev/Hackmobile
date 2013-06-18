@@ -297,6 +297,7 @@ public class LevelGenerator
         pathTaken.Push(startPoint);
         while (pathTaken.Count > 0)
         {
+			startPoint = pathTaken.Peek();
             // Don't want to visit the same point on a different route later
             blockedPoints.Put(true, startPoint.x, startPoint.y);
 
@@ -309,17 +310,68 @@ public class LevelGenerator
 			if (DebugManager.logging(DebugManager.Logs.LevelGen))
 			{ // Set up new print array
 				debugGrid = new GridArray(grids);
+				// Fill in blocked points
 				foreach (Value2D<bool> blockedPt in blockedPoints)
 				{
-					if (blockedPt.val){
-					debugGrid.Put(GridType.INTERNAL_RESERVED_BLOCKED, blockedPt.x, blockedPt.y);
+					if (blockedPt.val)
+					{
+						debugGrid.Put(GridType.INTERNAL_RESERVED_BLOCKED, blockedPt.x, blockedPt.y);
 					}
 				}
-				foreach (Value2D<GridType> path in pathTaken)
+				// Fill in path, looking at past points for direction hints
+				Value2D<GridType> backwardPt = null;
+				Value2D<GridType> curPoint = null;
+				#region pathPrinting
+				foreach (Value2D<GridType> forwardPt in pathTaken)
 				{
-					debugGrid.Put(GridType.PathFloor, path.x, path.y);
+					if (curPoint != null)
+					{
+						if (backwardPt == null)
+						{ // Start Point
+							debugGrid.Put(GridType.INTERNAL_RESERVED_CUR, curPoint.x, curPoint.y);
+						}
+						else if (Mathf.Abs(forwardPt.x - backwardPt.x) == 2)
+						{ // Horizontal
+							debugGrid.Put(GridType.INTERNAL_RESERVED_HORIZ, curPoint.x, curPoint.y);
+						}
+						else if (Mathf.Abs(forwardPt.y - backwardPt.y) == 2)
+						{ // Vertical
+							debugGrid.Put(GridType.INTERNAL_RESERVED_VERT, curPoint.x, curPoint.y);
+						}
+						else 
+						{ // Corner
+							bool top = (forwardPt.y == (curPoint.y + 1)) || (backwardPt.y == (curPoint.y + 1));
+							bool right = (forwardPt.x == (curPoint.x + 1)) || (backwardPt.x == (curPoint.x + 1));
+							if (top)
+							{
+								if (right)
+								{
+									debugGrid.Put(GridType.INTERNAL_RESERVED_RT, curPoint.x, curPoint.y);
+								}
+								else 
+								{
+									debugGrid.Put(GridType.INTERNAL_RESERVED_LT, curPoint.x, curPoint.y);
+								}
+							}
+							else 
+							{
+								if (right)
+								{
+									debugGrid.Put(GridType.INTERNAL_RESERVED_RB, curPoint.x, curPoint.y);
+								}
+								else 
+								{
+									debugGrid.Put(GridType.INTERNAL_RESERVED_LB, curPoint.x, curPoint.y);
+								}
+							}
+						}
+					}
+					// Set up for next point
+					backwardPt = curPoint;
+					curPoint = forwardPt;
 				}
-				debugGrid.Put(GridType.INTERNAL_RESERVED_CUR, startPoint.x, startPoint.y);
+				debugGrid.Put(GridType.INTERNAL_RESERVED_CUR, curPoint.x, curPoint.y);
+				#endregion
 			}
 			#endregion
 
@@ -362,7 +414,6 @@ public class LevelGenerator
             if (numGoodDirections == 0)
             {
                 pathTaken.Pop();
-				startPoint = pathTaken.Peek();
             }
             else
             {

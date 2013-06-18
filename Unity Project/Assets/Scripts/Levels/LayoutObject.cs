@@ -286,6 +286,18 @@ abstract public class LayoutObject {
                 return '*';
             case GridType.INTERNAL_RESERVED_CUR:
                 return '%';
+            case GridType.INTERNAL_RESERVED_HORIZ:
+                return (char) 205;
+            case GridType.INTERNAL_RESERVED_VERT:
+                return (char) 186;
+            case GridType.INTERNAL_RESERVED_LT:
+                return (char) 188;
+            case GridType.INTERNAL_RESERVED_LB:
+                return (char) 187;
+            case GridType.INTERNAL_RESERVED_RT:
+                return (char) 200;
+            case GridType.INTERNAL_RESERVED_RB:
+                return (char) 201;
             default:
                 return '?';
         }

@@ -45,15 +45,32 @@ public class GridArray : Array2Dcoord<GridType> {
 			base.Put(val, x, y);
 		}
     }
+	
+    public Bounding GetBoundingInternal()
+    {
+        GridType[,] array = GetArr();
+        Bounding ret = new Bounding();
+        for (int y = 0; y < array.GetLength(0); y++)
+        {
+            for (int x = 0; x < array.GetLength(1); x++)
+            {
+				if (array[y,x] != GridType.NULL) {
+					ret.absorb(x, y);
+				}
+            }
+        }
+        return ret;
+    }
 
     public override List<string> ToRowStrings()
     {
         GridType[,] array = GetArr();
+		Bounding bounds = GetBoundingInternal();
         List<string> ret = new List<string>();
-        for (int y = array.GetLength(0) - 1; y >= 0; y -= 1)
+        for (int y = bounds.yMax; y >= bounds.yMin; y -= 1)
         {
             string rowStr = "";
-            for (int x = 0; x < array.GetLength(1); x += 1)
+            for (int x = bounds.xMin; x <= bounds.xMax; x += 1)
             {
                 rowStr += LayoutObject.getAscii(array[y, x]);
             }
