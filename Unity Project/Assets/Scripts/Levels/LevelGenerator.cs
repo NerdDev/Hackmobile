@@ -45,32 +45,42 @@ public class LevelGenerator
         #endregion
         rand = new System.Random(seed);
         Random.seed = unitySeed;
+		float startTime = Time.realtimeSinceStartup;
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging())
         {
+			Debug.Log ("Generate Room took: " + (Time.realtimeSinceStartup - startTime));
+			startTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
         }
+		
         #endregion
         placeRooms(rooms, layout);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging())
         {
+			Debug.Log ("Place Rooms took: " + (Time.realtimeSinceStartup - startTime));
+			startTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
         }
         #endregion
         placeDoors(layout);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging())
         {
+			Debug.Log ("Place Doors took: " + (Time.realtimeSinceStartup - startTime));
+			startTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
         }
         #endregion
         placePaths(layout);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging())
         {
+			Debug.Log ("Place Paths took: " + (Time.realtimeSinceStartup - startTime));
+			startTime = Time.realtimeSinceStartup;
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
