@@ -5,10 +5,11 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     public override GridArray GetArray()
     {
-        GridArray ret = new GridArray(GetBounding());
+		Bounding bound = GetBoundingInternal();
+        GridArray ret = new GridArray(bound);
         foreach(LayoutObject obj in this)
         {
-            ret.PutAll(obj);
+            ret.PutAll(obj, bound);
         }
         return ret;
     }

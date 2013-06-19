@@ -46,7 +46,15 @@ public class Bounding {
         return xMin != Int32.MaxValue
             && yMin != Int32.MaxValue;
     }
-
+	
+	public Point getCenter()
+	{
+		if (isValid())
+			return new Point(xMin + width / 2, yMin + height / 2);
+		else
+			return new Point();
+	}
+	
     #region Absorbs
     public void absorb(int x, int y)
     {

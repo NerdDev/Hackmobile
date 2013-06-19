@@ -9,8 +9,8 @@ public class LevelManager : MonoBehaviour {
         DebugManager.levelGenDFSsteps = true;
         LevelGenerator gen = new LevelGenerator();
 		float startTime = Time.realtimeSinceStartup;
-        gen.generateLayout(1);
-		Debug.Log ("Generate Level took: " + (Time.realtimeSinceStartup - startTime));
+//        gen.generateLayout(1);
+//		Debug.Log ("Generate Level took: " + (Time.realtimeSinceStartup - startTime));
         gen.generateLayout(0, 665911697, 1733302797);
     }
 

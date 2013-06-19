@@ -20,13 +20,17 @@ abstract public class LayoutObject {
 
     public void setShift(LayoutObject rhs)
     {
-        shiftP.x = rhs.shiftP.x;
-        shiftP.y = rhs.shiftP.y;
+		Bounding bounds = GetBoundingInternal();
+		Bounding rhsBounds = rhs.GetBoundingInternal();
+		Point center = bounds.getCenter();
+		Point centerRhs = rhsBounds.getCenter();
+        shiftP.x = rhs.shiftP.x + (centerRhs.x - center.x);
+        shiftP.y = rhs.shiftP.y + (centerRhs.y - center.y);
     }
 	
 	public Point GetShift()
 	{
-		return shiftP;	
+		return new Point(shiftP);	
 	}
 
     public void ShiftOutside(LayoutObject rhs, Point dir)

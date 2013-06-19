@@ -42,8 +42,8 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         int height = 0;
         if (bound.isValid())
         {
-            width = bound.width;
-            height = bound.height;
+            width = bound.width + 1;
+            height = bound.height + 1;
         }
         arr = new T[height, width];
 	}
@@ -97,33 +97,6 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
                 arr[y, x] = val;
             }
         }
-        else
-        {
-            expandToFit(x, y);
-            Put(val, x, y);
-        }
-    }
-
-    public void expandToFit(int x, int y)
-    {
-        throw new NotImplementedException();
-        // Determine largest of parameter values vs existing values
-		int maxWidth = Math.Max(x, getWidth ());
-		int maxHeight = Math.Max (y, getHeight());
-
-        // If dimension needs to be grown, add growth buffer
-		if (maxWidth != getWidth()) {
-			maxWidth += growth;	
-		}
-		if (maxHeight != getHeight()) {
-			maxHeight += growth;	
-		}
-
-        // Make new larger arrray and copy data
-        Array2D<T> tmp = new Array2D<T>(maxWidth, maxHeight, this);
-
-        // Set internal array to the new copied array
-        arr = tmp.arr;
     }
 	
     // Unsafe put that does no checking or expanding

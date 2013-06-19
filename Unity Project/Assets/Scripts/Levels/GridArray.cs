@@ -46,9 +46,17 @@ public class GridArray : Array2D<GridType> {
 		}
     }
 	
-	public void PutAll(LayoutObject obj)
+	public void PutAll(LayoutObject obj, Bounding origBound)
 	{
-		base.PutAll (obj.GetArray(), obj.GetShift());	
+		Point shift = obj.GetShift();
+		shift.x -= origBound.xMin;
+		shift.y -= origBound.yMin;
+		base.PutAll (obj.GetArray(), shift);	
+	}
+	
+	public override Bounding GetBounding ()
+	{
+		return GetBoundingInternal();
 	}
 	
     public Bounding GetBoundingInternal()
