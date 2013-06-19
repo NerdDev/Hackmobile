@@ -110,9 +110,4 @@ public class Path : LayoutObject {
 			indexes[val.y - bounds.yMin, val.x - bounds.xMin] = index;
 		}
 	}
-
-    public override GridArray GetBakedArray()
-    {
-        return new GridArray(GetArray(), shiftP);
-    }
 }

@@ -23,6 +23,11 @@ abstract public class LayoutObject {
         shiftP.x = rhs.shiftP.x;
         shiftP.y = rhs.shiftP.y;
     }
+	
+	public Point GetShift()
+	{
+		return shiftP;	
+	}
 
     public void ShiftOutside(LayoutObject rhs, Point dir)
     {
@@ -113,8 +118,6 @@ abstract public class LayoutObject {
 
     #region GetSet
     public abstract GridArray GetArray();
-
-    public abstract GridArray GetBakedArray();
 
     public GridType[,] GetMinimizedArray()
     {

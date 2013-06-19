@@ -42,8 +42,8 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         int height = 0;
         if (bound.isValid())
         {
-            width = Mathf.Max(Mathf.Abs(bound.xMin), Mathf.Abs(bound.xMax));
-            height = Mathf.Max(Mathf.Abs(bound.yMin), Mathf.Abs(bound.yMax));
+            width = bound.width;
+            height = bound.height;
         }
         arr = new T[height, width];
 	}

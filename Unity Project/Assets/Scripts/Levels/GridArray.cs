@@ -46,6 +46,11 @@ public class GridArray : Array2D<GridType> {
 		}
     }
 	
+	public void PutAll(LayoutObject obj)
+	{
+		base.PutAll (obj.GetArray(), obj.GetShift());	
+	}
+	
     public Bounding GetBoundingInternal()
     {
         GridType[,] array = GetArr();

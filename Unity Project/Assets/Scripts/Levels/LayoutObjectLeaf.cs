@@ -4,7 +4,7 @@ using System;
 
 public class LayoutObjectLeaf : LayoutObject {
 
-    GridArray grids;
+    protected GridArray grids;
 
     public LayoutObjectLeaf(int width, int height)
     {
@@ -58,15 +58,6 @@ public class LayoutObjectLeaf : LayoutObject {
     public override GridArray GetArray()
     {
         return grids;
-    }
-
-    public override GridArray GetBakedArray()
-    {
-		if (!shiftP.isZero()){
-        	return new GridArray(grids, shiftP);
-		} else {
-			return grids;	
-		}
     }
 
     protected override Bounding GetBoundingInternal()
