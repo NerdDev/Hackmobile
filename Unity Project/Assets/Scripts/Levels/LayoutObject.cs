@@ -123,7 +123,7 @@ abstract public class LayoutObject {
     #region GetSet
     public abstract GridArray GetArray();
 
-    public GridType[,] GetMinimizedArray()
+    public virtual GridType[,] GetMinimizedArray()
     {
         GridArray inArr = GetArray();
         Bounding bounds = GetBoundingInternal();
