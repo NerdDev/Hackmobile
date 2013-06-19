@@ -27,7 +27,7 @@ public class GridArray : Array2D<GridType> {
         PutAll(rhs, xShift, yShift);
     }
 	
-	public GridArray(Bounding bounds) : base(bounds)
+	public GridArray(Bounding bounds, bool minimize) : base(bounds, minimize)
 	{
 		
 	}
@@ -61,7 +61,7 @@ public class GridArray : Array2D<GridType> {
 	
     public Bounding GetBoundingInternal()
     {
-        GridType[,] array = GetArr();
+		GridType[,] array = GetArr();
         Bounding ret = new Bounding();
         for (int y = 0; y < array.GetLength(0); y++)
         {

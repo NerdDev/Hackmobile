@@ -36,14 +36,22 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         PutAll(rhs, xShift, yShift);
     }
 
-	public Array2D(Bounding bound) : this()
+	public Array2D(Bounding bound, bool minimize) : this()
     {
         int width = 0;
         int height = 0;
         if (bound.isValid())
         {
-            width = bound.width + 1;
-            height = bound.height + 1;
+			if (minimize)
+			{
+	            width = bound.width + 1;
+	            height = bound.height + 1;
+			}
+			else 
+			{
+	            width = bound.xMax + 1;
+	            height = bound.yMax + 1;
+			}
         }
         arr = new T[height, width];
 	}

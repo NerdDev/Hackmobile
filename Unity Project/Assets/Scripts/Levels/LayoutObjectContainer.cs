@@ -6,7 +6,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     public override GridArray GetArray()
     {
 		Bounding bound = GetBoundingInternal();
-        GridArray ret = new GridArray(bound);
+        GridArray ret = new GridArray(bound, true);
         foreach(LayoutObject obj in this)
         {
             ret.PutAll(obj, bound);

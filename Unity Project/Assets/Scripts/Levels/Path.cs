@@ -24,7 +24,7 @@ public class Path : LayoutObject {
     public override GridArray GetArray()
     {
 	    Bounding bounds = GetBoundingInternal();
-	    GridArray ret = new GridArray(bounds);
+	    GridArray ret = new GridArray(bounds, false);
 		if (list.Count > 0)
 		{
 	        Value2D<GridType> backwardPt = null;
