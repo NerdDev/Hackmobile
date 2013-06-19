@@ -268,7 +268,7 @@ public class LevelGenerator
                 tmp.toLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
             }
             #endregion
-			//path.simplify();
+			path.simplify();
             grids.PutAll(path.GetArray());
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))

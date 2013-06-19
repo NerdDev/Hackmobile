@@ -93,7 +93,7 @@ public class Path : LayoutObject {
 			Surrounding<int> surround = Surrounding<int>.Get(indexes, val.x - bounds.xMin, val.y - bounds.yMin);
             foreach (Value2D<int> s in surround)
             { // Check each surrounding point
-                if (s.val != null && s.val != 0)
+                if (s != null && s.val != 0)
                 { // If point exists, prune
                     // Set indices to 0
                     List<Value2D<GridType>> toRemove = list.GetRange(s.val, index - s.val);

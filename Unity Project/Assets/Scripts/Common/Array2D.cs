@@ -106,6 +106,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public void expandToFit(int x, int y)
     {
+        throw new NotImplementedException();
         // Determine largest of parameter values vs existing values
 		int maxWidth = Math.Max(x, getWidth ());
 		int maxHeight = Math.Max (y, getHeight());

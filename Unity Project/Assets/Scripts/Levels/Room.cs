@@ -7,7 +7,7 @@ public class Room : LayoutObjectLeaf {
     public int roomNum { get; private set; }
 	
     public Room(int num)
-		: base(LevelGenerator.maxRectSize, LevelGenerator.maxRectSize)
+        : base(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2)
     {
         roomNum = num;
     }

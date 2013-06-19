@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GridArray : Array2Dcoord<GridType> {
+public class GridArray : Array2D<GridType> {
 
     #region Ctors
     public GridArray(int width, int height) : base(width, height)
