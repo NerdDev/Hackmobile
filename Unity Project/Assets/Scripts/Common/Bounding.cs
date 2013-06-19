@@ -43,8 +43,8 @@ public class Bounding {
 
     public bool isValid()
     {
-        return xMin != Int32.MinValue
-            && yMin != Int32.MinValue;
+        return xMin != Int32.MaxValue
+            && yMin != Int32.MaxValue;
     }
 
     #region Absorbs

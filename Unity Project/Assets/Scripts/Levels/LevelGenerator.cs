@@ -258,13 +258,24 @@ public class LevelGenerator
         GridMap doors = layout.getTypes(grids, GridType.Door);
         foreach (Value2D<GridType> door in doors)
         {
-            Stack<Value2D<GridType>> path = depthFirstSearchFor(door, grids, GridType.Door, GridType.PathFloor);
-            while (path.Count > 0)
+
+            Path path = new Path(depthFirstSearchFor(door, grids, GridType.Door, GridType.PathFloor));
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                Value2D<GridType> point = path.Pop();
-                grids.Put(GridType.PathFloor, point.x, point.y);
+				GridArray tmp = new GridArray(grids);
+				tmp.PutAll(path.GetArray());
+                tmp.toLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
             }
-            grids.toLog(DebugManager.Logs.LevelGen, "Final map with path");
+            #endregion
+			//path.simplify();
+            grids.PutAll(path.GetArray());
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                grids.toLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
+            }
+            #endregion
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
