@@ -34,6 +34,30 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 		}
 		return ret;
 	}
+	
+	public virtual Value2D<T> GetDirWithVal(T t)
+	{
+		foreach (Value2D<T> val in this)
+		{
+			if (val != null && val.val.Equals(t))
+			{
+				return val;	
+			}
+		}
+		return null;
+	}
+	
+	public virtual Value2D<T> GetDirWithoutVal(T t)
+	{
+		foreach (Value2D<T> val in this)
+		{
+			if (val != null && !val.val.Equals(t))
+			{
+				return val;	
+			}
+		}
+		return null;
+	}
 
     public IEnumerator<Value2D<T>> GetEnumerator()
     {

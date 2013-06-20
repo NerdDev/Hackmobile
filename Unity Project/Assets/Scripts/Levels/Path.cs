@@ -81,33 +81,63 @@ public class Path : LayoutObject {
 		}
         return ret;
     }
-	
-	public void simplify()
-	{
-		Bounding bounds = GetBounding();
-		int[,] indexes = new int[bounds.height, bounds.width];
-		List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(list);
-		int index = 0;
-		foreach (Value2D<GridType> val in tmp)
-		{ // For each point on the path
-			Surrounding<int> surround = Surrounding<int>.Get(indexes, val.x - bounds.xMin, val.y - bounds.yMin);
-            foreach (Value2D<int> s in surround)
-            { // Check each surrounding point
-                if (s != null && s.val != 0)
-                { // If point exists, prune
-                    // Set indices to 0
-                    List<Value2D<GridType>> toRemove = list.GetRange(s.val, index - s.val);
-                    foreach (Value2D<GridType> remove in toRemove)
-                    {
-                        indexes[remove.y, remove.x] = 0;
-                    }
-                    // Remove
-                    list.RemoveRange(s.val, index - s.val);
-                    // Set next index to proper number
-                    index = s.val + 1;
-                }
-            }
-			indexes[val.y - bounds.yMin, val.x - bounds.xMin] = index;
+
+    public void simplify()
+    {
+		#region DEBUG
+		if (DebugManager.logging(DebugManager.Logs.LevelGen))
+		{
+			DebugManager.printHeader(DebugManager.Logs.LevelGen, "Simplify");	
 		}
-	}
+		#endregion
+        Bounding bounds = GetBounding();
+        Array2D<int> indexes = new Array2D<int>(bounds, false);
+        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(list);
+        int index = 0;
+        foreach (Value2D<GridType> val in tmp)
+        { // For each point on the path
+            SurroundingInt surround = SurroundingInt.Get(indexes, val.x, val.y);
+            Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);		
+			#region DEBUG
+			if (DebugManager.logging(DebugManager.Logs.LevelGen))
+			{
+				DebugManager.w (DebugManager.Logs.LevelGen, "Evaluating " + val);
+				if (neighbor != null)
+				{
+					DebugManager.w (DebugManager.Logs.LevelGen, "Found Neighbor " + neighbor);
+				}
+			}
+			#endregion
+            if (neighbor != null)
+            { // If point of interest exists, prune	
+				int fromIndex = neighbor.val + 1;
+				int count = index - neighbor.val - 1;
+                // Set indices to 0
+                List<Value2D<GridType>> toRemove = list.GetRange(fromIndex, count);
+                foreach (Value2D<GridType> r in toRemove)
+                {
+                    indexes.Put(0, r.x, r.y);
+                }
+                // Remove
+                list.RemoveRange(fromIndex, count);
+                // Set next index to proper number
+                index = neighbor.val + 1;
+				#region DEBUG
+				if (DebugManager.logging(DebugManager.Logs.LevelGen))
+				{
+					DebugManager.w (DebugManager.Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count); 
+					toLog(DebugManager.Logs.LevelGen);
+				}
+				#endregion
+            }
+            indexes.Put(index, val.x, val.y);
+            index++;
+        }
+		#region DEBUG
+		if (DebugManager.logging(DebugManager.Logs.LevelGen))
+		{
+			DebugManager.printFooter(DebugManager.Logs.LevelGen);	
+		}
+		#endregion
+    }
 }
