@@ -697,7 +697,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd4e00e9db95dbd4bbba9353bbae9d44, type: 3}
   m_Name: 
-  textPrefab: {fileID: 100000, guid: eb6ff930acd8b4b41aa36d4003e4e4f8, type: 2}
+  textPrefab: {fileID: 0}
   introSplashObject: {fileID: 0}
   enemy1: {fileID: 0}
   potion: {fileID: 100000, guid: 793a04a2099408a4182fc26997dc9e57, type: 2}
@@ -1482,6 +1482,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91cbe0a98219ded4da418f64596b52ba, type: 3}
   m_Name: 
+  totalNumberOfNPCs: []
 --- !u!1 &662269330
 GameObject:
   m_ObjectHideFlags: 0

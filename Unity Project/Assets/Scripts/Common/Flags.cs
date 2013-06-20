@@ -27,39 +27,29 @@ public class Flags
     {
         get
         {
-            return (this.flags & conv(index)) == conv(index);
+            long i = Convert.ToInt64(index);
+            return (this.flags & i) == i;
         }
         set
         {
             if (value)
             {
-                this.flags |= conv(index);
+                this.flags |= Convert.ToInt64(index);
             }
             else
             {
-                this.flags &= ~conv(index);
+                this.flags &= ~Convert.ToInt64(index);
             }
         }
     }
 
-    private static long conv(Enum index)
-    {
-        return Convert.ToInt64(index);
-    }
-
     public static implicit operator Enum(Flags src)
     {
-        return src != null ? src.e : (Enum) Enum.ToObject(src.e.GetType(), src.flags);
+        return src != null ? src.e : (Enum)Enum.ToObject(src.e.GetType(), src.flags);
     }
 
     public static implicit operator Flags(Enum src)
     {
         return new Flags(src);
-    }
-
-    internal void set(Flags flags)
-    {
-        this.flags = flags.flags;
-        this.e = flags.e;
     }
 }

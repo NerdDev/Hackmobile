@@ -1,7 +1,7 @@
 ﻿using System;
 using XML;
 
-class ItemStats
+public class ItemStats
 {
     private int cost;
     public int Cost
