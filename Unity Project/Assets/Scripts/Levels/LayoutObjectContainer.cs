@@ -3,19 +3,20 @@ using System.Collections.Generic;
 
 abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutObject> {
 
-    public override GridMap getMap()
+    public override GridArray GetArray()
     {
-        return getBakedMap();
-    }
-
-    public override GridMap getBakedMap()
-    {
-        GridMap ret = new GridMap();
+		Bounding bound = GetBoundingInternal();
+        GridArray ret = new GridArray(bound, true);
         foreach(LayoutObject obj in this)
         {
-            ret.putAll(obj.getBakedMap(), shiftP);
+            ret.PutAll(obj, bound);
         }
         return ret;
+    }
+	
+	public override GridType[,] GetMinimizedArray()
+    {
+        return GetArray().GetArr();
     }
 	
     public abstract IEnumerator<LayoutObject> GetEnumerator();
@@ -25,12 +26,13 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         return this.GetEnumerator();
     }
 
-    protected override Bounding getBoundsInternal()
+    protected override Bounding GetBoundingInternal()
 	{
 		Bounding bound = new Bounding();
 		foreach (LayoutObject obj in this){
-			bound.absorb(obj.getBounds());
+			bound.absorb(obj.GetBounding());
 		}
 		return bound;
 	}
+
 }

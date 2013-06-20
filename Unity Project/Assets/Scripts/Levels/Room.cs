@@ -2,41 +2,15 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class Room : LayoutObjectContainer {
+public class Room : LayoutObjectLeaf {
 
-    // Testings
-
-    public LayoutObjectLeaf floors { get; set; }
-    public LayoutObjectLeaf walls { get; set; }
-    public LayoutObjectLeaf doors { get; set; }
     public int roomNum { get; private set; }
-
+	
     public Room(int num)
+        : base(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2)
     {
         roomNum = num;
-        floors = new LayoutObjectLeaf();
-        walls = new LayoutObjectLeaf();
-        doors = new LayoutObjectLeaf();
     }
-
-    #region UNUSED
-    //protected override List<string> ToRowStrings() 
-    //{
-    //    List<string> ret = base.ToRowStrings();
-    //    int vert = ret.Count / 2;
-    //    if (vert > 1)
-    //    {
-    //        string str = ret[vert];
-    //        string roomNumStr = roomNum.ToString();
-    //        int horiz = str.Length / 2;
-    //        if (horiz > roomNumStr.Length)
-    //        {
-    //            ret[vert] = str.Substring(0, horiz) + roomNumStr + str.Substring(horiz + roomNumStr.Length);
-    //        }
-    //    }
-    //    return ret;
-    //}
-    #endregion
 
     public void generate()
     {
@@ -54,8 +28,8 @@ public class Room : LayoutObjectContainer {
             DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
         }
         #endregion
-        walls.BoxStroke(GridType.Wall, width, height);
-        floors.BoxFill(GridType.Floor, width - 1, height - 1);
+        BoxFill(GridType.Floor, width - 1, height - 1);
+        BoxStroke(GridType.Wall, width, height);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
@@ -65,22 +39,25 @@ public class Room : LayoutObjectContainer {
         #endregion
     }
 	
+	public GridMap getWalls() {
+		return getTypes(GridType.Wall);
+	}
+	
+	public GridMap getFloors() {
+		return getTypes(GridType.Floor);
+	}
+	
+	public GridMap getDoors() {
+		return getTypes(GridType.Door);
+	}
+	
 	public override string ToString()
 	{
 		return "Room " + roomNum;
 	}
 
-
-    protected override Bounding getBoundsInternal()
+    protected override Bounding GetBoundingInternal()
     {
-        return walls.getBounds();
-    }
-
-    public override IEnumerator<LayoutObject> GetEnumerator()
-    {
-        yield return floors;
-        yield return walls;
-        yield return doors;
-    }
-
+		return grids.GetBounding();
+	}
 }
