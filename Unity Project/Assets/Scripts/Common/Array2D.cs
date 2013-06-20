@@ -5,7 +5,6 @@ using System;
 
 public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
-    static int growth = 10;
     protected T[,] arr;
 
     #region Ctors

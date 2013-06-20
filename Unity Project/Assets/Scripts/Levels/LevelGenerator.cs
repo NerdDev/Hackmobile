@@ -45,14 +45,14 @@ public class LevelGenerator
         #endregion
         rand = new System.Random(seed);
         Random.seed = unitySeed;
-		float startTime = Time.realtimeSinceStartup;
+        //float startTime = Time.realtimeSinceStartup;
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         #region DEBUG
         if (DebugManager.logging())
         {
-			Debug.Log ("Generate Room took: " + (Time.realtimeSinceStartup - startTime));
-			startTime = Time.realtimeSinceStartup;
+            //Debug.Log ("Generate Room took: " + (Time.realtimeSinceStartup - startTime));
+            //startTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
         }
 		
@@ -61,8 +61,8 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging())
         {
-			Debug.Log ("Place Rooms took: " + (Time.realtimeSinceStartup - startTime));
-			startTime = Time.realtimeSinceStartup;
+            //Debug.Log ("Place Rooms took: " + (Time.realtimeSinceStartup - startTime));
+            //startTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
         }
         #endregion
@@ -70,8 +70,8 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging())
         {
-			Debug.Log ("Place Doors took: " + (Time.realtimeSinceStartup - startTime));
-			startTime = Time.realtimeSinceStartup;
+            //Debug.Log ("Place Doors took: " + (Time.realtimeSinceStartup - startTime));
+            //startTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
         }
         #endregion
@@ -79,8 +79,8 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging())
         {
-			Debug.Log ("Place Paths took: " + (Time.realtimeSinceStartup - startTime));
-			startTime = Time.realtimeSinceStartup;
+            //Debug.Log ("Place Paths took: " + (Time.realtimeSinceStartup - startTime));
+            //startTime = Time.realtimeSinceStartup;
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion

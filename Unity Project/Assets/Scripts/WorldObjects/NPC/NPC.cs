@@ -68,9 +68,9 @@ public class NPC : WorldObject
         this.stats.setData(npc.stats);
         this.bodyparts.setData(npc.bodyparts);
         //flags
-        this.flags.set(npc.flags);
-        this.resists.set(npc.resists);
-        this.props.set(npc.props);
+        //this.flags.set(npc.flags);
+        //this.resists.set(npc.resists);
+        //this.props.set(npc.props);
         //enums
         this.race = npc.race;
         this.role = npc.role;

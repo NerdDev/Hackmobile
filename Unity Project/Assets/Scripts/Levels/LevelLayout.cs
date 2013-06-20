@@ -5,7 +5,6 @@ using System;
 public class LevelLayout : LayoutObjectContainer {
 
     List<Room> rooms = new List<Room>();
-    List<Path> paths = new List<Path>();
 
     public void addRoom(Room r)
     {
