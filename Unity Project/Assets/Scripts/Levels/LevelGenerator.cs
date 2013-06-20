@@ -293,7 +293,7 @@ public class LevelGenerator
     static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
     {
 		#region DEBUG
-		if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+		if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 		{
 			DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
 			GridArray tmp = new GridArray(grids);
@@ -325,7 +325,7 @@ public class LevelGenerator
             directionOptions[2] = new Value2D<GridType>(startPoint.x + 1, startPoint.y);  // Right
             directionOptions[3] = new Value2D<GridType>(startPoint.x - 1, startPoint.y);  // Left
 			#region DEBUG
-			if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+			if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 			{ // Set up new print array
 				debugGrid = new GridArray(grids);
 				// Fill in blocked points
@@ -355,7 +355,7 @@ public class LevelGenerator
 	                if (GridType.NULL != val)
 	                {
 						#region DEBUG
-						if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+						if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 						{
 							DebugManager.w (DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
 						}
@@ -364,7 +364,7 @@ public class LevelGenerator
 	                    return pathTaken;
 	                }
 					#region DEBUG
-					if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+					if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 					{
 						debugGrid.Put(GridType.INTERNAL_RESERVED_ACCEPTED, dir.x, dir.y);
 					}
@@ -372,7 +372,7 @@ public class LevelGenerator
                 } else {
                     // Remove direction option
 					#region DEBUG
-					if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+					if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 					{
 						debugGrid.Put(GridType.INTERNAL_RESERVED_REJECTED, dir.x, dir.y);
 					}
@@ -383,7 +383,7 @@ public class LevelGenerator
             }
 			
 			#region DEBUG
-			if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+			if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 			{
 				debugGrid.toLog(DebugManager.Logs.LevelGen, "Current Map with " + numGoodDirections + " options.");
 			}
@@ -404,7 +404,7 @@ public class LevelGenerator
                     }
                 }
 				#region DEBUG
-				if (DebugManager.levelGenDFSsteps && DebugManager.logging(DebugManager.Logs.LevelGen))
+				if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 				{
 					DebugManager.w (DebugManager.Logs.LevelGen, "Chose Direction: " + directionOptions[dirChosen]);
 				}

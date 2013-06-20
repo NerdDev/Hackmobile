@@ -32,11 +32,14 @@ public class DebugManager : MonoBehaviour
     static string breaker2 = @"|/////////////////////////////////////////////////|";
     #endregion
 
-    static bool globalLoggingOn = true;
-	static bool lineNumbersOn_ = false;
-    static public bool lineNumbersOn { get { return lineNumbersOn_;} set { lineNumbersOn_ = value; } }
-	static public bool levelGenDFSsteps_ = false;
-    static public bool levelGenDFSsteps { get { return levelGenDFSsteps_;} set { ; } }
+    public enum DebugFlag 
+    {
+        GlobalLogging,
+        LineNumbers,
+        LevelGenDFSSteps
+    }
+
+    static Flags flags = new Flags(DebugFlag.GlobalLogging);
 
     // Log storage
     static Log[] logs;
@@ -69,6 +72,16 @@ public class DebugManager : MonoBehaviour
     }
 	
     #region Accessors
+    public static bool flag(DebugFlag flag)
+    {
+        return flags[flag];
+    }
+
+    public static void setFlag(DebugFlag flag, bool on)
+    {
+        flags[flag] = on;
+    }
+
 	public static void nl(Logs e)
 	{
         if (logging(e))
@@ -186,7 +199,7 @@ public class DebugManager : MonoBehaviour
 
     public static bool logging()
     {
-        return globalLoggingOn;
+        return flags[DebugFlag.GlobalLogging];
     }
 
     public static bool logging(Logs e)
@@ -196,7 +209,7 @@ public class DebugManager : MonoBehaviour
 
     public static void logging(bool logging)
     {
-        globalLoggingOn = logging;
+        flags[DebugFlag.GlobalLogging] = logging;
     }
 
     public static void logging(Logs e, bool logging)
@@ -256,7 +269,7 @@ public class DebugManager : MonoBehaviour
         public void w(int depthModifier, string line)
         {
             string toWrite = "";
-            if (DebugManager.lineNumbersOn)
+            if (DebugManager.flag(DebugFlag.LineNumbers))
             {
                 toWrite += "[" + lineNum + "] ";
             }

@@ -6,7 +6,6 @@ public class LevelManager : MonoBehaviour {
 
     void Start()
     {
-        DebugManager.levelGenDFSsteps = true;
         LevelGenerator gen = new LevelGenerator();
         //float startTime = Time.realtimeSinceStartup;
         gen.generateLayout(1);
