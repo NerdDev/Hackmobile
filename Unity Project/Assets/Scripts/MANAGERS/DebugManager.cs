@@ -15,10 +15,8 @@ public class DebugManager : MonoBehaviour
         Items,
         NPCs,
     };
-    static string[] logPaths = { ""
-                               , "LevelGen/"};
-    static string[] logNames = { "=== Main ==="
-                               , "LevelGen"};
+    static Dictionary<Logs, string> logPaths = new Dictionary<Logs,string>();
+    static Dictionary<Logs, string> logNames = new Dictionary<Logs, string>();
     #endregion
 
     #region StringConstants
@@ -54,6 +52,11 @@ public class DebugManager : MonoBehaviour
         {
             Directory.Delete(debugFolder, true);
         }
+
+        // Load Debug log defaults
+        logNames.Add(Logs.Main, "=== Main ===");
+        logPaths.Add(Logs.LevelGen, "LevelGen/");
+        logNames.Add(Logs.LevelGen, "LevelGenTmp");
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))
@@ -159,11 +162,31 @@ public class DebugManager : MonoBehaviour
         }
 	}
 
+    static string getName(Logs e)
+    {
+        string name;
+        if (!logNames.TryGetValue(e, out name))
+        {
+            name = "";
+        }
+        return name;
+    }
+
+    static string getDir(Logs e)
+    {
+        string dir;
+        if (!logPaths.TryGetValue(e, out dir))
+        {
+            dir = "";
+        }
+        return dir;
+    }
+
     static Log Get(Logs e)
     {
         if (logs[(int)e] == null)
         {
-            CreateNewLog(e, logNames[(int) e]);
+            CreateNewLog(e, getName(e));
         }
         return logs[(int)e];
     }
@@ -172,7 +195,7 @@ public class DebugManager : MonoBehaviour
     {
 		Log prev = logs[(int)e];
         // Create actual path
-        logName = debugFolder + logPaths[(int)e] + logName + ".txt";
+        logName = debugFolder + getDir(e) + logName + ".txt";
         // Create necessary directories
         string dir = System.IO.Path.GetDirectoryName(logName);
         Directory.CreateDirectory(dir);
