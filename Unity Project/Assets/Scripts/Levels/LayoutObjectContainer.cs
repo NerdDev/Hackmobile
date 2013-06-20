@@ -1,20 +1,19 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutObject> {
 
-    public override MultiMap<GridType> getMap()
+    public override GridMap getMap()
     {
         return getBakedMap();
     }
 
-    public override MultiMap<GridType> getBakedMap()
+    public override GridMap getBakedMap()
     {
-        MultiMap<GridType> ret = new MultiMap<GridType>();
+        GridMap ret = new GridMap();
         foreach(LayoutObject obj in this)
         {
-            ret.putAll(obj.getBakedMap());
+            ret.putAll(obj.getBakedMap(), shiftP);
         }
         return ret;
     }
@@ -25,8 +24,8 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     {
         return this.GetEnumerator();
     }
-	
-	public override Bounding getBoundsInternal()
+
+    protected override Bounding getBoundsInternal()
 	{
 		Bounding bound = new Bounding();
 		foreach (LayoutObject obj in this){

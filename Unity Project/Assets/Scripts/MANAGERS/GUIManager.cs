@@ -46,7 +46,7 @@ public class GUIManager : MonoBehaviour {
 	public UILabel HUDIntelligenceValue;
 	public UILabel HUDDexterityLabel;
 	public UILabel HUDDexterityValue;
-
+	public UILabel hungerLabel;
 	
 	#endregion
 	
@@ -130,7 +130,11 @@ public class GUIManager : MonoBehaviour {
 		
 	}
 	
-		
+	public void UpdateHungerText(Color theCol)
+	{
+		hungerLabel.text = BigBoss.PlayerInfo.CurrentHungerLevel.ToString();
+		hungerLabel.color = theCol;
+	}
 	
 	void GrabNGUIReferences ()
 	{

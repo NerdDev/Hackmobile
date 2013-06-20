@@ -8,10 +8,12 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
     SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
     public SortedDictionary<int, SortedDictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
     public SortedDictionary<int, SortedDictionary<int, T>>.ValueCollection Values { get { return multimap.Values; } }
+    public Comparator<T> comparator { get; set; }
 
     #region Ctors
     public MultiMap()
     {
+        setComparator();
     }
 
     public MultiMap(MultiMap<T> rhs) : this()
@@ -19,14 +21,18 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
         putAll(rhs);
     }
 
-    public MultiMap(MultiMap<T> rhs, Point shift)
+    public MultiMap(MultiMap<T> rhs, Point shift) : this()
     {
         putAll(rhs, shift);
     }
 
-    public MultiMap(MultiMap<T> rhs, int xShift, int yShift)
+    public MultiMap(MultiMap<T> rhs, int xShift, int yShift) : this()
     {
         putAll(rhs, xShift, yShift);
+    }
+
+    protected virtual void setComparator() 
+    {
     }
     #endregion
 
@@ -57,7 +63,17 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
     public void put(T val, int x, int y)
     {
         SortedDictionary<int, T> row = GetRowCreate(y);
-        row[x] = val;
+        put(row, val, x);
+    }
+
+    void put(SortedDictionary<int, T> row, T val, int x)
+    {
+        if (!row.ContainsKey(x)    // If value doesn't already exist
+            || comparator == null  // Or comparator is null
+            || 1 == comparator.compare(val, row[x])) // Or if new value is greater
+        {
+            row[x] = val;
+        }
     }
 
     public void putAll(MultiMap<T> rhs)
@@ -67,7 +83,7 @@ public class MultiMap<T> : IEnumerable<KeyValuePair<int, SortedDictionary<int, T
             SortedDictionary<int, T> row = GetRowCreate(rowRhs.Key);
             foreach (KeyValuePair<int, T> rhsItem in rowRhs.Value)
             {
-                row[rhsItem.Key] = rhsItem.Value;
+                put(row, rhsItem.Value, rhsItem.Key);
             }
         }
     }

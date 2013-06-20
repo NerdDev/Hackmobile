@@ -1,9 +1,8 @@
-using UnityEngine;
 using System.Collections;
 
 public class LayoutObjectLeaf : LayoutObject {
 
-    MultiMap<GridType> grids = new MultiMap<GridType>();
+    GridMap grids = new GridMap();
     private Bounding bound = new Bounding();
 
     #region GetSet
@@ -47,17 +46,18 @@ public class LayoutObjectLeaf : LayoutObject {
         grids.put(t, x, y);
     }
 
-    public override MultiMap<GridType> getMap()
+    public override GridMap getMap()
     {
         return grids;
     }
 
-    public override MultiMap<GridType> getBakedMap()
+    public override GridMap getBakedMap()
     {
-        return new MultiMap<GridType>(grids, shiftP);
+        return new GridMap(grids, shiftP);
     }
-	
-	public override Bounding getBoundsInternal() {
+
+    protected override Bounding getBoundsInternal()
+    {
 		return bound;	
 	}
     #endregion GetSet
@@ -66,6 +66,16 @@ public class LayoutObjectLeaf : LayoutObject {
     public void BoxStroke(GridType t, int width, int height)
     {
         BoxStroke(t, 0, width - 1, 0, height - 1);
+    }
+
+    public void BoxStroke(GridType t, int xl, int xr, int yb, int yt)
+    {
+        putRow(t, xl, xr, yb);
+        putRow(t, xl, xr, yt);
+        yb++;
+        yt--;
+        putCol(t, yb, yt, xl);
+        putCol(t, yb, yt, xr);
     }
 
     public void BoxStrokeAndFill(GridType stroke, GridType fill, int width, int height)
@@ -94,14 +104,9 @@ public class LayoutObjectLeaf : LayoutObject {
         grids.putSquare(fill, xl, xr, yb, yt);
     }
 
-    public void BoxStroke(GridType t, int xl, int xr, int yb, int yt)
+    public void BoxFill(GridType t, int width, int height)
     {
-        putRow(t, xl, xr, yb);
-        putRow(t, xl, xr, yt);
-        yb++;
-        yt--;
-        putCol(t, yb, yt, xl);
-        putCol(t, yb, yt, xr);
+        BoxFill(t, 0, width - 1, 0, height - 1);
     }
 
     public void BoxFill(GridType t, int xl, int xr, int yb, int yt)

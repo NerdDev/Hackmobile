@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -12,11 +11,6 @@ abstract public class LayoutObject {
 	{
 		shiftP.shift(x,y);
 	}
-
-    public void shift(Vector2 vect)
-    {
-        shiftP.shift(vect);
-    }
 	
 	public void shift(Point p)
 	{
@@ -112,14 +106,14 @@ abstract public class LayoutObject {
         bound.yMax += shiftP.y;
         return bound;
     }
-	
-	public abstract Bounding getBoundsInternal();
+
+    protected abstract Bounding getBoundsInternal();
     #endregion Bounds
 
     #region GetSet
-    public abstract MultiMap<GridType> getMap();
+    public abstract GridMap getMap();
 
-    public abstract MultiMap<GridType> getBakedMap();
+    public abstract GridMap getBakedMap();
     #endregion GetSet
 
     #region Intersects
@@ -163,7 +157,7 @@ abstract public class LayoutObject {
 
     protected virtual List<string> ToRowStrings()
     {
-        MultiMap<GridType> grids = getMap();
+        GridMap grids = getMap();
         List<string> ret = new List<string>();
 		Bounding bound = getBounds ();
         for (int y = bound.yMin; y <= bound.yMax; y++)

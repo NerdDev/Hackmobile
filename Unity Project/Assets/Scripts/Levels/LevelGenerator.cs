@@ -7,14 +7,21 @@ public class LevelGenerator
 
     #region GlobalGenVariables
     // Number of Rooms
-    static int minRooms = 8;
-    static int maxRooms = 16;  //Max not inclusive
+	public static int minRooms { get { return 8; }}
+	public static int maxRooms { get { return 16; }} //Max not inclusive
+	
+	// Box Room Size (including walls)
+	public static int minRectSize { get { return 5; }}
+	public static int maxRectSize { get { return 20; }}
 
     // Amount to shift rooms
-    static int shiftRange = 10;   //Max not inclusive
+	public static int shiftRange { get { return 10; }} //Max not inclusive
+
+    // Number of doors per room
+    public static int doorsMin { get { return 1; } }
+    public static int doorsMax { get { return 4; } } //Max not inclusive
     #endregion
 
-    LevelLayout lev = new LevelLayout();
     public static System.Random rand = new System.Random();
     public static Random unityRand = new Random();
 
@@ -26,6 +33,7 @@ public class LevelGenerator
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         placeRooms(rooms, layout);
+        placeDoors(layout);
         #region DEBUG
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
         #endregion
@@ -67,6 +75,7 @@ public class LevelGenerator
             // Find room it will start from
             int roomNum = rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
+            room.setShift(startRoom);
             // Find where it will shift away
             Point shiftMagn = generateShiftMagnitude(shiftRange);
             #region DEBUG
@@ -77,8 +86,6 @@ public class LevelGenerator
                 DebugManager.w(DebugManager.Logs.LevelGen, "Shift: " + shiftMagn);
             }
             #endregion
-            // Move to initial start room
-        	room.setShift(startRoom);
             // Keep moving until room doesn't overlap any other rooms
 			LayoutObject intersect;
             while ((intersect = room.intersectObj(placedRooms)) != null)
@@ -105,6 +112,16 @@ public class LevelGenerator
         #region DEBUG
         DebugManager.printFooter(DebugManager.Logs.LevelGen);
         #endregion
+    }
+
+    void placeDoors(LevelLayout layout)
+    {
+        foreach (Room room in layout.getRooms())
+        {
+            LayoutObjectLeaf walls = room.walls;
+            LayoutObjectLeaf doors = room.doors;
+
+        }
     }
 
     Point generateShiftMagnitude(int mag)

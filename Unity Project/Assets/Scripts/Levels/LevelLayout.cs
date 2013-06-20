@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -22,16 +21,6 @@ public class LevelLayout : LayoutObjectContainer {
 		List<Room> ret = new List<Room>(rooms);
 		return ret;
 	}
-
-    public override MultiMap<GridType> getBakedMap()
-    {
-        MultiMap<GridType> ret = new MultiMap<GridType>();
-        foreach (Room room in rooms)
-        {
-            ret.putAll(room.getBakedMap());
-        }
-        return ret;
-    }
 
     public override IEnumerator<LayoutObject> GetEnumerator()
     {
