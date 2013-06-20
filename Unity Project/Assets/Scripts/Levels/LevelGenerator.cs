@@ -35,24 +35,27 @@ public class LevelGenerator
     {
         #region DEBUG
         int debugNum = 1;
+        float stepTime = 0, startTime = 0;
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
+            DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
             DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
             DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
+            stepTime = Time.realtimeSinceStartup;
+            startTime = stepTime;
         }
         #endregion
         rand = new System.Random(seed);
         Random.seed = unitySeed;
-        //float startTime = Time.realtimeSinceStartup;
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         #region DEBUG
         if (DebugManager.logging())
         {
-            //Debug.Log ("Generate Room took: " + (Time.realtimeSinceStartup - startTime));
-            //startTime = Time.realtimeSinceStartup;
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Room took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
         }
 		
@@ -61,8 +64,8 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging())
         {
-            //Debug.Log ("Place Rooms took: " + (Time.realtimeSinceStartup - startTime));
-            //startTime = Time.realtimeSinceStartup;
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Rooms took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
         }
         #endregion
@@ -70,8 +73,8 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging())
         {
-            //Debug.Log ("Place Doors took: " + (Time.realtimeSinceStartup - startTime));
-            //startTime = Time.realtimeSinceStartup;
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Doors took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
             DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
         }
         #endregion
@@ -79,9 +82,17 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging())
         {
-            //Debug.Log ("Place Paths took: " + (Time.realtimeSinceStartup - startTime));
-            //startTime = Time.realtimeSinceStartup;
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Paths took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+
+        #region DEBUG
+        if (DebugManager.logging())
+        {
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
+            DebugManager.printFooter(DebugManager.Logs.LevelGenMain);
         }
         #endregion
         return layout;

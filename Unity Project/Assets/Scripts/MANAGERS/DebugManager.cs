@@ -12,11 +12,13 @@ public class DebugManager : MonoBehaviour
     {
         Main,
         LevelGen,
+        LevelGenMain,
         Items,
         NPCs,
     };
-    static Dictionary<Logs, string> logPaths = new Dictionary<Logs,string>();
-    static Dictionary<Logs, string> logNames = new Dictionary<Logs, string>();
+    static string[] logPaths;
+    static string[] logNames;
+    static bool[] logOn;
     #endregion
 
     #region StringConstants
@@ -54,9 +56,20 @@ public class DebugManager : MonoBehaviour
         }
 
         // Load Debug log defaults
-        logNames.Add(Logs.Main, "=== Main ===");
-        logPaths.Add(Logs.LevelGen, "LevelGen/");
-        logNames.Add(Logs.LevelGen, "LevelGenTmp");
+		int enumLength = Enum.GetNames(typeof(Logs)).Length;
+		logNames = new string[enumLength];
+		logPaths = new string[enumLength];
+		logOn = new bool[enumLength];
+		putName(Logs.Main, "=== Main ===");
+        putPath(Logs.LevelGen, "LevelGen/");
+        putName(Logs.LevelGen, "LevelGenTmp");
+        putPath(Logs.LevelGenMain, "LevelGen/");
+        putName(Logs.LevelGenMain, "Level Gen Main");
+		
+		// Set Logging to be on
+		logging (Logs.Main, true);
+		logging (Logs.LevelGenMain, true);
+		logging (Logs.LevelGen, true);
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))
@@ -164,23 +177,23 @@ public class DebugManager : MonoBehaviour
 
     static string getName(Logs e)
     {
-        string name;
-        if (!logNames.TryGetValue(e, out name))
-        {
-            name = "";
-        }
-        return name;
+        return logNames[(int) e];
     }
+	
+	static void putName(Logs e, string name)
+	{
+		logNames[(int) e] = name;	
+	}
 
-    static string getDir(Logs e)
+    static string getPath(Logs e)
     {
-        string dir;
-        if (!logPaths.TryGetValue(e, out dir))
-        {
-            dir = "";
-        }
-        return dir;
+        return logPaths[(int) e];
     }
+	
+	static void putPath(Logs e, string path)
+	{
+		logPaths[(int) e] = path;	
+	}
 
     static Log Get(Logs e)
     {
@@ -195,7 +208,7 @@ public class DebugManager : MonoBehaviour
     {
 		Log prev = logs[(int)e];
         // Create actual path
-        logName = debugFolder + getDir(e) + logName + ".txt";
+        logName = debugFolder + getPath(e) + logName + ".txt";
         // Create necessary directories
         string dir = System.IO.Path.GetDirectoryName(logName);
         Directory.CreateDirectory(dir);
@@ -204,7 +217,6 @@ public class DebugManager : MonoBehaviour
         logs[(int)e] = newLog;
         if (prev != null)
         { // Close previous log
-			newLog.on = prev.on;
             prev.close();
         }
     }
@@ -227,7 +239,7 @@ public class DebugManager : MonoBehaviour
 
     public static bool logging(Logs e)
     {
-        return logging() && Get(e).on;
+        return logging() && logOn[(int)e];
     }
 
     public static void logging(bool logging)
@@ -237,14 +249,13 @@ public class DebugManager : MonoBehaviour
 
     public static void logging(Logs e, bool logging)
     {
-        Get(e).on = logging;
+        logOn[(int) e] = logging;
     }
     #endregion
 
     #region LogClass
     class Log
     {
-        public bool on { get; set; }
         StreamWriter writer;
         string depth = "";
         int lineNum = 1;
@@ -252,7 +263,6 @@ public class DebugManager : MonoBehaviour
         public Log(string path)
         {
             writer = new StreamWriter(path);
-            on = true;
         }
 
         public Log(FileStream fstream)
