@@ -9,22 +9,13 @@ public class LevelBuilder : MonoBehaviour {
 		GameObject[,] goArr = new GameObject[array.getWidth(),array.getHeight()];
 		foreach (Value2D<GridType> val in array)
         {
-            GameObject protoType = null;
-            GameObject obj = null;
-            switch (val.val)
-            {
-                case GridType.Floor:
-                    protoType = theme.floor;
-                    break;
-                default:
-                    break;
-            }
+            GameObject protoType = theme.Get(val.val);
             if (protoType != null)
             {
-                obj = Instantiate(protoType) as GameObject;
-                obj.transform.position = new Vector3(val.x, 0, val.y);
+                GameObject obj = Instantiate(protoType) as GameObject;
+                obj.transform.Translate(new Vector3(val.x, 0, val.y));
+                goArr[val.x, val.y] = obj;
             }
-            goArr[val.x, val.y] = obj;
 		}
 		return goArr;
 	}
