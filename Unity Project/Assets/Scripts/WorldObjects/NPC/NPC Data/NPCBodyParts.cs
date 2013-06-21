@@ -23,4 +23,11 @@ public class NPCBodyParts
         Legs = Nifty.StringToInt(x.select("legs").getText());
         Heads = Nifty.StringToInt(x.select("heads").getText());
     }
+
+    public void setNull()
+    {
+        this.Arms = 0;
+        this.Legs = 0;
+        this.Heads = 0;
+    }
 }

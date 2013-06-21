@@ -52,4 +52,9 @@ public class Flags
     {
         return new Flags(src);
     }
+
+    public void setNull()
+    {
+        flags = 0;
+    }
 }

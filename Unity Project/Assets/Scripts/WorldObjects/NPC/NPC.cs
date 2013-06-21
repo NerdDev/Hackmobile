@@ -25,22 +25,26 @@ public class NPC : WorldObject
     }
     #endregion
 
-    //TODO: Refactor base inventory and/or inventory to somewhere else?
-    //  -- do an NPCInstance() class which translates baseInventory into actual inventory?
+    //TODO:
     //  -- Refactor all public access to get/set functions? (annoying with unity, can't modify then).
 
-    #region NPC Properties
-    //Properties
-    //currently none, outsourced to their own classes
-
+    #region Base NPC Properties
     //Local variables
     public List<NPCItem> baseInventory = new List<NPCItem>();
-    List<GameObject> inventory;
+    #endregion
+
+    #region NPC Instance Properties
+    //Initialized all to null for the base.
+    //Converted from base properties upon creation of instance.
+    public Dictionary<Item, int> inventory = null;
+    #endregion
+
+    #region Generic NPC Properties
+    //Properties stored here.
+    public Dictionary<Enum, Effect> effects = new Dictionary<Enum, Effect>();
 
     //All sets of flags
-    public Flags flags = new Flags(NPCFlags.NONE);
-    public Flags resists = new Flags(NPCResistances.NONE);
-    public Flags props = new Flags(NPCProperties.NONE);
+    Flags flags = new Flags(NPCFlags.NONE);
 
     //Enums
     public NPCRace race;
@@ -55,6 +59,48 @@ public class NPC : WorldObject
     {
     }
 
+    #region Effects
+    public void applyEffect(Enum e, bool positive, Priority p)
+    {
+        if (!effects.ContainsKey(e))
+        {
+            effects.Add(e, new Effect());
+        }
+        if (positive)
+        {
+            effects[e].apply(p);
+        }
+        else
+        {
+            effects[e].remove(p);
+        }
+    }
+    #endregion
+
+    #region Get/Set of Properties and Flags
+    public bool getProperty(Enum e)
+    {
+        if (effects.ContainsKey(e))
+        {
+            return effects[e].On;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool get(NPCFlags fl)
+    {
+        return flags[fl];
+    }
+
+    public void set(NPCFlags fl, bool on)
+    {
+        flags[fl] = on;
+    }
+    #endregion
+
     #region NPC Management for instances
     public void setData(string npcName)
     {
@@ -63,27 +109,33 @@ public class NPC : WorldObject
 
     public void setData(NPC npc)
     {
+        //Anything performing the conversion from base NPC -> instance of NPC goes here.
         base.setData(npc);
         //classes
-        this.stats.setData(npc.stats);
-        this.bodyparts.setData(npc.bodyparts);
+        this.stats = npc.stats.Copy();
+        this.bodyparts = npc.bodyparts.Copy();
         //flags
-        this.flags.set(npc.flags);
-        this.resists.set(npc.resists);
-        this.props.set(npc.props);
+        this.flags = npc.flags.Copy();
         //enums
         this.race = npc.race;
         this.role = npc.role;
+        //lists
+        this.effects = npc.effects.Copy();
 
         //inventory
         //TODO: needs conversion from baseInventory into actual inventory
         //this.inventory.AddRange(npc.inventory);
     }
 
-    //TODO: Fill in null data.
     public override void setNull()
     {
         base.setNull();
+        this.stats.setNull();
+        this.bodyparts.setNull();
+        this.flags.setNull();
+        this.race = NPCRace.NONE;
+        this.role = NPCRole.NONE;
+        this.effects.Clear();
     }
 
     #region XML Parsing
@@ -100,7 +152,16 @@ public class NPC : WorldObject
         for (int i = 0; i < split.Length; i++)
         {
             //NPCProperties pr = (NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true);
-            this.props[(NPCProperties)Enum.Parse(typeof(NPCProperties), split[i].Trim(), true)] = true;
+            this.effects.Add((NPCProperties)Enum.Parse(typeof(NPCProperties), split[i].Trim(), true), new Effect(true));
+        }
+
+        //resistance parsing
+        temp = x.select("resistances").getText();
+        split = temp.Split(',');
+        for (int i = 0; i < split.Length; i++)
+        {
+            //NPCProperties pr = (NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true);
+            this.effects.Add((NPCResistances)Enum.Parse(typeof(NPCResistances), split[i].Trim(), true), new Effect(true));
         }
 
         //flag parsing

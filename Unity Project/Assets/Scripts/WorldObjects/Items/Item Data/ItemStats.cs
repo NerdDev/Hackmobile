@@ -28,13 +28,6 @@ public class ItemStats
         this.Cost = Nifty.StringToInt(x.select("cost").getText());
     }
 
-    public void setData(ItemStats istats)
-    {
-        this.Cost = istats.Cost;
-        this.Weight = istats.Weight;
-        this.nutrition = istats.nutrition;
-    }
-
     public void setNull()
     {
         this.Cost = 0;

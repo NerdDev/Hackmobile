@@ -3,6 +3,7 @@
 		<role>creature</role>
 		<race>reptile</race>
 		<flags>nopoly, leaves_corpse</flags>
+		<resistances>NONE</resistances>
 		<properties>infravision</properties>
 		<stats>
 			<charisma>3</charisma>

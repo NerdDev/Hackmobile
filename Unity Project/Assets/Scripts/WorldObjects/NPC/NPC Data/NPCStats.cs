@@ -41,13 +41,13 @@ public class NPCStats
         set { this.constitution = value; }
     }
 
-    public void setData(NPCStats ns) {
-        this.Strength = ns.Strength;
-        this.Charisma = ns.Charisma;
-        this.Intelligence = ns.Intelligence;
-        this.Wisdom = ns.Wisdom;
-        this.Dexterity = ns.Dexterity;
-        this.Constitution = ns.Constitution;
+    public void setNull() {
+        this.Strength = 0;
+        this.Charisma = 0;
+        this.Intelligence = 0;
+        this.Wisdom = 0;
+        this.Dexterity = 0;
+        this.Constitution = 0;
     }
 
     public void parseXML(XMLNode x)

@@ -45,6 +45,7 @@ public class WorldObject : UniqueObject
 
     public virtual void setNull()
     {
+        //these should be set to some type of model that we can tell shouldn't be ingame
         this.Model = "";
         this.ModelTexture = "";
         this.Name = "null";

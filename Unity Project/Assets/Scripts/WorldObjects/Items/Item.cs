@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using XML;
 
@@ -26,7 +27,7 @@ public class Item : WorldObject
 	}
     #endregion
 
-    #region Properties of Items
+    #region Generic Properties of Items
 
     //Properties
     private string type;
@@ -42,7 +43,7 @@ public class Item : WorldObject
         set { this.buc = value; }
     }
 
-    //These map to existing values upon a map
+    //These map to existing values upon a dictionary stored in ItemMaster
     private string damage;
     public Dice Damage
     {
@@ -64,6 +65,14 @@ public class Item : WorldObject
 
     #endregion
 
+    #region Instanced Properties of Items
+    //none atm
+    #endregion
+
+    #region Base Properties of Items
+    //none atm
+    #endregion
+
     public Item()
     {
     }
@@ -74,28 +83,29 @@ public class Item : WorldObject
         this.setData(BigBoss.ItemMaster.getItem(itemName));
     }
 
+    //use this to do a conversion of a base item to instanced item
     public void setData(Item baseItem)
     {
         base.setData(baseItem);
-        this.Name = baseItem.Name;
+        //classes
+        this.stats = baseItem.stats.Copy();
+        //properties
         this.Type = baseItem.Type;
-        this.stats.setData(baseItem.stats);
         this.BUC = baseItem.BUC;
         this.Damage = baseItem.Damage;
         this.Material = baseItem.Material;
-        this.Model = baseItem.Model;
-        this.ModelTexture = baseItem.ModelTexture;
     }
 
     public override void setNull()
     {
         //Initialize to null stats essentially. Needed/Not needed? Dunno.
         base.setNull();
+        //properties
+        type = "null";
         BUC = BUC.CURSED;
         damage = "d1";
         mat = "null";
-        Model = "";
-        ModelTexture = "";
+        //classes
         stats.setNull();
     }
 

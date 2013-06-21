@@ -50,7 +50,7 @@ public class NPCManager : MonoBehaviour {
 
 	public NPC CreateNPC(Vector3 location, string npcName)
 	{
-        GameObject go = new GameObject();
+        GameObject go = new GameObject(npcName);
         go.transform.position = location;
         NPC npc = go.AddComponent<NPC>();
         npc.setData(npcName);
