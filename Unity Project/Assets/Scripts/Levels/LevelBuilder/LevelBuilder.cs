@@ -10,10 +10,6 @@ public class LevelBuilder : MonoBehaviour {
 		GameObject[,] goArr = new GameObject[array.getWidth(),array.getHeight()];
 		foreach (Value2D<GridType> val in array)
         {
-			if (val.val == GridType.Path_Horiz)
-			{
-				int wer = 23;	
-			}
             GameObject protoType = theme.Get(val.val);
             if (protoType != null)
             {

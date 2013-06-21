@@ -23,63 +23,79 @@ public class Path : LayoutObject {
 
     public override GridArray GetArray()
     {
-	    Bounding bounds = GetBoundingInternal();
-	    GridArray ret = new GridArray(bounds, false);
-		if (list.Count > 0)
-		{
-	        Value2D<GridType> backwardPt = null;
-	        Value2D<GridType> curPoint = null;
-	        foreach (Value2D<GridType> forwardPt in list)
-	        {
-	            if (curPoint != null)
-	            {
-	                if (backwardPt == null)
-	                { // Start Point
-	                    ret.Put(GridType.INTERNAL_RESERVED_CUR, curPoint.x, curPoint.y);
-	                }
-	                else if (Mathf.Abs(forwardPt.x - backwardPt.x) == 2)
-	                { // Horizontal
-	                    ret.Put(GridType.Path_Horiz, curPoint.x, curPoint.y);
-	                }
-	                else if (Mathf.Abs(forwardPt.y - backwardPt.y) == 2)
-	                { // Vertical
-	                    ret.Put(GridType.Path_Vert, curPoint.x, curPoint.y);
-	                }
-	                else
-	                { // Corner
-	                    bool top = (forwardPt.y == (curPoint.y + 1)) || (backwardPt.y == (curPoint.y + 1));
-	                    bool right = (forwardPt.x == (curPoint.x + 1)) || (backwardPt.x == (curPoint.x + 1));
-	                    if (top)
-	                    {
-	                        if (right)
-	                        {
-	                            ret.Put(GridType.Path_RT, curPoint.x, curPoint.y);
-	                        }
-	                        else
-	                        {
-	                            ret.Put(GridType.Path_LT, curPoint.x, curPoint.y);
-	                        }
-	                    }
-	                    else
-	                    {
-	                        if (right)
-	                        {
-	                            ret.Put(GridType.Path_RB, curPoint.x, curPoint.y);
-	                        }
-	                        else
-	                        {
-	                            ret.Put(GridType.Path_LB, curPoint.x, curPoint.y);
-	                        }
-	                    }
-	                }
-	            }
-	            // Set up for next point
-	            backwardPt = curPoint;
-	            curPoint = forwardPt;
-	        }
-	        ret.Put(GridType.INTERNAL_RESERVED_CUR, curPoint.x, curPoint.y);
-		}
+        return GetArray(false);
+    }
+
+    public GridArray GetArray(bool ending)
+    {
+        Bounding bounds = GetBoundingInternal();
+        GridArray ret = new GridArray(bounds, false);
+        if (list.Count > 0)
+        {
+            Value2D<GridType> backwardPt = null;
+            Value2D<GridType> curPoint = null;
+            foreach (Value2D<GridType> forwardPt in list)
+            {
+                if (curPoint != null)
+                {
+                    if (backwardPt == null)
+                    { // Start Point
+                        if (ending)
+                        {
+                            ret.Put(GridType.INTERNAL_RESERVED_CUR, curPoint.x, curPoint.y);
+                        }
+                    }
+                    else if (Mathf.Abs(forwardPt.x - backwardPt.x) == 2)
+                    { // Horizontal
+                        ret.Put(GridType.Path_Horiz, curPoint.x, curPoint.y);
+                    }
+                    else if (Mathf.Abs(forwardPt.y - backwardPt.y) == 2)
+                    { // Vertical
+                        ret.Put(GridType.Path_Vert, curPoint.x, curPoint.y);
+                    }
+                    else
+                    { // Corner
+                        bool top = (forwardPt.y == (curPoint.y + 1)) || (backwardPt.y == (curPoint.y + 1));
+                        bool right = (forwardPt.x == (curPoint.x + 1)) || (backwardPt.x == (curPoint.x + 1));
+                        if (top)
+                        {
+                            if (right)
+                            {
+                                ret.Put(GridType.Path_RT, curPoint.x, curPoint.y);
+                            }
+                            else
+                            {
+                                ret.Put(GridType.Path_LT, curPoint.x, curPoint.y);
+                            }
+                        }
+                        else
+                        {
+                            if (right)
+                            {
+                                ret.Put(GridType.Path_RB, curPoint.x, curPoint.y);
+                            }
+                            else
+                            {
+                                ret.Put(GridType.Path_LB, curPoint.x, curPoint.y);
+                            }
+                        }
+                    }
+                }
+                // Set up for next point
+                backwardPt = curPoint;
+                curPoint = forwardPt;
+            }
+            if (ending)
+            {
+                ret.Put(GridType.INTERNAL_RESERVED_CUR, curPoint.x, curPoint.y);
+            }
+        }
         return ret;
+    }
+
+    public override GridArray GetPrintArray()
+    {
+        return GetArray(true);
     }
 
     public void simplify()
@@ -139,5 +155,10 @@ public class Path : LayoutObject {
 			DebugManager.printFooter(DebugManager.Logs.LevelGen);	
 		}
 		#endregion
+    }
+
+    public bool isValid()
+    {
+        return list.Count > 0;
     }
 }

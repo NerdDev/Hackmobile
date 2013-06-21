@@ -110,11 +110,26 @@ abstract public class LayoutObject {
     public Bounding GetBounding()
     {
         Bounding bound = new Bounding(GetBoundingInternal());
-        bound.xMin += shiftP.x;
-        bound.xMax += shiftP.x;
-        bound.yMin += shiftP.y;
-        bound.yMax += shiftP.y;
+        adjustBounding(bound, true);
         return bound;
+    }
+
+    protected void adjustBounding(Bounding bound, bool toExternal)
+    {
+        if (toExternal)
+        {
+            bound.xMin += shiftP.x;
+            bound.xMax += shiftP.x;
+            bound.yMin += shiftP.y;
+            bound.yMax += shiftP.y;
+        }
+        else
+        {
+            bound.xMin -= shiftP.x;
+            bound.xMax -= shiftP.x;
+            bound.yMin -= shiftP.y;
+            bound.yMax -= shiftP.y;
+        }
     }
 
     protected abstract Bounding GetBoundingInternal();
@@ -123,9 +138,13 @@ abstract public class LayoutObject {
     #region GetSet
     public abstract GridArray GetArray();
 
-    public virtual GridType[,] GetMinimizedArray()
+    public virtual GridArray GetPrintArray()
     {
-        GridArray inArr = GetArray();
+        return GetArray();
+    }
+
+    public virtual GridType[,] GetMinimizedArray(GridArray inArr)
+    {
         Bounding bounds = GetBoundingInternal();
         GridType[,] outArr = new GridType[bounds.height + 1, bounds.width + 1];
         for (int y = bounds.yMin; y <= bounds.yMax; y++)
@@ -257,7 +276,7 @@ abstract public class LayoutObject {
 
     protected virtual List<string> ToRowStrings()
     {
-		GridType[,] array = GetMinimizedArray();
+		GridType[,] array = GetMinimizedArray(GetPrintArray());
         List<string> ret = new List<string>();
 		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
             string rowStr = "";

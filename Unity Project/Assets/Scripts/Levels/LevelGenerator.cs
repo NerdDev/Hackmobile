@@ -265,7 +265,8 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Paths");
         }
         #endregion
-        GridArray grids = layout.GetArray();
+        Bounding bounds = layout.GetBounding();
+        GridArray grids = layout.GetArray(bounds);
         GridMap doors = layout.getTypes(grids, GridType.Door);
         foreach (Value2D<GridType> door in doors)
         {
@@ -286,13 +287,16 @@ public class LevelGenerator
             }
             #endregion
 			path.simplify();
-            grids.PutAll(path.GetArray());
-			layout.addPath(path);
+            if (path.isValid())
+            {
+                grids.PutAll(path.GetArray());
+                path.shift(bounds.xMin, bounds.yMin);
+                layout.addPath(path);
+            }
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 grids.toLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
-                layout.toLog(DebugManager.Logs.LevelGen, "Test");
             }
             #endregion
         }
