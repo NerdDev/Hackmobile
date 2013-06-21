@@ -8,14 +8,23 @@ public class Bounding {
     public int xMax { get; set; }
     public int yMin { get; set; }
     public int yMax { get; set; }
+	public int width {
+		get { return xMax - xMin; }
+	}
+	public int height {
+		get { return yMax - yMin; }
+	}
+	public int area {
+		get { return width * height; }
+	}
 
     #region Ctors
     public Bounding()
     {
-        xMin = 0;
-        xMax = 0;
-        yMin = 0;
-        yMax = 0;
+        xMin = Int32.MaxValue;
+        xMax = Int32.MinValue;
+        yMin = Int32.MaxValue;
+        yMax = Int32.MinValue;
     }
 
     public Bounding(int xl, int xr, int yb, int yt)
@@ -32,11 +41,30 @@ public class Bounding {
     }
     #endregion Ctors
 
+    public bool isValid()
+    {
+        return xMin != Int32.MaxValue
+            && yMin != Int32.MaxValue;
+    }
+	
+	public Point getCenter()
+	{
+		if (isValid())
+			return new Point(xMin + width / 2, yMin + height / 2);
+		else
+			return new Point();
+	}
+	
     #region Absorbs
     public void absorb(int x, int y)
     {
         absorbX(x);
         absorbY(y);
+    }
+
+    public void absorb<T>(Value2D<T> val)
+    {
+        absorb(val.x, val.y);
     }
 	
 	public void absorb(Bounding rhs)	
@@ -51,7 +79,7 @@ public class Bounding {
         {
             xMin = x;
         }
-        else if (xMax < x)
+        if (xMax < x)
         {
             xMax = x;
         }
@@ -63,29 +91,12 @@ public class Bounding {
         {
             yMin = y;
         }
-        else if (yMax < y)
+        if (yMax < y)
         {
             yMax = y;
         }
     }
     #endregion Absorbs
-
-    #region GetSet
-    public int width()
-	{
-		return xMax - xMin;
-	}
-	
-	public int height()
-	{
-		return yMax - yMin;	
-	}
-
-    public int area()
-    {
-        return width() * height();
-    }
-    #endregion GetSet
 
     #region Intersects
     public void boundingDimensions(Bounding rhs, out int width, out int height)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 /**
 * Extension methods to make working with flags Enum values easier.
@@ -95,7 +95,6 @@ public static class EnumExt
         Type type = value.GetType();
 
         //determine the values
-        object result = value;
         _Value parsed = new _Value(check, type);
         if (parsed.Signed is long)
         {

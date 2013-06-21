@@ -1,17 +1,22 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class LayoutObjectLeaf : LayoutObject {
 
-    MultiMap<GridType> grids = new MultiMap<GridType>();
-    private Bounding bound = new Bounding();
+    protected GridArray grids;
+
+    public LayoutObjectLeaf(int width, int height)
+    {
+        grids = new GridArray(width, height);
+    }
 
     #region GetSet
     public GridType get(int x, int y)
     {
-        x -= shiftP.x;
-        y -= shiftP.y;
-        return grids.get(x, y);
+        x += shiftP.x;
+        y += shiftP.y;
+        return grids.Get(x, y);
     }
 
     public void put(GridType t, int x, int y)
@@ -19,7 +24,14 @@ public class LayoutObjectLeaf : LayoutObject {
         x -= shiftP.x;
         y -= shiftP.y;
         putInternal(t, x, y);
-        bound.absorb(x, y);
+    }
+
+    public void putAll(GridMap map)
+    {
+        foreach (Value2D<GridType> vals in map)
+        {
+            put(vals.val, vals.x, vals.y);
+        }
     }
 
     public void putRow(GridType t, int xl, int xr, int y)
@@ -27,9 +39,7 @@ public class LayoutObjectLeaf : LayoutObject {
         xl -= shiftP.x;
         xr -= shiftP.x;
         y -= shiftP.y;
-        bound.absorb(xl, y);
-        bound.absorb(xr, y);
-        grids.putRow(t, xl, xr, y);
+        grids.PutRow(t, xl, xr, y);
     }
 
     public void putCol(GridType t, int y1, int y2, int x)
@@ -37,64 +47,35 @@ public class LayoutObjectLeaf : LayoutObject {
         x -= shiftP.x;
         y1 -= shiftP.y;
         y2 -= shiftP.y;
-        bound.absorb(x, y1);
-        bound.absorb(x, y2);
-        grids.putCol(t, y1, y2, x);
+        grids.PutCol(t, y1, y2, x);
     }
 
     void putInternal(GridType t, int x, int y)
     {
-        grids.put(t, x, y);
+        grids.Put(t, x, y);
     }
 
-    public override MultiMap<GridType> getMap()
+    public override GridArray GetArray()
     {
         return grids;
     }
 
-    public override MultiMap<GridType> getBakedMap()
+    protected override Bounding GetBoundingInternal()
     {
-        return new MultiMap<GridType>(grids, shiftP);
-    }
-	
-	public override Bounding getBoundsInternal() {
-		return bound;	
+		return grids.GetBoundingInternal();
 	}
     #endregion GetSet
 
     #region FillMethods
-    public void BoxStroke(GridType t, int width, int height)
+    protected void BoxStroke(GridType t, int width, int height)
     {
-        BoxStroke(t, 0, width - 1, 0, height - 1);
+        int centerX = grids.getWidth() / 2;
+        int centerY = grids.getHeight() / 2;
+        BoxStroke(t, centerX - width / 2, centerX + width / 2 - 1,
+            centerY - height / 2, centerY + height / 2 - 1);
     }
 
-    public void BoxStrokeAndFill(GridType stroke, GridType fill, int width, int height)
-    {
-        BoxStrokeAndFill(stroke, fill, 0, width - 1, 0, height - 1);
-    }
-
-    public void BoxStrokeAndFill(GridType stroke, GridType fill, int xl, int xr, int yb, int yt)
-    {
-        xl -= shiftP.x;
-        xr -= shiftP.x;
-        yb -= shiftP.y;
-        yt -= shiftP.y;
-        bound.absorbX(xl);
-        bound.absorbX(xr);
-        bound.absorbY(yb);
-        bound.absorbY(yt);
-        grids.putRow(stroke, xl, xr, yb);
-        grids.putRow(stroke, xl, xr, yt);
-        yb++;
-        yt--;
-        grids.putCol(stroke, yb, yt, xl);
-        grids.putCol(stroke, yb, yt, xr);
-        xl++;
-        xr--;
-        grids.putSquare(fill, xl, xr, yb, yt);
-    }
-
-    public void BoxStroke(GridType t, int xl, int xr, int yb, int yt)
+    protected void BoxStroke(GridType t, int xl, int xr, int yb, int yt)
     {
         putRow(t, xl, xr, yb);
         putRow(t, xl, xr, yt);
@@ -104,16 +85,34 @@ public class LayoutObjectLeaf : LayoutObject {
         putCol(t, yb, yt, xr);
     }
 
-    public void BoxFill(GridType t, int xl, int xr, int yb, int yt)
+    protected void BoxStrokeAndFill(GridType stroke, GridType fill, int width, int height)
     {
-        xl -= shiftP.x;
-        xr -= shiftP.x;
-        yb -= shiftP.y;
-        yt -= shiftP.y;
-        bound.absorbX(xl);
-        bound.absorbX(xr);
-        bound.absorbY(yb);
-        bound.absorbY(yt);
+        BoxStrokeAndFill(stroke, fill, 0, width - 1, 0, height - 1);
+    }
+
+    protected void BoxStrokeAndFill(GridType stroke, GridType fill, int xl, int xr, int yb, int yt)
+    {
+        grids.PutRow(stroke, xl, xr, yb);
+        grids.PutRow(stroke, xl, xr, yt);
+        yb++;
+        yt--;
+        grids.PutCol(stroke, yb, yt, xl);
+        grids.PutCol(stroke, yb, yt, xr);
+        xl++;
+        xr--;
+        grids.putSquare(fill, xl, xr, yb, yt);
+    }
+
+    protected void BoxFill(GridType t, int width, int height)
+    {
+        int centerX = grids.getWidth() / 2;
+        int centerY = grids.getHeight() / 2;
+        BoxFill(t, centerX - width / 2, centerX + width / 2 - 1,
+            centerY - height / 2, centerY + height / 2 - 1);
+    }
+
+    protected void BoxFill(GridType t, int xl, int xr, int yb, int yt)
+    {
         grids.putSquare(t, xl, xr, yb, yt);
     }
     #endregion FillMethods

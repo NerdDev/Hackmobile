@@ -58,6 +58,14 @@ public class InputManager : MonoBehaviour {
 			BigBoss.NPCManager.CreateNPC(place,"newt");
 			Debug.Log("X");
 		}
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			BigBoss.PlayerInfo.GainLevel();
+		}
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			BigBoss.PlayerInfo.GetXPToNextLevel();
+		}
 			
 		
 			

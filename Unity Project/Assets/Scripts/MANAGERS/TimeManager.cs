@@ -27,6 +27,8 @@ public class TimeManager : MonoBehaviour {
 			return nicelyFormatted;
 			}
 	}
+	
+	public int turnsPassed = 0;
 	#endregion
 	#region Expose Property In Inspector Example
 	//This is our inspector property example:   Copy this example for use within this TimeManager class.  To expose properties in other classes, make a new script copied from TimeManagerEditor.cs
@@ -115,4 +117,16 @@ public class TimeManager : MonoBehaviour {
 		PlayerPrefs.SetInt("MinutesPlayed",totalTimePlayed);
 		Debug.Log("Application Quit Called.");
 	}
+	
+	#region GAME TIME METHODS
+	public void PassTurn()
+	{
+		turnsPassed++;
+		//Justin's hot:
+		//DebugManager.print("Turn passed.  Total turns passed is now: " + turnsPassed);
+		BigBoss.PlayerInfo.AdjustHungerPoints(-2);
+	}
+	
+	#endregion
+	
 }

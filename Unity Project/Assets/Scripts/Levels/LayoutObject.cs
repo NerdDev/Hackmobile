@@ -1,7 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 
 abstract public class LayoutObject {
 
@@ -12,11 +12,6 @@ abstract public class LayoutObject {
 	{
 		shiftP.shift(x,y);
 	}
-
-    public void shift(Vector2 vect)
-    {
-        shiftP.shift(vect);
-    }
 	
 	public void shift(Point p)
 	{
@@ -25,9 +20,18 @@ abstract public class LayoutObject {
 
     public void setShift(LayoutObject rhs)
     {
-        shiftP.x = rhs.shiftP.x;
-        shiftP.y = rhs.shiftP.y;
+		Bounding bounds = GetBoundingInternal();
+		Bounding rhsBounds = rhs.GetBoundingInternal();
+		Point center = bounds.getCenter();
+		Point centerRhs = rhsBounds.getCenter();
+        shiftP.x = rhs.shiftP.x + (centerRhs.x - center.x);
+        shiftP.y = rhs.shiftP.y + (centerRhs.y - center.y);
     }
+	
+	public Point GetShift()
+	{
+		return new Point(shiftP);	
+	}
 
     public void ShiftOutside(LayoutObject rhs, Point dir)
     {
@@ -37,7 +41,7 @@ abstract public class LayoutObject {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Shift Outside " + ToString());
             DebugManager.w(DebugManager.Logs.LevelGen, "Shifting outside of " + rhs.ToString());
             DebugManager.w(DebugManager.Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
-			DebugManager.w (DebugManager.Logs.LevelGen, "Bounds: " + getBounds() + "  RHS bounds: " + rhs.getBounds());
+			DebugManager.w (DebugManager.Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
 		}
 		#endregion
 		while(this.intersects(rhs))
@@ -47,7 +51,7 @@ abstract public class LayoutObject {
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Shifted to: " + getBounds());
+                DebugManager.w(DebugManager.Logs.LevelGen, "Shifted to: " + GetBounding());
             }
             #endregion
 		}
@@ -71,19 +75,19 @@ abstract public class LayoutObject {
         int xMagn = (int)Math.Abs(dir.x);
         int yMagn = (int)Math.Abs(dir.y);
         int xMove, yMove;
-		Bounding bound = getBounds();
-		Bounding rhsBound = rhs.getBounds();
+		Bounding bound = GetBounding();
+		Bounding rhsBound = rhs.GetBounding();
         float magRatio;
         // Find which has largest magnitude and move fully that direction first
         if (xMagn > yMagn)
         { // X larger magnitude
-            xMove = bound.width() / 2 + rhsBound.width() / 2 + 1;
+            xMove = bound.width / 2 + rhsBound.width / 2 + 1;
             magRatio = yMagn == 0 ? 0 : ((float)yMagn) / xMagn;
             yMove = (int)(xMove * magRatio);
         } 
         else
         { // Y larger magnitude
-            yMove = bound.height() / 2 + rhsBound.height() / 2 + 1;
+            yMove = bound.height / 2 + rhsBound.height / 2 + 1;
             magRatio = xMagn == 0 ? 0 : ((float)xMagn) / yMagn;
             xMove = (int)(yMove * magRatio);
         }
@@ -103,29 +107,138 @@ abstract public class LayoutObject {
     #endregion
 
     #region Bounds
-    public Bounding getBounds()
+    public Bounding GetBounding()
     {
-        Bounding bound = new Bounding(getBoundsInternal());
-        bound.xMin += shiftP.x;
-        bound.xMax += shiftP.x;
-        bound.yMin += shiftP.y;
-        bound.yMax += shiftP.y;
+        Bounding bound = new Bounding(GetBoundingInternal());
+        adjustBounding(bound, true);
         return bound;
     }
-	
-	public abstract Bounding getBoundsInternal();
+
+    protected void adjustBounding(Bounding bound, bool toExternal)
+    {
+        if (toExternal)
+        {
+            bound.xMin += shiftP.x;
+            bound.xMax += shiftP.x;
+            bound.yMin += shiftP.y;
+            bound.yMax += shiftP.y;
+        }
+        else
+        {
+            bound.xMin -= shiftP.x;
+            bound.xMax -= shiftP.x;
+            bound.yMin -= shiftP.y;
+            bound.yMax -= shiftP.y;
+        }
+    }
+
+    protected abstract Bounding GetBoundingInternal();
     #endregion Bounds
 
     #region GetSet
-    public abstract MultiMap<GridType> getMap();
+    public abstract GridArray GetArray();
 
-    public abstract MultiMap<GridType> getBakedMap();
+    public virtual GridArray GetPrintArray()
+    {
+        return GetArray();
+    }
+
+    public virtual GridType[,] GetMinimizedArray(GridArray inArr)
+    {
+        Bounding bounds = GetBoundingInternal();
+        GridType[,] outArr = new GridType[bounds.height + 1, bounds.width + 1];
+        for (int y = bounds.yMin; y <= bounds.yMax; y++)
+        {
+            for (int x = bounds.xMin; x <= bounds.xMax; x++)
+            {
+                outArr[y - bounds.yMin, x - bounds.xMin] = inArr.Get (x, y);
+            }
+        }
+        return outArr;
+    }
     #endregion GetSet
+
+    #region SpecGet
+    public GridMap getType(GridType t)
+    {
+        return getType(GetArray(), t);
+    }
+
+    public GridMap getType(GridArray grids, GridType t)
+    {
+        GridMap ret = new GridMap();
+        foreach (Value2D<GridType> val in grids)
+        {
+            if (t == val.val)
+            {
+                val.x += shiftP.x;
+                val.y += shiftP.y;
+                ret.Put(val);
+            }
+        }
+        return ret;
+    }
+
+    public GridMap getTypes(params GridType[] ts)
+    {
+        return getTypes(new HashSet<GridType>(ts));
+    }
+
+    public GridMap getTypes(HashSet<GridType> ts)
+    {
+        return getTypes(GetArray(), ts);
+    }
+
+    public GridMap getTypes(GridArray grids, params GridType[] ts)
+    {
+        return getTypes(grids, new HashSet<GridType>(ts));
+    }
+
+    public GridMap getTypes(GridArray grids, HashSet<GridType> ts)
+    {
+        GridMap ret = new GridMap();
+        foreach (Value2D<GridType> val in grids)
+        {
+            if (ts.Contains(val.val))
+            {
+                val.x += shiftP.x;
+                val.y += shiftP.y;
+                ret.Put(val);
+            }
+        }
+        return ret;
+    }
+
+    public GridMap getCorneredBy(GridType target, params GridType[] by)
+    {
+        return getCorneredBy(target, new HashSet<GridType>(by));
+    }
+
+    public GridMap getCorneredBy(GridType target, HashSet<GridType> by)
+    {
+        GridMap ret = new GridMap();
+        GridArray grids = GetArray();
+        GridMap targets = getType(grids, target);
+        GridMap cornerOptions = getTypes(grids, by);
+        foreach (Value2D<GridType> tval in targets)
+        {
+            bool corneredHoriz = cornerOptions.Contains(tval.x + 1, tval.y)
+                || cornerOptions.Contains(tval.x - 1, tval.y);
+            bool corneredVert = cornerOptions.Contains(tval.x, tval.y + 1)
+                || cornerOptions.Contains(tval.x, tval.y - 1);
+            if (corneredHoriz && corneredVert)
+            {
+                ret.Put(tval);
+            }
+        }
+        return ret;
+    }
+    #endregion
 
     #region Intersects
     public bool intersects(LayoutObject rhs)
     {
-        return getBounds().intersects(rhs.getBounds());
+        return GetBounding().intersects(rhs.GetBounding());
     }
 
     public bool intersects(List<LayoutObject> list)
@@ -163,28 +276,15 @@ abstract public class LayoutObject {
 
     protected virtual List<string> ToRowStrings()
     {
-        MultiMap<GridType> grids = getMap();
+		GridType[,] array = GetMinimizedArray(GetPrintArray());
         List<string> ret = new List<string>();
-		Bounding bound = getBounds ();
-        for (int y = bound.yMin; y <= bound.yMax; y++)
-        {
-            SortedDictionary<int, GridType> row = null;
-            grids.getRow(y, out row);
+		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
             string rowStr = "";
-            GridType t;
-            for (int x = bound.xMin; x <= bound.xMax; x++)
-            {
-                if (row != null && row.TryGetValue(x, out t))
-                {
-                    rowStr += getAscii(t);
-                }
-                else
-                {
-                    rowStr += " ";
-                }
-            }
+    		for (int x = 0; x < array.GetLength(1); x += 1) {
+        		rowStr += getAscii(array[y,x]);
+    		}
             ret.Add(rowStr);
-        }
+		}
         return ret;
     }
 
@@ -202,8 +302,46 @@ abstract public class LayoutObject {
                 return '#';
             case GridType.NULL:
                 return ' ';
+            case GridType.INTERNAL_RESERVED_REJECTED:
+                return '<';
+            case GridType.INTERNAL_RESERVED_ACCEPTED:
+                return '>';
+            case GridType.INTERNAL_RESERVED_BLOCKED:
+                return '*';
+            case GridType.INTERNAL_RESERVED_CUR:
+                return '%';
+            case GridType.Path_Horiz:
+                return (char) 205;
+            case GridType.Path_Vert:
+                return (char) 186;
+            case GridType.Path_LT:
+                return (char) 188;
+            case GridType.Path_LB:
+                return (char) 187;
+            case GridType.Path_RT:
+                return (char) 200;
+            case GridType.Path_RB:
+                return (char) 201;
             default:
                 return '?';
+        }
+    }
+
+    public virtual void toLog(DebugManager.Logs log, params String[] customContent)
+    {
+        if (DebugManager.logging(log))
+        {
+            DebugManager.printHeader(log, ToString());
+            foreach (String s in customContent)
+            {
+                DebugManager.w(log, s);
+            }
+            foreach (string s in ToRowStrings())
+            {
+                DebugManager.w(log, s);
+            }
+            DebugManager.w(log, "Bounds: " + GetBounding().ToString());
+			DebugManager.printFooter(log);
         }
     }
 
@@ -211,14 +349,9 @@ abstract public class LayoutObject {
     {
         if (DebugManager.logging(log))
         {
-			DebugManager.printHeader(log, ToString()); 
-            foreach (string s in ToRowStrings())
-            {
-                DebugManager.w(log, s);
-            }
-            DebugManager.w(log, "Bounds: " + getBounds().ToString());
-			DebugManager.printFooter(log);
+            toLog(log, new String[0]);
         }
     }
     #endregion Printing
+
 }

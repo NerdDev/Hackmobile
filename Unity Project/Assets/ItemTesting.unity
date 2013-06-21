@@ -591,7 +591,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30e8cfd4b304c6742a59081a09162689, type: 3}
   m_Name: 
+  PlayerInventory: []
   PlayerChosenProfession: 0
+  CurrentHungerLevel: 0
 --- !u!114 &259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,6 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca07aa49cc0eb6145b4b59b6af927e71, type: 3}
   m_Name: 
   totalTimePlayed: 0
+  turnsPassed: 0
   myTestIntprivate: 0
   myTeststringprivate: 
 --- !u!114 &264
@@ -686,6 +689,7 @@ MonoBehaviour:
   HUDIntelligenceValue: {fileID: 1881272027}
   HUDDexterityLabel: {fileID: 943459990}
   HUDDexterityValue: {fileID: 1578939033}
+  hungerLabel: {fileID: 0}
 --- !u!114 &265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,7 +701,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd4e00e9db95dbd4bbba9353bbae9d44, type: 3}
   m_Name: 
-  textPrefab: {fileID: 0}
+  textPrefab: {fileID: 100000, guid: eb6ff930acd8b4b41aa36d4003e4e4f8, type: 2}
   introSplashObject: {fileID: 0}
   enemy1: {fileID: 0}
   potion: {fileID: 100000, guid: 793a04a2099408a4182fc26997dc9e57, type: 2}
@@ -1972,6 +1976,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a481f2cbcee4164e8575888c6e5e653, type: 3}
   m_Name: 
+  theme: {fileID: 0}
+  builder: {fileID: 0}
 --- !u!1 &1137411576
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ public class WorldObject : UniqueObject
         get { return modelTexture; }
         set { this.modelTexture = value; }
     }
-    private string name;
+    private new string name;
     public string Name
     {
         get { return name; }

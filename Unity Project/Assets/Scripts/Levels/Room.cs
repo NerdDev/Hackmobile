@@ -1,55 +1,63 @@
-using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
 
 public class Room : LayoutObjectLeaf {
 
-    static int max = 20;
-    static int min = 5;
-    public int roomNum {
-    	get;
-    	private set;
-	}
-
+    public int roomNum { get; private set; }
+	
     public Room(int num)
+        : base(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2)
     {
         roomNum = num;
     }
 
-    protected override List<string> ToRowStrings() 
-    {
-        List<string> ret = base.ToRowStrings();
-        int vert = ret.Count / 2;
-        if (vert > 1)
-        {
-            string str = ret[vert];
-			string roomNumStr = roomNum.ToString();
-            int horiz = str.Length / 2;
-            if (horiz > roomNumStr.Length)
-            {
-                ret[vert] = str.Substring(0, horiz) + roomNumStr + str.Substring(horiz + roomNumStr.Length);
-            }
-        }
-        return ret;
-    }
-
     public void generate()
     {
-        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Room -> Generate");
-
-        int height = LevelGenerator.rand.Next(min, max);
-        int width = LevelGenerator.rand.Next(min, max);
-        DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
-        BoxStrokeAndFill(GridType.Wall, GridType.Floor, width, height);
-		
-        toLog(DebugManager.Logs.LevelGen);
-        DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Room -> Generate");
+        }
+        #endregion
+        int height = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int width = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
+        }
+        #endregion
+        BoxFill(GridType.Floor, width - 1, height - 1);
+        BoxStroke(GridType.Wall, width, height);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            toLog(DebugManager.Logs.LevelGen);
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
+	
+	public GridMap getWalls() {
+		return getTypes(GridType.Wall);
+	}
+	
+	public GridMap getFloors() {
+		return getTypes(GridType.Floor);
+	}
+	
+	public GridMap getDoors() {
+		return getTypes(GridType.Door);
+	}
 	
 	public override string ToString()
 	{
 		return "Room " + roomNum;
 	}
 
+    protected override Bounding GetBoundingInternal()
+    {
+		return grids.GetBounding();
+	}
 }
