@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System .Collections.Generic;
+using System.Linq;
+using System;
 
 
 public class ItemMaster : MonoBehaviour {
@@ -100,4 +102,10 @@ public class ItemMaster : MonoBehaviour {
         mr.material = Resources.Load(item.ModelTexture) as Material;
 		return item;
 	}
+
+    public Item CreateRandomItem(Vector3 location)
+    {
+        Item i = (Item) Nifty.RandomValue(baseItems);
+        return CreateItem(location, i.Name);
+    }
 }

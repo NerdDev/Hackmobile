@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Nifty
 {
@@ -39,6 +41,36 @@ public class Nifty
         {
             throw new ArgumentException("String cannot be parsed to boolean!");
         }
+    }
+
+    /**
+     * Grabs a set of random values off a dictionary.
+     * 
+     * Usage: List<V> values = (List<V>) RandomValues(someDictionary).Take(someNumberOfElements);
+     * K = key, V = value.
+     */
+    public static IEnumerable<V> RandomValues<K, V>(IDictionary<K, V> dict)
+    {
+        System.Random rand = new System.Random();
+        List<V> values = Enumerable.ToList(dict.Values);
+        int size = dict.Count;
+        while (true)
+        {
+            yield return values[rand.Next(size)];
+        }
+    }
+
+    /**
+     * Grabs one random value off of a dictionary.
+     * 
+     * Usage: V value = (V) RandomValue(someDictionary);
+     * K = key, V = value.
+     */
+    public static V RandomValue<K, V>(IDictionary<K, V> dict)
+    {
+        System.Random rand = new System.Random();
+        List<V> values = Enumerable.ToList(dict.Values);
+        return values[rand.Next(dict.Count)];
     }
 }
 
