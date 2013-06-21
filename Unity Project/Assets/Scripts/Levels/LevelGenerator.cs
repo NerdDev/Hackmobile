@@ -92,6 +92,7 @@ public class LevelGenerator
         if (DebugManager.logging())
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
+            layout.toLog(DebugManager.Logs.LevelGenMain);
             DebugManager.printFooter(DebugManager.Logs.LevelGenMain);
         }
         #endregion
