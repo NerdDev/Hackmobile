@@ -10,7 +10,7 @@ public class LevelManager : MonoBehaviour {
     void Start()
     {
         LevelGenerator gen = new LevelGenerator();
-        LevelLayout layout = gen.generateLayout(0, 665911697, 1733302797);
+        LevelLayout layout = gen.generateLayout(0, 66511697, 1733302797);
 		builder.Build(layout, theme);
     }
 
