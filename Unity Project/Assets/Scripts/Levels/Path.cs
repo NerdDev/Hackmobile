@@ -39,11 +39,11 @@ public class Path : LayoutObject {
 	                }
 	                else if (Mathf.Abs(forwardPt.x - backwardPt.x) == 2)
 	                { // Horizontal
-	                    ret.Put(GridType.INTERNAL_RESERVED_HORIZ, curPoint.x, curPoint.y);
+	                    ret.Put(GridType.Path_Horiz, curPoint.x, curPoint.y);
 	                }
 	                else if (Mathf.Abs(forwardPt.y - backwardPt.y) == 2)
 	                { // Vertical
-	                    ret.Put(GridType.INTERNAL_RESERVED_VERT, curPoint.x, curPoint.y);
+	                    ret.Put(GridType.Path_Vert, curPoint.x, curPoint.y);
 	                }
 	                else
 	                { // Corner
@@ -53,22 +53,22 @@ public class Path : LayoutObject {
 	                    {
 	                        if (right)
 	                        {
-	                            ret.Put(GridType.INTERNAL_RESERVED_RT, curPoint.x, curPoint.y);
+	                            ret.Put(GridType.Path_RT, curPoint.x, curPoint.y);
 	                        }
 	                        else
 	                        {
-	                            ret.Put(GridType.INTERNAL_RESERVED_LT, curPoint.x, curPoint.y);
+	                            ret.Put(GridType.Path_LT, curPoint.x, curPoint.y);
 	                        }
 	                    }
 	                    else
 	                    {
 	                        if (right)
 	                        {
-	                            ret.Put(GridType.INTERNAL_RESERVED_RB, curPoint.x, curPoint.y);
+	                            ret.Put(GridType.Path_RB, curPoint.x, curPoint.y);
 	                        }
 	                        else
 	                        {
-	                            ret.Put(GridType.INTERNAL_RESERVED_LB, curPoint.x, curPoint.y);
+	                            ret.Put(GridType.Path_LB, curPoint.x, curPoint.y);
 	                        }
 	                    }
 	                }

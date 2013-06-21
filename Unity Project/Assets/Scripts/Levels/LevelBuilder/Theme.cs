@@ -31,6 +31,18 @@ public class Theme : MonoBehaviour {
                 return getWall();
             case GridType.Floor:
                 return getFloor();
+            case GridType.Path_Horiz:
+                return getFloor();
+            case GridType.Path_Vert:
+                return getFloor();
+            case GridType.Path_RT:
+                return getFloor();
+            case GridType.Path_RB:
+                return getFloor();
+            case GridType.Path_LT:
+                return getFloor();
+            case GridType.Path_LB:
+                return getFloor();
             default:
                 return null;
         }

@@ -275,8 +275,6 @@ abstract public class LayoutObject {
         {
             case GridType.Floor:
                 return '.';
-            case GridType.PathFloor:
-                return '-';
             case GridType.TrapDoor:
                 return 'T';
             case GridType.Door:
@@ -293,17 +291,17 @@ abstract public class LayoutObject {
                 return '*';
             case GridType.INTERNAL_RESERVED_CUR:
                 return '%';
-            case GridType.INTERNAL_RESERVED_HORIZ:
+            case GridType.Path_Horiz:
                 return (char) 205;
-            case GridType.INTERNAL_RESERVED_VERT:
+            case GridType.Path_Vert:
                 return (char) 186;
-            case GridType.INTERNAL_RESERVED_LT:
+            case GridType.Path_LT:
                 return (char) 188;
-            case GridType.INTERNAL_RESERVED_LB:
+            case GridType.Path_LB:
                 return (char) 187;
-            case GridType.INTERNAL_RESERVED_RT:
+            case GridType.Path_RT:
                 return (char) 200;
-            case GridType.INTERNAL_RESERVED_RB:
+            case GridType.Path_RB:
                 return (char) 201;
             default:
                 return '?';

@@ -40,6 +40,10 @@ public class LevelLayout : LayoutObjectContainer {
         {
             yield return room;
         }
+        foreach (Path path in paths)
+        {
+            yield return path;
+        }
     }
 	
 	public override string ToString ()

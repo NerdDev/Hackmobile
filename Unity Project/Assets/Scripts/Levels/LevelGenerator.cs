@@ -270,7 +270,13 @@ public class LevelGenerator
         foreach (Value2D<GridType> door in doors)
         {
 
-            Path path = new Path(depthFirstSearchFor(door, grids, GridType.Door, GridType.PathFloor));
+            Path path = new Path(depthFirstSearchFor(door, grids, GridType.Door, 
+                GridType.Path_Horiz,
+                GridType.Path_Vert,
+                GridType.Path_LB,
+                GridType.Path_LT,
+                GridType.Path_RB,
+                GridType.Path_RT));
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -286,6 +292,7 @@ public class LevelGenerator
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 grids.toLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
+                layout.toLog(DebugManager.Logs.LevelGen, "Test");
             }
             #endregion
         }
