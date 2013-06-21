@@ -50,10 +50,7 @@ public class DebugManager : MonoBehaviour
         logs = new Log[Enum.GetNames(typeof(Logs)).Length];
 
         // Wipe old debug logs
-        if (Directory.Exists(debugFolder))
-        {
-            Directory.Delete(debugFolder, true);
-        }
+        Nifty.DeleteContainedFiles(debugFolder, true);
 
         // Load Debug log defaults
 		int enumLength = Enum.GetNames(typeof(Logs)).Length;

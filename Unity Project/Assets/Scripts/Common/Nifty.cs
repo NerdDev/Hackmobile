@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 public class Nifty
 {
@@ -14,6 +15,30 @@ public class Nifty
         }
 		return a;
 	}
+
+    static public void DeleteContainedFiles(String dirPath, bool recursive)
+    {
+        DeleteContainedFiles(new DirectoryInfo(dirPath), recursive);
+    }
+
+    static public void DeleteContainedFiles(DirectoryInfo dir, bool recursive)
+    {
+        if (dir.Exists)
+        {
+            FileInfo[] files = dir.GetFiles("*.*");
+            foreach (FileInfo fi in files)
+            {
+                fi.Delete();
+            }
+            if (recursive)
+            {
+                foreach (DirectoryInfo subDir in dir.GetDirectories())
+                {
+                    DeleteContainedFiles(subDir, recursive);
+                }
+            }
+        }
+    }
 
     static public int StringToInt(string toParse)
     {
