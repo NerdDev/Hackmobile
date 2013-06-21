@@ -281,6 +281,7 @@ public class LevelGenerator
             #endregion
 			path.simplify();
             grids.PutAll(path.GetArray());
+			layout.addPath(path);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {

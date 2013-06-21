@@ -5,6 +5,7 @@ using System;
 public class LevelLayout : LayoutObjectContainer {
 
     List<Room> rooms = new List<Room>();
+	List<Path> paths = new List<Path>();
 
     public void addRoom(Room r)
     {
@@ -19,6 +20,17 @@ public class LevelLayout : LayoutObjectContainer {
 	public List<Room> getRooms()
 	{
 		List<Room> ret = new List<Room>(rooms);
+		return ret;
+	}
+
+    public void addPath(Path p)
+    {
+        paths.Add(p);
+    }
+	
+	public List<Path> getPaths()
+	{
+		List<Path> ret = new List<Path>(paths);
 		return ret;
 	}
 
