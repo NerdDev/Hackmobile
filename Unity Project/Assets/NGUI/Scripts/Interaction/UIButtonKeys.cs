@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(Collider))]
 [AddComponentMenu("NGUI/Interaction/Button Keys")]
-#pragma warning disable 0618
 public class UIButtonKeys : MonoBehaviour
 {
 	public bool startsSelected = false;
@@ -71,4 +70,3 @@ public class UIButtonKeys : MonoBehaviour
 		}
 	}
 }
-#pragma warning restore 0618

@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{DC7C9B63-E6EC-339C-7E81-046469D44C7F}</ProjectGuid>
+	<ProjectGuid>{D11C3109-2495-0BC9-FD84-3D3D58BFC60E}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -44,13 +44,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter1\DemoCharacter1_Script.js" />
-     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter2\DemoCharacter2_Script.js" />
-     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter3\DemoCharacter3_Script.js" />
-     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter4\DemoCharacter4_Script.js" />
-     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter5\DemoCharacter5_Script.js" />
-     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoCharacter6\DemoCharacter6_Script.js" />
-     <Compile Include="Assets\Frogames_Warriors_&amp;_Commoners\demoCharacters\DemoScript.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_UVScroller.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_animRandomizer.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_animSpeedRandomizer.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_destroyThisTimed.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_effectCaster.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_materialColorRandomizer.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_moveThis.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_prefabGenerator.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_randomRotation.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_randomScale.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_rotateThis.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_stohasticArrowMovement.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_trailFade.js" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\dynamon animations.txt" />
      <None Include="Assets\AudioToolkit\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
@@ -61,7 +67,6 @@
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc2 scholar animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\Arteria3d cartoon fantasy pack 1 README.txt" />
-     <None Include="Assets\Frogames_Warriors_&amp;_Commoners\ReadMe.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 1 animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
@@ -90,6 +95,7 @@
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 1 animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\ogre 2 animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc4 knight animations.txt" />
+     <None Include="Assets\IMPORT\SkeletonData\animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 3 animations.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimAlpha.shader" />
@@ -98,6 +104,7 @@
      <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutline.shader" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch.shader" />
+     <None Include="Assets\ShurikenMagic\Shaders\SM_2sided_transparent.shader" />
      <None Include="Assets\IMPORT\Fantasy Weapons\knife1\knife1.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\guard animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
@@ -105,6 +112,7 @@
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\Priest animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2_&amp;_santa_animations.txt" />
+     <None Include="Assets\ShurikenMagic\Shaders\SM_TransparentRim.shader" />
  <Reference Include="AudioToolkit_FreeVersion">
  <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
  </Reference>

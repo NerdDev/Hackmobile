@@ -19,7 +19,7 @@ public class PlayerManager : MonoBehaviour {
 	private string playerTitleCombatArea;//wizardry, combat, bushido, medicine, chemistry, sightseeing, etc
 	public string PlayerTitleCombatArea{get{ return playerTitleCombatArea;}}  //read only - updated via class info
 	
-	private GameObject playerAvatar;
+	public GameObject playerAvatar;
 	public GameObject PlayerAvatar{get{return playerAvatar;}}//read only global reference to the hero gameobject
 	
 	#region HERO STAT VARS   //only health and attribute stats pertaining to hero go here
@@ -115,15 +115,6 @@ public class PlayerManager : MonoBehaviour {
 	}
 	public HungerLevel CurrentHungerLevel;
 	
-	public enum StatusNegative
-	{
-		None,
-		Confused,
-		Blind,
-		Deaf,
-		
-	}
-	public StatusNegative CurrentNegativeStatus;
 	
 	public enum EncumbranceEnum  //speed and to-hit mods will be affected.  Nethack "exercises" strength and "abuses" dex/const based on this enum
 	{
@@ -135,7 +126,7 @@ public class PlayerManager : MonoBehaviour {
 		Overloaded
 		
 	}
-	public StatusNegative CurrentPlayerEncumbrance;
+	public EncumbranceEnum CurrentPlayerEncumbrance;
 	
 	public enum BodyEventLocations    //This enum is for event use - monster hitting - traps, etc.  Equip locations are below
 	{
@@ -195,7 +186,7 @@ public class PlayerManager : MonoBehaviour {
 	public void PlayerMoveForward()
 	{
 	
-	
+		gameObject.transform.Translate(new Vector3(0,0,1f));  //THIS IS TEMPORARYYYYYYYYYYYYYYYY
 		
 	}
 	
@@ -246,7 +237,7 @@ public class PlayerManager : MonoBehaviour {
 	{
 	
 		//NOT FINAL NOT FINAL NOT FINAL
-		float xpToNext = PlayerCurrentLevel * (100+(playerCurrentLevel*2));
+		float xpToNext = 100 + ((Mathf.Pow(playerCurrentLevel,3f)/2));
 		Debug.Log("XP To Next Level() Calc'd : " + xpToNext);
 		return xpToNext;
 	}
@@ -260,7 +251,7 @@ public class PlayerManager : MonoBehaviour {
 		Debug.Log("Max weight calculated: " + playerInventoryWeightMax);
 		return true;
 	}
-	public string DecidePlayerTitle()
+	private string DecidePlayerTitle()
 	{
 		
 		//Called in order to figure out what the player's title should be given all variables (titles taken verbatim from nethack:
@@ -273,10 +264,7 @@ public class PlayerManager : MonoBehaviour {
 				{
 					playerTitle = "Digger";	
 				}
-				else if (playerCurrentLevel < 5)
-				{
-					playerTitle = "Field Worker";
-				}
+				
 				else if (playerCurrentLevel < 9)
 				{
 					playerTitle = "Investigator";
@@ -310,60 +298,207 @@ public class PlayerManager : MonoBehaviour {
 			case PlayerProfessions.Barbarian:
 			{
 			
+				if (playerCurrentLevel < 2)
+				{
+					playerTitle = "Plunderer";
+				}
+				else if (playerCurrentLevel < 5)
+				{
+					playerTitle = "Pillager";
+				}
+				else if (playerCurrentLevel < 9)
+				{
+					playerTitle = "Bandit";
+				}
+				else if (playerCurrentLevel < 13)
+				{
+					playerTitle = "Brigand";
+				}
+				else if (playerCurrentLevel < 17)
+				{
+					playerTitle = "Raider";
+				}
+				else if (playerCurrentLevel < 21)
+				{
+					playerTitle = "Reaver";
+				}
+				else if (playerCurrentLevel < 25)
+				{
+					playerTitle = "Slayer";
+				}
+				else if (playerCurrentLevel < 29)
+				{
+					playerTitle = "Chieftain";
+				}
+				else if (playerCurrentLevel < 30)
+				{
+					playerTitle = "Conqueror";
+				}	
+			break;
 			}
 			case PlayerProfessions.Caveman:
 			{
-				
+				if (playerCurrentLevel < 2)
+				{
+					playerTitle = "Troglodyte";
+				}
+				else if (playerCurrentLevel < 5)
+				{
+					playerTitle = "Aborigine";
+				}
+				else if (playerCurrentLevel < 9)
+				{
+					playerTitle = "Wanderer";
+				}
+				else if (playerCurrentLevel < 13)
+				{
+					playerTitle = "Vagrant";
+				}
+				else if (playerCurrentLevel < 17)
+				{
+					playerTitle = "Wayfarer";
+				}
+				else if (playerCurrentLevel < 21)
+				{
+					playerTitle = "Roamer";
+				}
+				else if (playerCurrentLevel < 25)
+				{
+					playerTitle = "Nomad";
+				}
+				else if (playerCurrentLevel < 29)
+				{
+					playerTitle = "Rover";
+				}
+				else if (playerCurrentLevel < 30)
+				{
+					playerTitle = "Pioneer";
+				}
+				break;
+
 			}
 			case PlayerProfessions.Healer:
 			{
 			
+				if (playerCurrentLevel < 2)
+				{
+					playerTitle = "Rhizotomist";
+				}
+				else if (playerCurrentLevel < 5)
+				{
+					playerTitle = "Empiric";
+				}
+				else if (playerCurrentLevel < 9)
+				{
+					playerTitle = "Embalmer";
+				}
+				else if (playerCurrentLevel < 13)
+				{
+					playerTitle = "Medicus Ossium";
+				}
+				else if (playerCurrentLevel < 17)
+				{
+					playerTitle = "Herbalist";
+				}
+				else if (playerCurrentLevel < 21)
+				{
+					playerTitle = "Magister";
+				}
+				else if (playerCurrentLevel < 25)
+				{
+					playerTitle = "Slayer";
+				}
+				else if (playerCurrentLevel < 29)
+				{
+					playerTitle = "Physician";
+				}
+				else if (playerCurrentLevel < 30)
+				{
+					playerTitle = "Chirurgeon";
+				}
+			break;
 			}
 			case PlayerProfessions.Knight:
 			{
-				
+				if (playerCurrentLevel < 2)
+				{
+					playerTitle = "Gallant";
+				}
+				else if (playerCurrentLevel < 5)
+				{
+					playerTitle = "Esquire";
+				}
+				else if (playerCurrentLevel < 9)
+				{
+					playerTitle = "Bachelor";
+				}
+				else if (playerCurrentLevel < 13)
+				{
+					playerTitle = "Sergeant";
+				}
+				else if (playerCurrentLevel < 17)
+				{
+					playerTitle = "Knight";
+				}
+				else if (playerCurrentLevel < 21)
+				{
+					playerTitle = "Banneret";
+				}
+				else if (playerCurrentLevel < 25)
+				{
+					playerTitle = "Chevalier";
+				}
+				else if (playerCurrentLevel < 29)
+				{
+					playerTitle = "Seignieur";
+				}
+				else if (playerCurrentLevel < 30)
+				{
+					playerTitle = "Paladin";
+				}
+			break;
 			}
-			case PlayerProfessions.Monk:
-			{
-			
-			}
-			case PlayerProfessions.Priest:
-			{
-				
-			}
-			case PlayerProfessions.Ranger:
-			{
-			
-			}
-			case PlayerProfessions.Rogue:
-			{
-				
-			}
-			case PlayerProfessions.Samurai:
-			{
-			
-			}
-			case PlayerProfessions.Tourist:
-			{
-				
-			}
-			case PlayerProfessions.Valkyrie:
-			{
-			
-			}
-			case PlayerProfessions.Wizard:
-			{
-				
-			}
+//			case PlayerProfessions.Monk:
+//			{
+//			
+//			}
+//			case PlayerProfessions.Priest:
+//			{
+//				
+//			}
+//			case PlayerProfessions.Ranger:
+//			{
+//			
+//			}
+//			case PlayerProfessions.Rogue:
+//			{
+//				
+//			}
+//			case PlayerProfessions.Samurai:
+//			{
+//			
+//			}
+//			case PlayerProfessions.Tourist:
+//			{
+//				
+//			}
+//			case PlayerProfessions.Valkyrie:
+//			{
+//			
+//			}
+//			case PlayerProfessions.Wizard:
+//			{
+//				
+//			}
 			
 			
 		break;
 		}
 		
 		
-		string finalTitle = playerChosenName + ", " + playerTitle + " of " + playerTitleCombatArea;
+		string finalTitle = playerChosenName + ", " + playerTitle;// + " of " + playerTitleCombatArea;
 		return finalTitle;
-	}
+	}  //I'll come back and rework this so it's not retarded
 	#endregion
 	
 	

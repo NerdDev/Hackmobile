@@ -34,10 +34,8 @@ public class NGUISelectionTools
 	{
 		if (HasValidTransform())
 		{
-            GameObject[] gos = Selection.gameObjects;
-            #pragma warning disable 0618
-            bool val = !Selection.activeGameObject.active;
-            #pragma warning restore 0618
+			GameObject[] gos = Selection.gameObjects;
+			bool val = !Selection.activeGameObject.active;
 			foreach (GameObject go in gos) NGUITools.SetActive(go, val);
 		}
 	}

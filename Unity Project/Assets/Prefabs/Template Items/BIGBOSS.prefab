@@ -728,7 +728,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30e8cfd4b304c6742a59081a09162689, type: 3}
   m_Name: 
+  PlayerInventory: []
   PlayerChosenProfession: 0
+  CurrentHungerLevel: 0
+  CurrentNegativeStatus: 0
+  CurrentPlayerEncumbrance: 0
 --- !u!1002 &11400007
 EditorExtensionImpl:
   serializedVersion: 6
@@ -804,6 +808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca07aa49cc0eb6145b4b59b6af927e71, type: 3}
   m_Name: 
   totalTimePlayed: 0
+  turnsPassed: 0
   myTestIntprivate: 0
   myTeststringprivate: 
 --- !u!1002 &11400017
@@ -835,6 +840,7 @@ MonoBehaviour:
   HUDIntelligenceValue: {fileID: 0}
   HUDDexterityLabel: {fileID: 0}
   HUDDexterityValue: {fileID: 0}
+  hungerLabel: {fileID: 0}
 --- !u!1002 &11400019
 EditorExtensionImpl:
   serializedVersion: 6
@@ -851,7 +857,7 @@ MonoBehaviour:
   textPrefab: {fileID: 0}
   introSplashObject: {fileID: 0}
   enemy1: {fileID: 0}
-  potion: {fileID: 0}
+  potion: {fileID: 100000, guid: 793a04a2099408a4182fc26997dc9e57, type: 2}
 --- !u!1002 &11400021
 EditorExtensionImpl:
   serializedVersion: 6

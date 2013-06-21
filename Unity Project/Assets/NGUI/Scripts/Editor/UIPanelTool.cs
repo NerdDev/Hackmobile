@@ -11,7 +11,6 @@ using System.Collections.Generic;
 /// Panel wizard that allows enabling / disabling and selecting panels in the scene.
 /// </summary>
 
-#pragma warning disable 0618
 public class UIPanelTool : EditorWindow
 {
 	class Entry
@@ -283,4 +282,3 @@ public class UIPanelTool : EditorWindow
 		return retVal;
 	}
 }
-#pragma warning restore 0618

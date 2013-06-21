@@ -447,10 +447,8 @@ public class NGUIEditorTools
 	{
 		GameObject go = Selection.activeGameObject;
 
-        // Only use active objects
-        #pragma warning disable 0618
-        if (go != null && !go.active) go = null;
-        #pragma warning restore 0618
+		// Only use active objects
+		if (go != null && !go.active) go = null;
 
 		// Try to find a panel
 		UIPanel p = (go != null) ? NGUITools.FindInParents<UIPanel>(go) : null;

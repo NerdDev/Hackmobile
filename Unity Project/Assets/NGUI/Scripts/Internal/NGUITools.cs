@@ -11,7 +11,6 @@ using System.Collections.Generic;
 /// Helper class containing generic functions used throughout the UI library.
 /// </summary>
 
-#pragma warning disable 0618
 static public class NGUITools
 {
 	static AudioListener mListener;
@@ -543,4 +542,3 @@ static public class NGUITools
 		}
 	}
 }
-#pragma warning restore 0618

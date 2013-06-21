@@ -16,7 +16,6 @@ using System.Collections.Specialized;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/UI/Panel")]
-#pragma warning disable 0618
 public class UIPanel : MonoBehaviour
 {
 	public enum DebugInfo
@@ -997,4 +996,3 @@ public class UIPanel : MonoBehaviour
 
 	static public UIPanel Find (Transform trans) { return Find(trans, true); }
 }
-#pragma warning restore 0618

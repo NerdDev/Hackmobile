@@ -11,7 +11,6 @@ using System.Collections;
 /// </summary>
 
 [AddComponentMenu("NGUI/Interaction/Drag Object")]
-#pragma warning disable 0618
 public class UIDragObject : IgnoreTimeScale
 {
 	public enum DragEffect
@@ -227,4 +226,3 @@ public class UIDragObject : IgnoreTimeScale
 		}
 	}
 }
-#pragma warning restore 0618

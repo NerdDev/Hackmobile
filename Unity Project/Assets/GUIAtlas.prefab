@@ -43,13 +43,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 834
+      y: 1347
       width: 549
       height: 40
     inner:
       serializedVersion: 2
       x: 0
-      y: 834
+      y: 1347
       width: 549
       height: 40
     paddingLeft: .0127504552
@@ -60,13 +60,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 875
+      y: 1388
       width: 542
       height: 149
     inner:
       serializedVersion: 2
       x: 0
-      y: 875
+      y: 1388
       width: 542
       height: 149
     paddingLeft: .00369003695
@@ -77,18 +77,69 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 793
+      y: 1306
       width: 549
       height: 40
     inner:
       serializedVersion: 2
       x: 0
-      y: 793
+      y: 1306
       width: 549
       height: 40
     paddingLeft: .0127504552
     paddingRight: .00546448072
     paddingTop: .150000006
+    paddingBottom: 0
+  - name: HUDPanel_2_PreVis
+    outer:
+      serializedVersion: 2
+      x: 756
+      y: 1969
+      width: 162
+      height: 79
+    inner:
+      serializedVersion: 2
+      x: 756
+      y: 1969
+      width: 162
+      height: 79
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: ProgressBar_2
+    outer:
+      serializedVersion: 2
+      x: 511
+      y: 1954
+      width: 244
+      height: 94
+    inner:
+      serializedVersion: 2
+      x: 511
+      y: 1954
+      width: 244
+      height: 94
+    paddingLeft: .0245901644
+    paddingRight: .0245901644
+    paddingTop: .0212765951
+    paddingBottom: 0
+  - name: SciFi Atlas
+    outer:
+      serializedVersion: 2
+      x: 0
+      y: 1538
+      width: 510
+      height: 510
+    inner:
+      serializedVersion: 2
+      x: 0
+      y: 1538
+      width: 510
+      height: 510
+    paddingLeft: .00392156886
+    paddingRight: 0
+    paddingTop: .00392156886
     paddingBottom: 0
   mCoordinates: 0
   mPixelSize: 1

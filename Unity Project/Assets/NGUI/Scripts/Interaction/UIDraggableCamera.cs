@@ -11,7 +11,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 [AddComponentMenu("NGUI/Interaction/Draggable Camera")]
-#pragma warning disable 0618
 public class UIDraggableCamera : IgnoreTimeScale
 {
 	/// <summary>
@@ -222,4 +221,3 @@ public class UIDraggableCamera : IgnoreTimeScale
 		}
 	}
 }
-#pragma warning restore 0618

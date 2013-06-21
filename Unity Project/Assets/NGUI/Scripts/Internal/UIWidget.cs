@@ -10,7 +10,6 @@ using System.Collections.Generic;
 /// Base class for all UI components that should be derived from when creating new widget types.
 /// </summary>
 
-#pragma warning disable 0618
 public abstract class UIWidget : MonoBehaviour
 {
 	public enum Pivot
@@ -498,4 +497,3 @@ public abstract class UIWidget : MonoBehaviour
 
 	virtual public void OnFill (BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color> cols) { }
 }
-#pragma warning restore 0618

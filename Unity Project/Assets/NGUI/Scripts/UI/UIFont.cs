@@ -13,7 +13,6 @@ using System.Text;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/UI/Font")]
-#pragma warning disable 0618
 public class UIFont : MonoBehaviour
 {
 	public enum Alignment
@@ -739,4 +738,3 @@ public class UIFont : MonoBehaviour
 		}
 	}
 }
-#pragma warning restore 0618

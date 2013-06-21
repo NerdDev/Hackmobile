@@ -11,7 +11,6 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Drag Camera")]
-#pragma warning disable 0618
 public class UIDragCamera : IgnoreTimeScale
 {
 	/// <summary>
@@ -85,4 +84,3 @@ public class UIDragCamera : IgnoreTimeScale
 		}
 	}
 }
-#pragma warning restore 0618

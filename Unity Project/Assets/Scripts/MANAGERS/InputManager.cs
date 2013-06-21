@@ -64,7 +64,8 @@ public class InputManager : MonoBehaviour {
 		}
 		if (Input.GetKeyDown(KeyCode.A))
 		{
-			
+			Debug.Log("lulz");
+			BigBoss.PlayerInfo.PlayerAvatar.renderer.enabled = !BigBoss.PlayerInfo.PlayerAvatar.renderer.enabled;
 		}
 		if (Input.GetKeyDown(KeyCode.S))
 		{
@@ -85,7 +86,15 @@ public class InputManager : MonoBehaviour {
 		verticalMouseAxis = Input.GetAxis("Mouse Y");
 		mouseLocation = Input.mousePosition;
 		
-		if (Input.GetMouseButtonDown(1))
+		if (Input.GetMouseButtonDown(1)) //left click?
+		{			
+			//string mes = ("Hi!");
+			BigBoss.Gooey.CreateTextPop(new Vector3 (BigBoss.PlayerInfo.PlayerAvatar.transform.position.x,BigBoss.PlayerInfo.PlayerAvatar.transform.position.y+3.5f,BigBoss.PlayerInfo.PlayerAvatar.transform.position.z),"Poisoned!",Color.green);
+			//Vector3 camPoint = Camera.mainCamera.WorldToViewportPoint(BigBoss.PlayerInfo.playerAvatar.transform.position);
+			//Debug.Log(camPoint);
+			
+		}
+		if (Input.GetMouseButtonDown(2)) //right click?
 		{			
 			
 		}

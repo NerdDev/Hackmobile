@@ -12,7 +12,6 @@ using System.Collections.Generic;
 /// change -- rebuild the buffer as necessary.
 /// </summary>
 
-#pragma warning disable 0618
 public class UINode
 {
 	int mVisibleFlag = -1;
@@ -78,5 +77,3 @@ public class UINode
 		return false;
 	}
 }
-#pragma warning disable 0618
-#pragma warning restore 0618

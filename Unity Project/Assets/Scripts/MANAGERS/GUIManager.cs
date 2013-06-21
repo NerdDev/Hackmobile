@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GUIManager : MonoBehaviour {
 
@@ -24,10 +25,10 @@ public class GUIManager : MonoBehaviour {
 		//public Texture testTexture;
 		
 	
-	
+	public List<UILabel> textPopList; //A dynamic array of created textPop objects - used for orderly management and GO cleanup
 		
 	
-	#region NGUI REFERENCES   //these get switched to private towards completion - public now for editor hookups
+	#region NGUI REFERENCES FOR TYPE A UI   //these get switched to private towards completion - public now for editor hookups
 	//Panels
 	public UIPanel mainHUDPanel;
 	
@@ -50,15 +51,53 @@ public class GUIManager : MonoBehaviour {
 	
 	#endregion
 	
+	#region NGUI REFERENCES FOR TYPE B UI   //these get switched to private towards completion - public now for editor hookups
+	//Panels
+	public UIPanel MainHUDTypeBMotherPanel;
+	public UISprite mainHUDTabA; //hero
+	public UISprite mainHUDTabB;  //inventory
+	public UISprite mainHUDTabC; //stats/dungeon/achievements
+	public UISprite mainHUDTabD;  //option tab
+	
+	bool isUIPanelBUp = false;
+	public iTweenEvent tweenPanelBUp;
+	public iTweenEvent tweenPanelBDown;
+	//Code transform location for the mother panel:
+	public Vector3 HUDBPanelMotherLocationWhenUp = new Vector3 (-3f,50f,-5f);
+	public Vector3 HUDBPanelMotherLocationWhenDown = new Vector3 (-3f,-75f,-5f);
+	
+	//Buttons:
+	public UIImageButton HUDBarrowPullUpButton;
+	//Sliders & Progress Bars
+//	public UISlider HUDxpbar;
+//	public UISlider HUDplayerHealthBar;
+//	
+//	//Labels
+//	public UILabel HUDHealthBarNumberLabel;
+//	public UILabel HUDcharacterNameLabel;
+//	public UILabel HUDcharacterTitleLabel;
+//	public UILabel HUDDungeonLevelLabel;
+//	public UILabel HUDStrengthLabel;
+//	public UILabel HUDStrengthValue;
+//	public UILabel HUDIntelligenceLabel;
+//	public UILabel HUDIntelligenceValue;
+//	public UILabel HUDDexterityLabel;
+//	public UILabel HUDDexterityValue;
+//	public UILabel hungerLabel;
+	
+	#endregion
+	
 
 	void Start () 
 	{
 		StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
 	
 //			GrabNGUIReferences();
-			
 		
-		
+		tweenPanelBUp = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenUp");
+		tweenPanelBDown = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenDown");
+		MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenDown;
+				
 
 	}
 	
@@ -70,11 +109,7 @@ public class GUIManager : MonoBehaviour {
 //		
 //	}
 	
-	public void UpdateHealthBar()
-	{
-		HUDplayerHealthBar.sliderValue = (float)BigBoss.PlayerInfo.PlayerCurrentHealth/(float)BigBoss.PlayerInfo.PlayerMaxHealth;	
-		HUDHealthBarNumberLabel.text = BigBoss.PlayerInfo.PlayerCurrentHealth + " / " + BigBoss.PlayerInfo.PlayerMaxHealth;
-	}
+	
 	
 	
 	//Debugging Coroutine
@@ -131,12 +166,64 @@ public class GUIManager : MonoBehaviour {
 		
 	}
 	
+	#region UPDATING OF VARIOUS NGUI ELEMENTS - GENERALLY DRIVEN FROM CODE ELSEWHERE IN THE PROJECT
+	public void UpdateHealthBar()
+	{
+		HUDplayerHealthBar.sliderValue = (float)BigBoss.PlayerInfo.PlayerCurrentHealth/(float)BigBoss.PlayerInfo.PlayerMaxHealth;	
+		HUDHealthBarNumberLabel.text = BigBoss.PlayerInfo.PlayerCurrentHealth + " / " + BigBoss.PlayerInfo.PlayerMaxHealth;
+	}
+	
 	public void UpdateHungerText(Color theCol)
 	{
 		hungerLabel.text = BigBoss.PlayerInfo.CurrentHungerLevel.ToString();
 		hungerLabel.color = theCol;
 	}
 	
+	public void CreateTextPop(Vector3 worldPosition, string message, Color col)
+	{
+		//Vector3 actualLoc = new Vector3(worldPosition.x,worldPosition.y,worldPosition.z);
+		Vector3 camPoint = Camera.mainCamera.WorldToViewportPoint(worldPosition);
+		Debug.Log(camPoint);
+		GameObject go = Instantiate(BigBoss.Prefabs.textPopPrefab,camPoint,Quaternion.identity) as GameObject;
+		GUIText textComp = (GUIText) go.GetComponent<GUIText>();
+		textComp.text = message;
+		textComp.material.color = col;
+		
+	}
+//	public void TextPopEnd()  //This is method is called when the iTween on TextPops Completes.  Signals destruction of GO
+//	{
+//		DestroyEarliestTextPop();//iTween event was thrown - we can safely assume it's the first object in the list since we created in order
+//	}//FLAGGED FOR DELETION
+
+
+	
+	#endregion
+	
+	
+	#region HUD B INTERACTIONS:
+	
+	public void HUD2Button_ArrowUP_Click()
+	{
+	
+		if (isUIPanelBUp == false) //panel is down - tween up
+		{
+			//MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenUp;
+			tweenPanelBUp.Play();
+			isUIPanelBUp = true;
+			
+			
+		}
+		else if(isUIPanelBUp == true) //panel is up - tween down
+		{
+			//MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenDown;
+			tweenPanelBDown.Play();
+			isUIPanelBUp = false;
+			
+		}
+	}
+	
+	
+	#endregion
 	void GrabNGUIReferences ()
 	{
 		//GUIButtonTest = (UIButton)GameObject.Find("ButtonTest").GetComponent(typeof(UIButton));
