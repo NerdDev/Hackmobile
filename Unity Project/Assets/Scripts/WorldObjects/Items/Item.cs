@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using XML;
 
-public class Item : WorldObject
+public class Item : WorldObject, PassesTurns
 {
     #region BIGBOSSMANAGEMENT
     //consider some abtract/virtual methods and variables here for cleanliness
@@ -18,11 +18,13 @@ public class Item : WorldObject
 	public virtual void RegisterItemToSingleton() //if we decide to make Item.cs structural only, then switch these to abstract
 	{
 		BigBoss.ItemMaster.AddItemToMasterList(this);//registering existence with singleton
+        BigBoss.TimeKeeper.RegisterToUpdateList(this);
 	}
 	
 	public virtual void DestroyThisItem()
 	{
 		BigBoss.ItemMaster.RemoveItemFromMasterList(this);//removing existence with singleton
+        BigBoss.TimeKeeper.RemoveFromUpdateList(this);
 		Destroy (this.gameObject);
 	}
     #endregion
@@ -55,6 +57,13 @@ public class Item : WorldObject
     {
         get { return BigBoss.ItemMaster.getMaterial(mat); }
         set { this.mat = value.Name; }
+    }
+
+    private EquipTypes equipType;
+    public EquipTypes EquipType
+    {
+        get { return equipType; }
+        set { this.equipType = value; }
     }
 
     //flags
@@ -94,6 +103,7 @@ public class Item : WorldObject
         this.BUC = baseItem.BUC;
         this.Damage = baseItem.Damage;
         this.Material = baseItem.Material;
+        this.EquipType = baseItem.EquipType;
     }
 
     public override void setNull()
@@ -105,6 +115,7 @@ public class Item : WorldObject
         BUC = BUC.CURSED;
         damage = "d1";
         mat = "null";
+        EquipType = EquipTypes.NONE;
         //classes
         stats.setNull();
     }
@@ -120,5 +131,41 @@ public class Item : WorldObject
     }
     #endregion
 
+    #endregion
+
+    #region Turn Management
+
+    //If there's anything that needs updated... let it go here.
+    private int currentPoints;
+    private int basePoints;
+
+    public void UpdateTurn()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int CurrentPoints
+    {
+        get
+        {
+            return currentPoints;
+        }
+        set
+        {
+            currentPoints = value;
+        }
+    }
+
+    public int BasePoints
+    {
+        get
+        {
+            return basePoints;
+        }
+        set
+        {
+            basePoints = value;
+        }
+    }
     #endregion
 }

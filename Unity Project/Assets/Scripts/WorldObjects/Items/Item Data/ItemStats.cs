@@ -21,11 +21,19 @@ public class ItemStats
         get { return nutrition; }
         set { this.nutrition = value; }
     }
+    private Size size;
+    public Size Size
+    {
+        get { return size; }
+        set { this.size = value; }
+    }
 
     public void parseXML(XMLNode x)
     {
         this.Weight = Nifty.StringToInt(x.select("weight").getText());
         this.Cost = Nifty.StringToInt(x.select("cost").getText());
+        this.Nutrition = Nifty.StringToInt(x.select("nutrition").getText());
+        this.Size = (Size) Enum.Parse(size.GetType(), x.select("equipsize").getText(), true);
     }
 
     public void setNull()

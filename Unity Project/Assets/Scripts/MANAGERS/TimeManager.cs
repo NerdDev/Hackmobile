@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TimeManager : MonoBehaviour {
 	
@@ -119,14 +120,41 @@ public class TimeManager : MonoBehaviour {
 	}
 	
 	#region GAME TIME METHODS
-	public void PassTurn()
+	public void PassTurn(int turnPoints)
 	{
 		turnsPassed++;
 		//Justin's hot:
 		//DebugManager.print("Turn passed.  Total turns passed is now: " + turnsPassed);
 		BigBoss.PlayerInfo.AdjustHungerPoints(-2);
+
+        foreach (PassesTurns obj in updateList)
+        {
+            runUpdate(obj, turnPoints);
+        }
 	}
 	
 	#endregion
-	
+
+    #region Objects to Update
+    public List<PassesTurns> updateList = new List<PassesTurns>();
+
+    public void RegisterToUpdateList<T>(T obj) where T: PassesTurns
+    {
+        updateList.Add(obj);
+    }
+
+    public void RemoveFromUpdateList<T>(T obj) where T : PassesTurns
+    {
+        updateList.Remove(obj);
+    }
+
+    public void runUpdate<T>(T obj, int turnPoints) where T : PassesTurns
+    {
+        obj.CurrentPoints += turnPoints;
+        if (obj.CurrentPoints  >= obj.BasePoints) //this will prevent AI processing from doing all the small actions constantly
+        {
+            obj.UpdateTurn();
+        }
+    }
+    #endregion
 }

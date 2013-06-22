@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using XML;
 
-public class NPC : WorldObject
+public class NPC : WorldObject, PassesTurns
 {
     #region BIGBOSSMANAGEMENT
     // Use this for initialization
@@ -16,11 +16,13 @@ public class NPC : WorldObject
     public virtual void RegisterNPCToSingleton()
     {
         BigBoss.NPCManager.AddNPCToMasterList(this);
+        BigBoss.TimeKeeper.RegisterToUpdateList(this);
     }
 
     public virtual void DestroyThisItem()
     {
         BigBoss.NPCManager.RemoveNPCFromMasterList(this);
+        BigBoss.TimeKeeper.RemoveFromUpdateList(this);
         Destroy(this.gameObject);
     }
     #endregion
@@ -30,7 +32,7 @@ public class NPC : WorldObject
 
     #region Base NPC Properties
     //Local variables
-    public List<NPCItem> baseInventory = new List<NPCItem>();
+    public List<NPCItem> baseInventory = null;
     #endregion
 
     #region NPC Instance Properties
@@ -53,6 +55,8 @@ public class NPC : WorldObject
     //Separate classes
     public NPCStats stats = new NPCStats();
     public NPCBodyParts bodyparts = new NPCBodyParts();
+    public NPCEquipment equipment = new NPCEquipment();
+    
     #endregion
 
     public NPC()
@@ -114,6 +118,7 @@ public class NPC : WorldObject
         //classes
         this.stats = npc.stats.Copy();
         this.bodyparts = npc.bodyparts.Copy();
+        this.equipment = npc.equipment.Copy();
         //flags
         this.flags = npc.flags.Copy();
         //enums
@@ -124,7 +129,6 @@ public class NPC : WorldObject
 
         //inventory
         //TODO: needs conversion from baseInventory into actual inventory
-        //this.inventory.AddRange(npc.inventory);
     }
 
     public override void setNull()
@@ -132,6 +136,7 @@ public class NPC : WorldObject
         base.setNull();
         this.stats.setNull();
         this.bodyparts.setNull();
+        this.equipment.setNull();
         this.flags.setNull();
         this.race = NPCRace.NONE;
         this.role = NPCRole.NONE;
@@ -180,6 +185,7 @@ public class NPC : WorldObject
         this.stats.parseXML(x.select("stats"));
 
         //inventory
+        baseInventory = new List<NPCItem>();
         foreach (XMLNode xnode in x.select("inventory").get())
         {
             Debug.Log(xnode.getKey());
@@ -190,5 +196,40 @@ public class NPC : WorldObject
     }
     #endregion
 
+    #endregion
+
+    #region Turn Management
+
+    private int basePoints;
+    private int currentPoints;
+
+    public void UpdateTurn()
+    {
+        //this does nothing right now!
+    }
+
+    public int CurrentPoints
+    {
+        get
+        {
+            return currentPoints;
+        }
+        set
+        {
+            currentPoints = value;
+        }
+    }
+
+    public int BasePoints
+    {
+        get
+        {
+            return basePoints;
+        }
+        set
+        {
+            basePoints = value;
+        }
+    }
     #endregion
 }

@@ -29,11 +29,6 @@ public class WorldObject : UniqueObject
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-
-    }
 
     #region Data Management for Instances
     public void setData(WorldObject wo)

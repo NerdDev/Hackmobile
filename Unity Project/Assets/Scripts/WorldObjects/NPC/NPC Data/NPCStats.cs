@@ -40,6 +40,18 @@ public class NPCStats
         get { return constitution; }
         set { this.constitution = value; }
     }
+    private int difficulty;
+    public int Difficulty
+    {
+        get { return difficulty; }
+        set { this.difficulty = value; }
+    }
+    private Size size;
+    public Size Size
+    {
+        get { return size; }
+        set { this.size = value; }
+    }
 
     public void setNull() {
         this.Strength = 0;
@@ -48,6 +60,8 @@ public class NPCStats
         this.Wisdom = 0;
         this.Dexterity = 0;
         this.Constitution = 0;
+        this.Difficulty = 0;
+        this.Size = Size.NONE;
     }
 
     public void parseXML(XMLNode x)
@@ -58,5 +72,7 @@ public class NPCStats
         this.Wisdom = Nifty.StringToInt(x.select("wisdom").getText());
         this.Dexterity = Nifty.StringToInt(x.select("dexterity").getText());
         this.Constitution = Nifty.StringToInt(x.select("constitution").getText());
+        this.Difficulty = Nifty.StringToInt(x.select("difficulty").getText());
+        this.Size = (Size) Enum.Parse(size.GetType(), x.select("size").getText(), true);
     }
 }

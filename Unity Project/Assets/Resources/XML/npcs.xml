@@ -12,9 +12,11 @@
 			<dexterity>9</dexterity>
 			<intelligence>3</intelligence>
 			<strength>4</strength>
+			<difficulty>1</difficulty>
+			<size>small</size>
 		</stats>
-		<model>weapons/axe2/axe2</model>
-		<modeltexture>weapons/axe2/mat_axe2_1</modeltexture>
+		<model>armor/shield2/shield2</model>
+		<modeltexture>armor/shield2/mat_shield2_1</modeltexture>
 		<inventory>
 			<item>
 				<name>axe2</name>

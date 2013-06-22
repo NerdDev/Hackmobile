@@ -4,6 +4,8 @@
 			<stats>
 				<weight>15</weight>
 				<cost>20</cost>
+				<equipsize>medium</equipsize>
+				<nutrition>0</nutrition>
 			</stats>
 			<damage>2d6</damage>
 			<material>steel</material>
@@ -14,6 +16,8 @@
 			<stats>
 				<weight>15</weight>
 				<cost>20</cost>
+				<equipsize>small</equipsize>
+				<nutrition>0</nutrition>
 			</stats>
 			<damage>2d6</damage>
 			<material>steel</material>
@@ -24,6 +28,8 @@
 			<stats>
 				<weight>15</weight>
 				<cost>20</cost>
+				<equipsize>medium</equipsize>
+				<nutrition>0</nutrition>
 			</stats>
 			<damage>2d6</damage>
 			<material>steel</material>
@@ -34,6 +40,8 @@
 			<stats>
 				<weight>15</weight>
 				<cost>20</cost>
+				<equipsize>medium</equipsize>
+				<nutrition>0</nutrition>
 			</stats>
 			<damage>2d6</damage>
 			<material>steel</material>
@@ -44,6 +52,8 @@
 			<stats>
 				<weight>15</weight>
 				<cost>20</cost>
+				<equipsize>medium</equipsize>
+				<nutrition>0</nutrition>
 			</stats>
 			<damage>2d6</damage>
 			<material>steel</material>
