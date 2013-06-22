@@ -10,7 +10,12 @@ public class ItemMaster : MonoBehaviour {
 	
 	//This may be changed depending on how we utilize objects in the game world
 	//globally accessible list of types for iteration:
-	public List<Item> TotalItemsInExistence = new List<Item>(); 
+	public List<Item> TotalItemsInExistence = new List<Item>();
+    MaterialType nullMaterial { get; set; }
+    Item nullItem { get; set; }
+
+    Dictionary<string, Item> baseItems = new Dictionary<string, Item>();
+    Dictionary<string, MaterialType> materials = new Dictionary<string, MaterialType>();
 		
 	// Use this for initialization
 	void Start () 
@@ -23,7 +28,18 @@ public class ItemMaster : MonoBehaviour {
 	{
 		//Debug.Log(TotalItemsInExistence.Count);   //for quick debugging only
 	}
-	
+
+    private void initializeNullData()
+    {
+        //Null material
+        nullMaterial = new MaterialType();
+        nullMaterial.setNull();
+
+        //Null item
+        GameObject nullGOItem = new GameObject("nullItem");
+        nullItem = nullGOItem.AddComponent<Item>();
+        nullItem.setNull();
+    }
 	
 	public void AddItemToMasterList(Item theItemScript)
 	{
@@ -36,22 +52,52 @@ public class ItemMaster : MonoBehaviour {
 	
 		TotalItemsInExistence.Remove(theItemScript);//look up this generic method and see if we leave a memory leak
 	}
-	
-	public Potion CreatePotion(Vector3 location,Potion.Size size)
+
+    public Item getItem(string itemName)
+    {
+        if (getItems().ContainsKey(itemName))
+        {
+            return getItems()[itemName];
+        }
+        else
+        {
+            return nullItem;
+        }
+    }
+
+    public MaterialType getMaterial(string mat)
+    {
+        if (getMaterials().ContainsKey(mat))
+        {
+            return getMaterials()[mat];
+        }
+        else
+        {
+            return nullMaterial;
+        }
+    }
+
+    public Dictionary<string, Item> getItems()
+    {
+        return baseItems;
+    }
+
+    public Dictionary<string, MaterialType> getMaterials()
+    {
+        return materials;
+    }
+
+    public Item CreateItem(Vector3 location, string itemName)
 	{
-		//Instantiation:
-		GameObject go = Instantiate(BigBoss.Prefabs.potion)as GameObject;
-		//Relocating to desired place:
+        GameObject go = new GameObject();
 		go.transform.position = location;
-		//Capturing reference to script:
-		Potion thePotionScript = (Potion)go.GetComponent(typeof(Potion));
-		thePotionScript.potionSize = size;
-		//This part is a bit ghetto but we'll come back to it:
-		if (thePotionScript.potionSize == Potion.Size.Small)
-		{
-			thePotionScript.restoreHealthAmount = 25;	
-		}
-		//returning a reference to the instance of this exact potion
-		return thePotionScript;
+        Item item = go.AddComponent<Item>();
+        item.setData(itemName);
+        MeshFilter mf = go.AddComponent<MeshFilter>();
+        mf.mesh = (Resources.Load(item.Model) as GameObject).GetComponent<MeshFilter>().mesh;
+        MeshRenderer mr = go.AddComponent<MeshRenderer>();
+        Debug.Log(item.ModelTexture);
+        mr.material = Resources.Load(item.ModelTexture) as Material;
+		return item;
 	}
 }

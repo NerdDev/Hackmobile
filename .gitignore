@@ -11,6 +11,9 @@ Unity Project/Assets/NGUI/Examples/
 *.csproj
 *.sln
 *.userprefs
+Unity Project/Assets/UnityVS/
+Unity Project/Assets/UnityVS.meta
+Unity Project/UnityVS.*
 
 
 #################

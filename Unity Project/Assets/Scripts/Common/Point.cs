@@ -29,6 +29,11 @@ public class Point {
 	{
 		
 	}
+	
+	public Point (Point rhs) : this(rhs.x, rhs.y)
+	{
+			
+	}
     #endregion Ctors
 
     #region Shifts

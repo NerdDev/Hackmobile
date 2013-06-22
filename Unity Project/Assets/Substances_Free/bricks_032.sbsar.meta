@@ -3,7 +3,7 @@ guid: 5cfd35e82f706004cbbcbef15376cbb7
 SubstanceImporter:
   serializedVersion: 5
   materialInstances:
-  - serializedVersion: 7
+  - serializedVersion: 6
     name: bricks_032
     prototypeName: bricks_032
     shaderName: Bumped Specular
@@ -195,10 +195,10 @@ SubstanceImporter:
       textureHeight: 512
       textureFormat: 0
       loadingBehavior: 1
-  - serializedVersion: 7
+  - serializedVersion: 6
     name: bricks_test_walls
     prototypeName: bricks_032
-    shaderName: Bumped Specular
+    shaderName: Nature/Tree Creator Bark
     inputs:
     - name: $normalformat
       value:
@@ -333,13 +333,24 @@ SubstanceImporter:
             name: _BumpMap
           second:
             texture: {instanceID: 0}
-            scale: {x: 4, y: 1}
+            scale: {x: 4, y: 4}
+            offset: {x: 0, y: 0}
+        data:
+          first:
+            name: _GlossMap
+          second:
+            texture: {instanceID: 0}
+            scale: {x: 1, y: 1}
             offset: {x: 0, y: 0}
       floats:
         data:
           first:
             name: _Shininess
           second: .078125
+        data:
+          first:
+            name: _SquashAmount
+          second: 1
       colors:
         data:
           first:
@@ -349,6 +360,10 @@ SubstanceImporter:
           first:
             name: _SpecColor
           second: {r: .5, g: .5, b: .5, a: 1}
+        data:
+          first:
+            name: _Scale
+          second: {r: 1, g: 1, b: 1, a: 1}
     textureParameters:
     - name: bricks_032_1_Diffuse
       alphaSource: 5

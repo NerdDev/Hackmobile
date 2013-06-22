@@ -10,9 +10,9 @@ public class PrefabManager : MonoBehaviour {
 	
 	public GameObject enemy1;
 	public GameObject potion;
-//	public GameObject prefabName;
-//	public GameObject prefabName;
-//	public GameObject prefabName;
+	public GameObject sword1;
+	public GameObject sword2;
+	public GameObject skeletonFresh;
 //	public GameObject prefabName;
 //	public GameObject prefabName;
 //	public GameObject prefabName;

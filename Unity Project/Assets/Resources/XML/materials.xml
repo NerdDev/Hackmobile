@@ -1,0 +1,32 @@
+<materials>
+	<material name="stone">
+		<oxidizes>false</oxidizes>
+		<hardness>50</hardness>
+		<burns>false</burns>
+	</material>
+	<material name="steel">
+		<oxidizes>false</oxidizes>
+		<hardness>150</hardness>
+		<burns>false</burns>
+	</material>
+	<material name="glass">
+		<oxidizes>true</oxidizes>
+		<hardness>15</hardness>
+		<burns>false</burns>
+	</material>
+	<material name="iron">
+		<oxidizes>true</oxidizes>
+		<hardness>100</hardness>
+		<burns>false</burns>
+	</material>
+	<material name="copper">
+		<oxidizes>true</oxidizes>
+		<hardness>75</hardness>
+		<burns>false</burns>
+	</material>
+	<material name="wood">
+		<oxidizes>true</oxidizes>
+		<hardness>25</hardness>
+		<burns>true</burns>
+	</material>
+</materials>

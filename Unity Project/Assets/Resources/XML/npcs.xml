@@ -1,0 +1,31 @@
+<npcs>
+	<npc name="newt">
+		<role>creature</role>
+		<race>reptile</race>
+		<flags>nopoly, leaves_corpse</flags>
+		<properties>infravision</properties>
+		<stats>
+			<charisma>3</charisma>
+			<constitution>5</constitution>
+			<wisdom>3</wisdom>
+			<dexterity>9</dexterity>
+			<intelligence>3</intelligence>
+			<strength>4</strength>
+		</stats>
+		<model>weapons/axe2/axe2</model>
+		<modeltexture>weapons/axe2/mat_axe2_1</modeltexture>
+		<inventory>
+			<item>
+				<name>axe2</name>
+				<chance>100</chance>
+				<number>1</number>
+			</item>
+		</inventory>
+		<bodyparts>
+			<arms>0</arms>
+			<legs>4</legs>
+			<heads>1</heads>
+			<!-- body is implicitly assumed -->
+		</bodyparts>
+	</npc>
+</npcs>

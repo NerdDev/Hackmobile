@@ -82,10 +82,46 @@ public class PlayerManager : MonoBehaviour {
 	//Inventory Array - Will have to confirm typing when NGUI integration is set up...
 	public List<GameObject> PlayerInventory = new List<GameObject>();
 	#endregion
-	
-	
-	#region ENUMERATIONS OF ALL SORTS
-	
+
+    #region INVENTORY MANAGEMENT
+
+    Dictionary<Item, int> inventory = new Dictionary<Item, int>();
+
+    public void addToInventory(Item item)
+    {
+        if (inventory.ContainsKey(item))
+        {
+            inventory[item] += 1;
+        }
+        else
+        {
+            inventory.Add(item, 1);
+        }
+    }
+
+    public void removeFromInventory(Item item)
+    {
+        if (inventory.ContainsKey(item))
+        {
+            if (inventory[item] <= 1)
+            {
+                inventory.Remove(item);
+            }
+            else
+            {
+                inventory[item] -= 1;
+            }
+        }
+        else
+        {
+            //do nothing, the item isn't there
+        }
+    }
+
+    #endregion
+
+    #region ENUMERATIONS OF ALL SORTS
+
 	public enum PlayerProfessions //are we keeping all of these?  Rename/rework a couple maybe?
 	{
 		Archaeologist,
