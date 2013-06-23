@@ -330,11 +330,10 @@ public class LevelGenerator
 		}
 		#endregion
         // Init
+        GridType[,] arr = grids.GetArr();
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
-        Array2Dcoord<bool> blockedPoints = new Array2Dcoord<bool>(grids.GetBounding());
-        Value2D<GridType>[] directionOptions = new Value2D<GridType>[4];
-        int numGoodDirections, dirChosen;
-        GridType val;
+        Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBounding(), false);
+        DFSFilter filter = new DFSFilter(blockedPoints, targets);
 		#region DEBUG
 		GridArray debugGrid = new GridArray(0, 0);
 		#endregion
@@ -346,12 +345,6 @@ public class LevelGenerator
 			startPoint = pathTaken.Peek();
             // Don't want to visit the same point on a different route later
             blockedPoints.Put(true, startPoint.x, startPoint.y);
-
-            // Load up direction options
-            directionOptions[0] = new Value2D<GridType>(startPoint.x, startPoint.y + 1);  // Up
-            directionOptions[1] = new Value2D<GridType>(startPoint.x, startPoint.y - 1);  // Down
-            directionOptions[2] = new Value2D<GridType>(startPoint.x + 1, startPoint.y);  // Right
-            directionOptions[3] = new Value2D<GridType>(startPoint.x - 1, startPoint.y);  // Left
 			#region DEBUG
 			if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 			{ // Set up new print array
@@ -369,77 +362,44 @@ public class LevelGenerator
 			}
 			#endregion
 
-            // Remove bad directions
-            numGoodDirections = 4;
-            for (int i = 0 ; i < 4 ; i++)
+            // Get surrounding points
+            Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y);
+            #region DEBUG
+            if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                Value2D<GridType> dir = directionOptions[i];
-                // Check to see if direction is good
-                if (!blockedPoints.Get(dir.x, dir.y) // If not blocked
-                    && grids.TryGet(dir.x, dir.y, out val) // If not out of range
-                    && (val == GridType.NULL || targets.Contains(val))) // If open space or target
-                {
-	                // If found target, return path we took
-	                if (GridType.NULL != val)
-	                {
-						#region DEBUG
-						if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-						{
-							DebugManager.w (DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
-						}
-						#endregion
-						pathTaken.Push(dir);
-	                    return pathTaken;
-	                }
-					#region DEBUG
-					if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-					{
-						debugGrid.Put(GridType.INTERNAL_RESERVED_ACCEPTED, dir.x, dir.y);
-					}
-					#endregion
-                } else {
-                    // Remove direction option
-					#region DEBUG
-					if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-					{
-						debugGrid.Put(GridType.INTERNAL_RESERVED_REJECTED, dir.x, dir.y);
-					}
-					#endregion
-                    directionOptions[i] = null;
-                    numGoodDirections--;
-                }
+                debugGrid.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
             }
-			
-			#region DEBUG
-			if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-			{
-				debugGrid.toLog(DebugManager.Logs.LevelGen, "Current Map with " + numGoodDirections + " options.");
-			}
-			#endregion
-            // If all directions are bad, back up
-            if (numGoodDirections == 0)
+            #endregion
+
+            // If found target, return path we took
+            Value2D<GridType> targetDir = options.GetDirWithVal(targets, filter);
+            if (targetDir != null)
             {
+                #region DEBUG
+                if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
+                }
+                #endregion
+                pathTaken.Push(targetDir);
+                return pathTaken;
+            }
+
+            // Didn't find target, pick random direction
+            targetDir = options.GetRandom(rand, filter);
+            if (targetDir == null)
+            { // If all directions are bad, back up
                 pathTaken.Pop();
             }
             else
             {
-                // Pick one dir
-                dirChosen = rand.Next(numGoodDirections);
-                for (int i = 0; i <= dirChosen; i++)
-                { // Adjusting dirChosen index for nulls
-                    if (directionOptions[i] == null) {
-                        dirChosen++;
-                    }
-                }
 				#region DEBUG
 				if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 				{
-					DebugManager.w (DebugManager.Logs.LevelGen, "Chose Direction: " + directionOptions[dirChosen]);
+					DebugManager.w (DebugManager.Logs.LevelGen, "Chose Direction: " + targetDir);
 				}
 				#endregion
-
-                // Move that dir
-                startPoint = directionOptions[dirChosen];
+                startPoint = targetDir;
                 pathTaken.Push(startPoint);
             }
         }

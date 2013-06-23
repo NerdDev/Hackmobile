@@ -6,6 +6,7 @@ using System.Collections.Generic;
 abstract public class LayoutObject {
 
     protected Point shiftP = new Point();
+    List<LayoutObject> connectedTo = new List<LayoutObject>();
 
     #region Shifts
     public void shift(int x, int y)
@@ -304,10 +305,6 @@ abstract public class LayoutObject {
                 return '#';
             case GridType.NULL:
                 return ' ';
-            case GridType.INTERNAL_RESERVED_REJECTED:
-                return '<';
-            case GridType.INTERNAL_RESERVED_ACCEPTED:
-                return '>';
             case GridType.INTERNAL_RESERVED_BLOCKED:
                 return '*';
             case GridType.INTERNAL_RESERVED_CUR:
