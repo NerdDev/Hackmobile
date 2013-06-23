@@ -6,6 +6,7 @@ public class LevelBuilder : MonoBehaviour {
 	public GameObject[,] Build(LevelLayout layout, Theme theme)
 	{
 		GridArray array = layout.GetArray();
+        GameObject holder = new GameObject("Level Block Holder");
 		GameObject[,] goArr = new GameObject[array.getWidth(),array.getHeight()];
 		foreach (Value2D<GridType> val in array)
         {
@@ -13,6 +14,7 @@ public class LevelBuilder : MonoBehaviour {
             if (protoType != null)
             {
                 GameObject obj = Instantiate(protoType) as GameObject;
+                obj.transform.parent = holder.transform;
                 obj.transform.Translate(new Vector3(val.x, 0, val.y));
                 goArr[val.x, val.y] = obj;
             }
