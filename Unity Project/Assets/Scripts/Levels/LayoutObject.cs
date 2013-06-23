@@ -44,7 +44,7 @@ abstract public class LayoutObject {
 			DebugManager.w (DebugManager.Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
 		}
 		#endregion
-		while(this.intersects(rhs))
+		while(this.intersects(rhs, 0))
 		{
             // Shift small increments until not overlapping
             shift(reduc);
@@ -236,21 +236,29 @@ abstract public class LayoutObject {
     #endregion
 
     #region Intersects
-    public bool intersects(LayoutObject rhs)
+    public bool intersects(LayoutObject rhs, int buffer)
     {
-        return GetBounding().intersects(rhs.GetBounding());
+        Bounding rhsBound = rhs.GetBounding();
+        if (buffer != 0)
+        {
+            rhsBound.xMax += buffer;
+            rhsBound.yMax += buffer;
+            rhsBound.xMin -= buffer;
+            rhsBound.yMin -= buffer;
+        }
+        return GetBounding().intersects(rhsBound);
     }
 
-    public bool intersects(List<LayoutObject> list)
+    public bool intersects(List<LayoutObject> list, int buffer)
     {
-		return null != intersectObj(list);
+		return null != intersectObj(list, buffer);
     }
 	
-	public LayoutObject intersectObj(List<LayoutObject> list)
+	public LayoutObject intersectObj(List<LayoutObject> list, int buffer)
 	{
         foreach (LayoutObject rhs in list)
         {
-            if (intersects(rhs))
+            if (intersects(rhs, buffer))
             {
                 return rhs;
             }

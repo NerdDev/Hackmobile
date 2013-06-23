@@ -101,8 +101,8 @@ public class Bounding {
     #region Intersects
     public void boundingDimensions(Bounding rhs, out int width, out int height)
     {
-        width = System.Math.Min(xMax - rhs.xMin, rhs.xMax - xMin);
-        height = System.Math.Min(yMax - rhs.yMin, rhs.yMax - yMin);
+        width = System.Math.Min(xMax - rhs.xMin, rhs.xMax - xMin) + 1;
+        height = System.Math.Min(yMax - rhs.yMin, rhs.yMax - yMin) + 1;
     }
 
     public int intersectArea(Bounding rhs)

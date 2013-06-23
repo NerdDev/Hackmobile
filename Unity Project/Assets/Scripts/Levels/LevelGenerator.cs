@@ -159,7 +159,11 @@ public class LevelGenerator
             #endregion
             // Keep moving until room doesn't overlap any other rooms
 			LayoutObject intersect;
-            while ((intersect = room.intersectObj(placedRooms)) != null)
+            if (room.roomNum == 12)
+            {
+                int wer = 23;
+            }
+            while ((intersect = room.intersectObj(placedRooms, 1)) != null)
             {
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
