@@ -21,6 +21,9 @@ public class LevelGenerator
     public static int doorsMin { get { return 1; } }
     public static int doorsMax { get { return 5; } } //Max not inclusive
     public static int minDoorSpacing { get { return 2; } }
+
+    // Margin space on room layout
+    public static int layoutMargin { get { return 8; } }
     #endregion
 
     public static System.Random rand = new System.Random();
@@ -159,10 +162,6 @@ public class LevelGenerator
             #endregion
             // Keep moving until room doesn't overlap any other rooms
 			LayoutObject intersect;
-            if (room.roomNum == 12)
-            {
-                int wer = 23;
-            }
             while ((intersect = room.intersectObj(placedRooms, 1)) != null)
             {
                 #region DEBUG
@@ -271,6 +270,7 @@ public class LevelGenerator
         }
         #endregion
         Bounding bounds = layout.GetBounding();
+        bounds.expand(layoutMargin);
         GridArray grids = layout.GetArray(bounds);
         GridMap doors = layout.getTypes(grids, GridType.Door);
         foreach (Value2D<GridType> door in doors)

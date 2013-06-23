@@ -137,20 +137,13 @@ public class Bounding {
     }
     #endregion Intersects
 
-    #region UNUSED
-    // Returns bounding box of intersection, maintaining correct position.
-    public Bounding intersectBoundingAbsolute(Bounding rhs)
+    public void expand(int amount)
     {
-        //Bounding leftMost = xMin < rhs.xMin ? this : rhs;
-        //Bounding rightMost = xMin > rhs.xMin ? this : rhs;
-        //Bounding bottomMost = yMin < rhs.yMin ? this : rhs;
-        //Bounding topMost = yMin > rhs.yMin ? this : rhs;
-        
-        //Bounding ret = new Bounding();
-
-        throw new NotImplementedException();
+        xMax += amount;
+        yMax += amount;
+        xMin -= amount;
+        yMin -= amount;
     }
-    #endregion
 
     #region Printing
     public override string ToString()

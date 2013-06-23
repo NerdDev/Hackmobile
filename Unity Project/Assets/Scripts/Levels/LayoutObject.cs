@@ -239,13 +239,7 @@ abstract public class LayoutObject {
     public bool intersects(LayoutObject rhs, int buffer)
     {
         Bounding rhsBound = rhs.GetBounding();
-        if (buffer != 0)
-        {
-            rhsBound.xMax += buffer;
-            rhsBound.yMax += buffer;
-            rhsBound.xMin -= buffer;
-            rhsBound.yMin -= buffer;
-        }
+        rhsBound.expand(buffer);
         return GetBounding().intersects(rhsBound);
     }
 
