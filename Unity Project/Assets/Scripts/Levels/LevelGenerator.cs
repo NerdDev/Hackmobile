@@ -39,13 +39,16 @@ public class LevelGenerator
         #region DEBUG
         int debugNum = 1;
         float stepTime = 0, startTime = 0;
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
-            DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
-            DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
+                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
+                DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
+                DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
+            }
             stepTime = Time.realtimeSinceStartup;
             startTime = stepTime;
         }
@@ -55,39 +58,51 @@ public class LevelGenerator
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         #region DEBUG
-        if (DebugManager.logging())
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Room took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
+            }
         }
-		
+
         #endregion
         placeRooms(rooms, layout);
         #region DEBUG
-        if (DebugManager.logging())
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Rooms took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
+            }
         }
         #endregion
         placeDoors(layout);
         #region DEBUG
-        if (DebugManager.logging())
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Doors took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
+            }
         }
         #endregion
         placePaths(layout);
         #region DEBUG
-        if (DebugManager.logging())
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Paths took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            }
         }
         #endregion
 
