@@ -219,7 +219,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public int Count()
     {
-        int ret = multimap.Count;
+        int ret = 0;
         foreach (SortedDictionary<int, T> row in multimap.Values)
         {
             ret += row.Count;
