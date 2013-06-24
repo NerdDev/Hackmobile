@@ -91,10 +91,11 @@ public class ItemMaster : MonoBehaviour {
 
     public Item CreateItem(Vector3 location, string itemName)
 	{
-        GameObject go = new GameObject();
+        GameObject go = new GameObject(itemName);
 		go.transform.position = location;
         Item item = go.AddComponent<Item>();
         item.setData(itemName);
+        Debug.Log(item.Model);
         MeshFilter mf = go.AddComponent<MeshFilter>();
         mf.mesh = (Resources.Load(item.Model) as GameObject).GetComponent<MeshFilter>().mesh;
         MeshRenderer mr = go.AddComponent<MeshRenderer>();

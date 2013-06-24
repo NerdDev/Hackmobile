@@ -10,7 +10,8 @@ public class LevelManager : MonoBehaviour {
     void Start()
     {
         LevelGenerator gen = new LevelGenerator();
-        LevelLayout layout = gen.generateLayout(0, 66511697, 1733302797);
+        System.Random rand = new System.Random();
+        LevelLayout layout = gen.generateLayout(0, rand.Next(10000000), 1733302797);
 		builder.Build(layout, theme);
     }
 

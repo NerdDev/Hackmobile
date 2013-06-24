@@ -53,7 +53,7 @@ public class GUIManager : MonoBehaviour {
 
 	void Start () 
 	{
-		StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
+		//StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
 	
 //			GrabNGUIReferences();
 			
