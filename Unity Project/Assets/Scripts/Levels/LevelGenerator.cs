@@ -24,6 +24,11 @@ public class LevelGenerator
 
     // Margin space on room layout
     public static int layoutMargin { get { return 8; } }
+
+    // Room modifier probabilies
+    public static int chanceNoBaseMod { get { return 40; } }
+    public static int chanceNoFlexMod { get { return 10; } }
+    public static int chanceNoEndMod { get { return 40; } }
     #endregion
 
     public static System.Random rand = new System.Random();
@@ -146,6 +151,28 @@ public class LevelGenerator
         }
         #endregion
         return rooms;
+    }
+
+    void modRooms(List<Room> rooms)
+    {
+        foreach (Room r in rooms)
+        {
+            foreach (RoomModifier mod in pickMods())
+            {
+                mod.Modify(r);
+            }
+        }
+    }
+
+    List<RoomModifier> pickMods()
+    {
+        List<RoomModifier> mods = new List<RoomModifier>();
+
+        if (chanceNoBaseMod < rand.Next(100))
+        {
+        }
+
+        return mods;
     }
 
     void placeRooms(List<Room> rooms, LevelLayout layout)
