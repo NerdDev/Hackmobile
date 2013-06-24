@@ -363,7 +363,7 @@ public class LevelGenerator
     static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
     {
 		#region DEBUG
-		if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+		if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 		{
 			DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
 			GridArray tmp = new GridArray(grids);
@@ -388,7 +388,7 @@ public class LevelGenerator
             // Don't want to visit the same point on a different route later
             blockedPoints.Put(true, startPoint.x, startPoint.y);
 			#region DEBUG
-			if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+			if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 			{ // Set up new print array
 				debugGrid = new GridArray(grids);
 				// Fill in blocked points
@@ -407,7 +407,7 @@ public class LevelGenerator
             // Get surrounding points
             Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y);
             #region DEBUG
-            if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 debugGrid.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
             }
@@ -418,7 +418,7 @@ public class LevelGenerator
             if (targetDir != null)
             {
                 #region DEBUG
-                if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
                 {
                     DebugManager.w(DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
                 }
@@ -436,7 +436,7 @@ public class LevelGenerator
             else
             {
 				#region DEBUG
-				if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+				if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
 				{
 					DebugManager.w (DebugManager.Logs.LevelGen, "Chose Direction: " + targetDir);
 				}
