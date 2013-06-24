@@ -101,16 +101,18 @@ public class ProbabilityList<T> where T : ProbabilityItem
         return default(T);
     }
 
-    T GetRemove(int randNum)
+    T GetRemove()
     {
         int picked = rand.Next(maxNum);
+        int i = 0;
         foreach (ProbContainer cont in itemList)
         {
             if (picked < cont.num)
             {
-                klsdfj
+                itemList.RemoveAt(i);
                 return cont.item;
             }
+            i++;
         }
         return default(T);
     }
@@ -143,15 +145,17 @@ public class ProbabilityList<T> where T : ProbabilityItem
 
     public List<T> GetUnique(int amount)
     {
-        List<int> randNums = new List<int>();
-        while (randNums.Count < amount && randNums.Count < itemList.Count)
+        List<T> ret = new List<T>();
+        ProbabilityList<T> copy = new ProbabilityList<T>(this);
+        for (int i = 0; i < amount; i++)
         {
-            int picked = rand.Next(maxNum);
-            if (!randNums.Contains(picked))
+            T item = copy.GetRemove();
+            if (item != null)
             {
-                randNums.Add(picked);
+                ret.Add(item);
             }
         }
+        return ret;
     }
 
     public List<T> Get(int amount)

@@ -37,13 +37,25 @@ abstract public class RoomModifier : ProbabilityItem {
 
     public static List<RoomModifier> GetFlexible(int num)
     {
-        return mods[(int)RoomModType.Base].Get();
+        return mods[(int)RoomModType.Flexible].Get(num);
+    }
+
+    public static RoomModifier GetFinal()
+    {
+        return mods[(int)RoomModType.Final].Get();
+    }
+
+    public override string ToString()
+    {
+        return GetName();
     }
 
     // Inherited Functions
     public abstract void Modify(Room room, System.Random rand);
 
     public new abstract RoomModType GetType();
+
+    public abstract string GetName();
 
     public int ProbabilityDiv()
     {

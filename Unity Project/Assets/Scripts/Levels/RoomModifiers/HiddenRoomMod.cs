@@ -70,14 +70,13 @@ public class HiddenRoomMod : RoomModifier {
         #endregion
     }
 
-
     public override RoomModType GetType()
     {
         return RoomModType.Flexible;
     }
 
-    public override int GetProbabilityDivider()
+    public override string GetName()
     {
-        return 1;
+        return "Hidden Room";
     }
 }
