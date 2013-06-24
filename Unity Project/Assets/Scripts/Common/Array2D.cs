@@ -141,7 +141,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     }
 
     // Fills in a row with a desired value
-    public void PutRow(T t, int xl, int xr, int y)
+    public virtual void PutRow(T t, int xl, int xr, int y)
     {
         for (; xl <= xr; xl++)
         {

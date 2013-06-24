@@ -5,6 +5,7 @@ public class HiddenRoomMod : RoomModifier {
 
   public override void Modify(Room room, System.Random rand)
     {
+        int secretRoomSize = 2;
         int minDoorSpacing = 0;
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -12,35 +13,21 @@ public class HiddenRoomMod : RoomModifier {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Hidden Room Mod");
         }
         #endregion
-        GridMap potentialDoors = room.GetPotentialDoors();
-            int numDoors = 1;
+            GridMap potentialDoors = room.GetPotentialDoors();
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 potentialDoors.toLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
-                DebugManager.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
-
-                Value2D<GridType> doorSpace = potentialDoors.RandomValue(rand);
+            Value2D<GridType> doorSpace = potentialDoors.RandomValue(rand);
                 if (doorSpace != null)
-                {
+                { 
+                    room.BoxStrokeAndFill(GridType.Wall,GridType.Floor,
+                        (doorSpace.x-secretRoomSize),(doorSpace.x+secretRoomSize),
+                        (doorSpace.y-secretRoomSize),(doorSpace.y+secretRoomSize));
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
-                    potentialDoors.Remove(doorSpace.x, doorSpace.y, minDoorSpacing - 1);
-                    #region DEBUG
-                    if (DebugManager.logging(DebugManager.Logs.LevelGen))
-                    {
-                        room.toLog(DebugManager.Logs.LevelGen, "Generated door at: " + doorSpace);
-                        potentialDoors.toLog(DebugManager.Logs.LevelGen, "Remaining options");
-                    }
-                    #endregion
                 }
-                #region DEBUG
-                else if (DebugManager.logging(DebugManager.Logs.LevelGen))
-                {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "No door options remain.");
-                }
-                #endregion
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {

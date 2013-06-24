@@ -21,6 +21,7 @@ abstract public class RoomModifier : ProbabilityItem {
         ProbabilityList<RoomModifier> finalMods = modsList[(int)RoomModType.Final];
 
         flexMods.Add(new PillarMod());
+        flexMods.Add(new HiddenRoomMod());
 
         #region Internal
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))

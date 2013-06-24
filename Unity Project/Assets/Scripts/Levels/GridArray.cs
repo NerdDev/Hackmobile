@@ -91,4 +91,32 @@ public class GridArray : Array2D<GridType> {
         }
         return ret;
     }
+
+
+    // Fills in a row with a desired value
+    public override void PutRow(GridType t, int xl, int xr, int y)
+    {
+        for (; xl <= xr; xl++)
+        {
+            if (t != GridType.NULL)
+            {
+                arr[y, xl] = t;
+            }
+        }
+    }
+
+    // Fills in a col with a desired value
+    public override void PutCol(GridType t, int y1, int y2, int x)
+    {
+        for (; y1 <= y2; y1++)
+        {
+            if (t != GridType.NULL)
+            {
+                arr[y1, x] = t;
+            }
+        }
+    }
+
+
+
 }
