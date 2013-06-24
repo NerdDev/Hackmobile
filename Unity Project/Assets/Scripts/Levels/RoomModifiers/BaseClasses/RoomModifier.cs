@@ -3,39 +3,49 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class RoomModifier {
+abstract public class RoomModifier : ProbabilityItem {
 
-    static RoomModifier[][] modArr = new RoomModifier[Enum.GetNames(typeof(RoomModType)).Length][];
+    static ProbabilityList<RoomModifier>[] mods = new ProbabilityList<RoomModifier>[Enum.GetNames(typeof(RoomModType)).Length];
 
     public static void RegisterModifiers()
     {
         #region Internal
-        List<List<RoomModifier>> mods = new List<List<RoomModifier>>();
+        List<ProbabilityList<RoomModifier>> modsList = new List<ProbabilityList<RoomModifier>>();
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
-            mods.Add(new List<RoomModifier>());
+            modsList.Add(new ProbabilityList<RoomModifier>());
         }
         #endregion Internal
-        List<RoomModifier> baseMods = mods[(int)RoomModType.Base];
-        List<RoomModifier> flexMods = mods[(int)RoomModType.Flexible];
-        List<RoomModifier> finalMods = mods[(int)RoomModType.Final];
+        ProbabilityList<RoomModifier> baseMods = modsList[(int)RoomModType.Base];
+        ProbabilityList<RoomModifier> flexMods = modsList[(int)RoomModType.Flexible];
+        ProbabilityList<RoomModifier> finalMods = modsList[(int)RoomModType.Final];
 
         flexMods.Add(new PillarMod());
 
         #region Internal
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
-            modArr[(int)e] = mods[(int)e].ToArray();
+            mods[(int)e] = modsList[(int)e];
         }
         #endregion Internal
+    }
+
+    public static RoomModifier GetBase()
+    {
+        return mods[(int)RoomModType.Base].Get();
+    }
+
+    public static List<RoomModifier> GetFlexible(int num)
+    {
+        return mods[(int)RoomModType.Base].Get();
     }
 
     // Inherited Functions
     public abstract void Modify(Room room);
 
-    public abstract RoomModType GetType();
+    public new abstract RoomModType GetType();
 
-    public virtual int GetProbabilityDivider()
+    public int ProbabilityDiv()
     {
         return 1;
     }
