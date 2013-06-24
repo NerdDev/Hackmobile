@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PillarMod : RoomModifier {
 
-    public override void Modify(Room room)
+    public override void Modify(Room room, System.Random rand)
     {
     }
 
