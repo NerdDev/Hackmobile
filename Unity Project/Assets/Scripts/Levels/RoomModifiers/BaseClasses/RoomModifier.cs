@@ -31,7 +31,7 @@ abstract public class RoomModifier {
     }
 
     // Inherited Functions
-    public abstract void Modify(Room room);
+    public abstract void Modify(Room room, System.Random rand);
 
     public abstract RoomModType GetType();
 
