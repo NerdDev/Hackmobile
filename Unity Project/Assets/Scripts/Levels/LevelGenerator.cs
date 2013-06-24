@@ -27,8 +27,8 @@ public class LevelGenerator
 
     // Room modifier probabilies
     public static int chanceNoBaseMod { get { return 40; } }
-    public static int chanceNoFlexMod { get { return 10; } }
-    public static int chanceNoEndMod { get { return 40; } }
+    public static int maxFlexMod { get { return 5; } } //Max not inclusive
+    public static int chanceNoFinalMod { get { return 40; } }
     #endregion
 
     public static System.Random rand = new System.Random();
@@ -167,11 +167,15 @@ public class LevelGenerator
     List<RoomModifier> pickMods()
     {
         List<RoomModifier> mods = new List<RoomModifier>();
-
         if (chanceNoBaseMod < rand.Next(100))
         {
+            mods.Add(RoomModifier.GetBase());
         }
-
+        mods.AddRange(RoomModifier.GetFlexible(rand.Next(1, maxFlexMod)));
+        if (chanceNoFinalMod < rand.Next(100))
+        {
+            mods.Add(RoomModifier.GetFinal());
+        }
         return mods;
     }
 
