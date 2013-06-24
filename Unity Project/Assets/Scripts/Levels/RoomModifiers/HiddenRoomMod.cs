@@ -5,8 +5,6 @@ public class HiddenRoomMod : RoomModifier {
 
   public override void Modify(Room room, System.Random rand)
     {
-        int doorsMin = 0;
-        int doorsMax = 0;
         int minDoorSpacing = 0;
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -14,17 +12,8 @@ public class HiddenRoomMod : RoomModifier {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Hidden Room Mod");
         }
         #endregion
-            GridMap potentialDoors = room.getWalls();
-            GridMap corneredAreas = room.getCorneredBy(GridType.Wall, GridType.Wall);
-            #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
-            {
-                potentialDoors.toLog(DebugManager.Logs.LevelGen, "Original Room");
-                corneredAreas.toLog(DebugManager.Logs.LevelGen, "Cornered Areas");
-            }
-            #endregion
-            potentialDoors.RemoveAll(corneredAreas);
-            int numDoors = rand.Next(doorsMin, doorsMax);
+        GridMap potentialDoors = room.GetPotentialDoors();
+            int numDoors = 1;
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -32,8 +21,7 @@ public class HiddenRoomMod : RoomModifier {
                 DebugManager.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
-            for (int i = 0; i < numDoors; i++)
-            {
+
                 Value2D<GridType> doorSpace = potentialDoors.RandomValue(rand);
                 if (doorSpace != null)
                 {
@@ -53,7 +41,6 @@ public class HiddenRoomMod : RoomModifier {
                     DebugManager.w(DebugManager.Logs.LevelGen, "No door options remain.");
                 }
                 #endregion
-            }
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
