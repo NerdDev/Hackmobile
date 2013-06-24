@@ -67,7 +67,7 @@ public class LayoutObjectLeaf : LayoutObject {
     #endregion GetSet
 
     #region FillMethods
-    protected void BoxStroke(GridType t, int width, int height)
+    public void BoxStroke(GridType t, int width, int height)
     {
         int centerX = grids.getWidth() / 2;
         int centerY = grids.getHeight() / 2;
@@ -75,7 +75,7 @@ public class LayoutObjectLeaf : LayoutObject {
             centerY - height / 2, centerY + height / 2 - 1);
     }
 
-    protected void BoxStroke(GridType t, int xl, int xr, int yb, int yt)
+    public void BoxStroke(GridType t, int xl, int xr, int yb, int yt)
     {
         putRow(t, xl, xr, yb);
         putRow(t, xl, xr, yt);
@@ -85,12 +85,12 @@ public class LayoutObjectLeaf : LayoutObject {
         putCol(t, yb, yt, xr);
     }
 
-    protected void BoxStrokeAndFill(GridType stroke, GridType fill, int width, int height)
+    public void BoxStrokeAndFill(GridType stroke, GridType fill, int width, int height)
     {
         BoxStrokeAndFill(stroke, fill, 0, width - 1, 0, height - 1);
     }
 
-    protected void BoxStrokeAndFill(GridType stroke, GridType fill, int xl, int xr, int yb, int yt)
+    public void BoxStrokeAndFill(GridType stroke, GridType fill, int xl, int xr, int yb, int yt)
     {
         grids.PutRow(stroke, xl, xr, yb);
         grids.PutRow(stroke, xl, xr, yt);
@@ -103,7 +103,7 @@ public class LayoutObjectLeaf : LayoutObject {
         grids.putSquare(fill, xl, xr, yb, yt);
     }
 
-    protected void BoxFill(GridType t, int width, int height)
+    public void BoxFill(GridType t, int width, int height)
     {
         int centerX = grids.getWidth() / 2;
         int centerY = grids.getHeight() / 2;
@@ -111,7 +111,7 @@ public class LayoutObjectLeaf : LayoutObject {
             centerY - height / 2, centerY + height / 2 - 1);
     }
 
-    protected void BoxFill(GridType t, int xl, int xr, int yb, int yt)
+    public void BoxFill(GridType t, int xl, int xr, int yb, int yt)
     {
         grids.putSquare(t, xl, xr, yb, yt);
     }
