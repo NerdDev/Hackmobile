@@ -41,7 +41,7 @@ abstract public class RoomModifier : ProbabilityItem {
     }
 
     // Inherited Functions
-    public abstract void Modify(Room room);
+    public abstract void Modify(Room room, System.Random rand);
 
     public new abstract RoomModType GetType();
 

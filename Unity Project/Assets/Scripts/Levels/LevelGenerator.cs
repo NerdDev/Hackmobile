@@ -159,7 +159,7 @@ public class LevelGenerator
         {
             foreach (RoomModifier mod in pickMods())
             {
-                mod.Modify(r);
+                mod.Modify(r,rand);
             }
         }
     }
