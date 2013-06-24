@@ -3,37 +3,33 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using XML;
+using System.IO;
 
 public class DataManager : MonoBehaviour
 {
-    //TODO: Write deletion code for when these are parsed and stored.
-    XMLReader xmlItems;
-    XMLReader xmlNPCs;
-    XMLReader xmlMaterials;
-
     #region Storage Maps.
     Dictionary<string, Dice> Dice = new Dictionary<string, Dice>();
     #endregion
 
     #region XML Paths.
-    //TODO: Abstract all XML paths to a central XML which links to the rest of the XML's?
-    string npcsPath = "Assets/Resources/XML/npcs.xml";
-    string itemsPath = "Assets/Resources/XML/items.xml";
-    string materialsPath = "Assets/Resources/XML/materials.xml";
-    //Optional TODO: Add file path searching for additional XML's to load and parse by headers.
+    string XMLPath = "Assets/Resources/XML/";
+
+    Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
     #endregion
 
     void Start ()
     {
-        //Order matters here.
-        xmlMaterials = new XMLReader(materialsPath);
-        parseMaterials(xmlMaterials.getRoot());
+        //Parsing functions here
+        parsing.Add("items", parseItems);
+        parsing.Add("npcs", parseNPCs);
+        parsing.Add("materials", parseMaterials);
 
-        xmlItems = new XMLReader(itemsPath);
-        parseItems(xmlItems.getRoot());
-
-        xmlNPCs = new XMLReader(npcsPath);
-        parseNPCs(xmlNPCs.getRoot());
+        string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
+        foreach (string file in files)
+        {
+            Debug.Log(file);
+            parseXML(new XMLReader(file));
+        }
     }
 
     public Dice getDice(string dice)
@@ -51,28 +47,41 @@ public class DataManager : MonoBehaviour
     }
 
     #region XML Parsing methods.
-    void parseItems(XMLNode x)
+
+    void parseXML(XMLReader xreader)
     {
-        foreach (XMLNode m in x.select("weapons").get())
+        foreach (XMLNode x in xreader.getRoot().get()) {
+            parsing[x.getKey()](x);
+        }
+    }
+    
+    void parseItems(XMLNode top)
+    {
+        foreach (XMLNode x in top.get())
         {
-            parseItem(m, "weapon");
+            List<Item> items = new List<Item>();
+            foreach (XMLNode xnode in x.get())
+            {
+                items.Add(parseItem(xnode));
+            }
+            BigBoss.ItemMaster.getCategories().Add(x.getKey(), items);
         }
     }
 
-    private void parseItem(XMLNode m, string type)
+    private Item parseItem(XMLNode x)
     {
-        string itemName = m.SelectString("name");
+        string itemName = x.SelectString("name");
         GameObject go = new GameObject(itemName);
         Item i = go.AddComponent<Item>();
-        i.Type = type;
+        i.Type = x.getKey();
         i.Name = itemName;
-        i.parseXML(m);
-        BigBoss.ItemMaster.getItems().Add(i.Name, i);
+        i.parseXML(x);
+        return i;
     }
 
     void parseMaterials(XMLNode x)
     {
-        foreach (XMLNode m in x.select("materials").get())
+        foreach (XMLNode m in x.get())
         {
             MaterialType mat = new MaterialType();
             mat.parseXML(m);
@@ -82,7 +91,7 @@ public class DataManager : MonoBehaviour
 
     void parseNPCs(XMLNode x)
     {
-        foreach (XMLNode m in x.select("npcs").get())
+        foreach (XMLNode m in x.get())
         {
             string npcName = m.SelectString("name");
             GameObject go = new GameObject(npcName);

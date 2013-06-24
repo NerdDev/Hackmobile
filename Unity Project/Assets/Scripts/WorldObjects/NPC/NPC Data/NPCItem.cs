@@ -14,6 +14,6 @@ public class NPCItem
     {
         this.Name = x.SelectString("itemname");
         this.Chance = x.SelectInt("chance");
-        this.Count = x.SelectInt("count");
+        this.Count = x.SelectInt("number");
     }
 }

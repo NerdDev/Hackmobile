@@ -125,7 +125,7 @@ public class Item : WorldObject, PassesTurns
     {
         base.parseXML(x);
         this.Damage = BigBoss.DataManager.getDice(x.SelectString("damage"));
-        this.Material = BigBoss.ItemMaster.getMaterial(x.SelectString("material"));
+        this.mat = x.SelectString("material");
         stats.parseXML(x.select("stats"));
     }
     #endregion

@@ -17,6 +17,7 @@ public class ItemMaster : MonoBehaviour {
     Item nullItem { get; set; }
 
     Dictionary<string, Item> baseItems = new Dictionary<string, Item>();
+    Dictionary<string, List<Item>> itemCategories = new Dictionary<string, List<Item>>();
     Dictionary<string, MaterialType> materials = new Dictionary<string, MaterialType>();
 		
 	// Use this for initialization
@@ -82,6 +83,11 @@ public class ItemMaster : MonoBehaviour {
     public Dictionary<string, Item> getItems()
     {
         return baseItems;
+    }
+
+    public Dictionary<string, List<Item>> getCategories()
+    {
+        return itemCategories;
     }
 
     public Dictionary<string, MaterialType> getMaterials()
