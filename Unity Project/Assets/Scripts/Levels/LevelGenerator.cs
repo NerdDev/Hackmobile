@@ -250,16 +250,7 @@ public class LevelGenerator
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
-            GridMap potentialDoors = room.getWalls();
-            GridMap corneredAreas = room.getCorneredBy(GridType.Wall, GridType.Wall);
-			#region DEBUG
-			if (DebugManager.logging(DebugManager.Logs.LevelGen))
-			{
-                potentialDoors.toLog(DebugManager.Logs.LevelGen, "Original Room");
-                corneredAreas.toLog(DebugManager.Logs.LevelGen, "Cornered Areas");
-			}
-			#endregion
-            potentialDoors.RemoveAll(corneredAreas);
+            GridMap potentialDoors = room.GetPotentialDoors();
             int numDoors = rand.Next(doorsMin, doorsMax);
 			#region DEBUG
 			if (DebugManager.logging(DebugManager.Logs.LevelGen))
