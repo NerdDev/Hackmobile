@@ -19,9 +19,9 @@ public class NPCBodyParts
 
     public void parseXML(XMLNode x)
     {
-        Arms = Nifty.StringToInt(x.select("arms").getText());
-        Legs = Nifty.StringToInt(x.select("legs").getText());
-        Heads = Nifty.StringToInt(x.select("heads").getText());
+        Arms = x.SelectInt("arms");
+        Legs = x.SelectInt("legs");
+        Heads = x.SelectInt("heads");
     }
 
     public void setNull()

@@ -61,7 +61,7 @@ public class DataManager : MonoBehaviour
 
     private void parseItem(XMLNode m, string type)
     {
-        string itemName = m.select("name").getText();
+        string itemName = m.SelectString("name");
         GameObject go = new GameObject(itemName);
         Item i = go.AddComponent<Item>();
         i.Type = type;
@@ -84,7 +84,7 @@ public class DataManager : MonoBehaviour
     {
         foreach (XMLNode m in x.select("npcs").get())
         {
-            string npcName = m.select("name").getText();
+            string npcName = m.SelectString("name");
             GameObject go = new GameObject(npcName);
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;

@@ -30,10 +30,10 @@ public class ItemStats
 
     public void parseXML(XMLNode x)
     {
-        this.Weight = Nifty.StringToInt(x.select("weight").getText());
-        this.Cost = Nifty.StringToInt(x.select("cost").getText());
-        this.Nutrition = Nifty.StringToInt(x.select("nutrition").getText());
-        this.Size = (Size) Enum.Parse(size.GetType(), x.select("equipsize").getText(), true);
+        this.Weight = x.SelectInt("weight");
+        this.Cost = x.SelectInt("cost");
+        this.Nutrition = x.SelectInt("nutrition");
+        this.Size = x.SelectEnum<Size>("equipsize");
     }
 
     public void setNull()
@@ -41,5 +41,6 @@ public class ItemStats
         this.Cost = 0;
         this.Weight = 0;
         this.nutrition = 0;
+        this.Size = Size.NONE;
     }
 }

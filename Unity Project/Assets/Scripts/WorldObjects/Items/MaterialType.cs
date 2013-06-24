@@ -17,11 +17,11 @@ public class MaterialType
         Hardness = 0;
     }
 
-    public void parseXML(XMLNode m)
+    public void parseXML(XMLNode x)
     {
-        this.Name = m.select("name").getText();
-        this.Hardness = Nifty.StringToInt(m.select("hardness").getText());
-        this.Burns = Nifty.StringToBool(m.select("burns").getText());
-        this.Oxidizes = Nifty.StringToBool(m.select("oxidizes").getText());
+        this.Name = x.SelectString("name");
+        this.Hardness = x.SelectInt("hardness");
+        this.Burns = x.SelectBool("burns");
+        this.Oxidizes = x.SelectBool("oxidizes");
     }
 }

@@ -95,11 +95,9 @@ public class ItemMaster : MonoBehaviour {
 		go.transform.position = location;
         Item item = go.AddComponent<Item>();
         item.setData(itemName);
-        Debug.Log(item.Model);
         MeshFilter mf = go.AddComponent<MeshFilter>();
         mf.mesh = (Resources.Load(item.Model) as GameObject).GetComponent<MeshFilter>().mesh;
         MeshRenderer mr = go.AddComponent<MeshRenderer>();
-        Debug.Log(item.ModelTexture);
         mr.material = Resources.Load(item.ModelTexture) as Material;
 		return item;
 	}

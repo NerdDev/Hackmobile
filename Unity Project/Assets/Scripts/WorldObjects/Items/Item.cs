@@ -123,10 +123,9 @@ public class Item : WorldObject, PassesTurns
     #region XML Parsing
     public void parseXML(XMLNode x)
     {
-        this.Damage = BigBoss.DataManager.getDice(x.select("damage").getText());
-        this.Material = BigBoss.ItemMaster.getMaterial(x.select("material").getText());
-        this.Model = x.select("model").getText();
-        this.ModelTexture = x.select("modeltexture").getText();
+        base.parseXML(x);
+        this.Damage = BigBoss.DataManager.getDice(x.SelectString("damage"));
+        this.Material = BigBoss.ItemMaster.getMaterial(x.SelectString("material"));
         stats.parseXML(x.select("stats"));
     }
     #endregion

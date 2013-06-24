@@ -146,36 +146,41 @@ public class NPC : WorldObject, PassesTurns
     #region XML Parsing
     public void parseXML(XMLNode x)
     {
-        this.role = (NPCRole)Enum.Parse(typeof(NPCRole), x.select("role").getText(), true);
-        this.race = (NPCRace)Enum.Parse(typeof(NPCRace), x.select("race").getText(), true);
-        this.Model = x.select("model").getText();
-        this.ModelTexture = x.select("modeltexture").getText();
+        //name is handled in DataManager so we get the GameObject name
+        base.parseXML(x);
+
+        this.role = x.SelectEnum<NPCRole>("role");
+        this.race = x.SelectEnum<NPCRace>("race");
 
         //property parsing
-        string temp = x.select("properties").getText();
+        string temp = x.SelectString("properties");
         string[] split = temp.Split(',');
         for (int i = 0; i < split.Length; i++)
         {
             //NPCProperties pr = (NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true);
-            this.effects.Add((NPCProperties)Enum.Parse(typeof(NPCProperties), split[i].Trim(), true), new Effect(true));
+            this.effects.Add(
+                Nifty.StringToEnum<NPCProperties>(split[i].Trim()),
+                new Effect(true));
         }
 
         //resistance parsing
-        temp = x.select("resistances").getText();
+        temp = x.SelectString("resistances");
         split = temp.Split(',');
         for (int i = 0; i < split.Length; i++)
         {
             //NPCProperties pr = (NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true);
-            this.effects.Add((NPCResistances)Enum.Parse(typeof(NPCResistances), split[i].Trim(), true), new Effect(true));
+            this.effects.Add(
+                Nifty.StringToEnum<NPCResistances>(split[i].Trim()), 
+                new Effect(true));
         }
 
         //flag parsing
-        temp = x.select("flags").getText();
+        temp = x.SelectString("flags");
         split = temp.Split(',');
         for (int i = 0; i < split.Length; i++)
         {
             //NPCFlags fl = (NPCFlags) Enum.Parse(typeof(NPCFlags), split[i], true);
-            this.flags[(NPCFlags)Enum.Parse(typeof(NPCFlags), split[i].Trim(), true)] = true;
+            this.flags[Nifty.StringToEnum<NPCFlags>(split[i].Trim())] = true;
         }
 
         //body part data
@@ -188,7 +193,6 @@ public class NPC : WorldObject, PassesTurns
         baseInventory = new List<NPCItem>();
         foreach (XMLNode xnode in x.select("inventory").get())
         {
-            Debug.Log(xnode.getKey());
             NPCItem baseItem = new NPCItem();
             baseItem.parseXML(xnode);
             this.baseInventory.Add(baseItem);

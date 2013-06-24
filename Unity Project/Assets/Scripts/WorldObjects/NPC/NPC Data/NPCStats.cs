@@ -66,13 +66,13 @@ public class NPCStats
 
     public void parseXML(XMLNode x)
     {
-        this.Strength = Nifty.StringToInt(x.select("strength").getText());
-        this.Charisma = Nifty.StringToInt(x.select("charisma").getText());
-        this.Intelligence = Nifty.StringToInt(x.select("intelligence").getText());
-        this.Wisdom = Nifty.StringToInt(x.select("wisdom").getText());
-        this.Dexterity = Nifty.StringToInt(x.select("dexterity").getText());
-        this.Constitution = Nifty.StringToInt(x.select("constitution").getText());
-        this.Difficulty = Nifty.StringToInt(x.select("difficulty").getText());
-        this.Size = (Size) Enum.Parse(size.GetType(), x.select("size").getText(), true);
+        this.Strength = x.SelectInt("strength");
+        this.Charisma = x.SelectInt("charisma");
+        this.Intelligence = x.SelectInt("intelligence");
+        this.Wisdom = x.SelectInt("wisdom");
+        this.Dexterity = x.SelectInt("dexterity");
+        this.Constitution = x.SelectInt("constitution");
+        this.Difficulty = x.SelectInt("difficulty");
+        this.Size = x.SelectEnum<Size>("size");
     }
 }

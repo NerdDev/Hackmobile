@@ -12,8 +12,8 @@ public class NPCItem
 
     public void parseXML(XMLNode x)
     {
-        this.Name = x.select("name").getText();
-        this.Chance = Nifty.StringToInt(x.select("chance").getText());
-        this.Count = Nifty.StringToInt(x.select("number").getText());
+        this.Name = x.SelectString("itemname");
+        this.Chance = x.SelectInt("chance");
+        this.Count = x.SelectInt("count");
     }
 }

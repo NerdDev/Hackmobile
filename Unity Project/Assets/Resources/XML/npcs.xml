@@ -1,5 +1,7 @@
 <npcs>
 	<npc name="newt">
+		<model>armor/shield2/shield2</model>
+		<modeltexture>armor/shield2/mat_shield2_1</modeltexture>
 		<role>creature</role>
 		<race>reptile</race>
 		<flags>nopoly, leaves_corpse</flags>
@@ -15,11 +17,9 @@
 			<difficulty>1</difficulty>
 			<size>small</size>
 		</stats>
-		<model>armor/shield2/shield2</model>
-		<modeltexture>armor/shield2/mat_shield2_1</modeltexture>
 		<inventory>
 			<item>
-				<name>axe2</name>
+				<itemname>axe2</itemname>
 				<chance>100</chance>
 				<number>1</number>
 			</item>

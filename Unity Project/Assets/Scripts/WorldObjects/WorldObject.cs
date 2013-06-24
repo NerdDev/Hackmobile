@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using XML;
 
 public class WorldObject : UniqueObject
 {
@@ -36,6 +37,13 @@ public class WorldObject : UniqueObject
         this.Model = wo.Model;
         this.ModelTexture = wo.ModelTexture;
         this.Name = wo.Name;
+    }
+
+    public void parseXML(XMLNode x)
+    {
+        //name is handled in DataManager so we get the GameObject name
+        this.Model = x.SelectString("model");
+        this.ModelTexture = x.SelectString("modeltexture");
     }
 
     public virtual void setNull()

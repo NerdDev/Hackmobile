@@ -42,32 +42,6 @@ public class Nifty
         }
     }
 
-    static public int StringToInt(string toParse)
-    {
-        int temp; 
-        if (int.TryParse(toParse, out temp)) 
-        {
-            return temp;
-        }
-        else 
-        {
-            throw new ArgumentException("String cannot be parsed to integer!");
-        }
-    }
-
-    static public bool StringToBool(string toParse)
-    {
-        bool temp;
-        if (bool.TryParse(toParse, out temp))
-        {
-            return temp;
-        }
-        else
-        {
-            throw new ArgumentException("String cannot be parsed to boolean!");
-        }
-    }
-
     /**
      * Grabs a set of random values off a dictionary.
      * 
@@ -96,6 +70,11 @@ public class Nifty
         System.Random rand = new System.Random();
         List<V> values = Enumerable.ToList(dict.Values);
         return values[rand.Next(dict.Count)];
+    }
+
+    public static T StringToEnum<T>(string toParse)
+    {
+        return (T)Enum.Parse(typeof(T), toParse, true);
     }
 }
 

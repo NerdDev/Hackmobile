@@ -172,5 +172,25 @@ namespace XML
         {
             this.text = text;
         }
+
+        public int SelectInt(string toParse)
+        {
+            return XMLNifty.StringToInt(this.select(toParse).getText());
+        }
+
+        public T SelectEnum<T>(string toParse)
+        {
+            return (T)Enum.Parse(typeof(T), this.select(toParse).getText(), true);
+        }
+
+        public string SelectString(string node)
+        {
+            return this.select(node).getText();
+        }
+
+        public bool SelectBool(string toParse)
+        {
+            return XMLNifty.StringToBool(this.select(toParse).getText());
+        }
     }
 }
