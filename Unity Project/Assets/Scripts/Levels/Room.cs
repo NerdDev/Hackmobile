@@ -28,8 +28,7 @@ public class Room : LayoutObjectLeaf {
             DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
         }
         #endregion
-        BoxFill(GridType.Floor, width - 1, height - 1);
-        BoxStroke(GridType.Wall, width, height);
+        BoxStrokeAndFill(GridType.Wall, GridType.Floor, width, height);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {

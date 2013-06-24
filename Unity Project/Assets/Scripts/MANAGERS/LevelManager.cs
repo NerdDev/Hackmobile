@@ -17,23 +17,25 @@ public class LevelManager : MonoBehaviour {
         JoseTest();
     }
 
-    void JustinTest()
+    void TestModifier(RoomModifier mod, int seed)
     {
+        System.Random rand = new System.Random(seed);
         Room room = new Room(0);
         room.generate();
-        PillarMod pillar = new PillarMod();
-        pillar.Modify(room, new System.Random());
-        DebugManager.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + pillar);
+        mod.Modify(room, rand);
+        DebugManager.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
         room.toLog(DebugManager.Logs.LevelGenMain);
+    }
+
+    void JustinTest()
+    {
+        System.Random rand = new System.Random();
+        TestModifier(new PillarMod(), rand.Next()); 
     }
 
     void JoseTest()
     {
-        Room room = new Room(0);
-        room.generate();
-        HiddenRoomMod hidden = new HiddenRoomMod();
-        hidden.Modify(room, new System.Random());
-        DebugManager.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + hidden);
-        room.toLog(DebugManager.Logs.LevelGenMain);
+        System.Random rand = new System.Random();
+        TestModifier(new HiddenRoomMod(), rand.Next());
     }
 }

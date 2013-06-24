@@ -98,7 +98,7 @@ public class GridArray : Array2D<GridType> {
     {
         for (; xl <= xr; xl++)
         {
-            if (t != GridType.NULL)
+            if (GridType.NULL == arr[y, xl])
             {
                 arr[y, xl] = t;
             }
@@ -110,13 +110,10 @@ public class GridArray : Array2D<GridType> {
     {
         for (; y1 <= y2; y1++)
         {
-            if (t != GridType.NULL)
+            if (GridType.NULL == arr[y1, x])
             {
                 arr[y1, x] = t;
             }
         }
     }
-
-
-
 }
