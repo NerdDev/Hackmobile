@@ -36,7 +36,7 @@ public class DebugManager : MonoBehaviour
     {
         GlobalLogging,
         LineNumbers,
-        LevelGenDFSSteps,
+        SearchSteps,
         Probability
     }
 

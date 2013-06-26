@@ -422,7 +422,7 @@ public class LevelGenerator
     static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
     {
         #region DEBUG
-        if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
             GridArray tmp = new GridArray(grids);
@@ -447,7 +447,7 @@ public class LevelGenerator
             // Don't want to visit the same point on a different route later
             blockedPoints.Put(true, startPoint.x, startPoint.y);
             #region DEBUG
-            if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             { // Set up new print array
                 debugGrid = new GridArray(grids);
                 // Fill in blocked points
@@ -466,7 +466,7 @@ public class LevelGenerator
             // Get surrounding points
             Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y);
             #region DEBUG
-            if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 debugGrid.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
             }
@@ -477,7 +477,7 @@ public class LevelGenerator
             if (targetDir != null)
             {
                 #region DEBUG
-                if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
                 {
                     DebugManager.w(DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
                 }
@@ -495,7 +495,7 @@ public class LevelGenerator
             else
             {
                 #region DEBUG
-                if (DebugManager.Flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
                 {
                     DebugManager.w(DebugManager.Logs.LevelGen, "Chose Direction: " + targetDir);
                 }
@@ -505,6 +505,50 @@ public class LevelGenerator
             }
         }
         return pathTaken;
+    }
+
+    static GridArray BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    {
+        return BreadthFirstFill(startPoint, grids, new HashSet<GridType>(targets));
+    }
+
+    // Not tested
+    static GridArray BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    {
+        #region DEBUG
+        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Breadth First Search Fill");
+            GridArray tmp = new GridArray(grids);
+            tmp.Put(GridType.INTERNAL_RESERVED_CUR, startPoint.x, startPoint.y);
+            tmp.toLog(DebugManager.Logs.LevelGen, "Starting Map:");
+        }
+        #endregion
+        Queue<Value2D<GridType>> queue = new Queue<Value2D<GridType>>();
+        queue.Enqueue(startPoint);
+        GridType[,] targetArr = grids.GetArr();
+        GridArray outGridArr = new GridArray(grids.GetBoundingInternal(), false);
+        Value2D<GridType> curPoint;
+        while (queue.Count > 0)
+        {
+            curPoint = queue.Dequeue();
+            outGridArr.Put(curPoint);
+            Surrounding<GridType> options = Surrounding<GridType>.Get(targetArr, curPoint.x, curPoint.y);
+            #region DEBUG
+            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                outGridArr.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
+            }
+            #endregion
+            foreach (Value2D<GridType> option in options)
+            {
+                if (targets.Contains(option.val))
+                {
+                    queue.Enqueue(option);
+                }
+            }
+        }
+        return outGridArr;
     }
 
     Point generateShiftMagnitude(int mag)

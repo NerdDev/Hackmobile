@@ -29,8 +29,12 @@ public class GridArray : Array2D<GridType> {
 	
 	public GridArray(Bounding bounds, bool minimize) : base(bounds, minimize)
 	{
-		
 	}
+
+    public GridArray(GridType[,] arr)
+    {
+        this.arr = arr;
+    }
 	
 	protected override Comparator<GridType> getDefaultComparator ()
 	{
