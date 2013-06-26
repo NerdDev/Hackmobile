@@ -67,46 +67,6 @@ abstract public class LayoutObject {
     }
     #endregion Shifts
 
-    #region UNUSED
-    public void ShiftOutsideBulk(LayoutObject rhs, Point dir)
-    { // Unused atm, broken
-        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Shift Outside Bulk");
-		
-		setShift (rhs);  // Algorithm assumes they're centered on each other
-        int xMagn = (int)Math.Abs(dir.x);
-        int yMagn = (int)Math.Abs(dir.y);
-        int xMove, yMove;
-		Bounding bound = GetBounding();
-		Bounding rhsBound = rhs.GetBounding();
-        float magRatio;
-        // Find which has largest magnitude and move fully that direction first
-        if (xMagn > yMagn)
-        { // X larger magnitude
-            xMove = bound.width / 2 + rhsBound.width / 2 + 1;
-            magRatio = yMagn == 0 ? 0 : ((float)yMagn) / xMagn;
-            yMove = (int)(xMove * magRatio);
-        } 
-        else
-        { // Y larger magnitude
-            yMove = bound.height / 2 + rhsBound.height / 2 + 1;
-            magRatio = xMagn == 0 ? 0 : ((float)xMagn) / yMagn;
-            xMove = (int)(yMove * magRatio);
-        }
-
-        // Execute shift to the outside, adjusting to give right direction
-        xMove = xMove * Math.Sign(dir.x);
-        yMove = yMove * Math.Sign(dir.y);
-        shift(xMove, yMove);
-
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-			DebugManager.w(DebugManager.Logs.LevelGen, "Bounds1: " + bound + " Bounds2: " + rhsBound);
-            DebugManager.w(DebugManager.Logs.LevelGen, "XMag: " + xMagn + " YMag: " + yMagn + " magRatio: " + magRatio + " xMove: " + xMove + " yMove: " + yMove);
-        }
-        DebugManager.printFooter(DebugManager.Logs.LevelGen);
-    }
-    #endregion
-
     #region Bounds
     public Bounding GetBounding()
     {
