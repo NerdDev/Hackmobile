@@ -30,4 +30,6 @@ public enum NPCProperties : long
 
     //detriments
     POISONED,
+
+    LAST, //this is a marker of the number of properties in the enum
 }

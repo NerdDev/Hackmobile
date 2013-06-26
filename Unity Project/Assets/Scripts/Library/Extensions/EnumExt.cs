@@ -118,6 +118,11 @@ public static class EnumExt
         return !EnumExt.Has<T>(obj, value);
     }
 
+    public static long val(this Enum obj)
+    {
+        return Convert.ToInt64(obj);
+    }
+
     #endregion
 
     #region Helper Classes

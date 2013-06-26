@@ -40,12 +40,13 @@ public class NPC : WorldObject, PassesTurns
     //Initialized all to null for the base.
     //Converted from base properties upon creation of instance.
     public Dictionary<Item, int> inventory = null;
-    protected Dictionary<Enum, NPCEffect> effects = null;
     #endregion
 
     #region Generic NPC Properties
     //Properties stored here.
     public GenericFlags<NPCProperties> properties = new GenericFlags<NPCProperties>();
+    //When accessing, use the long value of NPC Properties.
+    protected NPCEffect[] effects = new NPCEffect[(long)NPCProperties.LAST];
 
     //All sets of flags
     Flags<NPCFlags> flags = new Flags<NPCFlags>();
@@ -68,15 +69,17 @@ public class NPC : WorldObject, PassesTurns
     #region Effects
     public void applyEffect(NPCProperties e, int priority, bool item)
     {
-        if (!effects.ContainsKey(e))
+        if (effects[(long) e] == null)
         {
             NPCEffect eff = new NPCEffect(e, this);
-            effects.Add(e, eff);
-            effects[e].apply(priority, item);
+
+            effects[(long) e] = eff;
+            eff.apply(priority, item);
+            
         }
         else
         {
-            effects[e].apply(priority, item);
+            effects[(long) e].apply(priority, item);
         }
     }
     #endregion
@@ -131,7 +134,10 @@ public class NPC : WorldObject, PassesTurns
         this.flags.setNull();
         this.race = NPCRace.NONE;
         this.role = NPCRole.NONE;
-        this.effects.Clear();
+        for (int i = 0; i < effects.Length; i++)
+        {
+            effects[i] = null;
+        }
     }
 
     #region XML Parsing
@@ -151,7 +157,7 @@ public class NPC : WorldObject, PassesTurns
             NPCProperties np = Nifty.StringToEnum<NPCProperties>(xnode.SelectString("name"));
             NPCEffect eff = new NPCEffect(np, this);
             eff.apply(xnode.SelectInt("val"), false);
-            this.effects.Add(np, new NPCEffect(np, this));
+            this.effects[(long) np] = new NPCEffect(np, this);
         }
 
         //flag parsing
