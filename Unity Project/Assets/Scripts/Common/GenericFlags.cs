@@ -3,6 +3,8 @@
 /**
  * Helper class for dealing with flags.
  * 
+ * Do not use with enums longer than 62 variables.
+ * 
  * Usage:
  *  Flags fl = new Flags<SomeEnum>(); // use the 0 value or somesuch with all bits cleared.
  *  fl[SomeEnum.VALUE1] = true; //sets the value1 bit to true.
@@ -12,48 +14,53 @@
  *  fl[SomeEnum.VALUE1 | SomeEnum.VALUE2] = true; //sets both value1 and value2 to true.
  * 
  */
-public class Flags<T> where T : IComparable, IConvertible
+public class GenericFlags<T> where T : IComparable, IConvertible
 {
     protected long flags;
 
-    public Flags()
+    public GenericFlags()
     {
         flags = 0;
     }
 
-    public Flags(T e)
+    public GenericFlags(T e)
     {
-        flags = Convert.ToInt64(e);
+        flags = bitwise(e);
+    }
+
+    private static long bitwise(T e)
+    {
+        return (long) 1 << Convert.ToInt32(e);
     }
 
     public bool this[T index]
     {
         get
         {
-            long i = Convert.ToInt64(index);
+            long i = bitwise(index);
             return (this.flags & i) == i;
         }
         set
         {
             if (value)
             {
-                this.flags |= Convert.ToInt64(index);
+                this.flags |= bitwise(index);
             }
             else
             {
-                this.flags &= ~Convert.ToInt64(index);
+                this.flags &= ~(bitwise(index));
             }
         }
     }
 
-    public static implicit operator T(Flags<T> src)
+    public static implicit operator T(GenericFlags<T> src)
     {
         return src != null ? (T)Enum.ToObject(typeof(T), src.flags) : (T)Enum.ToObject(typeof(T), 0);
     }
 
-    public static implicit operator Flags<T>(T src)
+    public static implicit operator GenericFlags<T>(T src)
     {
-        return new Flags<T>(src);
+        return new GenericFlags<T>(src);
     }
 
     public void setNull()

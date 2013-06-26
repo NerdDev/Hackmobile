@@ -4,9 +4,14 @@
 		<modeltexture>armor/shield2/mat_shield2_1</modeltexture>
 		<role>creature</role>
 		<race>reptile</race>
-		<flags>nopoly, leaves_corpse</flags>
-		<resistances>NONE</resistances>
-		<properties>infravision</properties>
+		<flags>
+			<flag name="no_poly"></flag>
+			<flag name="leaves_corpse"></flag>
+		</flags>
+		<properties>
+			<property name="infravision" val=2></property>
+			<property name="fire_res" val=3></property>
+		</properties>
 		<stats>
 			<charisma>3</charisma>
 			<constitution>5</constitution>

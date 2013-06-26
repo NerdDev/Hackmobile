@@ -17,6 +17,11 @@ public class DataManager : MonoBehaviour
     Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
     #endregion
 
+    void Update()
+    {
+
+    }
+
     void Start ()
     {
         //Parsing functions here
@@ -24,12 +29,16 @@ public class DataManager : MonoBehaviour
         parsing.Add("npcs", parseNPCs);
         parsing.Add("materials", parseMaterials);
 
+        Profiler.BeginSample("XML Profiling");
         string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
         foreach (string file in files)
         {
             Debug.Log(file);
-            parseXML(new XMLReader(file));
+            XMLReader xreader = new XMLReader(file);
+            parseXML(xreader);
+            xreader = null; //lets GC collect up.
         }
+        Profiler.EndSample();
     }
 
     public Dice getDice(string dice)

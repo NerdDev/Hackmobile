@@ -2,10 +2,10 @@
 
 public class Effect : PassesTurns
 {
-    private int eff;
-    private int itemEff;
+    protected int eff;
+    protected int itemEff;
 
-    public Effect()
+    protected Effect()
     {
         eff = 0;
         itemEff = 0;
@@ -51,29 +51,15 @@ public class Effect : PassesTurns
         }
     }
 
-    public void apply(Priority p)
+    public virtual void apply(int p, bool item)
     {
-        switch (p)
+        if (item) 
         {
-            case Priority.ITEM:
-                itemEff += 1;
-                break;
-            default:
-                eff += (int) p;
-                break;
+            itemEff += 1;
         }
-    }
-
-    public void remove(Priority p)
-    {
-        switch (p)
+        else 
         {
-            case Priority.ITEM:
-                itemEff -= 1;
-                break;
-            default:
-                eff -= (int)p;
-                break;
+            eff += (int) p;
         }
     }
 
@@ -85,7 +71,7 @@ public class Effect : PassesTurns
     private int basePoints;
     private int currentPoints;
 
-    public void UpdateTurn()
+    public virtual void UpdateTurn()
     {
         //this does nothing right now!
         // - this may need some extension, as far as the whole class goes.

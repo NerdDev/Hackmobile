@@ -33,20 +33,22 @@ public class NPC : WorldObject, PassesTurns
     #region Base NPC Properties
     //Local variables
     public List<NPCItem> baseInventory = null;
+    List<string[]> props = null;
     #endregion
 
     #region NPC Instance Properties
     //Initialized all to null for the base.
     //Converted from base properties upon creation of instance.
     public Dictionary<Item, int> inventory = null;
+    protected Dictionary<Enum, NPCEffect> effects = null;
     #endregion
 
     #region Generic NPC Properties
     //Properties stored here.
-    public Dictionary<Enum, Effect> effects = new Dictionary<Enum, Effect>();
+    public GenericFlags<NPCProperties> properties = new GenericFlags<NPCProperties>();
 
     //All sets of flags
-    Flags flags = new Flags(NPCFlags.NONE);
+    Flags<NPCFlags> flags = new Flags<NPCFlags>();
 
     //Enums
     public NPCRace race;
@@ -64,36 +66,26 @@ public class NPC : WorldObject, PassesTurns
     }
 
     #region Effects
-    public void applyEffect(Enum e, bool positive, Priority p)
+    public void applyEffect(NPCProperties e, int priority, bool item)
     {
         if (!effects.ContainsKey(e))
         {
-            effects.Add(e, new Effect());
-        }
-        if (positive)
-        {
-            effects[e].apply(p);
+            NPCEffect eff = new NPCEffect(e, this);
+            effects.Add(e, eff);
+            effects[e].apply(priority, item);
         }
         else
         {
-            effects[e].remove(p);
+            effects[e].apply(priority, item);
         }
     }
     #endregion
 
-    #region Get/Set of Properties and Flags
-    public bool getProperty(Enum e)
-    {
-        if (effects.ContainsKey(e))
-        {
-            return effects[e].On;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    #region Equipment Management
 
+    #endregion
+
+    #region Get/Set of flags
     public bool get(NPCFlags fl)
     {
         return flags[fl];
@@ -126,7 +118,6 @@ public class NPC : WorldObject, PassesTurns
         this.role = npc.role;
         //lists
         this.effects = npc.effects.Copy();
-
         //inventory
         //TODO: needs conversion from baseInventory into actual inventory
     }
@@ -153,34 +144,22 @@ public class NPC : WorldObject, PassesTurns
         this.race = x.SelectEnum<NPCRace>("race");
 
         //property parsing
-        string temp = x.SelectString("properties");
-        string[] split = temp.Split(',');
-        for (int i = 0; i < split.Length; i++)
+        this.props = new List<string[]>();
+        List<XMLNode> xprops = x.select("properties").selectList("property");
+        foreach (XMLNode xnode in xprops)
         {
-            //NPCProperties pr = (NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true);
-            this.effects.Add(
-                Nifty.StringToEnum<NPCProperties>(split[i].Trim()),
-                new Effect(true));
-        }
-
-        //resistance parsing
-        temp = x.SelectString("resistances");
-        split = temp.Split(',');
-        for (int i = 0; i < split.Length; i++)
-        {
-            //NPCProperties pr = (NPCProperties) Enum.Parse(typeof(NPCProperties), split[i], true);
-            this.effects.Add(
-                Nifty.StringToEnum<NPCResistances>(split[i].Trim()), 
-                new Effect(true));
+            NPCProperties np = Nifty.StringToEnum<NPCProperties>(xnode.SelectString("name"));
+            NPCEffect eff = new NPCEffect(np, this);
+            eff.apply(xnode.SelectInt("val"), false);
+            this.effects.Add(np, new NPCEffect(np, this));
         }
 
         //flag parsing
-        temp = x.SelectString("flags");
-        split = temp.Split(',');
-        for (int i = 0; i < split.Length; i++)
+        List<XMLNode> xflags = x.select("flags").selectList("flag");
+        foreach (XMLNode xnode in xflags)
         {
-            //NPCFlags fl = (NPCFlags) Enum.Parse(typeof(NPCFlags), split[i], true);
-            this.flags[Nifty.StringToEnum<NPCFlags>(split[i].Trim())] = true;
+            NPCFlags np = Nifty.StringToEnum<NPCFlags>(xnode.SelectString("name"));
+            this.flags[np] = true;
         }
 
         //body part data

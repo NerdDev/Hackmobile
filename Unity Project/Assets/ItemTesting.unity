@@ -154,7 +154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &84
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,9 +566,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 455fc51cfa5eddb4c8f85888e547323f, type: 3}
   m_Name: 
-  totalEnemyArray: []
-  enemiesToSpawn: 0
-  numberOfWaves: 0
 --- !u!114 &257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2435,6 +2432,10 @@ Prefab:
       propertyPath: textPrefab
       value: 
       objectReference: {fileID: 100000, guid: eb6ff930acd8b4b41aa36d4003e4e4f8, type: 2}
+    - target: {fileID: 100004, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
   m_RootGameObject: {fileID: 91}

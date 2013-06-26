@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using XML;
 
-public class WorldObject : UniqueObject
+public class WorldObject : MonoBehaviour
 {
 
     #region Generic Object Properties (graphical info, names, etc).
