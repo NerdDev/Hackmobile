@@ -6,7 +6,6 @@ public class HiddenRoomMod : RoomModifier {
   public override void Modify(Room room, System.Random rand)
     {
         int secretRoomSize = 2;
-        int minDoorSpacing = 0;
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {

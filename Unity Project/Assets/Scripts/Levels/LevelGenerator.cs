@@ -26,7 +26,6 @@ public class LevelGenerator
     public static int layoutMargin { get { return 8; } }
 
     // Room modifier probabilies
-    public static int chanceNoBaseMod { get { return 40; } }
     public static int maxFlexMod { get { return 5; } } //Max not inclusive
     public static int chanceNoFinalMod { get { return 40; } }
     #endregion
@@ -62,17 +61,6 @@ public class LevelGenerator
         Random.seed = unitySeed;
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
-        #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
-        {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Room took: " + (Time.realtimeSinceStartup - stepTime));
-            stepTime = Time.realtimeSinceStartup;
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
-            {
-                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Mod Rooms");
-            }
-        }
-        #endregion
         modRooms(rooms);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
@@ -152,7 +140,6 @@ public class LevelGenerator
         for (int i = 1; i <= numRooms; i++)
         {
             Room room = new Room(i);
-            room.generate();
             rooms.Add(room);
         }
         #region DEBUG
@@ -172,12 +159,12 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Mod Rooms");
         }
         #endregion
-        foreach (Room r in rooms)
+        foreach (Room room in rooms)
         {
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Modding " + r);
+                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Modding " + room);
             }
             #endregion
             foreach (RoomModifier mod in pickMods())
@@ -185,14 +172,15 @@ public class LevelGenerator
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
                 {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "Applying mod" + mod);
+                    DebugManager.w(DebugManager.Logs.LevelGen, "Applying: " + mod);
                 }
                 #endregion
-                mod.Modify(r, rand);
+                mod.Modify(room, rand);
             }
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
+                room.toLog(DebugManager.Logs.LevelGen);
                 DebugManager.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
@@ -214,17 +202,14 @@ public class LevelGenerator
         }
         #endregion
         List<RoomModifier> mods = new List<RoomModifier>();
-        if (chanceNoBaseMod < rand.Next(100))
+        RoomModifier baseMod = RoomModifier.GetBase();
+        mods.Add(baseMod);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            RoomModifier baseMod = RoomModifier.GetBase();
-            mods.Add(baseMod);
-            #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
-            {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + baseMod);
-            }
-            #endregion
+            DebugManager.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + baseMod);
         }
+        #endregion
         int numFlex = rand.Next(1, maxFlexMod);
         List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex);
         mods.AddRange(flexMods);

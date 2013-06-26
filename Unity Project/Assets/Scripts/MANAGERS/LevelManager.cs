@@ -22,7 +22,8 @@ public class LevelManager : MonoBehaviour {
     {
         System.Random rand = new System.Random(seed);
         Room room = new Room(0);
-        room.generate();
+        SquareRoom square = new SquareRoom();
+        square.Modify(room, rand);
         mod.Modify(room, rand);
         DebugManager.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
         room.toLog(DebugManager.Logs.LevelGenMain);

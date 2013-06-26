@@ -11,32 +11,6 @@ public class Room : LayoutObjectLeaf {
     {
         roomNum = num;
     }
-
-    public void generate()
-    {
-        #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Room -> Generate");
-        }
-        #endregion
-        int height = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        int width = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
-        }
-        #endregion
-        BoxStrokeAndFill(GridType.Wall, GridType.Floor, width, height);
-        #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            toLog(DebugManager.Logs.LevelGen);
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
-        }
-        #endregion
-    }
 	
 	public GridMap getWalls() 
     {
