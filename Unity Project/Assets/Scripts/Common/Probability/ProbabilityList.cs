@@ -171,7 +171,7 @@ public class ProbabilityList<T> where T : ProbabilityItem
     class ProbContainer {
         public T item;
         private int num_ = 0;
-        public int num { get; private set; }
+        public int num { get { return num_; } }
 
         public ProbContainer(T item)
         {
