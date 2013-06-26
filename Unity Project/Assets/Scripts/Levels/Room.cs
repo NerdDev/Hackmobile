@@ -27,12 +27,49 @@ public class Room : LayoutObjectLeaf {
 		return getTypes(GridType.Door);
 	}
 
+    public GridMap GetPotentialExternalDoors()
+    {
+        GridMap potentialDoors = GetPerimeter();
+        RemoveBadDoorWalls(potentialDoors);
+        potentialDoors.RemoveAllBut(GridType.Wall);
+        return potentialDoors;
+    }
+
     public GridMap GetPotentialDoors()
     {
         GridMap potentialDoors = getWalls();
+        RemoveBadDoorWalls(potentialDoors);
+        return potentialDoors;
+    }
+
+    void RemoveBadDoorWalls(GridMap potentialDoors)
+    {
         GridMap corneredAreas = getCorneredBy(GridType.Wall, GridType.Wall);
         potentialDoors.RemoveAll(corneredAreas);
-        return potentialDoors;
+    }
+
+    public GridMap GetPerimeter()
+    {
+        GridMap ret = new GridMap();
+        GridArray arr = GetArray();
+        // Get null spaces surrounding room
+        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), arr, GridType.NULL);
+        // Invert to be room
+        Array2D<bool>.invert(bfs);
+        foreach (Value2D<bool> val in bfs)
+        {
+            // If space part of room
+            if (val.val)
+            {
+                Surrounding<bool> surround = Surrounding<bool>.Get(bfs.GetArr(), val);
+                // If space is an edge (next to a false)
+                if (surround.GetDirWithVal(false) != null)
+                {
+                    ret.Put(arr.Get(val.x, val.y), val.x, val.y);
+                }
+            }
+        }
+        return ret;
     }
 
 	public override string ToString()

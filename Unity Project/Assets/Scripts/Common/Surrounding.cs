@@ -13,6 +13,11 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     }
 
+    public static Surrounding<T> Get(T[,] arr, Value2D<T> val)
+    {
+        return Get(arr, val.x, val.y);
+    }
+
 	public static Surrounding<T> Get(T[,] arr, int x, int y)
 	{
         Surrounding <T> ret = new Surrounding<T>();

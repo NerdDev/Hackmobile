@@ -159,6 +159,22 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         }
     }
 
+    public void RemoveAllBut(params T[] types)
+    {
+        RemoveAllBut(new HashSet<T>(types));
+    }
+
+    public void RemoveAllBut(HashSet<T> types)
+    {
+        foreach (Value2D<T> val in this)
+        {
+            if (!types.Contains(val.val))
+            {
+                Remove(val);
+            }
+        }
+    }
+
     public override void PutCol(T t, int y1, int y2, int x)
     {
         for (; y1 <= y2; y1++)
