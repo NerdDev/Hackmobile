@@ -9,24 +9,19 @@ abstract public class RoomModifier : ProbabilityItem {
 
     public static void RegisterModifiers()
     {
+        List<RoomModifier> modPrototypes = new List<RoomModifier>();
+        modPrototypes.Add(new SquareRoom());
+        modPrototypes.Add(new PillarMod());
+        modPrototypes.Add(new HiddenRoomMod());
+
         #region Internal
-        List<ProbabilityList<RoomModifier>> modsList = new List<ProbabilityList<RoomModifier>>();
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
-            modsList.Add(new ProbabilityList<RoomModifier>());
+            mods[(int)e] = new ProbabilityList<RoomModifier>();
         }
-        #endregion Internal
-        ProbabilityList<RoomModifier> baseMods = modsList[(int)RoomModType.Base];
-        ProbabilityList<RoomModifier> flexMods = modsList[(int)RoomModType.Flexible];
-        ProbabilityList<RoomModifier> finalMods = modsList[(int)RoomModType.Final];
-
-        flexMods.Add(new PillarMod());
-        flexMods.Add(new HiddenRoomMod());
-
-        #region Internal
-        foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
+        foreach (RoomModifier mod in modPrototypes)
         {
-            mods[(int)e] = modsList[(int)e];
+            mods[(int)mod.GetType()].Add(mod);
         }
         #endregion Internal
     }
