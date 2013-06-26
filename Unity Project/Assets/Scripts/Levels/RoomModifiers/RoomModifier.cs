@@ -13,6 +13,7 @@ abstract public class RoomModifier : ProbabilityItem {
         modPrototypes.Add(new SquareRoom());
         modPrototypes.Add(new PillarMod());
         modPrototypes.Add(new HiddenRoomMod());
+        modPrototypes.Add(new FinalMod());
 
         #region Internal
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
