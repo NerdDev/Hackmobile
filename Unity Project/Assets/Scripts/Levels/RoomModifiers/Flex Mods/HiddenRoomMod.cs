@@ -12,7 +12,7 @@ public class HiddenRoomMod : RoomModifier {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Hidden Room Mod");
         }
         #endregion
-            GridMap potentialDoors = room.GetPotentialDoors();
+            GridMap potentialDoors = room.GetPotentialExternalDoors();
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {

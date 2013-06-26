@@ -314,7 +314,7 @@ public class LevelGenerator
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
-            GridMap potentialDoors = room.GetPotentialDoors();
+            GridMap potentialDoors = room.GetPotentialExternalDoors();
             int numDoors = rand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -414,12 +414,12 @@ public class LevelGenerator
         #endregion
     }
 
-    static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    public static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
     {
         return depthFirstSearchFor(startPoint, grids, new HashSet<GridType>(targets));
     }
 
-    static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    public static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -507,13 +507,13 @@ public class LevelGenerator
         return pathTaken;
     }
 
-    static GridArray BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
     {
         return BreadthFirstFill(startPoint, grids, new HashSet<GridType>(targets));
     }
 
     // Not tested
-    static GridArray BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -527,12 +527,12 @@ public class LevelGenerator
         Queue<Value2D<GridType>> queue = new Queue<Value2D<GridType>>();
         queue.Enqueue(startPoint);
         GridType[,] targetArr = grids.GetArr();
-        GridArray outGridArr = new GridArray(grids.GetBoundingInternal(), false);
+        Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
         Value2D<GridType> curPoint;
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
-            outGridArr.Put(curPoint);
+            outGridArr.Put(true, curPoint.x, curPoint.y);
             Surrounding<GridType> options = Surrounding<GridType>.Get(targetArr, curPoint.x, curPoint.y);
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))

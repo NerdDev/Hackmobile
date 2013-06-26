@@ -194,4 +194,12 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return this.GetEnumerator();
     }
     #endregion
+
+    public static void invert(Array2D<bool> arr)
+    {
+        foreach (Value2D<bool> val in arr)
+        {
+            arr.Put(!val.val, val.x, val.y);
+        }
+    }
 }
