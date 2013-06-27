@@ -14,16 +14,12 @@ public class LayoutObjectLeaf : LayoutObject {
     #region GetSet
     public GridType get(int x, int y)
     {
-        x += shiftP.x;
-        y += shiftP.y;
         return grids.Get(x, y);
     }
 
     public void put(GridType t, int x, int y)
     {
-        x -= shiftP.x;
-        y -= shiftP.y;
-        putInternal(t, x, y);
+        grids.Put(t, x, y);
     }
 
     public void putAll(GridMap map)
@@ -36,23 +32,12 @@ public class LayoutObjectLeaf : LayoutObject {
 
     public void putRow(GridType t, int xl, int xr, int y)
     {
-        xl -= shiftP.x;
-        xr -= shiftP.x;
-        y -= shiftP.y;
         grids.PutRow(t, xl, xr, y);
     }
 
     public void putCol(GridType t, int y1, int y2, int x)
     {
-        x -= shiftP.x;
-        y1 -= shiftP.y;
-        y2 -= shiftP.y;
         grids.PutCol(t, y1, y2, x);
-    }
-
-    void putInternal(GridType t, int x, int y)
-    {
-        grids.Put(t, x, y);
     }
 
     public override GridArray GetArray()

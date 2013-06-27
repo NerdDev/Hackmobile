@@ -132,8 +132,6 @@ abstract public class LayoutObject {
         {
             if (t == val.val)
             {
-                val.x += shiftP.x;
-                val.y += shiftP.y;
                 ret.Put(val);
             }
         }
@@ -162,8 +160,6 @@ abstract public class LayoutObject {
         {
             if (ts.Contains(val.val))
             {
-                val.x += shiftP.x;
-                val.y += shiftP.y;
                 ret.Put(val);
             }
         }
