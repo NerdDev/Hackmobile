@@ -39,7 +39,7 @@ public class WorldObject : MonoBehaviour
         this.Name = wo.Name;
     }
 
-    public void parseXML(XMLNode x)
+    public virtual void parseXML(XMLNode x)
     {
         //name is handled in DataManager so we get the GameObject name
         this.Model = x.SelectString("model");

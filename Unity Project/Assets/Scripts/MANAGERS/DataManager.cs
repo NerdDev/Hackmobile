@@ -7,20 +7,11 @@ using System.IO;
 
 public class DataManager : MonoBehaviour
 {
-    #region Storage Maps.
-    Dictionary<string, Dice> Dice = new Dictionary<string, Dice>();
-    #endregion
-
     #region XML Paths.
     string XMLPath = "Assets/Resources/XML/";
 
     Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
     #endregion
-
-    void Update()
-    {
-
-    }
 
     void Start ()
     {
@@ -29,29 +20,12 @@ public class DataManager : MonoBehaviour
         parsing.Add("npcs", parseNPCs);
         parsing.Add("materials", parseMaterials);
 
-        Profiler.BeginSample("XML Profiling");
         string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
         foreach (string file in files)
         {
-            Debug.Log(file);
             XMLReader xreader = new XMLReader(file);
             parseXML(xreader);
             xreader = null; //lets GC collect up.
-        }
-        Profiler.EndSample();
-    }
-
-    public Dice getDice(string dice)
-    {
-        if (Dice.ContainsKey(dice))
-        {
-            return Dice[dice];
-        }
-        else
-        {
-            Dice d = new Dice(dice);
-            Dice.Add(dice, d);
-            return d;
         }
     }
 
@@ -109,13 +83,6 @@ public class DataManager : MonoBehaviour
             n.parseXML(m);
             BigBoss.NPCManager.getNPCs().Add(n.Name, n);
         }
-    }
-    #endregion
-
-    #region Map returns (should be abstracted to other methods for most purposes).
-    Dictionary<string, Dice> getDice()
-    {
-        return Dice;
     }
     #endregion
 }

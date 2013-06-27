@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public static class Probability
 {
@@ -22,4 +23,27 @@ public static class Probability
     {
         return rand.NextDouble();
     }
+
+    #region Dice Calcs
+    static Dictionary<string, Dice> dice = new Dictionary<string, Dice>();
+
+    static public Dice getDice(string d)
+    {
+        if (dice.ContainsKey(d))
+        {
+            return dice[d];
+        }
+        else
+        {
+            Dice die = new Dice(d);
+            dice.Add(d, die);
+            return die;
+        }
+    }
+
+    static Dictionary<string, Dice> getDice()
+    {
+        return dice;
+    }
+    #endregion
 }

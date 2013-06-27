@@ -68,7 +68,7 @@ public class Item : WorldObject, PassesTurns
     private string damage;
     public Dice Damage
     {
-        get { return BigBoss.DataManager.getDice(damage); }
+        get { return Probability.getDice(damage); }
         set { this.damage = value.diceName; }
     }
     private string mat;
@@ -144,7 +144,7 @@ public class Item : WorldObject, PassesTurns
     public void parseXML(XMLNode x)
     {
         base.parseXML(x);
-        this.Damage = BigBoss.DataManager.getDice(x.SelectString("damage"));
+        this.Damage = Probability.getDice(x.SelectString("damage"));
         this.mat = x.SelectString("material");
         stats.parseXML(x.select("stats"));
     }

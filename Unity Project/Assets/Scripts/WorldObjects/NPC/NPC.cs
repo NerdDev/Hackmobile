@@ -3,7 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using XML;
-
+/**
+ * Notes on usage:
+ * 
+ * Adding a property to an NPC requires adding it in several places;
+ *  - The property itself
+ *  - In the XML definition (if applicable)
+ *  - In the parseXML (if read from XML)
+ *  - In the setNull definition (to define a a null NPC)
+ *  - In the setData definition (to define an instance of an NPC)
+ *  
+ * When adding a property, if the property is only useful or applicable to a base NPC
+ *  then store it under the region of base NPC properties, and set it to a null initialization.
+ *  Add the definition to convert it to whatever is needed for the instance of an NPC
+ *  under the setData method.
+ *  
+ * If it is only applicable to an instance of an NPC, then do the opposite - add it to
+ *  the instance NPC properties, and leave the initialization as null until it is defined
+ *  in the setData method.
+ *  
+ * See equipment and equipped items for an example.
+ */
 public class NPC : WorldObject, PassesTurns
 {
     #region BIGBOSSMANAGEMENT
@@ -138,7 +158,7 @@ public class NPC : WorldObject, PassesTurns
         this.setData(BigBoss.NPCManager.getNPC(npcName));
     }
 
-    public void setData(NPC npc)
+    public override void setData(NPC npc)
     {
         //Anything performing the conversion from base NPC -> instance of NPC goes here.
         base.setData(npc);
