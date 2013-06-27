@@ -33,13 +33,14 @@ public class NPC : WorldObject, PassesTurns
     #region Base NPC Properties
     //Local variables
     public List<NPCItem> baseInventory = null;
-    List<string[]> props = null;
     #endregion
 
     #region NPC Instance Properties
     //Initialized all to null for the base.
     //Converted from base properties upon creation of instance.
     public Dictionary<Item, int> inventory = null;
+    List<Item> equippedItems = null;
+    NPCEquipment equipment = null;
     #endregion
 
     #region Generic NPC Properties
@@ -58,13 +59,20 @@ public class NPC : WorldObject, PassesTurns
     //Separate classes
     public NPCStats stats = new NPCStats();
     public NPCBodyParts bodyparts = new NPCBodyParts();
-    public NPCEquipment equipment = new NPCEquipment();
     
     #endregion
 
     public NPC()
     {
     }
+
+    #region Movement
+    public bool moveNPC(Vector3 location)
+    {
+        this.gameObject.transform.localPosition = location;
+        return true;
+    }
+    #endregion
 
     #region Effects
     public void applyEffect(NPCProperties e, int priority, bool item)
@@ -85,6 +93,30 @@ public class NPC : WorldObject, PassesTurns
     #endregion
 
     #region Equipment Management
+
+    public bool equipItem(Item i)
+    {
+        if (equipment.equipItem(i))
+        {
+            equippedItems.Add(i);
+            return true;
+        }
+        return false;
+    }
+
+    public bool removeItem(Item i)
+    {
+        if (equipment.removeItem(i))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public List<Item> getEquippedItems()
+    {
+        return equippedItems;
+    }
 
     #endregion
 
@@ -113,7 +145,6 @@ public class NPC : WorldObject, PassesTurns
         //classes
         this.stats = npc.stats.Copy();
         this.bodyparts = npc.bodyparts.Copy();
-        this.equipment = npc.equipment.Copy();
         //flags
         this.flags = npc.flags.Copy();
         //enums
@@ -123,6 +154,8 @@ public class NPC : WorldObject, PassesTurns
         this.effects = npc.effects.Copy();
         //inventory
         //TODO: needs conversion from baseInventory into actual inventory
+        equippedItems = new List<Item>();
+        equipment = new NPCEquipment(this.bodyparts);
     }
 
     public override void setNull()
@@ -150,7 +183,6 @@ public class NPC : WorldObject, PassesTurns
         this.race = x.SelectEnum<NPCRace>("race");
 
         //property parsing
-        this.props = new List<string[]>();
         List<XMLNode> xprops = x.select("properties").selectList("property");
         foreach (XMLNode xnode in xprops)
         {

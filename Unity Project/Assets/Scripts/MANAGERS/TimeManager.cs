@@ -73,9 +73,7 @@ public class TimeManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-	
-		
-		
+	    //Does this do anything for us? Or should it simply not be tracked.
 	}
 	
 	public void TogglePause()
@@ -124,8 +122,6 @@ public class TimeManager : MonoBehaviour {
 	{
 		turnsPassed++;
 		//Justin's hot:
-		//DebugManager.print("Turn passed.  Total turns passed is now: " + turnsPassed);
-		BigBoss.PlayerInfo.AdjustHungerPoints(-2);
 
         foreach (PassesTurns obj in updateList)
         {

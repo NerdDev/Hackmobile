@@ -44,6 +44,25 @@ public class Item : WorldObject, PassesTurns
         get { return buc; }
         set { this.buc = value; }
     }
+    private int size;
+    public int Size
+    {
+        get
+        {
+            return size;
+        }
+        set
+        {
+            this.size = value;
+        }
+    }
+    public double Weight
+    {
+        get
+        {
+            return (Size * Material.Density) / 1000;
+        }
+    }
 
     //These map to existing values upon a dictionary stored in ItemMaster
     private string damage;
@@ -67,7 +86,7 @@ public class Item : WorldObject, PassesTurns
     }
 
     //flags
-    public Flags itemFlags = new Flags(ItemFlags.NONE);
+    public Flags<ItemFlags> itemFlags = new Flags<ItemFlags>();
 
     //separate classes
     public ItemStats stats = new ItemStats();
@@ -104,6 +123,7 @@ public class Item : WorldObject, PassesTurns
         this.Damage = baseItem.Damage;
         this.Material = baseItem.Material;
         this.EquipType = baseItem.EquipType;
+        this.Size = baseItem.Size;
     }
 
     public override void setNull()
@@ -115,7 +135,7 @@ public class Item : WorldObject, PassesTurns
         BUC = BUC.CURSED;
         damage = "d1";
         mat = "null";
-        EquipType = EquipTypes.NONE;
+        EquipType = EquipTypes.LAST;
         //classes
         stats.setNull();
     }

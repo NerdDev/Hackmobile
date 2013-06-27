@@ -178,6 +178,11 @@ namespace XML
             return XMLNifty.StringToInt(this.select(toParse).getText());
         }
 
+        public double SelectDouble(string toParse)
+        {
+            return XMLNifty.StringToDouble(this.select(toParse).getText());
+        }
+
         public T SelectEnum<T>(string toParse)
         {
             return (T)Enum.Parse(typeof(T), this.select(toParse).getText(), true);

@@ -3,23 +3,11 @@ using System.Collections.Generic;
 
 public class NPCEquipment
 {
-    List<EquipSlot>[] equipSlots = {
-                                       new List<EquipSlot>(), //legs
-                                       new List<EquipSlot>(), //body
-                                       new List<EquipSlot>(), //head
-                                       new List<EquipSlot>(), //shirt
-                                       new List<EquipSlot>(), //neck
-                                       new List<EquipSlot>(), //feet
-                                       new List<EquipSlot>(), //hand
-                                       new List<EquipSlot>(), //rings
-                                   };
-
-    public NPCEquipment()
-    {
-    }
+    List<EquipSlot>[] equipSlots = new List<EquipSlot>[(int)EquipTypes.LAST];
 
     public NPCEquipment(NPCBodyParts bp)
     {
+        equipSlots.Initialize();
         equipSlots[(int)EquipTypes.BODY].Add(new EquipSlot());
         equipSlots[(int)EquipTypes.SHIRT].Add(new EquipSlot());
         if (bp.Arms > 0)
