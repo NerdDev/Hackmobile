@@ -16,6 +16,10 @@ abstract public class Container2D<T> {
 		return null;
 	}
     public abstract T Get(int x, int y);
+    public T Get(Value2D<T> val)
+    {
+        return Get(val.x, val.y);
+    }
     public abstract bool InRange(int x, int y);
     public virtual void Put(T val, int x, int y)
     {
@@ -62,12 +66,28 @@ abstract public class Container2D<T> {
 		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
             string rowStr = "";
     		for (int x = 0; x < array.GetLength(1); x += 1) {
-        		rowStr += array[y,x].ToString();
+                rowStr += ToString(array[y, x]);
     		}
             ret.Add(rowStr);
 		}
         return ret;	
 	}
+
+    public static string ToString(T t)
+    {
+        if (t.GetType() == typeof(bool))
+        {
+            if (Boolean.Parse(t.ToString()))
+            {
+                return "T";
+            }
+            else
+            {
+                return "_";
+            }
+        }
+        return t.ToString();
+    }
 	
 	public virtual void toLog(DebugManager.Logs log)
     {

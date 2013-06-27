@@ -314,12 +314,12 @@ public class LevelGenerator
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
-            GridMap potentialDoors = room.GetPotentialExternalDoors();
+            GridMap potentialDoors = room.GetPotentialDoors();
             int numDoors = rand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                potentialDoors.toLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
+                potentialDoors.toLog(DebugManager.Logs.LevelGen, "Potential Doors");
                 DebugManager.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
@@ -528,26 +528,33 @@ public class LevelGenerator
         queue.Enqueue(startPoint);
         GridType[,] targetArr = grids.GetArr();
         Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
+        outGridArr.Put(true, startPoint.x, startPoint.y);
         Value2D<GridType> curPoint;
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
-            outGridArr.Put(true, curPoint.x, curPoint.y);
             Surrounding<GridType> options = Surrounding<GridType>.Get(targetArr, curPoint.x, curPoint.y);
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                outGridArr.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
+                outGridArr.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options. Evaluating " + curPoint);
             }
             #endregion
             foreach (Value2D<GridType> option in options)
             {
-                if (targets.Contains(option.val))
+                if (targets.Contains(option.val) && !outGridArr.Get(option.x, option.y))
                 {
                     queue.Enqueue(option);
+                    outGridArr.Put(true, option.x, option.y);
                 }
             }
         }
+        #region DEBUG
+        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
         return outGridArr;
     }
 

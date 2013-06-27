@@ -59,30 +59,31 @@ public class GridArray : Array2D<GridType> {
 	}
 	
 	public override Bounding GetBounding ()
-	{
-		return GetBoundingInternal();
-	}
-	
-    public Bounding GetBoundingInternal()
     {
-		GridType[,] array = GetArr();
+        GridType[,] array = GetArr();
         Bounding ret = new Bounding();
         for (int y = 0; y < array.GetLength(0); y++)
         {
             for (int x = 0; x < array.GetLength(1); x++)
             {
-				if (array[y,x] != GridType.NULL) {
-					ret.absorb(x, y);
-				}
+                if (array[y, x] != GridType.NULL)
+                {
+                    ret.absorb(x, y);
+                }
             }
         }
         return ret;
+	}
+	
+    public Bounding GetBoundingInternal()
+    {
+        return base.GetBounding();
     }
 
     public override List<string> ToRowStrings()
     {
         GridType[,] array = GetArr();
-		Bounding bounds = GetBoundingInternal();
+		Bounding bounds = GetBounding();
         List<string> ret = new List<string>();
         for (int y = bounds.yMax; y >= bounds.yMin; y -= 1)
         {
