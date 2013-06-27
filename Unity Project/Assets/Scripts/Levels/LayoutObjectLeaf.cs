@@ -87,7 +87,10 @@ public class LayoutObjectLeaf : LayoutObject {
 
     public void BoxStrokeAndFill(GridType stroke, GridType fill, int width, int height)
     {
-        BoxStrokeAndFill(stroke, fill, 0, width - 1, 0, height - 1);
+        int centerX = grids.getWidth() / 2;
+        int centerY = grids.getHeight() / 2;
+        BoxStrokeAndFill(stroke, fill, centerX - width / 2, centerX + width / 2 - 1,
+            centerY - height / 2, centerY + height / 2 - 1);
     }
 
     public void BoxStrokeAndFill(GridType stroke, GridType fill, int xl, int xr, int yb, int yt)

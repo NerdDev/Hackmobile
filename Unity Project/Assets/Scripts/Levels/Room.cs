@@ -30,8 +30,11 @@ public class Room : LayoutObjectLeaf {
     public GridMap GetPotentialExternalDoors()
     {
         GridMap potentialDoors = GetPerimeter();
+        potentialDoors.toLog(DebugManager.Logs.LevelGen, "TEST1");
         RemoveBadDoorWalls(potentialDoors);
+        potentialDoors.toLog(DebugManager.Logs.LevelGen, "After cornered");
         potentialDoors.RemoveAllBut(GridType.Wall);
+        potentialDoors.toLog(DebugManager.Logs.LevelGen, "After remove but walls");
         return potentialDoors;
     }
 
@@ -45,15 +48,15 @@ public class Room : LayoutObjectLeaf {
     void RemoveBadDoorWalls(GridMap potentialDoors)
     {
         GridMap corneredAreas = getCorneredBy(GridType.Wall, GridType.Wall);
+        corneredAreas.toLog(DebugManager.Logs.LevelGen, "Cornered");
         potentialDoors.RemoveAll(corneredAreas);
     }
 
     public GridMap GetPerimeter()
     {
         GridMap ret = new GridMap();
-        GridArray arr = GetArray();
         // Get null spaces surrounding room
-        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), arr, GridType.NULL);
+        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), grids, GridType.NULL);
         // Invert to be room
         Array2D<bool>.invert(bfs);
         foreach (Value2D<bool> val in bfs)
@@ -65,7 +68,7 @@ public class Room : LayoutObjectLeaf {
                 // If space is an edge (next to a false)
                 if (surround.GetDirWithVal(false) != null)
                 {
-                    ret.Put(arr.Get(val.x, val.y), val.x, val.y);
+                    ret.Put(grids.Get(val.x, val.y), val.x, val.y);
                 }
             }
         }

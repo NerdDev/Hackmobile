@@ -12,7 +12,7 @@ abstract public class RoomModifier : ProbabilityItem {
         List<RoomModifier> modPrototypes = new List<RoomModifier>();
         modPrototypes.Add(new SquareRoom());
         modPrototypes.Add(new PillarMod());
-        modPrototypes.Add(new HiddenRoomMod());
+        //modPrototypes.Add(new HiddenRoomMod());
         modPrototypes.Add(new FinalMod());
 
         #region Internal
