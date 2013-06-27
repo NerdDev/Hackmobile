@@ -30,11 +30,8 @@ public class Room : LayoutObjectLeaf {
     public GridMap GetPotentialExternalDoors()
     {
         GridMap potentialDoors = GetPerimeter();
-        potentialDoors.toLog(DebugManager.Logs.LevelGen, "TEST1");
         RemoveBadDoorWalls(potentialDoors);
-        potentialDoors.toLog(DebugManager.Logs.LevelGen, "After cornered");
         potentialDoors.RemoveAllBut(GridType.Wall);
-        potentialDoors.toLog(DebugManager.Logs.LevelGen, "After remove but walls");
         return potentialDoors;
     }
 
@@ -48,7 +45,6 @@ public class Room : LayoutObjectLeaf {
     void RemoveBadDoorWalls(GridMap potentialDoors)
     {
         GridMap corneredAreas = getCorneredBy(GridType.Wall, GridType.Wall);
-        corneredAreas.toLog(DebugManager.Logs.LevelGen, "Cornered");
         potentialDoors.RemoveAll(corneredAreas);
     }
 
