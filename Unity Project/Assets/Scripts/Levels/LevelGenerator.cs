@@ -314,7 +314,7 @@ public class LevelGenerator
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
-            GridMap potentialDoors = room.GetPotentialDoors();
+            GridMap potentialDoors = room.GetPotentialExternalDoors();
             int numDoors = rand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
