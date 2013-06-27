@@ -81,6 +81,78 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 		return null;
 	}
 
+    public virtual bool IsCorneredBy(HashSet<T> by)
+    {
+        return GetNeighbor(GridDir.HORIZ, by) != null
+            && GetNeighbor(GridDir.VERT, by) != null;
+    }
+
+    public bool IsCorneredBy(params T[] by)
+    {
+        return IsCorneredBy(new HashSet<T>(by));
+    }
+
+    public Value2D<T> GetNeighbor(GridDir d, params T[] ofType)
+    {
+        return GetNeighbor(d, new HashSet<T>(ofType));
+    }
+
+    public Value2D<T> GetNeighbor(GridDir d, HashSet<T> ofType)
+    {
+        List<Value2D<T>> neighbors = GetNeighbors(d, ofType);
+        if (neighbors.Count > 0)
+        {
+            return neighbors[0];
+        }
+        return null;
+    }
+
+    public Value2D<T> GetNeighbor(GridDir d, T t)
+    {
+        IEnumerator<Value2D<T>> en = GetEnumerator(d);
+        while (en.MoveNext())
+        {
+            if (t.Equals(en.Current.val))
+            {
+                return en.Current;
+            }
+        }
+        return null;
+    }
+
+    public List<Value2D<T>> GetNeighbors(GridDir d, T t)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        IEnumerator<Value2D<T>> en = GetEnumerator(d);
+        while (en.MoveNext())
+        {
+            if (t.Equals(en.Current.val))
+            {
+                ret.Add(en.Current);
+            }
+        }
+        return ret;
+    }
+
+    public List<Value2D<T>> GetNeighbors(GridDir d, params T[] ofType)
+    {
+        return GetNeighbors(d, new HashSet<T>(ofType));
+    }
+
+    public List<Value2D<T>> GetNeighbors(GridDir d, HashSet<T> ofType)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        IEnumerator<Value2D<T>> en = GetEnumerator(d);
+        while (en.MoveNext())
+        {
+            if (ofType.Contains(en.Current.val))
+            {
+                ret.Add(en.Current);
+            }
+        }
+        return ret;
+    }
+
     public Value2D<T> GetRandom(Random rand, PassFilter<Value2D<T>> pass)
     {
         List<Value2D<T>> options = new List<Value2D<T>>();
@@ -120,6 +192,26 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
             yield return down;
         if (left != null)
             yield return left;
+    }
+
+    public IEnumerator<Value2D<T>> GetEnumerator(GridDir d)
+    {
+        if (up != null && d == GridDir.UP || d == GridDir.VERT)
+        {
+            yield return up;
+        }
+        if (right != null && d == GridDir.RIGHT || d == GridDir.HORIZ)
+        {
+            yield return right;
+        }
+        if (down != null && d == GridDir.DOWN || d == GridDir.VERT)
+        {
+            yield return down;
+        }
+        if (left != null && d == GridDir.LEFT || d == GridDir.HORIZ)
+        {
+            yield return left;
+        }
     }
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
