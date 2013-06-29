@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 	
-	public Theme theme;
-    public LevelBuilder builder;
-    GameObject[,] blocks_;
-    public GameObject[,] blocks { get { return blocks_; } private set { blocks_ = value; } }
-    GridArray array_;
-    public GridArray array { get { return array_; } private set { array_ = value; } }
+	static public Theme theme;
+    static public LevelBuilder builder;
+    static GameObject[,] blocks_;
+    static public GameObject[,] blocks { get { return blocks_; } private set { blocks_ = value; } }
+    static GridArray array_;
+    static public GridArray array { get { return array_; } private set { array_ = value; } }
 	
     void Start()
     {
