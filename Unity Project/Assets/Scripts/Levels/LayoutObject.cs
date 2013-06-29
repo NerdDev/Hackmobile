@@ -112,7 +112,7 @@ abstract public class LayoutObject {
         {
             for (int x = bounds.xMin; x <= bounds.xMax; x++)
             {
-                outArr[y - bounds.yMin, x - bounds.xMin] = inArr.Get (x, y);
+                outArr[y - bounds.yMin, x - bounds.xMin] = inArr[x, y];
             }
         }
         return outArr;

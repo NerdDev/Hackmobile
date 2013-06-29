@@ -36,7 +36,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #endregion
 
     #region GetSet
-    public override T Get(int x, int y)
+    protected override T Get(int x, int y)
     {
         T val;
         TryGetValue(x, y, out val);
@@ -75,7 +75,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return row;
     }
 
-    public override void Put(T val, int x, int y)
+    protected override void Put(T val, int x, int y)
     {
         PutInternal(val, x, y);
     }
@@ -125,7 +125,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
         foreach (Value2D<T> val in rhs)
         {
-            Put(val);
+            this[val] = val.val;
         }
     }
 

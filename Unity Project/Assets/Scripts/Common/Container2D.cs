@@ -15,13 +15,31 @@ abstract public class Container2D<T> {
 	{	
 		return null;
 	}
-    public abstract T Get(int x, int y);
-    public T Get(Value2D<T> val)
+    public T this[int x, int y]
     {
-        return Get(val.x, val.y);
+        get
+        {
+            return Get(x, y);
+        }
+        set
+        {
+            Put(value, x, y);
+        }
     }
+    public T this[Value2D<T> val]
+    {
+        get
+        {
+            return Get(val.x, val.y);
+        }
+        set
+        {
+            Put(value, val.x, val.y);
+        }
+    }
+    protected abstract T Get(int x, int y);
     public abstract bool InRange(int x, int y);
-    public virtual void Put(T val, int x, int y)
+    protected virtual void Put(T val, int x, int y)
     {
         if (
 			InRange(x, y)
@@ -32,7 +50,7 @@ abstract public class Container2D<T> {
     }
     public virtual void Put(Value2D<T> val)
     {
-        Put(val.val, val.x, val.y);
+        this[val] = val.val;
     }
     protected abstract void PutInternal(T val, int x, int y);
     public abstract Bounding GetBounding();
