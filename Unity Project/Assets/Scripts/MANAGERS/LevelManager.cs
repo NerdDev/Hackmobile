@@ -6,10 +6,6 @@ public class LevelManager : MonoBehaviour {
 	
 	public Theme theme;
     public LevelBuilder builder;
-    GameObject[,] blocks_;
-    public GameObject[,] blocks { get { return blocks_; } private set { blocks_ = value; } }
-    GridArray array_;
-    public GridArray array { get { return array_; } private set { array_ = value; } }
 	
     void Start()
     {
