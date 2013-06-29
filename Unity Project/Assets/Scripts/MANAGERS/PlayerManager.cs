@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class PlayerManager : MonoBehaviour {
 	
 	
-	//Name/title info:
+	//General Player Info:
 	private string playerChosenName;
 	public string PlayerChosenName{get{ return playerChosenName;}}  //read only - set at char creation
 	
@@ -19,7 +19,8 @@ public class PlayerManager : MonoBehaviour {
 	public GameObject playerAvatar;
 	public GameObject PlayerAvatar{get{return playerAvatar;}}//read only global reference to the hero gameobject
 	
-	public Vector3 lastFrameCenterPoint;  //saving up top for checking last frame
+	public Vector3 avatarStartLocation;
+	public float tileMovementTolerance = 1.1f;
 	
 	#region HERO STAT VARS   //only health and attribute stats pertaining to hero go here
 		//Attributes here are read-only for GUI access every frame - modify through functions below
@@ -224,6 +225,9 @@ public class PlayerManager : MonoBehaviour {
 	
 	static int idleState = Animator.StringToHash("Base Layer.Idle");	
 	static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
+	
+	Vector3 currentGridLoc;
+	Vector3 currentGridCenterPointWithoffset;
 	#endregion
 	
 	// Use this for initialization
@@ -234,30 +238,45 @@ public class PlayerManager : MonoBehaviour {
 		DecideHungerLevel();
 		anim = playerAvatar.GetComponent<Animator>() as Animator;
 		
+		//Placing our hero object at designated start location:
+		playerAvatar.transform.position = avatarStartLocation;
 		//Debug.Log(bb.gameObject);//working
 		//AdjustPlayerHealth(gameObject,0);
+		
+		UpdateCurrentTileVectors();
+		//Example of LevelLayout Surrounding() call:
+		//if grid type is wall:
+		//if (GridType.Wall == LevelManager.array[x,y])
+		//{
+		//	foo;
+		//}
+		
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		//This is for testing/dev purposes ONLY and HIGHLY INEFFICIENT DONT JUDGE ME
-		Debug.DrawRay(playerAvatar.transform.position,playerAvatar.transform.forward*.3f,Color.blue);
-		 GridSpace[] tiles = FindObjectsOfType(typeof(GridSpace)) as GridSpace[];
-        foreach (GridSpace grid in tiles) 
+		
+		Vector3 transVec = (currentGridLoc + Vector3.down*.5f) - playerAvatar.transform.position;
+		Debug.Log("Player current (rounded) grid loc: " + currentGridLoc);
+		Debug.DrawLine (playerAvatar.transform.position + Vector3.up, currentGridCenterPointWithoffset,Color.green);
+		
+		//Update() distance to that tile
+		float distanceToOccupiedTile = Vector3.Distance(playerAvatar.transform.position + Vector3.down * .5f,currentGridCenterPointWithoffset);
+		Debug.Log("Distance to player's current tile: " + distanceToOccupiedTile);
+		//If distance is greater than 1.3 (var), pass turn
+		if (distanceToOccupiedTile > tileMovementTolerance)
 		{
-            Debug.DrawRay(grid.gameObject.transform.position,grid.gameObject.transform.up,Color.yellow);
-        }
-		
-		
-		//Drawing Ray to closest tile:
-		Vector3 playerVec = new Vector3(playerAvatar.transform.position.x,playerAvatar.transform.position.y+ 2f,playerAvatar.transform.position.z);
-		Vector3 closestTileCenterPoint = (ReturnClosestGrid(tiles).gameObject.transform.position + (Vector3.up*.5f));
-		
-		Debug.Log ("Closest Tile Center Point:" + closestTileCenterPoint);
-		Vector3 transVec = closestTileCenterPoint - playerAvatar.transform.position;
-		Debug.DrawLine(playerAvatar.transform.position + Vector3.up*.3f,ReturnClosestGrid(tiles).gameObject.transform.position + Vector3.up*.5f,Color.green);
-	
+			//Wrap this into a function:
+			UpdateCurrentTileVectors();
+			//This will be our pass turn function:
+			BigBoss.TimeKeeper.numTilesCrossed++;
+			BigBoss.Gooey.UpdateTilesCrossedLabel();
+			AdjustXP(gameObject,10);
+			AdjustHungerPoints(-20);
+			BigBoss.Gooey.UpdateXPBar();
+		}
+
 		//Moving toward closest center point if player isn't moving with input:
 		if (BigBoss.PlayerInput.isMovementKeyPressed == false)
 		{
@@ -265,48 +284,19 @@ public class PlayerManager : MonoBehaviour {
 		}
 		
 		
-		
-		lastFrameCenterPoint = closestTileCenterPoint;//for updating tile change event - temporary
-		GameObject occupiedTile = ReturnClosestGrid(tiles).gameObject;
-		float distanceToOccupiedTile = Vector3.Distance(playerAvatar.transform.position,occupiedTile.transform.position+ Vector3.up*.5f);
-		Debug.Log("Distance to occupied tile: " + distanceToOccupiedTile);
-		
-		
-		//Our temporary turn pass function:
-		if (distanceToOccupiedTile > 1.3f)  //wrap this up into a var 
-		{
-			BigBoss.TimeKeeper.numTilesCrossed++;
-			BigBoss.Gooey.UpdateTilesCrossedLabel();
-			AdjustXP(gameObject,10);
-			AdjustHungerPoints(-20);
-			BigBoss.Gooey.UpdateXPBar();
-		} 
-		
-//		//Our temporary turn pass function:
-//		if (lastFrameCenterPoint != closestTileCenterPoint)
-//		{
-//			BigBoss.TimeKeeper.numTilesCrossed++;
-//			BigBoss.Gooey.UpdateTilesCrossedLabel();
-//			AdjustXP(gameObject,10);
-//			AdjustHungerPoints(-20);
-//			BigBoss.Gooey.UpdateXPBar();
-//		} 
-		
-		//Commenting logic
-	//---GetCurrently occupied tile, by way of (int) casting avatar transform position
-		
-		//Update() distance to that tile
-		
-		//If distance is greater than 1.3 (var), pass turn
-		
-		//Also calculate a new Occupied tile - will int casts work here?
+	}
+
+	void UpdateCurrentTileVectors ()
+	{
+		currentGridLoc = new Vector3(Mathf.Round(playerAvatar.transform.position.x),Mathf.Round(playerAvatar.transform.position.y),Mathf.Round(playerAvatar.transform.position.z));
+		currentGridCenterPointWithoffset = currentGridLoc + Vector3.down;
 	}
 		
 	void FixedUpdate ()
 	{
 		//float h = Input.GetAxis("Horizontal");				// setup h variable as our horizontal input axis
 		float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
-		Debug.Log("V: " + v);
+		//Debug.Log("V: " + v);
 		anim.SetFloat("Speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
 		//anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
 		//anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
@@ -316,26 +306,7 @@ public class PlayerManager : MonoBehaviour {
 //			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation
 		
 	}
-	 GameObject ReturnClosestGrid (GridSpace[] grids)
-    {
-        
-        GameObject closest = null;
-        float distance = Mathf.Infinity;
-        Vector3 playerPos = playerAvatar.transform.position;
-        foreach (GridSpace gr in grids)
-        {
-     
-                Vector3 diff = gr.gameObject.transform.position - playerPos;
-                float curDistance = diff.sqrMagnitude;
-                if (curDistance < distance)
-                { 
-                    closest = gr.gameObject;
-                    distance = curDistance;
-                }
-         }
-        Debug.Log("Closest Grid to player is " + closest + "...at " + closest.transform.position);
-        return closest;
-    }
+
 	
 	public void PlayerMoveForward()
 	{
