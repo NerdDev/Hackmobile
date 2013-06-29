@@ -68,7 +68,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #endregion
 
     #region GetSet
-    protected override T Get(int x, int y)
+    public override T Get(int x, int y)
     {
         // Shift public points to proper internal points
         x += xShift;
@@ -126,7 +126,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     // Puts value into the array
     // If outside the range, a new larger array is
     // made to store the value.
-    protected override void Put(T val, int x, int y)
+    public override void Put(T val, int x, int y)
     {
         if (InRange(x, y))
         {

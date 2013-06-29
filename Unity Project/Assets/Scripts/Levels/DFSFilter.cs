@@ -15,7 +15,7 @@ public class DFSFilter : PassFilter<Value2D<GridType>>
 
     public bool pass(Value2D<GridType> dir)
     {
-        return !blocked[dir.x, dir.y] // If not blocked
+        return !blocked.Get(dir.x, dir.y) // If not blocked
            && (dir.val == GridType.NULL || targets.Contains(dir.val)); // If open space or target
     }
 }

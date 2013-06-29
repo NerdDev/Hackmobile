@@ -14,12 +14,12 @@ public class LayoutObjectLeaf : LayoutObject {
     #region GetSet
     public GridType get(int x, int y)
     {
-        return grids[x, y];
+        return grids.Get(x, y);
     }
 
     public void put(GridType t, int x, int y)
     {
-        grids[x,y] = t;
+        grids.Put(t, x, y);
     }
 
     public void putAll(GridMap map)

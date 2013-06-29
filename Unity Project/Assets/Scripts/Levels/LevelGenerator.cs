@@ -7,6 +7,12 @@ public class LevelGenerator
 
     #region GlobalGenVariables
     // Number of Rooms
+    public static int minRooms { get { return 8; } }
+    public static int maxRooms { get { return 16; } } //Max not inclusive
+
+    // Box Room Size (including walls)
+    public static int minRectSize { get { return 5; } }
+    public static int maxRectSize { get { return 20; } }
 
     // Amount to shift rooms
     public static int shiftRange { get { return 10; } } //Max not inclusive
@@ -420,7 +426,7 @@ public class LevelGenerator
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
             GridArray tmp = new GridArray(grids);
-            tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+            tmp.Put(GridType.INTERNAL_RESERVED_CUR, startPoint.x, startPoint.y);
             tmp.toLog(DebugManager.Logs.LevelGen, "Starting Map:");
         }
         #endregion
@@ -439,7 +445,7 @@ public class LevelGenerator
         {
             startPoint = pathTaken.Peek();
             // Don't want to visit the same point on a different route later
-            blockedPoints[startPoint.x, startPoint.y] = true;
+            blockedPoints.Put(true, startPoint.x, startPoint.y);
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             { // Set up new print array
@@ -449,7 +455,7 @@ public class LevelGenerator
                 {
                     if (blockedPt.val)
                     {
-                        debugGrid[blockedPt.x, blockedPt.y] = GridType.INTERNAL_RESERVED_BLOCKED;
+                        debugGrid.Put(GridType.INTERNAL_RESERVED_BLOCKED, blockedPt.x, blockedPt.y);
                     }
                 }
                 Path tmpPath = new Path(pathTaken);
@@ -514,7 +520,7 @@ public class LevelGenerator
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Breadth First Search Fill");
             GridArray tmp = new GridArray(grids);
-            tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+            tmp.Put(GridType.INTERNAL_RESERVED_CUR, startPoint.x, startPoint.y);
             tmp.toLog(DebugManager.Logs.LevelGen, "Starting Map:");
         }
         #endregion
@@ -522,7 +528,7 @@ public class LevelGenerator
         queue.Enqueue(startPoint);
         GridType[,] targetArr = grids.GetArr();
         Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
-        outGridArr[startPoint.x, startPoint.y] = true;
+        outGridArr.Put(true, startPoint.x, startPoint.y);
         Value2D<GridType> curPoint;
         while (queue.Count > 0)
         {
@@ -536,10 +542,10 @@ public class LevelGenerator
             #endregion
             foreach (Value2D<GridType> option in options)
             {
-                if (targets.Contains(option.val) && !outGridArr[option.x, option.y])
+                if (targets.Contains(option.val) && !outGridArr.Get(option.x, option.y))
                 {
                     queue.Enqueue(option);
-                    outGridArr[option.x, option.y] = true;
+                    outGridArr.Put(true, option.x, option.y);
                 }
             }
         }

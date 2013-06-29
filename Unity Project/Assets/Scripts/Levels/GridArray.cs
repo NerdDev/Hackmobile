@@ -41,8 +41,8 @@ public class GridArray : Array2D<GridType> {
 		return GridTypeComparator.get();
 	}
     #endregion
-
-    protected override void Put(GridType val, int x, int y)
+	
+    public override void Put(GridType val, int x, int y)
     {
 		if (val != GridType.NULL)
 		{

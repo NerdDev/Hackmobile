@@ -42,16 +42,16 @@ public class Path : LayoutObject {
                     { // Start Point
                         if (ending)
                         {
-                            ret[curPoint.x, curPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                            ret.Put(GridType.INTERNAL_RESERVED_CUR, curPoint.x, curPoint.y);
                         }
                     }
                     else if (Mathf.Abs(forwardPt.x - backwardPt.x) == 2)
                     { // Horizontal
-                        ret[curPoint.x, curPoint.y] = GridType.Path_Horiz;
+                        ret.Put(GridType.Path_Horiz, curPoint.x, curPoint.y);
                     }
                     else if (Mathf.Abs(forwardPt.y - backwardPt.y) == 2)
                     { // Vertical
-                        ret[curPoint.x, curPoint.y] = GridType.Path_Vert;
+                        ret.Put(GridType.Path_Vert, curPoint.x, curPoint.y);
                     }
                     else
                     { // Corner
@@ -61,22 +61,22 @@ public class Path : LayoutObject {
                         {
                             if (right)
                             {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_RT;
+                                ret.Put(GridType.Path_RT, curPoint.x, curPoint.y);
                             }
                             else
                             {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_LT;
+                                ret.Put(GridType.Path_LT, curPoint.x, curPoint.y);
                             }
                         }
                         else
                         {
                             if (right)
                             {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_RB;
+                                ret.Put(GridType.Path_RB, curPoint.x, curPoint.y);
                             }
                             else
                             {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_LB;
+                                ret.Put(GridType.Path_LB, curPoint.x, curPoint.y);
                             }
                         }
                     }
@@ -87,7 +87,7 @@ public class Path : LayoutObject {
             }
             if (ending)
             {
-                ret[curPoint.x, curPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                ret.Put(GridType.INTERNAL_RESERVED_CUR, curPoint.x, curPoint.y);
             }
         }
         return ret;
@@ -132,7 +132,7 @@ public class Path : LayoutObject {
                 List<Value2D<GridType>> toRemove = list.GetRange(fromIndex, count);
                 foreach (Value2D<GridType> r in toRemove)
                 {
-                    indexes[r.x, r.y] = 0;
+                    indexes.Put(0, r.x, r.y);
                 }
                 // Remove
                 list.RemoveRange(fromIndex, count);
@@ -146,7 +146,7 @@ public class Path : LayoutObject {
 				}
 				#endregion
             }
-            indexes[val.x, val.y] = index;
+            indexes.Put(index, val.x, val.y);
             index++;
         }
 		#region DEBUG

@@ -11,6 +11,8 @@ public class Room : LayoutObjectLeaf {
     {
         roomNum = num;
     }
+	
+	public GridMap getWalls() 
     {
 		return getTypes(GridType.Wall);
 	}
@@ -62,7 +64,7 @@ public class Room : LayoutObjectLeaf {
                 // If space is an edge (next to a false)
                 if (surround.GetDirWithVal(false) != null)
                 {
-                    ret[val.x, val.y] = grids[val.x, val.y];
+                    ret.Put(grids.Get(val.x, val.y), val.x, val.y);
                 }
             }
         }
