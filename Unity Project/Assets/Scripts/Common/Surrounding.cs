@@ -45,11 +45,14 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 		return ret;
 	}
 	
-	public virtual Value2D<T> GetDirWithVal(T t)
+    // Returns a direction containing the given value.
+    // Null if none found.
+    public virtual Value2D<T> GetDirWithVal(PassFilter<Value2D<T>> pass, T t)
 	{
 		foreach (Value2D<T> val in this)
 		{
-			if (val != null && val.val.Equals(t))
+            if (val != null && val.val.Equals(t)
+                && (pass == null || pass.pass(val)))
 			{
 				return val;	
 			}
@@ -57,23 +60,36 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 		return null;
 	}
 
-    public virtual Value2D<T> GetDirWithVal(HashSet<T> t, PassFilter<Value2D<T>> pass)
+    // Returns a direction containing one of the given values.
+    // Null if none found.
+    public virtual Value2D<T> GetDirWithVal(PassFilter<Value2D<T>> pass, HashSet<T> set)
     {
         foreach (Value2D<T> val in this)
         {
-            if (val != null && t.Contains(val.val) && pass.pass(val))
+            if (val != null && set.Contains(val.val) 
+                && (pass == null || pass.pass(val)))
             {
                 return val;
             }
         }
         return null;
     }
+
+    // Returns a direction containing one of the given values that also passes the filter.
+    // Null if none found.
+    public virtual Value2D<T> GetDirWithVal(PassFilter<Value2D<T>> pass, params T[] types)
+    {
+        return GetDirWithVal(pass, new HashSet<T>(types));
+    }
 	
-	public virtual Value2D<T> GetDirWithoutVal(T t)
+    // Returns a direction that does not contain given value.
+    // Null if none found.
+	public virtual Value2D<T> GetDirWithoutVal(PassFilter<Value2D<T>> pass, T t)
 	{
 		foreach (Value2D<T> val in this)
 		{
-			if (val != null && !val.val.Equals(t))
+			if (val != null && !val.val.Equals(t)
+                && (pass == null || pass.pass(val)))
 			{
 				return val;	
 			}
@@ -81,23 +97,49 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 		return null;
 	}
 
-    public virtual bool IsCorneredBy(HashSet<T> by)
+    // Returns a direction not contained in the given set, that also passes the filter.
+    // Null if none found.
+    public virtual Value2D<T> GetDirWithoutVal(PassFilter<Value2D<T>> pass, params T[] types)
     {
-        return GetNeighbor(GridDir.HORIZ, by) != null
-            && GetNeighbor(GridDir.VERT, by) != null;
+        return GetDirWithoutVal(pass, new HashSet<T>(types));
     }
 
+    // Returns a direction not contained in the given set, that also passes the filter.
+    // Null if none found.
+    public virtual Value2D<T> GetDirWithoutVal(PassFilter<Value2D<T>> pass, HashSet<T> set)
+    {
+        foreach (Value2D<T> val in this)
+        {
+            if (val != null && !set.Contains(val.val)
+                && (pass == null || pass.pass(val)))
+            {
+                return val;
+            }
+        }
+        return null;
+    }
+
+    // True if current space is cornered by values given.
+    // Cornered means a block is present vertically and horizontally.
+    public virtual bool IsCorneredBy(HashSet<T> by)
+    {
+        return GetNeighbor(GridDirection.HORIZ, by) != null
+            && GetNeighbor(GridDirection.VERT, by) != null;
+    }
+
+    // True if current space is cornered by values given.
+    // Cornered means a block is present vertically and horizontally.
     public bool IsCorneredBy(params T[] by)
     {
         return IsCorneredBy(new HashSet<T>(by));
     }
 
-    public Value2D<T> GetNeighbor(GridDir d, params T[] ofType)
+    public Value2D<T> GetNeighbor(GridDirection d, params T[] ofType)
     {
         return GetNeighbor(d, new HashSet<T>(ofType));
     }
 
-    public Value2D<T> GetNeighbor(GridDir d, HashSet<T> ofType)
+    public Value2D<T> GetNeighbor(GridDirection d, HashSet<T> ofType)
     {
         List<Value2D<T>> neighbors = GetNeighbors(d, ofType);
         if (neighbors.Count > 0)
@@ -107,7 +149,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         return null;
     }
 
-    public Value2D<T> GetNeighbor(GridDir d, T t)
+    public Value2D<T> GetNeighbor(GridDirection d, T t)
     {
         IEnumerator<Value2D<T>> en = GetEnumerator(d);
         while (en.MoveNext())
@@ -120,7 +162,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         return null;
     }
 
-    public List<Value2D<T>> GetNeighbors(GridDir d, T t)
+    public List<Value2D<T>> GetNeighbors(GridDirection d, T t)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>();
         IEnumerator<Value2D<T>> en = GetEnumerator(d);
@@ -134,12 +176,12 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         return ret;
     }
 
-    public List<Value2D<T>> GetNeighbors(GridDir d, params T[] ofType)
+    public List<Value2D<T>> GetNeighbors(GridDirection d, params T[] ofType)
     {
         return GetNeighbors(d, new HashSet<T>(ofType));
     }
 
-    public List<Value2D<T>> GetNeighbors(GridDir d, HashSet<T> ofType)
+    public List<Value2D<T>> GetNeighbors(GridDirection d, HashSet<T> ofType)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>();
         IEnumerator<Value2D<T>> en = GetEnumerator(d);
@@ -194,21 +236,21 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
             yield return left;
     }
 
-    public IEnumerator<Value2D<T>> GetEnumerator(GridDir d)
+    public IEnumerator<Value2D<T>> GetEnumerator(GridDirection d)
     {
-        if (up != null && d == GridDir.UP || d == GridDir.VERT)
+        if (up != null && d == GridDirection.UP || d == GridDirection.VERT)
         {
             yield return up;
         }
-        if (right != null && d == GridDir.RIGHT || d == GridDir.HORIZ)
+        if (right != null && d == GridDirection.RIGHT || d == GridDirection.HORIZ)
         {
             yield return right;
         }
-        if (down != null && d == GridDir.DOWN || d == GridDir.VERT)
+        if (down != null && d == GridDirection.DOWN || d == GridDirection.VERT)
         {
             yield return down;
         }
-        if (left != null && d == GridDir.LEFT || d == GridDir.HORIZ)
+        if (left != null && d == GridDirection.LEFT || d == GridDirection.HORIZ)
         {
             yield return left;
         }
