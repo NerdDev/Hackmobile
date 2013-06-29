@@ -6,17 +6,31 @@ public class LevelManager : MonoBehaviour {
 	
 	public Theme theme;
     public LevelBuilder builder;
+    GameObject[,] blocks_;
+    public GameObject[,] blocks { get { return blocks_; } private set { blocks_ = value; } }
+    GridArray array_;
+    public GridArray array { get { return array_; } private set { array_ = value; } }
 	
     void Start()
     {
         RoomModifier.RegisterModifiers();
         LevelGenerator gen = new LevelGenerator();
         LevelLayout layout = gen.generateLayout(0, 665911697, 1733302797);
-		builder.Build(layout, theme);
+        array = layout.GetArray();
+		blocks = builder.Build(array, theme);
+
+        Surrounding<GridType> test = Surrounding<GridType>.Get(array, 1, 1);
+        foreach (Value2D<GridType> val in test)
+        {
+            Debug.Log(val);
+        }
+        Debug.Log(test + " is cornered: " + test.IsCorneredBy(GridType.Wall));
 
         JustinTest();
         JoseTest();
     }
+
+    
 
     void TestModifier(RoomModifier mod, int seed)
     {

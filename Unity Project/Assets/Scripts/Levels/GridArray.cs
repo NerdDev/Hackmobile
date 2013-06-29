@@ -121,4 +121,10 @@ public class GridArray : Array2D<GridType> {
             }
         }
     }
+
+    public static implicit operator GridType[,](GridArray src)
+    {
+        return src.arr;
+    }
+
 }

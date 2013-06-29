@@ -464,7 +464,7 @@ public class LevelGenerator
             #endregion
 
             // Get surrounding points
-            Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y);
+            Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y, filter);
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -473,7 +473,7 @@ public class LevelGenerator
             #endregion
 
             // If found target, return path we took
-            Value2D<GridType> targetDir = options.GetDirWithVal(targets, filter);
+            Value2D<GridType> targetDir = options.GetDirWithVal(targets);
             if (targetDir != null)
             {
                 #region DEBUG
