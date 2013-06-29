@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public enum GridDir {
+public enum GridDirection {
     UP,
     DOWN,
     LEFT,
