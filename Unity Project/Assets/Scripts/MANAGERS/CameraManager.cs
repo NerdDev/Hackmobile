@@ -5,6 +5,8 @@ using System.Collections;
 public class CameraManager : MonoBehaviour {
 	
 		
+	
+	
 	#region Global Variables
 	//Bools
 	

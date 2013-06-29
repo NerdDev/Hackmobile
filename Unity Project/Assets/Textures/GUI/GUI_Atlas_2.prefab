@@ -43,13 +43,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 573
+      y: 459
       width: 213
       height: 150
     inner:
       serializedVersion: 2
       x: 0
-      y: 573
+      y: 459
       width: 213
       height: 150
     paddingLeft: 0
@@ -60,13 +60,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 271
+      y: 308
       width: 213
       height: 150
     inner:
       serializedVersion: 2
       x: 0
-      y: 271
+      y: 308
       width: 213
       height: 150
     paddingLeft: 0
@@ -111,13 +111,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 422
+      y: 157
       width: 213
       height: 150
     inner:
       serializedVersion: 2
       x: 0
-      y: 422
+      y: 157
       width: 213
       height: 150
     paddingLeft: 0
@@ -144,14 +144,14 @@ MonoBehaviour:
   - name: GUISlider_Empty
     outer:
       serializedVersion: 2
-      x: 214
-      y: 834
+      x: 262
+      y: 683
       width: 549
       height: 40
     inner:
       serializedVersion: 2
-      x: 214
-      y: 834
+      x: 262
+      y: 683
       width: 549
       height: 40
     paddingLeft: .0127504552
@@ -179,13 +179,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 120
+      y: 6
       width: 213
       height: 150
     inner:
       serializedVersion: 2
       x: 0
-      y: 120
+      y: 6
       width: 213
       height: 150
     paddingLeft: 0
@@ -212,13 +212,13 @@ MonoBehaviour:
   - name: HUDPaneTab1
     outer:
       serializedVersion: 2
-      x: 0
+      x: 262
       y: 724
       width: 213
       height: 150
     inner:
       serializedVersion: 2
-      x: 0
+      x: 262
       y: 724
       width: 213
       height: 150
@@ -229,19 +229,36 @@ MonoBehaviour:
   - name: GUISlider_Full
     outer:
       serializedVersion: 2
-      x: 214
-      y: 793
+      x: 262
+      y: 642
       width: 549
       height: 40
     inner:
       serializedVersion: 2
-      x: 214
-      y: 793
+      x: 262
+      y: 642
       width: 549
       height: 40
     paddingLeft: .0127504552
     paddingRight: .00546448072
     paddingTop: .150000006
+    paddingBottom: 0
+  - name: Key
+    outer:
+      serializedVersion: 2
+      x: 0
+      y: 610
+      width: 261
+      height: 264
+    inner:
+      serializedVersion: 2
+      x: 0
+      y: 610
+      width: 261
+      height: 264
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
     paddingBottom: 0
   mCoordinates: 0
   mPixelSize: 1

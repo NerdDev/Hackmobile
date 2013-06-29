@@ -60,7 +60,10 @@
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\dynamon animations.txt" />
      <None Include="Assets\AudioToolkit\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
+     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 3 animations.txt" />
+     <None Include="Assets\Resources\XML\items.xml" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc3 female animations.txt" />
@@ -70,6 +73,7 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 1 animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
+     <None Include="Assets\IMPORT\wizard\wizard.skeleton.xml" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc1 baker animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 2 animations.txt" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutlineHard.shader" />
@@ -82,8 +86,11 @@
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\ogre 1 animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc5 blacksmith animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+     <None Include="Assets\IMPORT\FemAssasin\FemAssasin README.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\TransitionsManager\ReadMe.txt" />
+     <None Include="Assets\IMPORT\girl_warrior\animation list.txt" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
      <None Include="Assets\iTweenEditor\README.txt" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimLight.shader" />
      <None Include="Assets\NGUI\ReadMe - 2.0.3d.txt" />
@@ -93,12 +100,14 @@
      <None Include="Assets\NGUI\Examples\Other\English.txt" />
      <None Include="Assets\NGUI\Examples\Other\French.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 1 animations.txt" />
+     <None Include="Assets\IMPORT\wizard\wizard.mesh.xml" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\ogre 2 animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc4 knight animations.txt" />
      <None Include="Assets\IMPORT\SkeletonData\animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 3 animations.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimAlpha.shader" />
+     <None Include="Assets\Resources\XML\materials.xml" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2 animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
      <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
@@ -108,6 +117,7 @@
      <None Include="Assets\IMPORT\Fantasy Weapons\knife1\knife1.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\guard animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
+     <None Include="Assets\Resources\XML\npcs.xml" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\Priest animations.txt" />
@@ -115,6 +125,18 @@
      <None Include="Assets\ShurikenMagic\Shaders\SM_TransparentRim.shader" />
  <Reference Include="AudioToolkit_FreeVersion">
  <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
+ </Reference>
+ <Reference Include="OSCsharp">
+ <HintPath>Assets\TouchScript\Plugins\OSCsharp.dll</HintPath>
+ </Reference>
+ <Reference Include="TouchScript">
+ <HintPath>Assets\TouchScript\Plugins\TouchScript.dll</HintPath>
+ </Reference>
+ <Reference Include="TouchScript.Pro">
+ <HintPath>Assets\TouchScript\Plugins\TouchScript.Pro.dll</HintPath>
+ </Reference>
+ <Reference Include="TUIOsharp">
+ <HintPath>Assets\TouchScript\Plugins\TUIOsharp.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

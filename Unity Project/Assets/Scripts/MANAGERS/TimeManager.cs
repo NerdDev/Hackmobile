@@ -29,6 +29,7 @@ public class TimeManager : MonoBehaviour {
 	}
 	
 	public int turnsPassed = 0;
+	public int numTilesCrossed = 0;
 	#endregion
 	#region Expose Property In Inspector Example
 	//This is our inspector property example:   Copy this example for use within this TimeManager class.  To expose properties in other classes, make a new script copied from TimeManagerEditor.cs

@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour {
 	public bool allowPlayerInput;
 	public bool allowKeyboardInput;
 	public bool allowMouseInput;
+	public bool isMovementKeyPressed;//mainly for debugging, will convert this bool when the input class is implemented for mobile
 	//Mouse:
 	public float horizontalMouseSensitivity;
 	public float horizontalMouseAxis;//Number spit out by Unity's Input.GetAxis
@@ -47,6 +48,8 @@ public class InputManager : MonoBehaviour {
 	
 	void CheckForKeyboardInput ()
 	{
+			
+		isMovementKeyPressed = false;
 			//Standard Escape Menu/Pause
 				if (Input.GetKeyDown(KeyCode.Escape)){BigBoss.TimeKeeper.TogglePause();}
 			
@@ -58,22 +61,75 @@ public class InputManager : MonoBehaviour {
 			BigBoss.NPCManager.CreateNPC(place,"newt");
 			Debug.Log("X");
 		}
-		if (Input.GetKeyDown(KeyCode.W))
+		if (Input.GetKey(KeyCode.W))
 		{
 			BigBoss.PlayerInfo.PlayerMoveForward();
+			isMovementKeyPressed = true;
 		}
-		if (Input.GetKeyDown(KeyCode.A))
+		if (Input.GetKey(KeyCode.S))
 		{
-			Debug.Log("lulz");
-			BigBoss.PlayerInfo.PlayerAvatar.renderer.enabled = !BigBoss.PlayerInfo.PlayerAvatar.renderer.enabled;
+			BigBoss.PlayerInfo.PlayerMoveBackward();
+			isMovementKeyPressed = true;
+		}
+		if (Input.GetKey(KeyCode.A))
+		{
+			BigBoss.PlayerInfo.PlayerMoveLeft();
+			isMovementKeyPressed = true;
+		}
+		if (Input.GetKey(KeyCode.D))
+		{
+			
+			BigBoss.PlayerInfo.PlayerMoveRight();
+			isMovementKeyPressed = true;
+		}
+		
+		#region WASD
+		//For GUI debugging:
+		if (Input.GetKeyDown(KeyCode.W))
+		{
+			BigBoss.Gooey.keyWSprite.color = Color.green;
 		}
 		if (Input.GetKeyDown(KeyCode.S))
 		{
-			
+			BigBoss.Gooey.keySSprite.color = Color.green;
+		}
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+			BigBoss.Gooey.keyASprite.color = Color.green;
 		}
 		if (Input.GetKeyDown(KeyCode.D))
 		{
+			BigBoss.Gooey.keyDSprite.color = Color.green;
 			
+		}
+		if (Input.GetKeyUp(KeyCode.W))
+		{
+			BigBoss.Gooey.keyWSprite.color = Color.white;
+		}
+		if (Input.GetKeyUp(KeyCode.S))
+		{
+			BigBoss.Gooey.keySSprite.color = Color.white;
+		}
+		if (Input.GetKeyUp(KeyCode.A))
+		{
+			BigBoss.Gooey.keyASprite.color = Color.white;
+		}
+		if (Input.GetKeyUp(KeyCode.D))
+		{
+			BigBoss.Gooey.keyDSprite.color = Color.white;
+			
+		}
+		#endregion
+		
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			
+			//Debug only code:
+			HeroCam hCam = (HeroCam)Camera.main.GetComponent("HeroCam") as HeroCam;
+			hCam.enabled = !hCam.enabled;
+			maxCamera mCam = (maxCamera)Camera.main.GetComponent("maxCamera") as maxCamera;
+			mCam.enabled = !mCam.enabled;
+			BigBoss.Gooey.CreateTextPop(BigBoss.PlayerInfo.transform.position + Vector3.up *.75f," CAMERA SWAP ",Color.white);
 		}
 			
 		

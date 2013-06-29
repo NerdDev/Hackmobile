@@ -48,6 +48,8 @@ public class GUIManager : MonoBehaviour {
 	public UILabel HUDDexterityLabel;
 	public UILabel HUDDexterityValue;
 	public UILabel hungerLabel;
+	public UILabel tilesCrossedLabel;  //currently for dev only
+	
 	
 	#endregion
 	
@@ -58,6 +60,11 @@ public class GUIManager : MonoBehaviour {
 	public UISprite mainHUDTabB;  //inventory
 	public UISprite mainHUDTabC; //stats/dungeon/achievements
 	public UISprite mainHUDTabD;  //option tab
+	
+	public UISprite keyWSprite;
+	public UISprite keyASprite;
+	public UISprite keySSprite;
+	public UISprite keyDSprite;
 	
 	bool isUIPanelBUp = false;
 	public iTweenEvent tweenPanelBUp;
@@ -73,7 +80,7 @@ public class GUIManager : MonoBehaviour {
 //	public UISlider HUDplayerHealthBar;
 //	
 //	//Labels
-//	public UILabel HUDHealthBarNumberLabel;
+	public UILabel HUD2XPLabel;
 //	public UILabel HUDcharacterNameLabel;
 //	public UILabel HUDcharacterTitleLabel;
 //	public UILabel HUDDungeonLevelLabel;
@@ -177,6 +184,17 @@ public class GUIManager : MonoBehaviour {
 	{
 		hungerLabel.text = BigBoss.PlayerInfo.CurrentHungerLevel.ToString();
 		hungerLabel.color = theCol;
+	}
+	
+	public void UpdateXPBar()
+	{
+		HUDxpbar.sliderValue = (float)BigBoss.PlayerInfo.PlayerCurrentXPForThisLevel/1000f;
+		HUD2XPLabel.text = BigBoss.PlayerInfo.PlayerCurrentXPForThisLevel + " / 1000";
+	}
+	
+	public void UpdateTilesCrossedLabel()
+	{
+		tilesCrossedLabel.text = "Tiles Crossed: " + BigBoss.TimeKeeper.numTilesCrossed;
 	}
 	
 	public void CreateTextPop(Vector3 worldPosition, string message, Color col)

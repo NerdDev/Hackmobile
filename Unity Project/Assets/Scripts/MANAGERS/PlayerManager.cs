@@ -16,11 +16,10 @@ public class PlayerManager : MonoBehaviour {
 	private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
 	public string PlayerTitle{get{ return playerTitle;}}  //read only - updated via class info
 	
-	private string playerTitleCombatArea;//wizardry, combat, bushido, medicine, chemistry, sightseeing, etc
-	public string PlayerTitleCombatArea{get{ return playerTitleCombatArea;}}  //read only - updated via class info
-	
 	public GameObject playerAvatar;
 	public GameObject PlayerAvatar{get{return playerAvatar;}}//read only global reference to the hero gameobject
+	
+	public Vector3 lastFrameCenterPoint;  //saving up top for checking last frame
 	
 	#region HERO STAT VARS   //only health and attribute stats pertaining to hero go here
 		//Attributes here are read-only for GUI access every frame - modify through functions below
@@ -60,7 +59,7 @@ public class PlayerManager : MonoBehaviour {
 	private int playerWisdom = 6;  //temporarily hard-coded
 	public int PlayerWisdom{get{ return playerMaxHealth;}}  //read only - change through Adjust()
 	
-	private int playerHunger = 0;  //temporarily hard-coded
+	public int playerHunger = 1000;  //temporarily hard-coded
 	public int PlayerHunger{get{ return playerHunger;}}  //read only - change through Adjust()
 	
 	private int playerHungerMax = 1000;  //temporarily hard-coded
@@ -71,6 +70,9 @@ public class PlayerManager : MonoBehaviour {
 	
 	private int playerEncumbranceMax = 10;  //temporarily hard-coded
 	public int PlayerEncumbranceMax{get{ return playerEncumbranceMax;}}
+	
+	public float playerSpeed = 10;  //temporarily hard-coded
+	public float PlayerSpeed{get{ return playerSpeed;}}
 	#endregion
 	
 	#region INVENTORY
@@ -200,14 +202,37 @@ public class PlayerManager : MonoBehaviour {
 		Spellbook
 		
 	}
+	
+	public enum PlayerAttributes    //WIP - body inventory equipping purposes
+	{
+		Strength,
+		Dexterity,
+		Constitution,
+		Intelligence,
+		Wisdom,
+		Charisma
+		
+	}
+	
 	#endregion
+	
+	#region ANIMATION
+
+	private Animator anim;							// a reference to the animator on the character
+	private AnimatorStateInfo currentBaseState;			// a reference to the current state of the animator, used for base layer
+	private AnimatorStateInfo layer2CurrentState;	// a reference to the current state of the animator, used for layer 2
+	
+	static int idleState = Animator.StringToHash("Base Layer.Idle");	
+	static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
+	#endregion
+	
 	// Use this for initialization
 	void Start () 
 	{
 		DecidePlayerTitle();
 		DecidePlayerInventoryMaxWeight();
 		DecideHungerLevel();
-		
+		anim = playerAvatar.GetComponent<Animator>() as Animator;
 		
 		//Debug.Log(bb.gameObject);//working
 		//AdjustPlayerHealth(gameObject,0);
@@ -216,15 +241,127 @@ public class PlayerManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
+		//This is for testing/dev purposes ONLY and HIGHLY INEFFICIENT DONT JUDGE ME
+		Debug.DrawRay(playerAvatar.transform.position,playerAvatar.transform.forward*.3f,Color.blue);
+		 GridSpace[] tiles = FindObjectsOfType(typeof(GridSpace)) as GridSpace[];
+        foreach (GridSpace grid in tiles) 
+		{
+            Debug.DrawRay(grid.gameObject.transform.position,grid.gameObject.transform.up,Color.yellow);
+        }
 		
+		
+		//Drawing Ray to closest tile:
+		Vector3 playerVec = new Vector3(playerAvatar.transform.position.x,playerAvatar.transform.position.y+ 2f,playerAvatar.transform.position.z);
+		Vector3 closestTileCenterPoint = (ReturnClosestGrid(tiles).gameObject.transform.position + (Vector3.up*.5f));
+		
+		Debug.Log ("Closest Tile Center Point:" + closestTileCenterPoint);
+		Vector3 transVec = closestTileCenterPoint - playerAvatar.transform.position;
+		Debug.DrawLine(playerAvatar.transform.position + Vector3.up*.3f,ReturnClosestGrid(tiles).gameObject.transform.position + Vector3.up*.5f,Color.green);
+	
+		//Moving toward closest center point if player isn't moving with input:
+		if (BigBoss.PlayerInput.isMovementKeyPressed == false)
+		{
+			playerAvatar.transform.Translate(transVec*Time.deltaTime);
+		}
+		
+		
+		
+		lastFrameCenterPoint = closestTileCenterPoint;//for updating tile change event - temporary
+		GameObject occupiedTile = ReturnClosestGrid(tiles).gameObject;
+		float distanceToOccupiedTile = Vector3.Distance(playerAvatar.transform.position,occupiedTile.transform.position+ Vector3.up*.5f);
+		Debug.Log("Distance to occupied tile: " + distanceToOccupiedTile);
+		
+		
+		//Our temporary turn pass function:
+		if (distanceToOccupiedTile > 1.3f)  //wrap this up into a var 
+		{
+			BigBoss.TimeKeeper.numTilesCrossed++;
+			BigBoss.Gooey.UpdateTilesCrossedLabel();
+			AdjustXP(gameObject,10);
+			AdjustHungerPoints(-20);
+			BigBoss.Gooey.UpdateXPBar();
+		} 
+		
+//		//Our temporary turn pass function:
+//		if (lastFrameCenterPoint != closestTileCenterPoint)
+//		{
+//			BigBoss.TimeKeeper.numTilesCrossed++;
+//			BigBoss.Gooey.UpdateTilesCrossedLabel();
+//			AdjustXP(gameObject,10);
+//			AdjustHungerPoints(-20);
+//			BigBoss.Gooey.UpdateXPBar();
+//		} 
+		
+		//Commenting logic
+	//---GetCurrently occupied tile, by way of (int) casting avatar transform position
+		
+		//Update() distance to that tile
+		
+		//If distance is greater than 1.3 (var), pass turn
+		
+		//Also calculate a new Occupied tile - will int casts work here?
 	}
 		
+	void FixedUpdate ()
+	{
+		//float h = Input.GetAxis("Horizontal");				// setup h variable as our horizontal input axis
+		float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
+		Debug.Log("V: " + v);
+		anim.SetFloat("Speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
+		//anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
+		//anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
+		currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
+		
+//		if(anim.layerCount ==2)		
+//			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation
+		
+	}
+	 GameObject ReturnClosestGrid (GridSpace[] grids)
+    {
+        
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 playerPos = playerAvatar.transform.position;
+        foreach (GridSpace gr in grids)
+        {
+     
+                Vector3 diff = gr.gameObject.transform.position - playerPos;
+                float curDistance = diff.sqrMagnitude;
+                if (curDistance < distance)
+                { 
+                    closest = gr.gameObject;
+                    distance = curDistance;
+                }
+         }
+        Debug.Log("Closest Grid to player is " + closest + "...at " + closest.transform.position);
+        return closest;
+    }
+	
 	public void PlayerMoveForward()
 	{
 	
-		gameObject.transform.Translate(new Vector3(0,0,1f));  //THIS IS TEMPORARYYYYYYYYYYYYYYYY
+		playerAvatar.transform.Translate(Vector3.forward*playerSpeed*Time.deltaTime );
 		
 	}
+	public void PlayerMoveBackward()
+	{
+	
+		playerAvatar.transform.Translate(Vector3.back*playerSpeed*Time.deltaTime );
+		
+	}
+	public void PlayerMoveRight()
+	{
+	
+		playerAvatar.transform.Translate(Vector3.right*playerSpeed*Time.deltaTime );
+		
+	}
+	public void PlayerMoveLeft()
+	{
+	
+		playerAvatar.transform.Translate(Vector3.left*playerSpeed*Time.deltaTime );
+		
+	}
+	
 	
 	
 	
@@ -232,8 +369,11 @@ public class PlayerManager : MonoBehaviour {
 	#region ALL THE DECISION MAKING/UPDATING/COMMUNICATING TO OTHER SCRIPTS.  ALSO CONTAINED IN ANY ADJUST() CALLS.
 	private void DecideHungerLevel()//depending on other's needs I can 
 	{
+		
+		//Saving initial hunger for later use:
+		HungerLevel oldHL = CurrentHungerLevel;
 		//For coloring the text:
-		Color col;
+		Color col = Color.white;//initializing to avoid if error
 		//Trickle if statement to set enum, color, and update GUI:
 		if (PlayerHunger < 50)
 		{
@@ -244,13 +384,13 @@ public class PlayerManager : MonoBehaviour {
 		else if (PlayerHunger < 130)
 		{
 			CurrentHungerLevel = HungerLevel.Starving;
-			col = Color.magenta;
+			col = Color.yellow;
 			BigBoss.Gooey.UpdateHungerText(col);
 		}
 		else if (PlayerHunger < 500)
 		{
 			CurrentHungerLevel = HungerLevel.Hungry;
-			col = Color.cyan;
+			col = Color.yellow;
 			BigBoss.Gooey.UpdateHungerText(col);
 		}
 		else if (PlayerHunger < 800)
@@ -266,7 +406,19 @@ public class PlayerManager : MonoBehaviour {
 			BigBoss.Gooey.UpdateHungerText(col);
 		}
 		
+		if (oldHL != CurrentHungerLevel)
+		{
+			SendHungerLevelChangedEvent(col);	
+		}
+	}
+
+	public HungerLevel SendHungerLevelChangedEvent(Color guiCol)
+	{
+		//Do we ant a singleton registry to send out this event to othger managers?
 		
+		Debug.Log("Event thrown for hunger level changing: New level is: " + CurrentHungerLevel.ToString());
+		BigBoss.Gooey.CreateTextPop(playerAvatar.gameObject.transform.position + Vector3.up*.75f,CurrentHungerLevel .ToString() + "!",guiCol);
+		return CurrentHungerLevel;
 	}
 	
 	private float DecideXPToNextLevel()//UNDER CONSTRUCTION FOR DEBUG ONLY
@@ -542,8 +694,9 @@ public class PlayerManager : MonoBehaviour {
 	public int AdjustHungerPoints(int amount) 
 	{
 	
-		//Increment Hunger, but not less than 0 or over 100:
-		playerHunger += (int)Mathf.Clamp (amount,0f,playerHungerMax);
+		playerHunger += amount;
+		//Clamp to max for safety:  (in property set?)
+		
 		DecideHungerLevel();
 		return playerHunger;
 	}
@@ -583,7 +736,7 @@ public class PlayerManager : MonoBehaviour {
 	{
 	
 		Debug.Log("IncreasePlayerMaxHealth() called from " + senderObj + ".  Player's max health to be adjusted by " + amount);
-		playerMaxHealth += amount;  //come back and install logic/failsafes
+		playerCurrentXPForThisLevel += amount;  //come back and install logic/failsafes
 		Debug.Log("IncreasePlayerMaxHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
 	}
 	//A STRAIGHT UP SETHEALTH() COMMAND I THINK IS HIGHLY RECOMMENDED JUST IN CASE
@@ -602,5 +755,133 @@ public class PlayerManager : MonoBehaviour {
 		return playerCurrentHealth;
 	}
 	
+	public void SetAttribute(PlayerAttributes attr, int newValue)
+	{
+				
+		switch (attr) 
+		{
+//			case PlayerAttributes.Charisma:
+//			{
+//				
+//			return 
+//				break;
+//			}
+			case PlayerAttributes.Constitution:
+			{
+				playerConstitution = newValue;
+				break;
+			}
+			case PlayerAttributes.Dexterity:
+			{
+				playerDexterity  = newValue;
+				break;
+			}
+			case PlayerAttributes.Intelligence:
+			{
+				playerIntelligence = newValue;
+				break;
+			}
+			case PlayerAttributes.Strength:
+			{
+				playerStrength  = newValue;
+				break;
+			}
+			case PlayerAttributes.Wisdom:
+			{
+				playerWisdom  = newValue;
+				break;
+			}
+		
+		
+		default:
+		break;
+		}
+		//update gui:
+		
+	}
+	
+	#endregion
+	
+	
+	#region MECANIM EXAMPLE SCRIPT
+//	using UnityEngine;
+//using System.Collections;
+//
+//// Require these components when using this script
+//[RequireComponent(typeof (Animator))]
+//[RequireComponent(typeof (CapsuleCollider))]
+//[RequireComponent(typeof (Rigidbody))]
+//public class BotControlScript : MonoBehaviour
+//{
+//	[System.NonSerialized]					
+//	public float lookWeight;					// the amount to transition when using head look
+//	
+//	[System.NonSerialized]
+//	public Transform enemy;						// a transform to Lerp the camera to during head look
+//	
+//	public float animSpeed = 1.5f;				// a public setting for overall animator animation speed
+//	public float lookSmoother = 3f;				// a smoothing setting for camera motion
+//	public bool useCurves;						// a setting for teaching purposes to show use of curves
+//
+//	
+//	private Animator anim;							// a reference to the animator on the character
+//	private AnimatorStateInfo currentBaseState;			// a reference to the current state of the animator, used for base layer
+//	private AnimatorStateInfo layer2CurrentState;	// a reference to the current state of the animator, used for layer 2
+//	private CapsuleCollider col;					// a reference to the capsule collider of the character
+//	
+//
+//	static int idleState = Animator.StringToHash("Base Layer.Idle");	
+//	static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
+//	static int jumpState = Animator.StringToHash("Base Layer.Jump");				// and are used to check state for various actions to occur
+//	static int jumpDownState = Animator.StringToHash("Base Layer.JumpDown");		// within our FixedUpdate() function below
+//	static int fallState = Animator.StringToHash("Base Layer.Fall");
+//	static int rollState = Animator.StringToHash("Base Layer.Roll");
+//	static int waveState = Animator.StringToHash("Layer2.Wave");
+//	
+//
+//	void Start ()
+//	{
+//		// initialising reference variables
+//		anim = GetComponent<Animator>();					  
+//		col = GetComponent<CapsuleCollider>();				
+//		enemy = GameObject.Find("Enemy").transform;	
+//		if(anim.layerCount ==2)
+//			anim.SetLayerWeight(1, 1);
+//	}
+//	
+//	
+//	void FixedUpdate ()
+//	{
+//		float h = Input.GetAxis("Horizontal");				// setup h variable as our horizontal input axis
+//		float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
+//		anim.SetFloat("Speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
+//		anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
+//		anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
+//		anim.SetLookAtWeight(lookWeight);					// set the Look At Weight - amount to use look at IK vs using the head's animation
+//		currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
+//		
+//		if(anim.layerCount ==2)		
+//			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation
+//		
+//		
+
+//		// IDLE
+//		
+//		// check if we are at idle, if so, let us Wave!
+//		else if (currentBaseState.nameHash == idleState)
+//		{
+//			if(Input.GetButtonUp("Jump"))
+//			{
+//				anim.SetBool("Wave", true);
+//			}
+//		}
+//		// if we enter the waving state, reset the bool to let us wave again in future
+//		if(layer2CurrentState.nameHash == waveState)
+//		{
+//			anim.SetBool("Wave", false);
+//		}
+//	}
+//}
+
 	#endregion
 }
