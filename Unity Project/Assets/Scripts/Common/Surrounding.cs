@@ -7,20 +7,31 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     public Value2D<T> down { get; set; }
     public Value2D<T> left { get; set; }
     public Value2D<T> right { get; set; }
+    public PassFilter<Value2D<T>> pass = null;
 	
     protected Surrounding ()
     {
+    }
 
+    public static Surrounding<T> Get(T[,] arr, Value2D<T> val, PassFilter<Value2D<T>> pass)
+    {
+        return Get(arr, val.x, val.y, pass);
     }
 
     public static Surrounding<T> Get(T[,] arr, Value2D<T> val)
     {
-        return Get(arr, val.x, val.y);
+        return Get(arr, val.x, val.y, null);
     }
 
-	public static Surrounding<T> Get(T[,] arr, int x, int y)
+    public static Surrounding<T> Get(T[,] arr, int x, int y)
+    {
+        return Get(arr, x, y, null);
+    }
+
+    public static Surrounding<T> Get(T[,] arr, int x, int y, PassFilter<Value2D<T>> pass)
 	{
         Surrounding <T> ret = new Surrounding<T>();
+        ret.pass = pass;
 		x -= 1;
 		if (x >= 0 && x < arr.GetLength(1))
 		{
@@ -47,7 +58,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 	
     // Returns a direction containing the given value.
     // Null if none found.
-    public virtual Value2D<T> GetDirWithVal(PassFilter<Value2D<T>> pass, T t)
+    public virtual Value2D<T> GetDirWithVal(T t)
 	{
 		foreach (Value2D<T> val in this)
 		{
@@ -62,7 +73,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     // Returns a direction containing one of the given values.
     // Null if none found.
-    public virtual Value2D<T> GetDirWithVal(PassFilter<Value2D<T>> pass, HashSet<T> set)
+    public virtual Value2D<T> GetDirWithVal(HashSet<T> set)
     {
         foreach (Value2D<T> val in this)
         {
@@ -77,14 +88,14 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     // Returns a direction containing one of the given values that also passes the filter.
     // Null if none found.
-    public virtual Value2D<T> GetDirWithVal(PassFilter<Value2D<T>> pass, params T[] types)
+    public virtual Value2D<T> GetDirWithVal(params T[] types)
     {
-        return GetDirWithVal(pass, new HashSet<T>(types));
+        return GetDirWithVal(new HashSet<T>(types));
     }
 	
     // Returns a direction that does not contain given value.
     // Null if none found.
-	public virtual Value2D<T> GetDirWithoutVal(PassFilter<Value2D<T>> pass, T t)
+	public virtual Value2D<T> GetDirWithoutVal(T t)
 	{
 		foreach (Value2D<T> val in this)
 		{
@@ -99,14 +110,14 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     // Returns a direction not contained in the given set, that also passes the filter.
     // Null if none found.
-    public virtual Value2D<T> GetDirWithoutVal(PassFilter<Value2D<T>> pass, params T[] types)
+    public virtual Value2D<T> GetDirWithoutVal(params T[] types)
     {
-        return GetDirWithoutVal(pass, new HashSet<T>(types));
+        return GetDirWithoutVal(new HashSet<T>(types));
     }
 
     // Returns a direction not contained in the given set, that also passes the filter.
     // Null if none found.
-    public virtual Value2D<T> GetDirWithoutVal(PassFilter<Value2D<T>> pass, HashSet<T> set)
+    public virtual Value2D<T> GetDirWithoutVal(HashSet<T> set)
     {
         foreach (Value2D<T> val in this)
         {
