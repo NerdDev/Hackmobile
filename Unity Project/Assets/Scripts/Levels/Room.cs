@@ -64,7 +64,7 @@ public class Room : LayoutObjectLeaf {
                 // If space is an edge (next to a false)
                 if (surround.GetDirWithVal(false) != null)
                 {
-                    ret.Put(grids.Get(val.x, val.y), val.x, val.y);
+                    ret[val.x, val.y] = grids[val.x, val.y];
                 }
             }
         }

@@ -57,7 +57,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #endregion
 
     #region GetSet
-    public override T Get(int x, int y)
+    protected override T Get(int x, int y)
     {
         if (InRange(x, y))
         {
@@ -94,8 +94,8 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
         return arr.GetLength(0);
     }
-	
-    public override void Put(T val, int x, int y)
+
+    protected override void Put(T val, int x, int y)
     {
         if (InRange(x, y))
         {

@@ -19,13 +19,6 @@ public class LevelManager : MonoBehaviour {
         array = layout.GetArray();
 		blocks = builder.Build(array, theme);
 
-        Surrounding<GridType> test = Surrounding<GridType>.Get(array, 1, 1);
-        foreach (Value2D<GridType> val in test)
-        {
-            Debug.Log(val);
-        }
-        Debug.Log(test + " is cornered: " + test.IsCorneredBy(GridType.Wall));
-
         JustinTest();
         JoseTest();
     }
