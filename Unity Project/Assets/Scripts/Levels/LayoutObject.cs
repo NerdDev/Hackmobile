@@ -6,6 +6,7 @@ using System.Collections.Generic;
 abstract public class LayoutObject {
 
     protected Point shiftP = new Point();
+    List<LayoutObject> connectedTo = new List<LayoutObject>();
 
     #region Shifts
     public void shift(int x, int y)
@@ -44,7 +45,7 @@ abstract public class LayoutObject {
 			DebugManager.w (DebugManager.Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
 		}
 		#endregion
-		while(this.intersects(rhs))
+		while(this.intersects(rhs, 0))
 		{
             // Shift small increments until not overlapping
             shift(reduc);
@@ -65,46 +66,6 @@ abstract public class LayoutObject {
         #endregion
     }
     #endregion Shifts
-
-    #region UNUSED
-    public void ShiftOutsideBulk(LayoutObject rhs, Point dir)
-    { // Unused atm, broken
-        DebugManager.printHeader(DebugManager.Logs.LevelGen, "Shift Outside Bulk");
-		
-		setShift (rhs);  // Algorithm assumes they're centered on each other
-        int xMagn = (int)Math.Abs(dir.x);
-        int yMagn = (int)Math.Abs(dir.y);
-        int xMove, yMove;
-		Bounding bound = GetBounding();
-		Bounding rhsBound = rhs.GetBounding();
-        float magRatio;
-        // Find which has largest magnitude and move fully that direction first
-        if (xMagn > yMagn)
-        { // X larger magnitude
-            xMove = bound.width / 2 + rhsBound.width / 2 + 1;
-            magRatio = yMagn == 0 ? 0 : ((float)yMagn) / xMagn;
-            yMove = (int)(xMove * magRatio);
-        } 
-        else
-        { // Y larger magnitude
-            yMove = bound.height / 2 + rhsBound.height / 2 + 1;
-            magRatio = xMagn == 0 ? 0 : ((float)xMagn) / yMagn;
-            xMove = (int)(yMove * magRatio);
-        }
-
-        // Execute shift to the outside, adjusting to give right direction
-        xMove = xMove * Math.Sign(dir.x);
-        yMove = yMove * Math.Sign(dir.y);
-        shift(xMove, yMove);
-
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-			DebugManager.w(DebugManager.Logs.LevelGen, "Bounds1: " + bound + " Bounds2: " + rhsBound);
-            DebugManager.w(DebugManager.Logs.LevelGen, "XMag: " + xMagn + " YMag: " + yMagn + " magRatio: " + magRatio + " xMove: " + xMove + " yMove: " + yMove);
-        }
-        DebugManager.printFooter(DebugManager.Logs.LevelGen);
-    }
-    #endregion
 
     #region Bounds
     public Bounding GetBounding()
@@ -151,7 +112,7 @@ abstract public class LayoutObject {
         {
             for (int x = bounds.xMin; x <= bounds.xMax; x++)
             {
-                outArr[y - bounds.yMin, x - bounds.xMin] = inArr.Get (x, y);
+                outArr[y - bounds.yMin, x - bounds.xMin] = inArr[x, y];
             }
         }
         return outArr;
@@ -171,8 +132,6 @@ abstract public class LayoutObject {
         {
             if (t == val.val)
             {
-                val.x += shiftP.x;
-                val.y += shiftP.y;
                 ret.Put(val);
             }
         }
@@ -201,8 +160,6 @@ abstract public class LayoutObject {
         {
             if (ts.Contains(val.val))
             {
-                val.x += shiftP.x;
-                val.y += shiftP.y;
                 ret.Put(val);
             }
         }
@@ -236,21 +193,23 @@ abstract public class LayoutObject {
     #endregion
 
     #region Intersects
-    public bool intersects(LayoutObject rhs)
+    public bool intersects(LayoutObject rhs, int buffer)
     {
-        return GetBounding().intersects(rhs.GetBounding());
+        Bounding rhsBound = rhs.GetBounding();
+        rhsBound.expand(buffer);
+        return GetBounding().intersects(rhsBound);
     }
 
-    public bool intersects(List<LayoutObject> list)
+    public bool intersects(List<LayoutObject> list, int buffer)
     {
-		return null != intersectObj(list);
+		return null != intersectObj(list, buffer);
     }
 	
-	public LayoutObject intersectObj(List<LayoutObject> list)
+	public LayoutObject intersectObj(List<LayoutObject> list, int buffer)
 	{
         foreach (LayoutObject rhs in list)
         {
-            if (intersects(rhs))
+            if (intersects(rhs, buffer))
             {
                 return rhs;
             }
@@ -302,10 +261,6 @@ abstract public class LayoutObject {
                 return '#';
             case GridType.NULL:
                 return ' ';
-            case GridType.INTERNAL_RESERVED_REJECTED:
-                return '<';
-            case GridType.INTERNAL_RESERVED_ACCEPTED:
-                return '>';
             case GridType.INTERNAL_RESERVED_BLOCKED:
                 return '*';
             case GridType.INTERNAL_RESERVED_CUR:

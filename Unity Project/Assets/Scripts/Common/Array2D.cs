@@ -57,7 +57,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #endregion
 
     #region GetSet
-    public override T Get(int x, int y)
+    protected override T Get(int x, int y)
     {
         if (InRange(x, y))
         {
@@ -94,8 +94,8 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
         return arr.GetLength(0);
     }
-	
-    public override void Put(T val, int x, int y)
+
+    protected override void Put(T val, int x, int y)
     {
         if (InRange(x, y))
         {
@@ -141,7 +141,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     }
 
     // Fills in a row with a desired value
-    public void PutRow(T t, int xl, int xr, int y)
+    public virtual void PutRow(T t, int xl, int xr, int y)
     {
         for (; xl <= xr; xl++)
         {
@@ -194,4 +194,12 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return this.GetEnumerator();
     }
     #endregion
+
+    public static void invert(Array2D<bool> arr)
+    {
+        foreach (Value2D<bool> val in arr)
+        {
+            arr.Put(!val.val, val.x, val.y);
+        }
+    }
 }

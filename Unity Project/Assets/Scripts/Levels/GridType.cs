@@ -11,13 +11,11 @@ public enum GridType
     Door,
     TrapDoor,
 	
-	INTERNAL_RESERVED_REJECTED,
 	Path_Horiz,
 	Path_Vert,
 	Path_LT,
 	Path_LB,
 	Path_RT,
 	Path_RB,
-	INTERNAL_RESERVED_ACCEPTED,
 	INTERNAL_RESERVED_CUR
 }

@@ -29,16 +29,20 @@ public class GridArray : Array2D<GridType> {
 	
 	public GridArray(Bounding bounds, bool minimize) : base(bounds, minimize)
 	{
-		
 	}
+
+    public GridArray(GridType[,] arr)
+    {
+        this.arr = arr;
+    }
 	
 	protected override Comparator<GridType> getDefaultComparator ()
 	{
 		return GridTypeComparator.get();
 	}
     #endregion
-	
-    public override void Put(GridType val, int x, int y)
+
+    protected override void Put(GridType val, int x, int y)
     {
 		if (val != GridType.NULL)
 		{
@@ -55,30 +59,31 @@ public class GridArray : Array2D<GridType> {
 	}
 	
 	public override Bounding GetBounding ()
-	{
-		return GetBoundingInternal();
-	}
-	
-    public Bounding GetBoundingInternal()
     {
-		GridType[,] array = GetArr();
+        GridType[,] array = GetArr();
         Bounding ret = new Bounding();
         for (int y = 0; y < array.GetLength(0); y++)
         {
             for (int x = 0; x < array.GetLength(1); x++)
             {
-				if (array[y,x] != GridType.NULL) {
-					ret.absorb(x, y);
-				}
+                if (array[y, x] != GridType.NULL)
+                {
+                    ret.absorb(x, y);
+                }
             }
         }
         return ret;
+	}
+	
+    public Bounding GetBoundingInternal()
+    {
+        return base.GetBounding();
     }
 
     public override List<string> ToRowStrings()
     {
         GridType[,] array = GetArr();
-		Bounding bounds = GetBoundingInternal();
+		Bounding bounds = GetBounding();
         List<string> ret = new List<string>();
         for (int y = bounds.yMax; y >= bounds.yMin; y -= 1)
         {
@@ -91,4 +96,35 @@ public class GridArray : Array2D<GridType> {
         }
         return ret;
     }
+
+
+    // Fills in a row with a desired value
+    public override void PutRow(GridType t, int xl, int xr, int y)
+    {
+        for (; xl <= xr; xl++)
+        {
+            if (GridType.NULL == arr[y, xl])
+            {
+                arr[y, xl] = t;
+            }
+        }
+    }
+
+    // Fills in a col with a desired value
+    public override void PutCol(GridType t, int y1, int y2, int x)
+    {
+        for (; y1 <= y2; y1++)
+        {
+            if (GridType.NULL == arr[y1, x])
+            {
+                arr[y1, x] = t;
+            }
+        }
+    }
+
+    public static implicit operator GridType[,](GridArray src)
+    {
+        return src.arr;
+    }
+
 }

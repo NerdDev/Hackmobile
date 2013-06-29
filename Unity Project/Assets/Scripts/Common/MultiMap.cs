@@ -8,7 +8,6 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     protected SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
     public SortedDictionary<int, SortedDictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
     public SortedDictionary<int, SortedDictionary<int, T>>.ValueCollection Values { get { return multimap.Values; } }
-    public Comparator<T> comparator { get; set; }
 
     #region Ctors
     public MultiMap()
@@ -37,7 +36,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #endregion
 
     #region GetSet
-    public override T Get(int x, int y)
+    protected override T Get(int x, int y)
     {
         T val;
         TryGetValue(x, y, out val);
@@ -76,7 +75,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return row;
     }
 
-    public override void Put(T val, int x, int y)
+    protected override void Put(T val, int x, int y)
     {
         PutInternal(val, x, y);
     }
@@ -126,7 +125,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
         foreach (Value2D<T> val in rhs)
         {
-            Put(val);
+            this[val] = val.val;
         }
     }
 
@@ -157,6 +156,22 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         foreach (Value2D<T> val in rhs)
         {
             Remove(val);
+        }
+    }
+
+    public void RemoveAllBut(params T[] types)
+    {
+        RemoveAllBut(new HashSet<T>(types));
+    }
+
+    public void RemoveAllBut(HashSet<T> types)
+    {
+        foreach (Value2D<T> val in this)
+        {
+            if (!types.Contains(val.val))
+            {
+                Remove(val);
+            }
         }
     }
 
@@ -219,7 +234,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public int Count()
     {
-        int ret = multimap.Count;
+        int ret = 0;
         foreach (SortedDictionary<int, T> row in multimap.Values)
         {
             ret += row.Count;

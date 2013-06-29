@@ -101,8 +101,8 @@ public class Bounding {
     #region Intersects
     public void boundingDimensions(Bounding rhs, out int width, out int height)
     {
-        width = System.Math.Min(xMax - rhs.xMin, rhs.xMax - xMin);
-        height = System.Math.Min(yMax - rhs.yMin, rhs.yMax - yMin);
+        width = System.Math.Min(xMax - rhs.xMin, rhs.xMax - xMin) + 1;
+        height = System.Math.Min(yMax - rhs.yMin, rhs.yMax - yMin) + 1;
     }
 
     public int intersectArea(Bounding rhs)
@@ -137,20 +137,13 @@ public class Bounding {
     }
     #endregion Intersects
 
-    #region UNUSED
-    // Returns bounding box of intersection, maintaining correct position.
-    public Bounding intersectBoundingAbsolute(Bounding rhs)
+    public void expand(int amount)
     {
-        //Bounding leftMost = xMin < rhs.xMin ? this : rhs;
-        //Bounding rightMost = xMin > rhs.xMin ? this : rhs;
-        //Bounding bottomMost = yMin < rhs.yMin ? this : rhs;
-        //Bounding topMost = yMin > rhs.yMin ? this : rhs;
-        
-        //Bounding ret = new Bounding();
-
-        throw new NotImplementedException();
+        xMax += amount;
+        yMax += amount;
+        xMin -= amount;
+        yMin -= amount;
     }
-    #endregion
 
     #region Printing
     public override string ToString()
