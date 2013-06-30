@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 	
-	static public Theme theme;
-    static public LevelBuilder builder;
+	public Theme theme;
+    public LevelBuilder builder;
     static GameObject[,] blocks_;
     static public GameObject[,] blocks { get { return blocks_; } private set { blocks_ = value; } }
     static GridArray array_;
