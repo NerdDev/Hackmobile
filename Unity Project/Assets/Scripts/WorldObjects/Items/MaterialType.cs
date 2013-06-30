@@ -10,7 +10,7 @@ public class MaterialType
     public int Hardness { get; set;}
     public int MeltingPoint { get; set; }
 
-    private double[] density;
+    private double[] density = new double[3];
     public double Density { get; set; }
 
     public void setNull()

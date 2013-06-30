@@ -5,10 +5,6 @@ public static class Probability
 {
     static Random rand = new Random();
 
-    public Probability()
-    {
-    }
-
     public static int getRandomInt() 
     {
         return rand.Next();

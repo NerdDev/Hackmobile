@@ -16,7 +16,7 @@ public class NPCEffect : Effect
         baseNPC.properties[refEnum] = this.On;
     }
 
-    public virtual void apply(int p, bool item)
+    public override void apply(int p, bool item)
     {
         base.apply(p, item);
         updateFlag();
@@ -26,7 +26,7 @@ public class NPCEffect : Effect
      * For effects that require turn by turn changes
      *  - add them here to the switch and do an update method.
      */
-    public void UpdateTurn()
+    public override void UpdateTurn()
     {
         switch (refEnum)
         {
@@ -39,6 +39,6 @@ public class NPCEffect : Effect
     }
 
     void updatePoison() {
-        //do poison update her
+        //do poison update here
     }
 }

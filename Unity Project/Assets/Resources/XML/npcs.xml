@@ -5,12 +5,12 @@
 		<role>creature</role>
 		<race>reptile</race>
 		<flags>
-			<flag name="no_poly"></flag>
-			<flag name="leaves_corpse"></flag>
+			<flag name="nopoly" />
+			<flag name="leaves_corpse" />
 		</flags>
 		<properties>
-			<property name="infravision" val=2></property>
-			<property name="fire_res" val=3></property>
+			<property name="infravision" val="2" />
+			<property name="fire_res" val="3" />
 		</properties>
 		<stats>
 			<charisma>3</charisma>

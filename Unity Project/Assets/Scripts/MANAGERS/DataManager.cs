@@ -13,12 +13,17 @@ public class DataManager : MonoBehaviour
     Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
     #endregion
 
+    #region Strings
+    public Dictionary<string, string> strings = new Dictionary<string, string>();
+    #endregion
+
     void Start ()
     {
         //Parsing functions here
         parsing.Add("items", parseItems);
         parsing.Add("npcs", parseNPCs);
         parsing.Add("materials", parseMaterials);
+        parsing.Add("strings", parseStrings);
 
         string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
         foreach (string file in files)
@@ -27,6 +32,8 @@ public class DataManager : MonoBehaviour
             parseXML(xreader);
             xreader = null; //lets GC collect up.
         }
+
+        BigBoss.NPCManager.Log();
     }
 
     #region XML Parsing methods.
@@ -82,6 +89,18 @@ public class DataManager : MonoBehaviour
             n.Name = npcName;
             n.parseXML(m);
             BigBoss.NPCManager.getNPCs().Add(n.Name, n);
+        }
+    }
+
+    void parseStrings(XMLNode x)
+    {
+        foreach (XMLNode m in x.get())
+        {
+            string key = m.SelectString("key");
+            if (!strings.ContainsKey(key))
+            {
+                strings.Add(key, m.SelectString("text"));
+            }
         }
     }
     #endregion

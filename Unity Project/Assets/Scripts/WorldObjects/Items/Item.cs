@@ -141,7 +141,7 @@ public class Item : WorldObject, PassesTurns
     }
 
     #region XML Parsing
-    public void parseXML(XMLNode x)
+    public override void parseXML(XMLNode x)
     {
         base.parseXML(x);
         this.Damage = Probability.getDice(x.SelectString("damage"));

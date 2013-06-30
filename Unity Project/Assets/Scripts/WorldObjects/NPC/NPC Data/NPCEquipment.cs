@@ -233,7 +233,10 @@ public class NPCEquipment
     {
         for (int i = 0; i < equipSlots.Length; i++)
         {
-            equipSlots[i] = null;
+            if (equipSlots[i] != null)
+            {
+                equipSlots[i] = null;
+            }
         }
     }
 }

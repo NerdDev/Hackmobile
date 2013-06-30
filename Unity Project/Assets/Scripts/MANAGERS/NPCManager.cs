@@ -43,6 +43,25 @@ public class NPCManager : MonoBehaviour {
         }
     }
 
+    public void Log()
+    {
+        DebugManager.CreateNewLog(DebugManager.Logs.NPCs, "NPC Logs");
+        foreach (NPC n in baseNPCs.Values)
+        {
+            //DebugManager.w(DebugManager.Logs.NPCs, System.ObjectDumper.Dump(n));
+            List<string> filter = new List<string>();
+            filter.Add("Camera");
+            filter.Add("Rigidbody");
+            filter.Add("GameObject");
+
+            string s = System.ObjectDumper2.Dump(n, filter);
+            Debug.Log(s);
+            DebugManager.printHeader(DebugManager.Logs.NPCs, "NPC: " + n.Name);
+            DebugManager.w(DebugManager.Logs.NPCs, s);
+        }
+        DebugManager.printFooter(DebugManager.Logs.NPCs);
+    }
+
     public Dictionary<string, NPC> getNPCs()
     {
         return baseNPCs;

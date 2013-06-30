@@ -70,7 +70,7 @@ public class NPC : WorldObject, PassesTurns
     protected NPCEffect[] effects = new NPCEffect[(long)NPCProperties.LAST];
 
     //All sets of flags
-    Flags<NPCFlags> flags = new Flags<NPCFlags>();
+    GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
 
     //Enums
     public NPCRace race;
@@ -158,7 +158,7 @@ public class NPC : WorldObject, PassesTurns
         this.setData(BigBoss.NPCManager.getNPC(npcName));
     }
 
-    public override void setData(NPC npc)
+    public void setData(NPC npc)
     {
         //Anything performing the conversion from base NPC -> instance of NPC goes here.
         base.setData(npc);
@@ -183,7 +183,10 @@ public class NPC : WorldObject, PassesTurns
         base.setNull();
         this.stats.setNull();
         this.bodyparts.setNull();
-        this.equipment.setNull();
+        if (equipment != null)
+        {
+            this.equipment.setNull();
+        }  
         this.flags.setNull();
         this.race = NPCRace.NONE;
         this.role = NPCRole.NONE;
@@ -194,7 +197,7 @@ public class NPC : WorldObject, PassesTurns
     }
 
     #region XML Parsing
-    public void parseXML(XMLNode x)
+    public override void parseXML(XMLNode x)
     {
         //name is handled in DataManager so we get the GameObject name
         base.parseXML(x);

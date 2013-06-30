@@ -32,7 +32,7 @@ public class WorldObject : MonoBehaviour
 	}
 
     #region Data Management for Instances
-    public void setData(WorldObject wo)
+    public virtual void setData(WorldObject wo)
     {
         this.Model = wo.Model;
         this.ModelTexture = wo.ModelTexture;
