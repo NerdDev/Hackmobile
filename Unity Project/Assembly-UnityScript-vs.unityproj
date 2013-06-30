@@ -75,9 +75,11 @@
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
      <None Include="Assets\IMPORT\wizard\wizard.skeleton.xml" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc1 baker animations.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 2 animations.txt" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutlineHard.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\peasant animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 4 animations.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
@@ -92,7 +94,10 @@
      <None Include="Assets\IMPORT\girl_warrior\animation list.txt" />
      <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
      <None Include="Assets\iTweenEditor\README.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimLight.shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
      <None Include="Assets\NGUI\ReadMe - 2.0.3d.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (HardClip).shader" />
@@ -101,6 +106,7 @@
      <None Include="Assets\NGUI\Examples\Other\French.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 1 animations.txt" />
      <None Include="Assets\IMPORT\wizard\wizard.mesh.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\ogre 2 animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc4 knight animations.txt" />
      <None Include="Assets\IMPORT\SkeletonData\animations.txt" />
@@ -113,6 +119,7 @@
      <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutline.shader" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch.shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth.shader" />
      <None Include="Assets\ShurikenMagic\Shaders\SM_2sided_transparent.shader" />
      <None Include="Assets\IMPORT\Fantasy Weapons\knife1\knife1.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\guard animations.txt" />

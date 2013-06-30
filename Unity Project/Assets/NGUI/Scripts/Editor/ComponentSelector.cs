@@ -1,6 +1,6 @@
-﻿//----------------------------------------------
+//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEditor;
@@ -27,8 +27,19 @@ public class ComponentSelector : ScriptableWizard
 	static public void Draw<T> (string buttonName, T obj, OnSelectionCallback cb, params GUILayoutOption[] options) where T : MonoBehaviour
 	{
 		GUILayout.BeginHorizontal();
-		bool show = GUILayout.Button(buttonName, GUILayout.Width(76f));
+		bool show = GUILayout.Button(buttonName, "DropDownButton", GUILayout.Width(76f));
+#if !UNITY_3_4
+		GUILayout.BeginVertical();
+		GUILayout.Space(5f);
+#endif
 		T o = EditorGUILayout.ObjectField(obj, typeof(T), false, options) as T;
+#if !UNITY_3_4
+		GUILayout.EndVertical();
+#endif
+		if (o != null && Selection.activeObject != o.gameObject && GUILayout.Button("Edit", GUILayout.Width(40f)))
+		{
+			Selection.activeObject = o.gameObject;
+		}
 		GUILayout.EndHorizontal();
 		if (show) Show<T>(cb);
 		else if (o != obj) cb(o);
@@ -70,7 +81,7 @@ public class ComponentSelector : ScriptableWizard
 		}
 		else
 		{
-			GUILayout.Label("List of recently used components:");
+			GUILayout.Label("Recently used components", "LODLevelNotifyText");
 			NGUIEditorTools.DrawSeparator();
 
 			MonoBehaviour sel = null;
@@ -103,17 +114,18 @@ public class ComponentSelector : ScriptableWizard
 		{
 			if (EditorUtility.IsPersistent(mb.gameObject))
 			{
-				GUILayout.Label("Prefab", GUILayout.Width(80f));
+				GUILayout.Label("Prefab", "AS TextArea", GUILayout.Width(80f), GUILayout.Height(20f));
 			}
 			else
 			{
 				GUI.color = Color.grey;
-				GUILayout.Label("Object", GUILayout.Width(80f));
+				GUILayout.Label("Object", "AS TextArea", GUILayout.Width(80f), GUILayout.Height(20f));
 			}
 
-			GUILayout.Label(NGUITools.GetHierarchy(mb.gameObject));
+			GUILayout.Label(NGUITools.GetHierarchy(mb.gameObject), "AS TextArea", GUILayout.Height(20f));
 			GUI.color = Color.white;
-			retVal = GUILayout.Button("Select", GUILayout.Width(60f));
+
+			retVal = GUILayout.Button("Select", "ButtonLeft", GUILayout.Width(60f), GUILayout.Height(16f));
 		}
 		GUILayout.EndHorizontal();
 		return retVal;

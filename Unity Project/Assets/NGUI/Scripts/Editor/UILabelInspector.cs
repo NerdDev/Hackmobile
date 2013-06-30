@@ -1,6 +1,6 @@
-﻿//----------------------------------------------
+//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -37,36 +37,51 @@ public class UILabelInspector : UIWidgetInspector
 		}
 	}
 
-	override protected void OnInit () { mAllowPreview = false; }
-
-	override protected bool OnDrawProperties ()
+	override protected bool DrawProperties ()
 	{
 		mLabel = mWidget as UILabel;
 		ComponentSelector.Draw<UIFont>(mLabel.font, OnSelectFont);
 		if (mLabel.font == null) return false;
 
-		string text = EditorGUILayout.TextArea(mLabel.text, GUILayout.Height(100f));
+		GUI.skin.textArea.wordWrap = true;
+		string text = string.IsNullOrEmpty(mLabel.text) ? "" : mLabel.text;
+		text = EditorGUILayout.TextArea(mLabel.text, GUI.skin.textArea, GUILayout.Height(100f));
 		if (!text.Equals(mLabel.text)) { RegisterUndo(); mLabel.text = text; }
 
 		GUILayout.BeginHorizontal();
-		{
-			int len = EditorGUILayout.IntField("Line Width", mLabel.lineWidth, GUILayout.Width(120f));
-			if (len != mLabel.lineWidth) { RegisterUndo(); mLabel.lineWidth = len; }
-
-			bool multi = EditorGUILayout.Toggle("Multi-line", mLabel.multiLine, GUILayout.Width(100f));
-			if (multi != mLabel.multiLine) { RegisterUndo(); mLabel.multiLine = multi; }
-		}
+		int len = EditorGUILayout.IntField("Max Width", mLabel.lineWidth, GUILayout.Width(120f));
+		GUILayout.Label("pixels");
 		GUILayout.EndHorizontal();
+		if (len != mLabel.lineWidth) { RegisterUndo(); mLabel.lineWidth = len; }
+
+		int count = EditorGUILayout.IntField("Max Lines", mLabel.maxLineCount, GUILayout.Width(100f));
+		if (count != mLabel.maxLineCount) { RegisterUndo(); mLabel.maxLineCount = count; }
 
 		GUILayout.BeginHorizontal();
-		{
-			bool password = EditorGUILayout.Toggle("Password", mLabel.password, GUILayout.Width(120f));
-			if (password != mLabel.password) { RegisterUndo(); mLabel.password = password; }
-
-			bool encoding = EditorGUILayout.Toggle("Encoding", mLabel.supportEncoding, GUILayout.Width(100f));
-			if (encoding != mLabel.supportEncoding) { RegisterUndo(); mLabel.supportEncoding = encoding; }
-		}
+		bool shrinkToFit = EditorGUILayout.Toggle("Shrink to Fit", mLabel.shrinkToFit, GUILayout.Width(100f));
+		GUILayout.Label("- adjust scale if doesn't fit");
 		GUILayout.EndHorizontal();
+		if (shrinkToFit != mLabel.shrinkToFit) { RegisterUndo(); mLabel.shrinkToFit = shrinkToFit; }
+
+		GUILayout.BeginHorizontal();
+		bool password = EditorGUILayout.Toggle("Password", mLabel.password, GUILayout.Width(100f));
+		GUILayout.Label("- hide characters");
+		GUILayout.EndHorizontal();
+		if (password != mLabel.password) { RegisterUndo(); mLabel.password = password; }
+
+		GUILayout.BeginHorizontal();
+		bool encoding = EditorGUILayout.Toggle("Encoding", mLabel.supportEncoding, GUILayout.Width(100f));
+		GUILayout.Label("- use emoticons and colors");
+		GUILayout.EndHorizontal();
+		if (encoding != mLabel.supportEncoding) { RegisterUndo(); mLabel.supportEncoding = encoding; }
+
+		//GUILayout.EndHorizontal();
+
+		if (encoding && mLabel.font.hasSymbols)
+		{
+			UIFont.SymbolStyle sym = (UIFont.SymbolStyle)EditorGUILayout.EnumPopup("Symbols", mLabel.symbolStyle, GUILayout.Width(170f));
+			if (sym != mLabel.symbolStyle) { RegisterUndo(); mLabel.symbolStyle = sym; }
+		}
 
 		GUILayout.BeginHorizontal();
 		{
@@ -80,22 +95,23 @@ public class UILabelInspector : UIWidgetInspector
 			}
 		}
 		GUILayout.EndHorizontal();
-		return true;
-	}
 
-	override protected void OnDrawTexture ()
-	{
-		Texture2D tex = mLabel.mainTexture as Texture2D;
-
-		if (tex != null)
+		if (mLabel.effectStyle != UILabel.Effect.None)
 		{
-			// Draw the atlas
-			EditorGUILayout.Separator();
-			NGUIEditorTools.DrawSprite(tex, mLabel.font.uvRect, mUseShader ? mLabel.font.material : null);
+			GUILayout.Label("Distance", GUILayout.Width(70f));
+			GUILayout.Space(-34f);
+			GUILayout.BeginHorizontal();
+			GUILayout.Space(70f);
+			Vector2 offset = EditorGUILayout.Vector2Field("", mLabel.effectDistance);
+			GUILayout.Space(20f);
 
-			// Sprite size label
-			Rect rect = GUILayoutUtility.GetRect(Screen.width, 18f);
-			EditorGUI.DropShadowLabel(rect, "Font Size: " + mLabel.font.size);
+			if (offset != mLabel.effectDistance)
+			{
+				RegisterUndo();
+				mLabel.effectDistance = offset;
+			}
+			GUILayout.EndHorizontal();
 		}
+		return true;
 	}
 }
