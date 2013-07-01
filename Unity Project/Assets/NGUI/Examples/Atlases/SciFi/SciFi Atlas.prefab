@@ -58,6 +58,7 @@ MonoBehaviour:
       y: 480
       width: 7
       height: 7
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -75,6 +76,7 @@ MonoBehaviour:
       y: 481
       width: 5
       height: 5
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -92,6 +94,7 @@ MonoBehaviour:
       y: 497
       width: 11
       height: 9
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -109,6 +112,7 @@ MonoBehaviour:
       y: 495
       width: 14
       height: 14
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -126,6 +130,7 @@ MonoBehaviour:
       y: 210
       width: 22
       height: 20
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -143,6 +148,7 @@ MonoBehaviour:
       y: 257
       width: 110
       height: 86
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -160,6 +166,7 @@ MonoBehaviour:
       y: 0
       width: 256
       height: 256
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -177,6 +184,7 @@ MonoBehaviour:
       y: 0
       width: 256
       height: 512
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -194,6 +202,7 @@ MonoBehaviour:
       y: 437
       width: 255
       height: 76
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0

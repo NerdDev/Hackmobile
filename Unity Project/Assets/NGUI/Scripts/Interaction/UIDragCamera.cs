@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -11,7 +11,6 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Drag Camera")]
-#pragma warning disable 0618
 public class UIDragCamera : IgnoreTimeScale
 {
 	/// <summary>
@@ -55,7 +54,7 @@ public class UIDragCamera : IgnoreTimeScale
 
 	void OnPress (bool isPressed)
 	{
-		if (enabled && gameObject.active && draggableCamera != null)
+		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null)
 		{
 			draggableCamera.Press(isPressed);
 		}
@@ -67,9 +66,9 @@ public class UIDragCamera : IgnoreTimeScale
 
 	void OnDrag (Vector2 delta)
 	{
-		if (enabled && gameObject.active && draggableCamera != null)
+		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null)
 		{
-			 draggableCamera.Drag(delta);
+			draggableCamera.Drag(delta);
 		}
 	}
 
@@ -79,10 +78,9 @@ public class UIDragCamera : IgnoreTimeScale
 
 	void OnScroll (float delta)
 	{
-		if (enabled && gameObject.active && draggableCamera != null)
+		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null)
 		{
 			draggableCamera.Scroll(delta);
 		}
 	}
 }
-#pragma warning restore 0618

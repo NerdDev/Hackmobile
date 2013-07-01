@@ -58,6 +58,7 @@ MonoBehaviour:
       y: 258
       width: 253
       height: 253
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -75,6 +76,7 @@ MonoBehaviour:
       y: 273
       width: 27
       height: 27
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -92,6 +94,7 @@ MonoBehaviour:
       y: 39
       width: 8
       height: 8
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -109,6 +112,7 @@ MonoBehaviour:
       y: 180
       width: 255
       height: 76
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -126,6 +130,7 @@ MonoBehaviour:
       y: 285
       width: 10
       height: 10
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -143,6 +148,7 @@ MonoBehaviour:
       y: 282
       width: 10
       height: 10
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -160,6 +166,7 @@ MonoBehaviour:
       y: 266
       width: 7
       height: 7
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -177,6 +184,7 @@ MonoBehaviour:
       y: 272
       width: 30
       height: 29
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .0344827585
@@ -194,6 +202,7 @@ MonoBehaviour:
       y: 396
       width: 255
       height: 116
+    rotated: 0
     paddingLeft: 0
     paddingRight: .00392156886
     paddingTop: 0
@@ -211,6 +220,7 @@ MonoBehaviour:
       y: 266
       width: 1
       height: 2
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -228,6 +238,7 @@ MonoBehaviour:
       y: 53
       width: 126
       height: 126
+    rotated: 0
     paddingLeft: 0
     paddingRight: .00793650839
     paddingTop: 0
@@ -245,6 +256,7 @@ MonoBehaviour:
       y: 302
       width: 254
       height: 93
+    rotated: 0
     paddingLeft: 0
     paddingRight: .00393700786
     paddingTop: 0
@@ -262,6 +274,7 @@ MonoBehaviour:
       y: 127
       width: 80
       height: 52
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .365384609
@@ -279,6 +292,7 @@ MonoBehaviour:
       y: 74
       width: 80
       height: 52
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .365384609
@@ -296,6 +310,7 @@ MonoBehaviour:
       y: 270
       width: 32
       height: 31
+    rotated: 0
     paddingLeft: .03125
     paddingRight: 0
     paddingTop: 0

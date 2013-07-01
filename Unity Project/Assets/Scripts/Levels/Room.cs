@@ -11,46 +11,66 @@ public class Room : LayoutObjectLeaf {
     {
         roomNum = num;
     }
-
-    public void generate()
-    {
-        #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Room -> Generate");
-        }
-        #endregion
-        int height = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        int width = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
-        }
-        #endregion
-        BoxFill(GridType.Floor, width - 1, height - 1);
-        BoxStroke(GridType.Wall, width, height);
-        #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            toLog(DebugManager.Logs.LevelGen);
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
-        }
-        #endregion
-    }
 	
-	public GridMap getWalls() {
+	public GridMap getWalls() 
+    {
 		return getTypes(GridType.Wall);
 	}
 	
-	public GridMap getFloors() {
+	public GridMap getFloors() 
+    {
 		return getTypes(GridType.Floor);
 	}
 	
-	public GridMap getDoors() {
+	public GridMap getDoors() 
+    {
 		return getTypes(GridType.Door);
 	}
-	
+
+    public GridMap GetPotentialExternalDoors()
+    {
+        GridMap potentialDoors = GetPerimeter();
+        RemoveBadDoorWalls(potentialDoors);
+        potentialDoors.RemoveAllBut(GridType.Wall);
+        return potentialDoors;
+    }
+
+    public GridMap GetPotentialDoors()
+    {
+        GridMap potentialDoors = getWalls();
+        RemoveBadDoorWalls(potentialDoors);
+        return potentialDoors;
+    }
+
+    void RemoveBadDoorWalls(GridMap potentialDoors)
+    {
+        GridMap corneredAreas = getCorneredBy(GridType.Wall, GridType.Wall);
+        potentialDoors.RemoveAll(corneredAreas);
+    }
+
+    public GridMap GetPerimeter()
+    {
+        GridMap ret = new GridMap();
+        // Get null spaces surrounding room
+        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), grids, GridType.NULL);
+        // Invert to be room
+        Array2D<bool>.invert(bfs);
+        foreach (Value2D<bool> val in bfs)
+        {
+            // If space part of room
+            if (val.val)
+            {
+                Surrounding<bool> surround = Surrounding<bool>.Get(bfs.GetArr(), val);
+                // If space is an edge (next to a false)
+                if (surround.GetDirWithVal(false) != null)
+                {
+                    ret[val.x, val.y] = grids[val.x, val.y];
+                }
+            }
+        }
+        return ret;
+    }
+
 	public override string ToString()
 	{
 		return "Room " + roomNum;

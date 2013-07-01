@@ -27,7 +27,7 @@ RenderSettings:
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-GameManager:
+LevelGameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -207,56 +207,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &14
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 88}
-  - 65: {fileID: 157}
-  - 114: {fileID: 189}
-  - 114: {fileID: 175}
-  m_Layer: 9
-  m_Name: Storage Icon Template
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &15
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 89}
-  - 114: {fileID: 191}
-  m_Layer: 9
-  m_Name: Background
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &16
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 90}
-  - 114: {fileID: 192}
-  m_Layer: 9
-  m_Name: Icon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
 --- !u!1 &17
 GameObject:
   m_ObjectHideFlags: 0
@@ -1251,7 +1201,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 5}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 606.5, y: 406.500061, z: 0}
+  m_LocalPosition: {x: 390.750946, y: 262.000031, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 80}
@@ -1274,7 +1224,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 7}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .5, z: 0}
+  m_LocalPosition: {x: -.999363065, y: 1.00000596, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 84}
@@ -1348,41 +1298,6 @@ Transform:
   m_Children:
   - {fileID: 86}
   m_Father: {fileID: 91}
---- !u!4 &88
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 14}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3175, y: 1.5625, z: 0}
-  m_LocalScale: {x: .00249999994, y: .00249999994, z: .00249999994}
-  m_Children:
-  - {fileID: 89}
-  - {fileID: 90}
-  m_Father: {fileID: 0}
---- !u!4 &89
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 15}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 128, y: 128, z: 1}
-  m_Children: []
-  m_Father: {fileID: 88}
---- !u!4 &90
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 16}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 123, y: 113, z: 1}
-  m_Children: []
-  m_Father: {fileID: 88}
 --- !u!4 &91
 Transform:
   m_ObjectHideFlags: 0
@@ -1407,7 +1322,7 @@ Transform:
   m_GameObject: {fileID: 18}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: .00246305414, y: .00246305414, z: .00246305414}
+  m_LocalScale: {x: .00382409175, y: .00382409175, z: .00382409175}
   m_Children:
   - {fileID: 93}
   - {fileID: 81}
@@ -2223,18 +2138,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: .99999994, y: 1, z: 0}
   m_Center: {x: -.49999997, y: -.499999821, z: -3}
---- !u!65 &157
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 14}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 128, y: 128, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &158
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2423,8 +2326,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
-  automatic: 1
-  manualHeight: 812
+  scalingStyle: 0
+  automatic: 0
+  manualHeight: 960
+  minimumHeight: 320
+  maximumHeight: 1536
 --- !u!114 &169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2436,9 +2342,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5c5ca47aa5c01740810b7c66662099f, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: 6c2b3cc909d408944b7528b7e39f4d38, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
+  mRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  mShader: {fileID: 0}
+  mTexture: {fileID: 0}
 --- !u!114 &170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2457,6 +2372,8 @@ MonoBehaviour:
   ifDisabledOnPlay: 0
   disableWhenFinished: 0
   includeChildren: 0
+  eventReceiver: {fileID: 0}
+  callWhenFinished: 
 --- !u!114 &171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2469,6 +2386,23 @@ MonoBehaviour:
   m_Name: 
   method: 3
   style: 0
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  ignoreTimeScale: 1
+  delay: 0
   duration: .5
   steeperCurves: 0
   tweenGroup: 0
@@ -2487,11 +2421,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   uiCamera: {fileID: 153}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
   side: 4
   halfPixelOffset: 1
-  depthOffset: 0
   relativeOffset: {x: 0, y: 0}
-  stretchToFill: 0
 --- !u!114 &173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2503,11 +2437,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 2
   mDepth: 11
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: NGUI
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2521,20 +2461,6 @@ MonoBehaviour:
   tweenTarget: {fileID: 26}
   hover: {r: .886274517, g: 1, b: 0, a: 1}
   pressed: {r: .105882354, g: .282352954, b: 0, a: 1}
-  duration: .200000003
---- !u!114 &175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 14}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1.04999995, y: 1.04999995, z: 1.04999995}
-  pressed: {x: 1.04999995, y: 1.04999995, z: 1.04999995}
   duration: .200000003
 --- !u!114 &176
 MonoBehaviour:
@@ -2603,11 +2529,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   uiCamera: {fileID: 153}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
   side: 8
   halfPixelOffset: 1
-  depthOffset: 0
   relativeOffset: {x: 0, y: 0}
-  stretchToFill: 0
 --- !u!114 &181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2621,6 +2547,7 @@ MonoBehaviour:
   audioClip: {fileID: 0}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2665,11 +2592,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 0}
   mSpriteName: Bright
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2705,6 +2638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
@@ -2712,30 +2646,16 @@ MonoBehaviour:
   mText: Backpack
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
---- !u!114 &189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 14}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70841457d1e5b744593d9ffe219188ae, type: 3}
-  m_Name: 
-  icon: {fileID: 192}
-  background: {fileID: 191}
-  label: {fileID: 0}
-  grabSound: {fileID: 8300000, guid: cab912f3009b43843b0a48ac3120c6ad, type: 3}
-  placeSound: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
-  errorSound: {fileID: 8300000, guid: ab4b41aa0a43dcc48a386073b6a1a0d9, type: 3}
-  storage: {fileID: 0}
-  slot: 0
+  mMultiline: 1
 --- !u!114 &190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2749,43 +2669,10 @@ MonoBehaviour:
   maxItemCount: 16
   maxRows: 4
   maxColumns: 4
-  template: {fileID: 14}
+  template: {fileID: 100000, guid: d8b3491109ac9a54981225a3a7876ace, type: 2}
   background: {fileID: 0}
   spacing: 130
   padding: 10
---- !u!114 &191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 15}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
-  m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 4
-  mDepth: 4
-  mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
-  mSpriteName: Flat Outline
-  mFillCenter: 1
---- !u!114 &192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 16}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
-  m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 4
-  mDepth: 5
-  mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
-  mSpriteName: Orc Armor - Shoulders
 --- !u!114 &193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2796,20 +2683,31 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  debug: 0
   useMouse: 1
   useTouch: 1
+  allowMultiTouch: 1
   useKeyboard: 1
   useController: 1
+  stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 256
+  clipRaycasts: 1
   tooltipDelay: 1
+  stickyTooltip: 1
+  mouseDragThreshold: 4
   mouseClickThreshold: 10
+  touchDragThreshold: 40
   touchClickThreshold: 40
   rangeDistance: -1
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  submitKey0: 13
+  submitKey1: 330
+  cancelKey0: 27
+  cancelKey1: 331
 --- !u!114 &194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2818,7 +2716,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 22}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54ee5d39c85d5964b99ed24fac2b0590, type: 3}
+  m_Script: {fileID: 11500000, guid: bbc946d84fba95f41a0136cf378875be, type: 3}
   m_Name: 
   uiCamera: {fileID: 0}
   text: {fileID: 195}
@@ -2836,6 +2734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 0
   mDepth: 102
@@ -2844,12 +2743,16 @@ MonoBehaviour:
     Supports [0088FF]co[FF0000]lo[00FF00]rs!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2861,12 +2764,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .134328365, g: .134328365, b: .134328365, a: 1}
   mPivot: 0
   mDepth: 100
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Bright
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2889,6 +2797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
@@ -2896,12 +2805,16 @@ MonoBehaviour:
   mText: Wear Random Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2913,12 +2826,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .384771824, g: .75373137, b: 0, a: 1}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Smooth
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3005,20 +2923,31 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  debug: 0
   useMouse: 1
   useTouch: 1
+  allowMultiTouch: 1
   useKeyboard: 1
   useController: 1
+  stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 512
+  clipRaycasts: 1
   tooltipDelay: 1
+  stickyTooltip: 1
+  mouseDragThreshold: 4
   mouseClickThreshold: 10
+  touchDragThreshold: 40
   touchClickThreshold: 40
   rangeDistance: -1
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  submitKey0: 13
+  submitKey1: 330
+  cancelKey0: 27
+  cancelKey1: 331
 --- !u!114 &206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3030,6 +2959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
@@ -3037,12 +2967,16 @@ MonoBehaviour:
   mText: Shoulders
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3054,6 +2988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
@@ -3061,12 +2996,16 @@ MonoBehaviour:
   mText: Boots
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3078,6 +3017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
@@ -3085,12 +3025,16 @@ MonoBehaviour:
   mText: Bracers
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3102,11 +3046,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Bracers
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3118,12 +3068,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3135,12 +3090,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3152,11 +3112,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3168,11 +3134,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Smooth
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3184,12 +3156,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3719,20 +3696,31 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  debug: 0
   useMouse: 1
   useTouch: 1
+  allowMultiTouch: 1
   useKeyboard: 1
   useController: 1
+  stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 4294966527
+  clipRaycasts: 1
   tooltipDelay: 1
+  stickyTooltip: 1
+  mouseDragThreshold: 4
   mouseClickThreshold: 10
+  touchDragThreshold: 40
   touchClickThreshold: 40
   rangeDistance: -1
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  submitKey0: 13
+  submitKey1: 330
+  cancelKey0: 27
+  cancelKey1: 331
 --- !u!114 &225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3746,6 +3734,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
@@ -3763,6 +3753,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
@@ -3780,6 +3772,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}

@@ -3,8 +3,11 @@
 ######################
 
 Unity Project/Debug Logs/
+Unity Project/Assets/ShurikenMagic/
 Unity Project/Temp/
 Unity Project/Library/
+Unity Project/Assets/NGUI/Examples/
+
 *.csproj
 *.sln
 *.userprefs

@@ -230,9 +230,9 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: Bricks_Color
       value:
-        scalar[0]: .597014904
-        scalar[1]: .365150571
-        scalar[2]: .32523945
+        scalar[0]: 0
+        scalar[1]: 0
+        scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
     - name: Bricks_X

@@ -3,10 +3,13 @@ using System.Collections;
 
 public class TimedDestruction : MonoBehaviour {
 	
+	public float delayTilDeath;
 	
-	
-//	// Use this for initialization
-//	void Start () {
+	// Use this for initialization
+//	void Start () 
+//	{
+//		
+//		StartCoroutine.DestroyMe(delayTilDeath);		
 //	
 //	}
 	
@@ -15,10 +18,10 @@ public class TimedDestruction : MonoBehaviour {
 //	
 //	}
 	
-	public IEnumerator DestroyMe (float delay)
+	IEnumerator Start ()
 	{
 		
-		yield return new WaitForSeconds(delay);
+		yield return new WaitForSeconds(delayTilDeath);
 		Destroy(gameObject);
 		
 	}

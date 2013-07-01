@@ -1,0 +1,18 @@
+Animation Frames:
+
+    * » idle 0-163
+    * » walk 168-210
+    * » run01 215-252
+    * » run02 257-293
+    * » attack01 298-368
+    * » attack02 373-406
+    * » attack03 411-494
+    * » cheer 499-579
+    * » attack04 584-629
+    * » attack05 634-676
+    * » attack06 681-750
+    * » salute 755-813
+    * » death 818-871
+    * » stand up 876-987
+    * » hit 992-1024
+    * » jump 1029-1075

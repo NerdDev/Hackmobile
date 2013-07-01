@@ -1,6 +1,6 @@
-﻿//----------------------------------------------
+//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -12,18 +12,23 @@ using System.Collections.Generic;
 /// is to store the references in EditorPrefs -- retrieve them at start, and save them whenever something changes.
 /// </summary>
 
-public class UISettings
+public class NGUISettings
 {
 	static bool mLoaded = false;
 	static UIFont mFont;
 	static UIAtlas mAtlas;
+	static UIWidget.Pivot mPivot = UIWidget.Pivot.Center;
 	static TextAsset mFontData;
 	static Texture2D mFontTexture;
+	static string mPartial = "";
 	static string mFontName = "New Font";
 	static string mAtlasName = "New Atlas";
 	static int mAtlasPadding = 1;
 	static public bool mAtlasTrimming = true;
-	static bool mPreview = true;
+	static bool mUnityPacking = true;
+	static bool mForceSquare = true;
+	static Color mColor = Color.white;
+	static int mLayer = 0;
 
 	static Object GetObject (string name)
 	{
@@ -33,29 +38,87 @@ public class UISettings
 
 	static void Load ()
 	{
+		int l = LayerMask.NameToLayer("UI");
+		if (l == -1) l = LayerMask.NameToLayer("GUI");
+
 		mLoaded			= true;
+		mPartial		= EditorPrefs.GetString("NGUI Partial");
 		mFontName		= EditorPrefs.GetString("NGUI Font Name");
 		mAtlasName		= EditorPrefs.GetString("NGUI Atlas Name");
 		mFontData		= GetObject("NGUI Font Asset") as TextAsset;
 		mFontTexture	= GetObject("NGUI Font Texture") as Texture2D;
 		mFont			= GetObject("NGUI Font") as UIFont;
 		mAtlas			= GetObject("NGUI Atlas") as UIAtlas;
-		mPreview		= EditorPrefs.GetInt("NGUI Preview") == 0;
 		mAtlasPadding	= EditorPrefs.GetInt("NGUI Atlas Padding", 1);
 		mAtlasTrimming	= EditorPrefs.GetBool("NGUI Atlas Trimming", true);
+		mUnityPacking	= EditorPrefs.GetBool("NGUI Unity Packing", true);
+		mForceSquare	= EditorPrefs.GetBool("NGUI Force Square Atlas", true);
+		mPivot			= (UIWidget.Pivot)EditorPrefs.GetInt("NGUI Pivot", (int)mPivot);
+		mLayer			= EditorPrefs.GetInt("NGUI Layer", l);
+
+		LoadColor();
 	}
 
 	static void Save ()
 	{
+		EditorPrefs.SetString("NGUI Partial", mPartial);
 		EditorPrefs.SetString("NGUI Font Name", mFontName);
 		EditorPrefs.SetString("NGUI Atlas Name", mAtlasName);
 		EditorPrefs.SetInt("NGUI Font Asset", (mFontData != null) ? mFontData.GetInstanceID() : -1);
 		EditorPrefs.SetInt("NGUI Font Texture", (mFontTexture != null) ? mFontTexture.GetInstanceID() : -1);
 		EditorPrefs.SetInt("NGUI Font", (mFont != null) ? mFont.GetInstanceID() : -1);
 		EditorPrefs.SetInt("NGUI Atlas", (mAtlas != null) ? mAtlas.GetInstanceID() : -1);
-		EditorPrefs.SetInt("NGUI Preview", mPreview ? 0 : 1);
 		EditorPrefs.SetInt("NGUI Atlas Padding", mAtlasPadding);
 		EditorPrefs.SetBool("NGUI Atlas Trimming", mAtlasTrimming);
+		EditorPrefs.SetBool("NGUI Unity Packing", mUnityPacking);
+		EditorPrefs.SetBool("NGUI Force Square Atlas", mForceSquare);
+		EditorPrefs.SetInt("NGUI Pivot", (int)mPivot);
+		EditorPrefs.SetInt("NGUI Layer", mLayer);
+		SaveColor();
+	}
+
+	static void LoadColor ()
+	{
+		string sc = EditorPrefs.GetString("NGUI Color");
+
+		if (!string.IsNullOrEmpty(sc))
+		{
+			string[] colors = sc.Split(' ');
+
+			if (colors.Length == 4)
+			{
+				float.TryParse(colors[0], out mColor.r);
+				float.TryParse(colors[1], out mColor.g);
+				float.TryParse(colors[2], out mColor.b);
+				float.TryParse(colors[3], out mColor.a);
+			}
+		}
+	}
+
+	static void SaveColor ()
+	{
+		EditorPrefs.SetString("NGUI Color", mColor.r + " " + mColor.g + " " + mColor.b + " " + mColor.a);
+	}
+
+	/// <summary>
+	/// Color is used to easily copy/paste the widget's color value.
+	/// </summary>
+
+	static public Color color
+	{
+		get
+		{
+			if (!mLoaded) Load();
+			return mColor;
+		}
+		set
+		{
+			if (mColor != value)
+			{
+				mColor = value;
+				SaveColor();
+			}
+		}
 	}
 
 	/// <summary>
@@ -103,6 +166,48 @@ public class UISettings
 	}
 
 	/// <summary>
+	/// Default pivot point used by sprites.
+	/// </summary>
+
+	static public UIWidget.Pivot pivot
+	{
+		get
+		{
+			if (!mLoaded) Load();
+			return mPivot;
+		}
+		set
+		{
+			if (mPivot != value)
+			{
+				mPivot = value;
+				Save();
+			}
+		}
+	}
+
+	/// <summary>
+	/// Default layer used by the UI.
+	/// </summary>
+
+	static public int layer
+	{
+		get
+		{
+			if (!mLoaded) Load();
+			return mLayer;
+		}
+		set
+		{
+			if (mLayer != value)
+			{
+				mLayer = value;
+				Save();
+			}
+		}
+	}
+
+	/// <summary>
 	/// Name of the font, used by the Font Maker.
 	/// </summary>
 
@@ -127,10 +232,25 @@ public class UISettings
 	static public string atlasName { get { if (!mLoaded) Load(); return mAtlasName; } set { if (mAtlasName != value) { mAtlasName = value; Save(); } } }
 
 	/// <summary>
-	/// Whether the texture preview will be shown.
+	/// Name of the partial sprite name, used to filter sprites.
 	/// </summary>
 
-	static public bool texturePreview { get { if (!mLoaded) Load(); return mPreview; } set { if (mPreview != value) { mPreview = value; Save(); } } }
+	static public string partialSprite
+	{
+		get
+		{
+			if (!mLoaded) Load();
+			return mPartial;
+		}
+		set
+		{
+			if (mPartial != value)
+			{
+				mPartial = value;
+				EditorPrefs.SetString("NGUI Partial", mPartial);
+			}
+		}
+	}
 
 	/// <summary>
 	/// Added padding in-between of sprites when creating an atlas.
@@ -143,4 +263,16 @@ public class UISettings
 	/// </summary>
 
 	static public bool atlasTrimming { get { if (!mLoaded) Load(); return mAtlasTrimming; } set { if (mAtlasTrimming != value) { mAtlasTrimming = value; Save(); } } }
+
+	/// <summary>
+	/// Whether Unity's method or MaxRectBinPack will be used when creating an atlas
+	/// </summary>
+
+	static public bool unityPacking { get { if (!mLoaded) Load(); return mUnityPacking; } set { if (mUnityPacking != value) { mUnityPacking = value; Save(); } } }
+	
+	/// <summary>
+	/// Whether the Atlas Maker will force a square atlas texture when creating an atlas
+	/// </summary>
+	
+	static public bool forceSquareAtlas { get { if (!mLoaded) Load(); return mForceSquare; } set { if (mForceSquare != value) { mForceSquare = value; Save(); } } }
 }

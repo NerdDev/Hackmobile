@@ -1,3 +1,8 @@
+﻿//----------------------------------------------
+//            NGUI: Next-Gen UI kit
+// Copyright © 2011-2013 Tasharen Entertainment
+//----------------------------------------------
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -7,7 +12,6 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(Collider))]
 [AddComponentMenu("NGUI/Interaction/Button Keys")]
-#pragma warning disable 0618
 public class UIButtonKeys : MonoBehaviour
 {
 	public bool startsSelected = false;
@@ -16,18 +20,18 @@ public class UIButtonKeys : MonoBehaviour
 	public UIButtonKeys selectOnDown;
 	public UIButtonKeys selectOnLeft;
 	public UIButtonKeys selectOnRight;
-
+	
 	void Start ()
 	{
-		if (startsSelected && (UICamera.selectedObject == null || !UICamera.selectedObject.active))
+		if (startsSelected && (UICamera.selectedObject == null || !NGUITools.GetActive(UICamera.selectedObject)))
 		{
 			UICamera.selectedObject = gameObject;
 		}
 	}
-
+	 
 	void OnKey (KeyCode key)
 	{
-		if (enabled && gameObject.active)
+		if (enabled && NGUITools.GetActive(gameObject))
 		{
 			switch (key)
 			{
@@ -56,7 +60,7 @@ public class UIButtonKeys : MonoBehaviour
 					if (selectOnRight != null) UICamera.selectedObject = selectOnRight.gameObject;
 					else if (selectOnDown != null) UICamera.selectedObject = selectOnDown.gameObject;
 					else if (selectOnUp != null) UICamera.selectedObject = selectOnUp.gameObject;
-					else if (selectOnRight != null) UICamera.selectedObject = selectOnRight.gameObject;
+					else if (selectOnLeft != null) UICamera.selectedObject = selectOnLeft.gameObject;
 				}
 				break;
 			}
@@ -65,10 +69,9 @@ public class UIButtonKeys : MonoBehaviour
 
 	void OnClick ()
 	{
-		if (enabled && gameObject.active && selectOnClick != null)
+		if (enabled && selectOnClick != null)
 		{
 			UICamera.selectedObject = selectOnClick.gameObject;
 		}
 	}
 }
-#pragma warning restore 0618

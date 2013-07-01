@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -13,7 +13,6 @@ using System.Collections.Generic;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Internal/Update Manager")]
-#pragma warning disable 0618
 public class UpdateManager : MonoBehaviour
 {
 	public delegate void OnUpdate (float delta);
@@ -35,7 +34,7 @@ public class UpdateManager : MonoBehaviour
 	static int Compare (UpdateEntry a, UpdateEntry b)
 	{
 		if (a.index < b.index) return 1;
-		if (a.index > b.index) return 1;
+		if (a.index > b.index) return -1;
 		return 0;
 	}
 
@@ -87,7 +86,7 @@ public class UpdateManager : MonoBehaviour
 				}
 
 				// If the monobehaviour or its game object are disabled, move on to the next entry
-				if (!ent.mb.enabled || !ent.mb.gameObject.active) continue;
+				if (!ent.mb.enabled || !NGUITools.GetActive(ent.mb.gameObject)) continue;
 			}
 
 			// Call the function
@@ -257,4 +256,3 @@ public class UpdateManager : MonoBehaviour
 		else DestroyImmediate(obj);
 	}
 }
-#pragma warning restore 0618

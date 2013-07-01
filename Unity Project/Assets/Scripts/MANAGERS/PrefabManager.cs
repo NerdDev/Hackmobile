@@ -5,7 +5,7 @@ public class PrefabManager : MonoBehaviour {
 
 	
 	//THIS ALL NEEDS TO BE ORGANIZED
-	public GameObject textPrefab;
+	public GameObject textPopPrefab;
 	public GameObject introSplashObject;
 	
 	public GameObject enemy1;

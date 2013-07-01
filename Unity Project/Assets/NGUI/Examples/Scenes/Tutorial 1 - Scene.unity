@@ -27,7 +27,7 @@ RenderSettings:
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-GameManager:
+LevelGameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -220,6 +220,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
@@ -235,11 +237,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   uiCamera: {fileID: 13}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
   side: 8
   halfPixelOffset: 1
-  depthOffset: 0
   relativeOffset: {x: 0, y: 0}
-  stretchToFill: 0
 --- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,20 +252,31 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  debug: 0
   useMouse: 1
   useTouch: 1
+  allowMultiTouch: 1
   useKeyboard: 1
   useController: 1
+  stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 1
+  clipRaycasts: 1
   tooltipDelay: 1
+  stickyTooltip: 1
+  mouseDragThreshold: 4
   mouseClickThreshold: 10
+  touchDragThreshold: 40
   touchClickThreshold: 40
   rangeDistance: -1
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  submitKey0: 13
+  submitKey1: 330
+  cancelKey0: 27
+  cancelKey1: 331
 --- !u!114 &18
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,8 +287,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
-  automatic: 1
+  scalingStyle: 0
+  automatic: 0
   manualHeight: 611
+  minimumHeight: 320
+  maximumHeight: 1536
 --- !u!196 &19
 NavMeshSettings:
   m_ObjectHideFlags: 0

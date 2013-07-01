@@ -58,6 +58,7 @@ MonoBehaviour:
       y: 212
       width: 128
       height: 128
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -75,6 +76,7 @@ MonoBehaviour:
       y: 208
       width: 123
       height: 113
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -92,6 +94,7 @@ MonoBehaviour:
       y: 350
       width: 238
       height: 153
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -109,6 +112,7 @@ MonoBehaviour:
       y: 256
       width: 255
       height: 255
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -126,6 +130,7 @@ MonoBehaviour:
       y: 193
       width: 9
       height: 9
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -143,6 +148,7 @@ MonoBehaviour:
       y: 193
       width: 9
       height: 7
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -160,6 +166,7 @@ MonoBehaviour:
       y: 328
       width: 7
       height: 7
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -177,6 +184,7 @@ MonoBehaviour:
       y: 328
       width: 7
       height: 7
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -194,6 +202,7 @@ MonoBehaviour:
       y: 328
       width: 7
       height: 7
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -211,6 +220,7 @@ MonoBehaviour:
       y: 328
       width: 7
       height: 7
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -228,6 +238,7 @@ MonoBehaviour:
       y: 0
       width: 96
       height: 128
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -245,6 +256,7 @@ MonoBehaviour:
       y: 0
       width: 256
       height: 212
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -262,6 +274,7 @@ MonoBehaviour:
       y: 178
       width: 255
       height: 76
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0

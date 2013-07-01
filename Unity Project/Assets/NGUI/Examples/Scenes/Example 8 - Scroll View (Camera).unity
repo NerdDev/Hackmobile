@@ -27,7 +27,7 @@ RenderSettings:
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-GameManager:
+LevelGameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -2229,7 +2229,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 5}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2540.55322, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 2540.55322, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 139}
@@ -2300,7 +2300,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 11}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2395.41138, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 2395.41138, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 145}
@@ -2371,7 +2371,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 17}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2250.26953, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 2250.26953, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 151}
@@ -2442,7 +2442,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 23}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2105.12769, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 2105.12793, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 157}
@@ -2513,7 +2513,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 29}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1959.98596, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 1959.98596, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 163}
@@ -2584,7 +2584,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 35}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1814.84399, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 1814.84412, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 169}
@@ -2655,7 +2655,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 41}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1669.70215, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 1669.70227, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 175}
@@ -2726,7 +2726,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 47}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1524.5603, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 1524.56042, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 181}
@@ -2797,7 +2797,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 53}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1379.41846, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 1379.41846, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 187}
@@ -2868,7 +2868,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 59}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1234.27661, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 1234.27661, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 193}
@@ -2939,7 +2939,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 65}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1089.13477, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 1089.13464, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 199}
@@ -3010,7 +3010,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 71}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 943.99292, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 943.992859, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 205}
@@ -3081,7 +3081,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 77}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 798.850952, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 798.850952, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 211}
@@ -3152,7 +3152,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 83}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 653.709167, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 653.709167, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 217}
@@ -3223,7 +3223,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 89}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 508.567383, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 508.567383, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 223}
@@ -3294,7 +3294,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 95}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 363.425537, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 363.425537, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 229}
@@ -3365,7 +3365,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 101}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 218.283691, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 218.283691, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 235}
@@ -3614,7 +3614,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 121}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 73.1418457, y: -116.588631, z: 0}
+  m_LocalPosition: {x: 73.1418457, y: -116.588737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 247}
@@ -4121,6 +4121,7 @@ MonoBehaviour:
   scale: {x: 1, y: 0}
   scrollWheelFactor: -2
   dragEffect: 2
+  smoothDragStart: 1
   momentumAmount: 35
 --- !u!114 &292
 MonoBehaviour:
@@ -4133,12 +4134,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4150,11 +4156,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4166,6 +4178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4173,12 +4186,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4190,6 +4207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4197,12 +4215,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4214,6 +4236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4221,12 +4244,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4266,6 +4293,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4277,12 +4305,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4294,11 +4327,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4310,6 +4349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4317,12 +4357,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4334,6 +4378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4341,12 +4386,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4358,6 +4407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4365,12 +4415,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4410,6 +4464,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4421,12 +4476,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4438,11 +4498,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4454,6 +4520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4461,12 +4528,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4478,6 +4549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4485,12 +4557,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4502,6 +4578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4509,12 +4586,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4554,6 +4635,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4565,12 +4647,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4582,11 +4669,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4598,6 +4691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4605,12 +4699,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4622,6 +4720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4629,12 +4728,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4646,6 +4749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4653,12 +4757,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4698,6 +4806,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4709,12 +4818,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4726,11 +4840,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4742,6 +4862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4749,12 +4870,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4766,6 +4891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4773,12 +4899,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4790,6 +4920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4797,12 +4928,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4842,6 +4977,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4853,12 +4989,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4870,11 +5011,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4886,6 +5033,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4893,12 +5041,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4910,6 +5062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4917,12 +5070,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4934,6 +5091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4941,12 +5099,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4986,6 +5148,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4997,12 +5160,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5014,11 +5182,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5030,6 +5204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5037,12 +5212,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5054,6 +5233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5061,12 +5241,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5078,6 +5262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5085,12 +5270,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5130,6 +5319,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5141,12 +5331,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5158,11 +5353,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5174,6 +5375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5181,12 +5383,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5198,6 +5404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5205,12 +5412,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5222,6 +5433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5229,12 +5441,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5274,6 +5490,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5285,12 +5502,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5302,11 +5524,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5318,6 +5546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5325,12 +5554,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5342,6 +5575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5349,12 +5583,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5366,6 +5604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5373,12 +5612,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5418,6 +5661,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5429,12 +5673,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5446,11 +5695,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5462,6 +5717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5469,12 +5725,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5486,6 +5746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5493,12 +5754,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5510,6 +5775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5517,12 +5783,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5562,6 +5832,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5573,12 +5844,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5590,11 +5866,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5606,6 +5888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5613,12 +5896,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5630,6 +5917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5637,12 +5925,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5654,6 +5946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5661,12 +5954,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5706,6 +6003,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5717,12 +6015,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5734,11 +6037,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5750,6 +6059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5757,12 +6067,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5774,6 +6088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5781,12 +6096,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5798,6 +6117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5805,12 +6125,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5850,6 +6174,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5861,12 +6186,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5878,11 +6208,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5894,6 +6230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5901,12 +6238,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5918,6 +6259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5925,12 +6267,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5942,6 +6288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -5949,12 +6296,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5994,6 +6345,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6005,12 +6357,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6022,11 +6379,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6038,6 +6401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6045,12 +6409,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6062,6 +6430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6069,12 +6438,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6086,6 +6459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6093,12 +6467,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6138,6 +6516,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6149,12 +6528,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6166,11 +6550,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6182,6 +6572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6189,12 +6580,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6206,6 +6601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6213,12 +6609,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6230,6 +6630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6237,12 +6638,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6282,6 +6687,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6293,12 +6699,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6310,11 +6721,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6326,6 +6743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6333,12 +6751,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6350,6 +6772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6357,12 +6780,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6374,6 +6801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6381,12 +6809,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6426,6 +6858,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6437,12 +6870,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6454,11 +6892,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6470,6 +6914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6477,12 +6922,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6494,6 +6943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6501,12 +6951,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6518,6 +6972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6525,12 +6980,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6570,6 +7029,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6580,8 +7040,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
+  scalingStyle: 1
   automatic: 0
   manualHeight: 800
+  minimumHeight: 320
+  maximumHeight: 1536
 --- !u!114 &429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6592,8 +7055,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
+  scalingStyle: 1
   automatic: 0
   manualHeight: 800
+  minimumHeight: 320
+  maximumHeight: 1536
 --- !u!114 &430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6605,11 +7071,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 2
   mDepth: 11
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: NGUI
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6621,11 +7093,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   uiCamera: {fileID: 268}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
   side: 4
   halfPixelOffset: 1
-  depthOffset: 0
   relativeOffset: {x: 0, y: 0}
-  stretchToFill: 0
 --- !u!114 &432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6638,6 +7110,23 @@ MonoBehaviour:
   m_Name: 
   method: 3
   style: 0
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  ignoreTimeScale: 1
+  delay: 0
   duration: .5
   steeperCurves: 0
   tweenGroup: 0
@@ -6663,6 +7152,8 @@ MonoBehaviour:
   ifDisabledOnPlay: 0
   disableWhenFinished: 0
   includeChildren: 0
+  eventReceiver: {fileID: 0}
+  callWhenFinished: 
 --- !u!114 &434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6676,6 +7167,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6694,6 +7186,8 @@ MonoBehaviour:
   ifDisabledOnPlay: 0
   disableWhenFinished: 0
   includeChildren: 0
+  eventReceiver: {fileID: 0}
+  callWhenFinished: 
 --- !u!114 &436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6706,6 +7200,23 @@ MonoBehaviour:
   m_Name: 
   method: 3
   style: 0
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  ignoreTimeScale: 1
+  delay: 0
   duration: .25
   steeperCurves: 0
   tweenGroup: 0
@@ -6766,6 +7277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66ca9c6e5cbd4544ab22016a27d817a4, type: 3}
   m_Name: 
   columns: 0
+  direction: 0
   padding: {x: 8, y: 8}
   sorted: 0
   hideInactive: 1
@@ -6782,11 +7294,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: -5
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Dark
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6798,6 +7316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
@@ -6805,12 +7324,16 @@ MonoBehaviour:
   mText: Press Me
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6822,12 +7345,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Beveled Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6851,6 +7379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .358208954, g: .299585462, b: .208509684, a: 1}
   mPivot: 0
   mDepth: 4
@@ -6873,12 +7402,16 @@ MonoBehaviour:
     camera. Unfortunately you can''t rotate this scroll view or move it off-screen.'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6902,6 +7435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .981004, g: 1, b: .320895493, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6909,12 +7443,16 @@ MonoBehaviour:
   mText: 12,345 Gold
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6926,6 +7464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .199457258, g: 1, b: .0298507214, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6933,12 +7472,16 @@ MonoBehaviour:
   mText: New!
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6950,6 +7493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -6957,12 +7501,16 @@ MonoBehaviour:
   mText: Some Item
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6974,11 +7522,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Orc Armor - Shoulders
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6990,12 +7544,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Flat Outline
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7020,20 +7579,31 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  debug: 0
   useMouse: 1
   useTouch: 1
+  allowMultiTouch: 1
   useKeyboard: 1
   useController: 1
+  stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 1
+  clipRaycasts: 1
   tooltipDelay: 1
+  stickyTooltip: 1
+  mouseDragThreshold: 4
   mouseClickThreshold: 10
+  touchDragThreshold: 40
   touchClickThreshold: 40
   rangeDistance: -1
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  submitKey0: 13
+  submitKey1: 330
+  cancelKey0: 27
+  cancelKey1: 331
 --- !u!114 &454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7045,12 +7615,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62f3996954ef684696c03244a67ace1, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Paper Background
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7062,12 +7637,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .820895553, g: .820895553, b: .820895553, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Window
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7079,6 +7659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: .679052293, b: .0820895433, a: 1}
   mPivot: 4
   mDepth: 4
@@ -7086,12 +7667,16 @@ MonoBehaviour:
   mText: FFP Scroll View
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7103,12 +7688,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Window
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7120,12 +7710,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62f3996954ef684696c03244a67ace1, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .819607854, g: .819607854, b: .819607854, a: 1}
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Paper Background
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7137,12 +7732,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Window
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7153,20 +7753,31 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  debug: 0
   useMouse: 1
   useTouch: 1
+  allowMultiTouch: 1
   useKeyboard: 1
   useController: 1
+  stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 256
+  clipRaycasts: 1
   tooltipDelay: 1
+  stickyTooltip: 1
+  mouseDragThreshold: 4
   mouseClickThreshold: 10
+  touchDragThreshold: 40
   touchClickThreshold: 40
   rangeDistance: -1
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  submitKey0: 13
+  submitKey1: 330
+  cancelKey0: 27
+  cancelKey1: 331
 --- !u!114 &461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7178,11 +7789,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   uiCamera: {fileID: 268}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
   side: 8
   halfPixelOffset: 1
-  depthOffset: 0
   relativeOffset: {x: 0, y: 0}
-  stretchToFill: 0
 --- !u!114 &462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7194,11 +7805,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   uiCamera: {fileID: 268}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
   side: 8
   halfPixelOffset: 1
-  depthOffset: 0
   relativeOffset: {x: 0, y: 0}
-  stretchToFill: 0
 --- !u!114 &463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7212,6 +7823,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
@@ -7229,6 +7842,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}

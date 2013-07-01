@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEditor;
@@ -11,7 +11,6 @@ using System.Collections.Generic;
 /// Panel wizard that allows enabling / disabling and selecting panels in the scene.
 /// </summary>
 
-#pragma warning disable 0618
 public class UIPanelTool : EditorWindow
 {
 	class Entry
@@ -89,13 +88,13 @@ public class UIPanelTool : EditorWindow
 
 			if (state)
 			{
-				child.gameObject.active = true;
+				NGUITools.SetActiveSelf(child.gameObject, true);
 				SetActiveState(child, true);
 			}
 			else
 			{
 				SetActiveState(child, false);
-				child.gameObject.active = false;
+				NGUITools.SetActiveSelf(child.gameObject, false);
 			}
 			EditorUtility.SetDirty(child.gameObject);
 		}
@@ -109,13 +108,13 @@ public class UIPanelTool : EditorWindow
 	{
 		if (state)
 		{
-			panel.gameObject.active = true;
+			NGUITools.SetActiveSelf(panel.gameObject, true);
 			SetActiveState(panel.transform, true);
 		}
 		else
 		{
 			SetActiveState(panel.transform, false);
-			panel.gameObject.active = false;
+			NGUITools.SetActiveSelf(panel.gameObject, false);
 		}
 		EditorUtility.SetDirty(panel.gameObject);
 	}
@@ -142,14 +141,14 @@ public class UIPanelTool : EditorWindow
 				Entry ent = new Entry();
 				ent.panel = panel;
 				ent.widgets = GetWidgets(panel);
-				ent.isEnabled = panel.enabled && panel.gameObject.active;
+				ent.isEnabled = panel.enabled && NGUITools.GetActive(panel.gameObject);
 				ent.widgetsEnabled = ent.isEnabled;
 
 				if (ent.widgetsEnabled)
 				{
 					foreach (UIWidget w in ent.widgets)
 					{
-						if (!w.gameObject.active)
+						if (!NGUITools.GetActive(w.gameObject))
 						{
 							allEnabled = false;
 							ent.widgetsEnabled = false;
@@ -211,7 +210,7 @@ public class UIPanelTool : EditorWindow
 			panelName = ent.panel.name;
 			layer = LayerMask.LayerToName(ent.panel.gameObject.layer);
 			widgetCount = ent.widgets.Count.ToString();
-			drawCalls = ent.panel.drawCalls.Count.ToString();
+			drawCalls = ent.panel.drawCalls.size.ToString();
 			clipping = (ent.panel.clipping != UIDrawCall.Clipping.None) ? "Yes" : "";
 		}
 		else
@@ -283,4 +282,3 @@ public class UIPanelTool : EditorWindow
 		return retVal;
 	}
 }
-#pragma warning restore 0618

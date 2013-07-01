@@ -76,7 +76,6 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-    m_KeepAdditionalBonesAnimation: 1
   m_EditorCurves:
   - curve:
       serializedVersion: 2

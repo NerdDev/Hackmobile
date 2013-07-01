@@ -36,7 +36,8 @@ public class DebugManager : MonoBehaviour
     {
         GlobalLogging,
         LineNumbers,
-        LevelGenDFSSteps
+        SearchSteps,
+        Probability
     }
 
     static GenericFlags<DebugFlag> flags = new GenericFlags<DebugFlag>();
@@ -69,7 +70,8 @@ public class DebugManager : MonoBehaviour
 		logging (Logs.Main, true);
 		logging (Logs.LevelGenMain, true);
 		logging (Logs.LevelGen, true);
-        logging(Logs.NPCs, true);
+		logging(Logs.NPCs, true);
+        flags[DebugFlag.SearchSteps] = false;
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))
@@ -88,12 +90,12 @@ public class DebugManager : MonoBehaviour
     }
 	
     #region Accessors
-    public static bool flag(DebugFlag flag)
+    public static bool Flag(DebugFlag flag)
     {
         return flags[flag];
     }
 
-    public static void setFlag(DebugFlag flag, bool on)
+    public static void SetFlag(DebugFlag flag, bool on)
     {
         flags[flag] = on;
     }
@@ -302,7 +304,7 @@ public class DebugManager : MonoBehaviour
         public void w(int depthModifier, string line)
         {
             string toWrite = "";
-            if (DebugManager.flag(DebugFlag.LineNumbers))
+            if (DebugManager.Flag(DebugFlag.LineNumbers))
             {
                 toWrite += "[" + lineNum + "] ";
             }

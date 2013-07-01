@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright Â© 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -12,7 +12,6 @@ using UnityEngine;
 [ExecuteInEditMode]
 [RequireComponent(typeof(UIPanel))]
 [AddComponentMenu("NGUI/Interaction/Draggable Panel")]
-#pragma warning disable 0618
 public class UIDraggablePanel : IgnoreTimeScale
 {
 	public enum DragEffect
@@ -28,6 +27,8 @@ public class UIDraggablePanel : IgnoreTimeScale
 		OnlyIfNeeded,
 		WhenDragging,
 	}
+
+	public delegate void OnDragFinished ();
 
 	/// <summary>
 	/// Whether the dragging will be restricted to be within the parent panel's bounds.
@@ -48,6 +49,12 @@ public class UIDraggablePanel : IgnoreTimeScale
 	public DragEffect dragEffect = DragEffect.MomentumAndSpring;
 
 	/// <summary>
+	/// Whether the drag operation will be started smoothly, or if if it will be precise (but will have a noticeable "jump").
+	/// </summary>
+
+	public bool smoothDragStart = true;
+
+	/// <summary>
 	/// Scale value applied to the drag delta. Set X or Y to 0 to disallow dragging in that direction.
 	/// </summary>
 
@@ -66,7 +73,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 	public float momentumAmount = 35f;
 
 	/// <summary>
-	/// Starting position of the clipped area. (0, 0) means top-left corner, (1, 1) means bottom-right. Only used for quick inspector positioning.
+	/// Starting position of the clipped area. (0, 0) means top-left corner, (1, 1) means bottom-right.
 	/// </summary>
 
 	public Vector2 relativePositionOnReset = Vector2.zero;
@@ -95,6 +102,12 @@ public class UIDraggablePanel : IgnoreTimeScale
 
 	public ShowCondition showScrollBars = ShowCondition.OnlyIfNeeded;
 
+	/// <summary>
+	/// Event callback to trigger when the drag process finished. Can be used for additional effects, such as centering on some object.
+	/// </summary>
+
+	public OnDragFinished onDragFinished;
+
 	Transform mTrans;
 	UIPanel mPanel;
 	Plane mPlane;
@@ -106,7 +119,15 @@ public class UIDraggablePanel : IgnoreTimeScale
 	bool mCalculatedBounds = false;
 	bool mShouldMove = false;
 	bool mIgnoreCallbacks = false;
-	int mTouches = 0;
+	int mDragID = -10;
+	Vector2 mDragStartOffset = Vector2.zero;
+	bool mDragStarted = false;
+
+	/// <summary>
+	/// Panel that's being dragged.
+	/// </summary>
+
+	public UIPanel panel { get { return mPanel; } }
 
 	/// <summary>
 	/// Calculate the bounds used by the widgets.
@@ -167,8 +188,8 @@ public class UIDraggablePanel : IgnoreTimeScale
 			Vector4 clip = mPanel.clipRange;
 			Bounds b = bounds;
 
-			float hx = clip.z * 0.5f;
-			float hy = clip.w * 0.5f;
+			float hx = (clip.z == 0f) ? Screen.width  : clip.z * 0.5f;
+			float hy = (clip.w == 0f) ? Screen.height : clip.w * 0.5f;
 
 			if (!Mathf.Approximately(scale.x, 0f))
 			{
@@ -189,7 +210,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 	/// Current momentum, exposed just in case it's needed.
 	/// </summary>
 
-	public Vector3 currentMomentum { get { return mMomentum; } set { mMomentum = value; } }
+	public Vector3 currentMomentum { get { return mMomentum; } set { mMomentum = value; mShouldMove = true; } }
 
 	/// <summary>
 	/// Cache the transform and the panel.
@@ -226,7 +247,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 	/// Restrict the panel's contents to be within the panel's bounds.
 	/// </summary>
 
-	public void RestrictWithinBounds (bool instant)
+	public bool RestrictWithinBounds (bool instant)
 	{
 		Vector3 constraint = mPanel.CalculateConstrainOffset(bounds.min, bounds.max);
 
@@ -244,12 +265,9 @@ public class UIDraggablePanel : IgnoreTimeScale
 				mMomentum = Vector3.zero;
 				mScroll = 0f;
 			}
+			return true;
 		}
-		else
-		{
-			// Remove the spring as it's no longer needed
-			DisableSpring();
-		}
+		return false;
 	}
 
 	/// <summary>
@@ -278,62 +296,51 @@ public class UIDraggablePanel : IgnoreTimeScale
 				mShouldMove = shouldMove;
 			}
 
-			if (horizontalScrollBar != null)
+			Bounds b = bounds;
+			Vector2 bmin = b.min;
+			Vector2 bmax = b.max;
+
+			if (mPanel.clipping == UIDrawCall.Clipping.SoftClip)
 			{
-				Bounds b = bounds;
-				Vector3 boundsSize = b.size;
-
-				if (boundsSize.x > 0f)
-				{
-					Vector4 clip = mPanel.clipRange;
-					float extents = clip.z * 0.5f;
-					float min = clip.x - extents - b.min.x;
-					float max = b.max.x - extents - clip.x;
-
-					if (mPanel.clipping == UIDrawCall.Clipping.SoftClip)
-					{
-						min += mPanel.clipSoftness.x;
-						max -= mPanel.clipSoftness.x;
-					}
-
-					min = Mathf.Clamp01(min / boundsSize.x);
-					max = Mathf.Clamp01(max / boundsSize.x);
-
-					float sum = min + max;
-					mIgnoreCallbacks = true;
-					horizontalScrollBar.barSize = 1f - sum;
-					horizontalScrollBar.scrollValue = (sum > 0.001f) ? min / sum : 0f;
-					mIgnoreCallbacks = false;
-				}
+				Vector2 soft = mPanel.clipSoftness;
+				bmin -= soft;
+				bmax += soft;
 			}
 
-			if (verticalScrollBar != null)
+			if (horizontalScrollBar != null && bmax.x > bmin.x)
 			{
-				Bounds b = bounds;
-				Vector3 boundsSize = b.size;
+				Vector4 clip = mPanel.clipRange;
+				float extents = clip.z * 0.5f;
+				float min = clip.x - extents - b.min.x;
+				float max = b.max.x - extents - clip.x;
 
-				if (boundsSize.y > 0f)
-				{
-					Vector4 clip = mPanel.clipRange;
-					float extents = clip.w * 0.5f;
-					float min = clip.y - extents - b.min.y;
-					float max = b.max.y - extents - clip.y;
+				float width = bmax.x - bmin.x;
+				min = Mathf.Clamp01(min / width);
+				max = Mathf.Clamp01(max / width);
 
-					if (mPanel.clipping == UIDrawCall.Clipping.SoftClip)
-					{
-						min += mPanel.clipSoftness.y;
-						max -= mPanel.clipSoftness.y;
-					}
+				float sum = min + max;
+				mIgnoreCallbacks = true;
+				horizontalScrollBar.barSize = 1f - sum;
+				horizontalScrollBar.scrollValue = (sum > 0.001f) ? min / sum : 0f;
+				mIgnoreCallbacks = false;
+			}
 
-					min = Mathf.Clamp01(min / boundsSize.y);
-					max = Mathf.Clamp01(max / boundsSize.y);
-					float sum = min + max;
+			if (verticalScrollBar != null && bmax.y > bmin.y)
+			{
+				Vector4 clip = mPanel.clipRange;
+				float extents = clip.w * 0.5f;
+				float min = clip.y - extents - bmin.y;
+				float max = bmax.y - extents - clip.y;
 
-					mIgnoreCallbacks = true;
-					verticalScrollBar.barSize = 1f - sum;
-					verticalScrollBar.scrollValue = (sum > 0.001f) ? 1f - min / sum : 0f;
-					mIgnoreCallbacks = false;
-				}
+				float height = bmax.y - bmin.y;
+				min = Mathf.Clamp01(min / height);
+				max = Mathf.Clamp01(max / height);
+				float sum = min + max;
+
+				mIgnoreCallbacks = true;
+				verticalScrollBar.barSize = 1f - sum;
+				verticalScrollBar.scrollValue = (sum > 0.001f) ? 1f - min / sum : 0f;
+				mIgnoreCallbacks = false;
 			}
 		}
 		else if (recalculateBounds)
@@ -442,7 +449,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 	/// Move the panel by the specified amount.
 	/// </summary>
 
-	void MoveRelative (Vector3 relative)
+	public void MoveRelative (Vector3 relative)
 	{
 		mTrans.localPosition += relative;
 		Vector4 cr = mPanel.clipRange;
@@ -456,7 +463,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 	/// Move the panel by the specified amount.
 	/// </summary>
 
-	void MoveAbsolute (Vector3 absolute)
+	public void MoveAbsolute (Vector3 absolute)
 	{
 		Vector3 a = mTrans.InverseTransformPoint(absolute);
 		Vector3 b = mTrans.InverseTransformPoint(Vector3.zero);
@@ -469,9 +476,16 @@ public class UIDraggablePanel : IgnoreTimeScale
 
 	public void Press (bool pressed)
 	{
-		if (enabled && gameObject.active)
+		if (smoothDragStart && pressed)
 		{
-			mTouches += (pressed ? 1 : -1);
+			mDragStarted = false;
+			mDragStartOffset = Vector2.zero;
+		}
+
+		if (enabled && NGUITools.GetActive(gameObject))
+		{
+			if (!pressed && mDragID == UICamera.currentTouchID) mDragID = -10;
+
 			mCalculatedBounds = false;
 			mShouldMove = shouldMove;
 			if (!mShouldMove) return;
@@ -492,9 +506,13 @@ public class UIDraggablePanel : IgnoreTimeScale
 				// Create the plane to drag along
 				mPlane = new Plane(mTrans.rotation * Vector3.back, mLastPos);
 			}
-			else if (restrictWithinPanel && mPanel.clipping != UIDrawCall.Clipping.None && dragEffect == DragEffect.MomentumAndSpring)
+			else
 			{
-				RestrictWithinBounds(false);
+				if (restrictWithinPanel && mPanel.clipping != UIDrawCall.Clipping.None && dragEffect == DragEffect.MomentumAndSpring)
+				{
+					RestrictWithinBounds(false);
+				}
+				if (onDragFinished != null) onDragFinished();
 			}
 		}
 	}
@@ -503,13 +521,24 @@ public class UIDraggablePanel : IgnoreTimeScale
 	/// Drag the object along the plane.
 	/// </summary>
 
-	public void Drag (Vector2 delta)
+	public void Drag ()
 	{
-		if (enabled && gameObject.active && mShouldMove)
+		if (enabled && NGUITools.GetActive(gameObject) && mShouldMove)
 		{
+			if (mDragID == -10) mDragID = UICamera.currentTouchID;
 			UICamera.currentTouch.clickNotification = UICamera.ClickNotification.BasedOnDelta;
 
-			Ray ray = UICamera.currentCamera.ScreenPointToRay(UICamera.currentTouch.pos);
+			// Prevents the drag "jump". Contributed by 'mixd' from the Tasharen forums.
+			if (smoothDragStart && !mDragStarted)
+			{
+				mDragStarted = true;
+				mDragStartOffset = UICamera.currentTouch.totalDelta;
+			}
+
+			Ray ray = smoothDragStart ?
+				UICamera.currentCamera.ScreenPointToRay(UICamera.currentTouch.pos - mDragStartOffset) :
+				UICamera.currentCamera.ScreenPointToRay(UICamera.currentTouch.pos);
+
 			float dist = 0f;
 
 			if (mPlane.Raycast(ray, out dist))
@@ -529,14 +558,26 @@ public class UIDraggablePanel : IgnoreTimeScale
 				mMomentum = Vector3.Lerp(mMomentum, mMomentum + offset * (0.01f * momentumAmount), 0.67f);
 
 				// Move the panel
-				MoveAbsolute(offset);
+				//MoveAbsolute(offset);
+
+				Vector3 constraint = mPanel.CalculateConstrainOffset(bounds.min, bounds.max);
+
+				if (constraint.magnitude > 0.001f)
+				{
+					MoveAbsolute(offset * 0.5f);
+					mMomentum *= 0.5f;
+				}
+				else
+				{
+					MoveAbsolute(offset);
+				}
 
 				// We want to constrain the UI to be within bounds
 				if (restrictWithinPanel &&
 					mPanel.clipping != UIDrawCall.Clipping.None &&
 					dragEffect != DragEffect.MomentumAndSpring)
 				{
-					RestrictWithinBounds(false);
+					RestrictWithinBounds(true);
 				}
 			}
 		}
@@ -548,8 +589,9 @@ public class UIDraggablePanel : IgnoreTimeScale
 
 	public void Scroll (float delta)
 	{
-		if (enabled && gameObject.active)
+		if (enabled && NGUITools.GetActive(gameObject) && scrollWheelFactor != 0f)
 		{
+			DisableSpring();
 			mShouldMove = shouldMove;
 			if (Mathf.Sign(mScroll) != Mathf.Sign(delta)) mScroll = 0f;
 			mScroll += delta * scrollWheelFactor;
@@ -562,6 +604,9 @@ public class UIDraggablePanel : IgnoreTimeScale
 
 	void LateUpdate ()
 	{
+		// If the panel's geometry changed, recalculate the bounds
+		if (mPanel.changedLastFrame) UpdateScrollbars(true);
+
 		// Inspector functionality
 		if (repositionClipping)
 		{
@@ -579,7 +624,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 			bool vertical = false;
 			bool horizontal = false;
 
-			if (showScrollBars != ShowCondition.WhenDragging || mTouches > 0)
+			if (showScrollBars != ShowCondition.WhenDragging || mDragID != -10 || mMomentum.magnitude > 0.01f)
 			{
 				vertical = shouldMoveVertically;
 				horizontal = shouldMoveHorizontally;
@@ -605,7 +650,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 		// Apply momentum
 		if (mShouldMove && !mPressed)
 		{
-			mMomentum += scale * (-mScroll * 0.05f);
+			mMomentum -= scale * (mScroll * 0.05f);
 
 			if (mMomentum.magnitude > 0.0001f)
 			{
@@ -619,8 +664,13 @@ public class UIDraggablePanel : IgnoreTimeScale
 				if (restrictWithinPanel && mPanel.clipping != UIDrawCall.Clipping.None) RestrictWithinBounds(false);
 				return;
 			}
-			else mScroll = 0f;
+			else
+			{
+				mScroll = 0f;
+				mMomentum = Vector3.zero;
+			}
 		}
+		else mScroll = 0f;
 
 		// Dampen the momentum
 		NGUIMath.SpringDampen(ref mMomentum, 9f, delta);
@@ -644,4 +694,3 @@ public class UIDraggablePanel : IgnoreTimeScale
 	}
 #endif
 }
-#pragma warning restore 0618

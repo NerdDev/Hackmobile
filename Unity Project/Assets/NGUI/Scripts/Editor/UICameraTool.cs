@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEditor;
@@ -181,10 +181,8 @@ public class UICameraTool : EditorWindow
 		if (cam != null) NGUIEditorTools.HighlightLine(new Color(0.6f, 0.6f, 0.6f));
 
 		GUILayout.BeginHorizontal();
-        {
-            #pragma warning disable 0618
-            bool enabled = (cam == null || (cam.gameObject.active && cam.enabled));
-            #pragma warning restore 0618
+		{
+			bool enabled = (cam == null || (NGUITools.GetActive(cam.gameObject) && cam.enabled));
 
 			GUI.color = Color.white;
 

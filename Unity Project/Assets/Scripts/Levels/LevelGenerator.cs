@@ -7,20 +7,27 @@ public class LevelGenerator
 
     #region GlobalGenVariables
     // Number of Rooms
-	public static int minRooms { get { return 8; }}
-	public static int maxRooms { get { return 16; }} //Max not inclusive
-	
-	// Box Room Size (including walls)
-	public static int minRectSize { get { return 5; }}
-	public static int maxRectSize { get { return 20; }}
+    public static int minRooms { get { return 8; } }
+    public static int maxRooms { get { return 16; } } //Max not inclusive
+
+    // Box Room Size (including walls)
+    public static int minRectSize { get { return 5; } }
+    public static int maxRectSize { get { return 20; } }
 
     // Amount to shift rooms
-	public static int shiftRange { get { return 10; }} //Max not inclusive
+    public static int shiftRange { get { return 10; } } //Max not inclusive
 
     // Number of doors per room
     public static int doorsMin { get { return 1; } }
     public static int doorsMax { get { return 5; } } //Max not inclusive
     public static int minDoorSpacing { get { return 2; } }
+
+    // Margin space on room layout
+    public static int layoutMargin { get { return 8; } }
+
+    // Room modifier probabilies
+    public static int maxFlexMod { get { return 5; } } //Max not inclusive
+    public static int chanceNoFinalMod { get { return 40; } }
     #endregion
 
     public static System.Random rand = new System.Random();
@@ -36,13 +43,16 @@ public class LevelGenerator
         #region DEBUG
         int debugNum = 1;
         float stepTime = 0, startTime = 0;
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
-            DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
-            DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
+                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
+                DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
+                DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
+            }
             stepTime = Time.realtimeSinceStartup;
             startTime = stepTime;
         }
@@ -51,40 +61,52 @@ public class LevelGenerator
         Random.seed = unitySeed;
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
+        modRooms(rooms);
         #region DEBUG
-        if (DebugManager.logging())
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Room took: " + (Time.realtimeSinceStartup - stepTime));
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Modding Rooms took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
+            }
         }
-		
         #endregion
         placeRooms(rooms, layout);
         #region DEBUG
-        if (DebugManager.logging())
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Rooms took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
+            }
         }
         #endregion
         placeDoors(layout);
         #region DEBUG
-        if (DebugManager.logging())
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Doors took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
+            }
         }
         #endregion
         placePaths(layout);
         #region DEBUG
-        if (DebugManager.logging())
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Paths took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            }
         }
         #endregion
 
@@ -92,6 +114,7 @@ public class LevelGenerator
         if (DebugManager.logging())
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
+            layout.toLog(DebugManager.Logs.LevelGenMain);
             DebugManager.printFooter(DebugManager.Logs.LevelGenMain);
         }
         #endregion
@@ -117,8 +140,7 @@ public class LevelGenerator
         for (int i = 1; i <= numRooms; i++)
         {
             Room room = new Room(i);
-            room.generate();
-			rooms.Add(room);
+            rooms.Add(room);
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -127,6 +149,98 @@ public class LevelGenerator
         }
         #endregion
         return rooms;
+    }
+
+    void modRooms(List<Room> rooms)
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Mod Rooms");
+        }
+        #endregion
+        foreach (Room room in rooms)
+        {
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Modding " + room);
+            }
+            #endregion
+            foreach (RoomModifier mod in pickMods())
+            {
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "Applying: " + mod);
+                }
+                #endregion
+                mod.Modify(room, rand);
+            }
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                room.toLog(DebugManager.Logs.LevelGen);
+                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            }
+            #endregion
+        }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+    }
+
+    List<RoomModifier> pickMods()
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Pick Mods");
+        }
+        #endregion
+        List<RoomModifier> mods = new List<RoomModifier>();
+        RoomModifier baseMod = RoomModifier.GetBase();
+        mods.Add(baseMod);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + baseMod);
+        }
+        #endregion
+        int numFlex = rand.Next(1, maxFlexMod);
+        List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex);
+        mods.AddRange(flexMods);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Picked " + numFlex + " flex modifiers: ");
+            foreach (RoomModifier mod in flexMods)
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, 1, mod.ToString());
+            }
+        }
+        #endregion
+        if (chanceNoFinalMod < rand.Next(100))
+        {
+            RoomModifier finalMod = RoomModifier.GetFinal();
+            mods.Add(finalMod);
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + finalMod);
+            }
+            #endregion
+        }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+        return mods;
     }
 
     void placeRooms(List<Room> rooms, LevelLayout layout)
@@ -141,7 +255,7 @@ public class LevelGenerator
         placedRooms.Add(new Room(0)); // Seed empty center room to start positioning from.
         foreach (Room room in rooms)
         {
-			layout.addRoom(room);
+            layout.addRoom(room);
             // Find room it will start from
             int roomNum = rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
@@ -157,8 +271,8 @@ public class LevelGenerator
             }
             #endregion
             // Keep moving until room doesn't overlap any other rooms
-			LayoutObject intersect;
-            while ((intersect = room.intersectObj(placedRooms)) != null)
+            LayoutObject intersect;
+            while ((intersect = room.intersectObj(placedRooms, 1)) != null)
             {
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -172,7 +286,7 @@ public class LevelGenerator
             placedRooms.Add(room);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
-			{
+            {
                 DebugManager.w(DebugManager.Logs.LevelGen, "Layout after placing room at: " + room.GetBounding());
                 layout.toLog(DebugManager.Logs.LevelGen);
                 DebugManager.printBreakers(DebugManager.Logs.LevelGen, 4);
@@ -200,23 +314,14 @@ public class LevelGenerator
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
-            GridMap potentialDoors = room.getWalls();
-            GridMap corneredAreas = room.getCorneredBy(GridType.Wall, GridType.Wall);
-			#region DEBUG
-			if (DebugManager.logging(DebugManager.Logs.LevelGen))
-			{
-                potentialDoors.toLog(DebugManager.Logs.LevelGen, "Original Room");
-                corneredAreas.toLog(DebugManager.Logs.LevelGen, "Cornered Areas");
-			}
-			#endregion
-            potentialDoors.RemoveAll(corneredAreas);
+            GridMap potentialDoors = room.GetPotentialExternalDoors();
             int numDoors = rand.Next(doorsMin, doorsMax);
-			#region DEBUG
-			if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                potentialDoors.toLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
+                potentialDoors.toLog(DebugManager.Logs.LevelGen, "Potential Doors");
                 DebugManager.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
-			}
+            }
             #endregion
             for (int i = 0; i < numDoors; i++)
             {
@@ -254,7 +359,7 @@ public class LevelGenerator
             layout.toLog(DebugManager.Logs.LevelGen);
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
-		#endregion
+        #endregion
     }
 
     void placePaths(LevelLayout layout)
@@ -266,12 +371,13 @@ public class LevelGenerator
         }
         #endregion
         Bounding bounds = layout.GetBounding();
+        bounds.expand(layoutMargin);
         GridArray grids = layout.GetArray(bounds);
         GridMap doors = layout.getTypes(grids, GridType.Door);
         foreach (Value2D<GridType> door in doors)
         {
 
-            Path path = new Path(depthFirstSearchFor(door, grids, GridType.Door, 
+            Path path = new Path(depthFirstSearchFor(door, grids, GridType.Door,
                 GridType.Path_Horiz,
                 GridType.Path_Vert,
                 GridType.Path_LB,
@@ -281,12 +387,12 @@ public class LevelGenerator
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-				GridArray tmp = new GridArray(grids);
-				tmp.PutAll(path.GetArray());
+                GridArray tmp = new GridArray(grids);
+                tmp.PutAll(path.GetArray());
                 tmp.toLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
             }
             #endregion
-			path.simplify();
+            path.simplify();
             if (path.isValid())
             {
                 grids.PutAll(path.GetArray());
@@ -308,148 +414,159 @@ public class LevelGenerator
         #endregion
     }
 
-    static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    public static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
     {
         return depthFirstSearchFor(startPoint, grids, new HashSet<GridType>(targets));
     }
 
-    static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    public static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
     {
-		#region DEBUG
-		if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-		{
-			DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
-			GridArray tmp = new GridArray(grids);
-			tmp.Put(GridType.INTERNAL_RESERVED_CUR, startPoint.x, startPoint.y);
-			tmp.toLog(DebugManager.Logs.LevelGen, "Starting Map:");
-		}
-		#endregion
+        #region DEBUG
+        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
+            GridArray tmp = new GridArray(grids);
+            tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+            tmp.toLog(DebugManager.Logs.LevelGen, "Starting Map:");
+        }
+        #endregion
         // Init
+        GridType[,] arr = grids.GetArr();
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
-        Array2Dcoord<bool> blockedPoints = new Array2Dcoord<bool>(grids.GetBounding());
-        Value2D<GridType>[] directionOptions = new Value2D<GridType>[4];
-        int numGoodDirections, dirChosen;
-        GridType val;
-		#region DEBUG
-		GridArray debugGrid = new GridArray(0, 0);
-		#endregion
+        Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBounding(), false);
+        DFSFilter filter = new DFSFilter(blockedPoints, targets);
+        #region DEBUG
+        GridArray debugGrid = new GridArray(0, 0);
+        #endregion
 
         // Push start point onto path
         pathTaken.Push(startPoint);
         while (pathTaken.Count > 0)
         {
-			startPoint = pathTaken.Peek();
+            startPoint = pathTaken.Peek();
             // Don't want to visit the same point on a different route later
-            blockedPoints.Put(true, startPoint.x, startPoint.y);
-
-            // Load up direction options
-            directionOptions[0] = new Value2D<GridType>(startPoint.x, startPoint.y + 1);  // Up
-            directionOptions[1] = new Value2D<GridType>(startPoint.x, startPoint.y - 1);  // Down
-            directionOptions[2] = new Value2D<GridType>(startPoint.x + 1, startPoint.y);  // Right
-            directionOptions[3] = new Value2D<GridType>(startPoint.x - 1, startPoint.y);  // Left
-			#region DEBUG
-			if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-			{ // Set up new print array
-				debugGrid = new GridArray(grids);
-				// Fill in blocked points
-				foreach (Value2D<bool> blockedPt in blockedPoints)
-				{
-					if (blockedPt.val)
-					{
-						debugGrid.Put(GridType.INTERNAL_RESERVED_BLOCKED, blockedPt.x, blockedPt.y);
-					}
-				}
-				Path tmpPath = new Path(pathTaken);
-				debugGrid.PutAll(tmpPath.GetArray());
-			}
-			#endregion
-
-            // Remove bad directions
-            numGoodDirections = 4;
-            for (int i = 0 ; i < 4 ; i++)
-            {
-                Value2D<GridType> dir = directionOptions[i];
-                // Check to see if direction is good
-                if (!blockedPoints.Get(dir.x, dir.y) // If not blocked
-                    && grids.TryGet(dir.x, dir.y, out val) // If not out of range
-                    && (val == GridType.NULL || targets.Contains(val))) // If open space or target
+            blockedPoints[startPoint.x, startPoint.y] = true;
+            #region DEBUG
+            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+            { // Set up new print array
+                debugGrid = new GridArray(grids);
+                // Fill in blocked points
+                foreach (Value2D<bool> blockedPt in blockedPoints)
                 {
-	                // If found target, return path we took
-	                if (GridType.NULL != val)
-	                {
-						#region DEBUG
-						if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-						{
-							DebugManager.w (DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
-						}
-						#endregion
-						pathTaken.Push(dir);
-	                    return pathTaken;
-	                }
-					#region DEBUG
-					if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-					{
-						debugGrid.Put(GridType.INTERNAL_RESERVED_ACCEPTED, dir.x, dir.y);
-					}
-					#endregion
-                } else {
-                    // Remove direction option
-					#region DEBUG
-					if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-					{
-						debugGrid.Put(GridType.INTERNAL_RESERVED_REJECTED, dir.x, dir.y);
-					}
-					#endregion
-                    directionOptions[i] = null;
-                    numGoodDirections--;
+                    if (blockedPt.val)
+                    {
+                        debugGrid[blockedPt.x, blockedPt.y] = GridType.INTERNAL_RESERVED_BLOCKED;
+                    }
                 }
+                Path tmpPath = new Path(pathTaken);
+                debugGrid.PutAll(tmpPath.GetArray());
             }
-			
-			#region DEBUG
-			if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-			{
-				debugGrid.toLog(DebugManager.Logs.LevelGen, "Current Map with " + numGoodDirections + " options.");
-			}
-			#endregion
-            // If all directions are bad, back up
-            if (numGoodDirections == 0)
+            #endregion
+
+            // Get surrounding points
+            Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y, filter);
+            #region DEBUG
+            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
+                debugGrid.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
+            }
+            #endregion
+
+            // If found target, return path we took
+            Value2D<GridType> targetDir = options.GetDirWithVal(targets);
+            if (targetDir != null)
+            {
+                #region DEBUG
+                if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
+                }
+                #endregion
+                pathTaken.Push(targetDir);
+                return pathTaken;
+            }
+
+            // Didn't find target, pick random direction
+            targetDir = options.GetRandom(rand, filter);
+            if (targetDir == null)
+            { // If all directions are bad, back up
                 pathTaken.Pop();
             }
             else
             {
-                // Pick one dir
-                dirChosen = rand.Next(numGoodDirections);
-                for (int i = 0; i <= dirChosen; i++)
-                { // Adjusting dirChosen index for nulls
-                    if (directionOptions[i] == null) {
-                        dirChosen++;
-                    }
+                #region DEBUG
+                if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "Chose Direction: " + targetDir);
                 }
-				#region DEBUG
-				if (DebugManager.flag(DebugManager.DebugFlag.LevelGenDFSSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-				{
-					DebugManager.w (DebugManager.Logs.LevelGen, "Chose Direction: " + directionOptions[dirChosen]);
-				}
-				#endregion
-
-                // Move that dir
-                startPoint = directionOptions[dirChosen];
+                #endregion
+                startPoint = targetDir;
                 pathTaken.Push(startPoint);
             }
         }
         return pathTaken;
     }
 
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    {
+        return BreadthFirstFill(startPoint, grids, new HashSet<GridType>(targets));
+    }
+
+    // Not tested
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    {
+        #region DEBUG
+        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Breadth First Search Fill");
+            GridArray tmp = new GridArray(grids);
+            tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+            tmp.toLog(DebugManager.Logs.LevelGen, "Starting Map:");
+        }
+        #endregion
+        Queue<Value2D<GridType>> queue = new Queue<Value2D<GridType>>();
+        queue.Enqueue(startPoint);
+        GridType[,] targetArr = grids.GetArr();
+        Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
+        outGridArr[startPoint.x, startPoint.y] = true;
+        Value2D<GridType> curPoint;
+        while (queue.Count > 0)
+        {
+            curPoint = queue.Dequeue();
+            Surrounding<GridType> options = Surrounding<GridType>.Get(targetArr, curPoint.x, curPoint.y);
+            #region DEBUG
+            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                outGridArr.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options. Evaluating " + curPoint);
+            }
+            #endregion
+            foreach (Value2D<GridType> option in options)
+            {
+                if (targets.Contains(option.val) && !outGridArr[option.x, option.y])
+                {
+                    queue.Enqueue(option);
+                    outGridArr[option.x, option.y] = true;
+                }
+            }
+        }
+        #region DEBUG
+        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+        return outGridArr;
+    }
+
     Point generateShiftMagnitude(int mag)
     {
         Vector2 vect = Random.insideUnitCircle * mag;
         Point p = new Point(vect);
-		while (p.isZero())
-		{
-			vect = Random.insideUnitCircle * mag;
-			p = new Point(vect);
-		}
+        while (p.isZero())
+        {
+            vect = Random.insideUnitCircle * mag;
+            p = new Point(vect);
+        }
         return p;
     }
 }
