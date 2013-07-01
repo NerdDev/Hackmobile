@@ -76,6 +76,11 @@ abstract public class Container2D<T> {
         }
     }
     public abstract T[,] GetArr();
+
+    public Surrounding<T> GetSurrounding(Value2D<T> val)
+    {
+        return Surrounding<T>.Get(GetArr(), val);
+    }
 	
 	public virtual List<string> ToRowStrings()
 	{
