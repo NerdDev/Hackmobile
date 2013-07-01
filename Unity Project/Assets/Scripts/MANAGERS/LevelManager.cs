@@ -15,15 +15,15 @@ public class LevelManager : MonoBehaviour {
     {
         RoomModifier.RegisterModifiers();
         LevelGenerator gen = new LevelGenerator();
-        LevelLayout layout = gen.generateLayout(0, 665911697, 1733302797);
+        LevelLayout layout;
+        layout = gen.generateLayout(0, 665911697, 1733302797);
+        layout = gen.generateLayout(1);
         array = layout.GetArray();
 		blocks = builder.Build(array, theme);
 
         JustinTest();
         JoseTest();
     }
-
-    
 
     void TestModifier(RoomModifier mod, int seed)
     {

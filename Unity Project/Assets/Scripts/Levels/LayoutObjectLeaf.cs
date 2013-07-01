@@ -6,7 +6,7 @@ public class LayoutObjectLeaf : LayoutObject {
 
     protected GridArray grids;
 
-    public LayoutObjectLeaf(int width, int height)
+    public LayoutObjectLeaf(int width, int height) : base()
     {
         grids = new GridArray(width, height);
     }
@@ -104,4 +104,9 @@ public class LayoutObjectLeaf : LayoutObject {
         grids.putSquare(t, xl, xr, yb, yt);
     }
     #endregion FillMethods
+
+    public override bool Contains(Value2D<GridType> val)
+    {
+        return grids.Contains(val);
+    }
 }

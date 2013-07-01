@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
@@ -30,5 +31,39 @@ public class Value2D<T> {
     public override string ToString()
     {
         return "Value2D (" + x + "," + y + ", " + val + ")";
+    }
+
+    protected bool Equals(Value2D<T> other)
+    {
+        return x == other.x && y == other.y && EqualityComparer<T>.Default.Equals(val, other.val);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((Value2D<T>) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hashCode = x;
+            hashCode = (hashCode*397) ^ y;
+            hashCode = (hashCode*397) ^ EqualityComparer<T>.Default.GetHashCode(val);
+            return hashCode;
+        }
+    }
+
+    public static bool operator ==(Value2D<T> left, Value2D<T> right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Value2D<T> left, Value2D<T> right)
+    {
+        return !Equals(left, right);
     }
 }

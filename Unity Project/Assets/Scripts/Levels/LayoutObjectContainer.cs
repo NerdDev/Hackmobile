@@ -44,4 +44,21 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 		return bound;
 	}
 
+
+    public override bool Contains(Value2D<GridType> val)
+    {
+        return GetObjAt(val) != null;
+    }
+
+    public LayoutObject GetObjAt(Value2D<GridType> val)
+    {
+        foreach (LayoutObject obj in this)
+        {
+            if (obj.Contains(val))
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
 }

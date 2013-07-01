@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -109,6 +110,7 @@ public class LevelGenerator
             }
         }
         #endregion
+        ConfirmConnection(layout);
 
         #region DEBUG
         if (DebugManager.logging())
@@ -255,7 +257,7 @@ public class LevelGenerator
         placedRooms.Add(new Room(0)); // Seed empty center room to start positioning from.
         foreach (Room room in rooms)
         {
-            layout.addRoom(room);
+            layout.AddRoom(room);
             // Find room it will start from
             int roomNum = rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
@@ -306,7 +308,7 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
         }
         #endregion
-        foreach (Room room in layout.getRooms())
+        foreach (Room room in layout.GetRooms())
         {
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -373,38 +375,40 @@ public class LevelGenerator
         Bounding bounds = layout.GetBounding();
         bounds.expand(layoutMargin);
         GridArray grids = layout.GetArray(bounds);
-        GridMap doors = layout.getTypes(grids, GridType.Door);
-        foreach (Value2D<GridType> door in doors)
+        foreach (LayoutObject obj in layout)
         {
-
-            Path path = new Path(depthFirstSearchFor(door, grids, GridType.Door,
-                GridType.Path_Horiz,
-                GridType.Path_Vert,
-                GridType.Path_LB,
-                GridType.Path_LT,
-                GridType.Path_RB,
-                GridType.Path_RT));
-            #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            foreach (Value2D<GridType> door in obj.getTypes(GridType.Door))
             {
-                GridArray tmp = new GridArray(grids);
-                tmp.PutAll(path.GetArray());
-                tmp.toLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
+                Path path = new Path(depthFirstSearchFor(door, grids, GridType.Door,
+                    GridType.Path_Horiz,
+                    GridType.Path_Vert,
+                    GridType.Path_LB,
+                    GridType.Path_LT,
+                    GridType.Path_RB,
+                    GridType.Path_RT));
+                path.Connect(obj, layout);
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    GridArray tmp = new GridArray(grids);
+                    tmp.PutAll(path.GetArray());
+                    tmp.toLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
+                }
+                #endregion
+                path.Simplify();
+                if (path.isValid())
+                {
+                    grids.PutAll(path.GetArray());
+                    path.shift(bounds.xMin, bounds.yMin);
+                    layout.AddPath(path);
+                }
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    grids.toLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
+                }
+                #endregion
             }
-            #endregion
-            path.simplify();
-            if (path.isValid())
-            {
-                grids.PutAll(path.GetArray());
-                path.shift(bounds.xMin, bounds.yMin);
-                layout.addPath(path);
-            }
-            #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
-            {
-                grids.toLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
-            }
-            #endregion
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -412,6 +416,25 @@ public class LevelGenerator
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
+    }
+
+    private void ConfirmConnection(LevelLayout layout)
+    {
+        var roomsToConnect = new List<LayoutObject>(layout.GetRooms().Cast<LayoutObject>());
+        foreach (Room room in layout.GetRooms())
+        {
+            roomsToConnect.Remove(room);
+            LayoutObject fail;
+            if (!room.ConnectedTo(roomsToConnect, out fail))
+            {
+                MakeConnection(layout, room, fail);
+            }
+        }
+    }
+
+    private void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
+    {
+        
     }
 
     public static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)

@@ -5,11 +5,25 @@ using System.Collections.Generic;
 public class Path : LayoutObject {
 	
 	List<Value2D<GridType>> list;
-	
-	public Path (Stack<Value2D<GridType>> stack)        
+
+    public Path(IEnumerable<Value2D<GridType>> stack)
+        : base()
 	{
 		list = new List<Value2D<GridType>>(stack);
 	}
+
+    public void Connect(LayoutObject origin, LevelLayout layout)
+    {
+        if (isValid())
+        {
+            AddConnected(origin);
+            LayoutObject obj = layout.GetObjAt(list[0]);
+            if (obj != null)
+            {
+                obj.AddConnected(this);
+            }
+        }
+    }
 
     protected override Bounding GetBoundingInternal()
     {
@@ -98,7 +112,7 @@ public class Path : LayoutObject {
         return GetArray(true);
     }
 
-    public void simplify()
+    public void Simplify()
     {
 		#region DEBUG
 		if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -160,5 +174,10 @@ public class Path : LayoutObject {
     public bool isValid()
     {
         return list.Count > 0;
+    }
+
+    public override bool Contains(Value2D<GridType> val)
+    {
+        return list.Contains(val);
     }
 }

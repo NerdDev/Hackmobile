@@ -7,28 +7,27 @@ public class LevelLayout : LayoutObjectContainer {
     List<Room> rooms = new List<Room>();
 	List<Path> paths = new List<Path>();
 
-    public void addRoom(Room r)
+    public void AddRoom(Room r)
     {
         rooms.Add(r);
     }
 
-    public void addRooms(List<Room> rs)
+    public void AddRooms(List<Room> rs)
     {
         rooms.AddRange(rs);
     }
 	
-	public List<Room> getRooms()
+	public List<Room> GetRooms()
 	{
-		List<Room> ret = new List<Room>(rooms);
-		return ret;
+		return new List<Room>(rooms);
 	}
 
-    public void addPath(Path p)
+    public void AddPath(Path p)
     {
         paths.Add(p);
     }
 	
-	public List<Path> getPaths()
+	public List<Path> GetPaths()
 	{
 		List<Path> ret = new List<Path>(paths);
 		return ret;

@@ -7,6 +7,13 @@ abstract public class LayoutObject {
 
     protected Point shiftP = new Point();
     List<LayoutObject> connectedTo = new List<LayoutObject>();
+    private static int nextID = 0;
+    protected int id;
+
+    protected LayoutObject()
+    {
+        id = nextID++;
+    }
 
     #region Shifts
     public void shift(int x, int y)
@@ -192,6 +199,86 @@ abstract public class LayoutObject {
     }
     #endregion
 
+    public void AddConnected(LayoutObject obj)
+    {
+        connectedTo.Add(obj);
+        obj.connectedTo.Add(this);
+    }
+
+    abstract public bool Contains(Value2D<GridType> val);
+
+    public List<LayoutObject> ConnectedTo()
+    {
+        HashSet<LayoutObject> visited = new HashSet<LayoutObject>();
+        visited.Add(this);
+        List<LayoutObject>
+    }
+
+    void ConnectedToRecursive(HashSet<LayoutObject> visited, List<LayoutObject> list)
+    {
+        foreach (LayoutObject connected in connectedTo)
+        {
+            if (!visited.Contains(connected))
+            {
+                visited.Add(connected);
+                list.Add(connected);
+                ConnectedToRecursive(visited, list);
+            }
+        }
+    }
+
+    public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
+    {
+        foreach (LayoutObject obj in roomsToConnect)
+        {
+            if (!ConnectedTo(obj))
+            {
+                failObj = obj;
+                return false;
+            }
+        }
+        failObj = null;
+        return true;
+    }
+
+    public bool ConnectedTo(LayoutObject obj)
+    {
+        List<LayoutObject> list;
+        return GetPathTo(obj, out list);
+    }
+
+    public bool GetPathTo(LayoutObject target, out List<LayoutObject> list)
+    {
+        HashSet<LayoutObject> visited = new HashSet<LayoutObject>();
+        visited.Add(this);
+        return GetPathToRecursive(this, target, visited, out list);
+    }
+
+    bool GetPathToRecursive(LayoutObject cur, LayoutObject target, HashSet<LayoutObject> visited, out List<LayoutObject> list)
+    {
+        list = new List<LayoutObject>();
+        if (connectedTo.Contains(target))
+        {
+            list.Add(target);
+            return true;
+        }
+        // Recursively search
+        foreach (LayoutObject connected in connectedTo)
+        {
+            if (!visited.Contains(connected))
+            {
+                List<LayoutObject> targetPath;
+                visited.Add(connected);
+                if (GetPathToRecursive(connected, target, visited, out targetPath))
+                {
+                    list.AddRange(targetPath);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     #region Intersects
     public bool intersects(LayoutObject rhs, int buffer)
     {
@@ -309,4 +396,31 @@ abstract public class LayoutObject {
     }
     #endregion Printing
 
+    protected bool Equals(LayoutObject other)
+    {
+        return id == other.id;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((LayoutObject) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return id;
+    }
+
+    public static bool operator ==(LayoutObject left, LayoutObject right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(LayoutObject left, LayoutObject right)
+    {
+        return !Equals(left, right);
+    }
 }
