@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+
+//FLAGGED FOR OBSOLESCENCE WITH MAX CAM CONVERSION
+
         public class HeroCam : MonoBehaviour {
         public Transform target;
         public float distance = 3.0f;
@@ -19,10 +22,10 @@ using System.Collections;
      
                transform.position = Vector3.Lerp (transform.position, wantedPosition, Time.deltaTime * damping);
 
-               if (smoothRotation) {
-                       Quaternion wantedRotation = Quaternion.LookRotation(target.position - transform.position, target.up);
-                       transform.rotation = Quaternion.Slerp (transform.rotation, wantedRotation, Time.deltaTime * rotationDamping);
-               }
-               else transform.LookAt (target, target.up);
+//               if (smoothRotation) {
+//                       Quaternion wantedRotation = Quaternion.LookRotation(target.position - transform.position, target.up);
+//                       transform.rotation = Quaternion.Slerp (transform.rotation, wantedRotation, Time.deltaTime * rotationDamping);
+//               }
+//               else transform.LookAt (target, target.up);
          }
 }

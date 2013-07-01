@@ -27,7 +27,7 @@ RenderSettings:
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-GameManager:
+LevelGameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -307,7 +307,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f3e767228a56f24bb61e55205881b39, type: 3}
   m_Name: 
-  target: {fileID: 0}
+  target: {fileID: 2057465069}
   height: 10
   distance: 10
   min: 10
@@ -323,19 +323,19 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 92}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b803f01d0abaffd4a8b866ca36d9a3ec, type: 3}
   m_Name: 
-  target: {fileID: 0}
+  target: {fileID: 2057465069}
   targetOffset: {x: 0, y: 0, z: 0}
   distance: 5
-  maxDistance: 20
-  minDistance: .600000024
+  maxDistance: 10
+  minDistance: 2
   xSpeed: 200
   ySpeed: 200
-  yMinLimit: -80
-  yMaxLimit: 80
+  yMinLimit: 25
+  yMaxLimit: 75
   zoomRate: 40
   panSpeed: .300000012
   zoomDampening: 5
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 92}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d6445acabbb33a46ad0dbc646d8615d, type: 3}
   m_Name: 
@@ -353,8 +353,8 @@ MonoBehaviour:
   distance: 5
   height: 5
   damping: 5
-  smoothRotation: 1
-  followBehind: 1
+  smoothRotation: 0
+  followBehind: 0
   rotationDamping: 2
 --- !u!4 &129
 Transform:
@@ -527,8 +527,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 92}
-  m_LocalRotation: {x: .00666752458, y: -.948181748, z: .317032009, w: .0199414417}
-  m_LocalPosition: {x: 12.1294022, y: 5.87142849, z: 27.2147293}
+  m_LocalRotation: {x: .377313763, y: 0, z: 0, w: .926085532}
+  m_LocalPosition: {x: 3.78047562, y: 4.73844719, z: .823406458}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2062194370}
@@ -616,10 +616,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e8cfd4b304c6742a59081a09162689, type: 3}
   m_Name: 
   playerAvatar: {fileID: 2057465068}
-  avatarStartLocation: {x: 2, y: 0, z: 2}
-  tileMovementTolerance: 1.10000002
+  avatarStartLocation: {x: 13, y: -.5, z: 35}
+  tileMovementTolerance: .949999988
   playerHunger: 1000
   playerSpeed: 1
+  playerRotationSpeed: .150000006
   PlayerInventory: []
   PlayerChosenProfession: 8
   CurrentHungerLevel: 0
@@ -666,7 +667,7 @@ MonoBehaviour:
   horizontalMouseAxis: 0
   verticalMouseSensitivity: 1
   verticalMouseAxis: 0
-  mouseLocation: {x: 0, y: 0}
+  centerPointInScreenSpace: {x: 0, y: 0}
 --- !u!114 &262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -839,6 +840,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &3753072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -942,8 +944,8 @@ Transform:
   m_PrefabParentObject: {fileID: 400024, guid: 1bc803c4bf46dcc48b0d9035951ec07a, type: 2}
   m_PrefabInternal: {fileID: 706942918}
   m_GameObject: {fileID: 8553105}
-  m_LocalRotation: {x: 0, y: .315317661, z: 0, w: .948986232}
-  m_LocalPosition: {x: 7.31632042, y: .352139741, z: 12.9410448}
+  m_LocalRotation: {x: 0, y: .315317661, z: 0, w: .948986173}
+  m_LocalPosition: {x: 33.3453674, y: 0, z: 38.9882126}
   m_LocalScale: {x: 4.02368069, y: 4.02368069, z: 4.02368069}
   m_Children:
   - {fileID: 798802193}
@@ -1257,6 +1259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -1264,12 +1267,16 @@ MonoBehaviour:
   mText: STATS
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &56327196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1495,7 +1502,6 @@ MonoBehaviour:
   foreground: {fileID: 1231777740}
   thumb: {fileID: 0}
   direction: 0
-  fullSize: {x: 549, y: 40}
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
@@ -1617,11 +1623,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 0, g: .874125719, b: 1, a: 1}
   mPivot: 3
   mDepth: 9
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: GUISlider_Full
+  mFillCenter: 1
+  mType: 0
   mFillDirection: 0
   mFillAmount: .75
   mInvert: 0
@@ -1862,6 +1871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -1869,12 +1879,16 @@ MonoBehaviour:
   mText: 'Dex: 7'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &181014007
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,7 +2217,6 @@ MonoBehaviour:
   foreground: {fileID: 142597306}
   thumb: {fileID: 0}
   direction: 0
-  fullSize: {x: 549, y: 40}
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
@@ -2246,6 +2259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -2255,12 +2269,16 @@ MonoBehaviour:
 '
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &267666538
 GameObject:
   m_ObjectHideFlags: 0
@@ -2299,12 +2317,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUD_Panel_Label_Inv
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &271022337
 GameObject:
   m_ObjectHideFlags: 0
@@ -2347,7 +2370,6 @@ MonoBehaviour:
   foreground: {fileID: 501909089}
   thumb: {fileID: 0}
   direction: 0
-  fullSize: {x: 549, y: 40}
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
@@ -2533,6 +2555,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
@@ -2550,6 +2574,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
@@ -2581,20 +2607,31 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  debug: 0
   useMouse: 1
   useTouch: 1
+  allowMultiTouch: 1
   useKeyboard: 1
   useController: 1
+  stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 256
+  clipRaycasts: 1
   tooltipDelay: 1
+  stickyTooltip: 1
+  mouseDragThreshold: 4
   mouseClickThreshold: 10
+  touchDragThreshold: 40
   touchClickThreshold: 40
   rangeDistance: -1
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  submitKey0: 13
+  submitKey1: 330
+  cancelKey0: 27
+  cancelKey1: 331
 --- !u!20 &296583996
 Camera:
   m_ObjectHideFlags: 0
@@ -2673,6 +2710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .873134315, g: .575315416, b: .377923816, a: 1}
   mPivot: 4
   mDepth: 1
@@ -2680,12 +2718,16 @@ MonoBehaviour:
   mText: Encumbered
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &297608598
 GameObject:
   m_ObjectHideFlags: 0
@@ -2728,7 +2770,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &301276153
 Transform:
   m_ObjectHideFlags: 0
@@ -2750,7 +2792,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 16
@@ -2758,12 +2801,16 @@ MonoBehaviour:
   mText: A
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &306965318
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,11 +2849,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 0, g: .455223858, b: .30242148, a: 1}
   mPivot: 3
   mDepth: 8
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: GUISlider_Empty
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &322876421
 GameObject:
   m_ObjectHideFlags: 0
@@ -2829,8 +2882,8 @@ Transform:
   m_PrefabParentObject: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
   m_PrefabInternal: {fileID: 670101391}
   m_GameObject: {fileID: 322876421}
-  m_LocalRotation: {x: 0, y: -.923946202, z: 0, w: .382522613}
-  m_LocalPosition: {x: 10.0065279, y: .352139741, z: 2.16263008}
+  m_LocalRotation: {x: 0, y: .923946202, z: 0, w: -.382522494}
+  m_LocalPosition: {x: 36.0355759, y: 0, z: 28.2098141}
   m_LocalScale: {x: 3.81816387, y: 3.81816387, z: 3.81816387}
   m_Children:
   - {fileID: 1662861468}
@@ -2902,11 +2955,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   uiCamera: {fileID: 707569694}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
   side: 8
   halfPixelOffset: 1
-  depthOffset: 0
   relativeOffset: {x: 0, y: 0}
-  stretchToFill: 0
 --- !u!1 &338191182
 GameObject:
   m_ObjectHideFlags: 0
@@ -2945,6 +2998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -2952,12 +3006,16 @@ MonoBehaviour:
   mText: INVENTORY
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &341914263
 GameObject:
   m_ObjectHideFlags: 0
@@ -3000,7 +3058,6 @@ MonoBehaviour:
   foreground: {fileID: 1553228616}
   thumb: {fileID: 0}
   direction: 0
-  fullSize: {x: 549, y: 40}
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
@@ -3070,6 +3127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 1
@@ -3077,12 +3135,16 @@ MonoBehaviour:
   mText: XP
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &375467534
 GameObject:
   m_ObjectHideFlags: 0
@@ -3098,7 +3160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &375467535
 Transform:
   m_ObjectHideFlags: 0
@@ -3121,11 +3183,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 15
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: Key
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &385017177
 GameObject:
   m_ObjectHideFlags: 0
@@ -3218,6 +3286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -3225,12 +3294,16 @@ MonoBehaviour:
   mText: 'Str: 9'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &399607556
 GameObject:
   m_ObjectHideFlags: 0
@@ -3785,6 +3858,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &422940929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4004,11 +4078,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: .774697006, g: .206616193, b: .791044772, a: 1}
   mPivot: 3
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: GUISlider_Full
+  mFillCenter: 1
+  mType: 0
   mFillDirection: 0
   mFillAmount: .75
   mInvert: 0
@@ -4319,11 +4396,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .29650259, g: .82664454, b: .902985096, a: 1}
   mPivot: 3
   mDepth: 9
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: ProgressBar_2
+  mFillCenter: 1
+  mType: 0
   mFillDirection: 0
   mFillAmount: .693000019
   mInvert: 0
@@ -4446,6 +4526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: .944055915, b: 0, a: 1}
   mPivot: 4
   mDepth: 4
@@ -4453,12 +4534,16 @@ MonoBehaviour:
   mText: 4,399 GP
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &546416155
 GameObject:
   m_ObjectHideFlags: 0
@@ -4551,6 +4636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -4558,12 +4644,16 @@ MonoBehaviour:
   mText: 'Wis: 4'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &556374099
 GameObject:
   m_ObjectHideFlags: 0
@@ -6001,11 +6091,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: -5
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUDPaneTab1
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &635479346
 GameObject:
   m_ObjectHideFlags: 0
@@ -6033,6 +6129,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1359aeb37551d8a49b82c3d932442b18, type: 3}
   m_Name: 
+  destroyTime: 4
 --- !u!4 &635479348
 Transform:
   m_ObjectHideFlags: 0
@@ -6194,6 +6291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -6201,12 +6299,16 @@ MonoBehaviour:
   mText: 'Int: 3'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &664886154
 GameObject:
   m_ObjectHideFlags: 0
@@ -6243,15 +6345,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.0065279
+      value: 36.0355759
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
       propertyPath: m_LocalPosition.y
-      value: .352139741
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.16263008
+      value: 28.2098141
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6259,7 +6361,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -.923946202
+      value: .923946202
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
       propertyPath: m_LocalRotation.z
@@ -6267,7 +6369,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
       propertyPath: m_LocalRotation.w
-      value: .382522613
+      value: -.382522494
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 8ba535c70bbcf7b46b0cba1188faae47, type: 3}
       propertyPath: m_LocalScale.x
@@ -6324,6 +6426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 0, g: .370629311, b: 1, a: 1}
   mPivot: 4
   mDepth: 1
@@ -6331,12 +6434,16 @@ MonoBehaviour:
   mText: Lawful
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &684207137
 GameObject:
   m_ObjectHideFlags: 0
@@ -6421,7 +6528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &702581975
 Transform:
   m_ObjectHideFlags: 0
@@ -6444,11 +6551,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 15
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: Key
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &706258261
 GameObject:
   m_ObjectHideFlags: 0
@@ -6514,6 +6627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -6521,12 +6635,16 @@ MonoBehaviour:
   mText: 'Chr: 9'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1001 &706942918
 Prefab:
   m_ObjectHideFlags: 0
@@ -6536,15 +6654,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400024, guid: 1bc803c4bf46dcc48b0d9035951ec07a, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 7.31632042
+      value: 33.3453674
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 1bc803c4bf46dcc48b0d9035951ec07a, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .352139741
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 1bc803c4bf46dcc48b0d9035951ec07a, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 12.9410448
+      value: 38.9882126
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 1bc803c4bf46dcc48b0d9035951ec07a, type: 2}
       propertyPath: m_LocalRotation.x
@@ -6560,7 +6678,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 1bc803c4bf46dcc48b0d9035951ec07a, type: 2}
       propertyPath: m_LocalRotation.w
-      value: .948986232
+      value: .948986173
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 1bc803c4bf46dcc48b0d9035951ec07a, type: 2}
       propertyPath: m_LocalScale.x
@@ -6646,20 +6764,31 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  debug: 0
   useMouse: 1
   useTouch: 1
+  allowMultiTouch: 1
   useKeyboard: 1
   useController: 1
+  stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 256
+  clipRaycasts: 1
   tooltipDelay: 1
+  stickyTooltip: 1
+  mouseDragThreshold: 4
   mouseClickThreshold: 10
+  touchDragThreshold: 40
   touchClickThreshold: 40
   rangeDistance: -1
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  submitKey0: 13
+  submitKey1: 330
+  cancelKey0: 27
+  cancelKey1: 331
 --- !u!1 &707983719
 GameObject:
   m_ObjectHideFlags: 0
@@ -6850,15 +6979,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400024, guid: 8df4c35897b553d47b6872409cdcbbf3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.4923172
+      value: 45.5213623
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 8df4c35897b553d47b6872409cdcbbf3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: .352139741
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 8df4c35897b553d47b6872409cdcbbf3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19.27038
+      value: 45.317543
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 8df4c35897b553d47b6872409cdcbbf3, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6874,7 +7003,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 8df4c35897b553d47b6872409cdcbbf3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: .377156317
+      value: .377156228
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 8df4c35897b553d47b6872409cdcbbf3, type: 3}
       propertyPath: m_LocalScale.x
@@ -7318,6 +7447,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &792856985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8008,11 +8138,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUDPaneTab3
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &854069916
 GameObject:
   m_ObjectHideFlags: 0
@@ -8139,7 +8275,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &867222997
 Transform:
   m_ObjectHideFlags: 0
@@ -8162,11 +8298,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 15
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: Key
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &871552818
 GameObject:
   m_ObjectHideFlags: 0
@@ -8455,6 +8597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 10
@@ -8462,12 +8605,16 @@ MonoBehaviour:
   mText: 5 / 100
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &943459988
 GameObject:
   m_ObjectHideFlags: 0
@@ -8506,6 +8653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
@@ -8513,12 +8661,16 @@ MonoBehaviour:
   mText: 'Dex: 5'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &946560543
 GameObject:
   m_ObjectHideFlags: 0
@@ -8642,7 +8794,6 @@ MonoBehaviour:
   foreground: {fileID: 457540711}
   thumb: {fileID: 0}
   direction: 0
-  fullSize: {x: 549, y: 40}
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
@@ -8956,11 +9107,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 13
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUDPaneTab2
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!4 &1025916243
 Transform:
   m_ObjectHideFlags: 0
@@ -9128,8 +9285,8 @@ Transform:
   m_PrefabParentObject: {fileID: 400024, guid: 8df4c35897b553d47b6872409cdcbbf3, type: 3}
   m_PrefabInternal: {fileID: 720198246}
   m_GameObject: {fileID: 1075107710}
-  m_LocalRotation: {x: 0, y: .926149666, z: 0, w: .377156317}
-  m_LocalPosition: {x: 19.4923172, y: .352139741, z: 19.27038}
+  m_LocalRotation: {x: 0, y: .926149666, z: 0, w: .377156228}
+  m_LocalPosition: {x: 45.5213623, y: 0, z: 45.317543}
   m_LocalScale: {x: 5.06760073, y: 5.06760073, z: 5.06760073}
   m_Children:
   - {fileID: 837044612}
@@ -9387,6 +9544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -9394,12 +9552,16 @@ MonoBehaviour:
   mText: 'XP: 425 / 1000'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1126431932
 GameObject:
   m_ObjectHideFlags: 0
@@ -9465,11 +9627,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: HUDPanel_2_PreVis
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1140488129
 GameObject:
   m_ObjectHideFlags: 0
@@ -10930,11 +11098,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: .426573515, g: 1, b: 0, a: 1}
   mPivot: 3
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: GUISlider_Full
+  mFillCenter: 1
+  mType: 0
   mFillDirection: 0
   mFillAmount: .75
   mInvert: 0
@@ -11035,7 +11206,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1239080903
 Transform:
   m_ObjectHideFlags: 0
@@ -11057,7 +11228,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 16
@@ -11065,12 +11237,16 @@ MonoBehaviour:
   mText: S
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1253115009
 GameObject:
   m_ObjectHideFlags: 0
@@ -11178,7 +11354,7 @@ Transform:
   m_GameObject: {fileID: 1269852173}
   m_LocalRotation: {x: 0, y: .997508824, z: 0, w: -.0705422834}
   m_LocalPosition: {x: 2, y: 10, z: 40}
-  m_LocalScale: {x: .00430107536, y: .00430107536, z: .00430107536}
+  m_LocalScale: {x: .00303951371, y: .00303951371, z: .00303951371}
   m_Children:
   - {fileID: 296583997}
   m_Father: {fileID: 0}
@@ -11192,8 +11368,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
-  automatic: 1
+  scalingStyle: 0
+  automatic: 0
   manualHeight: 465
+  minimumHeight: 320
+  maximumHeight: 1536
 --- !u!1 &1272249044
 GameObject:
   m_ObjectHideFlags: 0
@@ -11232,6 +11411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .873134315, g: .456114948, b: .456114948, a: 1}
   mPivot: 4
   mDepth: 1
@@ -11239,12 +11419,16 @@ MonoBehaviour:
   mText: Hungry
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1001 &1295185580
 Prefab:
   m_ObjectHideFlags: 0
@@ -11393,6 +11577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -11400,12 +11585,16 @@ MonoBehaviour:
   mText: 'Wis: 4'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1314443097
 GameObject:
   m_ObjectHideFlags: 0
@@ -12760,11 +12949,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 0, b: 0, a: 1}
   mPivot: 3
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: GUISlider_Empty
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1359928772
 GameObject:
   m_ObjectHideFlags: 0
@@ -12884,6 +13079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 1
@@ -12891,12 +13087,16 @@ MonoBehaviour:
   mText: Dungeon Floor 1
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1396459785
 GameObject:
   m_ObjectHideFlags: 0
@@ -12935,11 +13135,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .440298498, g: 0, b: 0, a: 1}
   mPivot: 3
   mDepth: 8
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: ProgressBar_2
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1404700267
 GameObject:
   m_ObjectHideFlags: 0
@@ -13075,6 +13281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mDepth: 2
@@ -13082,12 +13289,16 @@ MonoBehaviour:
   mText: 'HP:'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1416757252
 GameObject:
   m_ObjectHideFlags: 0
@@ -13133,6 +13344,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
   trigger: 0
   volume: 1
+  pitch: 1
 --- !u!114 &1416757255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13240,6 +13452,46 @@ Transform:
   m_Children:
   - {fileID: 459964356}
   m_Father: {fileID: 399607557}
+--- !u!1001 &1434320982
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+  m_RootGameObject: {fileID: 2144762597}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &1434704428
 GameObject:
   m_ObjectHideFlags: 0
@@ -13332,12 +13584,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUD_Panel_Label_Inv
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1441986551
 GameObject:
   m_ObjectHideFlags: 0
@@ -13504,11 +13761,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: .0947187096, g: 0, b: .24626863, a: 1}
   mPivot: 3
   mDepth: 8
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: ProgressBar_2
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1485425186
 GameObject:
   m_ObjectHideFlags: 0
@@ -13632,7 +13895,6 @@ MonoBehaviour:
   foreground: {fileID: 1570564179}
   thumb: {fileID: 0}
   direction: 0
-  fullSize: {x: 549, y: 40}
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
@@ -13949,6 +14211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -13956,12 +14219,16 @@ MonoBehaviour:
   mText: 'Chr: 2'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1548178627
 GameObject:
   m_ObjectHideFlags: 0
@@ -14039,11 +14306,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUDPaneTab1
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1553228615
 GameObject:
   m_ObjectHideFlags: 0
@@ -14082,11 +14355,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: 1a36ae50b19d00c429256b06738099c2, type: 2}
+  mTex: {fileID: 2800000, guid: e0df0eb6fc62b8a438ff635d36c6a127, type: 3}
   mColor: {r: 0, g: .874125719, b: 1, a: 1}
   mPivot: 3
   mDepth: 9
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: GUISlider_Full
+  mFillCenter: 1
+  mType: 0
   mFillDirection: 0
   mFillAmount: .75
   mInvert: 0
@@ -14159,7 +14435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1566154985
 Transform:
   m_ObjectHideFlags: 0
@@ -14181,7 +14457,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 16
@@ -14189,12 +14466,16 @@ MonoBehaviour:
   mText: W
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1570564178
 GameObject:
   m_ObjectHideFlags: 0
@@ -14233,11 +14514,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 0, g: 1, b: .0349650383, a: 1}
   mPivot: 3
   mDepth: 9
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: ProgressBar_2
+  mFillCenter: 1
+  mType: 0
   mFillDirection: 0
   mFillAmount: .693000019
   mInvert: 0
@@ -14360,6 +14644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 7
@@ -14367,12 +14652,16 @@ MonoBehaviour:
   mText: 10
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1578225414
 GameObject:
   m_ObjectHideFlags: 0
@@ -14438,6 +14727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 7
@@ -14445,12 +14735,16 @@ MonoBehaviour:
   mText: 8
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1584391515
 GameObject:
   m_ObjectHideFlags: 0
@@ -14552,8 +14846,8 @@ Transform:
   m_PrefabParentObject: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
   m_PrefabInternal: {fileID: 2103749232}
   m_GameObject: {fileID: 1596047539}
-  m_LocalRotation: {x: 0, y: .256995976, z: 0, w: -.966412544}
-  m_LocalPosition: {x: 14.4178934, y: .352139741, z: 11.4414425}
+  m_LocalRotation: {x: 0, y: .256996125, z: 0, w: -.966412425}
+  m_LocalPosition: {x: 40.4469414, y: 0, z: 37.4886169}
   m_LocalScale: {x: 4.43711662, y: 4.43711662, z: 4.43711662}
   m_Children:
   - {fileID: 1323577069}
@@ -15308,11 +15602,23 @@ Prefab:
       objectReference: {fileID: 867222998}
     - target: {fileID: 11400006, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
       propertyPath: avatarStartLocation.x
-      value: 2
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
       propertyPath: avatarStartLocation.z
-      value: 2
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: avatarStartLocation.y
+      value: -.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: playerRotationSpeed
+      value: .150000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: tileMovementTolerance
+      value: .949999988
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
@@ -15530,11 +15836,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: HUDPanel_2_PreVis
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1714694738
 GameObject:
   m_ObjectHideFlags: 0
@@ -15744,6 +16056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -15751,12 +16064,16 @@ MonoBehaviour:
   mText: Floor B4
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1739281973
 GameObject:
   m_ObjectHideFlags: 0
@@ -15795,12 +16112,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: -1
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUD_Arrow_Button
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1741845409
 GameObject:
   m_ObjectHideFlags: 0
@@ -15923,11 +16245,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUDPaneTab4
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1766357088
 GameObject:
   m_ObjectHideFlags: 0
@@ -16046,6 +16374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -16053,12 +16382,16 @@ MonoBehaviour:
   mText: HERO
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1790770463
 GameObject:
   m_ObjectHideFlags: 0
@@ -16363,6 +16696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
@@ -16370,12 +16704,16 @@ MonoBehaviour:
   mText: 'Str: 5'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1817226060
 GameObject:
   m_ObjectHideFlags: 0
@@ -16592,6 +16930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
@@ -16599,12 +16938,16 @@ MonoBehaviour:
   mText: L. 1 Student of Combat
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1833015658
 GameObject:
   m_ObjectHideFlags: 0
@@ -16670,6 +17013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mDepth: 2
@@ -16677,12 +17021,16 @@ MonoBehaviour:
   mText: Andrew, Level 2 Digger
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1844974316
 GameObject:
   m_ObjectHideFlags: 0
@@ -16807,11 +17155,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: 1a36ae50b19d00c429256b06738099c2, type: 2}
+  mTex: {fileID: 2800000, guid: e0df0eb6fc62b8a438ff635d36c6a127, type: 3}
   mColor: {r: 0, g: .455223858, b: .30242148, a: 1}
   mPivot: 3
   mDepth: 8
   mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
   mSpriteName: GUISlider_Empty
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1851990215
 GameObject:
   m_ObjectHideFlags: 0
@@ -17011,6 +17365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
@@ -17018,12 +17373,16 @@ MonoBehaviour:
   mText: Andrew, Level 5 Raider
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1881272025
 GameObject:
   m_ObjectHideFlags: 0
@@ -17062,6 +17421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 7
@@ -17069,12 +17429,16 @@ MonoBehaviour:
   mText: 8
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1001 &1882445909
 Prefab:
   m_ObjectHideFlags: 0
@@ -17165,6 +17529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 14
@@ -17172,12 +17537,16 @@ MonoBehaviour:
   mText: 'Tiles Crossed:'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1892528511
 GameObject:
   m_ObjectHideFlags: 0
@@ -17216,6 +17585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mDepth: 2
@@ -17223,12 +17593,16 @@ MonoBehaviour:
   mText: 'En:'
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1899398108
 GameObject:
   m_ObjectHideFlags: 0
@@ -17924,7 +18298,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2034116348
 Transform:
   m_ObjectHideFlags: 0
@@ -17947,11 +18321,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 15
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: Key
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &2040901176
 GameObject:
   m_ObjectHideFlags: 0
@@ -18016,12 +18396,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: HUD_Panel_Label_Inv
   mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &2046289847
 GameObject:
   m_ObjectHideFlags: 0
@@ -18045,7 +18430,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2046289847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.499929756, y: 0, z: -.00118893816}
+  m_LocalPosition: {x: -.500053644, y: .500131607, z: -.00136067637}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2124491335}
@@ -18061,11 +18446,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   uiCamera: {fileID: 296583996}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
   side: 8
   halfPixelOffset: 1
-  depthOffset: 0
   relativeOffset: {x: 0, y: 0}
-  stretchToFill: 0
 --- !u!1 &2057465068
 GameObject:
   m_ObjectHideFlags: 0
@@ -18196,8 +18581,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
+  scalingStyle: 1
   automatic: 1
   manualHeight: 639
+  minimumHeight: 320
+  maximumHeight: 1536
 --- !u!4 &2062194370
 Transform:
   m_ObjectHideFlags: 0
@@ -18335,11 +18723,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
+  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
   mColor: {r: .5, g: .409090936, b: 0, a: 1}
   mPivot: 3
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
   mSpriteName: GUISlider_Empty
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &2098003637
 GameObject:
   m_ObjectHideFlags: 0
@@ -18382,7 +18776,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2098273375
 Transform:
   m_ObjectHideFlags: 0
@@ -18404,7 +18798,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 16
@@ -18412,12 +18807,16 @@ MonoBehaviour:
   mText: D
   mMaxLineWidth: 0
   mEncoding: 1
-  mMultiline: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
   mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &2101090863
 GameObject:
   m_ObjectHideFlags: 0
@@ -18494,15 +18893,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 14.4178934
+      value: 40.4469414
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .352139741
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 11.4414425
+      value: 37.4886169
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
       propertyPath: m_LocalRotation.x
@@ -18510,7 +18909,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
       propertyPath: m_LocalRotation.y
-      value: .256995976
+      value: .256996125
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
       propertyPath: m_LocalRotation.z
@@ -18518,7 +18917,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
       propertyPath: m_LocalRotation.w
-      value: -.966412544
+      value: -.966412425
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 502c290bbb4b39d4f927c9e96a4ba993, type: 2}
       propertyPath: m_LocalScale.x
@@ -18752,6 +19151,8 @@ MonoBehaviour:
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
+  widgetsAreStatic: 0
+  mAlpha: 1
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
@@ -18870,3 +19271,43 @@ Transform:
   m_LocalScale: {x: 1.0000608, y: .999939442, z: 1}
   m_Children: []
   m_Father: {fileID: 1771408844}
+--- !u!1 &2144762597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+  m_PrefabInternal: {fileID: 1434320982}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2144762599}
+  - 114: {fileID: 2144762598}
+  m_Layer: 0
+  m_Name: Touch Debugger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2144762598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c,
+    type: 2}
+  m_PrefabInternal: {fileID: 1434320982}
+  m_GameObject: {fileID: 2144762597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 923107734, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Name: 
+  TouchTexture: {fileID: 2800000, guid: f5c75ed8c6bed0f489d9003aa739aff7, type: 3}
+  FontColor: {r: 0, g: .958217144, b: 1, a: 1}
+--- !u!4 &2144762599
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: c0dc5781cae4a6348b42ea6b818a3f9c, type: 2}
+  m_PrefabInternal: {fileID: 1434320982}
+  m_GameObject: {fileID: 2144762597}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}

@@ -18,9 +18,18 @@ public class PlayerManager : MonoBehaviour {
 	
 	public GameObject playerAvatar;
 	public GameObject PlayerAvatar{get{return playerAvatar;}}//read only global reference to the hero gameobject
+	#region TRANSFORMS AND GRID DATA
 	
 	public Vector3 avatarStartLocation;
-	public float tileMovementTolerance = 1.1f;
+	public float tileMovementTolerance = 1f;  //radius
+	//X,Y coordinate for other scripts to grab:
+	private Vector2 playerGridCoordinate;
+	public Vector2 PlayerGridCoordinate{get{return playerGridCoordinate;}}
+	
+	private Vector3 currentOccupiedGridCenterWorldPoint;
+	public Vector3 CurrentOccupiedGridCenterWorldPoint{get{return currentOccupiedGridCenterWorldPoint;}}
+	#endregion
+	
 	
 	#region HERO STAT VARS   //only health and attribute stats pertaining to hero go here
 		//Attributes here are read-only for GUI access every frame - modify through functions below
@@ -74,6 +83,9 @@ public class PlayerManager : MonoBehaviour {
 	
 	public float playerSpeed = 10;  //temporarily hard-coded
 	public float PlayerSpeed{get{ return playerSpeed;}}
+	
+	public float playerRotationSpeed = .05f;  //temporarily hard-coded
+	public float PlayerRotationSpeed{get{ return playerRotationSpeed;}}
 	#endregion
 	
 	#region INVENTORY
@@ -238,12 +250,7 @@ public class PlayerManager : MonoBehaviour {
 		DecideHungerLevel();
 		anim = playerAvatar.GetComponent<Animator>() as Animator;
 		
-		//Placing our hero object at designated start location:
-		playerAvatar.transform.position = avatarStartLocation;
-		//Debug.Log(bb.gameObject);//working
-		//AdjustPlayerHealth(gameObject,0);
-		
-		UpdateCurrentTileVectors();
+	
 		//Example of LevelLayout Surrounding() call:
 		//if grid type is wall:
 		//if (GridType.Wall == LevelManager.array[x,y])
@@ -251,51 +258,61 @@ public class PlayerManager : MonoBehaviour {
 		//	foo;
 		//}
 		
+		
+		//Placing our hero object at designated start location:
+		playerAvatar.transform.position = avatarStartLocation;
+		UpdateCurrentTileVectors();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		
-		Vector3 transVec = (currentGridLoc + Vector3.down*.5f) - playerAvatar.transform.position;
-		Debug.Log("Player current (rounded) grid loc: " + currentGridLoc);
-		Debug.DrawLine (playerAvatar.transform.position + Vector3.up, currentGridCenterPointWithoffset,Color.green);
+		Vector3 lookVectorToOccupiedTile = currentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;  //relocate this into InputMgr
+		//Debug.Log("Player current (rounded) grid loc: " + playerGridCoordinate);
+		Debug.DrawLine (playerAvatar.transform.position + Vector3.up, currentOccupiedGridCenterWorldPoint,Color.green);
 		
-		//Update() distance to that tile
-		float distanceToOccupiedTile = Vector3.Distance(playerAvatar.transform.position + Vector3.down * .5f,currentGridCenterPointWithoffset);
-		Debug.Log("Distance to player's current tile: " + distanceToOccupiedTile);
+		
 		//If distance is greater than 1.3 (var), pass turn
-		if (distanceToOccupiedTile > tileMovementTolerance)
+		if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
 		{
-			//Wrap this into a function:
+			
 			UpdateCurrentTileVectors();
-			//This will be our pass turn function:
+			//Wrap this up into pass turn
 			BigBoss.TimeKeeper.numTilesCrossed++;
 			BigBoss.Gooey.UpdateTilesCrossedLabel();
-			AdjustXP(gameObject,10);
+			AdjustXP(10);
+			AdjustPlayerHealth(1);
+			
 			AdjustHungerPoints(-20);
-			BigBoss.Gooey.UpdateXPBar();
+			
 		}
 
 		//Moving toward closest center point if player isn't moving with input:
-		if (BigBoss.PlayerInput.isMovementKeyPressed == false)
-		{
-			playerAvatar.transform.Translate(transVec*Time.deltaTime);
-		}
+//		if (BigBoss.PlayerInput.isMovementKeyPressed == false && Input.GetMouseButton(1) == false)  //i.e. no player driven movement
+//		{
+//			//"Drift our player towards tile center point:
+//			playerAvatar.transform.Translate(lookVectorToOccupiedTile.normalized*Time.deltaTime);
+//		}
 		
-		
+		Debug.DrawRay(currentOccupiedGridCenterWorldPoint,Vector3.up,Color.yellow);
 	}
 
 	void UpdateCurrentTileVectors ()
 	{
-		currentGridLoc = new Vector3(Mathf.Round(playerAvatar.transform.position.x),Mathf.Round(playerAvatar.transform.position.y),Mathf.Round(playerAvatar.transform.position.z));
-		currentGridCenterPointWithoffset = currentGridLoc + Vector3.down;
+		playerGridCoordinate = new Vector2(Mathf.Round(playerAvatar.transform.position.x),Mathf.Round(playerAvatar.transform.position.z));
+		currentOccupiedGridCenterWorldPoint = new Vector3(playerGridCoordinate.x,-.5f,playerGridCoordinate.y);
 	}
 		
 	void FixedUpdate ()
 	{
 		//float h = Input.GetAxis("Horizontal");				// setup h variable as our horizontal input axis
-		float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
+		//float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
+		float v = 0;
+		if (Input.GetMouseButton(1))
+		{
+			v = 1;
+		}
 		//Debug.Log("V: " + v);
 		anim.SetFloat("Speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
 		//anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
@@ -307,33 +324,44 @@ public class PlayerManager : MonoBehaviour {
 		
 	}
 
+	//THESE DIRECTIONAL FUNCTIONS FLAGGED FOR DELETION
+//	public void PlayerMoveForward()   
+//	{
+//	
+//		playerAvatar.transform.Translate(Vector3.forward*playerSpeed*Time.deltaTime );
+//		
+//	}
+//	public void PlayerMoveBackward()
+//	{
+//	
+//		playerAvatar.transform.Translate(Vector3.back*playerSpeed*Time.deltaTime );
+//		
+//	}
+//	public void PlayerMoveRight()
+//	{
+//	
+//		playerAvatar.transform.Translate(Vector3.forward*(playerSpeed*.8f)*Time.deltaTime );
+//		playerAvatar.transform.Rotate(Vector3.up * PlayerSpeed*25f * Time.deltaTime,Space.Self);
+//		
+//	}
+//	public void PlayerMoveLeft()
+//	{
+//	
+//		playerAvatar.transform.Translate(Vector3.forward*(playerSpeed*.8f)*Time.deltaTime );
+//		playerAvatar.transform.Rotate((Vector3.up * PlayerSpeed*-25f * Time.deltaTime),Space.Self);		
+//	}
 	
-	public void PlayerMoveForward()
+	public void MovePlayer(Vector3 heading)//comes from input manager and phases out the WASD movement
 	{
-	
-		playerAvatar.transform.Translate(Vector3.forward*playerSpeed*Time.deltaTime );
+		
+		//THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
+		//Translation toward a precalculated heading:
+		playerAvatar.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime,Space.Self);
+		//Lerping rotation so we don't get jitter:
+		Quaternion toRot = Quaternion.LookRotation(heading);//does this need to be normalized?
+ 		playerAvatar.transform.rotation = Quaternion.Slerp(playerAvatar.transform.rotation, toRot, playerRotationSpeed); 
 		
 	}
-	public void PlayerMoveBackward()
-	{
-	
-		playerAvatar.transform.Translate(Vector3.back*playerSpeed*Time.deltaTime );
-		
-	}
-	public void PlayerMoveRight()
-	{
-	
-		playerAvatar.transform.Translate(Vector3.right*playerSpeed*Time.deltaTime );
-		
-	}
-	public void PlayerMoveLeft()
-	{
-	
-		playerAvatar.transform.Translate(Vector3.left*playerSpeed*Time.deltaTime );
-		
-	}
-	
-	
 	
 	
 	
@@ -385,7 +413,7 @@ public class PlayerManager : MonoBehaviour {
 
 	public HungerLevel SendHungerLevelChangedEvent(Color guiCol)
 	{
-		//Do we ant a singleton registry to send out this event to othger managers?
+		//Do we want a singleton registry to send out this event to othger managers?
 		
 		Debug.Log("Event thrown for hunger level changing: New level is: " + CurrentHungerLevel.ToString());
 		BigBoss.Gooey.CreateTextPop(playerAvatar.gameObject.transform.position + Vector3.up*.75f,CurrentHungerLevel .ToString() + "!",guiCol);
@@ -404,7 +432,7 @@ public class PlayerManager : MonoBehaviour {
 	private bool DecidePlayerInventoryMaxWeight()//Should only be cal'c when weight changes or attribute on player is affected
 	{
 		
-		playerInventoryWeightMax = (25 * (playerStrength + playerConstitution) + 50);
+		playerInventoryWeightMax = (25 * (playerStrength + playerConstitution) + 50);  //rework this function since we're not using level cap
 		//This a good spot to add in buffs that would be outside the normal calc?
 		
 		Debug.Log("Max weight calculated: " + playerInventoryWeightMax);
@@ -651,7 +679,6 @@ public class PlayerManager : MonoBehaviour {
 //			}
 			
 			
-		break;
 		}
 		
 		
@@ -682,10 +709,10 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	//Adjustment of health and attributes should follow the health examples.
-	public void AdjustPlayerHealth(GameObject senderObj,int amount)//if this is our only health function, consider adding a sender component
+	public void AdjustPlayerHealth(int amount)//if this is our only health function, consider adding a sender component
 	{
 	
-		Debug.Log("IncreasePlayerHealth() called from " + senderObj + ".  Player's health to be adjusted by a raw amount of " + amount);
+		Debug.Log("IncreasePlayerHealth() called... Player's health to be adjusted by a raw amount of " + amount);
 		//Can't raise health over maximum:
 		int difference = PlayerMaxHealth - PlayerCurrentHealth;
 		amount = (int)Mathf.Clamp(amount,0f,(float)difference);
@@ -695,30 +722,31 @@ public class PlayerManager : MonoBehaviour {
 		Debug.Log("IncreasePlayerHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
 	}
 	
-	public void AdjustPlayerMaxHealth(GameObject senderObj,int amount)//if this is our only health function, consider adding a sender component
+	public void AdjustPlayerMaxHealth(int amount)//if this is our only health function, consider adding a sender component
 	{
 	
-		Debug.Log("IncreasePlayerMaxHealth() called from " + senderObj + ".  Player's max health to be adjusted by " + amount);
+		Debug.Log("IncreasePlayerMaxHealth() called.  Player's max health to be adjusted by " + amount);
 		playerMaxHealth += amount;  //come back and install logic/failsafes
 		Debug.Log("IncreasePlayerMaxHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
 	}
 	
-	public void AdjustXP(GameObject senderObj,int amount)
+	public void AdjustXP(int amount)
 	{
 	
-		Debug.Log("IncreasePlayerMaxHealth() called from " + senderObj + ".  Player's max health to be adjusted by " + amount);
+		Debug.Log("IncreasePlayerMaxHealth() called.  Player's max health to be adjusted by " + amount);
 		playerCurrentXPForThisLevel += amount;  //come back and install logic/failsafes
+		BigBoss.Gooey.UpdateXPBar();
 		Debug.Log("IncreasePlayerMaxHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
 	}
-	//A STRAIGHT UP SETHEALTH() COMMAND I THINK IS HIGHLY RECOMMENDED JUST IN CASE
+
 	#endregion
 	
 	#region SETFUCTIONS   //THESE SHOULD BE USED IN GAME ONLY FOR VERY SPECIFIC SITUATIONS AND/OR EVENTS
 	
-	public int SetHealth(GameObject senderObj,int newHealthAmount)
+	public int SetHealth(int newHealthAmount)
 	{
 		
-		Debug.Log("SetHealth() called from " + senderObj + ".  Target health should be " + newHealthAmount);
+		Debug.Log("SetHealth() called.  Target health should be " + newHealthAmount);
 		
 		playerCurrentHealth = newHealthAmount; 
 		BigBoss.Gooey.UpdateHealthBar();
