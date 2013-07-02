@@ -4,25 +4,22 @@ using System.Collections.Generic;
 
 public class Room : LayoutObjectLeaf {
 
-    public int roomNum { get; private set; }
-	
-    public Room(int num)
+    public Room()
         : base(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2)
     {
-        roomNum = num;
     }
 	
-	public GridMap getWalls() 
+	public GridMap GetWalls() 
     {
 		return getTypes(GridType.Wall);
 	}
 	
-	public GridMap getFloors() 
+	public GridMap GetFloors() 
     {
 		return getTypes(GridType.Floor);
 	}
 	
-	public GridMap getDoors() 
+	public GridMap GetDoors() 
     {
 		return getTypes(GridType.Door);
 	}
@@ -37,7 +34,7 @@ public class Room : LayoutObjectLeaf {
 
     public GridMap GetPotentialDoors()
     {
-        GridMap potentialDoors = getWalls();
+        GridMap potentialDoors = GetWalls();
         RemoveBadDoorWalls(potentialDoors);
         return potentialDoors;
     }
@@ -73,7 +70,7 @@ public class Room : LayoutObjectLeaf {
 
 	public override string ToString()
 	{
-		return "Room " + roomNum;
+		return "Room " + Id;
 	}
 
     protected override Bounding GetBoundingInternal()

@@ -116,15 +116,15 @@ abstract public class Container2D<T> {
         return t.ToString();
     }
 	
-	public virtual void toLog(DebugManager.Logs log)
+	public virtual void ToLog(DebugManager.Logs log)
     {
         if (DebugManager.logging(log))
         {
-            toLog(log, new String[0]);
+            ToLog(log, new String[0]);
         }
     }
 
-    public virtual void toLog(DebugManager.Logs log, params string[] customContent)
+    public virtual void ToLog(DebugManager.Logs log, params string[] customContent)
     {
         if (DebugManager.logging(log))
         {

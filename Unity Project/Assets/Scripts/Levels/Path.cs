@@ -9,19 +9,21 @@ public class Path : LayoutObject {
     public Path(IEnumerable<Value2D<GridType>> stack)
         : base()
 	{
-		list = new List<Value2D<GridType>>(stack);
+        list = new List<Value2D<GridType>>(stack);
 	}
 
-    public void Connect(LayoutObject origin, LevelLayout layout)
+    public Path(IEnumerable<Value2D<GridType>> stack, LayoutObjectContainer layout, Value2D<GridType> startPoint)
+        : this(stack)
+    {
+        AddConnected(layout, startPoint);
+        ConnectEnding(layout);
+    }
+
+    public void ConnectEnding(LayoutObjectContainer layout)
     {
         if (isValid())
         {
-            AddConnected(origin);
-            LayoutObject obj = layout.GetObjAt(list[0]);
-            if (obj != null)
-            {
-                obj.AddConnected(this);
-            }
+            AddConnected(layout, list[0]);
         }
     }
 
@@ -156,7 +158,7 @@ public class Path : LayoutObject {
 				if (DebugManager.logging(DebugManager.Logs.LevelGen))
 				{
 					DebugManager.w (DebugManager.Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count); 
-					toLog(DebugManager.Logs.LevelGen);
+					ToLog(DebugManager.Logs.LevelGen);
 				}
 				#endregion
             }
@@ -171,7 +173,7 @@ public class Path : LayoutObject {
 		#endregion
     }
 
-    public bool isValid()
+    public override bool isValid()
     {
         return list.Count > 0;
     }

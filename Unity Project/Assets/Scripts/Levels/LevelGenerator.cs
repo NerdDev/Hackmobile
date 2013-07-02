@@ -102,21 +102,28 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Paths took: " + (Time.realtimeSinceStartup - stepTime));
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Place paths took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Connections");
             }
         }
         #endregion
-        ConfirmConnection(layout);
+        //ConfirmConnection(layout);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Confirm Connection took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
+        }
+        #endregion
 
         #region DEBUG
         if (DebugManager.logging())
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
-            layout.toLog(DebugManager.Logs.LevelGenMain);
+            layout.ToLog(DebugManager.Logs.LevelGenMain);
             DebugManager.printFooter(DebugManager.Logs.LevelGenMain);
         }
         #endregion
@@ -141,7 +148,7 @@ public class LevelGenerator
         #endregion
         for (int i = 1; i <= numRooms; i++)
         {
-            Room room = new Room(i);
+            Room room = new Room();
             rooms.Add(room);
         }
         #region DEBUG
@@ -182,7 +189,7 @@ public class LevelGenerator
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                room.toLog(DebugManager.Logs.LevelGen);
+                room.ToLog(DebugManager.Logs.LevelGen);
                 DebugManager.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
@@ -254,7 +261,7 @@ public class LevelGenerator
         }
         #endregion
         List<LayoutObject> placedRooms = new List<LayoutObject>();
-        placedRooms.Add(new Room(0)); // Seed empty center room to start positioning from.
+        placedRooms.Add(new Room()); // Seed empty center room to start positioning from.
         foreach (Room room in rooms)
         {
             layout.AddRoom(room);
@@ -267,7 +274,7 @@ public class LevelGenerator
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Placing room: " + room.roomNum);
+                DebugManager.w(DebugManager.Logs.LevelGen, "Placing room: " + room);
                 DebugManager.w(DebugManager.Logs.LevelGen, "Picked starting room number: " + roomNum);
                 DebugManager.w(DebugManager.Logs.LevelGen, "Shift: " + shiftMagn);
             }
@@ -280,7 +287,7 @@ public class LevelGenerator
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
                 {
                     DebugManager.w(DebugManager.Logs.LevelGen, "This layout led to an overlap: " + room.GetBounding());
-                    layout.toLog(DebugManager.Logs.LevelGen);
+                    layout.ToLog(DebugManager.Logs.LevelGen);
                 }
                 #endregion
                 room.ShiftOutside(intersect, shiftMagn);
@@ -290,7 +297,7 @@ public class LevelGenerator
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 DebugManager.w(DebugManager.Logs.LevelGen, "Layout after placing room at: " + room.GetBounding());
-                layout.toLog(DebugManager.Logs.LevelGen);
+                layout.ToLog(DebugManager.Logs.LevelGen);
                 DebugManager.printBreakers(DebugManager.Logs.LevelGen, 4);
             }
             #endregion
@@ -321,7 +328,7 @@ public class LevelGenerator
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                potentialDoors.toLog(DebugManager.Logs.LevelGen, "Potential Doors");
+                potentialDoors.ToLog(DebugManager.Logs.LevelGen, "Potential Doors");
                 DebugManager.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
@@ -335,8 +342,8 @@ public class LevelGenerator
                     #region DEBUG
                     if (DebugManager.logging(DebugManager.Logs.LevelGen))
                     {
-                        room.toLog(DebugManager.Logs.LevelGen, "Generated door at: " + doorSpace);
-                        potentialDoors.toLog(DebugManager.Logs.LevelGen, "Remaining options");
+                        room.ToLog(DebugManager.Logs.LevelGen, "Generated door at: " + doorSpace);
+                        potentialDoors.ToLog(DebugManager.Logs.LevelGen, "Remaining options");
                     }
                     #endregion
                 }
@@ -350,7 +357,7 @@ public class LevelGenerator
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                room.toLog(DebugManager.Logs.LevelGen, "Final Room After placing doors");
+                room.ToLog(DebugManager.Logs.LevelGen, "Final Room After placing doors");
                 DebugManager.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
@@ -358,7 +365,7 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            layout.toLog(DebugManager.Logs.LevelGen);
+            layout.ToLog(DebugManager.Logs.LevelGen);
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
@@ -375,40 +382,44 @@ public class LevelGenerator
         var bounds = layout.GetBounding();
         bounds.expand(layoutMargin);
         var grids = layout.GetArray(bounds);
-        foreach (var obj in layout)
+        GridMap doors = layout.getTypes(grids, GridType.Door);
+        foreach (var door in doors)
         {
-            foreach (var door in obj.getTypes(GridType.Door))
+            var path = new Path(
+                DepthFirstSearchFor(door, grids, GridType.Door,
+                                                    GridType.Path_Horiz,
+                                                    GridType.Path_Vert,
+                                                    GridType.Path_LB,
+                                                    GridType.Path_LT,
+                                                    GridType.Path_RB,
+                                                    GridType.Path_RT),
+                                                    layout, 
+                                                    door);
+            #region DEBUG
+
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                var path = new Path(DepthFirstSearchFor(door, grids, GridType.Door,
-                    GridType.Path_Horiz,
-                    GridType.Path_Vert,
-                    GridType.Path_LB,
-                    GridType.Path_LT,
-                    GridType.Path_RB,
-                    GridType.Path_RT));
-                path.Connect(obj, layout);
-                #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
-                {
-                    GridArray tmp = new GridArray(grids);
-                    tmp.PutAll(path.GetArray());
-                    tmp.toLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
-                }
-                #endregion
-                path.Simplify();
-                if (path.isValid())
-                {
-                    grids.PutAll(path.GetArray());
-                    path.shift(bounds.xMin, bounds.yMin);
-                    layout.AddPath(path);
-                }
-                #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
-                {
-                    grids.toLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
-                }
-                #endregion
+                GridArray tmp = new GridArray(grids);
+                tmp.PutAll(path.GetArray());
+                tmp.ToLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
             }
+
+            #endregion
+            path.Simplify();
+            if (path.isValid())
+            {
+                grids.PutAll(path.GetArray());
+                path.shift(bounds.xMin, bounds.yMin);
+                layout.AddPath(path);
+            }
+            #region DEBUG
+
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                grids.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
+            }
+
+            #endregion
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -420,21 +431,76 @@ public class LevelGenerator
 
     private static void ConfirmConnection(LevelLayout layout)
     {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Confirm Connections");
+        }
+        #endregion
         var roomsToConnect = new List<LayoutObject>(layout.GetRooms().Cast<LayoutObject>());
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Connecting List:");
+            foreach (var layoutobj in layout.GetRooms())
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, 1, layoutobj.ToString());       
+            }
+        }
+        #endregion
         foreach (var layoutObj in layout.GetRooms())
         {
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                layoutObj.ToLog(DebugManager.Logs.LevelGen, "Connecting");
+            }
+            #endregion
             roomsToConnect.Remove(layoutObj);
             LayoutObject fail;
             if (!layoutObj.ConnectedTo(roomsToConnect, out fail))
             {
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    fail.ToLog(DebugManager.Logs.LevelGen, "Failed to connect to");
+                }
+                #endregion
                 MakeConnection(layout, layoutObj, fail);
             }
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            }
+            #endregion
         }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
 
     private static void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
     {
-        
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Make Connection");
+        }
+        #endregion
+        var connected1 = obj1.GetConnectedGrid();
+        var connected2 = obj2.GetConnectedGrid();
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            connected1.ToLog(DebugManager.Logs.LevelGen);
+            connected2.ToLog(DebugManager.Logs.LevelGen);
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
 
     public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
@@ -450,7 +516,7 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
             GridArray tmp = new GridArray(grids);
             tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-            tmp.toLog(DebugManager.Logs.LevelGen, "Starting Map:");
+            tmp.ToLog(DebugManager.Logs.LevelGen, "Starting Map:");
         }
         #endregion
         // Init
@@ -491,7 +557,7 @@ public class LevelGenerator
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                debugGrid.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
+                debugGrid.ToLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
             }
             #endregion
 
@@ -543,7 +609,7 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Breadth First Search Fill");
             GridArray tmp = new GridArray(grids);
             tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-            tmp.toLog(DebugManager.Logs.LevelGen, "Starting Map:");
+            tmp.ToLog(DebugManager.Logs.LevelGen, "Starting Map:");
         }
         #endregion
         Queue<Value2D<GridType>> queue = new Queue<Value2D<GridType>>();
@@ -559,7 +625,7 @@ public class LevelGenerator
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                outGridArr.toLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options. Evaluating " + curPoint);
+                outGridArr.ToLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options. Evaluating " + curPoint);
             }
             #endregion
             foreach (Value2D<GridType> option in options)

@@ -36,7 +36,7 @@ public class CameraManager : MonoBehaviour {
 			
 		//Register to Singleton:
 				
-		//Connect to Script Variables:
+		//ConnectEnding to Script Variables:
 			
     }
 	

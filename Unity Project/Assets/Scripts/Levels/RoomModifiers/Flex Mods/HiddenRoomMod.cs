@@ -16,7 +16,7 @@ public class HiddenRoomMod : RoomModifier {
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                potentialDoors.toLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
+                potentialDoors.ToLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
             }
             #endregion
             Value2D<GridType> doorSpace = potentialDoors.RandomValue(rand);
@@ -30,14 +30,14 @@ public class HiddenRoomMod : RoomModifier {
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                room.toLog(DebugManager.Logs.LevelGen, "Final Room After placing doors");
+                room.ToLog(DebugManager.Logs.LevelGen, "Final Room After placing doors");
                 DebugManager.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            //layout.toLog(DebugManager.Logs.LevelGen);
+            //layout.ToLog(DebugManager.Logs.LevelGen);
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion

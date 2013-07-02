@@ -8,7 +8,7 @@ abstract public class LayoutObject {
     protected Point ShiftP = new Point();
     readonly List<LayoutObject> _connectedTo = new List<LayoutObject>();
     private static int _nextId = 0;
-    protected readonly int Id;
+    public int Id { get; protected set; }
 
     protected LayoutObject()
     {
@@ -199,33 +199,58 @@ abstract public class LayoutObject {
     }
     #endregion
 
+    public GridArray GetConnectedGrid()
+    {
+        List<LayoutObject> connected;
+        Bounding bounds;
+        ConnectedToAll(out connected, out bounds);
+        var arrOut = new GridArray(bounds, false);
+        foreach (var obj in connected)
+        {
+            arrOut.PutAll(obj.GetArray());
+        }
+        return arrOut;
+    }
+
     public void AddConnected(LayoutObject obj)
     {
-        _connectedTo.Add(obj);
-        obj._connectedTo.Add(this);
+        if (obj != null && isValid() && obj.isValid())
+        {
+            _connectedTo.Add(obj);
+            obj._connectedTo.Add(this);
+        }
+    }
+
+    public void AddConnected(LayoutObjectContainer layout, Value2D<GridType> pt)
+    {
+        AddConnected(layout.GetObjAt(pt));
     }
 
     abstract public bool Contains(Value2D<GridType> val);
 
-    public List<LayoutObject> ConnectedToAll()
+    public void ConnectedToAll(out List<LayoutObject> connected, out Bounding bounds)
     {
-        var visited = new HashSet<LayoutObject> {this};
-        var connected = new List<LayoutObject>();
-        ConnectedToRecursive(visited, connected);
-        return connected;
+        connected = new List<LayoutObject>();
+        bounds = new Bounding();
+        ConnectedToRecursive(connected, bounds);
     }
 
-    void ConnectedToRecursive(HashSet<LayoutObject> visited, List<LayoutObject> list)
+    void ConnectedToRecursive(List<LayoutObject> list, Bounding bounds)
     {
         foreach (var connected in _connectedTo)
         {
-            if (!visited.Contains(connected))
+            if (!list.Contains(connected))
             {
-                visited.Add(connected);
                 list.Add(connected);
-                ConnectedToRecursive(visited, list);
+                bounds.absorb(connected.GetBounding());
+                ConnectedToRecursive(list, bounds);
             }
         }
+    }
+
+    public virtual bool isValid()
+    {
+        return true;
     }
 
     public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
@@ -369,7 +394,7 @@ abstract public class LayoutObject {
         }
     }
 
-    public virtual void toLog(DebugManager.Logs log, params String[] customContent)
+    public virtual void ToLog(DebugManager.Logs log, params String[] customContent)
     {
         if (DebugManager.logging(log))
         {
@@ -387,11 +412,11 @@ abstract public class LayoutObject {
         }
     }
 
-    public virtual void toLog(DebugManager.Logs log)
+    public virtual void ToLog(DebugManager.Logs log)
     {
         if (DebugManager.logging(log))
         {
-            toLog(log, new String[0]);
+            ToLog(log, new String[0]);
         }
     }
     #endregion Printing
