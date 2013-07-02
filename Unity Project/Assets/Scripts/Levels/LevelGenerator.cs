@@ -31,15 +31,15 @@ public class LevelGenerator
     public static int chanceNoFinalMod { get { return 40; } }
     #endregion
 
-    public static System.Random rand = new System.Random();
-    public static Random unityRand = new Random();
+    public static System.Random Rand = new System.Random();
+    public static Random UnityRand = new Random();
 
-    public LevelLayout generateLayout(int levelDepth)
+    public LevelLayout GenerateLayout(int levelDepth)
     {
-        return generateLayout(levelDepth, rand.Next(), rand.Next());
+        return GenerateLayout(levelDepth, Rand.Next(), Rand.Next());
     }
 
-    public LevelLayout generateLayout(int levelDepth, int seed, int unitySeed)
+    public LevelLayout GenerateLayout(int levelDepth, int seed, int unitySeed)
     {
         #region DEBUG
         int debugNum = 1;
@@ -58,11 +58,11 @@ public class LevelGenerator
             startTime = stepTime;
         }
         #endregion
-        rand = new System.Random(seed);
+        Rand = new System.Random(seed);
         Random.seed = unitySeed;
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
-        modRooms(rooms);
+        ModRooms(rooms);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
@@ -74,7 +74,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        placeRooms(rooms, layout);
+        PlaceRooms(rooms, layout);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
@@ -86,7 +86,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        placeDoors(layout);
+        PlaceDoors(layout);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
@@ -98,7 +98,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        placePaths(layout);
+        PlacePaths(layout);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
@@ -132,7 +132,7 @@ public class LevelGenerator
         }
         #endregion
         List<Room> rooms = new List<Room>();
-        int numRooms = rand.Next(minRooms, maxRooms);
+        int numRooms = Rand.Next(minRooms, maxRooms);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
@@ -153,7 +153,7 @@ public class LevelGenerator
         return rooms;
     }
 
-    void modRooms(List<Room> rooms)
+    void ModRooms(IEnumerable<Room> rooms)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -169,7 +169,7 @@ public class LevelGenerator
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Modding " + room);
             }
             #endregion
-            foreach (RoomModifier mod in pickMods())
+            foreach (RoomModifier mod in PickMods())
             {
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -177,7 +177,7 @@ public class LevelGenerator
                     DebugManager.w(DebugManager.Logs.LevelGen, "Applying: " + mod);
                 }
                 #endregion
-                mod.Modify(room, rand);
+                mod.Modify(room, Rand);
             }
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -195,7 +195,7 @@ public class LevelGenerator
         #endregion
     }
 
-    List<RoomModifier> pickMods()
+    static List<RoomModifier> PickMods()
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -212,7 +212,7 @@ public class LevelGenerator
             DebugManager.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + baseMod);
         }
         #endregion
-        int numFlex = rand.Next(1, maxFlexMod);
+        int numFlex = Rand.Next(1, maxFlexMod);
         List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex);
         mods.AddRange(flexMods);
         #region DEBUG
@@ -225,7 +225,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        if (chanceNoFinalMod < rand.Next(100))
+        if (chanceNoFinalMod < Rand.Next(100))
         {
             RoomModifier finalMod = RoomModifier.GetFinal();
             mods.Add(finalMod);
@@ -245,7 +245,7 @@ public class LevelGenerator
         return mods;
     }
 
-    void placeRooms(List<Room> rooms, LevelLayout layout)
+    static void PlaceRooms(List<Room> rooms, LevelLayout layout)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -259,11 +259,11 @@ public class LevelGenerator
         {
             layout.AddRoom(room);
             // Find room it will start from
-            int roomNum = rand.Next(placedRooms.Count);
+            int roomNum = Rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
             room.setShift(startRoom);
             // Find where it will shift away
-            Point shiftMagn = generateShiftMagnitude(shiftRange);
+            Point shiftMagn = GenerateShiftMagnitude(shiftRange);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -300,7 +300,7 @@ public class LevelGenerator
         #endregion
     }
 
-    void placeDoors(LevelLayout layout)
+    static void PlaceDoors(LevelLayout layout)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -317,7 +317,7 @@ public class LevelGenerator
             }
             #endregion
             GridMap potentialDoors = room.GetPotentialExternalDoors();
-            int numDoors = rand.Next(doorsMin, doorsMax);
+            int numDoors = Rand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -327,7 +327,7 @@ public class LevelGenerator
             #endregion
             for (int i = 0; i < numDoors; i++)
             {
-                Value2D<GridType> doorSpace = potentialDoors.RandomValue(rand);
+                Value2D<GridType> doorSpace = potentialDoors.RandomValue(Rand);
                 if (doorSpace != null)
                 {
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
@@ -364,7 +364,7 @@ public class LevelGenerator
         #endregion
     }
 
-    void placePaths(LevelLayout layout)
+    static void PlacePaths(LevelLayout layout)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -372,14 +372,14 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Paths");
         }
         #endregion
-        Bounding bounds = layout.GetBounding();
+        var bounds = layout.GetBounding();
         bounds.expand(layoutMargin);
-        GridArray grids = layout.GetArray(bounds);
-        foreach (LayoutObject obj in layout)
+        var grids = layout.GetArray(bounds);
+        foreach (var obj in layout)
         {
-            foreach (Value2D<GridType> door in obj.getTypes(GridType.Door))
+            foreach (var door in obj.getTypes(GridType.Door))
             {
-                Path path = new Path(depthFirstSearchFor(door, grids, GridType.Door,
+                var path = new Path(DepthFirstSearchFor(door, grids, GridType.Door,
                     GridType.Path_Horiz,
                     GridType.Path_Vert,
                     GridType.Path_LB,
@@ -418,31 +418,31 @@ public class LevelGenerator
         #endregion
     }
 
-    private void ConfirmConnection(LevelLayout layout)
+    private static void ConfirmConnection(LevelLayout layout)
     {
         var roomsToConnect = new List<LayoutObject>(layout.GetRooms().Cast<LayoutObject>());
-        foreach (Room room in layout.GetRooms())
+        foreach (var layoutObj in layout.GetRooms())
         {
-            roomsToConnect.Remove(room);
+            roomsToConnect.Remove(layoutObj);
             LayoutObject fail;
-            if (!room.ConnectedTo(roomsToConnect, out fail))
+            if (!layoutObj.ConnectedTo(roomsToConnect, out fail))
             {
-                MakeConnection(layout, room, fail);
+                MakeConnection(layout, layoutObj, fail);
             }
         }
     }
 
-    private void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
+    private static void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
     {
         
     }
 
-    public static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
     {
-        return depthFirstSearchFor(startPoint, grids, new HashSet<GridType>(targets));
+        return DepthFirstSearchFor(startPoint, grids, new HashSet<GridType>(targets));
     }
 
-    public static Stack<Value2D<GridType>> depthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -510,7 +510,7 @@ public class LevelGenerator
             }
 
             // Didn't find target, pick random direction
-            targetDir = options.GetRandom(rand, filter);
+            targetDir = options.GetRandom(Rand, filter);
             if (targetDir == null)
             { // If all directions are bad, back up
                 pathTaken.Pop();
@@ -535,7 +535,6 @@ public class LevelGenerator
         return BreadthFirstFill(startPoint, grids, new HashSet<GridType>(targets));
     }
 
-    // Not tested
     public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
     {
         #region DEBUG
@@ -581,7 +580,7 @@ public class LevelGenerator
         return outGridArr;
     }
 
-    Point generateShiftMagnitude(int mag)
+    static Point GenerateShiftMagnitude(int mag)
     {
         Vector2 vect = Random.insideUnitCircle * mag;
         Point p = new Point(vect);

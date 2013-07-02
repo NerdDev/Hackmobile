@@ -5,25 +5,25 @@ using System.Collections.Generic;
 
 abstract public class LayoutObject {
 
-    protected Point shiftP = new Point();
-    List<LayoutObject> connectedTo = new List<LayoutObject>();
-    private static int nextID = 0;
-    protected int id;
+    protected Point ShiftP = new Point();
+    readonly List<LayoutObject> _connectedTo = new List<LayoutObject>();
+    private static int _nextId = 0;
+    protected readonly int Id;
 
     protected LayoutObject()
     {
-        id = nextID++;
+        Id = _nextId++;
     }
 
     #region Shifts
     public void shift(int x, int y)
 	{
-		shiftP.shift(x,y);
+		ShiftP.shift(x,y);
 	}
 	
 	public void shift(Point p)
 	{
-		shiftP.shift(p);	
+		ShiftP.shift(p);	
 	}
 
     public void setShift(LayoutObject rhs)
@@ -32,13 +32,13 @@ abstract public class LayoutObject {
 		Bounding rhsBounds = rhs.GetBoundingInternal();
 		Point center = bounds.getCenter();
 		Point centerRhs = rhsBounds.getCenter();
-        shiftP.x = rhs.shiftP.x + (centerRhs.x - center.x);
-        shiftP.y = rhs.shiftP.y + (centerRhs.y - center.y);
+        ShiftP.x = rhs.ShiftP.x + (centerRhs.x - center.x);
+        ShiftP.y = rhs.ShiftP.y + (centerRhs.y - center.y);
     }
 	
 	public Point GetShift()
 	{
-		return new Point(shiftP);	
+		return new Point(ShiftP);	
 	}
 
     public void ShiftOutside(LayoutObject rhs, Point dir)
@@ -86,17 +86,17 @@ abstract public class LayoutObject {
     {
         if (toExternal)
         {
-            bound.xMin += shiftP.x;
-            bound.xMax += shiftP.x;
-            bound.yMin += shiftP.y;
-            bound.yMax += shiftP.y;
+            bound.xMin += ShiftP.x;
+            bound.xMax += ShiftP.x;
+            bound.yMin += ShiftP.y;
+            bound.yMax += ShiftP.y;
         }
         else
         {
-            bound.xMin -= shiftP.x;
-            bound.xMax -= shiftP.x;
-            bound.yMin -= shiftP.y;
-            bound.yMax -= shiftP.y;
+            bound.xMin -= ShiftP.x;
+            bound.xMax -= ShiftP.x;
+            bound.yMin -= ShiftP.y;
+            bound.yMax -= ShiftP.y;
         }
     }
 
@@ -201,24 +201,23 @@ abstract public class LayoutObject {
 
     public void AddConnected(LayoutObject obj)
     {
-        connectedTo.Add(obj);
-        obj.connectedTo.Add(this);
+        _connectedTo.Add(obj);
+        obj._connectedTo.Add(this);
     }
 
     abstract public bool Contains(Value2D<GridType> val);
 
     public List<LayoutObject> ConnectedToAll()
     {
-        HashSet<LayoutObject> visited = new HashSet<LayoutObject>();
-        visited.Add(this);
-        List<LayoutObject> connected = new List<LayoutObject>();
+        var visited = new HashSet<LayoutObject> {this};
+        var connected = new List<LayoutObject>();
         ConnectedToRecursive(visited, connected);
         return connected;
     }
 
     void ConnectedToRecursive(HashSet<LayoutObject> visited, List<LayoutObject> list)
     {
-        foreach (LayoutObject connected in connectedTo)
+        foreach (var connected in _connectedTo)
         {
             if (!visited.Contains(connected))
             {
@@ -231,7 +230,7 @@ abstract public class LayoutObject {
 
     public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
     {
-        foreach (LayoutObject obj in roomsToConnect)
+        foreach (var obj in roomsToConnect)
         {
             if (!ConnectedTo(obj))
             {
@@ -251,21 +250,20 @@ abstract public class LayoutObject {
 
     public bool GetPathTo(LayoutObject target, out List<LayoutObject> list)
     {
-        HashSet<LayoutObject> visited = new HashSet<LayoutObject>();
-        visited.Add(this);
+        var visited = new HashSet<LayoutObject> {this};
         return GetPathToRecursive(this, target, visited, out list);
     }
 
     bool GetPathToRecursive(LayoutObject cur, LayoutObject target, HashSet<LayoutObject> visited, out List<LayoutObject> list)
     {
         list = new List<LayoutObject>();
-        if (connectedTo.Contains(target))
+        if (_connectedTo.Contains(target))
         {
             list.Add(target);
             return true;
         }
         // Recursively search
-        foreach (LayoutObject connected in connectedTo)
+        foreach (var connected in _connectedTo)
         {
             if (!visited.Contains(connected))
             {
@@ -400,7 +398,7 @@ abstract public class LayoutObject {
 
     protected bool Equals(LayoutObject other)
     {
-        return id == other.id;
+        return Id == other.Id;
     }
 
     public override bool Equals(object obj)
@@ -413,7 +411,7 @@ abstract public class LayoutObject {
 
     public override int GetHashCode()
     {
-        return id;
+        return Id;
     }
 
     public static bool operator ==(LayoutObject left, LayoutObject right)
