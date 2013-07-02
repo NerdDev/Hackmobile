@@ -525,7 +525,7 @@ public class LevelGenerator
         Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBounding(), false);
         DFSFilter filter = new DFSFilter(blockedPoints, targets);
         #region DEBUG
-        GridArray debugGrid = new GridArray(0, 0);
+        GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
         #endregion
 
         // Push start point onto path
@@ -569,6 +569,7 @@ public class LevelGenerator
                 if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
                 {
                     DebugManager.w(DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
+                    DebugManager.printFooter(DebugManager.Logs.LevelGen);
                 }
                 #endregion
                 pathTaken.Push(targetDir);
@@ -593,6 +594,12 @@ public class LevelGenerator
                 pathTaken.Push(startPoint);
             }
         }
+        #region DEBUG
+        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
         return pathTaken;
     }
 

@@ -68,7 +68,7 @@ public class DebugManager : MonoBehaviour
 		logging (Logs.Main, true);
 		logging (Logs.LevelGenMain, true);
 		logging (Logs.LevelGen, true);
-        flags[DebugFlag.SearchSteps] = false;
+        flags[DebugFlag.SearchSteps] = true;
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))
