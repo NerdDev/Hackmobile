@@ -207,11 +207,13 @@ abstract public class LayoutObject {
 
     abstract public bool Contains(Value2D<GridType> val);
 
-    public List<LayoutObject> ConnectedTo()
+    public List<LayoutObject> ConnectedToAll()
     {
         HashSet<LayoutObject> visited = new HashSet<LayoutObject>();
         visited.Add(this);
-        List<LayoutObject>
+        List<LayoutObject> connected = new List<LayoutObject>();
+        ConnectedToRecursive(visited, connected);
+        return connected;
     }
 
     void ConnectedToRecursive(HashSet<LayoutObject> visited, List<LayoutObject> list)
