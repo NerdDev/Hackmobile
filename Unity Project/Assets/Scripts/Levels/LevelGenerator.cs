@@ -522,7 +522,7 @@ public class LevelGenerator
         // Init
         GridType[,] arr = grids.GetArr();
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
-        Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBounding(), false);
+        Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBoundingInternal(), false);
         DFSFilter filter = new DFSFilter(blockedPoints, targets);
         #region DEBUG
         GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
@@ -577,7 +577,7 @@ public class LevelGenerator
             }
 
             // Didn't find target, pick random direction
-            targetDir = options.GetRandom(Rand, filter);
+            targetDir = options.GetRandom(Rand);
             if (targetDir == null)
             { // If all directions are bad, back up
                 pathTaken.Pop();
