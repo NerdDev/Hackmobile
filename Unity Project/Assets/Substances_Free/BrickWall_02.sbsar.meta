@@ -116,7 +116,7 @@ SubstanceImporter:
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
-      scale: {x: 1, y: 1}
+      scale: {x: 3, y: 3}
       generateAllOutputs: 1
       animationUpdateRate: 42
     materialProperties:
@@ -126,15 +126,15 @@ SubstanceImporter:
           first:
             name: _MainTex
           second:
-            texture: {fileID: 77162307, guid: 3b1d094d8729eaa4284735068bc6effd, type: 3}
-            scale: {x: 1, y: 1}
+            texture: {instanceID: 0}
+            scale: {x: 3, y: 3}
             offset: {x: 0, y: 0}
         data:
           first:
             name: _BumpMap
           second:
-            texture: {fileID: 121608078, guid: 3b1d094d8729eaa4284735068bc6effd, type: 3}
-            scale: {x: 1, y: 1}
+            texture: {instanceID: 0}
+            scale: {x: 3, y: 1}
             offset: {x: 0, y: 0}
       floats:
         data:
@@ -154,12 +154,12 @@ SubstanceImporter:
     - name: BrickWall_02_Diffuse
       alphaSource: 5
       filterMode: 1
-      aniso: 1
+      aniso: 6
       wrapMode: 0
     - name: BrickWall_02_Specular
       alphaSource: 0
       filterMode: 1
-      aniso: 1
+      aniso: 6
       wrapMode: 0
     - name: BrickWall_02_Normal
       alphaSource: 0
@@ -184,8 +184,8 @@ SubstanceImporter:
     buildTargetSettings:
     - serializedVersion: 2
       buildTarget: 
-      textureWidth: 512
-      textureHeight: 512
+      textureWidth: 1024
+      textureHeight: 1024
       textureFormat: 0
       loadingBehavior: 1
   deletedPrototypes: []

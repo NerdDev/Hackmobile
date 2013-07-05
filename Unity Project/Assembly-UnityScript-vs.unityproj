@@ -44,6 +44,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\EVIL WATCHER\Scripts\MouseOrbit.js" />
+     <Compile Include="Assets\EVIL WATCHER\Scripts\ThirdPersonController.js" />
      <Compile Include="Assets\ShurikenMagic\Scripts\SM_UVScroller.js" />
      <Compile Include="Assets\ShurikenMagic\Scripts\SM_animRandomizer.js" />
      <Compile Include="Assets\ShurikenMagic\Scripts\SM_animSpeedRandomizer.js" />

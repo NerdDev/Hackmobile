@@ -24,7 +24,7 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: $randomseed
       value:
-        scalar[0]: 0
+        scalar[0]: 4677
         scalar[1]: 0
         scalar[2]: 0
         scalar[3]: 0
@@ -38,9 +38,9 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: Metal_Color
       value:
-        scalar[0]: .372500002
-        scalar[1]: .360700011
-        scalar[2]: .352899998
+        scalar[0]: .149973422
+        scalar[1]: .23880595
+        scalar[2]: .0944531038
         scalar[3]: 0
         texture: {instanceID: 0}
     - name: Metal_Rust_Drips
@@ -52,9 +52,9 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: Paint_Color
       value:
-        scalar[0]: .835200012
-        scalar[1]: .450899988
-        scalar[2]: .35679999
+        scalar[0]: 0
+        scalar[1]: 0
+        scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
     - name: Peeling
@@ -80,9 +80,9 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: Rust_Color
       value:
-        scalar[0]: .286300004
-        scalar[1]: .168599993
-        scalar[2]: .101999998
+        scalar[0]: .410447776
+        scalar[1]: .326332927
+        scalar[2]: .278736919
         scalar[3]: 0
         texture: {instanceID: 0}
     - name: Depth
@@ -144,7 +144,7 @@ SubstanceImporter:
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
-      scale: {x: 1, y: 1}
+      scale: {x: 4, y: 4}
       generateAllOutputs: 1
       animationUpdateRate: 42
     materialProperties:
@@ -154,17 +154,15 @@ SubstanceImporter:
           first:
             name: _MainTex
           second:
-            texture: {fileID: 1243994280, guid: ffb3959b6c250464c91026cd534f8e68,
-              type: 3}
-            scale: {x: 1, y: 1}
+            texture: {instanceID: 0}
+            scale: {x: 4, y: 4}
             offset: {x: 0, y: 0}
         data:
           first:
             name: _BumpMap
           second:
-            texture: {fileID: 1157711673, guid: ffb3959b6c250464c91026cd534f8e68,
-              type: 3}
-            scale: {x: 1, y: 1}
+            texture: {instanceID: 0}
+            scale: {x: 4, y: 5}
             offset: {x: 0, y: 0}
       floats:
         data:

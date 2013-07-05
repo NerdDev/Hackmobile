@@ -24,7 +24,7 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: $randomseed
       value:
-        scalar[0]: 0
+        scalar[0]: 9271
         scalar[1]: 0
         scalar[2]: 0
         scalar[3]: 0
@@ -137,7 +137,7 @@ SubstanceImporter:
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
-      scale: {x: 1, y: 1}
+      scale: {x: 3, y: 4}
       generateAllOutputs: 1
       animationUpdateRate: 42
     materialProperties:
@@ -147,16 +147,15 @@ SubstanceImporter:
           first:
             name: _MainTex
           second:
-            texture: {fileID: 825539836, guid: 4bd5672752bbd624aa4c0b96f184a51d, type: 3}
-            scale: {x: 1, y: 1}
+            texture: {instanceID: 0}
+            scale: {x: 3, y: 4}
             offset: {x: 0, y: 0}
         data:
           first:
             name: _BumpMap
           second:
-            texture: {fileID: -1780125576, guid: 4bd5672752bbd624aa4c0b96f184a51d,
-              type: 3}
-            scale: {x: 1, y: 1}
+            texture: {instanceID: 0}
+            scale: {x: 3, y: 5}
             offset: {x: 0, y: 0}
       floats:
         data:

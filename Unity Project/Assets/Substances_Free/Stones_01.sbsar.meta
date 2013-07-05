@@ -230,7 +230,7 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: $randomseed
       value:
-        scalar[0]: 1174
+        scalar[0]: 7849
         scalar[1]: 0
         scalar[2]: 0
         scalar[3]: 0
@@ -372,7 +372,7 @@ SubstanceImporter:
         data:
           first:
             name: _Color
-          second: {r: .25373137, g: .153785452, b: .0435509011, a: 1}
+          second: {r: .283582091, g: .227226794, b: .165070176, a: 1}
         data:
           first:
             name: _SpecColor
