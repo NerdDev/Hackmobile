@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 /*   As long as this isn't an MMO, this Player class should be able to hold most if not all of player information.
  
  
  */
-public class PlayerManager : MonoBehaviour {
+public class PlayerManager : NPC, PassesTurns {
 	
 	
 	//General Player Info:
@@ -21,65 +22,21 @@ public class PlayerManager : MonoBehaviour {
 	#region TRANSFORMS AND GRID DATA
 	
 	public Vector3 avatarStartLocation;
-	public float tileMovementTolerance = 1f;  //radius
+	public float tileMovementTolerance = .85f;  //radius
 	//X,Y coordinate for other scripts to grab:
 	private Vector2 playerGridCoordinate;
 	public Vector2 PlayerGridCoordinate{get{return playerGridCoordinate;}}
 	
 	private Vector3 currentOccupiedGridCenterWorldPoint;
 	public Vector3 CurrentOccupiedGridCenterWorldPoint{get{return currentOccupiedGridCenterWorldPoint;}}
+    private Vector3 lastOccupiedGridCenterWorldPoint;
+    public Vector3 LastOccupiedGridCenterWorldPoint { get { return lastOccupiedGridCenterWorldPoint; } }
 	#endregion
-	
 	
 	#region HERO STAT VARS   //only health and attribute stats pertaining to hero go here
 		//Attributes here are read-only for GUI access every frame - modify through functions below
-	private int playerMaxHealth = 100;  //temporarily hard-coded
-	public int PlayerMaxHealth{get{ return playerMaxHealth;}}  //read only - change through Adjust()
-	
-	private int playerCurrentHealth = 50;
-	public int PlayerCurrentHealth{get{ return playerCurrentHealth;}} //read only Player Health - change through Adjust()
-	
-	private int playerMaxWillpower = 100;  //temporarily hard-coded
-	public int PlayerMaxWillpower{get{ return playerMaxWillpower;}}  //read only - change through Adjust()
-	
-	private int playerCurrentWillpower = 50;
-	public int PlayerCurrentWillpower{get{ return playerCurrentWillpower;}} //read only Player Health - change through Adjust()
-	
-	private int playerCurrentXPForThisLevel = 0;  //temporarily hard-coded
-	public int PlayerCurrentXPForThisLevel{get{ return playerCurrentXPForThisLevel;}}  //read only - change through Adjust()
-	
 	private int playerLifeTimeXP = 0;  //temporarily hard-coded
 	public int PlayerLifeTimeXP{get{ return playerLifeTimeXP;}}
-	
-	private int playerCurrentLevel = 1;
-	public int PlayerCurrentLevel{get{ return playerCurrentLevel;}} //read only Player Health - change through Adjust()
-	
-	private int playerStrength = 10;//temporarily hard-coded
-	public int PlayerStrength{get{ return playerMaxHealth;}}  //read only - change through Adjust()
-	
-	private int playerConstitution = 10;//temporarily hard-coded
-	public int PlayerConstitution{get{ return playerConstitution;}}
-	
-	private int playerDexterity = 10;   //temporarily hard-coded
-	public int PlayerDexterity{get{ return playerMaxHealth;}}  //read only - change through Adjust()
-	
-	private int playerIntelligence = 8;//temporarily hard-coded
-	public int PlayerIntelligence{get{ return playerMaxHealth;}}  //read only - change through Adjust()
-	
-	private int playerWisdom = 6;  //temporarily hard-coded
-	public int PlayerWisdom{get{ return playerMaxHealth;}}  //read only - change through Adjust()
-	
-	public int playerHunger = 1000;  //temporarily hard-coded
-	public int PlayerHunger{get{ return playerHunger;}}  //read only - change through Adjust()
-	
-	private int playerHungerMax = 1000;  //temporarily hard-coded
-	public int PlayerHungerMax{get{ return playerHungerMax;}}  //read only - change through Adjust()
-	
-	private int playerEncumbrance = 0;  //temporarily hard-coded
-	public int PlayerEncumbrance{get{ return playerEncumbrance;}}
-	
-	private int playerEncumbranceMax = 10;  //temporarily hard-coded
-	public int PlayerEncumbranceMax{get{ return playerEncumbranceMax;}}
 	
 	public float playerSpeed = 10;  //temporarily hard-coded
 	public float PlayerSpeed{get{ return playerSpeed;}}
@@ -102,57 +59,10 @@ public class PlayerManager : MonoBehaviour {
 
     Dictionary<Item, int> inventory = new Dictionary<Item, int>();
 
-    public void addToInventory(Item item)
-    {
-        if (inventory.ContainsKey(item))
-        {
-            inventory[item] += 1;
-        }
-        else
-        {
-            inventory.Add(item, 1);
-        }
-    }
-
-    public void removeFromInventory(Item item)
-    {
-        if (inventory.ContainsKey(item))
-        {
-            if (inventory[item] <= 1)
-            {
-                inventory.Remove(item);
-            }
-            else
-            {
-                inventory[item] -= 1;
-            }
-        }
-        else
-        {
-            //do nothing, the item isn't there
-        }
-    }
-
     #endregion
 
     #region ENUMERATIONS OF ALL SORTS
 
-	public enum PlayerProfessions //are we keeping all of these?  Rename/rework a couple maybe?
-	{
-		Archaeologist,
-		Barbarian,
-		Caveman,
-		Healer,
-		Knight,
-		Monk,
-		Priest,
-		Ranger,
-		Rogue,
-		Samurai,
-		Tourist,
-		Valkyrie,
-		Wizard
-	}
 	public PlayerProfessions PlayerChosenProfession;
 	
 	public enum HungerLevel 
@@ -162,7 +72,6 @@ public class PlayerManager : MonoBehaviour {
 		Hungry,
 		Starving,
 		Faint
-		
 	}
 	public HungerLevel CurrentHungerLevel;
 	
@@ -194,10 +103,8 @@ public class PlayerManager : MonoBehaviour {
 		RightKnee,
 		LeftFoot,
 		RightFoot
-		
-		
 	}
-	public enum BodyEquipLocations    //WIP - body inventory equipping purposes
+	public enum BodyEquipLocations
 	{
 		Head,
 		Neck,
@@ -213,18 +120,6 @@ public class PlayerManager : MonoBehaviour {
 		Shield,
 		Weapon,
 		Spellbook
-		
-	}
-	
-	public enum PlayerAttributes    //WIP - body inventory equipping purposes
-	{
-		Strength,
-		Dexterity,
-		Constitution,
-		Intelligence,
-		Wisdom,
-		Charisma
-		
 	}
 	
 	#endregion
@@ -269,7 +164,7 @@ public class PlayerManager : MonoBehaviour {
 	{
 		
 		Vector3 lookVectorToOccupiedTile = currentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;  //relocate this into InputMgr
-		//Debug.Log("Player current (rounded) grid loc: " + playerGridCoordinate);
+		Debug.Log("Player current (rounded) grid loc: " + playerGridCoordinate);
 		Debug.DrawLine (playerAvatar.transform.position + Vector3.up, currentOccupiedGridCenterWorldPoint,Color.green);
 		
 		
@@ -279,28 +174,43 @@ public class PlayerManager : MonoBehaviour {
 			
 			UpdateCurrentTileVectors();
 			//Wrap this up into pass turn
-			BigBoss.TimeKeeper.numTilesCrossed++;
-			BigBoss.Gooey.UpdateTilesCrossedLabel();
-			AdjustXP(10);
-			AdjustPlayerHealth(1);
-			
-			AdjustHungerPoints(-20);
-			
+            BigBoss.TimeKeeper.PassTurn(60);
 		}
 
+        Debug.Log("Player current grid loc: " + playerAvatar.transform.position);
 		//Moving toward closest center point if player isn't moving with input:
-//		if (BigBoss.PlayerInput.isMovementKeyPressed == false && Input.GetMouseButton(1) == false)  //i.e. no player driven movement
-//		{
-//			//"Drift our player towards tile center point:
-//			playerAvatar.transform.Translate(lookVectorToOccupiedTile.normalized*Time.deltaTime);
-//		}
+        if (BigBoss.PlayerInput.isMovementKeyPressed == false && Input.GetMouseButton(1) == false)
+        {
+            if (checkPosition(playerAvatar.transform.position, currentOccupiedGridCenterWorldPoint)) 
+            {
+                //"Drift our player towards tile center point:
+                this.MovePlayer(lookVectorToOccupiedTile);
+                //playerAvatar.transform.Translate(lookVectorToOccupiedTile.normalized*Time.deltaTime);
+            }
+            else
+            {
+                this.playerAvatar.transform.position = currentOccupiedGridCenterWorldPoint;
+            }
+        }
 		
 		Debug.DrawRay(currentOccupiedGridCenterWorldPoint,Vector3.up,Color.yellow);
 	}
 
+    private float variance = .08f;
+    private bool checkPosition(Vector3 playPos, Vector3 curPos)
+    {
+        if (Math.Abs(playPos.x - curPos.x) > variance ||
+            Math.Abs(playPos.z - curPos.z) > variance)
+        {
+            return true;
+        }
+        return false;
+    }
+
 	void UpdateCurrentTileVectors ()
 	{
 		playerGridCoordinate = new Vector2(Mathf.Round(playerAvatar.transform.position.x),Mathf.Round(playerAvatar.transform.position.z));
+        lastOccupiedGridCenterWorldPoint = currentOccupiedGridCenterWorldPoint;
 		currentOccupiedGridCenterWorldPoint = new Vector3(playerGridCoordinate.x,-.5f,playerGridCoordinate.y);
 	}
 		
@@ -374,31 +284,31 @@ public class PlayerManager : MonoBehaviour {
 		//For coloring the text:
 		Color col = Color.white;//initializing to avoid if error
 		//Trickle if statement to set enum, color, and update GUI:
-		if (PlayerHunger < 50)
+		if (stats.Hunger < 50)
 		{
 			CurrentHungerLevel = HungerLevel.Faint;
 			col = Color.red;
 			BigBoss.Gooey.UpdateHungerText(col);
 		}
-		else if (PlayerHunger < 130)
+        else if (stats.Hunger < 130)
 		{
 			CurrentHungerLevel = HungerLevel.Starving;
 			col = Color.yellow;
 			BigBoss.Gooey.UpdateHungerText(col);
 		}
-		else if (PlayerHunger < 500)
+        else if (stats.Hunger < 500)
 		{
 			CurrentHungerLevel = HungerLevel.Hungry;
 			col = Color.yellow;
 			BigBoss.Gooey.UpdateHungerText(col);
 		}
-		else if (PlayerHunger < 800)
+        else if (stats.Hunger < 800)
 		{
 			CurrentHungerLevel = HungerLevel.Satiated;
 			col = Color.blue;
 			BigBoss.Gooey.UpdateHungerText(col);
 		}
-		else if (PlayerHunger < 1000)
+        else if (stats.Hunger < 1000)
 		{
 			CurrentHungerLevel = HungerLevel.Stuffed;
 			col = Color.yellow;
@@ -424,7 +334,7 @@ public class PlayerManager : MonoBehaviour {
 	{
 	
 		//NOT FINAL NOT FINAL NOT FINAL
-		float xpToNext = 100 + ((Mathf.Pow(playerCurrentLevel,3f)/2));
+		float xpToNext = 100 + ((Mathf.Pow(stats.Level,3f)/2));
 		Debug.Log("XP To Next Level() Calc'd : " + xpToNext);
 		return xpToNext;
 	}
@@ -432,7 +342,7 @@ public class PlayerManager : MonoBehaviour {
 	private bool DecidePlayerInventoryMaxWeight()//Should only be cal'c when weight changes or attribute on player is affected
 	{
 		
-		playerInventoryWeightMax = (25 * (playerStrength + playerConstitution) + 50);  //rework this function since we're not using level cap
+		playerInventoryWeightMax = (25 * (attributes.Strength + attributes.Constitution) + 50);  //rework this function since we're not using level cap
 		//This a good spot to add in buffs that would be outside the normal calc?
 		
 		Debug.Log("Max weight calculated: " + playerInventoryWeightMax);
@@ -440,7 +350,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 	private string DecidePlayerTitle()
 	{
-		
+        /*
 		//Called in order to figure out what the player's title should be given all variables (titles taken verbatim from nethack:
 		switch (PlayerChosenProfession) 
 		{
@@ -681,7 +591,8 @@ public class PlayerManager : MonoBehaviour {
 			
 		}
 		
-		
+		*/
+        playerTitle = "SomeTitle";
 		string finalTitle = playerChosenName + ", " + playerTitle;// + " of " + playerTitleCombatArea;
 		return finalTitle;
 	}  //I'll come back and rework this so it's not retarded
@@ -689,55 +600,50 @@ public class PlayerManager : MonoBehaviour {
 	
 	
 	#region Adjust Player Stats/Attr's/Data
-	public int AdjustHungerPoints(int amount) 
-	{
-	
-		playerHunger += amount;
-		//Clamp to max for safety:  (in property set?)
-		
-		DecideHungerLevel();
-		return playerHunger;
-	}
-	
-	
-	
-	 public void AdjustLevel()//UNDER CONSTRUCTION FOR DEBUG ONLY
-	{
-		playerCurrentLevel++;
-		DecidePlayerInventoryMaxWeight();//Replace this with the increase stats() method
-		Debug.Log("Player gained level " + playerCurrentLevel);
-	}
+    public override int AdjustHunger(int amount)
+    {
+        base.AdjustHunger(amount);
 
-	//Adjustment of health and attributes should follow the health examples.
-	public void AdjustPlayerHealth(int amount)//if this is our only health function, consider adding a sender component
-	{
-	
-		Debug.Log("IncreasePlayerHealth() called... Player's health to be adjusted by a raw amount of " + amount);
-		//Can't raise health over maximum:
-		int difference = PlayerMaxHealth - PlayerCurrentHealth;
-		amount = (int)Mathf.Clamp(amount,0f,(float)difference);
-		playerCurrentHealth += (int)amount; 
-		BigBoss.Gooey.UpdateHealthBar();
-		
-		Debug.Log("IncreasePlayerHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
-	}
-	
-	public void AdjustPlayerMaxHealth(int amount)//if this is our only health function, consider adding a sender component
-	{
-	
-		Debug.Log("IncreasePlayerMaxHealth() called.  Player's max health to be adjusted by " + amount);
-		playerMaxHealth += amount;  //come back and install logic/failsafes
-		Debug.Log("IncreasePlayerMaxHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
-	}
-	
-	public void AdjustXP(int amount)
-	{
-	
-		Debug.Log("IncreasePlayerMaxHealth() called.  Player's max health to be adjusted by " + amount);
-		playerCurrentXPForThisLevel += amount;  //come back and install logic/failsafes
-		BigBoss.Gooey.UpdateXPBar();
-		Debug.Log("IncreasePlayerMaxHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
-	}
+        //Update GUI here
+
+        return stats.Hunger;
+    }
+
+    public override void AddLevel()
+    {
+        base.AddLevel();
+        
+        //Update GUI here
+    }
+
+    public override void AdjustHealth(int amount)
+    {
+        base.AdjustHealth(amount);
+
+        //Do all GUI updates here
+        BigBoss.Gooey.UpdateHealthBar();
+    }
+
+    public override void AdjustMaxHealth(int amount)
+    {
+        base.AdjustMaxHealth(amount);
+
+        //GUI updates
+    }
+
+    public override void AdjustXP(int amount)
+    {
+        base.AdjustXP(amount);
+
+        //GUI updates
+        BigBoss.Gooey.UpdateXPBar();
+    }
+
+    public override void AdjustAttribute(Attributes attr, int amount)
+    {
+        base.AdjustAttribute(attr, amount);
+        //update gui:
+    }
 
 	#endregion
 	
@@ -748,55 +654,10 @@ public class PlayerManager : MonoBehaviour {
 		
 		Debug.Log("SetHealth() called.  Target health should be " + newHealthAmount);
 		
-		playerCurrentHealth = newHealthAmount; 
+		stats.CurrentHealth = newHealthAmount; 
 		BigBoss.Gooey.UpdateHealthBar();
-		Debug.Log("SetHealth() successfully completed - " + PlayerCurrentHealth + " is current health.");
-		return playerCurrentHealth;
-	}
-	
-	public void SetAttribute(PlayerAttributes attr, int newValue)
-	{
-				
-		switch (attr) 
-		{
-//			case PlayerAttributes.Charisma:
-//			{
-//				
-//			return 
-//				break;
-//			}
-			case PlayerAttributes.Constitution:
-			{
-				playerConstitution = newValue;
-				break;
-			}
-			case PlayerAttributes.Dexterity:
-			{
-				playerDexterity  = newValue;
-				break;
-			}
-			case PlayerAttributes.Intelligence:
-			{
-				playerIntelligence = newValue;
-				break;
-			}
-			case PlayerAttributes.Strength:
-			{
-				playerStrength  = newValue;
-				break;
-			}
-			case PlayerAttributes.Wisdom:
-			{
-				playerWisdom  = newValue;
-				break;
-			}
-		
-		
-		default:
-		break;
-		}
-		//update gui:
-		
+		Debug.Log("SetHealth() successfully completed - " + stats.CurrentHealth + " is current health.");
+		return stats.CurrentHealth;
 	}
 	
 	#endregion
@@ -883,4 +744,34 @@ public class PlayerManager : MonoBehaviour {
 //}
 
 	#endregion
+
+    void PassesTurns.UpdateTurn()
+    {
+        BigBoss.TimeKeeper.numTilesCrossed++;
+        BigBoss.Gooey.UpdateTilesCrossedLabel();
+    }
+
+    int PassesTurns.CurrentPoints
+    {
+        get
+        {
+            throw new System.NotImplementedException();
+        }
+        set
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    int PassesTurns.BasePoints
+    {
+        get
+        {
+            throw new System.NotImplementedException();
+        }
+        set
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

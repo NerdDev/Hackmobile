@@ -3,6 +3,10 @@
 /**
  * Helper class for dealing with flags.
  * 
+ * Do not use with enums larger than 62 entries. All enums this is used with must
+ *  be based on the [Flags] attribute, and enum values marked accordingly as
+ *  Val1 = 0x1, Val2 = 0x2, Val3 = 0x4, and etc.
+ *  
  * Usage:
  *  Flags fl = new Flags<SomeEnum>(); // use the 0 value or somesuch with all bits cleared.
  *  fl[SomeEnum.VALUE1] = true; //sets the value1 bit to true.

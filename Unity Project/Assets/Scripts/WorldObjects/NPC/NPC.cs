@@ -77,14 +77,109 @@ public class NPC : WorldObject, PassesTurns
     public NPCRole role;
 
     //Separate classes
-    public NPCStats stats = new NPCStats();
+    public AttributesData attributes = new AttributesData();
     public NPCBodyParts bodyparts = new NPCBodyParts();
+    public NPCStats stats = new NPCStats();
     
+    #endregion
+
+    #region Misc Properties for storage
+    int encumbranceLevel = 0;
+    int XPForNextLevel = 0;
     #endregion
 
     public NPC()
     {
     }
+
+    #region Stats
+    public virtual int AdjustHunger(int amount)
+    {
+        stats.Hunger += amount;
+        return stats.Hunger;
+    }
+
+    public virtual void AddLevel()
+    {
+        stats.Level++;
+    }
+
+    public virtual void AdjustHealth(int amount)
+    {
+        if (stats.CurrentHealth + amount > stats.MaxHealth)
+        {
+            stats.CurrentHealth = stats.MaxHealth;
+        }
+        else
+        {
+            stats.CurrentHealth = stats.CurrentHealth + amount;
+        }
+    }
+
+    public virtual void AdjustMaxHealth(int amount)
+    {
+        stats.MaxHealth += amount;
+    }
+
+    public virtual void AdjustXP(int amount)
+    {
+        stats.XP += amount;
+        BigBoss.Gooey.UpdateXPBar();
+    }
+
+    public virtual void AdjustAttribute(Attributes attr, int amount)
+    {
+        switch (attr)
+        {
+            case Attributes.Charisma:
+                {
+                    attributes.Charisma += amount;
+                    break;
+                }
+            case Attributes.Constitution:
+                {
+                    attributes.Constitution += amount;
+                    break;
+                }
+            case Attributes.Dexterity:
+                {
+                    attributes.Dexterity += amount;
+                    break;
+                }
+            case Attributes.Intelligence:
+                {
+                    attributes.Intelligence += amount;
+                    break;
+                }
+            case Attributes.Strength:
+                {
+                    attributes.Strength += amount;
+                    break;
+                }
+            case Attributes.Wisdom:
+                {
+                    attributes.Wisdom += amount;
+                    break;
+                }
+            default:
+                break;
+        }
+    }
+    #endregion
+
+    #region Stat Calculations
+    int calculateEncumbrance()
+    {
+        //calculate encumbrance from stats here
+        return 400;
+    }
+
+    int calcXPForNextLevel()
+    {
+        //do calc here
+        return 10;
+    }
+    #endregion
 
     #region Movement
     public bool moveNPC(Vector3 location)
@@ -95,19 +190,40 @@ public class NPC : WorldObject, PassesTurns
     #endregion
 
     #region Effects
-    public void applyEffect(NPCProperties e, int priority, bool item)
+    /**
+     * Does nothing if the NONE property is applied.
+     */
+    public void applyEffect(NPCProperties e, int priority, bool isItem)
     {
-        if (effects[(long) e] == null)
+        if (e != NPCProperties.NONE)
         {
-            NPCEffect eff = new NPCEffect(e, this);
+            if (effects[(long)e] == null)
+            {
+                NPCEffect eff = new NPCEffect(e, this);
+                if (this.properties[NPCProperties.NONE])
+                {
+                    this.properties[NPCProperties.NONE] = false;
+                }
 
-            effects[(long) e] = eff;
-            eff.apply(priority, item);
-            
+                effects[(long)e] = eff;
+                eff.apply(priority, isItem);
+
+            }
+            else
+            {
+                effects[(long)e].apply(priority, isItem);
+            }
         }
-        else
+    }
+
+    /**
+     * This entirely removes the effect from the NPC. If applied again later, it'll create a new one.
+     */
+    public void removeEffect(NPCProperties e)
+    {
+        if (effects[(long)e] != null)
         {
-            effects[(long) e].apply(priority, item);
+            effects[(long)e] = null;
         }
     }
     #endregion
@@ -138,6 +254,49 @@ public class NPC : WorldObject, PassesTurns
         return equippedItems;
     }
 
+    #endregion
+
+    #region Inventory
+    public void addToInventory(Item item)
+    {
+        this.addToInventory(item, 1);
+    }
+
+    public void addToInventory(Item item, int count)
+    {
+        if (inventory.ContainsKey(item))
+        {
+            inventory[item] += count;
+        }
+        else
+        {
+            inventory.Add(item, count);
+        }
+    }
+
+    public void removeFromInventory(Item item)
+    {
+        removeFromInventory(item, 1);
+    }
+
+    public void removeFromInventory(Item item, int count)
+    {
+        if (inventory.ContainsKey(item))
+        {
+            if (inventory[item] <= count)
+            {
+                inventory.Remove(item);
+            }
+            else
+            {
+                inventory[item] -= count;
+            }
+        }
+        else
+        {
+            //do nothing, the item isn't there
+        }
+    }
     #endregion
 
     #region Get/Set of flags
@@ -173,6 +332,7 @@ public class NPC : WorldObject, PassesTurns
         //lists
         this.effects = npc.effects.Copy();
         //inventory
+        inventory = new Dictionary<Item, int>();
         //TODO: needs conversion from baseInventory into actual inventory
         equippedItems = new List<Item>();
         equipment = new NPCEquipment(this.bodyparts);
@@ -181,7 +341,7 @@ public class NPC : WorldObject, PassesTurns
     public override void setNull()
     {
         base.setNull();
-        this.stats.setNull();
+        this.attributes.setNull();
         this.bodyparts.setNull();
         if (equipment != null)
         {
@@ -227,7 +387,7 @@ public class NPC : WorldObject, PassesTurns
         this.bodyparts.parseXML(x.select("bodyparts"));
 
         //stats
-        this.stats.parseXML(x.select("stats"));
+        this.attributes.parseXML(x.select("stats"));
 
         //inventory
         baseInventory = new List<NPCItem>();

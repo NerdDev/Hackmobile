@@ -21,207 +21,21 @@ namespace System
             return typeof(T);
         }
     }
-    public class ObjectDumper
+
+    public class ObjDump
     {
-
-        public static string Write(object element)
-        {
-            return Write(element, 0);
-        }
-
-        public static string Write(object element, int depth)
-        {
-            
-            ObjectDumper dumper = new ObjectDumper(depth);
-            //dumper.writer = log;
-            dumper.WriteObject(null, element);
-            return writer.ToString();
-        }
-
-        static StringBuilder writer = new StringBuilder();
-        int pos;
-        int level;
-        int depth;
-
-        private ObjectDumper(int depth)
-        {
-            this.depth = depth;
-        }
-
-        private void Write(string s)
-        {
-            if (s != null)
-            {
-                writer.Append(s);
-                pos += s.Length;
-            }
-        }
-
-        private void WriteIndent()
-        {
-            for (int i = 0; i < level; i++) writer.Append("  ");
-        }
-
-        private void WriteLine()
-        {
-            writer.AppendLine();
-            pos = 0;
-        }
-
-        private void WriteTab()
-        {
-            Write("  ");
-            while (pos % 8 != 0) Write(" ");
-        }
-
-        private void WriteObject(string prefix, object element)
-        {
-            if (element == null || element is ValueType || element is string)
-            {
-                WriteIndent();
-                Write(prefix);
-                WriteValue(element);
-                WriteLine();
-            }
-            else
-            {
-                IEnumerable enumerableElement = element as IEnumerable;
-                if (enumerableElement != null)
-                {
-                    foreach (object item in enumerableElement)
-                    {
-                        if (item is IEnumerable && !(item is string))
-                        {
-                            WriteIndent();
-                            Write(prefix);
-                            Write("...");
-                            WriteLine();
-                            if (level < depth)
-                            {
-                                level++;
-                                WriteObject(prefix, item);
-                                level--;
-                            }
-                        }
-                        else
-                        {
-                            WriteObject(prefix, item);
-                        }
-                    }
-                }
-                else
-                {
-                    getFromType(prefix, element);
-                }
-            }
-        }
-
-        private void getFromType(string prefix, object element)
-        {
-            MemberInfo[] members = element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance);
-            WriteIndent();
-            Write(prefix);
-            bool propWritten = false;
-            foreach (MemberInfo m in members)
-            {
-                FieldInfo f = m as FieldInfo;
-                PropertyInfo p = m as PropertyInfo;
-                if (f != null || p != null)
-                {
-                    if (propWritten)
-                    {
-                        WriteTab();
-                    }
-                    else
-                    {
-                        propWritten = true;
-                    }
-                    Write(m.Name);
-                    Write("=");
-                    Type t = f != null ? f.FieldType : p.PropertyType;
-                    if (t.IsValueType || t == typeof(string))
-                    {
-                        WriteValue(f != null ? f.GetValue(element) : p.GetValue(element, null));
-                    }
-                    else
-                    {
-                        if (typeof(IEnumerable).IsAssignableFrom(t))
-                        {
-                            Write("{\n");
-                            
-                            Write("}\n");
-                        }
-                        else
-                        {
-                            Write("{ }");
-                        }
-                    }
-                }
-            }
-            if (propWritten) WriteLine();
-            if (level < depth)
-            {
-                foreach (MemberInfo m in members)
-                {
-                    FieldInfo f = m as FieldInfo;
-                    PropertyInfo p = m as PropertyInfo;
-                    if (f != null || p != null)
-                    {
-                        Type t = f != null ? f.FieldType : p.PropertyType;
-                        if (!(t.IsValueType || t == typeof(string)))
-                        {
-                            object value = f != null ? f.GetValue(element) : p.GetValue(element, null);
-                            if (value != null)
-                            {
-                                level++;
-                                WriteObject(m.Name + ": ", value);
-                                level--;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void WriteValue(object o)
-        {
-            if (o == null)
-            {
-                Write("null");
-            }
-            else if (o is DateTime)
-            {
-                Write(((DateTime)o).ToShortDateString());
-            }
-            else if (o is ValueType || o is string)
-            {
-                Write(o.ToString());
-            }
-            else if (o is IEnumerable)
-            {
-                Write("...");
-            }
-            else
-            {
-                Write("{ }");
-            }
-        }
-    }
-
-    public class ObjectDumper2
-    {
-        private int _level;
-        private readonly int _indentSize;
-        private readonly StringBuilder _stringBuilder;
-        private readonly List<int> _hashListOfFoundElements;
+        private int depth;
+        private readonly int indent;
+        private readonly StringBuilder stringBuilder;
+        private readonly List<int> foundElements;
         private List<string> filter;
 
-        private ObjectDumper2(int indentSize, List<string> filter)
+        private ObjDump(int indentSize, List<string> filter)
         {
             this.filter = filter;
-            _indentSize = indentSize;
-            _stringBuilder = new StringBuilder();
-            _hashListOfFoundElements = new List<int>();
+            indent = indentSize;
+            stringBuilder = new StringBuilder();
+            foundElements = new List<int>();
         }
 
         public static string Dump(object element)
@@ -236,7 +50,7 @@ namespace System
 
         public static string Dump(object element, int indentSize, List<string> filter)
         {
-            var instance = new ObjectDumper2(indentSize, filter);
+            var instance = new ObjDump(indentSize, filter);
             return instance.DumpElement(element);
         }
 
@@ -246,8 +60,10 @@ namespace System
             {
                 Write(FormatValue(element));
             }
+            //yeah, this is crude, but it works cleanly enough
             else if (filter.Contains(element.GetType().Name))
             {
+                Write("filtered");
             }
             else
             {
@@ -255,8 +71,8 @@ namespace System
                 if (!typeof(IEnumerable).IsAssignableFrom(objectType))
                 {
                     Write("{{{0}}}", objectType.FullName);
-                    _hashListOfFoundElements.Add(element.GetHashCode());
-                    _level++;
+                    foundElements.Add(element.GetHashCode());
+                    depth++;
                 }
 
                 var enumerableElement = element as IEnumerable;
@@ -268,9 +84,9 @@ namespace System
                         {
                             if (item is IEnumerable && !(item is string))
                             {
-                                _level++;
+                                depth++;
                                 DumpElement(item);
-                                _level--;
+                                depth--;
                             }
                             else
                             {
@@ -296,7 +112,9 @@ namespace System
                         var propertyInfo = memberInfo as PropertyInfo;
 
                         if (fieldInfo == null && propertyInfo == null)
+                        {
                             continue;
+                        }
 
                         Type type = null;
                         object value = null;
@@ -314,7 +132,7 @@ namespace System
                             }
                             catch
                             {
-                                Write("null");
+                                //Write("null");
                             }
                         }
                         
@@ -333,23 +151,27 @@ namespace System
                             Write("{0}: {1}", memberInfo.Name, isEnumerable ? "..." : "{ }");
 
                             var alreadyTouched = !isEnumerable && AlreadyTouched(value);
-                            _level++;
+                            depth++;
                             if (!alreadyTouched)
+                            {
                                 DumpElement(value);
+                            }
                             else
+                            {
                                 Write("{{{0}}} <-- bidirectional reference found", value.GetType().FullName);
-                            _level--;
+                            }
+                            depth--;
                         }
                     }
                 }
 
                 if (!typeof(IEnumerable).IsAssignableFrom(objectType))
                 {
-                    _level--;
+                    depth--;
                 }
             }
 
-            return _stringBuilder.ToString();
+            return stringBuilder.ToString();
         }
 
         private bool AlreadyTouched(object value)
@@ -359,22 +181,26 @@ namespace System
                 return false;
             }
             var hash = value.GetHashCode();
-            for (var i = 0; i < _hashListOfFoundElements.Count; i++)
+            for (var i = 0; i < foundElements.Count; i++)
             {
-                if (_hashListOfFoundElements[i] == hash)
+                if (foundElements[i] == hash)
+                {
                     return true;
+                }
             }
             return false;
         }
 
         private void Write(string value, params object[] args)
         {
-            var space = new string(' ', _level * _indentSize);
+            string space = new string(' ', depth * indent);
 
             if (args != null)
+            {
                 value = string.Format(value, args);
+            }
 
-            _stringBuilder.AppendLine(space + value);
+            stringBuilder.AppendLine(space + value);
         }
 
         private string FormatValue(object o)

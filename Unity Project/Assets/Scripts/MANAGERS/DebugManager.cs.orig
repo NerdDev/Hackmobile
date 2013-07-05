@@ -70,8 +70,11 @@ public class DebugManager : MonoBehaviour
 		logging (Logs.Main, true);
 		logging (Logs.LevelGenMain, true);
 		logging (Logs.LevelGen, true);
-		logging(Logs.NPCs, true);
+<<<<<<< HEAD
+        logging(Logs.NPCs, true);
+=======
         flags[DebugFlag.SearchSteps] = false;
+>>>>>>> origin/AB
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))
@@ -353,14 +356,4 @@ public class DebugManager : MonoBehaviour
         }
     }
     #endregion LogClass
-
-    public void dump(System.Object o)
-    {
-        ObjDump.Dump(o);
-    }
-
-    public void dump(UnityEngine.Object o)
-    {
-        ObjDump.Dump(o);
-    }
 }

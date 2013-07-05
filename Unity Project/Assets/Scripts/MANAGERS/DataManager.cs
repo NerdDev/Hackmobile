@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using XML;
 using System.IO;
+
 
 public class DataManager : MonoBehaviour
 {
@@ -17,6 +17,10 @@ public class DataManager : MonoBehaviour
     public Dictionary<string, string> strings = new Dictionary<string, string>();
     #endregion
 
+    #region Titles
+    ProfessionTitles playerProfessions = new ProfessionTitles();
+    #endregion
+
     void Start ()
     {
         //Parsing functions here
@@ -24,16 +28,22 @@ public class DataManager : MonoBehaviour
         parsing.Add("npcs", parseNPCs);
         parsing.Add("materials", parseMaterials);
         parsing.Add("strings", parseStrings);
+        parsing.Add("titles", parseTitles);
 
         string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
         foreach (string file in files)
         {
-            XMLReader xreader = new XMLReader(file);
-            parseXML(xreader);
-            xreader = null; //lets GC collect up.
+            buildXML(file);
         }
 
-        BigBoss.NPCManager.Log();
+        //BigBoss.NPCManager.Log();
+    }
+
+    private void buildXML(string file)
+    {
+        XMLReader xreader = new XMLReader(file);
+        parseXML(xreader);
+        xreader = null; //lets GC collect up.
     }
 
     #region XML Parsing methods.
@@ -102,6 +112,11 @@ public class DataManager : MonoBehaviour
                 strings.Add(key, m.SelectString("text"));
             }
         }
+    }
+
+    void parseTitles(XMLNode x)
+    {
+        playerProfessions.parseXML(x);
     }
     #endregion
 }

@@ -16,11 +16,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
   m_Layers:
-  - serializedVersion: 3
+  - serializedVersion: 2
     m_Name: Base Layer
     m_Type: 0
     m_StateMachine: {fileID: 110700000}
-    m_Mask: {fileID: 0}
+    m_HumanMask: {fileID: 0}
+    m_SkeletonMask: {fileID: 0}
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
     m_StateMachineMotionSetIndex: 0
@@ -34,17 +35,12 @@ BlendTree:
   m_Childs:
   - m_Motion: {fileID: 7400004, guid: 041ea62ae1abd974ba748ed5a8dc72cc, type: 3}
     m_Threshold: 0
-    m_Position: {x: 0, y: 0}
     m_TimeScale: 1
-    m_CycleOffset: 0
     m_IsAnim: 1
-    m_Mirror: 0
   m_BlendEvent: Speed
-  m_BlendEventY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
-  m_BlendType: 0
 --- !u!1101 &110100000
 Transition:
   m_ObjectHideFlags: 3
@@ -88,13 +84,11 @@ State:
   m_PrefabInternal: {fileID: 0}
   m_Name: Idle
   m_Speed: 1
-  m_CycleOffset: 0
   m_Motions:
   - {fileID: 7400002, guid: 041ea62ae1abd974ba748ed5a8dc72cc, type: 3}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: 156, y: 72, z: 0}
   m_IKOnFeet: 1
-  m_Mirror: 0
   m_Tag: 
 --- !u!1102 &110271147
 State:
@@ -103,13 +97,11 @@ State:
   m_PrefabInternal: {fileID: 0}
   m_Name: Locomotion
   m_Speed: 1
-  m_CycleOffset: 0
   m_Motions:
   - {fileID: 20600000}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: 312, y: -12, z: 0}
   m_IKOnFeet: 1
-  m_Mirror: 0
   m_Tag: 
 --- !u!1107 &110700000
 StateMachine:

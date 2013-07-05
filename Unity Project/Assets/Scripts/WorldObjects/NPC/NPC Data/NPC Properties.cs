@@ -4,7 +4,7 @@ public enum NPCProperties : long
 {
     //store the NPC's properties here
     //ex:
-    NONE,
+    NONE, 
     LEVITATION,
     FLYING,
     TELEPATHY,

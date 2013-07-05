@@ -1,7 +1,7 @@
 ﻿using System;
 using XML;
 
-public class NPCStats
+public class AttributesData
 {
     //store stat data here
     private int strength;
@@ -75,4 +75,14 @@ public class NPCStats
         this.Difficulty = x.SelectInt("difficulty");
         this.Size = x.SelectEnum<Size>("size");
     }
+}
+
+public enum Attributes
+{
+    Strength,
+    Dexterity,
+    Constitution,
+    Intelligence,
+    Wisdom,
+    Charisma
 }

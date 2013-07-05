@@ -53,8 +53,21 @@ public class NPCManager : MonoBehaviour {
             filter.Add("Camera");
             filter.Add("Rigidbody");
             filter.Add("GameObject");
+            filter.Add("Light");
+            filter.Add("Animation");
+            filter.Add("ConstantForce");
+            filter.Add("Renderer");
+            filter.Add("AudioSource");
+            filter.Add("GUIText");
+            filter.Add("NetworkView");
+            filter.Add("GUIElement");
+            filter.Add("GUITexture");
+            filter.Add("HingeJoint");
+            filter.Add("Collider");
+            filter.Add("ParticleEmitter");
+            filter.Add("ParticleSystem");
 
-            string s = System.ObjectDumper2.Dump(n, filter);
+            string s = System.ObjDump.Dump(n, filter);
             Debug.Log(s);
             DebugManager.printHeader(DebugManager.Logs.NPCs, "NPC: " + n.Name);
             DebugManager.w(DebugManager.Logs.NPCs, s);
