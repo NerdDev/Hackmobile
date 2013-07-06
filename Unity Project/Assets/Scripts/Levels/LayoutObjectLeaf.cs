@@ -6,9 +6,18 @@ public class LayoutObjectLeaf : LayoutObject {
 
     protected GridArray grids;
 
-    public LayoutObjectLeaf(int width, int height) : base()
+    protected LayoutObjectLeaf() : base()
     {
-        grids = new GridArray(width, height);
+    }
+
+    public LayoutObjectLeaf(int width, int height)
+        : this(new GridArray(width, height))
+    {
+    }
+
+    public LayoutObjectLeaf(GridArray arr) : this()
+    {
+        grids = arr;
     }
 
     #region GetSet

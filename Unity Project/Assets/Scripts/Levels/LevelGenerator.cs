@@ -406,9 +406,10 @@ public class LevelGenerator
             if (path.isValid())
             {
                 path.Simplify();
-                grids.PutAll(path.GetArray());
-                path.shift(bounds.xMin, bounds.yMin);
                 path.ConnectEnds(layout);
+                path.Finalize();
+                path.shift(bounds.xMin, bounds.yMin);
+                grids.PutAll(path.GetArray());
                 layout.AddPath(path);
             }
             #region DEBUG

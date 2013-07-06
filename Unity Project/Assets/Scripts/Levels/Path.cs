@@ -2,20 +2,24 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Path : LayoutObject {
+public class Path : LayoutObjectLeaf {
 	
-	List<Value2D<GridType>> list;
+	List<Value2D<GridType>> _list;
 
     public Path(IEnumerable<Value2D<GridType>> stack)
         : base()
 	{
-        list = new List<Value2D<GridType>>(stack);
+        _list = new List<Value2D<GridType>>(stack);
 	}
 
     protected override Bounding GetBoundingInternal()
     {
+        if (grids != null)
+        {
+            return base.GetBoundingInternal();
+        }
         Bounding ret = new Bounding();
-        foreach (Value2D<GridType> val in list)
+        foreach (Value2D<GridType> val in _list)
         {
             ret.absorb(val);
         }
@@ -27,15 +31,25 @@ public class Path : LayoutObject {
         return GetArray(false);
     }
 
+    public void Finalize()
+    {
+        grids = GetArray(false);
+        _list = null;
+    }
+
     public GridArray GetArray(bool ending)
     {
+        if (grids != null)
+        {
+            return grids;
+        }
         Bounding bounds = GetBoundingInternal();
         GridArray ret = new GridArray(bounds, false);
-        if (list.Count > 0)
+        if (_list.Count > 0)
         {
             Value2D<GridType> backwardPt = null;
             Value2D<GridType> curPoint = null;
-            foreach (Value2D<GridType> forwardPt in list)
+            foreach (Value2D<GridType> forwardPt in _list)
             {
                 if (curPoint != null)
                 {
@@ -114,7 +128,7 @@ public class Path : LayoutObject {
         #endregion
         Bounding bounds = GetBounding();
         Array2D<int> indexes = new Array2D<int>(bounds, false);
-        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(list);
+        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
@@ -135,13 +149,13 @@ public class Path : LayoutObject {
                 int fromIndex = neighbor.val + 1;
                 int count = index - neighbor.val - 1;
                 // Set indices to 0
-                List<Value2D<GridType>> toRemove = list.GetRange(fromIndex, count);
+                List<Value2D<GridType>> toRemove = _list.GetRange(fromIndex, count);
                 foreach (Value2D<GridType> r in toRemove)
                 {
                     indexes[r.x, r.y] = 0;
                 }
                 // Remove
-                list.RemoveRange(fromIndex, count);
+                _list.RemoveRange(fromIndex, count);
                 // Set next index to proper number
                 index = neighbor.val + 1;
                 #region DEBUG
@@ -165,19 +179,7 @@ public class Path : LayoutObject {
 
     public override bool isValid()
     {
-        return list.Count > 0;
-    }
-
-    public override bool ContainsPoint(Value2D<GridType> val)
-    {
-        foreach (Value2D<GridType> pt in list)
-        {
-            if (pt.x == val.x && pt.y == val.y)
-            {
-                return true;
-            }
-        }
-        return false;
+        return _list.Count > 0;
     }
 
     public void ConnectEnds(LevelLayout layout)
@@ -188,8 +190,8 @@ public class Path : LayoutObject {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connect Ends");
         }
         #endregion
-        layout.FindAndConnect(this, list[0]);
-        layout.FindAndConnect(this, list[list.Count - 1]);
+        layout.FindAndConnect(this, _list[0]);
+        layout.FindAndConnect(this, _list[_list.Count - 1]);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
