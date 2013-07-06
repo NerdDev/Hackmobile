@@ -51,9 +51,9 @@ public class LevelLayout : LayoutObjectContainer {
             yield return path;
         }
     }
-	
-	public override string ToString ()
-	{
-		 return "LevelLayout";
-	}
+
+    public override String GetTypeString()
+    {
+        return "Level Layout";
+    }
 }

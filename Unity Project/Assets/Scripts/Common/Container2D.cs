@@ -40,7 +40,7 @@ abstract public class Container2D<T> {
     protected abstract T Get(int x, int y);
     public bool Contains(Value2D<T> val)
     {
-        return Get(val.x, val.y) != null;
+        return !Get(val.x, val.y).Equals(default(T));
     }
     public abstract bool InRange(int x, int y);
     protected virtual void Put(T val, int x, int y)

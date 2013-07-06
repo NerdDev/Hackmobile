@@ -109,4 +109,9 @@ public class LayoutObjectLeaf : LayoutObject {
     {
         return grids.Contains(val);
     }
+
+    public override String GetTypeString()
+    {
+        return "Layout Object Leaf";
+    }
 }

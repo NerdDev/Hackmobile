@@ -12,21 +12,6 @@ public class Path : LayoutObject {
         list = new List<Value2D<GridType>>(stack);
 	}
 
-    public Path(IEnumerable<Value2D<GridType>> stack, LayoutObjectContainer layout, Value2D<GridType> startPoint)
-        : this(stack)
-    {
-        AddConnected(layout, startPoint);
-        ConnectEnding(layout);
-    }
-
-    public void ConnectEnding(LayoutObjectContainer layout)
-    {
-        if (isValid())
-        {
-            AddConnected(layout, list[0]);
-        }
-    }
-
     protected override Bounding GetBoundingInternal()
     {
         Bounding ret = new Bounding();
@@ -116,12 +101,17 @@ public class Path : LayoutObject {
 
     public void Simplify()
     {
-		#region DEBUG
-		if (DebugManager.logging(DebugManager.Logs.LevelGen))
-		{
-			DebugManager.printHeader(DebugManager.Logs.LevelGen, "Simplify");	
-		}
-		#endregion
+        Prune();
+    }
+
+    void Prune()
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Prune");
+        }
+        #endregion
         Bounding bounds = GetBounding();
         Array2D<int> indexes = new Array2D<int>(bounds, false);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(list);
@@ -129,21 +119,21 @@ public class Path : LayoutObject {
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
             SurroundingInt surround = SurroundingInt.Get(indexes, val.x, val.y);
-            Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);		
-			#region DEBUG
-			if (DebugManager.logging(DebugManager.Logs.LevelGen))
-			{
-				DebugManager.w (DebugManager.Logs.LevelGen, "Evaluating " + val);
-				if (neighbor != null)
-				{
-					DebugManager.w (DebugManager.Logs.LevelGen, "Found Neighbor " + neighbor);
-				}
-			}
-			#endregion
+            Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, "Evaluating " + val);
+                if (neighbor != null)
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "Found Neighbor " + neighbor);
+                }
+            }
+            #endregion
             if (neighbor != null)
             { // If point of interest exists, prune	
-				int fromIndex = neighbor.val + 1;
-				int count = index - neighbor.val - 1;
+                int fromIndex = neighbor.val + 1;
+                int count = index - neighbor.val - 1;
                 // Set indices to 0
                 List<Value2D<GridType>> toRemove = list.GetRange(fromIndex, count);
                 foreach (Value2D<GridType> r in toRemove)
@@ -154,23 +144,23 @@ public class Path : LayoutObject {
                 list.RemoveRange(fromIndex, count);
                 // Set next index to proper number
                 index = neighbor.val + 1;
-				#region DEBUG
-				if (DebugManager.logging(DebugManager.Logs.LevelGen))
-				{
-					DebugManager.w (DebugManager.Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count); 
-					ToLog(DebugManager.Logs.LevelGen);
-				}
-				#endregion
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count);
+                    ToLog(DebugManager.Logs.LevelGen);
+                }
+                #endregion
             }
             indexes[val.x, val.y] = index;
             index++;
         }
-		#region DEBUG
-		if (DebugManager.logging(DebugManager.Logs.LevelGen))
-		{
-			DebugManager.printFooter(DebugManager.Logs.LevelGen);	
-		}
-		#endregion
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
 
     public override bool isValid()
@@ -181,5 +171,28 @@ public class Path : LayoutObject {
     public override bool Contains(Value2D<GridType> val)
     {
         return list.Contains(val);
+    }
+
+    public void ConnectEnds(LevelLayout layout)
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connect Ends");
+        }
+        #endregion
+        layout.FindAndConnect(this, list[0]);
+        layout.FindAndConnect(this, list[list.Count - 1]);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+    }
+
+    public override string GetTypeString()
+    {
+        return "Path";
     }
 }

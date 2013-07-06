@@ -6,7 +6,7 @@ using System.Collections.Generic;
 abstract public class LayoutObject {
 
     protected Point ShiftP = new Point();
-    readonly List<LayoutObject> _connectedTo = new List<LayoutObject>();
+    readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
     private static int _nextId = 0;
     public int Id { get; protected set; }
 
@@ -34,6 +34,11 @@ abstract public class LayoutObject {
 		Point centerRhs = rhsBounds.getCenter();
         ShiftP.x = rhs.ShiftP.x + (centerRhs.x - center.x);
         ShiftP.y = rhs.ShiftP.y + (centerRhs.y - center.y);
+    }
+
+    public Value2D<GridType> Shift(Value2D<GridType> val)
+    {
+        return new Value2D<GridType>(val.x + ShiftP.x, val.y + ShiftP.y, val.val);
     }
 	
 	public Point GetShift()
@@ -212,18 +217,22 @@ abstract public class LayoutObject {
         return arrOut;
     }
 
-    public void AddConnected(LayoutObject obj)
+    public void Connect(LayoutObject obj)
     {
         if (obj != null && isValid() && obj.isValid())
         {
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, "Connecting " + ToString() + " to " + obj.ToString());
+            }
             _connectedTo.Add(obj);
             obj._connectedTo.Add(this);
         }
     }
 
-    public void AddConnected(LayoutObjectContainer layout, Value2D<GridType> pt)
+    public void Connect(LayoutObjectContainer layout, Value2D<GridType> pt)
     {
-        AddConnected(layout.GetObjAt(pt));
+        Connect(layout.GetObjAt(pt));
     }
 
     abstract public bool Contains(Value2D<GridType> val);
@@ -235,17 +244,46 @@ abstract public class LayoutObject {
         ConnectedToRecursive(connected, bounds);
     }
 
+    public List<LayoutObject> ConnectedToAll()
+    {
+        var connected = new List<LayoutObject>();
+        ConnectedToRecursive(connected, null);
+        return connected;
+    }
+
     void ConnectedToRecursive(List<LayoutObject> list, Bounding bounds)
     {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connected To Recursive: " + this);
+            DebugManager.w(DebugManager.Logs.LevelGen, "Connected to:");
+            foreach (var connected in _connectedTo)
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, 1, connected.ToString());
+            }
+        }
+        #endregion
         foreach (var connected in _connectedTo)
         {
             if (!list.Contains(connected))
             {
+
                 list.Add(connected);
-                bounds.absorb(connected.GetBounding());
-                ConnectedToRecursive(list, bounds);
+                DebugManager.w(DebugManager.Logs.LevelGen, "Added " + connected);
+                if (bounds != null)
+                {
+                    bounds.absorb(connected.GetBounding());
+                }
+                connected.ConnectedToRecursive(list, bounds);
             }
         }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
 
     public virtual bool isValid()
@@ -255,16 +293,29 @@ abstract public class LayoutObject {
 
     public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
     {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connected To");
+        }
+        #endregion
+        failObj = null;
+        var connected = ConnectedToAll();
         foreach (var obj in roomsToConnect)
         {
-            if (!ConnectedTo(obj))
+            if (!connected.Contains(obj))
             {
                 failObj = obj;
-                return false;
+                break;
             }
         }
-        failObj = null;
-        return true;
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+        return failObj == null;
     }
 
     public bool ConnectedTo(LayoutObject obj)
@@ -332,8 +383,10 @@ abstract public class LayoutObject {
 
     #region Printing
     public override string ToString() {
-		return "Layout Object";
+		return GetTypeString() + " " + Id;
 	}
+
+    public abstract String GetTypeString();
 	
     protected string printContent()
     {

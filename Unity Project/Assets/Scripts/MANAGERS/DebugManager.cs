@@ -37,7 +37,8 @@ public class DebugManager : MonoBehaviour
         GlobalLogging,
         LineNumbers,
         SearchSteps,
-        Probability
+        Probability,
+        LevelGen_Path_Simplify_Prune
     }
 
     static Flags flags = new Flags(DebugFlag.GlobalLogging);
@@ -67,8 +68,10 @@ public class DebugManager : MonoBehaviour
 		// Set Logging to be on
 		logging (Logs.Main, true);
 		logging (Logs.LevelGenMain, true);
-		logging (Logs.LevelGen, true);
+        logging(Logs.LevelGen, true);
         flags[DebugFlag.SearchSteps] = false;
+        flags[DebugFlag.LevelGen_Path_Simplify_Prune] = false;
+	    DebugManager.logging(DebugManager.Logs.LevelGen, false);
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))

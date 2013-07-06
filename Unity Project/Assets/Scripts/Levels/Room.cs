@@ -68,10 +68,10 @@ public class Room : LayoutObjectLeaf {
         return ret;
     }
 
-	public override string ToString()
-	{
-		return "Room " + Id;
-	}
+    public override String GetTypeString()
+    {
+        return "Room";
+    }
 
     protected override Bounding GetBoundingInternal()
     {

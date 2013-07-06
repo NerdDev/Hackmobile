@@ -110,7 +110,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        //ConfirmConnection(layout);
+        ConfirmConnection(layout);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
@@ -392,9 +392,7 @@ public class LevelGenerator
                                                     GridType.Path_LB,
                                                     GridType.Path_LT,
                                                     GridType.Path_RB,
-                                                    GridType.Path_RT),
-                                                    layout, 
-                                                    door);
+                                                    GridType.Path_RT));
             #region DEBUG
 
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -405,11 +403,12 @@ public class LevelGenerator
             }
 
             #endregion
-            path.Simplify();
             if (path.isValid())
             {
+                path.Simplify();
                 grids.PutAll(path.GetArray());
                 path.shift(bounds.xMin, bounds.yMin);
+                path.ConnectEnds(layout);
                 layout.AddPath(path);
             }
             #region DEBUG
@@ -466,7 +465,7 @@ public class LevelGenerator
                     fail.ToLog(DebugManager.Logs.LevelGen, "Failed to connect to");
                 }
                 #endregion
-                MakeConnection(layout, layoutObj, fail);
+//                MakeConnection(layout, layoutObj, fail);
             }
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
