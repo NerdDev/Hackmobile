@@ -31,6 +31,19 @@ namespace XML
             }
         }
 
+        static public float StringToFloat(string toParse)
+        {
+            float temp;
+            if (float.TryParse(toParse, out temp))
+            {
+                return temp;
+            }
+            else
+            {
+                throw new ArgumentException("String cannot be parsed to double!");
+            }
+        }
+
         static public bool StringToBool(string toParse)
         {
             bool temp;

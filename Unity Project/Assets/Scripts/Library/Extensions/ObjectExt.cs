@@ -20,6 +20,11 @@ namespace System
         {
             return typeof(T);
         }
+
+        public static bool IsNotAFreaking<T>(this object obj)
+        {
+            return !(obj is T);
+        }
     }
 
     public class ObjDump

@@ -1,6 +1,6 @@
 ﻿using System;
 
-public enum NPCRole
+public enum Role
 {
     //NPC roles go here
     NONE,

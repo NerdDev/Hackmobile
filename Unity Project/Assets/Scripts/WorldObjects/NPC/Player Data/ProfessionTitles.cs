@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using XML;
 
-class ProfessionTitles
+public class ProfessionTitles
 {
     Titles[] titles = new Titles[(int) PlayerProfessions.LAST];
 
@@ -15,10 +15,6 @@ class ProfessionTitles
             Titles t = titles[(int)prof];
 
             t.parseXML(xnode);
-            foreach (XMLNode xmlNode in x.get())
-            {
-                
-            }
         }
     }
 
@@ -35,7 +31,7 @@ class ProfessionTitles
         {
             foreach (XMLNode xmlNode in x.get())
             {
-                titles.Add(new Title(x.SelectInt("level"), x.SelectString("playertitle")));
+                titles.Add(new Title(xmlNode.SelectInt("level"), xmlNode.SelectString("playertitle")));
             }
             titles.Reverse();
         }

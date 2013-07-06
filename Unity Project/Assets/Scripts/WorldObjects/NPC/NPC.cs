@@ -24,7 +24,7 @@ using XML;
  *  
  * See equipment and equipped items for an example.
  */
-public class NPC : WorldObject, PassesTurns
+public class NPC : WorldObject
 {
     #region BIGBOSSMANAGEMENT
     // Use this for initialization
@@ -49,6 +49,7 @@ public class NPC : WorldObject, PassesTurns
 
     //TODO:
     //  -- Refactor all public access to get/set functions? (annoying with unity, can't modify then).
+    //  -- Refine the NPC's movement functions?
 
     #region Base NPC Properties
     //Local variables
@@ -60,32 +61,27 @@ public class NPC : WorldObject, PassesTurns
     //Converted from base properties upon creation of instance.
     public Dictionary<Item, int> inventory = null;
     List<Item> equippedItems = null;
-    NPCEquipment equipment = null;
+    Equipment equipment = null;
     #endregion
 
     #region Generic NPC Properties
     //Properties stored here.
-    public GenericFlags<NPCProperties> properties = new GenericFlags<NPCProperties>();
+    public GenericFlags<Properties> properties = new GenericFlags<Properties>();
     //When accessing, use the long value of NPC Properties.
-    protected NPCEffect[] effects = new NPCEffect[(long)NPCProperties.LAST];
+    protected NPCEffect[] effects = new NPCEffect[(long)Properties.LAST];
 
     //All sets of flags
     GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
 
     //Enums
-    public NPCRace race;
-    public NPCRole role;
+    public Race race;
+    public Role role;
 
     //Separate classes
     public AttributesData attributes = new AttributesData();
-    public NPCBodyParts bodyparts = new NPCBodyParts();
-    public NPCStats stats = new NPCStats();
+    public BodyParts bodyparts = new BodyParts();
+    public Stats stats = new Stats();
     
-    #endregion
-
-    #region Misc Properties for storage
-    int encumbranceLevel = 0;
-    int XPForNextLevel = 0;
     #endregion
 
     public NPC()
@@ -96,16 +92,20 @@ public class NPC : WorldObject, PassesTurns
     public virtual int AdjustHunger(int amount)
     {
         stats.Hunger += amount;
+        getHungerLevel(stats.Hunger);
         return stats.Hunger;
     }
 
     public virtual void AddLevel()
     {
         stats.Level++;
+        //do level up stuff here
+        calcStats();
     }
 
     public virtual void AdjustHealth(int amount)
     {
+        Debug.Log("Adjusting Health: " + amount);
         if (stats.CurrentHealth + amount > stats.MaxHealth)
         {
             stats.CurrentHealth = stats.MaxHealth;
@@ -121,88 +121,109 @@ public class NPC : WorldObject, PassesTurns
         stats.MaxHealth += amount;
     }
 
-    public virtual void AdjustXP(int amount)
+    public virtual void AdjustXP(float amount)
     {
-        stats.XP += amount;
-        BigBoss.Gooey.UpdateXPBar();
+        stats.CurrentXP += amount;
+        if (stats.CurrentXP > stats.XPToNextLevel)
+        {
+            AddLevel();
+        }
     }
 
     public virtual void AdjustAttribute(Attributes attr, int amount)
     {
-        switch (attr)
-        {
-            case Attributes.Charisma:
-                {
-                    attributes.Charisma += amount;
-                    break;
-                }
-            case Attributes.Constitution:
-                {
-                    attributes.Constitution += amount;
-                    break;
-                }
-            case Attributes.Dexterity:
-                {
-                    attributes.Dexterity += amount;
-                    break;
-                }
-            case Attributes.Intelligence:
-                {
-                    attributes.Intelligence += amount;
-                    break;
-                }
-            case Attributes.Strength:
-                {
-                    attributes.Strength += amount;
-                    break;
-                }
-            case Attributes.Wisdom:
-                {
-                    attributes.Wisdom += amount;
-                    break;
-                }
-            default:
-                break;
-        }
+        attributes.set(attr, attributes.get(attr) + amount);
+        calcStats();
     }
     #endregion
 
     #region Stat Calculations
-    int calculateEncumbrance()
+    //Use this for a re-calc on level up or any attribute changes.
+    void calcStats()
     {
-        //calculate encumbrance from stats here
-        return 400;
+        stats.MaxEncumbrance = getMaxInventoryWeight();
+        stats.XPToNextLevel = calcXPForNextLevel();
     }
 
-    int calcXPForNextLevel()
+    float calcXPForNextLevel()
     {
         //do calc here
-        return 10;
+        return (100 + ((Mathf.Pow(stats.Level, 3f) / 2)));
+    }
+
+    protected void getHungerLevel(int hunger)
+    {
+        HungerLevel prior = stats.HungerLevel;
+        Color col = Color.white;
+
+        if (hunger < 50)
+        {
+            stats.HungerLevel = HungerLevel.Faint;
+            col = Color.red;
+            BigBoss.Gooey.UpdateHungerText(col);
+        }
+        else if (hunger < 130)
+        {
+            stats.HungerLevel = HungerLevel.Starving;
+            col = Color.yellow;
+            BigBoss.Gooey.UpdateHungerText(col);
+        }
+        else if (hunger < 500)
+        {
+            stats.HungerLevel = HungerLevel.Hungry;
+            col = Color.yellow;
+            BigBoss.Gooey.UpdateHungerText(col);
+        }
+        else if (hunger < 800)
+        {
+            stats.HungerLevel = HungerLevel.Satiated;
+            col = Color.blue;
+            BigBoss.Gooey.UpdateHungerText(col);
+        }
+        else if (hunger < 1000)
+        {
+            stats.HungerLevel = HungerLevel.Stuffed;
+            col = Color.yellow;
+            BigBoss.Gooey.UpdateHungerText(col);
+        }
+
+        if (prior != stats.HungerLevel)
+        {
+            UpdateHungerLevel(col);
+        }
+    }
+
+    protected void UpdateHungerLevel(Color guiCol)
+    {
+        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
     }
     #endregion
 
     #region Movement
+
     public bool moveNPC(Vector3 location)
     {
         this.gameObject.transform.localPosition = location;
         return true;
     }
+
     #endregion
 
     #region Effects
     /**
      * Does nothing if the NONE property is applied.
      */
-    public void applyEffect(NPCProperties e, int priority, bool isItem)
+    public virtual void applyEffect(Properties e, int priority, bool isItem)
     {
-        if (e != NPCProperties.NONE)
+        Debug.Log("Applying Effect: " + e);
+        if (e != Properties.NONE)
         {
             if (effects[(long)e] == null)
             {
                 NPCEffect eff = new NPCEffect(e, this);
-                if (this.properties[NPCProperties.NONE])
+                if (this.properties[Properties.NONE])
                 {
-                    this.properties[NPCProperties.NONE] = false;
+                    this.properties[Properties.NONE] = false;
                 }
 
                 effects[(long)e] = eff;
@@ -214,12 +235,15 @@ public class NPC : WorldObject, PassesTurns
                 effects[(long)e].apply(priority, isItem);
             }
         }
+        if (this.IsNotAFreaking<PlayerManager>()) {
+            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Poisoned!", Color.green);
+        }
     }
 
     /**
      * This entirely removes the effect from the NPC. If applied again later, it'll create a new one.
      */
-    public void removeEffect(NPCProperties e)
+    public void removeEffect(Properties e)
     {
         if (effects[(long)e] != null)
         {
@@ -272,11 +296,13 @@ public class NPC : WorldObject, PassesTurns
         {
             inventory.Add(item, count);
         }
+        stats.Encumbrance += item.Weight * count;
     }
 
     public void removeFromInventory(Item item)
     {
         removeFromInventory(item, 1);
+
     }
 
     public void removeFromInventory(Item item, int count)
@@ -291,11 +317,31 @@ public class NPC : WorldObject, PassesTurns
             {
                 inventory[item] -= count;
             }
+            stats.Encumbrance -= item.Weight * count;
         }
         else
         {
             //do nothing, the item isn't there
         }
+    }
+
+    public float getCurrentInventoryWeight()
+    {
+        float tempWeight = 0;
+        foreach (KeyValuePair<Item, int> kvp in inventory)
+        {
+            tempWeight += kvp.Key.Weight * kvp.Value;
+        }
+
+        return tempWeight;
+    }
+
+    public float getMaxInventoryWeight()//Should only be calc'd when weight changes or attribute on player is affected
+    {
+        float invWeightMax;
+        //Add formula here
+        invWeightMax = (25 * (attributes.Strength + attributes.Constitution) + 50);
+        return invWeightMax;
     }
     #endregion
 
@@ -312,6 +358,7 @@ public class NPC : WorldObject, PassesTurns
     #endregion
 
     #region NPC Management for instances
+    //These are probably incomplete at this point, I haven't updated them consistently.
     public void setData(string npcName)
     {
         this.setData(BigBoss.NPCManager.getNPC(npcName));
@@ -335,7 +382,8 @@ public class NPC : WorldObject, PassesTurns
         inventory = new Dictionary<Item, int>();
         //TODO: needs conversion from baseInventory into actual inventory
         equippedItems = new List<Item>();
-        equipment = new NPCEquipment(this.bodyparts);
+        equipment = new Equipment(this.bodyparts);
+        stats.MaxEncumbrance = getMaxInventoryWeight();
     }
 
     public override void setNull()
@@ -348,8 +396,8 @@ public class NPC : WorldObject, PassesTurns
             this.equipment.setNull();
         }  
         this.flags.setNull();
-        this.race = NPCRace.NONE;
-        this.role = NPCRole.NONE;
+        this.race = Race.NONE;
+        this.role = Role.NONE;
         for (int i = 0; i < effects.Length; i++)
         {
             effects[i] = null;
@@ -362,14 +410,14 @@ public class NPC : WorldObject, PassesTurns
         //name is handled in DataManager so we get the GameObject name
         base.parseXML(x);
 
-        this.role = x.SelectEnum<NPCRole>("role");
-        this.race = x.SelectEnum<NPCRace>("race");
+        this.role = x.SelectEnum<Role>("role");
+        this.race = x.SelectEnum<Race>("race");
 
         //property parsing
         List<XMLNode> xprops = x.select("properties").selectList("property");
         foreach (XMLNode xnode in xprops)
         {
-            NPCProperties np = Nifty.StringToEnum<NPCProperties>(xnode.SelectString("name"));
+            Properties np = Nifty.StringToEnum<Properties>(xnode.SelectString("name"));
             NPCEffect eff = new NPCEffect(np, this);
             eff.apply(xnode.SelectInt("val"), false);
             this.effects[(long) np] = new NPCEffect(np, this);
@@ -404,35 +452,35 @@ public class NPC : WorldObject, PassesTurns
 
     #region Turn Management
 
-    private int basePoints;
-    private int currentPoints;
+    private int npcPoints = 0;
+    private int baseNPCPoints = 60;
 
-    public void UpdateTurn()
+    public override void UpdateTurn()
     {
-        //this does nothing right now!
+        AdjustHunger(-1);
     }
 
-    public int CurrentPoints
+    public override int CurrentPoints
     {
         get
         {
-            return currentPoints;
+            return this.npcPoints;
         }
         set
         {
-            currentPoints = value;
+            this.npcPoints = value;
         }
     }
 
-    public int BasePoints
+    public override int BasePoints
     {
         get
         {
-            return basePoints;
+            return this.baseNPCPoints;
         }
         set
         {
-            basePoints = value;
+            this.baseNPCPoints = value;
         }
     }
     #endregion

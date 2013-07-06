@@ -53,6 +53,52 @@ public class AttributesData
         set { this.size = value; }
     }
 
+    public int get(Attributes a) 
+    {
+        switch (a)
+        {
+            case Attributes.Charisma:
+                return Charisma;
+            case Attributes.Constitution:
+                return Constitution;
+            case Attributes.Dexterity:
+                return Dexterity;
+            case Attributes.Intelligence:
+                return Intelligence;
+            case Attributes.Strength:
+                return Strength;
+            case Attributes.Wisdom:
+                return Wisdom;
+        }
+        return 0;
+    }
+
+    public bool set(Attributes a, int val)
+    {
+        switch (a)
+        {
+            case Attributes.Charisma:
+                Charisma = val;
+                return true;
+            case Attributes.Constitution:
+                Constitution = val;
+                return true;
+            case Attributes.Dexterity:
+                Dexterity = val;
+                return true;
+            case Attributes.Intelligence:
+                Intelligence = val;
+                return true;
+            case Attributes.Strength:
+                Strength = val;
+                return true;
+            case Attributes.Wisdom:
+                Wisdom = val;
+                return true;
+        }
+        return false;
+    }
+
     public void setNull() {
         this.Strength = 0;
         this.Charisma = 0;

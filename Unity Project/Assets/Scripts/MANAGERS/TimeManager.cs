@@ -147,10 +147,12 @@ public class TimeManager : MonoBehaviour {
 
     public void runUpdate<T>(T obj, int turnPoints) where T : PassesTurns
     {
+        //Debug.Log("Updating turn for: " + obj.ToString());
         obj.CurrentPoints += turnPoints;
         if (obj.CurrentPoints  >= obj.BasePoints) //this will prevent AI processing from doing all the small actions constantly
         {
             obj.UpdateTurn();
+            obj.CurrentPoints -= obj.BasePoints;
         }
     }
     #endregion

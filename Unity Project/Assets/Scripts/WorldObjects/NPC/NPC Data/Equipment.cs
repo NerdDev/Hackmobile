@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class NPCEquipment
+public class Equipment
 {
     List<EquipSlot>[] equipSlots = new List<EquipSlot>[(int)EquipTypes.LAST];
 
-    public NPCEquipment(NPCBodyParts bp)
+    public Equipment(BodyParts bp)
     {
         equipSlots.Initialize();
         equipSlots[(int)EquipTypes.BODY].Add(new EquipSlot());

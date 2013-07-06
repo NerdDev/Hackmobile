@@ -754,7 +754,7 @@ MonoBehaviour:
   m_Name: 
   textPopPrefab: {fileID: 100000, guid: 094522a56aa9f15458163733f6fe29b3, type: 2}
   introSplashObject: {fileID: 0}
-  enemy1: {fileID: 0}
+  enemy1: {fileID: 100000, guid: 2e773be3c69e0ef49b8ae5ee2b644fbd, type: 2}
   potion: {fileID: 100000, guid: 793a04a2099408a4182fc26997dc9e57, type: 2}
   sword1: {fileID: 0}
   sword2: {fileID: 0}
@@ -6989,6 +6989,10 @@ Prefab:
       propertyPath: tileMovementTolerance
       value: .949999988
       objectReference: {fileID: 0}
+    - target: {fileID: 11400020, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: enemy1
+      value: 
+      objectReference: {fileID: 100000, guid: 2e773be3c69e0ef49b8ae5ee2b644fbd, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
   m_RootGameObject: {fileID: 91}

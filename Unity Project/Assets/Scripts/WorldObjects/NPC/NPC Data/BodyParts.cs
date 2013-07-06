@@ -1,7 +1,7 @@
 ﻿using System;
 using XML;
 
-public class NPCBodyParts
+public class BodyParts
 {
     private int arms;
     public int Arms { get { return arms; } set { this.arms = value; } }
@@ -10,7 +10,7 @@ public class NPCBodyParts
     private int heads;
     public int Heads { get { return heads; } set { this.heads = value; } }
 
-    public void setData(NPCBodyParts nbp)
+    public void setData(BodyParts nbp)
     {
         this.Arms = nbp.Arms;
         this.Legs = nbp.Legs;

@@ -18,7 +18,7 @@ public class DataManager : MonoBehaviour
     #endregion
 
     #region Titles
-    ProfessionTitles playerProfessions = new ProfessionTitles();
+    public ProfessionTitles playerProfessions = new ProfessionTitles();
     #endregion
 
     void Start ()

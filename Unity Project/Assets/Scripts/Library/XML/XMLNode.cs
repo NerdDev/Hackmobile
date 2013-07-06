@@ -183,6 +183,11 @@ namespace XML
             return XMLNifty.StringToDouble(this.select(toParse).getText());
         }
 
+        public float SelectFloat(string toParse)
+        {
+            return XMLNifty.StringToFloat(this.select(toParse).getText());
+        }
+
         public T SelectEnum<T>(string toParse)
         {
             return (T)Enum.Parse(typeof(T), this.select(toParse).getText(), true);

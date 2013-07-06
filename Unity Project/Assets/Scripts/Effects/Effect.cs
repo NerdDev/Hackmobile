@@ -9,6 +9,12 @@ public class Effect : PassesTurns
     {
         eff = 0;
         itemEff = 0;
+        BigBoss.TimeKeeper.RegisterToUpdateList(this);
+    }
+
+    ~Effect()
+    {
+        BigBoss.TimeKeeper.RemoveFromUpdateList(this);
     }
 
     public Effect(bool on)
@@ -68,8 +74,8 @@ public class Effect : PassesTurns
     //These are to determine how often an effect is triggered. This could
     // - easily be used to have an effect be triggered every 5 turns, every 10,
     // - or however often we want.
-    private int basePoints;
-    private int currentPoints;
+    private int basePoints = 60;
+    private int currentPoints = 0;
 
     public virtual void UpdateTurn()
     {

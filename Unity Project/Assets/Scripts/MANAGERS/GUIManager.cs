@@ -183,14 +183,14 @@ public class GUIManager : MonoBehaviour {
 	
 	public void UpdateHungerText(Color theCol)
 	{
-		hungerLabel.text = BigBoss.PlayerInfo.CurrentHungerLevel.ToString();
+		hungerLabel.text = BigBoss.PlayerInfo.stats.HungerLevel.ToString();
 		hungerLabel.color = theCol;
 	}
 	
 	public void UpdateXPBar()
 	{
-		HUDxpbar.sliderValue = (float)BigBoss.PlayerInfo.stats.XP/1000f;
-		HUD2XPLabel.text = BigBoss.PlayerInfo.stats.XP + " / 1000";
+		HUDxpbar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentXP/1000f;
+		HUD2XPLabel.text = BigBoss.PlayerInfo.stats.CurrentXP + " / 1000";
 	}
 	
 	public void UpdateTilesCrossedLabel()

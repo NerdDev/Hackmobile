@@ -1,6 +1,6 @@
 ﻿using System;
 
-public enum NPCRace
+public enum Race
 {
     //races go here
     NONE,

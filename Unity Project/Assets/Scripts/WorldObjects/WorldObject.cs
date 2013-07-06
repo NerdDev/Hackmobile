@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using XML;
 
-public class WorldObject : MonoBehaviour
+public class WorldObject : MonoBehaviour, PassesTurns
 {
 
     #region Generic Object Properties (graphical info, names, etc).
@@ -53,5 +53,41 @@ public class WorldObject : MonoBehaviour
         this.ModelTexture = "";
         this.Name = "null";
     }
+    #endregion
+
+    #region Time Management
+
+    int turnPoints = 0;
+    int basePoints = 60;
+
+    public virtual void UpdateTurn()
+    {
+        //do nothing atm
+    }
+
+    public virtual int CurrentPoints
+    {
+        get
+        {
+            return this.turnPoints;
+        }
+        set
+        {
+            this.turnPoints = value;
+        }
+    }
+
+    public virtual int BasePoints
+    {
+        get
+        {
+            return this.basePoints;
+        }
+        set
+        {
+            this.basePoints = value;
+        }
+    }
+
     #endregion
 }

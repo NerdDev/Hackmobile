@@ -56,7 +56,7 @@ public class Item : WorldObject, PassesTurns
             this.size = value;
         }
     }
-    public double Weight
+    public float Weight
     {
         get
         {
@@ -90,6 +90,11 @@ public class Item : WorldObject, PassesTurns
 
     //separate classes
     public ItemStats stats = new ItemStats();
+
+    //effects
+    protected Effect onEaten;
+    protected Effect onEquip;
+    protected Effect onUse;
 
     #endregion
 
@@ -155,35 +160,35 @@ public class Item : WorldObject, PassesTurns
     #region Turn Management
 
     //If there's anything that needs updated... let it go here.
-    private int currentPoints;
-    private int basePoints;
+    private int itemPoints = 0;
+    private int baseItemPoints = 60;
 
-    public void UpdateTurn()
+    public override void UpdateTurn()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
-    public int CurrentPoints
+    public override int CurrentPoints
     {
         get
         {
-            return currentPoints;
+            return this.itemPoints;
         }
         set
         {
-            currentPoints = value;
+            this.itemPoints = value;
         }
     }
 
-    public int BasePoints
+    public override int BasePoints
     {
         get
         {
-            return basePoints;
+            return this.baseItemPoints;
         }
         set
         {
-            basePoints = value;
+            this.baseItemPoints = value;
         }
     }
     #endregion

@@ -1,6 +1,6 @@
 ﻿using System;
 
-public enum NPCProperties : long
+public enum Properties : long
 {
     //store the NPC's properties here
     //ex:

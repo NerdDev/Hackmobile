@@ -2,10 +2,10 @@
 
 public class NPCEffect : Effect
 {
-    protected NPCProperties refEnum; //the enum this effect is linked with
+    protected Properties refEnum; //the enum this effect is linked with
     protected NPC baseNPC; //the NPC the effect links to, simply a reference
 
-    public NPCEffect(NPCProperties e, NPC n)
+    public NPCEffect(Properties e, NPC n)
     {
         baseNPC = n;
         refEnum = e;
@@ -30,7 +30,7 @@ public class NPCEffect : Effect
     {
         switch (refEnum)
         {
-            case NPCProperties.POISONED:
+            case Properties.POISONED:
                 updatePoison();
                 break;
             default:
@@ -39,6 +39,26 @@ public class NPCEffect : Effect
     }
 
     void updatePoison() {
-        //do poison update here
+        switch (eff)
+        {
+            case 1:
+                baseNPC.AdjustHealth(-2);
+                break;
+            case 2:
+                baseNPC.AdjustHealth(-4);
+                break;
+            case 3:
+                baseNPC.AdjustHealth(-6);
+                break;
+            case 4:
+                baseNPC.AdjustHealth(-8);
+                break;
+            case 5:
+                baseNPC.AdjustHealth(-10);
+                break;
+            default:
+                baseNPC.AdjustHealth(-10);
+                break;
+        }
     }
 }
