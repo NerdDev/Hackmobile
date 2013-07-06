@@ -39,17 +39,17 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
         int width = 0;
         int height = 0;
-        if (bound.isValid())
+        if (bound.IsValid())
         {
 			if (minimize)
 			{
-	            width = bound.width + 1;
-	            height = bound.height + 1;
+	            width = bound.Width + 1;
+	            height = bound.Height + 1;
 			}
 			else 
 			{
-	            width = bound.xMax + 1;
-	            height = bound.yMax + 1;
+	            width = bound.XMax + 1;
+	            height = bound.YMax + 1;
 			}
         }
         arr = new T[height, width];
@@ -163,10 +163,10 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     public override Bounding GetBounding()
     {
         Bounding ret = new Bounding();
-        ret.xMin = 0;
-        ret.xMax = arr.GetLength(1) - 1;
-        ret.yMin = 0;
-        ret.yMax = arr.GetLength(0) - 1;
+        ret.XMin = 0;
+        ret.XMax = arr.GetLength(1) - 1;
+        ret.YMin = 0;
+        ret.YMax = arr.GetLength(0) - 1;
         return ret;
     }
 

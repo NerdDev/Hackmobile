@@ -30,8 +30,8 @@ abstract public class LayoutObject {
     {
 		Bounding bounds = GetBoundingInternal();
 		Bounding rhsBounds = rhs.GetBoundingInternal();
-		Point center = bounds.getCenter();
-		Point centerRhs = rhsBounds.getCenter();
+		Point center = bounds.GetCenter();
+		Point centerRhs = rhsBounds.GetCenter();
         ShiftP.x = rhs.ShiftP.x + (centerRhs.x - center.x);
         ShiftP.y = rhs.ShiftP.y + (centerRhs.y - center.y);
     }
@@ -91,17 +91,17 @@ abstract public class LayoutObject {
     {
         if (toExternal)
         {
-            bound.xMin += ShiftP.x;
-            bound.xMax += ShiftP.x;
-            bound.yMin += ShiftP.y;
-            bound.yMax += ShiftP.y;
+            bound.XMin += ShiftP.x;
+            bound.XMax += ShiftP.x;
+            bound.YMin += ShiftP.y;
+            bound.YMax += ShiftP.y;
         }
         else
         {
-            bound.xMin -= ShiftP.x;
-            bound.xMax -= ShiftP.x;
-            bound.yMin -= ShiftP.y;
-            bound.yMax -= ShiftP.y;
+            bound.XMin -= ShiftP.x;
+            bound.XMax -= ShiftP.x;
+            bound.YMin -= ShiftP.y;
+            bound.YMax -= ShiftP.y;
         }
     }
 
@@ -119,12 +119,12 @@ abstract public class LayoutObject {
     public virtual GridType[,] GetMinimizedArray(GridArray inArr)
     {
         Bounding bounds = GetBoundingInternal();
-        GridType[,] outArr = new GridType[bounds.height + 1, bounds.width + 1];
-        for (int y = bounds.yMin; y <= bounds.yMax; y++)
+        GridType[,] outArr = new GridType[bounds.Height + 1, bounds.Width + 1];
+        for (int y = bounds.YMin; y <= bounds.YMax; y++)
         {
-            for (int x = bounds.xMin; x <= bounds.xMax; x++)
+            for (int x = bounds.XMin; x <= bounds.XMax; x++)
             {
-                outArr[y - bounds.yMin, x - bounds.xMin] = inArr[x, y];
+                outArr[y - bounds.YMin, x - bounds.XMin] = inArr[x, y];
             }
         }
         return outArr;
@@ -225,7 +225,7 @@ abstract public class LayoutObject {
         GridArray grids = GetArray();
         GridMap ret = new GridMap();
         // Get null spaces surrounding room
-        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), grids, null, GridType.NULL);
+        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), grids, GridType.NULL);
         // Invert to be room
         Array2D<bool>.invert(bfs);
         foreach (Value2D<bool> val in bfs)
@@ -257,16 +257,36 @@ abstract public class LayoutObject {
     }
     #endregion
 
-    public GridArray GetConnectedGrid()
+    public Bounding GetConnectedBounds()
     {
         List<LayoutObject> connected;
         Bounding bounds;
         ConnectedToAll(out connected, out bounds);
-        var arrOut = new GridArray(bounds, false);
+        return bounds;
+    }
+
+    public GridArray GetConnectedGrid()
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Get Connected Grid " + this);
+        }
+        #endregion
+        List<LayoutObject> connected;
+        Bounding bounds;
+        ConnectedToAll(out connected, out bounds);
+        var arrOut = new GridArray(bounds, true);
         foreach (var obj in connected)
         {
-            arrOut.PutAll(obj.GetArray());
+            arrOut.PutAll(obj, bounds);
         }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
         return arrOut;
     }
 
@@ -411,8 +431,12 @@ abstract public class LayoutObject {
     public bool intersects(LayoutObject rhs, int buffer)
     {
         Bounding rhsBound = rhs.GetBounding();
-        rhsBound.expand(buffer);
-        return GetBounding().intersects(rhsBound);
+        if (rhsBound.IsValid())
+        {
+            rhsBound.expand(buffer);
+            return GetBounding().Intersects(rhsBound);
+        }
+        return false;
     }
 
     public bool intersects(List<LayoutObject> list, int buffer)

@@ -56,10 +56,10 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
         int width = 0;
         int height = 0;
-        if (bound.isValid())
+        if (bound.IsValid())
         {
-            width = Mathf.Max(Mathf.Abs(bound.xMin), Mathf.Abs(bound.xMax));
-            height = Mathf.Max(Mathf.Abs(bound.yMin), Mathf.Abs(bound.yMax));
+            width = Mathf.Max(Mathf.Abs(bound.XMin), Mathf.Abs(bound.XMax));
+            height = Mathf.Max(Mathf.Abs(bound.YMin), Mathf.Abs(bound.YMax));
         }
         arr = new T[height * 2 + 1, width * 2 + 1];
         xShift = width;
@@ -239,10 +239,10 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     public override Bounding GetBounding()
     {
         Bounding ret = new Bounding();
-        ret.xMin = -xShift;
-        ret.xMax = arr.GetLength(1) - xShift;
-        ret.yMin = -yShift;
-        ret.yMax = arr.GetLength(0) - yShift;
+        ret.XMin = -xShift;
+        ret.XMax = arr.GetLength(1) - xShift;
+        ret.YMin = -yShift;
+        ret.YMax = arr.GetLength(0) - yShift;
         return ret;
     }
 

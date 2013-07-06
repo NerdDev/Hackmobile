@@ -53,8 +53,8 @@ public class GridArray : Array2D<GridType> {
 	public void PutAll(LayoutObject obj, Bounding origBound)
 	{
 		Point shift = obj.GetShift();
-		shift.x -= origBound.xMin;
-		shift.y -= origBound.yMin;
+		shift.x -= origBound.XMin;
+		shift.y -= origBound.YMin;
 		base.PutAll (obj.GetArray(), shift);	
 	}
 	
@@ -85,10 +85,10 @@ public class GridArray : Array2D<GridType> {
         GridType[,] array = GetArr();
 		Bounding bounds = GetBounding();
         List<string> ret = new List<string>();
-        for (int y = bounds.yMax; y >= bounds.yMin; y -= 1)
+        for (int y = bounds.YMax; y >= bounds.YMin; y -= 1)
         {
             string rowStr = "";
-            for (int x = bounds.xMin; x <= bounds.xMax; x += 1)
+            for (int x = bounds.XMin; x <= bounds.XMax; x += 1)
             {
                 rowStr += LayoutObject.getAscii(array[y, x]);
             }

@@ -36,7 +36,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 		Bounding bound = new Bounding();
 		foreach (LayoutObject obj in this){
 			Bounding objBound = obj.GetBounding();
-			if (objBound.isValid())
+			if (objBound.IsValid())
 			{
 				bound.absorb(objBound);
 			}

@@ -221,12 +221,12 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     public override T[,] GetArr()
     {
         Bounding bounds = GetBounding();
-        T[,] arr = new T[bounds.height + 1, bounds.width + 1];
+        T[,] arr = new T[bounds.Height + 1, bounds.Width + 1];
         foreach (KeyValuePair<int, SortedDictionary<int, T>> row in multimap)
         {
             foreach (KeyValuePair<int, T> val in row.Value)
             {
-                arr[row.Key - bounds.yMin, val.Key - bounds.xMin] = val.Value;
+                arr[row.Key - bounds.YMin, val.Key - bounds.XMin] = val.Value;
             }
         }
 		return arr;

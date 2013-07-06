@@ -264,6 +264,10 @@ public class LevelGenerator
         placedRooms.Add(new Room()); // Seed empty center room to start positioning from.
         foreach (Room room in rooms)
         {
+            if (room.Id == 4)
+            {
+                int wer = 23;
+            }
             layout.AddRoom(room);
             // Find room it will start from
             int roomNum = Rand.Next(placedRooms.Count);
@@ -406,7 +410,7 @@ public class LevelGenerator
             if (path.isValid())
             {
                 path.Simplify();
-                path.shift(bounds.xMin, bounds.yMin);
+                path.shift(bounds.XMin, bounds.YMin);
                 path.ConnectEnds(layout);
                 path.Bake();
                 grids.PutAll(path.GetArray());
@@ -463,10 +467,10 @@ public class LevelGenerator
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
                 {
-                    fail.ToLog(DebugManager.Logs.LevelGen, "Failed to connect to");
+                    fail.ToLog(DebugManager.Logs.LevelGen, layoutObj + " failed to connect to:");
                 }
                 #endregion
-//                MakeConnection(layout, layoutObj, fail);
+                MakeConnection(layout, layoutObj, fail);
             }
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -488,16 +492,14 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Make Connection");
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Make Connection - " + obj1 + " AND " + obj2);
         }
         #endregion
-        var connected1 = obj1.GetConnectedGrid();
-        var connected2 = obj2.GetConnectedGrid();
+        var connectedBounds1 = obj1.GetConnectedBounds();
+        var connectedBounds2 = obj2.GetConnectedBounds();
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            connected1.ToLog(DebugManager.Logs.LevelGen);
-            connected2.ToLog(DebugManager.Logs.LevelGen);
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
@@ -603,9 +605,19 @@ public class LevelGenerator
         return pathTaken;
     }
 
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    {
+        return BreadthFirstFill(startPoint, grids, null, targets);
+    }
+
     public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, params GridType[] targets)
     {
         return BreadthFirstFill(startPoint, grids, pass, new HashSet<GridType>(targets));
+    }
+
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    {
+        return BreadthFirstFill(startPoint, grids, null, targets);
     }
 
     public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, HashSet<GridType> targets)

@@ -4,53 +4,60 @@ using System;
 
 public class Bounding {
 
-    public int xMin { get; set; }
-    public int xMax { get; set; }
-    public int yMin { get; set; }
-    public int yMax { get; set; }
-	public int width {
-		get { return xMax - xMin; }
+    public int XMin { get; set; }
+    public int XMax { get; set; }
+    public int YMin { get; set; }
+    public int YMax { get; set; }
+	public int Width {
+		get { return XMax - XMin; }
 	}
-	public int height {
-		get { return yMax - yMin; }
+	public int Height {
+		get { return YMax - YMin; }
 	}
-	public int area {
-		get { return width * height; }
+	public int Area {
+		get { return Width * Height; }
 	}
 
     #region Ctors
     public Bounding()
     {
-        xMin = Int32.MaxValue;
-        xMax = Int32.MinValue;
-        yMin = Int32.MaxValue;
-        yMax = Int32.MinValue;
+        XMin = Int32.MaxValue;
+        XMax = Int32.MinValue;
+        YMin = Int32.MaxValue;
+        YMax = Int32.MinValue;
     }
 
     public Bounding(int xl, int xr, int yb, int yt)
     {
-        xMin = xl;
-        xMax = xr;
-        yMin = yb;
-        yMax = yt;
+        XMin = xl;
+        XMax = xr;
+        YMin = yb;
+        YMax = yt;
+    }
+
+    public Bounding(Point leftdownOrigin, int width, int height)
+        : this (leftdownOrigin.x, leftdownOrigin.x + width, 
+        leftdownOrigin.y, leftdownOrigin.y + height)
+    {
+        
     }
 
     public Bounding(Bounding rhs)
-        : this(rhs.xMin, rhs.xMax, rhs.yMin, rhs.yMax)
+        : this(rhs.XMin, rhs.XMax, rhs.YMin, rhs.YMax)
     {
     }
     #endregion Ctors
 
-    public bool isValid()
+    public bool IsValid()
     {
-        return xMin != Int32.MaxValue
-            && yMin != Int32.MaxValue;
+        return XMin != Int32.MaxValue
+            && YMin != Int32.MaxValue;
     }
 	
-	public Point getCenter()
+	public Point GetCenter()
 	{
-		if (isValid())
-			return new Point(xMin + width / 2, yMin + height / 2);
+		if (IsValid())
+			return new Point(XMin + Width / 2, YMin + Height / 2);
 		else
 			return new Point();
 	}
@@ -69,47 +76,89 @@ public class Bounding {
 	
 	public void absorb(Bounding rhs)	
 	{
-		absorb(rhs.xMin, rhs.yMin);
-		absorb(rhs.xMax, rhs.yMax);
+		absorb(rhs.XMin, rhs.YMin);
+		absorb(rhs.XMax, rhs.YMax);
 	}
 
     public void absorbX(int x)
     {
-        if (xMin > x)
+        if (XMin > x)
         {
-            xMin = x;
+            XMin = x;
         }
-        if (xMax < x)
+        if (XMax < x)
         {
-            xMax = x;
+            XMax = x;
         }
     }
 
     public void absorbY(int y)
     {
-        if (yMin > y)
+        if (YMin > y)
         {
-            yMin = y;
+            YMin = y;
         }
-        if (yMax < y)
+        if (YMax < y)
         {
-            yMax = y;
+            YMax = y;
         }
     }
     #endregion Absorbs
 
     #region Intersects
-    public void boundingDimensions(Bounding rhs, out int width, out int height)
+    public void IntersectingDimensions(Bounding rhs, out int width, out int height)
     {
-        width = System.Math.Min(xMax - rhs.xMin, rhs.xMax - xMin) + 1;
-        height = System.Math.Min(yMax - rhs.yMin, rhs.yMax - yMin) + 1;
+        if (IsValid() && rhs.IsValid())
+        {
+            IntersectingWidth(rhs, out width);
+            IntersectingHeight(rhs, out height);
+        }
+        else
+        {
+            width = 0;
+            height = 0;
+        }
     }
 
-    public int intersectArea(Bounding rhs)
+    // Returns the min number, and whether thisNum was the min.
+    public bool GetMinDim(int thisNum, int rhsNum, out int result)
+    {
+        int thisAbs = Math.Abs(thisNum) + 1;
+        int rhsAbs = Math.Abs(rhsNum) + 1;
+        if (thisAbs < rhsAbs)
+        {
+            result = thisAbs;
+            if (Math.Sign(thisNum) < 0)
+            {
+                result = -result;
+            }
+            return true;
+        }
+        result = rhsAbs;
+        if (Math.Sign(rhsNum) < 0)
+        {
+            result = -result;
+        }
+        return false;
+    }
+
+    // Gets the minimum intersection width, and leftmost point
+    public int IntersectingWidth(Bounding rhs, out int width)
+    {
+        return GetMinDim(rhs.XMax - XMin, XMax - rhs.XMin, out width) ? XMin : rhs.XMin;
+    }
+
+    // Gets the minimum intersection width, and downmost point
+    public int IntersectingHeight(Bounding rhs, out int height)
+    {
+        return GetMinDim(rhs.YMax - YMin, YMax - rhs.YMin, out height) ? YMin : rhs.YMin;
+    }
+
+    public int IntersectArea(Bounding rhs)
     {
         int width;
         int height;
-        boundingDimensions(rhs, out width, out height);
+        IntersectingDimensions(rhs, out width, out height);
 
         // If either x or y intersect is negative, there's no intersection
 		if (width > 0 && height > 0)
@@ -119,36 +168,53 @@ public class Bounding {
 		return 0;
     }
 
-    public bool intersects(Bounding rhs)
+    public bool Intersects(Bounding rhs)
     {
-        return intersectArea(rhs) > 0;
+        return IntersectArea(rhs) > 0;
     }
 
     // Returns bounding box of area, but positioning is on the origin
-    public Bounding intersectBoundRelative(Bounding rhs)
+    public Bounding IntersectBoundRelative(Bounding rhs)
     {
         Bounding ret = new Bounding();
         int width;
         int height;
-        boundingDimensions(rhs, out width, out height);
-        ret.xMax = width;
-        ret.yMax = height;
+        IntersectingDimensions(rhs, out width, out height);
+        ret.XMax = width;
+        ret.YMax = height;
         return ret;
+    }
+
+    // Returns bounding box of intersecting area
+    public Bounding IntersectBounds(Bounding rhs)
+    {
+        int width, height;
+        int leftmost = IntersectingWidth(rhs, out width);
+        int downmost = IntersectingHeight(rhs, out height);
+        Bounding ret = new Bounding(new Point(leftmost, downmost), width, height);
+        return ret;
+    }
+
+    // Gets center point of intersecting bounds
+    public Point GetCenterPoint(Bounding rhs)
+    {
+        Bounding intersection = IntersectBounds(rhs);
+        return intersection.GetCenter();
     }
     #endregion Intersects
 
     public void expand(int amount)
     {
-        xMax += amount;
-        yMax += amount;
-        xMin -= amount;
-        yMin -= amount;
+        XMax += amount;
+        YMax += amount;
+        XMin -= amount;
+        YMin -= amount;
     }
 
     #region Printing
     public override string ToString()
     {
-        return "(" + xMin + "," + yMin + ") (" + xMax + "," + yMax + ")";
+        return "(" + XMin + "," + YMin + ") (" + XMax + "," + YMax + ")";
     }
     #endregion Printing
 }
