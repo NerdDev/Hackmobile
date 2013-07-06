@@ -16,7 +16,7 @@ public class Path : LayoutObjectLeaf {
     {
         if (grids != null)
         {
-            return base.GetBoundingInternal();
+            return grids.GetBoundingInternal();
         }
         Bounding ret = new Bounding();
         foreach (Value2D<GridType> val in _list)
@@ -31,7 +31,7 @@ public class Path : LayoutObjectLeaf {
         return GetArray(false);
     }
 
-    public void Finalize()
+    public void Bake()
     {
         grids = GetArray(false);
         _list = null;
@@ -108,11 +108,6 @@ public class Path : LayoutObjectLeaf {
         return ret;
     }
 
-    public override GridArray GetPrintArray()
-    {
-        return GetArray(true);
-    }
-
     public void Simplify()
     {
         Prune();
@@ -179,7 +174,7 @@ public class Path : LayoutObjectLeaf {
 
     public override bool isValid()
     {
-        return _list.Count > 0;
+        return grids != null || (_list != null && _list.Count > 0);
     }
 
     public void ConnectEnds(LevelLayout layout)

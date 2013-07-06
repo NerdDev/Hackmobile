@@ -270,7 +270,6 @@ abstract public class LayoutObject {
             {
 
                 list.Add(connected);
-                DebugManager.w(DebugManager.Logs.LevelGen, "Added " + connected);
                 if (bounds != null)
                 {
                     bounds.absorb(connected.GetBounding());
