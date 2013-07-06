@@ -178,12 +178,29 @@ abstract public class LayoutObject {
         return ret;
     }
 
-    public GridMap getCorneredBy(GridType target, params GridType[] by)
+    public GridMap GetTouchingNull(GridType target)
     {
-        return getCorneredBy(target, new HashSet<GridType>(by));
+        GridMap ret = new GridMap();
+        GridArray grids = GetArray();
+        GridMap targets = getType(grids, target);
+        foreach (Value2D<GridType> val in targets)
+        {
+            Surrounding<GridType> surround = Surrounding<GridType>.Get(grids, val, null);
+            Value2D<GridType> nullDir = surround.GetDirWithVal(GridType.NULL);
+            if (nullDir != null)
+            {
+                ret[val] = val.val;
+            }
+        }
+        return ret;
     }
 
-    public GridMap getCorneredBy(GridType target, HashSet<GridType> by)
+    public GridMap GetCorneredBy(GridType target, params GridType[] by)
+    {
+        return GetCorneredBy(target, new HashSet<GridType>(by));
+    }
+
+    public GridMap GetCorneredBy(GridType target, HashSet<GridType> by)
     {
         GridMap ret = new GridMap();
         GridArray grids = GetArray();
@@ -201,6 +218,42 @@ abstract public class LayoutObject {
             }
         }
         return ret;
+    }
+
+    public GridMap GetBfsPerimeter()
+    {
+        GridArray grids = GetArray();
+        GridMap ret = new GridMap();
+        // Get null spaces surrounding room
+        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), grids, null, GridType.NULL);
+        // Invert to be room
+        Array2D<bool>.invert(bfs);
+        foreach (Value2D<bool> val in bfs)
+        {
+            // If space part of room
+            if (val.val)
+            {
+                Surrounding<bool> surround = Surrounding<bool>.Get(bfs.GetArr(), val);
+                // If space is an edge (next to a false)
+                if (surround.GetDirWithVal(false) != null)
+                {
+                    ret[val.x, val.y] = grids[val.x, val.y];
+                }
+            }
+        }
+        return ret;
+    }
+
+    public Value2D<GridType> ScanForFirst(GridType type)
+    {
+        foreach (Value2D<GridType> val in GetArray())
+        {
+            if (val.val == type)
+            {
+                return val;
+            }
+        }
+        return null;
     }
     #endregion
 

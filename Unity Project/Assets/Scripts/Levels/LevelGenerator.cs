@@ -523,7 +523,7 @@ public class LevelGenerator
         GridType[,] arr = grids.GetArr();
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
         Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBoundingInternal(), false);
-        DFSFilter filter = new DFSFilter(blockedPoints, targets);
+        FilterDFS filter = new FilterDFS(blockedPoints, targets);
         #region DEBUG
         GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
         #endregion
@@ -603,12 +603,12 @@ public class LevelGenerator
         return pathTaken;
     }
 
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, params GridType[] targets)
     {
-        return BreadthFirstFill(startPoint, grids, new HashSet<GridType>(targets));
+        return BreadthFirstFill(startPoint, grids, pass, new HashSet<GridType>(targets));
     }
 
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, HashSet<GridType> targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -628,7 +628,7 @@ public class LevelGenerator
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
-            Surrounding<GridType> options = Surrounding<GridType>.Get(targetArr, curPoint.x, curPoint.y);
+            Surrounding<GridType> options = Surrounding<GridType>.Get(targetArr, curPoint.x, curPoint.y, pass);
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {

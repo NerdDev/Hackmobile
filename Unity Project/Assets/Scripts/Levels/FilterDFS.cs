@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DFSFilter : PassFilter<Value2D<GridType>>
+public class FilterDFS : PassFilter<Value2D<GridType>>
 {
     Array2D<bool> blocked;
     HashSet<GridType> targets;
 
-    public DFSFilter(Array2D<bool> blocked, HashSet<GridType> targets)
+    public FilterDFS(Array2D<bool> blocked, HashSet<GridType> targets)
     {
         this.blocked = blocked;
         this.targets = targets;
