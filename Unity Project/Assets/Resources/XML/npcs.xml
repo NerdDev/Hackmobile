@@ -1,9 +1,17 @@
 <npcs>
 	<npc name="newt">
+		<model>armor/shield2/shield2</model>
+		<modeltexture>armor/shield2/mat_shield2_1</modeltexture>
 		<role>creature</role>
 		<race>reptile</race>
-		<flags>nopoly, leaves_corpse</flags>
-		<properties>infravision</properties>
+		<flags>
+			<flag name="nopoly" />
+			<flag name="leaves_corpse" />
+		</flags>
+		<properties>
+			<property name="infravision" val="2" />
+			<property name="fire_res" val="3" />
+		</properties>
 		<stats>
 			<charisma>3</charisma>
 			<constitution>5</constitution>
@@ -11,12 +19,12 @@
 			<dexterity>9</dexterity>
 			<intelligence>3</intelligence>
 			<strength>4</strength>
+			<difficulty>1</difficulty>
+			<size>small</size>
 		</stats>
-		<model>weapons/axe2/axe2</model>
-		<modeltexture>weapons/axe2/mat_axe2_1</modeltexture>
 		<inventory>
 			<item>
-				<name>axe2</name>
+				<itemname>axe2</itemname>
 				<chance>100</chance>
 				<number>1</number>
 			</item>

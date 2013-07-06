@@ -40,7 +40,7 @@ public class DebugManager : MonoBehaviour
         Probability
     }
 
-    static Flags flags = new Flags(DebugFlag.GlobalLogging);
+    static GenericFlags<DebugFlag> flags = new GenericFlags<DebugFlag>();
 
     // Log storage
     static Log[] logs;
@@ -63,11 +63,14 @@ public class DebugManager : MonoBehaviour
         putName(Logs.LevelGen, "LevelGenTmp");
         putPath(Logs.LevelGenMain, "LevelGen/");
         putName(Logs.LevelGenMain, "Level Gen Main");
+        putPath(Logs.NPCs, "NPCs/");
+        putName(Logs.NPCs, "NPCs");
 		
 		// Set Logging to be on
 		logging (Logs.Main, true);
 		logging (Logs.LevelGenMain, true);
 		logging (Logs.LevelGen, true);
+		logging(Logs.NPCs, true);
         flags[DebugFlag.SearchSteps] = false;
 
         // Test output
@@ -350,4 +353,14 @@ public class DebugManager : MonoBehaviour
         }
     }
     #endregion LogClass
+
+    public void dump(System.Object o)
+    {
+        ObjDump.Dump(o);
+    }
+
+    public void dump(UnityEngine.Object o)
+    {
+        ObjDump.Dump(o);
+    }
 }

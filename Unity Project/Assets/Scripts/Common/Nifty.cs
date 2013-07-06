@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
 public class Nifty
 {
@@ -40,30 +42,39 @@ public class Nifty
         }
     }
 
-    static public int StringToInt(string toParse)
+    /**
+     * Grabs a set of random values off a dictionary.
+     * 
+     * Usage: List<V> values = (List<V>) RandomValues(someDictionary).Take(someNumberOfElements);
+     * K = key, V = value.
+     */
+    public static IEnumerable<V> RandomValues<K, V>(IDictionary<K, V> dict)
     {
-        int temp; 
-        if (int.TryParse(toParse, out temp)) 
+        System.Random rand = new System.Random();
+        List<V> values = Enumerable.ToList(dict.Values);
+        int size = dict.Count;
+        while (true)
         {
-            return temp;
-        }
-        else 
-        {
-            throw new ArgumentException("String cannot be parsed to integer!");
+            yield return values[rand.Next(size)];
         }
     }
 
-    static public bool StringToBool(string toParse)
+    /**
+     * Grabs one random value off of a dictionary.
+     * 
+     * Usage: V value = (V) RandomValue(someDictionary);
+     * K = key, V = value.
+     */
+    public static V RandomValue<K, V>(IDictionary<K, V> dict)
     {
-        bool temp;
-        if (bool.TryParse(toParse, out temp))
-        {
-            return temp;
-        }
-        else
-        {
-            throw new ArgumentException("String cannot be parsed to boolean!");
-        }
+        System.Random rand = new System.Random();
+        List<V> values = Enumerable.ToList(dict.Values);
+        return values[rand.Next(dict.Count)];
+    }
+
+    public static T StringToEnum<T>(string toParse)
+    {
+        return (T)Enum.Parse(typeof(T), toParse, true);
     }
 }
 

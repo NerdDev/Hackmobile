@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System .Collections.Generic;
+using System.Linq;
+using System;
 
 
 public class ItemMaster : MonoBehaviour {
@@ -15,6 +17,7 @@ public class ItemMaster : MonoBehaviour {
     Item nullItem { get; set; }
 
     Dictionary<string, Item> baseItems = new Dictionary<string, Item>();
+    Dictionary<string, List<Item>> itemCategories = new Dictionary<string, List<Item>>();
     Dictionary<string, MaterialType> materials = new Dictionary<string, MaterialType>();
 		
 	// Use this for initialization
@@ -82,6 +85,11 @@ public class ItemMaster : MonoBehaviour {
         return baseItems;
     }
 
+    public Dictionary<string, List<Item>> getCategories()
+    {
+        return itemCategories;
+    }
+
     public Dictionary<string, MaterialType> getMaterials()
     {
         return materials;
@@ -89,15 +97,20 @@ public class ItemMaster : MonoBehaviour {
 
     public Item CreateItem(Vector3 location, string itemName)
 	{
-        GameObject go = new GameObject();
+        GameObject go = new GameObject(itemName);
 		go.transform.position = location;
         Item item = go.AddComponent<Item>();
         item.setData(itemName);
         MeshFilter mf = go.AddComponent<MeshFilter>();
         mf.mesh = (Resources.Load(item.Model) as GameObject).GetComponent<MeshFilter>().mesh;
         MeshRenderer mr = go.AddComponent<MeshRenderer>();
-        Debug.Log(item.ModelTexture);
         mr.material = Resources.Load(item.ModelTexture) as Material;
 		return item;
 	}
+
+    public Item CreateRandomItem(Vector3 location)
+    {
+        Item i = (Item) Nifty.RandomValue(baseItems);
+        return CreateItem(location, i.Name);
+    }
 }

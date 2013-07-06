@@ -21,18 +21,19 @@ public class ItemStats
         get { return nutrition; }
         set { this.nutrition = value; }
     }
+    private Size size;
+    public Size Size
+    {
+        get { return size; }
+        set { this.size = value; }
+    }
 
     public void parseXML(XMLNode x)
     {
-        this.Weight = Nifty.StringToInt(x.select("weight").getText());
-        this.Cost = Nifty.StringToInt(x.select("cost").getText());
-    }
-
-    public void setData(ItemStats istats)
-    {
-        this.Cost = istats.Cost;
-        this.Weight = istats.Weight;
-        this.nutrition = istats.nutrition;
+        this.Weight = x.SelectInt("weight");
+        this.Cost = x.SelectInt("cost");
+        this.Nutrition = x.SelectInt("nutrition");
+        this.Size = x.SelectEnum<Size>("equipsize");
     }
 
     public void setNull()
@@ -40,5 +41,6 @@ public class ItemStats
         this.Cost = 0;
         this.Weight = 0;
         this.nutrition = 0;
+        this.Size = Size.NONE;
     }
 }

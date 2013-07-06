@@ -67,7 +67,7 @@ public class InputManager : MonoBehaviour {
 				if (Input.GetKeyDown(KeyCode.X))
 		{
 			Vector3 place = new Vector3(15f,.5f,18);
-			BigBoss.NPCManager.CreateNPC(place,"newt");
+			BigBoss.ItemMaster.CreateRandomItem(place);
 			Debug.Log("X");
 		}
 //		if (Input.GetKey(KeyCode.W))

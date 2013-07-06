@@ -1,32 +1,14 @@
 <materials>
-	<material name="stone">
-		<oxidizes>false</oxidizes>
-		<hardness>50</hardness>
-		<burns>false</burns>
-	</material>
 	<material name="steel">
 		<oxidizes>false</oxidizes>
 		<hardness>150</hardness>
 		<burns>false</burns>
-	</material>
-	<material name="glass">
-		<oxidizes>true</oxidizes>
-		<hardness>15</hardness>
-		<burns>false</burns>
-	</material>
-	<material name="iron">
-		<oxidizes>true</oxidizes>
-		<hardness>100</hardness>
-		<burns>false</burns>
-	</material>
-	<material name="copper">
-		<oxidizes>true</oxidizes>
-		<hardness>75</hardness>
-		<burns>false</burns>
-	</material>
-	<material name="wood">
-		<oxidizes>true</oxidizes>
-		<hardness>25</hardness>
-		<burns>true</burns>
+		<!--This way is parsed exactly the same as the second.
+		<density min="7.75" max="8.05"></density> -->
+		<density>
+			<min>7.75</min>
+			<max>8.05</max>
+		</density>
+		<meltingpoint>1370</meltingpoint>
 	</material>
 </materials>

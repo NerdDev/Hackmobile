@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using XML;
 
-public class WorldObject : UniqueObject
+public class WorldObject : MonoBehaviour, PassesTurns
 {
 
     #region Generic Object Properties (graphical info, names, etc).
@@ -29,25 +30,64 @@ public class WorldObject : UniqueObject
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-
-    }
 
     #region Data Management for Instances
-    public void setData(WorldObject wo)
+    public virtual void setData(WorldObject wo)
     {
         this.Model = wo.Model;
         this.ModelTexture = wo.ModelTexture;
         this.Name = wo.Name;
     }
 
+    public virtual void parseXML(XMLNode x)
+    {
+        //name is handled in DataManager so we get the GameObject name
+        this.Model = x.SelectString("model");
+        this.ModelTexture = x.SelectString("modeltexture");
+    }
+
     public virtual void setNull()
     {
+        //these should be set to some type of model that we can tell shouldn't be ingame
         this.Model = "";
         this.ModelTexture = "";
         this.Name = "null";
     }
+    #endregion
+
+    #region Time Management
+
+    int turnPoints = 0;
+    int basePoints = 60;
+
+    public virtual void UpdateTurn()
+    {
+        //do nothing atm
+    }
+
+    public virtual int CurrentPoints
+    {
+        get
+        {
+            return this.turnPoints;
+        }
+        set
+        {
+            this.turnPoints = value;
+        }
+    }
+
+    public virtual int BasePoints
+    {
+        get
+        {
+            return this.basePoints;
+        }
+        set
+        {
+            this.basePoints = value;
+        }
+    }
+
     #endregion
 }

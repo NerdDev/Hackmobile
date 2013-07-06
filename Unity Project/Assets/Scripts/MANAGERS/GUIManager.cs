@@ -97,7 +97,7 @@ public class GUIManager : MonoBehaviour {
 
 	void Start () 
 	{
-		StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
+		//StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
 	
 //			GrabNGUIReferences();
 		
@@ -177,20 +177,20 @@ public class GUIManager : MonoBehaviour {
 	#region UPDATING OF VARIOUS NGUI ELEMENTS - GENERALLY DRIVEN FROM CODE ELSEWHERE IN THE PROJECT
 	public void UpdateHealthBar()
 	{
-		HUDplayerHealthBar.sliderValue = (float)BigBoss.PlayerInfo.PlayerCurrentHealth/(float)BigBoss.PlayerInfo.PlayerMaxHealth;	
-		HUDHealthBarNumberLabel.text = BigBoss.PlayerInfo.PlayerCurrentHealth + " / " + BigBoss.PlayerInfo.PlayerMaxHealth;
+		HUDplayerHealthBar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentHealth/(float)BigBoss.PlayerInfo.stats.MaxHealth;	
+		HUDHealthBarNumberLabel.text = BigBoss.PlayerInfo.stats.CurrentHealth + " / " + BigBoss.PlayerInfo.stats.MaxHealth;
 	}
 	
 	public void UpdateHungerText(Color theCol)
 	{
-		hungerLabel.text = BigBoss.PlayerInfo.CurrentHungerLevel.ToString();
+		hungerLabel.text = BigBoss.PlayerInfo.stats.HungerLevel.ToString();
 		hungerLabel.color = theCol;
 	}
 	
 	public void UpdateXPBar()
 	{
-		HUDxpbar.sliderValue = (float)BigBoss.PlayerInfo.PlayerCurrentXPForThisLevel/1000f;
-		HUD2XPLabel.text = BigBoss.PlayerInfo.PlayerCurrentXPForThisLevel + " / 1000";
+		HUDxpbar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentXP/1000f;
+		HUD2XPLabel.text = BigBoss.PlayerInfo.stats.CurrentXP + " / 1000";
 	}
 	
 	public void UpdateTilesCrossedLabel()
