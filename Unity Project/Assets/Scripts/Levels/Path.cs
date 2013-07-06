@@ -168,9 +168,16 @@ public class Path : LayoutObject {
         return list.Count > 0;
     }
 
-    public override bool Contains(Value2D<GridType> val)
+    public override bool ContainsPoint(Value2D<GridType> val)
     {
-        return list.Contains(val);
+        foreach (Value2D<GridType> pt in list)
+        {
+            if (pt.x == val.x && pt.y == val.y)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void ConnectEnds(LevelLayout layout)

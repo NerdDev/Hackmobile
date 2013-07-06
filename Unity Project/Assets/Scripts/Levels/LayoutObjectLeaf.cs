@@ -105,9 +105,9 @@ public class LayoutObjectLeaf : LayoutObject {
     }
     #endregion FillMethods
 
-    public override bool Contains(Value2D<GridType> val)
+    public override bool ContainsPoint(Value2D<GridType> val)
     {
-        return grids.Contains(val);
+        return grids.ContainsPoint(val);
     }
 
     public override String GetTypeString()

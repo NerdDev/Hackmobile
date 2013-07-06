@@ -45,7 +45,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 	}
 
 
-    public override bool Contains(Value2D<GridType> val)
+    public override bool ContainsPoint(Value2D<GridType> val)
     {
         return GetObjAt(val) != null;
     }
@@ -71,7 +71,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         #endregion
         foreach (LayoutObject obj in this)
         {
-            if (obj.Contains(val.Unshift(obj.GetShift())))
+            if (obj.ContainsPoint(val.Unshift(obj.GetShift())))
             {
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))

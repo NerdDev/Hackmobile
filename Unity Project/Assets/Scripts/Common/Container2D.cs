@@ -38,7 +38,7 @@ abstract public class Container2D<T> {
         }
     }
     protected abstract T Get(int x, int y);
-    public bool Contains(Value2D<T> val)
+    public bool ContainsPoint(Value2D<T> val)
     {
         return !Get(val.x, val.y).Equals(default(T));
     }

@@ -235,7 +235,7 @@ abstract public class LayoutObject {
         Connect(layout.GetObjAt(pt));
     }
 
-    abstract public bool Contains(Value2D<GridType> val);
+    abstract public bool ContainsPoint(Value2D<GridType> val);
 
     public void ConnectedToAll(out List<LayoutObject> connected, out Bounding bounds)
     {

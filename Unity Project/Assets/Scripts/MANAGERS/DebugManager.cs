@@ -71,7 +71,6 @@ public class DebugManager : MonoBehaviour
         logging(Logs.LevelGen, true);
         flags[DebugFlag.SearchSteps] = false;
         flags[DebugFlag.LevelGen_Path_Simplify_Prune] = false;
-	    DebugManager.logging(DebugManager.Logs.LevelGen, false);
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))
