@@ -337,16 +337,15 @@ abstract public class LayoutObject {
             }
         }
         #endregion
+        list.Add(this);
+        if (bounds != null)
+        {
+            bounds.absorb(GetBounding());
+        }
         foreach (var connected in _connectedTo)
         {
             if (!list.Contains(connected))
             {
-
-                list.Add(connected);
-                if (bounds != null)
-                {
-                    bounds.absorb(connected.GetBounding());
-                }
                 connected.ConnectedToRecursive(list, bounds);
             }
         }

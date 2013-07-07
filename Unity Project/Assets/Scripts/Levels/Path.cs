@@ -174,7 +174,7 @@ public class Path : LayoutObjectLeaf {
 
     public override bool isValid()
     {
-        return grids != null || (_list != null && _list.Count > 0);
+        return grids != null || (_list != null && _list.Count > 2);
     }
 
     public void ConnectEnds(LevelLayout layout)
