@@ -55,7 +55,7 @@ public class Room : LayoutObjectLeaf {
         return "Room";
     }
 
-    protected override Bounding GetBoundingInternal()
+    protected override Bounding GetBoundingUnshifted()
     {
 		return grids.GetBounding();
 	}

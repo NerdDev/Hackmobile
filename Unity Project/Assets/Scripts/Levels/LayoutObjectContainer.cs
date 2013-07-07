@@ -31,7 +31,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         return this.GetEnumerator();
     }
 
-    protected override Bounding GetBoundingInternal()
+    protected override Bounding GetBoundingUnshifted()
 	{
 		Bounding bound = new Bounding();
 		foreach (LayoutObject obj in this){

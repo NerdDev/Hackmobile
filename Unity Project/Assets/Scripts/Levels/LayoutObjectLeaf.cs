@@ -54,9 +54,9 @@ public class LayoutObjectLeaf : LayoutObject {
         return grids;
     }
 
-    protected override Bounding GetBoundingInternal()
+    protected override Bounding GetBoundingUnshifted()
     {
-		return grids.GetBoundingInternal();
+		return grids.GetBounding();
 	}
     #endregion GetSet
 

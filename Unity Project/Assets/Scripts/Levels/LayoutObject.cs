@@ -28,8 +28,8 @@ abstract public class LayoutObject {
 
     public void setShift(LayoutObject rhs)
     {
-		Bounding bounds = GetBoundingInternal();
-		Bounding rhsBounds = rhs.GetBoundingInternal();
+		Bounding bounds = GetBoundingUnshifted();
+		Bounding rhsBounds = rhs.GetBoundingUnshifted();
 		Point center = bounds.GetCenter();
 		Point centerRhs = rhsBounds.GetCenter();
         ShiftP.x = rhs.ShiftP.x + (centerRhs.x - center.x);
@@ -82,7 +82,7 @@ abstract public class LayoutObject {
     #region Bounds
     public Bounding GetBounding()
     {
-        Bounding bound = new Bounding(GetBoundingInternal());
+        Bounding bound = new Bounding(GetBoundingUnshifted());
         adjustBounding(bound, true);
         return bound;
     }
@@ -105,7 +105,7 @@ abstract public class LayoutObject {
         }
     }
 
-    protected abstract Bounding GetBoundingInternal();
+    protected abstract Bounding GetBoundingUnshifted();
     #endregion Bounds
 
     #region GetSet
@@ -118,7 +118,7 @@ abstract public class LayoutObject {
 
     public virtual GridType[,] GetMinimizedArray(GridArray inArr)
     {
-        Bounding bounds = GetBoundingInternal();
+        Bounding bounds = GetBoundingUnshifted();
         GridType[,] outArr = new GridType[bounds.Height + 1, bounds.Width + 1];
         for (int y = bounds.YMin; y <= bounds.YMax; y++)
         {

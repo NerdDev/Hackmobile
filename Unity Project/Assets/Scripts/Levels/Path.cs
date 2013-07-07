@@ -12,11 +12,11 @@ public class Path : LayoutObjectLeaf {
         _list = new List<Value2D<GridType>>(stack);
 	}
 
-    protected override Bounding GetBoundingInternal()
+    protected override Bounding GetBoundingUnshifted()
     {
         if (grids != null)
         {
-            return grids.GetBoundingInternal();
+            return base.GetBoundingUnshifted();
         }
         Bounding ret = new Bounding();
         foreach (Value2D<GridType> val in _list)
@@ -43,7 +43,7 @@ public class Path : LayoutObjectLeaf {
         {
             return grids;
         }
-        Bounding bounds = GetBoundingInternal();
+        Bounding bounds = GetBoundingUnshifted();
         GridArray ret = new GridArray(bounds, false);
         if (_list.Count > 0)
         {
