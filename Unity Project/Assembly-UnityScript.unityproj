@@ -94,6 +94,7 @@
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\TransitionsManager\ReadMe.txt" />
      <None Include="Assets\IMPORT\girl_warrior\animation list.txt" />
+     <None Include="Assets\Resources\XML\strings.xml" />
      <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
      <None Include="Assets\iTweenEditor\README.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
@@ -131,6 +132,7 @@
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\Priest animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2_&amp;_santa_animations.txt" />
+     <None Include="Assets\Resources\XML\titles.xml" />
      <None Include="Assets\ShurikenMagic\Shaders\SM_TransparentRim.shader" />
  <Reference Include="AudioToolkit_FreeVersion">
  <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>

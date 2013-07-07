@@ -43,15 +43,16 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 459
+      y: 127
       width: 213
       height: 150
     inner:
       serializedVersion: 2
       x: 0
-      y: 459
+      y: 127
       width: 213
       height: 150
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .0199999996
@@ -59,16 +60,17 @@ MonoBehaviour:
   - name: HUDPaneTab3
     outer:
       serializedVersion: 2
-      x: 0
-      y: 308
+      x: 262
+      y: 724
       width: 213
       height: 150
     inner:
       serializedVersion: 2
-      x: 0
-      y: 308
+      x: 262
+      y: 724
       width: 213
       height: 150
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .0199999996
@@ -86,6 +88,7 @@ MonoBehaviour:
       y: 875
       width: 542
       height: 149
+    rotated: 0
     paddingLeft: .00369003695
     paddingRight: .00369003695
     paddingTop: .0201342274
@@ -93,16 +96,17 @@ MonoBehaviour:
   - name: HUDPanel_2_PreVis
     outer:
       serializedVersion: 2
-      x: 788
-      y: 945
+      x: 0
+      y: 47
       width: 162
       height: 79
     inner:
       serializedVersion: 2
-      x: 788
-      y: 945
+      x: 0
+      y: 47
       width: 162
       height: 79
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -110,16 +114,17 @@ MonoBehaviour:
   - name: HUDPaneTab4
     outer:
       serializedVersion: 2
-      x: 0
-      y: 157
+      x: 476
+      y: 724
       width: 213
       height: 150
     inner:
       serializedVersion: 2
-      x: 0
-      y: 157
+      x: 476
+      y: 724
       width: 213
       height: 150
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .0199999996
@@ -137,6 +142,7 @@ MonoBehaviour:
       y: 881
       width: 17
       height: 19
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -154,6 +160,7 @@ MonoBehaviour:
       y: 683
       width: 549
       height: 40
+    rotated: 0
     paddingLeft: .0127504552
     paddingRight: .00546448072
     paddingTop: .150000006
@@ -171,6 +178,7 @@ MonoBehaviour:
       y: 901
       width: 69
       height: 28
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .0714285746
@@ -179,15 +187,16 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 6
+      y: 278
       width: 213
       height: 150
     inner:
       serializedVersion: 2
       x: 0
-      y: 6
+      y: 278
       width: 213
       height: 150
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .0199999996
@@ -205,6 +214,7 @@ MonoBehaviour:
       y: 930
       width: 244
       height: 94
+    rotated: 0
     paddingLeft: .0245901644
     paddingRight: .0245901644
     paddingTop: .0212765951
@@ -212,16 +222,17 @@ MonoBehaviour:
   - name: HUDPaneTab1
     outer:
       serializedVersion: 2
-      x: 262
+      x: 690
       y: 724
       width: 213
       height: 150
     inner:
       serializedVersion: 2
-      x: 262
+      x: 690
       y: 724
       width: 213
       height: 150
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: .0199999996
@@ -239,6 +250,7 @@ MonoBehaviour:
       y: 642
       width: 549
       height: 40
+    rotated: 0
     paddingLeft: .0127504552
     paddingRight: .00546448072
     paddingTop: .150000006
@@ -256,6 +268,619 @@ MonoBehaviour:
       y: 610
       width: 261
       height: 264
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: boxNormal
+    outer:
+      serializedVersion: 2
+      x: 262
+      y: 388
+      width: 123
+      height: 126
+    inner:
+      serializedVersion: 2
+      x: 262
+      y: 388
+      width: 123
+      height: 126
+    rotated: 0
+    paddingLeft: .040650405
+    paddingRight: 0
+    paddingTop: .0158730168
+    paddingBottom: 0
+  - name: boxHover
+    outer:
+      serializedVersion: 2
+      x: 788
+      y: 896
+      width: 128
+      height: 128
+    inner:
+      serializedVersion: 2
+      x: 788
+      y: 896
+      width: 128
+      height: 128
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: boxSelect
+    outer:
+      serializedVersion: 2
+      x: 262
+      y: 515
+      width: 123
+      height: 126
+    inner:
+      serializedVersion: 2
+      x: 262
+      y: 515
+      width: 123
+      height: 126
+    rotated: 0
+    paddingLeft: .040650405
+    paddingRight: 0
+    paddingTop: .0158730168
+    paddingBottom: 0
+  - name: Panel_Inventory
+    outer:
+      serializedVersion: 2
+      x: 0
+      y: 429
+      width: 227
+      height: 180
+    inner:
+      serializedVersion: 2
+      x: 0
+      y: 429
+      width: 227
+      height: 180
+    rotated: 0
+    paddingLeft: .0176211447
+    paddingRight: .0572687238
+    paddingTop: .027777778
+    paddingBottom: .0166666675
+  - name: Gems_03
+    outer:
+      serializedVersion: 2
+      x: 906
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 906
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Shirt_01
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 512
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 512
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Metal Case_00
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 447
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 447
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Wood_01
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 382
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 382
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Essence_03
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 317
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 317
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: metal chest plate
+    outer:
+      serializedVersion: 2
+      x: 262
+      y: 128
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 262
+      y: 128
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Ruin Stone_01
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 252
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 252
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Necklace_02
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 122
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 122
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Flower Bunch_03
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 57
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 57
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Ornament_03
+    outer:
+      serializedVersion: 2
+      x: 451
+      y: 512
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 451
+      y: 512
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Small Potion_00
+    outer:
+      serializedVersion: 2
+      x: 516
+      y: 512
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 516
+      y: 512
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Cloak_02
+    outer:
+      serializedVersion: 2
+      x: 581
+      y: 512
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 581
+      y: 512
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Coin_03
+    outer:
+      serializedVersion: 2
+      x: 917
+      y: 960
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 917
+      y: 960
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Berry_02
+    outer:
+      serializedVersion: 2
+      x: 917
+      y: 895
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 917
+      y: 895
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Ruin Stone_02
+    outer:
+      serializedVersion: 2
+      x: 163
+      y: 62
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 163
+      y: 62
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Wood_00
+    outer:
+      serializedVersion: 2
+      x: 904
+      y: 810
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 904
+      y: 810
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Book_03
+    outer:
+      serializedVersion: 2
+      x: 904
+      y: 745
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 904
+      y: 745
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Necklace_03
+    outer:
+      serializedVersion: 2
+      x: 262
+      y: 323
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 262
+      y: 323
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Shirt_00
+    outer:
+      serializedVersion: 2
+      x: 262
+      y: 258
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 262
+      y: 258
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Ornament_02
+    outer:
+      serializedVersion: 2
+      x: 262
+      y: 193
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 262
+      y: 193
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Parchment_02
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 187
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 187
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: metal sword
+    outer:
+      serializedVersion: 2
+      x: 262
+      y: 63
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 262
+      y: 63
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Crystal Ball_02
+    outer:
+      serializedVersion: 2
+      x: 386
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 386
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Gems_01
+    outer:
+      serializedVersion: 2
+      x: 451
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 451
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Cloak_03
+    outer:
+      serializedVersion: 2
+      x: 516
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 516
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Crystal Ball_03
+    outer:
+      serializedVersion: 2
+      x: 581
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 581
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Book_00
+    outer:
+      serializedVersion: 2
+      x: 646
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 646
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Small Potion_03
+    outer:
+      serializedVersion: 2
+      x: 711
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 711
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Berry_03
+    outer:
+      serializedVersion: 2
+      x: 776
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 776
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Metal Case_01
+    outer:
+      serializedVersion: 2
+      x: 841
+      y: 577
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 841
+      y: 577
+      width: 64
+      height: 64
+    rotated: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
