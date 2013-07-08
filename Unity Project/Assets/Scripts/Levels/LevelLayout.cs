@@ -9,14 +9,13 @@ public class LevelLayout : LayoutObjectContainer {
 
     public override GridArray GetArray()
     {
-        var bounds = GetBounding();
-        bounds.expand(LevelGenerator.layoutMargin);
         return GetArray(GetBounding());
     }
 
     public void AddRoom(Room r)
     {
         rooms.Add(r);
+        AddObject(r);
     }
 
     public void AddRooms(List<Room> rs)
@@ -32,6 +31,7 @@ public class LevelLayout : LayoutObjectContainer {
     public void AddPath(Path p)
     {
         paths.Add(p);
+        AddObject(p);
     }
 	
 	public List<Path> GetPaths()
@@ -39,18 +39,6 @@ public class LevelLayout : LayoutObjectContainer {
 		List<Path> ret = new List<Path>(paths);
 		return ret;
 	}
-
-    public override IEnumerator<LayoutObject> GetEnumerator()
-    {
-        foreach (Room room in rooms)
-        {
-            yield return room;
-        }
-        foreach (Path path in paths)
-        {
-            yield return path;
-        }
-    }
 
     public override String GetTypeString()
     {

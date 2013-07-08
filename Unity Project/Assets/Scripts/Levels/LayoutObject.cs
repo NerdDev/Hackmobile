@@ -36,7 +36,7 @@ abstract public class LayoutObject {
         ShiftP.y = rhs.ShiftP.y + (centerRhs.y - center.y);
     }
 
-    public Value2D<GridType> Shift(Value2D<GridType> val)
+    public Value2D<GridType> ShiftValue(Value2D<GridType> val)
     {
         return new Value2D<GridType>(val.x + ShiftP.x, val.y + ShiftP.y, val.val);
     }

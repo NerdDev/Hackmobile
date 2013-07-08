@@ -241,6 +241,29 @@ public class Bounding {
         YMin -= amount;
     }
 
+    public Point GetShiftNonNeg()
+    {
+        Point shift = new Point();
+        if (XMin < 0)
+        {
+            shift.x = -XMin;
+        }
+        if (YMin < 0)
+        {
+            shift.y = -YMin;
+        }
+        return shift;
+    }
+
+    public void ShiftNonNeg()
+    {
+        Point shift = GetShiftNonNeg();
+        XMin += shift.x;
+        XMax += shift.x;
+        YMin += shift.y;
+        YMax += shift.y;
+    }
+
     #region Printing
     public override string ToString()
     {

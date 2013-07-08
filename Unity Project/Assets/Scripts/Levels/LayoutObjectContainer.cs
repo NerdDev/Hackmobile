@@ -3,6 +3,43 @@ using System.Collections.Generic;
 
 abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutObject> {
 
+    protected List<LayoutObject> Objects = new List<LayoutObject>(); 
+
+    public void AddObject(LayoutObject obj)
+    {
+        Objects.Add(obj);
+        /// Shift so nothing is in the negative
+        Point shift = obj.GetBounding().GetShiftNonNeg();
+        if (!shift.isZero())
+        {
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, "Shifted elements of " + this + " " + shift);
+            }
+            #endregion
+            ShiftAll(shift);
+        }
+    }
+
+    public void RemoveObject(LayoutObject obj)
+    {
+        Objects.Remove(obj);
+    }
+
+    public void ShiftAll(int x, int y)
+    {
+        foreach (LayoutObject obj in Objects)
+        {
+            obj.shift(x, y);
+        }   
+    }
+
+    public void ShiftAll(Point shift)
+    {
+        ShiftAll(shift.x, shift.y);
+    }
+
     public GridArray GetArray(Bounding bound)
     {
         adjustBounding(bound, false);
@@ -24,7 +61,10 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         return inArr.GetArr();
     }
 	
-    public abstract IEnumerator<LayoutObject> GetEnumerator();
+    public IEnumerator<LayoutObject> GetEnumerator()
+    {
+        return Objects.GetEnumerator();
+    }
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
@@ -52,7 +92,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     public void FindAndConnect(LayoutObject obj1, Value2D<GridType> connectPt)
     {
-        obj1.Connect(GetObjAt(obj1.Shift(connectPt)));
+        obj1.Connect(GetObjAt(obj1.ShiftValue(connectPt)));
     }
 
     public LayoutObject GetObjAt(Value2D<GridType> val)

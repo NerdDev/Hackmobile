@@ -261,10 +261,11 @@ public class LevelGenerator
         }
         #endregion
         List<LayoutObject> placedRooms = new List<LayoutObject>();
-        placedRooms.Add(new Room()); // Seed empty center room to start positioning from.
+        Room seedRoom = new Room();
+        layout.AddObject(seedRoom);
+        placedRooms.Add(seedRoom); // Seed empty center room to start positioning from.
         foreach (Room room in rooms)
         {
-            layout.AddRoom(room);
             // Find room it will start from
             int roomNum = Rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
@@ -293,6 +294,8 @@ public class LevelGenerator
                 room.ShiftOutside(intersect, shiftMagn);
             }
             placedRooms.Add(room);
+            layout.AddRoom(room);
+            layout.RemoveObject(seedRoom);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -381,6 +384,7 @@ public class LevelGenerator
         #endregion
         var bounds = layout.GetBounding();
         bounds.expand(layoutMargin);
+        bounds.ShiftNonNeg();
         var grids = layout.GetArray(bounds);
         GridMap doors = layout.getTypes(grids, GridType.Door);
         foreach (var door in doors)
@@ -407,6 +411,7 @@ public class LevelGenerator
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 grids.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
+                layout.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door TEST: " + door);
             }
 
             #endregion
