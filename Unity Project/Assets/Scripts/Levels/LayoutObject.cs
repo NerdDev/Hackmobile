@@ -268,7 +268,7 @@ abstract public class LayoutObject {
     public GridArray GetConnectedGrid()
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Get Connected Grid " + this);
         }
@@ -282,7 +282,7 @@ abstract public class LayoutObject {
             arrOut.PutAll(obj, bounds);
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
@@ -327,7 +327,7 @@ abstract public class LayoutObject {
     void ConnectedToRecursive(List<LayoutObject> list, Bounding bounds)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connected To Recursive: " + this);
             DebugManager.w(DebugManager.Logs.LevelGen, "Connected to:");
@@ -350,7 +350,7 @@ abstract public class LayoutObject {
             }
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
@@ -365,7 +365,7 @@ abstract public class LayoutObject {
     public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connected To");
         }
@@ -381,7 +381,7 @@ abstract public class LayoutObject {
             }
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }

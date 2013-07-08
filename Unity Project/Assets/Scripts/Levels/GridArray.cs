@@ -57,6 +57,14 @@ public class GridArray : Array2D<GridType> {
 		shift.y -= origBound.YMin;
 		base.PutAll (obj.GetArray(), shift);	
 	}
+
+    public void PutAsBlocked(GridArray rhs)
+    {
+        foreach (Value2D<GridType> val in rhs)
+        {
+            Put(GridType.INTERNAL_RESERVED_BLOCKED, val.x, val.y);
+        }
+    }
 	
 	public override Bounding GetBounding ()
     {

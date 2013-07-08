@@ -264,10 +264,6 @@ public class LevelGenerator
         placedRooms.Add(new Room()); // Seed empty center room to start positioning from.
         foreach (Room room in rooms)
         {
-            if (room.Id == 4)
-            {
-                int wer = 23;
-            }
             layout.AddRoom(room);
             // Find room it will start from
             int roomNum = Rand.Next(placedRooms.Count);
@@ -389,14 +385,7 @@ public class LevelGenerator
         GridMap doors = layout.getTypes(grids, GridType.Door);
         foreach (var door in doors)
         {
-            var path = new Path(
-                DepthFirstSearchFor(door, grids, GridType.Door,
-                                                    GridType.Path_Horiz,
-                                                    GridType.Path_Vert,
-                                                    GridType.Path_LB,
-                                                    GridType.Path_LT,
-                                                    GridType.Path_RB,
-                                                    GridType.Path_RT));
+            var path = new Path(door, grids);
             #region DEBUG
 
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -409,10 +398,7 @@ public class LevelGenerator
             #endregion
             if (path.isValid())
             {
-                path.Simplify();
-                path.shift(bounds.XMin, bounds.YMin);
-                path.ConnectEnds(layout);
-                path.Bake();
+                path.Finalize(layout, bounds);
                 grids.PutAll(path.GetArray());
                 layout.AddPath(path);
             }
@@ -495,13 +481,40 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Make Connection - " + obj1 + " AND " + obj2);
         }
         #endregion
-        var connectedBounds1 = obj1.GetConnectedBounds();
-        var connectedBounds2 = obj2.GetConnectedBounds();
-        var intersection = connectedBounds1.IntersectBounds(connectedBounds2);
-        DebugManager.w(DebugManager.Logs.LevelGen, "Bounds 1" + connectedBounds1);
-        DebugManager.w(DebugManager.Logs.LevelGen, "Bounds 2" + connectedBounds2);
-        DebugManager.w(DebugManager.Logs.LevelGen, "Intersection Bounds" + intersection);
+        GridArray smallest;
+        GridArray largest;
+        Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
         #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            smallest.ToLog(DebugManager.Logs.LevelGen, "Smallest");
+            largest.ToLog(DebugManager.Logs.LevelGen, "Largest");
+        }
+        #endregion
+        var startPtStack = DepthFirstSearchFor(new Value2D<GridType>(), smallest, Path.PathTypes());
+        if (startPtStack.Count > 0)
+        {
+            largest.PutAsBlocked(smallest);
+            Value2D<GridType> startPoint = startPtStack.Pop();
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                largest.ToLog(DebugManager.Logs.LevelGen, "Largest after putting blocked");
+                DebugManager.w(DebugManager.Logs.LevelGen, "Start Point:" + startPoint);
+            }
+            #endregion
+            var path = new Path(startPoint, largest);
+            if (path.isValid())
+            {
+                path.Finalize(layout);
+                layout.AddPath(path);
+            }
+        }
+        #region DEBUG
+        else if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Could not make an initial start point connection.");
+        }
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
             DebugManager.printFooter(DebugManager.Logs.LevelGen);

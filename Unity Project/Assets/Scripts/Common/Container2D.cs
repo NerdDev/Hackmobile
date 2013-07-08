@@ -141,4 +141,16 @@ abstract public class Container2D<T> {
             DebugManager.printFooter(log);
         }
     }
+
+    public static void Smallest<Z>(Z obj1, Z obj2, out Z smallest, out Z largest) where Z : Container2D<T>
+    {
+        if (obj1.GetBounding().Area < obj2.GetBounding().Area)
+        {
+            smallest = obj1;
+            largest = obj2;
+            return;
+        }
+        smallest = obj2;
+        largest = obj1;
+    }
 }

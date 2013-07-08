@@ -2,15 +2,42 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Path : LayoutObjectLeaf {
-	
-	List<Value2D<GridType>> _list;
+public class Path : LayoutObjectLeaf
+{
+
+    private static GridType[] types = new GridType[]
+        {
+            GridType.Path_Horiz, 
+            GridType.Path_LB, 
+            GridType.Path_LT, 
+            GridType.Path_RB, 
+            GridType.Path_RT, 
+            GridType.Path_Vert
+        };
+    private static HashSet<GridType> typesSet = new HashSet<GridType>(types);
+    List<Value2D<GridType>> _list;
+
+    public Path(Value2D<GridType> startPoint, GridArray grids)
+        : this(LevelGenerator.DepthFirstSearchFor(startPoint, grids, GridType.Door,
+                                           GridType.Path_Horiz,
+                                           GridType.Path_Vert,
+                                           GridType.Path_LB,
+                                           GridType.Path_LT,
+                                           GridType.Path_RB,
+                                           GridType.Path_RT))
+    {
+    }
 
     public Path(IEnumerable<Value2D<GridType>> stack)
         : base()
 	{
         _list = new List<Value2D<GridType>>(stack);
 	}
+
+    public static HashSet<GridType> PathTypes()
+    {
+        return typesSet;
+    }
 
     protected override Bounding GetBoundingUnshifted()
     {
@@ -29,6 +56,18 @@ public class Path : LayoutObjectLeaf {
     public override GridArray GetArray()
     {
         return GetArray(false);
+    }
+
+    public void Finalize(LayoutObjectContainer obj, Bounding bounds)
+    {
+        Simplify();
+        shift(bounds.XMin, bounds.YMin);
+        ConnectEnds(obj);
+        Bake();
+    }
+
+    public void Finalize(LayoutObject obj)
+    {
     }
 
     public void Bake()
@@ -177,7 +216,7 @@ public class Path : LayoutObjectLeaf {
         return grids != null || (_list != null && _list.Count > 2);
     }
 
-    public void ConnectEnds(LevelLayout layout)
+    public void ConnectEnds(LayoutObjectContainer container)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -185,8 +224,8 @@ public class Path : LayoutObjectLeaf {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connect Ends");
         }
         #endregion
-        layout.FindAndConnect(this, _list[0]);
-        layout.FindAndConnect(this, _list[_list.Count - 1]);
+        container.FindAndConnect(this, _list[0]);
+        container.FindAndConnect(this, _list[_list.Count - 1]);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
