@@ -142,16 +142,46 @@ public class Bounding {
         return false;
     }
 
-    // Gets the minimum intersection width, and leftmost point
-    public int IntersectingWidth(Bounding rhs, out int width)
+    public bool InsideHoriz(Bounding rhs)
     {
-        return GetMinDim(rhs.XMax - XMin, XMax - rhs.XMin, out width) ? XMin : rhs.XMin;
+        return XMin > rhs.XMin && XMax < rhs.XMax;
     }
 
-    // Gets the minimum intersection width, and downmost point
-    public int IntersectingHeight(Bounding rhs, out int height)
+    public bool InsideVert(Bounding rhs)
     {
-        return GetMinDim(rhs.YMax - YMin, YMax - rhs.YMin, out height) ? YMin : rhs.YMin;
+        return YMin > rhs.YMin && YMax < rhs.YMax;
+    }
+
+    // Gets the minimum intersection outHeight, and leftmost point
+    public int IntersectingWidth(Bounding rhs, out int outWidth)
+    {
+        if (InsideHoriz(rhs))
+        {
+            outWidth = Width;
+            return XMin;
+        }
+        if (rhs.InsideHoriz(this))
+        {
+            outWidth = rhs.Width;
+            return rhs.XMin;
+        }
+        return GetMinDim(rhs.XMax - XMin, XMax - rhs.XMin, out outWidth) ? XMin : rhs.XMin;
+    }
+
+    // Gets the minimum intersection outHeight, and downmost point
+    public int IntersectingHeight(Bounding rhs, out int outHeight)
+    {
+        if (InsideVert(rhs))
+        {
+            outHeight = Height;
+            return YMin;
+        }
+        if (rhs.InsideVert(this))
+        {
+            outHeight = rhs.Height;
+            return rhs.YMin;
+        }
+        return GetMinDim(rhs.YMax - YMin, YMax - rhs.YMin, out outHeight) ? YMin : rhs.YMin;
     }
 
     public int IntersectArea(Bounding rhs)

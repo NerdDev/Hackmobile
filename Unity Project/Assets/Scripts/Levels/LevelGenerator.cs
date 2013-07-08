@@ -498,10 +498,6 @@ public class LevelGenerator
         var connectedBounds1 = obj1.GetConnectedBounds();
         var connectedBounds2 = obj2.GetConnectedBounds();
         var intersection = connectedBounds1.IntersectBounds(connectedBounds2);
-        var connected1 = obj1.GetConnectedGrid();
-        var connected2 = obj2.GetConnectedGrid();
-        connected1.ToLog(DebugManager.Logs.LevelGen);
-        connected2.ToLog(DebugManager.Logs.LevelGen);
         DebugManager.w(DebugManager.Logs.LevelGen, "Bounds 1" + connectedBounds1);
         DebugManager.w(DebugManager.Logs.LevelGen, "Bounds 2" + connectedBounds2);
         DebugManager.w(DebugManager.Logs.LevelGen, "Intersection Bounds" + intersection);
