@@ -402,7 +402,7 @@ public class LevelGenerator
             #endregion
             if (path.isValid())
             {
-                path.Finalize(layout, bounds);
+                path.Finalize(layout);
                 grids.PutAll(path.GetArray());
                 layout.AddPath(path);
             }
@@ -512,8 +512,21 @@ public class LevelGenerator
             var path = new Path(startPoint, largest);
             if (path.isValid())
             {
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    largest.PutAll(path);
+                    largest.ToLog(DebugManager.Logs.LevelGen, "Connecting Path");
+                }
+                #endregion
                 path.Finalize(layout);
                 layout.AddPath(path);
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    layout.ToLog(DebugManager.Logs.LevelGen, "Final Connection");
+                }
+                #endregion
             }
         }
         #region DEBUG

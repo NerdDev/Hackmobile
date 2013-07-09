@@ -58,16 +58,11 @@ public class Path : LayoutObjectLeaf
         return GetArray(false);
     }
 
-    public void Finalize(LayoutObjectContainer obj, Bounding bounds)
+    public void Finalize(LayoutObjectContainer obj)
     {
         Simplify();
-        shift(bounds.XMin, bounds.YMin);
         ConnectEnds(obj);
         Bake();
-    }
-
-    public void Finalize(LayoutObject obj)
-    {
     }
 
     public void Bake()
