@@ -17,13 +17,22 @@ public class Stats
     public HungerLevel HungerLevel { get; set; }
     public EncumbranceLevel EncumbranceLevel { get; set; }
 
+    public Stats()
+    {
+    }
+
     public void setNull()
     {
-
+        MaxHealth = 0;
+        MaxPower = 0;
+        MaxEncumbrance = 0;
+        Level = 0;
     }
 
     public void parseXML(XMLNode x)
     {
-
+        MaxHealth = x.SelectInt("maxhealth");
+        MaxPower = x.SelectInt("maxpower");
+        Level = x.SelectInt("level");
     }
 }

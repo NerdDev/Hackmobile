@@ -30,7 +30,10 @@ public class NPC : WorldObject
     // Use this for initialization
     void Awake()
     {
-        RegisterNPCToSingleton();
+        if (this.IsNotAFreaking<PlayerManager>())
+        {
+            RegisterNPCToSingleton();
+        }
     }
 
     public virtual void RegisterNPCToSingleton()
@@ -210,12 +213,36 @@ public class NPC : WorldObject
     #endregion
 
     #region Effects
+
+    /**
+     * Just some various overloads. If not specified, it is 
+     * assumed to be priority 1, infinite turns, and not an item.
+     */
+    public virtual void applyEffect(Properties e)
+    {
+        applyEffect(e, 1, false, -1);
+    }
+
+    public virtual void applyEffect(Properties e, int priority)
+    {
+        applyEffect(e, priority, false, -1);
+    }
+
+    public virtual void applyEffect(Properties e, bool isItem)
+    {
+        applyEffect(e, 1, isItem, -1);
+    }
+
+    public virtual void applyEffect(Properties e, int priority, bool isItem)
+    {
+        applyEffect(e, priority, isItem, -1);
+    }
+
     /**
      * Does nothing if the NONE property is applied.
      */
-    public virtual void applyEffect(Properties e, int priority, bool isItem)
+    public virtual void applyEffect(Properties e, int priority, bool isItem, int turnsToProcess)
     {
-        Debug.Log("Applying Effect: " + e);
         if (e != Properties.NONE)
         {
             if (effects[(long)e] == null)
@@ -227,16 +254,17 @@ public class NPC : WorldObject
                 }
 
                 effects[(long)e] = eff;
-                eff.apply(priority, isItem);
+                eff.apply(priority, isItem, turnsToProcess);
 
             }
             else
             {
-                effects[(long)e].apply(priority, isItem);
+                effects[(long)e].apply(priority, isItem, turnsToProcess);
             }
         }
-        if (this.IsNotAFreaking<PlayerManager>()) {
-            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Poisoned!", Color.green);
+        if (this.IsNotAFreaking<PlayerManager>())
+        {
+            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, e.ToString(), Color.green);
         }
     }
 
@@ -247,9 +275,42 @@ public class NPC : WorldObject
     {
         if (effects[(long)e] != null)
         {
+            BigBoss.TimeKeeper.RemoveFromUpdateList(effects[(long)e]);
             effects[(long)e] = null;
         }
     }
+    #endregion
+
+    #region Actions
+
+    public void eatItem(Item i)
+    {
+        if (inventory.ContainsKey(i))
+        {
+            //item was just eaten, take it outta that list
+            unequipItem(i);
+
+            //unless you're Jose, in which case you'll be using a mac
+            //and who knows what happens when mac people eat
+            //no one can finish big macs anyways
+        }
+
+        //this allows what to do on an item basis to be in the item class
+        i.onEatenEvent(this);
+
+        //removes item permanently
+        DestroyObject(i.gameObject);
+        DestroyObject(i);
+    }
+
+    public void useItem(Item i)
+    {
+        if (i.isUsable())
+        {
+            i.onUseEvent(this);
+        }
+    }
+
     #endregion
 
     #region Equipment Management
@@ -258,16 +319,22 @@ public class NPC : WorldObject
     {
         if (equipment.equipItem(i))
         {
+            i.onEquipEvent(this);
             equippedItems.Add(i);
             return true;
         }
         return false;
     }
 
-    public bool removeItem(Item i)
+    public bool unequipItem(Item i)
     {
-        if (equipment.removeItem(i))
+        if (i.isUnEquippable() && equipment.removeItem(i))
         {
+            i.onUnEquipEvent(this);
+            if (equippedItems.Contains(i))
+            {
+                equippedItems.Remove(i);
+            }
             return true;
         }
         return false;
@@ -370,6 +437,7 @@ public class NPC : WorldObject
         base.setData(npc);
         //classes
         this.stats = npc.stats.Copy();
+        this.attributes = npc.attributes.Copy();
         this.bodyparts = npc.bodyparts.Copy();
         //flags
         this.flags = npc.flags.Copy();
@@ -380,10 +448,18 @@ public class NPC : WorldObject
         this.effects = npc.effects.Copy();
         //inventory
         inventory = new Dictionary<Item, int>();
-        //TODO: needs conversion from baseInventory into actual inventory
+        foreach (NPCItem nitem in baseInventory)
+        {
+            //go to inventory
+        }
         equippedItems = new List<Item>();
         equipment = new Equipment(this.bodyparts);
         stats.MaxEncumbrance = getMaxInventoryWeight();
+        stats.Encumbrance = getCurrentInventoryWeight();
+        stats.CurrentHealth = stats.MaxHealth;
+        stats.CurrentPower = stats.MaxPower;
+        stats.XPToNextLevel = calcXPForNextLevel();
+        stats.CurrentXP = 0;
     }
 
     public override void setNull()
@@ -431,11 +507,14 @@ public class NPC : WorldObject
             this.flags[np] = true;
         }
 
+        //stats
+        this.stats.parseXML(x.select("stats"));
+
         //body part data
         this.bodyparts.parseXML(x.select("bodyparts"));
 
-        //stats
-        this.attributes.parseXML(x.select("stats"));
+        //attributes
+        this.attributes.parseXML(x.select("attributes"));
 
         //inventory
         baseInventory = new List<NPCItem>();

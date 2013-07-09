@@ -12,11 +12,11 @@ public class PlayerManager : NPC
 
     #region General Player Info:
 
-    private string playerChosenName;
+    private string playerChosenName = "Kurtis";
     public string PlayerChosenName { get { return playerChosenName; } }  //read only - set at char creation
 
     private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
-    public string PlayerTitle { get { return playerTitle; } }  //read only - updated via class info
+    public string PlayerTitle { get { return playerTitle; } set { playerTitle = value; } }
 
     public GameObject playerAvatar;
     public GameObject PlayerAvatar { get { return playerAvatar; } }//read only global reference to the hero gameobject
@@ -29,6 +29,7 @@ public class PlayerManager : NPC
 
     public Vector3 avatarStartLocation;
     public float tileMovementTolerance = .85f;  //radius
+
     //X,Y coordinate for other scripts to grab:
     private Vector2 playerGridCoordinate;
     public Vector2 PlayerGridCoordinate
@@ -36,6 +37,8 @@ public class PlayerManager : NPC
         get { return playerGridCoordinate; }
         set { playerGridCoordinate = value; }
     }
+
+    private Vector3 vectorToGrid;
 
     private Vector3 currentOccupiedGridCenterWorldPoint;
     public Vector3 CurrentOccupiedGridCenterWorldPoint 
@@ -77,17 +80,16 @@ public class PlayerManager : NPC
 
     Vector3 currentGridLoc;
     Vector3 currentGridCenterPointWithoffset;
+
     #endregion
 
     // Use this for initialization
     void Start()
     {
-        playerTitle = getPlayerTitle();
         stats.MaxEncumbrance = getMaxInventoryWeight();
         stats.Hunger = 900;
 
         anim = playerAvatar.GetComponent<Animator>() as Animator;
-
 
         //Example of LevelLayout Surrounding() call:
         //if grid type is wall:
@@ -95,11 +97,6 @@ public class PlayerManager : NPC
         //{
         //	foo;
         //}
-
-
-        //Placing our hero object at designated start location:
-        playerAvatar.transform.position = avatarStartLocation;
-        UpdateCurrentTileVectors();
     }
 
     // Update is called once per frame
@@ -134,8 +131,24 @@ public class PlayerManager : NPC
         {
             if (checkPosition(playerAvatar.transform.position, currentOccupiedGridCenterWorldPoint))
             {
-                //"Drift our player towards tile center point:
-                playerAvatar.transform.Translate(lookVectorToOccupiedTile.normalized * Time.deltaTime);
+                //VECTORS ARE RETARDED
+
+                //THESE VECTORS WOULD GO AWAY FROM THE PLAYER
+
+                //WHY
+
+                //WHY OH WHY
+
+                //GRID POINT - POSITION SHOULD NOT SEND THE PLAYER AWAY
+
+                //sigh
+
+                //vectorToGrid = currentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;
+                //vectorToGrid = Vector3.Lerp(playerAvatar.transform.position, currentOccupiedGridCenterWorldPoint, 1f);
+                //playerAvatar.transform.Translate(vectorToGrid.normalized * Time.deltaTime);
+
+                //so I just did this. and it rotates the player. and it's annoying.
+                MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime);
             }
             else
             {
@@ -202,6 +215,7 @@ public class PlayerManager : NPC
         {
             v = 1;
         }
+        
         //Debug.Log("V: " + v);
         anim.SetFloat("Speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
         //anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
@@ -228,9 +242,9 @@ public class PlayerManager : NPC
 
     #region Effects
 
-    public override void applyEffect(Properties e, int priority, bool isItem)
+    public override void applyEffect(Properties e, int priority, bool isItem, int turnsToProcess)
     {
-        base.applyEffect(e, priority, isItem);
+        base.applyEffect(e, priority, isItem, turnsToProcess);
         BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
         //update gui
     }

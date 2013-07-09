@@ -92,9 +92,9 @@ public class Item : WorldObject, PassesTurns
     public ItemStats stats = new ItemStats();
 
     //effects
-    protected Effect onEaten;
-    protected Effect onEquip;
-    protected Effect onUse;
+    protected Properties onEaten;
+    protected Properties onEquip;
+    protected Properties onUse;
 
     #endregion
 
@@ -110,7 +110,53 @@ public class Item : WorldObject, PassesTurns
     {
     }
 
+    #region Usage:
+
+    public void onEatenEvent(NPC n)
+    {
+        n.applyEffect(this.onEaten, 1, false);
+    }
+
+    public bool isUsable()
+    {
+        //do any code to determine usability here
+        //like if it's restricted on a turn basis, all that
+        return true;
+    }
+
+    public void onUseEvent(NPC n)
+    {
+        n.applyEffect(onUse, 1, false);
+
+        //if usage needs restricted, change that here
+    }
+
+    public bool isUnEquippable()
+    {
+        if (BUC == global::BUC.BLESSED || BUC == global::BUC.UNCURSED)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void onEquipEvent(NPC n)
+    {
+        n.applyEffect(onEquip, 1, true);
+    }
+
+    public void onUnEquipEvent(NPC n)
+    {
+        n.applyEffect(onEquip, -1, true);
+    }
+
+    #endregion
+
     #region Data Management for Item Instances
+
     public void setData(string itemName) 
     {
         this.setData(BigBoss.ItemMaster.getItem(itemName));
