@@ -276,10 +276,10 @@ abstract public class LayoutObject {
         List<LayoutObject> connected;
         Bounding bounds;
         ConnectedToAll(out connected, out bounds);
-        var arrOut = new GridArray(bounds, true);
+        var arrOut = new GridArray(bounds, false);
         foreach (var obj in connected)
         {
-            arrOut.PutAll(obj, bounds);
+            arrOut.PutAll(obj);
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))

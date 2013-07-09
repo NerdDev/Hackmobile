@@ -177,7 +177,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #endregion
 
     #region Iteration
-    public IEnumerator<Value2D<T>> GetEnumerator()
+    public virtual IEnumerator<Value2D<T>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {

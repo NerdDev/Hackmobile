@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GridArray : Array2D<GridType> {
+public class GridArray : Array2D<GridType>, IEnumerable<Value2D<GridType>>
+{
 
     #region Ctors
     public GridArray(int width, int height) : base(width, height)
@@ -57,6 +58,10 @@ public class GridArray : Array2D<GridType> {
 		shift.y -= origBound.YMin;
 		base.PutAll (obj.GetArray(), shift);	
 	}
+    public void PutAll(LayoutObject rhs)
+    {
+        PutAll(rhs.GetArray(), rhs.GetShift());
+    }
 
     public void PutAsBlocked(GridArray rhs)
     {
@@ -135,4 +140,18 @@ public class GridArray : Array2D<GridType> {
         return src.arr;
     }
 
+    public override IEnumerator<Value2D<GridType>> GetEnumerator()
+    {
+        for (int y = 0; y < arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < arr.GetLength(1); x++)
+            {
+                if (arr[y, x] != GridType.NULL)
+                {
+                    Value2D<GridType> val = new Value2D<GridType>(x, y, arr[y, x]);
+                    yield return val;
+                }
+            }
+        }
+    }
 }
