@@ -31,7 +31,7 @@ public class LevelLayout : LayoutObjectContainer {
     public void AddPath(Path p)
     {
         paths.Add(p);
-        AddObject(p);
+        AddObject(p, 0);
     }
 	
 	public List<Path> GetPaths()

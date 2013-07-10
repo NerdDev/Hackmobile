@@ -5,11 +5,11 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     protected List<LayoutObject> Objects = new List<LayoutObject>(); 
 
-    public void AddObject(LayoutObject obj)
+    public void AddObject(LayoutObject obj, int buffer)
     {
         Objects.Add(obj);
         /// Shift so nothing is in the negative 
-        Point shift = obj.GetBounding().GetShiftNonNeg();
+        Point shift = obj.GetBounding().GetShiftNonNeg(buffer);
         if (!shift.isZero())
         {
             #region DEBUG
@@ -20,6 +20,11 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
             #endregion
             ShiftAll(shift);
         }
+    }
+
+    public void AddObject(LayoutObject obj)
+    {
+        AddObject(obj, LevelGenerator.layoutMargin);
     }
 
     public void RemoveObject(LayoutObject obj)

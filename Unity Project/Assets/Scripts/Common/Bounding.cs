@@ -246,21 +246,26 @@ public class Bounding
         }
     }
 
-    public Point GetShiftNonNeg()
+    public Point GetShiftNonNeg(int buffer)
     {
         Point shift = new Point();
         if (IsValid())
         {
-            if (XMin < 0)
+            if (XMin < buffer)
             {
-                shift.x = -XMin;
+                shift.x = buffer - XMin;
             }
-            if (YMin < 0)
+            if (YMin < buffer)
             {
-                shift.y = -YMin;
+                shift.y = buffer - YMin;
             }
         }
         return shift;
+    }
+
+    public Point GetShiftNonNeg()
+    {
+        return GetShiftNonNeg(0);
     }
 
     public void Shift(Point shift)
