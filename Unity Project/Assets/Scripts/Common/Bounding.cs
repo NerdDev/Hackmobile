@@ -2,8 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class Bounding {
+public class Bounding
+{
 
+    private static int max = Int32.MaxValue / 2;
+    private static int min = Int32.MinValue / 2;
     public int XMin { get; set; }
     public int XMax { get; set; }
     public int YMin { get; set; }
@@ -50,8 +53,7 @@ public class Bounding {
 
     public bool IsValid()
     {
-        return XMin != Int32.MaxValue
-            && YMin != Int32.MaxValue;
+        return XMin > min && XMin < max;
     }
 	
 	public Point GetCenter()
@@ -235,33 +237,46 @@ public class Bounding {
 
     public void expand(int amount)
     {
-        XMax += amount;
-        YMax += amount;
-        XMin -= amount;
-        YMin -= amount;
+        if (IsValid())
+        {
+            XMax += amount;
+            YMax += amount;
+            XMin -= amount;
+            YMin -= amount;
+        }
     }
 
     public Point GetShiftNonNeg()
     {
         Point shift = new Point();
-        if (XMin < 0)
+        if (IsValid())
         {
-            shift.x = -XMin;
-        }
-        if (YMin < 0)
-        {
-            shift.y = -YMin;
+            if (XMin < 0)
+            {
+                shift.x = -XMin;
+            }
+            if (YMin < 0)
+            {
+                shift.y = -YMin;
+            }
         }
         return shift;
     }
 
+    public void Shift(Point shift)
+    {
+        if (IsValid())
+        {
+            XMin += shift.x;
+            XMax += shift.x;
+            YMin += shift.y;
+            YMax += shift.y;
+        }
+    }
+
     public void ShiftNonNeg()
     {
-        Point shift = GetShiftNonNeg();
-        XMin += shift.x;
-        XMax += shift.x;
-        YMin += shift.y;
-        YMax += shift.y;
+        Shift(GetShiftNonNeg());
     }
 
     #region Printing

@@ -49,10 +49,10 @@ public class LevelGenerator
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
+                DebugManager.w(DebugManager.Logs.LevelGenMain, "Random's seed int: " + seed);
+                DebugManager.w(DebugManager.Logs.LevelGenMain, "Unity Random's seed int: " + unitySeed);
                 DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
-                DebugManager.w(DebugManager.Logs.LevelGen, "Random's seed int: " + seed);
-                DebugManager.w(DebugManager.Logs.LevelGen, "Unity Random's seed int: " + unitySeed);
             }
             stepTime = Time.realtimeSinceStartup;
             startTime = stepTime;

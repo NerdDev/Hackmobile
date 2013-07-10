@@ -91,17 +91,11 @@ abstract public class LayoutObject {
     {
         if (toExternal)
         {
-            bound.XMin += ShiftP.x;
-            bound.XMax += ShiftP.x;
-            bound.YMin += ShiftP.y;
-            bound.YMax += ShiftP.y;
+            bound.Shift(ShiftP);
         }
         else
         {
-            bound.XMin -= ShiftP.x;
-            bound.XMax -= ShiftP.x;
-            bound.YMin -= ShiftP.y;
-            bound.YMax -= ShiftP.y;
+            bound.Shift(ShiftP.Invert());
         }
     }
 

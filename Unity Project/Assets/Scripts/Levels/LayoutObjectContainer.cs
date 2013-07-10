@@ -8,7 +8,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     public void AddObject(LayoutObject obj)
     {
         Objects.Add(obj);
-        /// Shift so nothing is in the negative
+        /// Shift so nothing is in the negative 
         Point shift = obj.GetBounding().GetShiftNonNeg();
         if (!shift.isZero())
         {
