@@ -3,8 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class LayoutObject {
+abstract public class LayoutObject
+{
 
+    protected bool finalized = false;
+    protected Bounding bakedBounds = new Bounding();
     protected Point ShiftP = new Point();
     readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
     private static int _nextId = 0;
@@ -250,6 +253,12 @@ abstract public class LayoutObject {
         return null;
     }
     #endregion
+
+    public virtual void Bake()
+    {
+        bakedBounds = GetBounding();
+        finalized = true;
+    }
 
     public Bounding GetConnectedBounds()
     {
@@ -529,7 +538,10 @@ abstract public class LayoutObject {
             {
                 DebugManager.w(log, s);
             }
-            DebugManager.w(log, "Bounds: " + GetBounding().ToString());
+            Bounding bounds = GetBounding();
+            DebugManager.w(log, "Bounds Shifted: " + bounds.ToString());
+            bounds.Shift(ShiftP.Invert());
+            DebugManager.w(log, "Bounds: " + bounds.ToString());
 			DebugManager.printFooter(log);
         }
     }

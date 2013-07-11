@@ -192,6 +192,7 @@ public class LevelGenerator
                 DebugManager.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
+            room.Bake();
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))

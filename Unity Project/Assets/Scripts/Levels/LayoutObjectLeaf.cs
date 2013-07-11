@@ -56,9 +56,23 @@ public class LayoutObjectLeaf : LayoutObject {
 
     protected override Bounding GetBoundingUnshifted()
     {
+        if (finalized)
+        {
+            return bakedBounds;
+        }
 		return grids.GetBounding();
 	}
     #endregion GetSet
+
+    public override void Bake()
+    {
+        ToLog(DebugManager.Logs.LevelGen, "Test 1");
+        Point minimizeShift = grids.Minimize(1);
+        ToLog(DebugManager.Logs.LevelGen, "Test 2");
+        ShiftP.shift(minimizeShift);
+        bakedBounds = grids.GetBoundingInternal();
+        finalized = true;
+    }
 
     #region FillMethods
     public void BoxStroke(GridType t, int width, int height)

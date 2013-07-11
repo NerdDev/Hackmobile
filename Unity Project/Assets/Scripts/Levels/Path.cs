@@ -65,10 +65,11 @@ public class Path : LayoutObjectLeaf
         Bake();
     }
 
-    public void Bake()
+    public override void Bake()
     {
         grids = GetArray(false);
         _list = null;
+        base.Bake();
     }
 
     public GridArray GetArray(bool ending)

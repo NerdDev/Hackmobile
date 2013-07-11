@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GridArray : Array2D<GridType>, IEnumerable<Value2D<GridType>>
+public class GridArray : Array2D<GridType>
 {
 
     #region Ctors
@@ -25,7 +25,7 @@ public class GridArray : Array2D<GridType>, IEnumerable<Value2D<GridType>>
     public GridArray(GridArray rhs, int xShift, int yShift)
         : base(rhs.arr.GetLength(1), rhs.arr.GetLength(0))
     {
-        PutAll(rhs, xShift, yShift);
+        PutAll(rhs.arr, xShift, yShift);
     }
 	
 	public GridArray(Bounding bounds, bool minimize) : base(bounds, minimize)
@@ -86,6 +86,17 @@ public class GridArray : Array2D<GridType>, IEnumerable<Value2D<GridType>>
     public Bounding GetBoundingInternal()
     {
         return base.GetBounding();
+    }
+
+    public Point Minimize(int buffer)
+    {
+        Bounding bounds = GetBounding();
+        bounds.expand(buffer);
+        bounds.ShiftNonNeg();
+        GridType[,] tmp = arr;
+        arr = BoundedArr(bounds, true);
+        PutAll(tmp, - bounds.XMin, - bounds.YMin);
+        return new Point(bounds.XMin, bounds.YMin);
     }
 
     public override List<string> ToRowStrings()

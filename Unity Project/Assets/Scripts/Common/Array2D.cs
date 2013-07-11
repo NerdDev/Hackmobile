@@ -37,24 +37,29 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
 	public Array2D(Bounding bound, bool minimize) : this()
     {
+        arr = BoundedArr(bound, minimize);
+	}
+    #endregion
+
+    protected static T[,] BoundedArr(Bounding bound, bool minimize)
+    {
         int width = 0;
         int height = 0;
         if (bound.IsValid())
         {
-			if (minimize)
-			{
-	            width = bound.Width + 1;
-	            height = bound.Height + 1;
-			}
-			else 
-			{
-	            width = bound.XMax + 1;
-	            height = bound.YMax + 1;
-			}
+            if (minimize)
+            {
+                width = bound.Width + 1;
+                height = bound.Height + 1;
+            }
+            else
+            {
+                width = bound.XMax + 1;
+                height = bound.YMax + 1;
+            }
         }
-        arr = new T[height, width];
-	}
-    #endregion
+        return new T[height,width];
+    }
 
     #region GetSet
     protected override T Get(int x, int y)
@@ -125,11 +130,16 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public void PutAll(Array2D<T> rhs, int additionalXshift, int additionalYshift)
     {
-        for (int y = 0; y < rhs.arr.GetLength(0); y++)
+        PutAll(rhs.arr, additionalXshift, additionalYshift);
+    }
+
+    public void PutAll(T[,] rhs, int additionalXshift, int additionalYshift)
+    {
+        for (int y = 0; y < rhs.GetLength(0); y++)
         {
-            for (int x = 0; x < rhs.arr.GetLength(1); x++)
+            for (int x = 0; x < rhs.GetLength(1); x++)
             {
-                Put(rhs.arr[y, x], x + additionalXshift, y + additionalYshift);
+                Put(rhs[y, x], x + additionalXshift, y + additionalYshift);
 			}
         }
     }
