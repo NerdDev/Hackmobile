@@ -8,18 +8,30 @@ public class LevelManager : MonoBehaviour {
     public LevelBuilder Builder;
     public static GameObject[,] Blocks { get; private set; }
     public static GridArray Array { get; private set; }
+    private static LevelGenerator gen;
 
     void Start()
     {
         RoomModifier.RegisterModifiers();
-        LevelGenerator gen = new LevelGenerator();
-        LevelLayout layout = null;
+        gen = new LevelGenerator();
+        LevelLayout layout;
         layout = gen.GenerateLayout(0);
+//        layout = GenerateLevels(30);
         Array = layout.GetArray();
 		Blocks = Builder.Build(Array, Theme);
 
         JustinTest();
         JoseTest();
+    }
+
+    LevelLayout GenerateLevels(int num)
+    {
+        LevelLayout last = null;
+        for (int i = 0; i < num; i++)
+        {
+            last = gen.GenerateLayout(i);
+        }
+        return last;
     }
 
     void TestModifier(RoomModifier mod, int seed)
