@@ -66,11 +66,6 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         return ret;
     }
 	
-	public override GridType[,] GetMinimizedArray(GridArray inArr)
-    {
-        return inArr.GetArr();
-    }
-	
     public IEnumerator<LayoutObject> GetEnumerator()
     {
         return Objects.GetEnumerator();

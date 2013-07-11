@@ -185,6 +185,7 @@ public class LevelGenerator
                 #endregion
                 mod.Modify(room, Rand);
             }
+            room.Bake(false);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -192,7 +193,6 @@ public class LevelGenerator
                 DebugManager.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
-            room.Bake();
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))

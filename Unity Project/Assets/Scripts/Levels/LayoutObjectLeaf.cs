@@ -64,12 +64,13 @@ public class LayoutObjectLeaf : LayoutObject {
 	}
     #endregion GetSet
 
-    public override void Bake()
+    public override void Bake(bool shiftCompensate)
     {
-        ToLog(DebugManager.Logs.LevelGen, "Test 1");
         Point minimizeShift = grids.Minimize(1);
-        ToLog(DebugManager.Logs.LevelGen, "Test 2");
-        ShiftP.shift(minimizeShift);
+        if (shiftCompensate)
+        {
+            ShiftP.shift(minimizeShift);
+        }
         bakedBounds = grids.GetBoundingInternal();
         finalized = true;
     }

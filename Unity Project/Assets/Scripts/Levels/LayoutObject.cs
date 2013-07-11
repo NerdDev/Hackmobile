@@ -254,7 +254,7 @@ abstract public class LayoutObject
     }
     #endregion
 
-    public virtual void Bake()
+    public virtual void Bake(bool shiftCompensate)
     {
         bakedBounds = GetBounding();
         finalized = true;

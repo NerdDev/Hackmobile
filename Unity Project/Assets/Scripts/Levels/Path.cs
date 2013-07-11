@@ -62,14 +62,14 @@ public class Path : LayoutObjectLeaf
     {
         Simplify();
         ConnectEnds(obj);
-        Bake();
+        Bake(false);
     }
 
-    public override void Bake()
+    public override void Bake(bool shiftCompensate)
     {
         grids = GetArray(false);
         _list = null;
-        base.Bake();
+        base.Bake(shiftCompensate);
     }
 
     public GridArray GetArray(bool ending)
