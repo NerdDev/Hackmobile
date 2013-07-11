@@ -13,13 +13,13 @@ public class LevelManager : MonoBehaviour {
     {
         RoomModifier.RegisterModifiers();
         LevelGenerator gen = new LevelGenerator();
-        LevelLayout layout;
-        layout = gen.GenerateLayout(0, 1826027463, 870812270);
-//        for (int i = 0; i < 30; i++)
-//        {
-//            DebugManager.w(DebugManager.Logs.LevelGenMain, "Generating " + i);
-//            layout = gen.GenerateLayout(i);
-//        }
+        LevelLayout layout = null;
+//        layout = gen.GenerateLayout(0, 1826027463, 870812270);
+        for (int i = 0; i < 30; i++)
+        {
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Generating " + i);
+            layout = gen.GenerateLayout(i);
+        }
         Array = layout.GetArray();
 		Blocks = Builder.Build(Array, Theme);
 

@@ -29,49 +29,84 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     }
 
     public static Surrounding<T> Get(T[,] arr, int x, int y, PassFilter<Value2D<T>> pass)
-	{
+    {
+        Position xPos = GetPos(x, arr.GetLength(1));
+        Position yPos = GetPos(y, arr.GetLength(0));
+
+        if (xPos == Position.Out || yPos == Position.Out)
+        { // Bad Query
+            return null;
+        }
+
         Surrounding <T> ret = new Surrounding<T>();
-		x -= 1;
-		if (x >= 0 && x < arr.GetLength(1))
+
+        // Create Values
+        if (xPos != Position.BottomEdge) {
+			ret.left = new Value2D<T>(x - 1, y, arr[y, x - 1]);
+		}
+		if (xPos != Position.TopEdge)
 		{
-			ret.left = new Value2D<T>(x, y, arr[y,x]);
-            if (pass != null && !pass.pass(ret.left))
+            ret.right = new Value2D<T>(x + 1, y, arr[y, x + 1]);
+		}
+		if (yPos != Position.BottomEdge)
+		{
+            ret.down = new Value2D<T>(x, y - 1, arr[y - 1, x]);
+		}
+		if (yPos != Position.TopEdge)
+		{
+            ret.up = new Value2D<T>(x, y + 1, arr[y + 1, x]);
+		}
+
+        // Handle pass filter
+        if (pass != null)
+        {
+            if (!pass.pass(ret.left))
             {
                 ret.left = null;
             }
-		}
-		x += 2;
-		if (x >= 0 && x < arr.GetLength(1))
-		{
-            ret.right = new Value2D<T>(x, y, arr[y, x]);
-            if (pass != null && !pass.pass(ret.right))
+            if (!pass.pass(ret.right))
             {
                 ret.right = null;
             }
-		}
-		x -= 1;
-		y -= 1;
-		if (y >= 0 && y < arr.GetLength(0))
-		{
-            ret.down = new Value2D<T>(x, y, arr[y, x]);
-            if (pass != null && !pass.pass(ret.down))
-            {
-                ret.down = null;
-            }	
-		}
-		y += 2;
-		if (y >= 0 && y < arr.GetLength(0))
-		{
-            ret.up = new Value2D<T>(x, y, arr[y, x]);
-            if (pass != null && !pass.pass(ret.up))
+            if (!pass.pass(ret.up))
             {
                 ret.up = null;
             }
-		}
+            if (!pass.pass(ret.down))
+            {
+                ret.down = null;
+            }
+        }
+
         ret.Count = ret.CountInternal();
 		return ret;
 	}
-	
+
+    static Position GetPos(int val, int arrLim)
+    {
+        if (val > 0 && val < arrLim)
+        {
+            return Position.In;
+        }
+        if (val == 0)
+        {
+            return Position.BottomEdge;
+        }
+        if (val == arrLim - 1)
+        {
+            return Position.TopEdge;
+        }
+        return Position.Out;
+    }
+
+    private enum Position
+    {
+        Out,
+        BottomEdge,
+        In,
+        TopEdge
+    }
+
     // Returns a direction containing the given value.
     // Null if none found.
     public virtual Value2D<T> GetDirWithVal(T t)
