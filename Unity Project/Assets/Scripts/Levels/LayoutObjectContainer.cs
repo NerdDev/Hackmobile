@@ -58,7 +58,12 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     
     public override GridArray GetArray()
     {
-        return GetArray(GetBounding());
+        GridArray ret = new GridArray(GetBounding(), false);
+        foreach (LayoutObject obj in this)
+        {
+            ret.PutAll(obj);
+        }
+        return ret;
     }
 	
 	public override GridType[,] GetMinimizedArray(GridArray inArr)

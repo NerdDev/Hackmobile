@@ -487,6 +487,8 @@ public class LevelGenerator
         #endregion
         GridArray smallest;
         GridArray largest;
+        GridArray layoutArr = layout.GetArray();
+        layoutArr.PutAsBlocked(layoutArr);
         Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -498,17 +500,17 @@ public class LevelGenerator
         var startPtStack = DepthFirstSearchFor(new Value2D<GridType>(), smallest, Path.PathTypes());
         if (startPtStack.Count > 0)
         {
+            layoutArr.PutAll(largest);
             Value2D<GridType> startPoint = startPtStack.Pop();
-            largest.PutAsBlocked(smallest);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                largest[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-                largest.ToLog(DebugManager.Logs.LevelGen, "Largest after putting blocked");
+                layoutArr[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                layoutArr.ToLog(DebugManager.Logs.LevelGen, "Largest after putting blocked");
                 DebugManager.w(DebugManager.Logs.LevelGen, "Start Point:" + startPoint);
             }
             #endregion
-            var path = new Path(startPoint, largest);
+            var path = new Path(startPoint, layoutArr);
             if (path.isValid())
             {
                 #region DEBUG

@@ -36,11 +36,6 @@ public class GridArray : Array2D<GridType>, IEnumerable<Value2D<GridType>>
     {
         this.arr = arr;
     }
-	
-	protected override Comparator<GridType> getDefaultComparator ()
-	{
-		return GridTypeComparator.get();
-	}
     #endregion
 
     protected override void Put(GridType val, int x, int y)

@@ -7,11 +7,6 @@ public class LevelLayout : LayoutObjectContainer {
     List<Room> rooms = new List<Room>();
 	List<Path> paths = new List<Path>();
 
-    public override GridArray GetArray()
-    {
-        return GetArray(GetBounding());
-    }
-
     public void AddRoom(Room r)
     {
         rooms.Add(r);
