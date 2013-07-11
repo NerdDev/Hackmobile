@@ -33,12 +33,12 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         Position xPos = GetPos(x, arr.GetLength(1));
         Position yPos = GetPos(y, arr.GetLength(0));
 
+        Surrounding<T> ret = new Surrounding<T>();
+
         if (xPos == Position.Out || yPos == Position.Out)
         { // Bad Query
-            return null;
+            return ret;
         }
-
-        Surrounding <T> ret = new Surrounding<T>();
 
         // Create Values
         if (xPos != Position.BottomEdge) {
@@ -84,6 +84,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     static Position GetPos(int val, int arrLim)
     {
+        arrLim -= 1;
         if (val > 0 && val < arrLim)
         {
             return Position.In;
@@ -92,7 +93,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         {
             return Position.BottomEdge;
         }
-        if (val == arrLim - 1)
+        if (val == arrLim)
         {
             return Position.TopEdge;
         }
