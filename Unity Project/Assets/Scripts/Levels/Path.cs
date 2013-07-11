@@ -62,7 +62,7 @@ public class Path : LayoutObjectLeaf
     {
         Simplify();
         ConnectEnds(obj);
-        Bake(false);
+        Bake(true);
     }
 
     public override void Bake(bool shiftCompensate)

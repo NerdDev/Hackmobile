@@ -403,7 +403,7 @@ public class LevelGenerator
             if (path.isValid())
             {
                 path.Finalize(layout);
-                grids.PutAll(path.GetArray());
+                grids.PutAll(path);
                 layout.AddPath(path);
             }
             #region DEBUG
