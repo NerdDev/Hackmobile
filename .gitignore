@@ -17,6 +17,8 @@ Unity Project/UnityVS.*
 Unity Project/dev_Data/
 Unity Project/Properties/
 
+*.orig
+*.orig.meta
 
 #################
 ## Visual Studio
