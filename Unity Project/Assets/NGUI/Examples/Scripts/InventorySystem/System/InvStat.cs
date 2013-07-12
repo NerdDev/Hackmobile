@@ -23,6 +23,7 @@ public class InvStat
 		Armor,
 		Health,
 		Mana,
+		Hunger, //line added by AB
 		Other,
 	}
 
@@ -66,6 +67,7 @@ public class InvStat
 			case Identifier.Armor:			return "Armor protects from damage";
 			case Identifier.Health:			return "Health prolongs life";
 			case Identifier.Mana:			return "Mana increases the number of spells that can be cast";
+			case Identifier.Hunger:			return "Eat small meals regularly to avoid overeating!";//line added by AB
 		}
 		return null;
 	}

@@ -70,27 +70,8 @@ public class InputManager : MonoBehaviour {
 			BigBoss.ItemMaster.CreateRandomItem(place);
 			Debug.Log("X");
 		}
-//		if (Input.GetKey(KeyCode.W))
-//		{
-//			BigBoss.PlayerInfo.PlayerMoveForward();
-//			isMovementKeyPressed = true;
-//		}
-//		if (Input.GetKey(KeyCode.S))
-//		{
-//			BigBoss.PlayerInfo.PlayerMoveBackward();
-//			isMovementKeyPressed = true;
-//		}
-//		if (Input.GetKey(KeyCode.A))
-//		{
-//			BigBoss.PlayerInfo.PlayerMoveLeft();
-//			isMovementKeyPressed = true;
-//		}
-//		if (Input.GetKey(KeyCode.D))
-//		{
-//			
-//			BigBoss.PlayerInfo.PlayerMoveRight();
-//			isMovementKeyPressed = true;
-//		}
+		
+		
 		
 		#region WASD
 		//For GUI debugging:

@@ -4163,6 +4163,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 783925647}
   - 114: {fileID: 783925648}
+  - 114: {fileID: 783925649}
   m_Layer: 0
   m_Name: ItemMaster
   m_TagString: Untagged
@@ -4193,6 +4194,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e07f756254428143bff909e1f595cfc, type: 3}
   m_Name: 
   TotalItemsInExistence: []
+--- !u!114 &783925649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 783925646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be182ce83f3ee04b941134953597507, type: 3}
+  m_Name: 
+  databaseID: 0
+  items:
+  - id16: 0
+    name: Berries
+    description: Yummy berries!  Restores a small amount of hunger.  Justin is hot.
+    slot: 0
+    minItemLevel: 1
+    maxItemLevel: 50
+    stats:
+    - id: 9
+      modifier: 0
+      amount: 500
+    attachment: {fileID: 0}
+    color: {r: .996660054, g: .99253732, b: 1, a: 1}
+    iconAtlas: {fileID: 11400000, guid: 0f9d2b556f17dcc4bb74468086c12b05, type: 2}
+    iconName: Berry_03
+  iconAtlas: {fileID: 11400000, guid: 0f9d2b556f17dcc4bb74468086c12b05, type: 2}
 --- !u!1 &792856982
 GameObject:
   m_ObjectHideFlags: 0
@@ -4737,12 +4765,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 849fd93d348255049af49ba16fb8bcb0, type: 3}
   m_Name: 
-  maxItemCount: 8
-  maxRows: 4
-  maxColumns: 4
+  maxItemCount: 36
+  maxRows: 6
+  maxColumns: 6
   template: {fileID: 100000, guid: 924b6cc7d02b84543b3b9261cbd49808, type: 2}
   background: {fileID: 0}
-  spacing: 128
+  spacing: 60
   padding: 10
 --- !u!1 &943459988
 GameObject:
@@ -4921,6 +4949,32 @@ Transform:
   m_LocalScale: {x: 430.800476, y: 150, z: 1}
   m_Children: []
   m_Father: {fileID: 2124491335}
+--- !u!1 &1093322375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1093322376}
+  m_Layer: 0
+  m_Name: MyItem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1093322376
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1093322375}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.31750107, y: 1.5625, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &1098176712
 GameObject:
   m_ObjectHideFlags: 0
@@ -8799,7 +8853,7 @@ GameObject:
   - 114: {fileID: 2124491337}
   - 114: {fileID: 2124491338}
   m_Layer: 8
-  m_Name: Panel
+  m_Name: GUIv2_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
