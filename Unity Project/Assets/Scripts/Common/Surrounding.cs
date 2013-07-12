@@ -7,7 +7,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     public Value2D<T> down { get; set; }
     public Value2D<T> left { get; set; }
     public Value2D<T> right { get; set; }
-    public PassFilter<Value2D<T>> pass = null;
+    public int Count { get; private set; }
 	
     protected Surrounding ()
     {
@@ -29,41 +29,92 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     }
 
     public static Surrounding<T> Get(T[,] arr, int x, int y, PassFilter<Value2D<T>> pass)
-	{
-        Surrounding <T> ret = new Surrounding<T>();
-        ret.pass = pass;
-		x -= 1;
-		if (x >= 0 && x < arr.GetLength(1))
-		{
-			ret.left = new Value2D<T>(x, y, arr[y,x]);	
+    {
+        Position xPos = GetPos(x, arr.GetLength(1));
+        Position yPos = GetPos(y, arr.GetLength(0));
+
+        Surrounding<T> ret = new Surrounding<T>();
+
+        if (xPos == Position.Out || yPos == Position.Out)
+        { // Bad Query
+            return ret;
+        }
+
+        // Create Values
+        if (xPos != Position.BottomEdge) {
+			ret.left = new Value2D<T>(x - 1, y, arr[y, x - 1]);
 		}
-		x += 2;
-		if (x >= 0 && x < arr.GetLength(1))
+		if (xPos != Position.TopEdge)
 		{
-            ret.right = new Value2D<T>(x, y, arr[y, x]);	
+            ret.right = new Value2D<T>(x + 1, y, arr[y, x + 1]);
 		}
-		x -= 1;
-		y -= 1;
-		if (y >= 0 && y < arr.GetLength(0))
+		if (yPos != Position.BottomEdge)
 		{
-            ret.down = new Value2D<T>(x, y, arr[y, x]);	
+            ret.down = new Value2D<T>(x, y - 1, arr[y - 1, x]);
 		}
-		y += 2;
-		if (y >= 0 && y < arr.GetLength(0))
+		if (yPos != Position.TopEdge)
 		{
-            ret.up = new Value2D<T>(x, y, arr[y, x]);	
+            ret.up = new Value2D<T>(x, y + 1, arr[y + 1, x]);
 		}
+
+        // Handle pass filter
+        if (pass != null)
+        {
+            if (!pass.pass(ret.left))
+            {
+                ret.left = null;
+            }
+            if (!pass.pass(ret.right))
+            {
+                ret.right = null;
+            }
+            if (!pass.pass(ret.up))
+            {
+                ret.up = null;
+            }
+            if (!pass.pass(ret.down))
+            {
+                ret.down = null;
+            }
+        }
+
+        ret.Count = ret.CountInternal();
 		return ret;
 	}
-	
+
+    static Position GetPos(int val, int arrLim)
+    {
+        arrLim -= 1;
+        if (val > 0 && val < arrLim)
+        {
+            return Position.In;
+        }
+        if (val == 0)
+        {
+            return Position.BottomEdge;
+        }
+        if (val == arrLim)
+        {
+            return Position.TopEdge;
+        }
+        return Position.Out;
+    }
+
+    private enum Position
+    {
+        Out,
+        BottomEdge,
+        In,
+        TopEdge
+    }
+
     // Returns a direction containing the given value.
     // Null if none found.
     public virtual Value2D<T> GetDirWithVal(T t)
 	{
 		foreach (Value2D<T> val in this)
 		{
-            if (val != null && val.val.Equals(t)
-                && (pass == null || pass.pass(val)))
+            if (val != null && val.val.Equals(t))
 			{
 				return val;	
 			}
@@ -77,8 +128,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     {
         foreach (Value2D<T> val in this)
         {
-            if (val != null && set.Contains(val.val) 
-                && (pass == null || pass.pass(val)))
+            if (val != null && set.Contains(val.val))
             {
                 return val;
             }
@@ -99,8 +149,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 	{
 		foreach (Value2D<T> val in this)
 		{
-			if (val != null && !val.val.Equals(t)
-                && (pass == null || pass.pass(val)))
+			if (val != null && !val.val.Equals(t))
 			{
 				return val;	
 			}
@@ -121,8 +170,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     {
         foreach (Value2D<T> val in this)
         {
-            if (val != null && !set.Contains(val.val)
-                && (pass == null || pass.pass(val)))
+            if (val != null && !set.Contains(val.val))
             {
                 return val;
             }
@@ -206,13 +254,12 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         return ret;
     }
 
-    public Value2D<T> GetRandom(Random rand, PassFilter<Value2D<T>> pass)
+    public Value2D<T> GetRandom(Random rand)
     {
         List<Value2D<T>> options = new List<Value2D<T>>();
         foreach (Value2D<T> val in this)
         {
-            if (pass == null || pass.pass(val))
-                options.Add(val);
+            options.Add(val);
         }
         if (options.Count != 0)
         {
@@ -221,7 +268,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         return null;
     }
 
-    public int Count()
+    private int CountInternal()
     {
         int ret = 0;
         if (up != null)

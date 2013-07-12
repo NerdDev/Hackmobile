@@ -2,19 +2,51 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Path : LayoutObject {
-	
-	List<Value2D<GridType>> list;
-	
-	public Path (Stack<Value2D<GridType>> stack)        
+public class Path : LayoutObjectLeaf
+{
+
+    private static GridType[] types = new GridType[]
+        {
+            GridType.Path_Horiz, 
+            GridType.Path_LB, 
+            GridType.Path_LT, 
+            GridType.Path_RB, 
+            GridType.Path_RT, 
+            GridType.Path_Vert
+        };
+    private static HashSet<GridType> typesSet = new HashSet<GridType>(types);
+    List<Value2D<GridType>> _list;
+
+    public Path(Value2D<GridType> startPoint, GridArray grids)
+        : this(LevelGenerator.DepthFirstSearchFor(startPoint, grids, GridType.Door,
+                                           GridType.Path_Horiz,
+                                           GridType.Path_Vert,
+                                           GridType.Path_LB,
+                                           GridType.Path_LT,
+                                           GridType.Path_RB,
+                                           GridType.Path_RT))
+    {
+    }
+
+    public Path(IEnumerable<Value2D<GridType>> stack)
+        : base()
 	{
-		list = new List<Value2D<GridType>>(stack);
+        _list = new List<Value2D<GridType>>(stack);
 	}
 
-    protected override Bounding GetBoundingInternal()
+    public static HashSet<GridType> PathTypes()
     {
+        return typesSet;
+    }
+
+    protected override Bounding GetBoundingUnshifted()
+    {
+        if (grids != null)
+        {
+            return base.GetBoundingUnshifted();
+        }
         Bounding ret = new Bounding();
-        foreach (Value2D<GridType> val in list)
+        foreach (Value2D<GridType> val in _list)
         {
             ret.absorb(val);
         }
@@ -26,15 +58,33 @@ public class Path : LayoutObject {
         return GetArray(false);
     }
 
+    public void Finalize(LayoutObjectContainer obj)
+    {
+        Simplify();
+        ConnectEnds(obj);
+        Bake(true);
+    }
+
+    public override void Bake(bool shiftCompensate)
+    {
+        grids = GetArray(false);
+        _list = null;
+        base.Bake(shiftCompensate);
+    }
+
     public GridArray GetArray(bool ending)
     {
-        Bounding bounds = GetBoundingInternal();
+        if (grids != null)
+        {
+            return grids;
+        }
+        Bounding bounds = GetBoundingUnshifted();
         GridArray ret = new GridArray(bounds, false);
-        if (list.Count > 0)
+        if (_list.Count > 0)
         {
             Value2D<GridType> backwardPt = null;
             Value2D<GridType> curPoint = null;
-            foreach (Value2D<GridType> forwardPt in list)
+            foreach (Value2D<GridType> forwardPt in _list)
             {
                 if (curPoint != null)
                 {
@@ -93,72 +143,95 @@ public class Path : LayoutObject {
         return ret;
     }
 
-    public override GridArray GetPrintArray()
+    public void Simplify()
     {
-        return GetArray(true);
+        Prune();
     }
 
-    public void simplify()
+    void Prune()
     {
-		#region DEBUG
-		if (DebugManager.logging(DebugManager.Logs.LevelGen))
-		{
-			DebugManager.printHeader(DebugManager.Logs.LevelGen, "Simplify");	
-		}
-		#endregion
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Prune");
+        }
+        #endregion
         Bounding bounds = GetBounding();
         Array2D<int> indexes = new Array2D<int>(bounds, false);
-        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(list);
+        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
             SurroundingInt surround = SurroundingInt.Get(indexes, val.x, val.y);
-            Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);		
-			#region DEBUG
-			if (DebugManager.logging(DebugManager.Logs.LevelGen))
-			{
-				DebugManager.w (DebugManager.Logs.LevelGen, "Evaluating " + val);
-				if (neighbor != null)
-				{
-					DebugManager.w (DebugManager.Logs.LevelGen, "Found Neighbor " + neighbor);
-				}
-			}
-			#endregion
+            Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+            {
+                DebugManager.w(DebugManager.Logs.LevelGen, "Evaluating " + val);
+                if (neighbor != null)
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "Found Neighbor " + neighbor);
+                }
+            }
+            #endregion
             if (neighbor != null)
             { // If point of interest exists, prune	
-				int fromIndex = neighbor.val + 1;
-				int count = index - neighbor.val - 1;
+                int fromIndex = neighbor.val + 1;
+                int count = index - neighbor.val - 1;
                 // Set indices to 0
-                List<Value2D<GridType>> toRemove = list.GetRange(fromIndex, count);
+                List<Value2D<GridType>> toRemove = _list.GetRange(fromIndex, count);
                 foreach (Value2D<GridType> r in toRemove)
                 {
                     indexes[r.x, r.y] = 0;
                 }
                 // Remove
-                list.RemoveRange(fromIndex, count);
+                _list.RemoveRange(fromIndex, count);
                 // Set next index to proper number
                 index = neighbor.val + 1;
-				#region DEBUG
-				if (DebugManager.logging(DebugManager.Logs.LevelGen))
-				{
-					DebugManager.w (DebugManager.Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count); 
-					toLog(DebugManager.Logs.LevelGen);
-				}
-				#endregion
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+                {
+                    DebugManager.w(DebugManager.Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count);
+                    ToLog(DebugManager.Logs.LevelGen);
+                }
+                #endregion
             }
             indexes[val.x, val.y] = index;
             index++;
         }
-		#region DEBUG
-		if (DebugManager.logging(DebugManager.Logs.LevelGen))
-		{
-			DebugManager.printFooter(DebugManager.Logs.LevelGen);	
-		}
-		#endregion
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
 
-    public bool isValid()
+    public override bool isValid()
     {
-        return list.Count > 0;
+        return grids != null || (_list != null && _list.Count > 2);
+    }
+
+    public void ConnectEnds(LayoutObjectContainer container)
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connect Ends");
+        }
+        #endregion
+        container.FindAndConnect(this, _list[0]);
+        container.FindAndConnect(this, _list[_list.Count - 1]);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+    }
+
+    public override string GetTypeString()
+    {
+        return "Path";
     }
 }

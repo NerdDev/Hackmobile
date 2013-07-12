@@ -7,47 +7,36 @@ public class LevelLayout : LayoutObjectContainer {
     List<Room> rooms = new List<Room>();
 	List<Path> paths = new List<Path>();
 
-    public void addRoom(Room r)
+    public void AddRoom(Room r)
     {
         rooms.Add(r);
+        AddObject(r);
     }
 
-    public void addRooms(List<Room> rs)
+    public void AddRooms(List<Room> rs)
     {
         rooms.AddRange(rs);
     }
 	
-	public List<Room> getRooms()
+	public List<Room> GetRooms()
 	{
-		List<Room> ret = new List<Room>(rooms);
-		return ret;
+		return new List<Room>(rooms);
 	}
 
-    public void addPath(Path p)
+    public void AddPath(Path p)
     {
         paths.Add(p);
+        AddObject(p, 0);
     }
 	
-	public List<Path> getPaths()
+	public List<Path> GetPaths()
 	{
 		List<Path> ret = new List<Path>(paths);
 		return ret;
 	}
 
-    public override IEnumerator<LayoutObject> GetEnumerator()
+    public override String GetTypeString()
     {
-        foreach (Room room in rooms)
-        {
-            yield return room;
-        }
-        foreach (Path path in paths)
-        {
-            yield return path;
-        }
+        return "Level Layout";
     }
-	
-	public override string ToString ()
-	{
-		 return "LevelLayout";
-	}
 }

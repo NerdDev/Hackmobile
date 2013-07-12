@@ -11,8 +11,8 @@ public class SquareRoom : RoomModifier {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, ToString());
         }
         #endregion
-        int height = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        int width = LevelGenerator.rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int height = LevelGenerator.Rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int width = LevelGenerator.Rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {

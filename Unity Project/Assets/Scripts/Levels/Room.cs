@@ -4,25 +4,22 @@ using System.Collections.Generic;
 
 public class Room : LayoutObjectLeaf {
 
-    public int roomNum { get; private set; }
-	
-    public Room(int num)
+    public Room()
         : base(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2)
     {
-        roomNum = num;
     }
 	
-	public GridMap getWalls() 
+	public GridMap GetWalls() 
     {
 		return getTypes(GridType.Wall);
 	}
 	
-	public GridMap getFloors() 
+	public GridMap GetFloors() 
     {
 		return getTypes(GridType.Floor);
 	}
 	
-	public GridMap getDoors() 
+	public GridMap GetDoors() 
     {
 		return getTypes(GridType.Door);
 	}
@@ -37,46 +34,28 @@ public class Room : LayoutObjectLeaf {
 
     public GridMap GetPotentialDoors()
     {
-        GridMap potentialDoors = getWalls();
+        GridMap potentialDoors = GetWalls();
         RemoveBadDoorWalls(potentialDoors);
         return potentialDoors;
     }
 
     void RemoveBadDoorWalls(GridMap potentialDoors)
     {
-        GridMap corneredAreas = getCorneredBy(GridType.Wall, GridType.Wall);
+        GridMap corneredAreas = GetCorneredBy(GridType.Wall, GridType.Wall);
         potentialDoors.RemoveAll(corneredAreas);
     }
 
     public GridMap GetPerimeter()
     {
-        GridMap ret = new GridMap();
-        // Get null spaces surrounding room
-        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), grids, GridType.NULL);
-        // Invert to be room
-        Array2D<bool>.invert(bfs);
-        foreach (Value2D<bool> val in bfs)
-        {
-            // If space part of room
-            if (val.val)
-            {
-                Surrounding<bool> surround = Surrounding<bool>.Get(bfs.GetArr(), val);
-                // If space is an edge (next to a false)
-                if (surround.GetDirWithVal(false) != null)
-                {
-                    ret[val.x, val.y] = grids[val.x, val.y];
-                }
-            }
-        }
-        return ret;
+        return GetBfsPerimeter();
     }
 
-	public override string ToString()
-	{
-		return "Room " + roomNum;
-	}
+    public override String GetTypeString()
+    {
+        return "Room";
+    }
 
-    protected override Bounding GetBoundingInternal()
+    protected override Bounding GetBoundingUnshifted()
     {
 		return grids.GetBounding();
 	}

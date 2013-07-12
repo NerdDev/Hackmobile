@@ -37,24 +37,29 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
 	public Array2D(Bounding bound, bool minimize) : this()
     {
-        int width = 0;
-        int height = 0;
-        if (bound.isValid())
-        {
-			if (minimize)
-			{
-	            width = bound.width + 1;
-	            height = bound.height + 1;
-			}
-			else 
-			{
-	            width = bound.xMax + 1;
-	            height = bound.yMax + 1;
-			}
-        }
-        arr = new T[height, width];
+        arr = BoundedArr(bound, minimize);
 	}
     #endregion
+
+    protected static T[,] BoundedArr(Bounding bound, bool minimize)
+    {
+        int width = 0;
+        int height = 0;
+        if (bound.IsValid())
+        {
+            if (minimize)
+            {
+                width = bound.Width + 1;
+                height = bound.Height + 1;
+            }
+            else
+            {
+                width = bound.XMax + 1;
+                height = bound.YMax + 1;
+            }
+        }
+        return new T[height,width];
+    }
 
     #region GetSet
     protected override T Get(int x, int y)
@@ -125,11 +130,16 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public void PutAll(Array2D<T> rhs, int additionalXshift, int additionalYshift)
     {
-        for (int y = 0; y < rhs.arr.GetLength(0); y++)
+        PutAll(rhs.arr, additionalXshift, additionalYshift);
+    }
+
+    public void PutAll(T[,] rhs, int additionalXshift, int additionalYshift)
+    {
+        for (int y = 0; y < rhs.GetLength(0); y++)
         {
-            for (int x = 0; x < rhs.arr.GetLength(1); x++)
+            for (int x = 0; x < rhs.GetLength(1); x++)
             {
-                Put(rhs.arr[y, x], x + additionalXshift, y + additionalYshift);
+                Put(rhs[y, x], x + additionalXshift, y + additionalYshift);
 			}
         }
     }
@@ -163,10 +173,10 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     public override Bounding GetBounding()
     {
         Bounding ret = new Bounding();
-        ret.xMin = 0;
-        ret.xMax = arr.GetLength(1) - 1;
-        ret.yMin = 0;
-        ret.yMax = arr.GetLength(0) - 1;
+        ret.XMin = 0;
+        ret.XMax = arr.GetLength(1) - 1;
+        ret.YMin = 0;
+        ret.YMax = arr.GetLength(0) - 1;
         return ret;
     }
 
@@ -177,7 +187,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #endregion
 
     #region Iteration
-    public IEnumerator<Value2D<T>> GetEnumerator()
+    public virtual IEnumerator<Value2D<T>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {

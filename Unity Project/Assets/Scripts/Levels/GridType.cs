@@ -2,7 +2,6 @@ using System.Collections;
 
 public enum GridType
 {
-    // Order represents "priority" if two are in the same spot, which to display
     NULL,
 	INTERNAL_RESERVED_BLOCKED,
 	
@@ -17,5 +16,12 @@ public enum GridType
 	Path_LB,
 	Path_RT,
 	Path_RB,
+
+    Enemy,
+    Trap,
+    Secret,
+    SmallLoot,
+    Chest,
+
 	INTERNAL_RESERVED_CUR
 }

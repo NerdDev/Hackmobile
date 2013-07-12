@@ -37,7 +37,9 @@ public class DebugManager : MonoBehaviour
         GlobalLogging,
         LineNumbers,
         SearchSteps,
-        Probability
+        Probability,
+        LevelGen_Path_Simplify_Prune,
+        LevelGen_Connected_To
     }
 
     static GenericFlags<DebugFlag> flags = new GenericFlags<DebugFlag>();
@@ -72,6 +74,8 @@ public class DebugManager : MonoBehaviour
 		logging (Logs.LevelGen, true);
 		logging(Logs.NPCs, true);
         flags[DebugFlag.SearchSteps] = false;
+        flags[DebugFlag.LevelGen_Path_Simplify_Prune] = false;
+        flags[DebugFlag.LevelGen_Connected_To] = false;
 
         // Test output
         if (DebugManager.logging(DebugManager.Logs.Main))

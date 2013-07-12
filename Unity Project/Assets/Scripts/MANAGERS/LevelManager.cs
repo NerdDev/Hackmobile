@@ -4,36 +4,45 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 	
-	public Theme theme;
-    public LevelBuilder builder;
-    static GameObject[,] blocks_;
-    static public GameObject[,] blocks { get { return blocks_; } private set { blocks_ = value; } }
-    static GridArray array_;
-    static public GridArray array { get { return array_; } private set { array_ = value; } }
-	
+	public Theme Theme;
+    public LevelBuilder Builder;
+    public static GameObject[,] Blocks { get; private set; }
+    public static GridArray Array { get; private set; }
+    private static LevelGenerator gen;
+
     void Start()
     {
         RoomModifier.RegisterModifiers();
-        LevelGenerator gen = new LevelGenerator();
-        LevelLayout layout = gen.generateLayout(0, 665911697, 1733302797);
-        array = layout.GetArray();
-		blocks = builder.Build(array, theme);
+        gen = new LevelGenerator();
+        LevelLayout layout;
+        layout = gen.GenerateLayout(0);
+//        layout = GenerateLevels(30);
+        Array = layout.GetArray();
+		Blocks = Builder.Build(Array, Theme);
 
         JustinTest();
         JoseTest();
     }
 
-    
+    LevelLayout GenerateLevels(int num)
+    {
+        LevelLayout last = null;
+        for (int i = 0; i < num; i++)
+        {
+            last = gen.GenerateLayout(i);
+        }
+        return last;
+    }
 
     void TestModifier(RoomModifier mod, int seed)
     {
         System.Random rand = new System.Random(seed);
-        Room room = new Room(0);
+        Room room = new Room();
         SquareRoom square = new SquareRoom();
         square.Modify(room, rand);
         mod.Modify(room, rand);
         DebugManager.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
-        room.toLog(DebugManager.Logs.LevelGenMain);
+        room.ToLog(DebugManager.Logs.LevelGenMain);
     }
 
     void JustinTest()

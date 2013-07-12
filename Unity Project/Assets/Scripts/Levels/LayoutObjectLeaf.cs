@@ -6,9 +6,18 @@ public class LayoutObjectLeaf : LayoutObject {
 
     protected GridArray grids;
 
-    public LayoutObjectLeaf(int width, int height)
+    protected LayoutObjectLeaf() : base()
     {
-        grids = new GridArray(width, height);
+    }
+
+    public LayoutObjectLeaf(int width, int height)
+        : this(new GridArray(width, height))
+    {
+    }
+
+    public LayoutObjectLeaf(GridArray arr) : this()
+    {
+        grids = arr;
     }
 
     #region GetSet
@@ -45,11 +54,26 @@ public class LayoutObjectLeaf : LayoutObject {
         return grids;
     }
 
-    protected override Bounding GetBoundingInternal()
+    protected override Bounding GetBoundingUnshifted()
     {
-		return grids.GetBoundingInternal();
+        if (finalized)
+        {
+            return bakedBounds;
+        }
+		return grids.GetBounding();
 	}
     #endregion GetSet
+
+    public override void Bake(bool shiftCompensate)
+    {
+        Point minimizeShift = grids.Minimize(1);
+        if (shiftCompensate)
+        {
+            ShiftP.shift(minimizeShift);
+        }
+        bakedBounds = grids.GetBoundingInternal();
+        finalized = true;
+    }
 
     #region FillMethods
     public void BoxStroke(GridType t, int width, int height)
@@ -104,4 +128,14 @@ public class LayoutObjectLeaf : LayoutObject {
         grids.putSquare(t, xl, xr, yb, yt);
     }
     #endregion FillMethods
+
+    public override bool ContainsPoint(Value2D<GridType> val)
+    {
+        return grids.ContainsPoint(val);
+    }
+
+    public override String GetTypeString()
+    {
+        return "Layout Object Leaf";
+    }
 }

@@ -38,6 +38,10 @@ abstract public class Container2D<T> {
         }
     }
     protected abstract T Get(int x, int y);
+    public bool ContainsPoint(Value2D<T> val)
+    {
+        return !Get(val.x, val.y).Equals(default(T));
+    }
     public abstract bool InRange(int x, int y);
     protected virtual void Put(T val, int x, int y)
     {
@@ -76,6 +80,11 @@ abstract public class Container2D<T> {
         }
     }
     public abstract T[,] GetArr();
+
+    public Surrounding<T> GetSurrounding(Value2D<T> val)
+    {
+        return Surrounding<T>.Get(GetArr(), val);
+    }
 	
 	public virtual List<string> ToRowStrings()
 	{
@@ -107,15 +116,15 @@ abstract public class Container2D<T> {
         return t.ToString();
     }
 	
-	public virtual void toLog(DebugManager.Logs log)
+	public virtual void ToLog(DebugManager.Logs log)
     {
         if (DebugManager.logging(log))
         {
-            toLog(log, new String[0]);
+            ToLog(log, new String[0]);
         }
     }
 
-    public virtual void toLog(DebugManager.Logs log, params string[] customContent)
+    public virtual void ToLog(DebugManager.Logs log, params string[] customContent)
     {
         if (DebugManager.logging(log))
         {
@@ -131,5 +140,17 @@ abstract public class Container2D<T> {
             DebugManager.w(log, "Bounds: " + GetBounding().ToString());
             DebugManager.printFooter(log);
         }
+    }
+
+    public static void Smallest<Z>(Z obj1, Z obj2, out Z smallest, out Z largest) where Z : Container2D<T>
+    {
+        if (obj1.GetBounding().Area < obj2.GetBounding().Area)
+        {
+            smallest = obj1;
+            largest = obj2;
+            return;
+        }
+        smallest = obj2;
+        largest = obj1;
     }
 }

@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GridArray : Array2D<GridType> {
+public class GridArray : Array2D<GridType>
+{
 
     #region Ctors
     public GridArray(int width, int height) : base(width, height)
@@ -24,7 +25,7 @@ public class GridArray : Array2D<GridType> {
     public GridArray(GridArray rhs, int xShift, int yShift)
         : base(rhs.arr.GetLength(1), rhs.arr.GetLength(0))
     {
-        PutAll(rhs, xShift, yShift);
+        PutAll(rhs.arr, xShift, yShift);
     }
 	
 	public GridArray(Bounding bounds, bool minimize) : base(bounds, minimize)
@@ -35,11 +36,6 @@ public class GridArray : Array2D<GridType> {
     {
         this.arr = arr;
     }
-	
-	protected override Comparator<GridType> getDefaultComparator ()
-	{
-		return GridTypeComparator.get();
-	}
     #endregion
 
     protected override void Put(GridType val, int x, int y)
@@ -53,10 +49,22 @@ public class GridArray : Array2D<GridType> {
 	public void PutAll(LayoutObject obj, Bounding origBound)
 	{
 		Point shift = obj.GetShift();
-		shift.x -= origBound.xMin;
-		shift.y -= origBound.yMin;
+		shift.x -= origBound.XMin;
+		shift.y -= origBound.YMin;
 		base.PutAll (obj.GetArray(), shift);	
 	}
+    public void PutAll(LayoutObject rhs)
+    {
+        PutAll(rhs.GetArray(), rhs.GetShift());
+    }
+
+    public void PutAsBlocked(GridArray rhs)
+    {
+        foreach (Value2D<GridType> val in rhs)
+        {
+            Put(GridType.INTERNAL_RESERVED_BLOCKED, val.x, val.y);
+        }
+    }
 	
 	public override Bounding GetBounding ()
     {
@@ -80,15 +88,26 @@ public class GridArray : Array2D<GridType> {
         return base.GetBounding();
     }
 
+    public Point Minimize(int buffer)
+    {
+        Bounding bounds = GetBounding();
+        bounds.expand(buffer);
+        bounds.ShiftNonNeg();
+        GridType[,] tmp = arr;
+        arr = BoundedArr(bounds, true);
+        PutAll(tmp, - bounds.XMin, - bounds.YMin);
+        return new Point(bounds.XMin, bounds.YMin);
+    }
+
     public override List<string> ToRowStrings()
     {
         GridType[,] array = GetArr();
 		Bounding bounds = GetBounding();
         List<string> ret = new List<string>();
-        for (int y = bounds.yMax; y >= bounds.yMin; y -= 1)
+        for (int y = bounds.YMax; y >= bounds.YMin; y -= 1)
         {
             string rowStr = "";
-            for (int x = bounds.xMin; x <= bounds.xMax; x += 1)
+            for (int x = bounds.XMin; x <= bounds.XMax; x += 1)
             {
                 rowStr += LayoutObject.getAscii(array[y, x]);
             }
@@ -127,4 +146,18 @@ public class GridArray : Array2D<GridType> {
         return src.arr;
     }
 
+    public override IEnumerator<Value2D<GridType>> GetEnumerator()
+    {
+        for (int y = 0; y < arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < arr.GetLength(1); x++)
+            {
+                if (arr[y, x] != GridType.NULL)
+                {
+                    Value2D<GridType> val = new Value2D<GridType>(x, y, arr[y, x]);
+                    yield return val;
+                }
+            }
+        }
+    }
 }

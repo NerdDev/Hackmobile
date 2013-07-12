@@ -59,6 +59,11 @@ public class Point {
 	}
     #endregion Shifts
 
+    public Point Invert()
+    {
+        return new Point(-x, -y);
+    }
+
     public bool isZero()
 	{
 		return x == 0 && y == 0;	
