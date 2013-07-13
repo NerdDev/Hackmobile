@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour
             //Toggle Debug Mode:
             if (Input.GetKeyDown(KeyCode.BackQuote)) 
             { 
-                BigBoss.GameStateManager.ToggleDebugMode(); 
+                //BigBoss.GameStateManager.ToggleDebugMode(); 
             }
             if (allowKeyboardInput)
             {
@@ -63,7 +63,7 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             Vector3 place = new Vector3(15f, .5f, 18);
-            BigBoss.ItemMaster.CreateRandomItem(place);
+            BigBoss.WorldObjectManager.CreateRandomItem(place);
             Debug.Log("X");
         }
 
@@ -97,7 +97,9 @@ public class InputManager : MonoBehaviour
         {
             Vector2 centerScreenPointToMousePosLookVector = (Vector2)Input.mousePosition - centerPointInScreenSpace;
             Vector3 playerConvertedTranslationVector = new Vector3(centerScreenPointToMousePosLookVector.x, 0, centerScreenPointToMousePosLookVector.y);
-            Debug.DrawRay(BigBoss.PlayerInfo.PlayerAvatar.transform.position, playerConvertedTranslationVector, Color.magenta);
+            Debug.DrawRay(BigBoss.PlayerInfo.PlayerAvatar.transform.position,
+                playerConvertedTranslationVector,
+                Color.magenta);
             BigBoss.PlayerInfo.MovePlayer(playerConvertedTranslationVector);
 
         }

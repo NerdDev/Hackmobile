@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-/*   As long as this isn't an MMO, this Player class should be able to hold most if not all of player information.
- 
- 
+/*   
+ * As long as this isn't an MMO, this Player class should be able to hold most if not all of player information.
  */
-public class PlayerManager : NPC
+public class Player : NPC
 {
 
     #region General Player Info:
@@ -30,37 +29,13 @@ public class PlayerManager : NPC
     public Vector3 avatarStartLocation;
     public float tileMovementTolerance = .85f;  //radius
 
-    //X,Y coordinate for other scripts to grab:
-    private Vector2 playerGridCoordinate;
-    public Vector2 PlayerGridCoordinate
-    {
-        get { return playerGridCoordinate; }
-        set { playerGridCoordinate = value; }
-    }
-
-    private Vector3 vectorToGrid;
-
-    private Vector3 currentOccupiedGridCenterWorldPoint;
-    public Vector3 CurrentOccupiedGridCenterWorldPoint 
-    { 
-        get { return currentOccupiedGridCenterWorldPoint; }
-        set { currentOccupiedGridCenterWorldPoint = value; }
-    }
-
-    private Vector3 lastOccupiedGridCenterWorldPoint;
-    public Vector3 LastOccupiedGridCenterWorldPoint
-    {
-        get { return lastOccupiedGridCenterWorldPoint; }
-        set { lastOccupiedGridCenterWorldPoint = value; }
-    }
-
     #endregion
 
     #region Player Stats (For all the Player-only statistics)
-    public float playerSpeed = 10;  //temporarily hard-coded
+    public float playerSpeed = 1.5f;  //temporarily hard-coded
     public float PlayerSpeed { get { return playerSpeed; } }
 
-    public float playerRotationSpeed = .05f;  //temporarily hard-coded
+    public float playerRotationSpeed = .15f;  //temporarily hard-coded
     public float PlayerRotationSpeed { get { return playerRotationSpeed; } }
     #endregion
 
@@ -75,19 +50,52 @@ public class PlayerManager : NPC
     private AnimatorStateInfo currentBaseState;			// a reference to the current state of the animator, used for base layer
     private AnimatorStateInfo layer2CurrentState;	// a reference to the current state of the animator, used for layer 2
 
-    static int idleState = Animator.StringToHash("Base Layer.Idle");
-    static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
+    //static int idleState = Animator.StringToHash("Base Layer.Idle");
+    //static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
 
     Vector3 currentGridLoc;
     Vector3 currentGridCenterPointWithoffset;
 
     #endregion
 
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision!");
+        if (collision.gameObject.GetComponent<NPC>() != null)
+        {
+            Debug.Log("You walked into an NPC!");
+        }
+        else
+        {
+            GridType g = LevelManager.array[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
+            switch (g)
+            {
+                case GridType.Wall:
+                    Debug.Log("You walked into a wall!");
+                    break;
+                case GridType.Door:
+                    Debug.Log("You walked through the door!");
+                    break;
+                case GridType.Floor:
+                    Debug.Log("You ended up in the floor. Don't ask how.");
+                    break;
+                default:
+                    Debug.Log("I'm not sure what you collided with.");
+                    break;
+            }
+        }
+    }
+
     // Use this for initialization
     void Start()
     {
+        //use the internal assignation reference for clarity
+        this.playerAvatar = this.gameObject;
         stats.MaxEncumbrance = getMaxInventoryWeight();
         stats.Hunger = 900;
+        stats.MaxHealth = 100;
+        stats.CurrentHealth = 100;
+        IsActive = true;
 
         anim = playerAvatar.GetComponent<Animator>() as Animator;
 
@@ -105,7 +113,28 @@ public class PlayerManager : NPC
         movement();
     }
 
+    #region Combat
+
+    public void attack(NPC n)
+    {
+        List<Item> weapons = equipment.getItems(EquipTypes.HAND);
+        if (weapons.Count > 0)
+        {
+            foreach (Item i in weapons)
+            {
+                n.damage(i.getDamage());
+            }
+        }
+    }
+
+    #endregion
+
     #region Movement
+
+    float timePassed = 0;
+    float timeVar = 1.5f;
+    bool timeSet;
+    bool isMoving;
 
     private void movement()
     {
@@ -129,61 +158,76 @@ public class PlayerManager : NPC
     {
         if (BigBoss.PlayerInput.isMovementKeyPressed == false && Input.GetMouseButton(1) == false)
         {
-            if (checkPosition(playerAvatar.transform.position, currentOccupiedGridCenterWorldPoint))
+            if (!timeSet)
             {
-                //VECTORS ARE RETARDED
+                timePassed = UnityEngine.Time.time + timeVar;
+                timeSet = true;
+            }
+            if (UnityEngine.Time.time > timePassed)
+            {
+                if (checkPosition(playerAvatar.transform.position, CurrentOccupiedGridCenterWorldPoint))
+                {
+                    //VECTORS ARE RETARDED
 
-                //THESE VECTORS WOULD GO AWAY FROM THE PLAYER
+                    //THESE VECTORS WOULD GO AWAY FROM THE PLAYER
 
-                //WHY
+                    //WHY
 
-                //WHY OH WHY
+                    //WHY OH WHY
 
-                //GRID POINT - POSITION SHOULD NOT SEND THE PLAYER AWAY
+                    //GRID POINT - POSITION SHOULD NOT SEND THE PLAYER AWAY
 
-                //sigh
+                    //sigh
 
-                //vectorToGrid = currentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;
-                //vectorToGrid = Vector3.Lerp(playerAvatar.transform.position, currentOccupiedGridCenterWorldPoint, 1f);
-                //playerAvatar.transform.Translate(vectorToGrid.normalized * Time.deltaTime);
+                    //vectorToGrid = currentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;
+                    //vectorToGrid = Vector3.Lerp(playerAvatar.transform.position, currentOccupiedGridCenterWorldPoint, 1f);
+                    //playerAvatar.transform.Translate(vectorToGrid.normalized * Time.deltaTime);
 
-                //so I just did this. and it rotates the player. and it's annoying.
-                MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime);
+                    //so I just did this. and it rotates the player. and it's annoying.
+                    MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime, .75f, .25f);
+                    isMoving = true;
+                }
+                else
+                {
+                    resetPosition();
+                    isMoving = false;
+                }
             }
             else
             {
-                this.playerAvatar.transform.position = CurrentOccupiedGridCenterWorldPoint;
+                isMoving = false;
             }
         }
+        else
+        {
+            isMoving = true;
+            timeSet = false;
+        }
+    }
+
+    private void resetPosition()
+    {
+        this.playerAvatar.transform.position = CurrentOccupiedGridCenterWorldPoint;
     }
 
     public void MovePlayer(Vector3 heading)
     {
+        MovePlayer(heading, playerSpeed, playerRotationSpeed);
+    }
+
+    private void MovePlayer(Vector3 heading, float playerSpeed, float playerRotationSpeed)
+    {
         //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
         //Translation toward a precalculated heading:
-        playerAvatar.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
+        gameObject.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
         //Lerping rotation so we don't get jitter:
         Quaternion toRot = Quaternion.LookRotation(heading);//does this need to be normalized?
         playerAvatar.transform.rotation = Quaternion.Slerp(playerAvatar.transform.rotation, toRot, playerRotationSpeed);
     }
 
-    void UpdateCurrentTileVectors()
-    {
-        PlayerGridCoordinate = new Vector2(Mathf.Round(playerAvatar.transform.position.x), Mathf.Round(playerAvatar.transform.position.z));
-        LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
-        CurrentOccupiedGridCenterWorldPoint = new Vector3(PlayerGridCoordinate.x, -.5f, PlayerGridCoordinate.y);
-        GridSpace grid = LevelManager.blocks[Convert.ToInt32(PlayerGridCoordinate.x), Convert.ToInt32(PlayerGridCoordinate.y)].GetComponent<GridSpace>();
-        if (grid.hasNPC())
-        {
-            playerAvatar.transform.position = LastOccupiedGridCenterWorldPoint;
-        }
-        applyTileEffect();
-    }
-
     private void applyTileEffect()
     {
-        GridType grid = LevelManager.array[Convert.ToInt32(playerGridCoordinate.x), Convert.ToInt32(playerGridCoordinate.y)];
-        Debug.Log(grid);
+        GridType grid = LevelManager.array[Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y)];
         switch (grid)
         {
             case GridType.Wall:
@@ -194,11 +238,11 @@ public class PlayerManager : NPC
         }
     }
 
-    private float variance = .08f;
+    private float playervariance = .08f;
     private bool checkPosition(Vector3 playPos, Vector3 curPos)
     {
-        if (Math.Abs(playPos.x - curPos.x) > variance ||
-            Math.Abs(playPos.z - curPos.z) > variance)
+        if (Math.Abs(playPos.x - curPos.x) > playervariance ||
+            Math.Abs(playPos.z - curPos.z) > playervariance)
         {
             return true;
         }
@@ -211,9 +255,10 @@ public class PlayerManager : NPC
         //float h = Input.GetAxis("Horizontal");				// setup h variable as our horizontal input axis
         //float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
         float v = 0;
-        if (Input.GetMouseButton(1))
+        //if (Input.GetMouseButton(1))
+        if (isMoving)
         {
-            v = 1;
+            v = playerSpeed;
         }
         
         //Debug.Log("V: " + v);
@@ -245,7 +290,7 @@ public class PlayerManager : NPC
     public override void applyEffect(Properties e, int priority, bool isItem, int turnsToProcess)
     {
         base.applyEffect(e, priority, isItem, turnsToProcess);
-        BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
+        //BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
         //update gui
     }
 
@@ -253,7 +298,7 @@ public class PlayerManager : NPC
 
     #region Adjust Player Stats/Attr's/Data
 
-    public override int AdjustHunger(int amount)
+    public override float AdjustHunger(int amount)
     {
         base.AdjustHunger(amount);
 

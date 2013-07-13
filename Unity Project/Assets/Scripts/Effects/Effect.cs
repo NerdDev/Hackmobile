@@ -92,6 +92,18 @@ public class Effect : PassesTurns
         {
             eff += (int)p;
         }
+        //sets caps on values, not really thoroughly defined by stacking
+        if (!stacking)
+        {
+            if (eff > 5)
+            {
+                eff = 5;
+            }
+            else if (eff < -5)
+            {
+                eff = -5;
+            }
+        }
     }
 
     #region Turn Management
@@ -108,7 +120,7 @@ public class Effect : PassesTurns
         {
             //effect is ended
             isActive = false;
-        } 
+        }
         else if (turnsToProcess < 0)
         {
             //continue, infinite effect
@@ -146,6 +158,19 @@ public class Effect : PassesTurns
         set
         {
             basePoints = value;
+        }
+    }
+
+    protected bool activeEff;
+    public bool IsActive
+    {
+        get
+        {
+            return this.activeEff;
+        }
+        set
+        {
+            this.activeEff = value;
         }
     }
     #endregion

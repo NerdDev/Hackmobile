@@ -17,13 +17,13 @@ public class Item : WorldObject, PassesTurns
 	
 	public virtual void RegisterItemToSingleton() //if we decide to make Item.cs structural only, then switch these to abstract
 	{
-		BigBoss.ItemMaster.AddItemToMasterList(this);//registering existence with singleton
+		BigBoss.WorldObjectManager.AddItemToMasterList(this);//registering existence with singleton
         BigBoss.TimeKeeper.RegisterToUpdateList(this);
 	}
 	
 	public virtual void DestroyThisItem()
 	{
-		BigBoss.ItemMaster.RemoveItemFromMasterList(this);//removing existence with singleton
+		BigBoss.WorldObjectManager.RemoveItemFromMasterList(this);//removing existence with singleton
         BigBoss.TimeKeeper.RemoveFromUpdateList(this);
 		Destroy (this.gameObject);
 	}
@@ -74,7 +74,7 @@ public class Item : WorldObject, PassesTurns
     private string mat;
     public MaterialType Material
     {
-        get { return BigBoss.ItemMaster.getMaterial(mat); }
+        get { return BigBoss.WorldObjectManager.getMaterial(mat); }
         set { this.mat = value.Name; }
     }
 
@@ -153,13 +153,18 @@ public class Item : WorldObject, PassesTurns
         n.applyEffect(onEquip, -1, true);
     }
 
+    public int getDamage()
+    {
+        return this.Damage.getValue();
+    }
+
     #endregion
 
     #region Data Management for Item Instances
 
     public void setData(string itemName) 
     {
-        this.setData(BigBoss.ItemMaster.getItem(itemName));
+        this.setData(BigBoss.WorldObjectManager.getItem(itemName));
     }
 
     //use this to do a conversion of a base item to instanced item
@@ -235,6 +240,17 @@ public class Item : WorldObject, PassesTurns
         set
         {
             this.baseItemPoints = value;
+        }
+    }
+    public override bool IsActive
+    {
+        get
+        {
+            return this.isActive;
+        }
+        set
+        {
+            this.isActive = value;
         }
     }
     #endregion

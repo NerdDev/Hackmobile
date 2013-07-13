@@ -71,6 +71,11 @@ public class Equipment
 
     }
 
+    public List<Item> getItems(EquipTypes et)
+    {
+        return getItemsIE(et) as List<Item>;
+    }
+
     public bool equipItem(Item i)
     {
         if (isFreeSlot(i.EquipType))
@@ -114,6 +119,17 @@ public class Equipment
     }
 
     /// Private functions
+
+    private IEnumerable<Item> getItemsIE(EquipTypes et)
+    {
+        foreach (EquipSlot es in equipSlots[(int)et])
+        {
+            if (es.isFree())
+            {
+                yield return es.getItem();
+            }
+        }
+    }
 
     private EquipSlot getFreeSlot(EquipTypes et)
     {
@@ -179,9 +195,9 @@ public class Equipment
         return false;
     }
 
-    private bool removeItem(Item i, List<EquipSlot> boots)
+    private bool removeItem(Item i, List<EquipSlot> slots)
     {
-        foreach (EquipSlot es in boots)
+        foreach (EquipSlot es in slots)
         {
             if (es.removeItem(i))
             {
@@ -226,6 +242,11 @@ public class Equipment
             {
                 return false;
             }
+        }
+
+        public Item getItem()
+        {
+            return this.equipped;
         }
     }
 

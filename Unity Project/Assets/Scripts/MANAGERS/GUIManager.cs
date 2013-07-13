@@ -142,7 +142,7 @@ public class GUIManager : MonoBehaviour {
 			
 		while(this.enabled == true)//Infinite Loop:
 		{
-			
+			/*
 			if (BigBoss.GameStateManager.DebugMode	== true)//Only Calculate this stuff in Debug Mode:
 			{
 				textComp.enabled = true;
@@ -164,7 +164,8 @@ public class GUIManager : MonoBehaviour {
 				yield return null;
 				//yield return new WaitForSeconds (.05f);
 			}
-			else textComp.enabled = false;
+                */
+			//else textComp.enabled = false;
 			yield return null;
 			
 		}

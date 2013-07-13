@@ -110,7 +110,7 @@ namespace System
                 }
                 else
                 {
-                    MemberInfo[] members = element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance);
+                    MemberInfo[] members = element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
                     foreach (var memberInfo in members)
                     {
                         var fieldInfo = memberInfo as FieldInfo;

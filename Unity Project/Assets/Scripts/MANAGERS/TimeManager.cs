@@ -78,10 +78,10 @@ public class TimeManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    //void Update()
+    //{
         //Does this do anything for us? Or should it simply not be tracked.
-    }
+    //}
 
     public void TogglePause()
     {
@@ -92,7 +92,7 @@ public class TimeManager : MonoBehaviour
         if (Time.timeScale == 1)//If Unpaused:
         {
             //prePauseState = Managers.GameStateManager.State;
-            BigBoss.GameStateManager.SetState(typeof(PausedState));
+            //BigBoss.GameStateManager.SetState(typeof(PausedState));
             Time.timeScale = 0;
         }
         else if (Time.timeScale == 0)//If Paused:
@@ -121,6 +121,7 @@ public class TimeManager : MonoBehaviour
     }
 
     #region GAME TIME METHODS
+
     public void PassTurn(int turnPoints)
     {
         turnsPassed++;
@@ -128,7 +129,10 @@ public class TimeManager : MonoBehaviour
 
         foreach (PassesTurns obj in updateList)
         {
-            runUpdate(obj, turnPoints);
+            if (obj.IsActive)
+            {
+                runUpdate(obj, turnPoints);
+            }
         }
     }
 
