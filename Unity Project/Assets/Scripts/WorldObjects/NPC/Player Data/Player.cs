@@ -67,7 +67,7 @@ public class Player : NPC
         }
         else
         {
-            GridType g = LevelManager.array[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
+            GridType g = LevelManager.Array[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
             switch (g)
             {
                 case GridType.Wall:
@@ -227,7 +227,7 @@ public class Player : NPC
 
     private void applyTileEffect()
     {
-        GridType grid = LevelManager.array[Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y)];
+        GridType grid = LevelManager.Array[Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y)];
         switch (grid)
         {
             case GridType.Wall:
