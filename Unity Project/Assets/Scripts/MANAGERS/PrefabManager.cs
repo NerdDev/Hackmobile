@@ -3,7 +3,8 @@ using System.Collections;
 
 public class PrefabManager : MonoBehaviour {
 
-	
+
+    public GameObject player;
 	//THIS ALL NEEDS TO BE ORGANIZED
 	public GameObject textPopPrefab;
 	public GameObject introSplashObject;

@@ -64,7 +64,7 @@ public class DataManager : MonoBehaviour
             {
                 items.Add(parseItem(xnode));
             }
-            BigBoss.ItemMaster.getCategories().Add(x.getKey(), items);
+            BigBoss.WorldObjectManager.getCategories().Add(x.getKey(), items);
         }
     }
 
@@ -85,7 +85,7 @@ public class DataManager : MonoBehaviour
         {
             MaterialType mat = new MaterialType();
             mat.parseXML(m);
-            BigBoss.ItemMaster.getMaterials().Add(mat.Name, mat);
+            BigBoss.WorldObjectManager.getMaterials().Add(mat.Name, mat);
         }
     }
 
@@ -98,7 +98,7 @@ public class DataManager : MonoBehaviour
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;
             n.parseXML(m);
-            BigBoss.NPCManager.getNPCs().Add(n.Name, n);
+            BigBoss.WorldObjectManager.getNPCs().Add(n.Name, n);
         }
     }
 

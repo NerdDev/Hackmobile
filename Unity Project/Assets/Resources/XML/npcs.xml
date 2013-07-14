@@ -13,6 +13,11 @@
 			<property name="fire_res" val="3" />
 		</properties>
 		<stats>
+			<maxhealth>8</maxhealth>
+			<maxpower>0</maxpower>
+			<level>1</level>
+		</stats>
+		<attributes>
 			<charisma>3</charisma>
 			<constitution>5</constitution>
 			<wisdom>3</wisdom>
@@ -21,7 +26,7 @@
 			<strength>4</strength>
 			<difficulty>1</difficulty>
 			<size>small</size>
-		</stats>
+		</attributes>
 		<inventory>
 			<item>
 				<itemname>axe2</itemname>

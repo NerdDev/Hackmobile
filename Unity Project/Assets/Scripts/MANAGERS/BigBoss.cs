@@ -66,20 +66,14 @@ public class BigBoss : MonoBehaviour
         get { return timeManager; }
     }
 	
-	private static GameStateManager gameManager;
-    public static GameStateManager GameStateManager
-    {
-        get { return gameManager; }
-    } 
-	
-	private static PlayerManager playerManager;
-    public static PlayerManager PlayerInfo
+	private static Player playerManager;
+    public static Player PlayerInfo
     {
         get { return playerManager; }
     }
 	
-	private static NPCManager enemyManager;
-    public static NPCManager Enemy
+	private static WorldObjectManager enemyManager;
+    public static WorldObjectManager Enemy
     {
         get { return enemyManager; }
     } 
@@ -102,16 +96,12 @@ public class BigBoss : MonoBehaviour
         get { return dungeonMaster; }
     }
 	
-	private static ItemMaster itemMaster;
-    public static ItemMaster ItemMaster
+	private static WorldObjectManager worldObjectManager;
+    public static WorldObjectManager WorldObjectManager
     {
-        get { return itemMaster; }
+        get { return worldObjectManager; }
     }
-	private static EquipmentMaster equipmentMaster;
-    public static EquipmentMaster EquipmentMaster
-    {
-        get { return equipmentMaster; }
-	}	
+
 	private static DebugManager debugManager;
     public static DebugManager DebugManager
     {
@@ -122,12 +112,6 @@ public class BigBoss : MonoBehaviour
     public static DataManager DataManager
     {
         get { return dataManager; }
-    }
-
-    private static NPCManager npcManager;
-    public static NPCManager NPCManager
-    {
-        get { return npcManager; }
     }
  
     // Use this for initialization
@@ -147,22 +131,20 @@ public class BigBoss : MonoBehaviour
 		
 		//audioManager = GetComponentInChildren<AudioManager>() as AudioManager;//Obsolete with the use of AudioToolkit
 		prefabManager = GetComponentInChildren<PrefabManager>() as PrefabManager;
+        playerManager = prefabManager.player.GetComponent<Player>();
 		guiManager = GetComponentInChildren<GUIManager>() as GUIManager;
         inputManager = GetComponentInChildren<InputManager>() as InputManager;
         levelLoadManager = GetComponentInChildren<LevelLoadManager>() as LevelLoadManager;
         levelManager = GetComponentInChildren<LevelManager>() as LevelManager;
  		timeManager = GetComponentInChildren<TimeManager>() as TimeManager;
-		gameManager = GetComponentInChildren<GameStateManager>() as GameStateManager;
-		playerManager = GetComponentInChildren<PlayerManager>() as PlayerManager;
-		enemyManager = GetComponentInChildren<NPCManager>() as NPCManager;
+		//playerManager = GetComponentInChildren<PlayerManager>() as PlayerManager; //moved below
+		enemyManager = GetComponentInChildren<WorldObjectManager>() as WorldObjectManager;
 		camManager = GetComponentInChildren<CameraManager>() as CameraManager;
 		preGameManager = GetComponentInChildren<PreGameManager>() as PreGameManager;
         dungeonMaster = GetComponentInChildren<DungeonMaster>() as DungeonMaster;
-		itemMaster = GetComponentInChildren<ItemMaster>() as ItemMaster;
-		equipmentMaster = GetComponentInChildren<EquipmentMaster >() as EquipmentMaster;
+        worldObjectManager = GetComponentInChildren<WorldObjectManager>() as WorldObjectManager;
 		debugManager = GetComponentInChildren<DebugManager>() as DebugManager;
         dataManager = GetComponentInChildren<DataManager>() as DataManager;
-        npcManager = GetComponentInChildren<NPCManager>() as NPCManager;
 
 		//Make this game object persistent
         DontDestroyOnLoad(gameObject);

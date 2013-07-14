@@ -22,19 +22,29 @@ public class NPCEffect : Effect
         updateFlag();
     }
 
+    public override void apply(int p, bool item, int turnsToProcess)
+    {
+        base.apply(p, item, turnsToProcess);
+        updateFlag();
+    }
+
     /*
      * For effects that require turn by turn changes
      *  - add them here to the switch and do an update method.
      */
     public override void UpdateTurn()
     {
-        switch (refEnum)
+        base.UpdateTurn();
+        if (isActive && On)
         {
-            case Properties.POISONED:
-                updatePoison();
-                break;
-            default:
-                break;
+            switch (refEnum)
+            {
+                case Properties.POISONED:
+                    updatePoison();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

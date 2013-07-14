@@ -4,31 +4,44 @@ public class Effect : PassesTurns
 {
     protected int eff;
     protected int itemEff;
+    protected int turnsToProcess { get; set; }
+    protected bool stacking; //not implemented yet
+    protected bool isActive;
 
     protected Effect()
     {
         eff = 0;
         itemEff = 0;
+        stacking = false;
         BigBoss.TimeKeeper.RegisterToUpdateList(this);
     }
 
     ~Effect()
     {
-        BigBoss.TimeKeeper.RemoveFromUpdateList(this);
+        if (BigBoss.TimeKeeper.updateList.Contains(this))
+        {
+            BigBoss.TimeKeeper.RemoveFromUpdateList(this);
+        }
     }
 
-    public Effect(bool on)
+    public Effect(bool stacking)
     {
-        if (on)
-        {
-            eff = 1;
-            itemEff = 0;
-        }
-        else
-        {
-            eff = 0;
-            itemEff = 0;
-        }
+        this.stacking = stacking;
+    }
+
+    public void setStacking(bool stacking)
+    {
+        this.stacking = stacking;
+    }
+
+    public bool active()
+    {
+        return isActive;
+    }
+
+    public void setActive(bool a)
+    {
+        this.isActive = a;
     }
 
     public bool On
@@ -59,13 +72,37 @@ public class Effect : PassesTurns
 
     public virtual void apply(int p, bool item)
     {
-        if (item) 
+        apply(p, item, -1);
+    }
+
+    public virtual void apply(int p, bool item, int turnsToProcess)
+    {
+        isActive = true;
+        this.turnsToProcess = turnsToProcess;
+        if (item)
         {
-            itemEff += 1;
+            if (p >= 0)
+                itemEff++;
+            else
+            {
+                itemEff--;
+            }
         }
-        else 
+        else
         {
-            eff += (int) p;
+            eff += (int)p;
+        }
+        //sets caps on values, not really thoroughly defined by stacking
+        if (!stacking)
+        {
+            if (eff > 5)
+            {
+                eff = 5;
+            }
+            else if (eff < -5)
+            {
+                eff = -5;
+            }
         }
     }
 
@@ -79,12 +116,25 @@ public class Effect : PassesTurns
 
     public virtual void UpdateTurn()
     {
-        //this does nothing right now!
-        // - this may need some extension, as far as the whole class goes.
-        // - considering dropping in a variable for the effect type
-        // - and leaving this as a switch based on effect type.
-        // - since switches for enums are based on jump tables
-        // - so it'd be quite fast.
+        if (turnsToProcess == 0 || !On)
+        {
+            //effect is ended
+            isActive = false;
+        }
+        else if (turnsToProcess < 0)
+        {
+            //continue, infinite effect
+            if (!isActive) isActive = true;
+        }
+        else if (isActive)
+        {
+            //decrement turn counter
+            turnsToProcess--;
+        }
+        else
+        {
+            //do nothing, not active effect
+        }
     }
 
     public int CurrentPoints
@@ -108,6 +158,19 @@ public class Effect : PassesTurns
         set
         {
             basePoints = value;
+        }
+    }
+
+    protected bool activeEff;
+    public bool IsActive
+    {
+        get
+        {
+            return this.activeEff;
+        }
+        set
+        {
+            this.activeEff = value;
         }
     }
     #endregion

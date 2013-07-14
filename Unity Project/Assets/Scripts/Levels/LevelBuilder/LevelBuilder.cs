@@ -14,14 +14,10 @@ public class LevelBuilder : MonoBehaviour {
             {
                 GameObject obj = Instantiate(protoType) as GameObject;
                 GridSpace grid = obj.AddComponent<GridSpace>();
-                System.Random rand = new System.Random();
+                grid.coords = new Point(val.x, val.y);
                 obj.transform.parent = holder.transform;
                 obj.transform.Translate(new Vector3(val.x, 0, val.y));
                 goArr[val.x, val.y] = obj;
-                if (rand.Next(100) > 95)
-                {
-                    grid.setNPC(((GameObject)Instantiate(BigBoss.Prefabs.enemy1, obj.transform.position, Quaternion.identity)).GetComponent<NPC>());
-                }
             }
         }
         return goArr;

@@ -5,6 +5,7 @@ using XML;
 public class ProfessionTitles
 {
     Titles[] titles = new Titles[(int) PlayerProfessions.LAST];
+    public bool isParsed = false;
 
     public void parseXML(XMLNode x)
     {
@@ -13,9 +14,10 @@ public class ProfessionTitles
             PlayerProfessions prof = xnode.SelectEnum<PlayerProfessions>("name");
             titles[(int)prof] = new Titles();
             Titles t = titles[(int)prof];
-
             t.parseXML(xnode);
         }
+        //This needs moved after main menu/something to delay player creation is set up
+        BigBoss.PlayerInfo.PlayerTitle = this.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
     }
 
     public string getTitle(PlayerProfessions prof, int level)
@@ -29,7 +31,7 @@ public class ProfessionTitles
 
         public void parseXML(XMLNode x)
         {
-            foreach (XMLNode xmlNode in x.get())
+            foreach (XMLNode xmlNode in x.selectList("title"))
             {
                 titles.Add(new Title(xmlNode.SelectInt("level"), xmlNode.SelectString("playertitle")));
             }

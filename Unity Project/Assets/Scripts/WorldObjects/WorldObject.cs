@@ -59,6 +59,7 @@ public class WorldObject : MonoBehaviour, PassesTurns
 
     int turnPoints = 0;
     int basePoints = 60;
+    protected bool isActive = false;
 
     public virtual void UpdateTurn()
     {
@@ -86,6 +87,18 @@ public class WorldObject : MonoBehaviour, PassesTurns
         set
         {
             this.basePoints = value;
+        }
+    }
+
+    public virtual bool IsActive
+    {
+        get
+        {
+            return this.isActive;
+        }
+        set
+        {
+            this.isActive = value;
         }
     }
 
