@@ -1,37 +1,50 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 	
+    // Internal
 	public Theme Theme;
     public LevelBuilder Builder;
+    private const int MaxLevels = 100;
+    private static LevelGenerator _gen;
+    private static Level[] Levels;
+
+    // Public Access
+    public static int CurLevelDepth { get; private set; }
     public static GameObject[,] Blocks { get; private set; }
     public static GridArray Array { get; private set; }
-    private static LevelGenerator gen;
 
     void Start()
     {
         RoomModifier.RegisterModifiers();
-        gen = new LevelGenerator();
-        LevelLayout layout;
-        layout = gen.GenerateLayout(0);
-//        layout = GenerateLevels(30);
-        Array = layout.GetArray();
-		Blocks = Builder.Build(Array, Theme);
+        Levels = new Level[MaxLevels];
+        _gen = new LevelGenerator();
+
+        GenerateLevel(0);
+        SetCurLevel(0);
 
         JustinTest();
         JoseTest();
     }
 
-    LevelLayout GenerateLevels(int num)
+    void SetCurLevel(int num)
     {
-        LevelLayout last = null;
+        CurLevelDepth = num;
+        Array = Levels[num].Arr;
+        // Need to switch out game blocks when level switching is implemented
+    }
+
+    void GenerateLevels(int num)
+    {
         for (int i = 0; i < num; i++)
         {
-            last = gen.GenerateLayout(i);
+            GenerateLevel(num);
         }
-        return last;
+    }
+
+    void GenerateLevel(int num)
+    {
+        Levels[num] = new Level(_gen.GenerateLayout(num));
     }
 
     void TestModifier(RoomModifier mod, int seed)

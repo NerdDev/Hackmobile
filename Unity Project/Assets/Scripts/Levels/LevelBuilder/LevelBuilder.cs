@@ -23,6 +23,11 @@ public class LevelBuilder : MonoBehaviour {
         return goArr;
     }
 
+    public GameObject[,] Build(Level level, Theme theme)
+    {
+        return Build(level.Arr, theme);
+    }
+
 	public GameObject[,] Build(LevelLayout layout, Theme theme)
 	{
         return Build(layout.GetArray(), theme);
