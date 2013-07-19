@@ -18,7 +18,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_1_3;UNITY_4_1;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -46,6 +46,19 @@
   <ItemGroup>
      <Compile Include="Assets\EVIL WATCHER\Scripts\MouseOrbit.js" />
      <Compile Include="Assets\EVIL WATCHER\Scripts\ThirdPersonController.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_UVScroller.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_animRandomizer.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_animSpeedRandomizer.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_destroyThisTimed.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_effectCaster.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_materialColorRandomizer.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_moveThis.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_prefabGenerator.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_randomRotation.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_randomScale.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_rotateThis.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_stohasticArrowMovement.js" />
+     <Compile Include="Assets\ShurikenMagic\Scripts\SM_trailFade.js" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\dynamon animations.txt" />
      <None Include="Assets\AudioToolkit\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
@@ -110,6 +123,7 @@
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutline.shader" />
      <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth.shader" />
+     <None Include="Assets\ShurikenMagic\Shaders\SM_2sided_transparent.shader" />
      <None Include="Assets\IMPORT\Fantasy Weapons\knife1\knife1.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\guard animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
@@ -119,6 +133,7 @@
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\Priest animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2_&amp;_santa_animations.txt" />
      <None Include="Assets\Resources\XML\titles.xml" />
+     <None Include="Assets\ShurikenMagic\Shaders\SM_TransparentRim.shader" />
  <Reference Include="AudioToolkit_FreeVersion">
  <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
  </Reference>

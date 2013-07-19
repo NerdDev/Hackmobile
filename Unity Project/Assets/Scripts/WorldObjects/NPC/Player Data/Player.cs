@@ -11,7 +11,7 @@ public class Player : NPC
 
     #region General Player Info:
 
-    private string playerChosenName = "Kurtis";
+    private string playerChosenName = "Andrew";
     public string PlayerChosenName { get { return playerChosenName; } }  //read only - set at char creation
 
     private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
@@ -42,6 +42,29 @@ public class Player : NPC
     #region INVENTORY
     //Inventory Array - Will have to confirm typing when NGUI integration is set up...
     public List<GameObject> PlayerInventory = new List<GameObject>();
+	
+	public virtual void addToInventory(Item item)
+    {
+        this.addToInventory(item, 1);
+		//GUI Stuff:
+		
+    }
+
+    public virtual void addToInventory(Item item, int count)
+    {
+        if (inventory.ContainsKey(item))
+        {
+            inventory[item] += count;
+			//GUI Stuff:
+			
+        }
+        else
+        {
+            inventory.Add(item, count);
+			//GUI Stuff:
+        }
+        stats.Encumbrance += item.Weight * count;
+    }
     #endregion
 
     #region ANIMATION
