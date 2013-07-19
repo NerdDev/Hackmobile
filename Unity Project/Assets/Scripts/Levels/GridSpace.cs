@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class GridSpace : MonoBehaviour
 {
-    private GridType _type;
-    private GameObject _block;
+    public GridType Type { get; private set; }
+    public GameObject Block { get; set; }
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
 
-    public void GridSpace(GridType type, GameObject block)
+    public GridSpace(GridType type)
     {
-        this._type = type;
-        this._block = block;
+        this.Type = type;
     }
 
     public void Put(WorldObject obj)
@@ -106,5 +105,15 @@ public class GridSpace : MonoBehaviour
         if (_blockingObjects != null)
             ret.AddRange(_blockingObjects);
         return ret;
+    }
+
+    public static GridSpace[,] Convert(GridArray arr)
+    {
+        GridSpace[,] arrOut = new GridSpace[arr.getHeight(), arr.getWidth()];
+        foreach (Value2D<GridType> val in arr)
+        {
+            arrOut[val.y, val.x] = new GridSpace(val.val);
+        }
+        return arrOut;
     }
 }

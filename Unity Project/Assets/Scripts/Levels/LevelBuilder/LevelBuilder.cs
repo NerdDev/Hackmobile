@@ -3,33 +3,21 @@ using System.Collections;
 
 public class LevelBuilder : MonoBehaviour {
 
-    public GameObject[,] Build(GridArray array, Theme theme)
+    public void Build(GridSpace[,] array, Theme theme)
     {
         GameObject holder = new GameObject("Level Block Holder");
-        GameObject[,] goArr = new GameObject[array.getWidth(), array.getHeight()];
-        foreach (Value2D<GridType> val in array)
+        for (int y = 0; y < array.GetLength(0); y++)
         {
-            GameObject protoType = theme.Get(val.val);
-            if (protoType != null)
+            for (int x = 0; x < array.GetLength(0); x++)
             {
-                GameObject obj = Instantiate(protoType) as GameObject;
-                GridSpace grid = obj.AddComponent<GridSpace>();
-                grid.coords = new Point(val.x, val.y);
-                obj.transform.parent = holder.transform;
-                obj.transform.Translate(new Vector3(val.x, 0, val.y));
-                goArr[val.x, val.y] = obj;
+                GridSpace space = array[y, x];
+                if (space == null) continue;
+                GameObject protoType = theme.Get(array[y,x].Type);
+                if (protoType == null) continue;
+                space.Block = Instantiate(protoType) as GameObject;
+                space.Block.transform.parent = holder.transform;
+                space.Block.transform.Translate(new Vector3(x, 0, y));
             }
         }
-        return goArr;
     }
-
-    public GameObject[,] Build(Level level, Theme theme)
-    {
-        return Build(level.Arr, theme);
-    }
-
-	public GameObject[,] Build(LevelLayout layout, Theme theme)
-	{
-        return Build(layout.GetArray(), theme);
-	}
 }
