@@ -11,13 +11,15 @@ public class GridSpace : MonoBehaviour
 
     void Start()
     {
-        if (rand.Next(100) > 95)
+        /*
+        if (rand.Next(100) > 85)
         {
-            //this.setNPC(((GameObject)Instantiate(BigBoss.Prefabs.enemy1, this.transform.position, Quaternion.identity)).GetComponent<NPC>());
-            //this.getNPC().setData(BigBoss.WorldObjectManager.getNPC("newt"));
-            //this.getNPC().IsActive = true;
+            this.setNPC(((GameObject)Instantiate(BigBoss.Prefabs.enemy1, this.transform.position, Quaternion.identity)).GetComponent<NPC>());
+            this.getNPC().setData(BigBoss.WorldObjectManager.getNPC("newt"));
+            this.getNPC().IsActive = true;
             //this.getNPC().gameObject.transform.parent = npcHolder.transform;
         }
+        */
     }
 
     public bool hasNPC()

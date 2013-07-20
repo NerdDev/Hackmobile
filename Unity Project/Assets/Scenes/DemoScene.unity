@@ -535,6 +535,9 @@ MonoBehaviour:
   sword1: {fileID: 0}
   sword2: {fileID: 0}
   skeletonFresh: {fileID: 0}
+  SkeletonMage: {fileID: 100024, guid: 1bc803c4bf46dcc48b0d9035951ec07a, type: 2}
+  Orc: {fileID: 100000, guid: 2e773be3c69e0ef49b8ae5ee2b644fbd, type: 2}
+  Beholder: {fileID: 100000, guid: 0fbfac8647072ae47b9148811b610dd1, type: 2}
 --- !u!196 &275
 NavMeshSettings:
   m_ObjectHideFlags: 0

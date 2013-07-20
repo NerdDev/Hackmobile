@@ -9,5 +9,7 @@ public enum Race
     HUMAN,
     ELF,
     REPTILE,
+    ORC,
+    BEHOLDER,
     //etc
 }

@@ -63,8 +63,8 @@ public class NPC : WorldObject
     #region NPC Instance Properties
     //Initialized all to null for the base.
     //Converted from base properties upon creation of instance.
-    public Dictionary<Item, int> inventory = null;
-    protected List<Item> equippedItems = null;
+    public Dictionary<Item, int> inventory = new Dictionary<Item,int>();
+    protected List<Item> equippedItems = new List<Item>();
     protected Equipment equipment = null;
     #endregion
 
@@ -125,6 +125,11 @@ public class NPC : WorldObject
 
     void Start()
     {
+        calcStats();
+        bodyparts.Arms = 2;
+        bodyparts.Legs = 2;
+        bodyparts.Heads = 1;
+        equipment = new Equipment(this.bodyparts);
         UpdateCurrentTileVectors();
     }
 
@@ -136,6 +141,7 @@ public class NPC : WorldObject
 
         if (this.IsNotAFreaking<Player>())
         {
+            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, name + " is dead!", Color.red);
             DestroyThisItem();
         }
         else
@@ -145,7 +151,7 @@ public class NPC : WorldObject
     }
 
     #region Stats
-    public virtual float AdjustHunger(int amount)
+    public virtual float AdjustHunger(float amount)
     {
         stats.Hunger += amount;
         getHungerLevel(stats.Hunger);
@@ -162,7 +168,11 @@ public class NPC : WorldObject
     public virtual void AdjustHealth(int amount)
     {
         Debug.Log("Adjusting Health: " + amount);
-        if (stats.CurrentHealth + amount > stats.MaxHealth)
+        if (amount < 0)
+        {
+            damage(-amount);
+        }
+        else if (stats.CurrentHealth + amount > stats.MaxHealth)
         {
             stats.CurrentHealth = stats.MaxHealth;
         }
@@ -172,18 +182,20 @@ public class NPC : WorldObject
         }
     }
 
-    public virtual void damage(int amount)
+    public virtual bool damage(int amount)
     {
         Debug.Log("Adjusting Health: " + amount);
         if (stats.CurrentHealth - amount > 0)
         {
             stats.CurrentHealth = stats.CurrentHealth - amount;
             BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Damaged for " + amount + "!", Color.red);
+            return false;
         }
         else
         {
             //NPC is now dead!
             this.killThisNPC();
+            return true;
         }
     }
 
@@ -210,13 +222,14 @@ public class NPC : WorldObject
 
     #region Stat Calculations
     //Use this for a re-calc on level up or any attribute changes.
-    void calcStats()
+    protected void calcStats()
     {
+        stats.Encumbrance = getCurrentInventoryWeight();
         stats.MaxEncumbrance = getMaxInventoryWeight();
         stats.XPToNextLevel = calcXPForNextLevel();
     }
 
-    float calcXPForNextLevel()
+    protected float calcXPForNextLevel()
     {
         //do calc here
         return (100 + ((Mathf.Pow(stats.Level, 3f) / 2)));
@@ -268,6 +281,12 @@ public class NPC : WorldObject
     {
         BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
     }
+
+    public float getXPfromNPC() 
+    {
+        //how much XP is this NPC worth?
+        return 10f;
+    }
     #endregion
 
     #region Movement
@@ -276,11 +295,13 @@ public class NPC : WorldObject
     {
         //Debug.Log(this.gameObject.name);
         Vector3 gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x + x, -.5f, CurrentOccupiedGridCenterWorldPoint.z + y);
-        //Vector3 heading = gridCoords - CurrentOccupiedGridCenterWorldPoint;
+        Vector3 heading = gridCoords - CurrentOccupiedGridCenterWorldPoint;
 
-        //while (!MoveNPCStepwise(heading, gridCoords))
-        //{
-        //}
+        Debug.Log("Starting move sequence with: gridcoords - " + gridCoords + " and heading - " + heading);
+        while (MoveNPCStepwise(heading, gridCoords))
+        {
+            Debug.Log("Still moving!");
+        }
 
         this.gameObject.transform.position = gridCoords;
     }
@@ -289,11 +310,13 @@ public class NPC : WorldObject
     {
         //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
         //Translation toward a precalculated heading:
+        Debug.Log("Moving NPC at " + heading);
+        Debug.Log("Destination: " + gridCoords);
         gameObject.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         //Lerping rotation so we don't get jitter:
         Quaternion toRot = Quaternion.LookRotation(heading);//does this need to be normalized?
         this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, toRot, NPCRotationSpeed);
-        if (checkPosition(this.gameObject.transform.position, gridCoords))
+        if (!checkPosition(this.gameObject.transform.position, gridCoords))
         {
             return true;
         }
@@ -319,7 +342,16 @@ public class NPC : WorldObject
         GridCoordinate = new Vector2(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.z));
         LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
+        LevelManager.Blocks[Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y)].GetComponent<GridSpace>().setNPC(this);
     }
+
+    public PathTree getPath(Vector2 destination) 
+    {
+        PathTree path = new PathTree();
+
+        return path;
+    }
+
     #endregion
 
     #region Effects
@@ -395,7 +427,10 @@ public class NPC : WorldObject
         if (inventory.ContainsKey(i))
         {
             //item was just eaten, take it outta that list
-            unequipItem(i);
+            if (i.itemFlags[ItemFlags.IS_EQUIPPED]) {
+                unequipItem(i);
+            }
+            removeFromInventory(i);
 
             //unless you're Jose, in which case you'll be using a mac
             //and who knows what happens when mac people eat
@@ -418,6 +453,56 @@ public class NPC : WorldObject
         }
     }
 
+    public void attack(NPC n)
+    {
+        if (equipment == null)
+        {
+            Debug.Log("Null equipment");
+        }
+        if (equipment.getItems(EquipTypes.HAND) != null)
+        {
+            List<Item> weapons = equipment.getItems(EquipTypes.HAND);
+            if (weapons.Count > 0)
+            {
+                foreach (Item i in weapons)
+                {
+                    if (!n.damage(i.getDamage()))
+                    {
+                    }
+                    else
+                    {
+                        AdjustXP(n.getXPfromNPC());
+                    }
+                }
+            }
+            else
+            {
+                if (!n.damage(calcHandDamage()))
+                {
+                }
+                else
+                {
+                    AdjustXP(n.getXPfromNPC());
+                }
+            }
+        }
+        else
+        {
+            //attacking with bare hands
+            if (!n.damage(calcHandDamage()))
+            {
+            }
+            else
+            {
+                AdjustXP(n.getXPfromNPC());
+            }
+        }
+    }
+
+    protected int calcHandDamage()
+    {
+        return (new System.Random()).Next(0, attributes.Strength);
+    }
     #endregion
 
     #region Equipment Management
@@ -649,10 +734,10 @@ public class NPC : WorldObject
         if (base.isActive)
         {
             UpdateCurrentTileVectors();
-            /**
+            
             try
             {
-                GridSpace grid = LevelManager.blocks[Convert.ToInt32(this.GridCoordinate.x), Convert.ToInt32(this.GridCoordinate.y)].GetComponent<GridSpace>();
+                GridSpace grid = LevelManager.Blocks[Convert.ToInt32(this.GridCoordinate.x), Convert.ToInt32(this.GridCoordinate.y)].GetComponent<GridSpace>();
                 if (this.IsNotAFreaking<Player>())
                 {
                     MoveNPC(1, 1);
@@ -662,7 +747,7 @@ public class NPC : WorldObject
             {
                 //do nothing
             }
-            */
+            
             AdjustHunger(-1);
         }
     }

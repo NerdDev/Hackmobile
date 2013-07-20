@@ -15,7 +15,8 @@ public class LevelManager : MonoBehaviour {
         RoomModifier.RegisterModifiers();
         gen = new LevelGenerator();
         LevelLayout layout;
-        layout = gen.GenerateLayout(0);
+        layout = gen.GenerateLayout(0, 5, 5);
+        //layout = gen.GenerateLayout(0);
 //        layout = GenerateLevels(30);
         Array = layout.GetArray();
 		Blocks = Builder.Build(Array, Theme);

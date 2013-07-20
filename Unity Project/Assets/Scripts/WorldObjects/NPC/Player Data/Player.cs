@@ -64,6 +64,8 @@ public class Player : NPC
         if (collision.gameObject.GetComponent<NPC>() != null)
         {
             Debug.Log("You walked into an NPC!");
+            Debug.Log("Attacking!");
+            attack(collision.gameObject.GetComponent<NPC>());
         }
         else
         {
@@ -91,11 +93,10 @@ public class Player : NPC
     {
         //use the internal assignation reference for clarity
         this.playerAvatar = this.gameObject;
-        stats.MaxEncumbrance = getMaxInventoryWeight();
+        this.setData(BigBoss.WorldObjectManager.getNPC("player"));
         stats.Hunger = 900;
-        stats.MaxHealth = 100;
-        stats.CurrentHealth = 100;
         IsActive = true;
+        calcStats();
 
         anim = playerAvatar.GetComponent<Animator>() as Animator;
 
@@ -105,6 +106,23 @@ public class Player : NPC
         //{
         //	foo;
         //}
+
+        //test scene
+
+        GameObject beholder = Instantiate(BigBoss.Prefabs.Beholder, new Vector3(22f, -.5f, 35f), Quaternion.identity) as GameObject;
+        NPC beholderNPC = beholder.GetComponent<NPC>();
+        beholderNPC.setData(BigBoss.WorldObjectManager.getNPC("beholder"));
+        beholderNPC.IsActive = true;
+
+        GameObject orc = Instantiate(BigBoss.Prefabs.Orc, new Vector3(12f, -.5f, 44f), Quaternion.identity) as GameObject;
+        NPC orcNPC = orc.GetComponent<NPC>();
+        orcNPC.setData(BigBoss.WorldObjectManager.getNPC("orc"));
+        orcNPC.IsActive = true;
+
+        GameObject skeleMage = Instantiate(BigBoss.Prefabs.SkeletonMage, new Vector3(22f, -.5f, 42f), Quaternion.identity) as GameObject;
+        NPC skeleMageNPC = skeleMage.GetComponent<NPC>();
+        skeleMageNPC.setData(BigBoss.WorldObjectManager.getNPC("skeleton"));
+        skeleMageNPC.IsActive = true;
     }
 
     // Update is called once per frame
@@ -115,17 +133,7 @@ public class Player : NPC
 
     #region Combat
 
-    public void attack(NPC n)
-    {
-        List<Item> weapons = equipment.getItems(EquipTypes.HAND);
-        if (weapons.Count > 0)
-        {
-            foreach (Item i in weapons)
-            {
-                n.damage(i.getDamage());
-            }
-        }
-    }
+
 
     #endregion
 
@@ -298,7 +306,7 @@ public class Player : NPC
 
     #region Adjust Player Stats/Attr's/Data
 
-    public override float AdjustHunger(int amount)
+    public override float AdjustHunger(float amount)
     {
         base.AdjustHunger(amount);
 

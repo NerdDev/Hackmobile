@@ -208,8 +208,8 @@ public class GUIManager : MonoBehaviour {
 		GUIText textComp = (GUIText) go.GetComponent<GUIText>();
 		textComp.text = message;
 		textComp.material.color = col;
-		
 	}
+
 //	public void TextPopEnd()  //This is method is called when the iTween on TextPops Completes.  Signals destruction of GO
 //	{
 //		DestroyEarliestTextPop();//iTween event was thrown - we can safely assume it's the first object in the list since we created in order

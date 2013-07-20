@@ -14,9 +14,9 @@ public class PrefabManager : MonoBehaviour {
 	public GameObject sword1;
 	public GameObject sword2;
 	public GameObject skeletonFresh;
-//	public GameObject prefabName;
-//	public GameObject prefabName;
-//	public GameObject prefabName;
+	public GameObject SkeletonMage;
+	public GameObject Orc;
+	public GameObject Beholder;
 //	public GameObject prefabName;
 //	public GameObject prefabName;
 //	public GameObject prefabName;

@@ -7,27 +7,31 @@ public class Equipment
 
     public Equipment(BodyParts bp)
     {
-        equipSlots.Initialize();
+        for (int i = 0; i < equipSlots.Length; i++)
+        {
+            equipSlots[i] = new List<EquipSlot>();
+        }
         equipSlots[(int)EquipTypes.BODY].Add(new EquipSlot());
         equipSlots[(int)EquipTypes.SHIRT].Add(new EquipSlot());
         if (bp.Arms > 0)
         {
             for (int i = 0; i < bp.Arms; i++)
             {
-                equipSlots[(int) EquipTypes.RING].Add(new EquipSlot());
-                equipSlots[(int) EquipTypes.HAND].Add(new EquipSlot());
+                equipSlots[(int)EquipTypes.RING].Add(new EquipSlot());
+                equipSlots[(int)EquipTypes.HAND].Add(new EquipSlot());
             }
         }
         if (bp.Legs > 0)
         {
             if (bp.Legs == 2)
             {
-                equipSlots[(int) EquipTypes.LEGS].Add(new EquipSlot());
+                equipSlots[(int)EquipTypes.LEGS].Add(new EquipSlot());
             }
-            if (bp.Legs % 2 == 0 && bp.Legs >= 2) {
+            if (bp.Legs % 2 == 0 && bp.Legs >= 2)
+            {
                 for (int i = 2; i <= bp.Legs; i += 2)
                 {
-                    equipSlots[(int) EquipTypes.FEET].Add(new EquipSlot());
+                    equipSlots[(int)EquipTypes.FEET].Add(new EquipSlot());
                 }
             }
         }
@@ -35,8 +39,8 @@ public class Equipment
         {
             for (int i = 0; i < bp.Heads; i++)
             {
-                equipSlots[(int) EquipTypes.HEAD].Add(new EquipSlot());
-                equipSlots[(int) EquipTypes.NECK].Add(new EquipSlot());
+                equipSlots[(int)EquipTypes.HEAD].Add(new EquipSlot());
+                equipSlots[(int)EquipTypes.NECK].Add(new EquipSlot());
             }
         }
     }
@@ -50,7 +54,7 @@ public class Equipment
             case EquipTypes.LEFT_RING:
                 if (equipSlots[(int)EquipTypes.RING].Count == 2) //if the count isn't 2, they have an odd number of hands, so left/right makes no sense
                 {
-                    return equipSlots[(int) EquipTypes.RING][0].isFree();
+                    return equipSlots[(int)EquipTypes.RING][0].isFree();
                 }
                 else
                 {
@@ -221,12 +225,14 @@ public class Equipment
             return (equipped == null);
         }
 
-        public void equipItem(Item i) {
+        public void equipItem(Item i)
+        {
             this.equipped = i;
             i.itemFlags[ItemFlags.IS_EQUIPPED] = true;
         }
 
-        public void removeItem() {
+        public void removeItem()
+        {
             this.equipped.itemFlags[ItemFlags.IS_EQUIPPED] = false;
             this.equipped = null;
         }
