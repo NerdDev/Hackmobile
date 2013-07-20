@@ -1,22 +1,40 @@
 using UnityEngine;
 using System.Collections;
 
-public class LevelBuilder : MonoBehaviour {
+public class LevelBuilder : MonoBehaviour
+{
+    private GameObject holder;
 
-    public void Build(GridSpace[,] array, Theme theme)
+    public Theme Theme { get; set; }
+
+    public GameObject Build(Value2D<GridSpace> val)
     {
-        GameObject holder = new GameObject("Level Block Holder");
+        return Build(val.val, val.x, val.y);
+    }
+
+    public GameObject Build(GridSpace space, int x, int y)
+    {
+        if (holder == null)
+        {
+            holder = new GameObject("Level Block Holder");   
+        }
+        if (space == null) return null;
+        GameObject protoType = Theme.Get(space.Type);
+        if (protoType == null) return null;
+        GameObject obj = Instantiate(protoType) as GameObject;
+        obj.transform.parent = holder.transform;
+        obj.transform.Translate(new Vector3(x, 0, y));
+        space.Block = obj;
+        return obj;
+    }
+
+    public void Build(GridSpace[,] array)
+    {
         for (int y = 0; y < array.GetLength(0); y++)
         {
             for (int x = 0; x < array.GetLength(0); x++)
             {
-                GridSpace space = array[y, x];
-                if (space == null) continue;
-                GameObject protoType = theme.Get(array[y,x].Type);
-                if (protoType == null) continue;
-                space.Block = Instantiate(protoType) as GameObject;
-                space.Block.transform.parent = holder.transform;
-                space.Block.transform.Translate(new Vector3(x, 0, y));
+                Build(array[y,x], x, y);
             }
         }
     }

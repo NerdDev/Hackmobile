@@ -2,12 +2,17 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Level
+public class Level : IEnumerable<Value2D<GridSpace>>
 {
     protected LevelLayout Layout;
     public GridSpace[,] Arr { get; private set; }
 
-    public GridSpace Get(int x, int y)
+    public Level(LevelLayout layout)
+    {
+        Arr = GridSpace.Convert(layout.GetArray());
+    }
+
+    GridSpace Get(int x, int y)
     {
         if (x < Arr.GetLength(1) && y < Arr.GetLength(0))
         {
@@ -25,6 +30,12 @@ public class Level
     public void Remove(int x, int y, WorldObject obj)
     {
         Get(x, y).Remove(obj);
+    }
+
+    public void Move(WorldObject obj, int xFrom, int yFrom, int xTo, int yTo)
+    {
+        Remove(xFrom, yFrom, obj);
+        Put(xTo, yTo, obj);
     }
 
     public bool Accept(int x, int y, WorldObject obj)
@@ -67,4 +78,31 @@ public class Level
         return Get(x, y).GetBlockingObjects();
     }
     #endregion
+
+    public IEnumerator<GridSpace> GetBasicEnumerator()
+    {
+        for (int y = 0; y < Arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < Arr.GetLength(1); x++)
+            {
+                yield return Arr[x, y];
+            }
+        }
+    }
+
+    public IEnumerator<Value2D<GridSpace>> GetEnumerator()
+    {
+        for (int y = 0; y < Arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < Arr.GetLength(1); x++)
+            {
+                yield return new Value2D<GridSpace>(x, y, Arr[y, x]);
+            }
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
+    }
 }

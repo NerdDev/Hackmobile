@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridSpace : MonoBehaviour
+public class GridSpace
 {
     public GridType Type { get; private set; }
     public GameObject Block { get; set; }
@@ -14,6 +14,7 @@ public class GridSpace : MonoBehaviour
         this.Type = type;
     }
 
+    #region Accessors
     public void Put(WorldObject obj)
     {
         // Implement sorting later
@@ -55,7 +56,9 @@ public class GridSpace : MonoBehaviour
         if (_blockingObjects != null)
             _blockingObjects.Remove(obj);
     }
+    #endregion
 
+    #region isChecks
     public bool Accept(WorldObject obj)
     {
         return true;
@@ -80,7 +83,9 @@ public class GridSpace : MonoBehaviour
     {
         return !HasObject();
     }
+    #endregion
 
+    #region getLists
     public List<WorldObject> GetContained()
     {
         var ret = new List<WorldObject>();
@@ -106,6 +111,7 @@ public class GridSpace : MonoBehaviour
             ret.AddRange(_blockingObjects);
         return ret;
     }
+    #endregion
 
     public static GridSpace[,] Convert(GridArray arr)
     {

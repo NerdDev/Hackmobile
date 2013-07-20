@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour {
@@ -10,12 +12,12 @@ public class LevelManager : MonoBehaviour {
     private static Level[] Levels;
 
     // Public Access
+    public static Level Level { get; private set; }
     public static int CurLevelDepth { get; private set; }
-    public static GameObject[,] Blocks { get; private set; }
-    public static GridArray Array { get; private set; }
 
     void Start()
     {
+        Builder.Theme = Theme;
         RoomModifier.RegisterModifiers();
         Levels = new Level[MaxLevels];
         _gen = new LevelGenerator();
@@ -30,8 +32,29 @@ public class LevelManager : MonoBehaviour {
     void SetCurLevel(int num)
     {
         CurLevelDepth = num;
-        Array = Levels[num].Arr;
+        Level = Levels[num];
+        Deploy(Level);
         // Need to switch out game blocks when level switching is implemented
+    }
+
+    void Destroy(Level level)
+    {
+        IEnumerator<GridSpace> grids = Level.GetBasicEnumerator();
+        while (grids.MoveNext())
+        {
+            // Delete block
+        }
+    }
+
+    void Deploy(Level level)
+    {
+        foreach(Value2D<GridSpace> space in level)
+        {
+            if (space != null)
+            {
+                Builder.Build(space);
+            }
+        }
     }
 
     void GenerateLevels(int num)
