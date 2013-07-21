@@ -100,7 +100,8 @@ public class GUIManager : MonoBehaviour {
 	private TweenPosition invPanelTweenPos;
 	
 	//Misc NGUI Integration:
-	public UIItemStorage itemStorageScript;
+	public UIItemStorage inventoryStorageScript;
+	public UISprite[] inventoryIconArray;
 	#endregion
 
 	void Start () 
@@ -110,17 +111,22 @@ public class GUIManager : MonoBehaviour {
 //			GrabNGUIReferences();   //will probably reactivate this later in development
 		
 		//FIND A BETTER PLACE FOR OR ELIMINATE THESE REFERENCES
-		tweenPanelBUp = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenUp");
-		tweenPanelBDown = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenDown");
-		MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenDown;
+		//tweenPanelBUp = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenUp");
+		//tweenPanelBDown = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenDown");
+		//MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenDown;
 		
-		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;
-		itemStorageScript = inventoryPanel.gameObject.GetComponentInChildren<UIItemStorage>();
+		
+		InventoryGUIInit();//better convention to call this from player eventually
+		//BigBoss.PlayerInfo.invent
+		SeedInventory(BigBoss.PlayerInfo.PlayerInventory);
 		//CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + itemStorageScript.maxItemCount + " total inventory slots!");
 		//Item iScript = BigBoss.WorldObjectManager.CreateItem(new Vector3(0,0,0),"ABITEMLOLZ");
 		
 		
+		
 	}
+
+	
 	
 	
 	
@@ -191,10 +197,22 @@ public class GUIManager : MonoBehaviour {
 	
 	#region INVENTORY
 	
+	
+	public void InventoryGUIInit ()//To refresh references when game starts or upon inventory max size change:
+	{
+		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;//consider coming back to recapture the GO reference in case it gets broken
+		inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<UIItemStorage>();	
+		//Icon array to switch on visuals, initializing to size:
+		//inventoryIconArray = new UISprite[itemStorageScript.maxItemCount];
+		//inventoryIconArray = itemStorageScript.gameObject.GetComponentsInChildren<UISprite>();
+		
+		//Debug:
+		//Debug.Log(inventoryIconArray.Length);
+	}
+	
 	public void OpenInventoryUI()
 	{
 		//Calling tween pos script on panel object
-		
 		invPanelTweenPos.duration = .75f;
 		invPanelTweenPos.from = new Vector3 (-1400f,0,0);//wrap these up into variables
 		invPanelTweenPos.to = new Vector3 (-500f,0,0);//wrap these up into variables
@@ -206,7 +224,6 @@ public class GUIManager : MonoBehaviour {
 	public void CloseInventoryUI()
 	{
 		//Calling tween pos script on panel object
-		
 		invPanelTweenPos.duration = .35f;
 		invPanelTweenPos.from = new Vector3 (-500f,0,0);//wrap these up into variables
 		invPanelTweenPos.to = new Vector3 (-1400f,0,0);//wrap these up into variables
@@ -217,12 +234,24 @@ public class GUIManager : MonoBehaviour {
 	
 	public void SeedInventory(List<Item> invList)
 	{
-		//Iterating through each inventory Item via for loop x times, where x is max inventory space
-		for (int i = 1; i <= itemStorageScript.maxItemCount; i++) 
+		
+		
+//		foreach (UISprite icon in inventoryIconArray)
+//		{
+//			
+//		}
+		Debug.Log("Seeding inventory..." + invList.Count + " items in player's list.");
+		foreach (Item item in invList) 
 		{
 			//Debugging:
-			Debug.Log(invList[i]);
+			Debug.Log(item.name);
+			string iconToSetString = item.ModelTexture.ToString();
+			
+			inventoryStorageScript.items.Add(item);
+			Debug.Log(item + " added.");
 		}
+		
+		Debug.Log("Seed Inventory end - " + inventoryStorageScript.items.Count + " items in player's UIStorage.");
 	}
 	
 	

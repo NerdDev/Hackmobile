@@ -232,7 +232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &90
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,8 +706,9 @@ MonoBehaviour:
   HUDBPanelMotherLocationWhenDown: {x: -3, y: -75, z: -5}
   HUDBarrowPullUpButton: {fileID: 0}
   HUD2XPLabel: {fileID: 0}
-  inventoryPanel: {fileID: 0}
+  inventoryPanel: {fileID: 1144756355}
   itemStorageScript: {fileID: 0}
+  inventoryIconArray: []
 --- !u!114 &265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2558,6 +2559,14 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100016, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400018, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: inventoryPanel
+      value: 
+      objectReference: {fileID: 1144756355}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
   m_RootGameObject: {fileID: 91}

@@ -41,7 +41,7 @@ public class Player : NPC
 
     #region INVENTORY
     //Inventory Array - Will have to confirm typing when NGUI integration is set up...
-    public List<GameObject> PlayerInventory = new List<GameObject>();
+    public List<Item> PlayerInventory = new List<Item>();
 	
 	public virtual void addToInventory(Item item)
     {
