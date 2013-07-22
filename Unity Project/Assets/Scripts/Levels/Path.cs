@@ -5,21 +5,24 @@ using System.Collections.Generic;
 public class Path : LayoutObjectLeaf
 {
 
-    private static GridType[] types = new GridType[]
+    private static GridType[] searchTypes = new GridType[]
         {
             GridType.Path_Horiz, 
             GridType.Path_LB, 
             GridType.Path_LT, 
             GridType.Path_RB, 
             GridType.Path_RT, 
-            GridType.Path_Vert
+            GridType.Path_Vert,
+            GridType.Door
         };
-    private static GridSet typesSet = new GridSet(types);
+    private static GridSet typesSet = new GridSet(searchTypes);
     List<Value2D<GridType>> _list;
 
     public Path(Value2D<GridType> startPoint, GridArray grids)
-        : this(LevelGenerator.DepthFirstSearchFor(startPoint, grids, types))
+        : base()
     {
+        DFSSearcher searcher = new DFSSearcher();
+        _list = new List<Value2D<GridType>>(searcher.Search(startPoint, grids, GridType.NULL, typesSet, LevelGenerator.Rand));
     }
 
     public Path(IEnumerable<Value2D<GridType>> stack)
