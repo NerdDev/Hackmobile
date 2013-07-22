@@ -14,17 +14,11 @@ public class Path : LayoutObjectLeaf
             GridType.Path_RT, 
             GridType.Path_Vert
         };
-    private static HashSet<GridType> typesSet = new HashSet<GridType>(types);
+    private static GridSet typesSet = new GridSet(types);
     List<Value2D<GridType>> _list;
 
     public Path(Value2D<GridType> startPoint, GridArray grids)
-        : this(LevelGenerator.DepthFirstSearchFor(startPoint, grids, GridType.Door,
-                                           GridType.Path_Horiz,
-                                           GridType.Path_Vert,
-                                           GridType.Path_LB,
-                                           GridType.Path_LT,
-                                           GridType.Path_RB,
-                                           GridType.Path_RT))
+        : this(LevelGenerator.DepthFirstSearchFor(startPoint, grids, types))
     {
     }
 
@@ -34,7 +28,7 @@ public class Path : LayoutObjectLeaf
         _list = new List<Value2D<GridType>>(stack);
 	}
 
-    public static HashSet<GridType> PathTypes()
+    public static GridSet PathTypes()
     {
         return typesSet;
     }

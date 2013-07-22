@@ -543,12 +543,7 @@ public class LevelGenerator
         #endregion
     }
 
-    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
-    {
-        return DepthFirstSearchFor(startPoint, grids, new HashSet<GridType>(targets));
-    }
-
-    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
+    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, GridSet targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -643,22 +638,14 @@ public class LevelGenerator
         return pathTaken;
     }
 
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    //public static Stack<Value2D<GridType>> DepthFirstSearchLeap(Value2D<GridType> startPoint, GridArray grids, ) 
+
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, GridSet targets)
     {
         return BreadthFirstFill(startPoint, grids, null, targets);
     }
 
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, params GridType[] targets)
-    {
-        return BreadthFirstFill(startPoint, grids, pass, new HashSet<GridType>(targets));
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
-    {
-        return BreadthFirstFill(startPoint, grids, null, targets);
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, HashSet<GridType> targets)
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, GridSet targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
