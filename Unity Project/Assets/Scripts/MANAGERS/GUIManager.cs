@@ -100,7 +100,7 @@ public class GUIManager : MonoBehaviour {
 	private TweenPosition invPanelTweenPos;
 	
 	//Misc NGUI Integration:
-	public UIItemStorage inventoryStorageScript;
+	public ItemStorage inventoryStorageScript;
 	public UISprite[] inventoryIconArray;
 	#endregion
 
@@ -117,10 +117,12 @@ public class GUIManager : MonoBehaviour {
 		
 		
 		InventoryGUIInit();//better convention to call this from player eventually
-		//BigBoss.PlayerInfo.invent
-		SeedInventory(BigBoss.PlayerInfo.PlayerInventory);
-		//CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + itemStorageScript.maxItemCount + " total inventory slots!");
+		
+		//SeedInventory(BigBoss.PlayerInfo.PlayerInventory);
+		CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
 		//Item iScript = BigBoss.WorldObjectManager.CreateItem(new Vector3(0,0,0),"ABITEMLOLZ");
+		
+		//BigBoss.PlayerInfo.addToInventory(iScript);
 		
 		
 		
@@ -201,7 +203,7 @@ public class GUIManager : MonoBehaviour {
 	public void InventoryGUIInit ()//To refresh references when game starts or upon inventory max size change:
 	{
 		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;//consider coming back to recapture the GO reference in case it gets broken
-		inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<UIItemStorage>();	
+		inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();	
 		//Icon array to switch on visuals, initializing to size:
 		//inventoryIconArray = new UISprite[itemStorageScript.maxItemCount];
 		//inventoryIconArray = itemStorageScript.gameObject.GetComponentsInChildren<UISprite>();
@@ -214,8 +216,8 @@ public class GUIManager : MonoBehaviour {
 	{
 		//Calling tween pos script on panel object
 		invPanelTweenPos.duration = .75f;
-		invPanelTweenPos.from = new Vector3 (-1400f,0,0);//wrap these up into variables
-		invPanelTweenPos.to = new Vector3 (-500f,0,0);//wrap these up into variables
+		invPanelTweenPos.from = new Vector3 (-1000f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.to = new Vector3 (-500f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
 		invPanelTweenPos.Reset();
 		invPanelTweenPos.Play(true);
 		isInventoryOpen = true;
@@ -225,8 +227,8 @@ public class GUIManager : MonoBehaviour {
 	{
 		//Calling tween pos script on panel object
 		invPanelTweenPos.duration = .35f;
-		invPanelTweenPos.from = new Vector3 (-500f,0,0);//wrap these up into variables
-		invPanelTweenPos.to = new Vector3 (-1400f,0,0);//wrap these up into variables
+		invPanelTweenPos.from = new Vector3 (-500f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.to = new Vector3 (-1000f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
 		invPanelTweenPos.Reset();
 		invPanelTweenPos.Play(true);	
 		isInventoryOpen = false;
@@ -247,7 +249,7 @@ public class GUIManager : MonoBehaviour {
 			Debug.Log(item.name);
 			string iconToSetString = item.ModelTexture.ToString();
 			
-			inventoryStorageScript.items.Add(item);
+			//inventoryStorageScript.items.Add(item);
 			Debug.Log(item + " added.");
 		}
 		

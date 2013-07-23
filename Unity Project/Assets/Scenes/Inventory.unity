@@ -707,7 +707,7 @@ MonoBehaviour:
   HUDBarrowPullUpButton: {fileID: 0}
   HUD2XPLabel: {fileID: 0}
   inventoryPanel: {fileID: 1144756355}
-  itemStorageScript: {fileID: 0}
+  inventoryStorageScript: {fileID: 0}
   inventoryIconArray: []
 --- !u!114 &265
 MonoBehaviour:
@@ -4688,9 +4688,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 933641330}
-  m_LocalRotation: {x: 0, y: -2.89848771e-07, z: 0, w: 1}
-  m_LocalPosition: {x: -7.62939453e-05, y: 0, z: -0}
-  m_LocalScale: {x: 1.00011039, y: 1.00011003, z: 1.00011027}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1144756354}
 --- !u!114 &933641332
@@ -4701,14 +4701,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 933641330}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 849fd93d348255049af49ba16fb8bcb0, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d2ec8bb535a33f4cabece79d0f8d6bb, type: 3}
   m_Name: 
-  maxItemCount: 36
-  maxRows: 6
-  maxColumns: 6
-  template: {fileID: 100000, guid: 924b6cc7d02b84543b3b9261cbd49808, type: 2}
+  maxItemCount: 20
+  maxRows: 20
+  maxColumns: 1
+  template: {fileID: 100004, guid: 16652b2462fea2f4bbb17e77c7b647c4, type: 2}
   background: {fileID: 0}
-  spacing: 60
+  spacing: 50
   padding: 10
 --- !u!1 &943459988
 GameObject:
@@ -4899,32 +4899,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3a53df2e95f14845b51b883168f8fbb, type: 3}
   m_Name: 
---- !u!1 &1093322375
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1093322376}
-  m_Layer: 0
-  m_Name: MyItem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1093322376
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1093322375}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.31750107, y: 1.5625, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
 --- !u!1 &1105864238
 GameObject:
   m_ObjectHideFlags: 0
@@ -5105,6 +5079,7 @@ GameObject:
   - 4: {fileID: 1144756354}
   - 114: {fileID: 1144756355}
   - 114: {fileID: 1144756356}
+  - 114: {fileID: 1144756357}
   m_Layer: 8
   m_Name: Inventory_Panel
   m_TagString: Untagged
@@ -5119,7 +5094,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1144756353}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4000, y: 0, z: 0}
+  m_LocalPosition: {x: -1400, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 933641331}
@@ -5140,9 +5115,9 @@ MonoBehaviour:
   widgetsAreStatic: 0
   mAlpha: 1
   mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  mClipping: 3
+  mClipRange: {x: 46, y: -160, z: 270, w: 300}
+  mClipSoftness: {x: 10, y: 20}
 --- !u!114 &1144756356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5179,6 +5154,28 @@ MonoBehaviour:
   callWhenFinished: 
   from: {x: -1400, y: 0, z: 0}
   to: {x: -500, y: 0, z: 0}
+--- !u!114 &1144756357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1144756353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d81807633ea807d4c8e3fff7e10c6000, type: 3}
+  m_Name: 
+  restrictWithinPanel: 1
+  disableDragIfFits: 0
+  dragEffect: 2
+  smoothDragStart: 1
+  scale: {x: 0, y: 1, z: 0}
+  scrollWheelFactor: 0
+  momentumAmount: 15
+  relativePositionOnReset: {x: 0, y: 0}
+  repositionClipping: 0
+  horizontalScrollBar: {fileID: 0}
+  verticalScrollBar: {fileID: 0}
+  showScrollBars: 1
 --- !u!1 &1154459714
 GameObject:
   m_ObjectHideFlags: 0
@@ -5363,7 +5360,7 @@ Transform:
   m_GameObject: {fileID: 1269852173}
   m_LocalRotation: {x: 0, y: .997508824, z: 0, w: -.0705422834}
   m_LocalPosition: {x: 2, y: 10, z: 40}
-  m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
+  m_LocalScale: {x: .0030165913, y: .0030165913, z: .0030165913}
   m_Children:
   - {fileID: 296583997}
   m_Father: {fileID: 0}
@@ -8258,11 +8255,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2046289847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.499865353, y: .499977112, z: -.00102181162}
+  m_LocalPosition: {x: -.99982518, y: .999960423, z: -.000344381493}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1144756354}
   - {fileID: 2124491335}
+  - {fileID: 1144756354}
   m_Father: {fileID: 296583997}
 --- !u!114 &2046289849
 MonoBehaviour:
