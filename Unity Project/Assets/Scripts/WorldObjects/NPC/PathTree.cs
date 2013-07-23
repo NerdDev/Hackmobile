@@ -83,15 +83,16 @@ public class PathTree
 
         foreach (Point p in list)
         {
-            if (LevelManager.Array[p.x, p.y] == GridType.Floor || LevelManager.Array[p.x, p.y] == GridType.Door
-                || LevelManager.Array[p.x, p.y] == GridType.Path_LB
-                || LevelManager.Array[p.x, p.y] == GridType.Path_LT
-                || LevelManager.Array[p.x, p.y] == GridType.Path_RB
-                || LevelManager.Array[p.x, p.y] == GridType.Path_RT
-                || LevelManager.Array[p.x, p.y] == GridType.Path_Vert
-                || LevelManager.Array[p.x, p.y] == GridType.Path_Horiz)
+            try
             {
-                newList.Add(p);
+                if (LevelManager.Level.Arr[p.x, p.y].IsBlocked())
+                {
+                    newList.Add(p);
+                }
+            }
+            catch (NullReferenceException)
+            {
+                //the array location doesn't exist
             }
         }
 

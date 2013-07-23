@@ -117,6 +117,11 @@ public class NPC : WorldObject
         get { return gridCoordinate; }
         set { gridCoordinate = value; }
     }
+    //X, Y in integers
+    private Point gridCoordInt;
+
+    //GridSpace reference
+    public GridSpace gridSpace;
     #endregion
 
     public NPC()
@@ -342,11 +347,22 @@ public class NPC : WorldObject
     List<GameObject> lightList = new List<GameObject>();
     protected void UpdateCurrentTileVectors()
     {
+        if (gridSpace != null)
+        {
+            gridSpace.Remove(this);
+        }
         GridCoordinate = new Vector2(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.z));
+        gridCoordInt = new Point(Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y));
+        gridSpace = LevelManager.Level.Arr[gridCoordInt.x, gridCoordInt.y];
         LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
-        LevelManager.Blocks[Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y)].GetComponent<GridSpace>().setNPC(this);
 
+        //for testing the pathing
+        //buildPath();
+    }
+
+    private void buildPath()
+    {
         if (this is Player && BigBoss.TimeKeeper.turnsPassed != 0)
         {
             foreach (GameObject go in lightList)
@@ -757,13 +773,13 @@ public class NPC : WorldObject
 
     public override void UpdateTurn()
     {
-        if (base.isActive)
+        if (IsActive)
         {
-            //UpdateCurrentTileVectors();
+            UpdateCurrentTileVectors();
             
             try
             {
-                GridSpace grid = LevelManager.Blocks[Convert.ToInt32(this.GridCoordinate.x), Convert.ToInt32(this.GridCoordinate.y)].GetComponent<GridSpace>();
+                GridSpace grid = LevelManager.Level.Arr[gridCoordInt.x, gridCoordInt.y];
                 if (this.IsNotAFreaking<Player>())
                 {
                     //MoveNPC(1, 1);

@@ -69,7 +69,10 @@ public class Player : NPC
         }
         else
         {
-            GridType g = LevelManager.Array[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
+            //yes, it's the gspot
+            GridSpace gspot = LevelManager.Level.Arr[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
+            //I KNEW IT EXISTED
+            GridType g = gspot.Type;
             switch (g)
             {
                 case GridType.Wall:
@@ -107,8 +110,12 @@ public class Player : NPC
         //	foo;
         //}
 
-        //test scene
+        //test scene instantiation
+        //testScene();
+    }
 
+    private static void testScene()
+    {
         GameObject beholder = Instantiate(BigBoss.Prefabs.Beholder, new Vector3(22f, -.5f, 35f), Quaternion.identity) as GameObject;
         NPC beholderNPC = beholder.GetComponent<NPC>();
         beholderNPC.setData(BigBoss.WorldObjectManager.getNPC("beholder"));
@@ -241,15 +248,6 @@ public class Player : NPC
 
     private void applyTileEffect()
     {
-        GridType grid = LevelManager.Array[Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y)];
-        switch (grid)
-        {
-            case GridType.Wall:
-                applyEffect(Properties.POISONED, 3, false);
-                break;
-            default:
-                break;
-        }
     }
 
     private float playervariance = .08f;
