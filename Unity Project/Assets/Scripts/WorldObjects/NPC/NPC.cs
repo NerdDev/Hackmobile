@@ -130,7 +130,7 @@ public class NPC : WorldObject
         bodyparts.Legs = 2;
         bodyparts.Heads = 1;
         equipment = new Equipment(this.bodyparts);
-        if (!this.IsActive) 
+        if (IsActive) 
         {
             UpdateCurrentTileVectors();
         }
