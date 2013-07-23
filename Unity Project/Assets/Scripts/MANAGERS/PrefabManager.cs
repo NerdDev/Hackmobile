@@ -17,7 +17,7 @@ public class PrefabManager : MonoBehaviour {
 	public GameObject SkeletonMage;
 	public GameObject Orc;
 	public GameObject Beholder;
-//	public GameObject prefabName;
+	public GameObject lightMarker;
 //	public GameObject prefabName;
 //	public GameObject prefabName;
 //	public GameObject prefabName;

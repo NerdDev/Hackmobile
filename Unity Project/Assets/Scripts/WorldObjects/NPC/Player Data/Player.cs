@@ -118,11 +118,17 @@ public class Player : NPC
         NPC orcNPC = orc.GetComponent<NPC>();
         orcNPC.setData(BigBoss.WorldObjectManager.getNPC("orc"));
         orcNPC.IsActive = true;
+        BigBoss.Prefabs.Orc = orc;
 
         GameObject skeleMage = Instantiate(BigBoss.Prefabs.SkeletonMage, new Vector3(22f, -.5f, 42f), Quaternion.identity) as GameObject;
         NPC skeleMageNPC = skeleMage.GetComponent<NPC>();
         skeleMageNPC.setData(BigBoss.WorldObjectManager.getNPC("skeleton"));
         skeleMageNPC.IsActive = true;
+    }
+
+    public int conv(float x)
+    {
+        return Convert.ToInt32(x);
     }
 
     // Update is called once per frame

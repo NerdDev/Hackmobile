@@ -130,7 +130,10 @@ public class NPC : WorldObject
         bodyparts.Legs = 2;
         bodyparts.Heads = 1;
         equipment = new Equipment(this.bodyparts);
-        UpdateCurrentTileVectors();
+        if (!this.IsActive) 
+        {
+            UpdateCurrentTileVectors();
+        }
     }
 
     private void killThisNPC()
@@ -297,10 +300,10 @@ public class NPC : WorldObject
         Vector3 gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x + x, -.5f, CurrentOccupiedGridCenterWorldPoint.z + y);
         Vector3 heading = gridCoords - CurrentOccupiedGridCenterWorldPoint;
 
-        Debug.Log("Starting move sequence with: gridcoords - " + gridCoords + " and heading - " + heading);
+        //Debug.Log("Starting move sequence with: gridcoords - " + gridCoords + " and heading - " + heading);
         while (MoveNPCStepwise(heading, gridCoords))
         {
-            Debug.Log("Still moving!");
+            //Debug.Log("Still moving!");
         }
 
         this.gameObject.transform.position = gridCoords;
@@ -310,8 +313,8 @@ public class NPC : WorldObject
     {
         //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
         //Translation toward a precalculated heading:
-        Debug.Log("Moving NPC at " + heading);
-        Debug.Log("Destination: " + gridCoords);
+        //Debug.Log("Moving NPC at " + heading);
+        //Debug.Log("Destination: " + gridCoords);
         gameObject.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         //Lerping rotation so we don't get jitter:
         Quaternion toRot = Quaternion.LookRotation(heading);//does this need to be normalized?
@@ -336,18 +339,41 @@ public class NPC : WorldObject
         }
         return false;
     }
-
+    List<GameObject> lightList = new List<GameObject>();
     protected void UpdateCurrentTileVectors()
     {
         GridCoordinate = new Vector2(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.z));
         LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
         LevelManager.Blocks[Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y)].GetComponent<GridSpace>().setNPC(this);
-    }
 
+        if (this is Player && BigBoss.TimeKeeper.turnsPassed != 0)
+        {
+            foreach (GameObject go in lightList)
+            {
+                Destroy(go);
+            }
+            lightList.Clear();
+            Point start = new Point(conv(this.gameObject.transform.position.x), conv(this.gameObject.transform.position.z));
+            Point dest = new Point(conv(BigBoss.Prefabs.Orc.transform.position.x), conv(BigBoss.Prefabs.Orc.transform.position.z));
+            PathTree path = new PathTree(start, dest);
+            List<PathNode> pathNodes = path.getPath();
+
+            foreach (PathNode node in pathNodes)
+            {
+                GameObject go = Instantiate(BigBoss.Prefabs.lightMarker, new Vector3(node.loc.x, .3f, node.loc.y), Quaternion.identity) as GameObject;
+                go.transform.Rotate(Vector3.left, -90f);
+                lightList.Add(go);
+            }
+        }
+    }
+    public int conv(float x)
+    {
+        return Convert.ToInt32(x);
+    }
     public PathTree getPath(Vector2 destination) 
     {
-        PathTree path = new PathTree();
+        PathTree path = new PathTree(new Point(gridCoordinate.x, gridCoordinate.y), new Point(destination.x, destination.y));
 
         return path;
     }
@@ -733,14 +759,14 @@ public class NPC : WorldObject
     {
         if (base.isActive)
         {
-            UpdateCurrentTileVectors();
+            //UpdateCurrentTileVectors();
             
             try
             {
                 GridSpace grid = LevelManager.Blocks[Convert.ToInt32(this.GridCoordinate.x), Convert.ToInt32(this.GridCoordinate.y)].GetComponent<GridSpace>();
                 if (this.IsNotAFreaking<Player>())
                 {
-                    MoveNPC(1, 1);
+                    //MoveNPC(1, 1);
                 }
             }
             catch (NullReferenceException)
