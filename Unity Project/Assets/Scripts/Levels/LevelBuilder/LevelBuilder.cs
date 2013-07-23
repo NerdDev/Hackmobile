@@ -1,30 +1,41 @@
 using UnityEngine;
 using System.Collections;
 
-public class LevelBuilder : MonoBehaviour {
+public class LevelBuilder : MonoBehaviour
+{
+    private GameObject holder;
 
-    public GameObject[,] Build(GridArray array, Theme theme)
+    public Theme Theme { get; set; }
+
+    public GameObject Build(Value2D<GridSpace> val)
     {
-        GameObject holder = new GameObject("Level Block Holder");
-        GameObject[,] goArr = new GameObject[array.getWidth(), array.getHeight()];
-        foreach (Value2D<GridType> val in array)
-        {
-            GameObject protoType = theme.Get(val.val);
-            if (protoType != null)
-            {
-                GameObject obj = Instantiate(protoType) as GameObject;
-                GridSpace grid = obj.AddComponent<GridSpace>();
-                grid.coords = new Point(val.x, val.y);
-                obj.transform.parent = holder.transform;
-                obj.transform.Translate(new Vector3(val.x, 0, val.y));
-                goArr[val.x, val.y] = obj;
-            }
-        }
-        return goArr;
+        return Build(val.val, val.x, val.y);
     }
 
-	public GameObject[,] Build(LevelLayout layout, Theme theme)
-	{
-        return Build(layout.GetArray(), theme);
-	}
+    public GameObject Build(GridSpace space, int x, int y)
+    {
+        if (holder == null)
+        {
+            holder = new GameObject("Level Block Holder");   
+        }
+        if (space == null) return null;
+        GameObject protoType = Theme.Get(space.Type);
+        if (protoType == null) return null;
+        GameObject obj = Instantiate(protoType) as GameObject;
+        obj.transform.parent = holder.transform;
+        obj.transform.Translate(new Vector3(x, 0, y));
+        space.Block = obj;
+        return obj;
+    }
+
+    public void Build(GridSpace[,] array)
+    {
+        for (int y = 0; y < array.GetLength(0); y++)
+        {
+            for (int x = 0; x < array.GetLength(0); x++)
+            {
+                Build(array[y,x], x, y);
+            }
+        }
+    }
 }

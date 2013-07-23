@@ -1,47 +1,125 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridSpace : MonoBehaviour
+public class GridSpace
 {
-    public List<Item> items = new List<Item>();
-    public NPC npc = null;
-    public Point coords;
-    System.Random rand = new System.Random();
+    public GridType Type { get; private set; }
+    public GameObject Block { get; set; }
+    private List<WorldObject> _freeObjects;
+    private List<WorldObject> _blockingObjects;
 
-    void Start()
+    public GridSpace(GridType type)
     {
-        /*
-        if (rand.Next(100) > 85)
-        {
-            this.setNPC(((GameObject)Instantiate(BigBoss.Prefabs.enemy1, this.transform.position, Quaternion.identity)).GetComponent<NPC>());
-            this.getNPC().setData(BigBoss.WorldObjectManager.getNPC("newt"));
-            this.getNPC().IsActive = true;
-            //this.getNPC().gameObject.transform.parent = npcHolder.transform;
-        }
-        */
+        this.Type = type;
     }
 
-    public bool hasNPC()
+    #region Accessors
+    public void Put(WorldObject obj)
     {
-        if (npc == null)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        // Implement sorting later
+        PutFree(obj);
     }
 
-    //Call after hasNPC()
-    public NPC getNPC()
+    protected void PutFree(WorldObject obj)
     {
-        return npc;
+        if (_freeObjects == null)
+        {
+            _freeObjects = new List<WorldObject>();
+        }
+        _freeObjects.Add(obj);
     }
 
-    public void setNPC(NPC n)
+    protected void PutBlocking(WorldObject obj)
     {
-        this.npc = n;
+        if (_blockingObjects == null)
+        {
+            _blockingObjects = new List<WorldObject>();
+        }
+        _blockingObjects.Add(obj);
+    }
+
+    public void Remove(WorldObject obj)
+    {
+        RemoveFree(obj);
+        RemoveBlocked(obj);
+    }
+
+    protected void RemoveFree(WorldObject obj)
+    {
+        if (_freeObjects != null)
+            _freeObjects.Remove(obj);
+    }
+
+    protected void RemoveBlocked(WorldObject obj)
+    {
+        if (_blockingObjects != null)
+            _blockingObjects.Remove(obj);
+    }
+    #endregion
+
+    #region isChecks
+    public bool Accept(WorldObject obj)
+    {
+        return true;
+    }
+
+    public bool IsBlocked()
+    {
+        return _blockingObjects != null && _blockingObjects.Count > 0;
+    }
+
+    public bool HasNonBlocking()
+    {
+        return _freeObjects != null && _freeObjects.Count > 0;
+    }
+
+    public bool HasObject()
+    {
+        return IsBlocked() || HasNonBlocking();
+    }
+
+    public bool IsEmpty()
+    {
+        return !HasObject();
+    }
+    #endregion
+
+    #region getLists
+    public List<WorldObject> GetContained()
+    {
+        var ret = new List<WorldObject>();
+        if (_freeObjects != null)
+            ret.AddRange(_freeObjects);
+        if (_blockingObjects != null)
+            ret.AddRange(_blockingObjects);
+        return ret;
+    }
+
+    public List<WorldObject> GetFreeObjects()
+    {
+        var ret = new List<WorldObject>();
+        if (_freeObjects != null)
+            ret.AddRange(_freeObjects);
+        return ret;
+    }
+
+    public List<WorldObject> GetBlockingObjects()
+    {
+        var ret = new List<WorldObject>();
+        if (_blockingObjects != null)
+            ret.AddRange(_blockingObjects);
+        return ret;
+    }
+    #endregion
+
+    public static GridSpace[,] Convert(GridArray arr)
+    {
+        GridSpace[,] arrOut = new GridSpace[arr.getHeight(), arr.getWidth()];
+        foreach (Value2D<GridType> val in arr)
+        {
+            arrOut[val.y, val.x] = new GridSpace(val.val);
+        }
+        return arrOut;
     }
 }
