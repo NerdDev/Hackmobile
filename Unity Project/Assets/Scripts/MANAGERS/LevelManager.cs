@@ -68,7 +68,7 @@ public class LevelManager : MonoBehaviour {
 
     void GenerateLevel(int num)
     {
-        Levels[num] = new Level(_gen.GenerateLayout(num));
+        Levels[num] = new Level(_gen.GenerateLayout(num, Seed));
     }
 
     void TestModifier(RoomModifier mod, int seed)
