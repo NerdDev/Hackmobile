@@ -135,7 +135,8 @@ public class BigBoss : MonoBehaviour
 		
 		//audioManager = GetComponentInChildren<AudioManager>() as AudioManager;//Obsolete with the use of AudioToolkit
 		prefabManager = GetComponentInChildren<PrefabManager>() as PrefabManager;
-        playerManager = prefabManager.player.GetComponent<Player>();
+        if (prefabManager != null)
+            playerManager = prefabManager.player.GetComponent<Player>();
 		guiManager = GetComponentInChildren<GUIManager>() as GUIManager;
         inputManager = GetComponentInChildren<InputManager>() as InputManager;
         levelLoadManager = GetComponentInChildren<LevelLoadManager>() as LevelLoadManager;

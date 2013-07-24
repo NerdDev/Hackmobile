@@ -2197,6 +2197,7 @@ MonoBehaviour:
   m_Name: 
   Theme: {fileID: 11400000, guid: 190358207bedb01488dc7d4be001c31a, type: 2}
   Builder: {fileID: 11400000, guid: ed42e612c387bca4bac91cf44cf1fb33, type: 2}
+  Seed: -1
 --- !u!1 &2139884947
 GameObject:
   m_ObjectHideFlags: 0

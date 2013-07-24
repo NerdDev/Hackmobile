@@ -118,8 +118,25 @@ public class GridSpace
         GridSpace[,] arrOut = new GridSpace[arr.getHeight(), arr.getWidth()];
         foreach (Value2D<GridType> val in arr)
         {
+            if (val == null) continue;
+            switch (val.val)
+            {
+                case GridType.Path_Horiz:
+                case GridType.Path_Vert:
+                case GridType.Path_RT:
+                case GridType.Path_LT:
+                case GridType.Path_LB:
+                case GridType.Path_RB:
+                    val.val = GridType.Floor;
+                    break;
+            }
             arrOut[val.y, val.x] = new GridSpace(val.val);
         }
         return arrOut;
+    }
+
+    public static implicit operator GridType(GridSpace space)
+    {
+        return space.Type;
     }
 }
