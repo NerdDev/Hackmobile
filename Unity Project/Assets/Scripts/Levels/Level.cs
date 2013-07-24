@@ -82,6 +82,26 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     }
     #endregion
 
+    public void ToLog(DebugManager.Logs log, params string[] customContent)
+    {
+        GridArray ga = this;
+        ga.ToLog(log, customContent);
+    }
+
+    public static implicit operator GridArray(Level lev)
+    {
+        GridType[,] ret = new GridType[lev.Arr.GetLength(0), lev.Arr.GetLength(1)];
+        for (int y = 0; y < lev.Arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < lev.Arr.GetLength(1); x++)
+            {
+                if (lev.Arr[y, x] != null)
+                    ret[y, x] = lev.Arr[y, x];
+            }
+        }
+        return new GridArray(ret);
+    }
+
     public IEnumerator<GridSpace> GetBasicEnumerator()
     {
         for (int y = 0; y < Arr.GetLength(0); y++)

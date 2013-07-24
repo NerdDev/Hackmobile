@@ -26,6 +26,8 @@ public class LevelManager : MonoBehaviour {
         GenerateLevel(0);
         SetCurLevel(0);
 
+        Level lev = Level;
+        lev.ToLog(DebugManager.Logs.LevelGenMain, "Test");
         JustinTest();
         JoseTest();
     }
