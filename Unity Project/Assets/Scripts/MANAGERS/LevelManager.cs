@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour {
     // Internal
 	public Theme Theme;
     public LevelBuilder Builder;
+    public int Seed = -1;
     private const int MaxLevels = 100;
     private static LevelGenerator _gen;
     private static Level[] Levels;

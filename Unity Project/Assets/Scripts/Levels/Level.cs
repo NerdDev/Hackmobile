@@ -5,31 +5,34 @@ using System.Collections.Generic;
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
     protected LevelLayout Layout;
-    public GridSpace[,] Arr { get; private set; }
+    private GridSpace[,] Arr;
 
     public Level(LevelLayout layout)
     {
         Arr = GridSpace.Convert(layout.GetArray());
     }
 
-    GridSpace Get(int x, int y)
+    public GridSpace this[int x, int y]
     {
-        if (x < Arr.GetLength(1) && y < Arr.GetLength(0))
+        get
         {
-            return Arr[y, x];
+            if (x < Arr.GetLength(1) && y < Arr.GetLength(0))
+            {
+                return Arr[y, x];
+            }
+            return null;
         }
-        return null;
     }
 
     #region ConvenienceFunctions
     public void Put(int x, int y, WorldObject obj)
     {
-        Get(x,y).Put(obj);
+        this[x,y].Put(obj);
     }
 
     public void Remove(int x, int y, WorldObject obj)
     {
-        Get(x, y).Remove(obj);
+        this[x,y].Remove(obj);
     }
 
     public void Move(WorldObject obj, int xFrom, int yFrom, int xTo, int yTo)
@@ -40,42 +43,42 @@ public class Level : IEnumerable<Value2D<GridSpace>>
 
     public bool Accept(int x, int y, WorldObject obj)
     {
-        return Get(x, y).Accept(obj);
+        return this[x,y].Accept(obj);
     }
 
     public bool IsBlocked(int x, int y)
     {
-        return Get(x, y).IsBlocked();
+        return this[x,y].IsBlocked();
     }
 
     public bool HasNonBlocking(int x, int y)
     {
-        return Get(x, y).HasNonBlocking();
+        return this[x,y].HasNonBlocking();
     }
 
     public bool HasObject(int x, int y)
     {
-        return Get(x, y).HasObject();
+        return this[x,y].HasObject();
     }
 
     public bool IsEmpty(int x, int y)
     {
-        return Get(x, y).IsEmpty();
+        return this[x,y].IsEmpty();
     }
 
     public List<WorldObject> GetContained(int x, int y)
     {
-        return Get(x, y).GetContained();
+        return this[x,y].GetContained();
     }
 
     public List<WorldObject> GetFreeObjects(int x, int y)
     {
-        return Get(x, y).GetFreeObjects();
+        return this[x,y].GetFreeObjects();
     }
 
     public List<WorldObject> GetBlockingObjects(int x, int y)
     {
-        return Get(x, y).GetBlockingObjects();
+        return this[x,y].GetBlockingObjects();
     }
     #endregion
 

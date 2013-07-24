@@ -122,4 +122,9 @@ public class GridSpace
         }
         return arrOut;
     }
+
+    public static implicit operator GridType(GridSpace space)
+    {
+        return space.Type;
+    }
 }
