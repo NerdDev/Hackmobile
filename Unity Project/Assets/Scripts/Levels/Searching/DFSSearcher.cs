@@ -4,17 +4,18 @@ using System.Collections.Generic;
 
 public class DFSSearcher
 {
+    private System.Random _rand;
     public DFSSearcher()
+        : this(new System.Random())
     {
     }
 
-    public Stack<Value2D<GridType>> Search(Value2D<GridType> startPoint, GridType[,] arr, GridSet validSpaces,
-                                           GridSet targets)
+    public DFSSearcher(System.Random rand)
     {
-        return Search(startPoint, arr, validSpaces, targets, new System.Random());
+        this._rand = rand;
     }
 
-    public Stack<Value2D<GridType>> Search(Value2D<GridType> startPoint, GridType[,] arr, GridSet validSpaces, GridSet targets, System.Random rand)
+    public Stack<Value2D<GridType>> Search(Value2D<GridType> startPoint, GridType[,] arr, GridSet validSpaces, GridSet targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -81,7 +82,7 @@ public class DFSSearcher
             }
 
             // Didn't find target, pick random direction
-            targetDir = options.GetRandom(rand);
+            targetDir = options.GetRandom(_rand);
             if (targetDir == null)
             { // If all directions are bad, back up
                 pathTaken.Pop();
