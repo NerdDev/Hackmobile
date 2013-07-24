@@ -36,11 +36,15 @@ public class LevelGenerator
 
     public LevelLayout GenerateLayout(int levelDepth)
     {
-        return GenerateLayout(levelDepth, Rand.Next(), Rand.Next());
+        return GenerateLayout(levelDepth, Rand.Next());
     }
 
-    public LevelLayout GenerateLayout(int levelDepth, int seed, int unitySeed)
+    public LevelLayout GenerateLayout(int levelDepth, int seed)
     {
+        if (seed == -1)
+        {
+            return GenerateLayout(levelDepth);
+        }
         #region DEBUG
         int debugNum = 1;
         float stepTime = 0, startTime = 0;
@@ -49,7 +53,7 @@ public class LevelGenerator
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
-                DebugManager.w(DebugManager.Logs.LevelGenMain, "Random/Unity seed ints: " + seed + ", " + unitySeed);
+                DebugManager.w(DebugManager.Logs.LevelGenMain, "Random seed int: " + seed);
                 DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
             }
@@ -58,7 +62,7 @@ public class LevelGenerator
         }
         #endregion
         Rand = new System.Random(seed);
-        Random.seed = unitySeed;
+        Random.seed = Rand.Next();
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = generateRooms();
         ModRooms(rooms);
