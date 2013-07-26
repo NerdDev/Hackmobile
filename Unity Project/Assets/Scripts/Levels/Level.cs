@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
-    protected LevelLayout Layout;
     private GridSpace[,] Arr;
 
     public Level(LevelLayout layout)

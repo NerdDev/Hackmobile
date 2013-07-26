@@ -121,6 +121,14 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
         }
         #endregion
+        ConfirmEdges(layout);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Confirm Edges took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
+        }
+        #endregion
 
         #region DEBUG
         if (DebugManager.logging())
@@ -391,33 +399,43 @@ public class LevelGenerator
         bounds.ShiftNonNeg();
         var grids = layout.GetArray(bounds);
         GridMap doors = layout.getTypes(grids, GridType.Door);
+        #region DEBUG
+        GridArray debugArr = null;
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            debugArr = new GridArray(grids);
+        }
+        #endregion
         foreach (var door in doors)
         {
             var path = new Path(door, grids);
             #region DEBUG
-
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                GridArray tmp = new GridArray(grids);
-                tmp.PutAll(path.GetArray());
-                tmp.ToLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
+                GridArray messyPathArr = new GridArray(debugArr);
+                messyPathArr.PutAll(path.GetArray());
+                messyPathArr.ToLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
             }
-
             #endregion
             if (path.isValid())
             {
-                path.Finalize(layout);
+                path.Simplify();
+                path.ConnectEnds(layout);
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    debugArr.PutAll(path);
+                }
+                #endregion
+                path.Bake(true);
                 grids.PutAll(path);
                 layout.AddPath(path);
             }
             #region DEBUG
-
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                grids.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
-                layout.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door TEST: " + door);
+                debugArr.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
             }
-
             #endregion
         }
         #region DEBUG
@@ -482,6 +500,48 @@ public class LevelGenerator
         #endregion
     }
 
+    private static void ConfirmEdges(LevelLayout layout)
+    {
+//        var bounds = layout.GetBounding();
+//        bounds.expand(layoutMargin);
+//        bounds.ShiftNonNeg();
+        GridArray arr = layout.GetArray();
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Confirm Edges");
+            arr.ToLog(DebugManager.Logs.LevelGen, "Pre Confirm Edges");
+        }
+        #endregion
+        LayoutObjectLeaf leaf = new LayoutObjectLeaf(arr.getWidth(), arr.getHeight());
+        layout.AddObject(leaf);
+        foreach (Value2D<GridType> val in arr)
+        {
+            if (val.val == GridType.Floor)
+            {
+                Surrounding<GridType> surround = Surrounding<GridType>.Get(arr, val);
+                if (val.y == 0)
+                {
+                    int wer = 23;
+                }
+                foreach (Value2D<GridType> neighbor in surround)
+                {
+                    if (neighbor.val == GridType.NULL)
+                    {
+                        leaf.put(GridType.Wall, neighbor.x, neighbor.y);
+                    }
+                }
+            }
+        }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            arr.ToLog(DebugManager.Logs.LevelGen, "Post Confirm Edges");
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+    }
+
     private static void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
     {
         #region DEBUG
@@ -493,7 +553,7 @@ public class LevelGenerator
         GridArray smallest;
         GridArray largest;
         GridArray layoutArr = layout.GetArray();
-        layoutArr.PutAsBlocked(layoutArr);
+        layoutArr.PutAs(layoutArr, GridType.INTERNAL_RESERVED_BLOCKED);
         Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))

@@ -55,7 +55,12 @@ public class Path : LayoutObjectLeaf
 
     public override GridArray GetArray()
     {
-        return GetArray(false);
+        return GetArray(false, true);
+    }
+
+    public override GridArray GetPrintArray()
+    {
+        return GetArray(true, true);
     }
 
     public void Finalize(LayoutObjectContainer obj)
@@ -67,12 +72,12 @@ public class Path : LayoutObjectLeaf
 
     public override void Bake(bool shiftCompensate)
     {
-        grids = GetArray(false);
+        grids = GetArray(false, false);
         _list = null;
         base.Bake(shiftCompensate);
     }
 
-    public GridArray GetArray(bool ending)
+    public GridArray GetArray(bool ending, bool print)
     {
         if (grids != null)
         {
@@ -86,56 +91,67 @@ public class Path : LayoutObjectLeaf
             Value2D<GridType> curPoint = null;
             foreach (Value2D<GridType> forwardPt in _list)
             {
-                if (curPoint != null)
+                if (print)
                 {
-                    if (backwardPt == null)
-                    { // Start Point
-                        if (ending)
+                    if (curPoint != null)
+                    {
+                        if (backwardPt == null)
                         {
-                            ret[curPoint.x, curPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                            // Start Point
+                            if (ending)
+                            {
+                                ret[curPoint.x, curPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                            }
                         }
-                    }
-                    else if (Mathf.Abs(forwardPt.x - backwardPt.x) == 2)
-                    { // Horizontal
-                        ret[curPoint.x, curPoint.y] = GridType.Path_Horiz;
-                    }
-                    else if (Mathf.Abs(forwardPt.y - backwardPt.y) == 2)
-                    { // Vertical
-                        ret[curPoint.x, curPoint.y] = GridType.Path_Vert;
-                    }
-                    else
-                    { // Corner
-                        bool top = (forwardPt.y == (curPoint.y + 1)) || (backwardPt.y == (curPoint.y + 1));
-                        bool right = (forwardPt.x == (curPoint.x + 1)) || (backwardPt.x == (curPoint.x + 1));
-                        if (top)
+                        else if (Mathf.Abs(forwardPt.x - backwardPt.x) == 2)
                         {
-                            if (right)
-                            {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_RT;
-                            }
-                            else
-                            {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_LT;
-                            }
+                            // Horizontal
+                            ret[curPoint.x, curPoint.y] = GridType.Path_Horiz;
+                        }
+                        else if (Mathf.Abs(forwardPt.y - backwardPt.y) == 2)
+                        {
+                            // Vertical
+                            ret[curPoint.x, curPoint.y] = GridType.Path_Vert;
                         }
                         else
                         {
-                            if (right)
+                            // Corner
+                            bool top = (forwardPt.y == (curPoint.y + 1)) || (backwardPt.y == (curPoint.y + 1));
+                            bool right = (forwardPt.x == (curPoint.x + 1)) || (backwardPt.x == (curPoint.x + 1));
+                            if (top)
                             {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_RB;
+                                if (right)
+                                {
+                                    ret[curPoint.x, curPoint.y] = GridType.Path_RT;
+                                }
+                                else
+                                {
+                                    ret[curPoint.x, curPoint.y] = GridType.Path_LT;
+                                }
                             }
                             else
                             {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_LB;
+                                if (right)
+                                {
+                                    ret[curPoint.x, curPoint.y] = GridType.Path_RB;
+                                }
+                                else
+                                {
+                                    ret[curPoint.x, curPoint.y] = GridType.Path_LB;
+                                }
                             }
                         }
                     }
+                    // Set up for next point
+                    backwardPt = curPoint;
+                    curPoint = forwardPt;
                 }
-                // Set up for next point
-                backwardPt = curPoint;
-                curPoint = forwardPt;
+                else
+                {
+                    ret[forwardPt.x, forwardPt.y] = GridType.Floor;
+                }
             }
-            if (ending)
+            if (print && ending)
             {
                 ret[curPoint.x, curPoint.y] = GridType.INTERNAL_RESERVED_CUR;
             }
