@@ -559,7 +559,7 @@ public class LevelGenerator
             largest.ToLog(DebugManager.Logs.LevelGen, "Largest");
         }
         #endregion
-        var startPtStack = DepthFirstSearchFor(new Value2D<GridType>(), smallest, Path.PathTypes());
+        var startPtStack = DepthFirstSearchFor(new Value2D<GridType>(), smallest, GridType.Floor);
         if (startPtStack.Count > 0)
         {
             layoutArr.PutAll(largest);
