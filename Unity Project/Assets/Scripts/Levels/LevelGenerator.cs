@@ -559,7 +559,8 @@ public class LevelGenerator
             largest.ToLog(DebugManager.Logs.LevelGen, "Largest");
         }
         #endregion
-        var startPtStack = DepthFirstSearchFor(new Value2D<GridType>(), smallest, GridType.Floor);
+        DFSSearcher searcher = new DFSSearcher();
+        var startPtStack = searcher.Search(new Value2D<GridType>(), smallest, GridType.NULL, Path.PathTypes(), Rand);
         if (startPtStack.Count > 0)
         {
             layoutArr.PutAll(largest);
@@ -604,124 +605,12 @@ public class LevelGenerator
         #endregion
     }
 
-    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
-    {
-        return DepthFirstSearchFor(startPoint, grids, new HashSet<GridType>(targets));
-    }
-
-    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
-    {
-        #region DEBUG
-        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
-            GridArray tmp = new GridArray(grids);
-            tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-            tmp.ToLog(DebugManager.Logs.LevelGen, "Starting Map:");
-        }
-        #endregion
-        // Init
-        GridType[,] arr = grids.GetArr();
-        Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
-        Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBoundingInternal(), false);
-        FilterDFS filter = new FilterDFS(blockedPoints, targets);
-        Surrounding<GridType> options = new Surrounding<GridType>(arr);
-        options.Filter = filter;
-        #region DEBUG
-        GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
-        #endregion
-
-        // Push start point onto path
-        pathTaken.Push(startPoint);
-        while (pathTaken.Count > 0)
-        {
-            startPoint = pathTaken.Peek();
-            // Don't want to visit the same point on a different route later
-            blockedPoints[startPoint.x, startPoint.y] = true;
-            #region DEBUG
-            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-            { // Set up new print array
-                debugGrid = new GridArray(grids);
-                // Fill in blocked points
-                foreach (Value2D<bool> blockedPt in blockedPoints)
-                {
-                    if (blockedPt.val)
-                    {
-                        debugGrid[blockedPt.x, blockedPt.y] = GridType.INTERNAL_RESERVED_BLOCKED;
-                    }
-                }
-                Path tmpPath = new Path(pathTaken);
-                debugGrid.PutAll(tmpPath.GetArray());
-            }
-            #endregion
-
-            // Get surrounding points
-            options.Load(startPoint.x, startPoint.y);
-            #region DEBUG
-            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-            {
-                debugGrid.ToLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
-            }
-            #endregion
-
-            // If found target, return path we took
-            Value2D<GridType> targetDir = options.GetDirWithVal(targets);
-            if (targetDir != null)
-            {
-                #region DEBUG
-                if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-                {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
-                    DebugManager.printFooter(DebugManager.Logs.LevelGen);
-                }
-                #endregion
-                pathTaken.Push(targetDir);
-                return pathTaken;
-            }
-
-            // Didn't find target, pick random direction
-            targetDir = options.GetRandom(Rand);
-            if (targetDir == null)
-            { // If all directions are bad, back up
-                pathTaken.Pop();
-            }
-            else
-            {
-                #region DEBUG
-                if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-                {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "Chose Direction: " + targetDir);
-                }
-                #endregion
-                startPoint = targetDir;
-                pathTaken.Push(startPoint);
-            }
-        }
-        #region DEBUG
-        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
-        }
-        #endregion
-        return pathTaken;
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, GridSet targets)
     {
         return BreadthFirstFill(startPoint, grids, null, targets);
     }
 
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, params GridType[] targets)
-    {
-        return BreadthFirstFill(startPoint, grids, pass, new HashSet<GridType>(targets));
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
-    {
-        return BreadthFirstFill(startPoint, grids, null, targets);
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, HashSet<GridType> targets)
+    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, GridSet targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
