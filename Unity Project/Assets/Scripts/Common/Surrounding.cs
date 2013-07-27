@@ -134,11 +134,29 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         return null;
     }
 
+    public virtual List<Value2D<T>> GetDirsWithVal(HashSet<T> set)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        foreach (Value2D<T> val in this)
+        {
+            if (val != null && set.Contains(val.val))
+            {
+                ret.Add(val);
+            }
+        }
+        return ret;
+    }
+
     // Returns a direction containing one of the given values that also passes the filter.
     // Null if none found.
     public virtual Value2D<T> GetDirWithVal(params T[] types)
     {
         return GetDirWithVal(new HashSet<T>(types));
+    }
+
+    public virtual List<Value2D<T>> GetDirsWithVal(params T[] types)
+    {
+        return GetDirsWithVal(new HashSet<T>(types));
     }
 	
     // Returns a direction that does not contain given value.
@@ -155,11 +173,30 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 		return null;
 	}
 
+    public virtual List<Value2D<T>> GetDirsWithoutVal(T t)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        foreach (Value2D<T> val in this)
+        {
+            if (val != null && !val.val.Equals(t))
+            {
+                ret.Add(val);
+            }
+        }
+        return ret;
+    }
+
+
     // Returns a direction not contained in the given set, that also passes the filter.
     // Null if none found.
     public virtual Value2D<T> GetDirWithoutVal(params T[] types)
     {
         return GetDirWithoutVal(new HashSet<T>(types));
+    }
+
+    public virtual List<Value2D<T>> GetDirsWithoutVal(params T[] types)
+    {
+        return GetDirsWithoutVal(new HashSet<T>(types));
     }
 
     // Returns a direction not contained in the given set, that also passes the filter.
@@ -174,6 +211,19 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
             }
         }
         return null;
+    }
+
+    public virtual List<Value2D<T>> GetDirsWithoutVal(HashSet<T> set)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        foreach (Value2D<T> val in this)
+        {
+            if (val != null && !set.Contains(val.val))
+            {
+                ret.Add(val);
+            }
+        }
+        return ret;
     }
 
     // True if current space is cornered by values given.

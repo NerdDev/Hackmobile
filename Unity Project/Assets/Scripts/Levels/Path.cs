@@ -7,12 +7,7 @@ public class Path : LayoutObjectLeaf
 
     private static GridType[] searchTypes = new GridType[]
         {
-            GridType.Path_Horiz, 
-            GridType.Path_LB, 
-            GridType.Path_LT, 
-            GridType.Path_RB, 
-            GridType.Path_RT, 
-            GridType.Path_Vert,
+            GridType.Floor,
             GridType.Door
         };
     private static GridSet typesSet = new GridSet(searchTypes);

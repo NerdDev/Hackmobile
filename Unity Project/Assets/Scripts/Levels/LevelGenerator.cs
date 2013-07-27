@@ -399,6 +399,7 @@ public class LevelGenerator
         bounds.ShiftNonNeg();
         var grids = layout.GetArray(bounds);
         GridMap doors = layout.getTypes(grids, GridType.Door);
+        Surrounding<GridType> surround = new Surrounding<GridType>(grids);
         #region DEBUG
         GridArray debugArr = null;
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -408,6 +409,14 @@ public class LevelGenerator
         #endregion
         foreach (var door in doors)
         {
+            // Block nearby floor from being found
+            surround.Load(door);
+            Value2D<GridType> floor = surround.GetDirWithVal(GridType.Floor);
+            if (floor != null)
+            {
+                grids[floor] = GridType.INTERNAL_RESERVED_BLOCKED;
+            }
+
             var path = new Path(door, grids);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
