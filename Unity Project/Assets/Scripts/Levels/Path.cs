@@ -175,10 +175,11 @@ public class Path : LayoutObjectLeaf
         Bounding bounds = GetBounding();
         Array2D<int> indexes = new Array2D<int>(bounds, false);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
+        SurroundingInt surround = new SurroundingInt(indexes.GetArr());
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
-            SurroundingInt surround = SurroundingInt.Get(indexes, val.x, val.y);
+            surround.Load(val.x, val.y);
             Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))

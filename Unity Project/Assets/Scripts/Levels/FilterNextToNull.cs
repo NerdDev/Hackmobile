@@ -1,19 +1,19 @@
 using UnityEngine;
 using System.Collections;
 
-public class FilterNextToNull : PassFilter<Value2D<GridType>> {
-
-    readonly GridArray grids;
+public class FilterNextToNull : PassFilter<Value2D<GridType>>
+{
+    private Surrounding<GridType> surround;
 
     public FilterNextToNull(GridArray grids)
     {
-        this.grids = grids;
+        this.surround = new Surrounding<GridType>(grids);
     }
 
     public bool pass(Value2D<GridType> dir)
     {
-        Surrounding<GridType> dirSurround = Surrounding<GridType>.Get(grids, dir);
-        Value2D<GridType> nullDir = dirSurround.GetDirWithVal(GridType.NULL);
+        surround.Load(dir);
+        Value2D<GridType> nullDir = surround.GetDirWithVal(GridType.NULL);
         return nullDir != null;
     }
 }

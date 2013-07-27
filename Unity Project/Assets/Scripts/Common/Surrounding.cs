@@ -3,104 +3,102 @@ using System.Collections.Generic;
 
 public class Surrounding<T> : IEnumerable<Value2D<T>>
 {
-	public Value2D<T> up { get; set; }
-    public Value2D<T> down { get; set; }
-    public Value2D<T> left { get; set; }
-    public Value2D<T> right { get; set; }
-    public int Count { get; private set; }
+    Value2D<T>[] dirs = new Value2D<T>[Enum.GetNames(typeof(GridLocation)).Length];
+    public int Count {
+        get { return CountInternal(); }
+    }
+    public PassFilter<Value2D<T>> Filter { get; set; } 
+    public T[,] arr;
 	
-    protected Surrounding ()
+    public Surrounding(T[,] srcArr)
     {
+        arr = srcArr;
     }
 
-    public static Surrounding<T> Get(T[,] arr, Value2D<T> val, PassFilter<Value2D<T>> pass)
+    public Value2D<T> this[GridLocation loc]
     {
-        return Get(arr, val.x, val.y, pass);
+        get { return dirs[(int) loc]; }
+        set { dirs[(int) loc] = value; }
     }
 
-    public static Surrounding<T> Get(T[,] arr, Value2D<T> val)
+    public void Clear()
     {
-        return Get(arr, val.x, val.y, null);
+        for (int i = 0; i < dirs.Length; i++)
+        {
+            dirs[i] = null;
+        }
     }
 
-    public static Surrounding<T> Get(T[,] arr, int x, int y)
+    public void FilterExec(PassFilter<Value2D<T>> filter)
     {
-        return Get(arr, x, y, null);
+        if (filter != null)
+        {
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                if (!filter.pass(dirs[i]))
+                {
+                    dirs[i] = null;
+                }
+            }
+        }
     }
 
-    public static Surrounding<T> Get(T[,] arr, int x, int y, PassFilter<Value2D<T>> pass)
+    public void Load(Value2D<T> val)
     {
-        Position xPos = GetPos(x, arr.GetLength(1));
-        Position yPos = GetPos(y, arr.GetLength(0));
+        Load(val.x, val.y);
+    }
 
-        Surrounding<T> ret = new Surrounding<T>();
+    public void Load(int x, int y)
+    {
+        EdgePosition xPos = GetPos(x, arr.GetLength(1));
+        EdgePosition yPos = GetPos(y, arr.GetLength(0));
 
-        if (xPos == Position.Out || yPos == Position.Out)
+        Clear();
+        if (xPos == EdgePosition.Out || yPos == EdgePosition.Out)
         { // Bad Query
-            return ret;
+            return;
         }
 
         // Create Values
-        if (xPos != Position.BottomEdge) {
-			ret.left = new Value2D<T>(x - 1, y, arr[y, x - 1]);
-		}
-		if (xPos != Position.TopEdge)
-		{
-            ret.right = new Value2D<T>(x + 1, y, arr[y, x + 1]);
-		}
-		if (yPos != Position.BottomEdge)
-		{
-            ret.down = new Value2D<T>(x, y - 1, arr[y - 1, x]);
-		}
-		if (yPos != Position.TopEdge)
-		{
-            ret.up = new Value2D<T>(x, y + 1, arr[y + 1, x]);
-		}
-
-        // Handle pass filter
-        if (pass != null)
+        if (xPos != EdgePosition.BottomEdge)
         {
-            if (!pass.pass(ret.left))
-            {
-                ret.left = null;
-            }
-            if (!pass.pass(ret.right))
-            {
-                ret.right = null;
-            }
-            if (!pass.pass(ret.up))
-            {
-                ret.up = null;
-            }
-            if (!pass.pass(ret.down))
-            {
-                ret.down = null;
-            }
+            this[GridLocation.LEFT] = new Value2D<T>(x - 1, y, arr[y, x - 1]);
+        }
+        if (xPos != EdgePosition.TopEdge)
+        {
+            this[GridLocation.RIGHT] = new Value2D<T>(x + 1, y, arr[y, x + 1]);
+        }
+        if (yPos != EdgePosition.BottomEdge)
+        {
+            this[GridLocation.DOWN] = new Value2D<T>(x, y - 1, arr[y - 1, x]);
+        }
+        if (yPos != EdgePosition.TopEdge)
+        {
+            this[GridLocation.UP] = new Value2D<T>(x, y + 1, arr[y + 1, x]);
         }
 
-        ret.Count = ret.CountInternal();
-		return ret;
-	}
+        FilterExec(Filter);
+    }
 
-    static Position GetPos(int val, int arrLim)
+    static EdgePosition GetPos(int val, int arrLim)
     {
         arrLim -= 1;
         if (val > 0 && val < arrLim)
         {
-            return Position.In;
+            return EdgePosition.In;
         }
         if (val == 0)
         {
-            return Position.BottomEdge;
+            return EdgePosition.BottomEdge;
         }
         if (val == arrLim)
         {
-            return Position.TopEdge;
+            return EdgePosition.TopEdge;
         }
-        return Position.Out;
+        return EdgePosition.Out;
     }
 
-    private enum Position
+    private enum EdgePosition
     {
         Out,
         BottomEdge,
@@ -271,46 +269,33 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     private int CountInternal()
     {
         int ret = 0;
-        if (up != null)
+        IEnumerator<Value2D<T>> e = GetEnumerator();
+        while (e.MoveNext())
+        {
             ret++;
-        if (right != null)
-            ret++;
-        if (down != null)
-            ret++;
-        if (left != null)
-            ret++;
+        }
         return ret;
     }
 
     public IEnumerator<Value2D<T>> GetEnumerator()
     {
-        if (up != null)
-            yield return up;
-        if (right != null)
-            yield return right;
-        if (down != null)
-            yield return down;
-        if (left != null)
-            yield return left;
+        foreach (Value2D<T> val in dirs)
+        {
+            if (val != null)
+            {
+                yield return val;
+            }
+        }
     }
 
     public IEnumerator<Value2D<T>> GetEnumerator(GridDirection d)
     {
-        if (up != null && d == GridDirection.UP || d == GridDirection.VERT)
+        foreach (GridLocation loc in Enum.GetValues(typeof (GridLocation)))
         {
-            yield return up;
-        }
-        if (right != null && d == GridDirection.RIGHT || d == GridDirection.HORIZ)
-        {
-            yield return right;
-        }
-        if (down != null && d == GridDirection.DOWN || d == GridDirection.VERT)
-        {
-            yield return down;
-        }
-        if (left != null && d == GridDirection.LEFT || d == GridDirection.HORIZ)
-        {
-            yield return left;
+            if (loc.PartOf(d) && this[loc] != null)
+            {
+                yield return this[loc];
+            }
         }
     }
 

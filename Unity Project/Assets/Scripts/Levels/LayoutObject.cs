@@ -179,10 +179,11 @@ abstract public class LayoutObject
     {
         GridMap ret = new GridMap();
         GridArray grids = GetArray();
+        Surrounding<GridType> surround = new Surrounding<GridType>(grids);
         GridMap targets = getType(grids, target);
         foreach (Value2D<GridType> val in targets)
         {
-            Surrounding<GridType> surround = Surrounding<GridType>.Get(grids, val, null);
+            surround.Load(val);
             Value2D<GridType> nullDir = surround.GetDirWithVal(GridType.NULL);
             if (nullDir != null)
             {
@@ -225,12 +226,13 @@ abstract public class LayoutObject
         Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), grids, GridType.NULL);
         // Invert to be room
         Array2D<bool>.invert(bfs);
+        Surrounding<bool> surround = new Surrounding<bool>(bfs.GetArr());
         foreach (Value2D<bool> val in bfs)
         {
             // If space part of room
             if (val.val)
             {
-                Surrounding<bool> surround = Surrounding<bool>.Get(bfs.GetArr(), val);
+                surround.Load(val);
                 // If space is an edge (next to a false)
                 if (surround.GetDirWithVal(false) != null)
                 {

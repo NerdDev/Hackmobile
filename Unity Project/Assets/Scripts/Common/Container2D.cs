@@ -79,12 +79,8 @@ abstract public class Container2D<T> {
             putRow(t, xl, xr, yb);
         }
     }
-    public abstract T[,] GetArr();
 
-    public Surrounding<T> GetSurrounding(Value2D<T> val)
-    {
-        return Surrounding<T>.Get(GetArr(), val);
-    }
+    public abstract T[,] GetArr();
 	
 	public virtual List<string> ToRowStrings()
 	{

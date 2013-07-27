@@ -513,17 +513,14 @@ public class LevelGenerator
             arr.ToLog(DebugManager.Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
+        Surrounding<GridType> surround = new Surrounding<GridType>(arr);
         LayoutObjectLeaf leaf = new LayoutObjectLeaf(arr.getWidth(), arr.getHeight());
         layout.AddObject(leaf);
         foreach (Value2D<GridType> val in arr)
         {
             if (val.val == GridType.Floor)
             {
-                Surrounding<GridType> surround = Surrounding<GridType>.Get(arr, val);
-                if (val.y == 0)
-                {
-                    int wer = 23;
-                }
+                surround.Load(val);
                 foreach (Value2D<GridType> neighbor in surround)
                 {
                     if (neighbor.val == GridType.NULL)
@@ -628,6 +625,8 @@ public class LevelGenerator
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
         Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBoundingInternal(), false);
         FilterDFS filter = new FilterDFS(blockedPoints, targets);
+        Surrounding<GridType> options = new Surrounding<GridType>(arr);
+        options.Filter = filter;
         #region DEBUG
         GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
         #endregion
@@ -657,7 +656,7 @@ public class LevelGenerator
             #endregion
 
             // Get surrounding points
-            Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y, filter);
+            options.Load(startPoint.x, startPoint.y);
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -737,12 +736,14 @@ public class LevelGenerator
         queue.Enqueue(startPoint);
         GridType[,] targetArr = grids.GetArr();
         Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
+        Surrounding<GridType> options = new Surrounding<GridType>(targetArr);
+        options.Filter = pass;
         outGridArr[startPoint.x, startPoint.y] = true;
         Value2D<GridType> curPoint;
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
-            Surrounding<GridType> options = Surrounding<GridType>.Get(targetArr, curPoint.x, curPoint.y, pass);
+            options.Load(curPoint.x, curPoint.y);
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
