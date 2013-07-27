@@ -28,7 +28,8 @@ public class DFSSearcher
         #endregion
         Array2D<bool> blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
-        FilterDFS filter = new FilterDFS(blockedPoints, targets);
+        Surrounding<GridType> options = new Surrounding<GridType>(arr);
+        options.Filter = new FilterDFS(blockedPoints, targets);
         #region DEBUG
         GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
         #endregion
@@ -58,7 +59,7 @@ public class DFSSearcher
             #endregion
 
             // Get surrounding points
-            Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y, filter);
+            options.Load(startPoint.x, startPoint.y);
             #region DEBUG
             if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
             {
