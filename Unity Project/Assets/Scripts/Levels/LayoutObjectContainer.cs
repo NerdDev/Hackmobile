@@ -65,6 +65,14 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         }
         return ret;
     }
+
+    public GridArray GetArray(int buffer)
+    {
+        var bounds = GetBounding();
+        bounds.expand(buffer);
+        bounds.ShiftNonNeg();
+        return GetArray(bounds);
+    }
 	
     public IEnumerator<LayoutObject> GetEnumerator()
     {

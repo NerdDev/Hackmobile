@@ -119,6 +119,10 @@ public class LevelGenerator
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Confirm Connection took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Edges");
+            }
         }
         #endregion
         ConfirmEdges(layout);
@@ -394,10 +398,7 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Paths");
         }
         #endregion
-        var bounds = layout.GetBounding();
-        bounds.expand(layoutMargin);
-        bounds.ShiftNonNeg();
-        var grids = layout.GetArray(bounds);
+        var grids = layout.GetArray(layoutMargin);
         GridMap doors = layout.getTypes(grids, GridType.Door);
         Surrounding<GridType> surround = new Surrounding<GridType>(grids);
         #region DEBUG
@@ -511,15 +512,12 @@ public class LevelGenerator
 
     private static void ConfirmEdges(LevelLayout layout)
     {
-//        var bounds = layout.GetBounding();
-//        bounds.expand(layoutMargin);
-//        bounds.ShiftNonNeg();
-        GridArray arr = layout.GetArray();
+        GridArray arr = layout.GetArray(layoutMargin);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Confirm Edges");
-            arr.ToLog(DebugManager.Logs.LevelGen, "Pre Confirm Edges");
+            layout.ToLog(DebugManager.Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
         Surrounding<GridType> surround = new Surrounding<GridType>(arr);
@@ -542,7 +540,7 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            arr.ToLog(DebugManager.Logs.LevelGen, "Post Confirm Edges");
+            layout.ToLog(DebugManager.Logs.LevelGen, "Post Confirm Edges");
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
