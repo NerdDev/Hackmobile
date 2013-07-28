@@ -68,7 +68,7 @@ public class DFSSearcher
             #endregion
 
             // If found target, return path we took
-            Value2D<GridType> targetDir = options.GetDirWithVal(targets);
+            Value2D<GridType> targetDir = options.GetDirWithVal(true, targets);
             if (targetDir != null)
             {
                 #region DEBUG

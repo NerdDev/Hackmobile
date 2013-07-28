@@ -106,124 +106,67 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         TopEdge
     }
 
-    // Returns a direction containing the given value.
-    // Null if none found.
-    public virtual Value2D<T> GetDirWithVal(T t)
-	{
-		foreach (Value2D<T> val in this)
-		{
-            if (val != null && val.val.Equals(t))
-			{
-				return val;	
-			}
-		}
-		return null;
-	}
-
-    // Returns a direction containing one of the given values.
-    // Null if none found.
-    public virtual Value2D<T> GetDirWithVal(HashSet<T> set)
+    public virtual List<Value2D<T>> GetDirsWithVal(bool with, T t)
     {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
         foreach (Value2D<T> val in this)
         {
-            if (val != null && set.Contains(val.val))
+            if (val != null && val.val.Equals(t) == with)
             {
-                return val;
+                ret.Add(val);
             }
         }
+        return ret;
+    }
+
+    public virtual List<Value2D<T>> GetDirsWithVal(bool with, HashSet<T> set)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        foreach (Value2D<T> val in this)
+        {
+            if (val != null && set.Contains(val.val) == with)
+            {
+                ret.Add(val);
+            }
+        }
+        return ret;
+    }
+
+    public virtual List<Value2D<T>> GetDirsWithVal(bool with, params T[] types)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        foreach (Value2D<T> val in this)
+        {
+            if (val != null && types.Contains(val.val) == with)
+            {
+                ret.Add(val);
+            }
+        }
+        return ret;
+    }
+
+    public virtual Value2D<T> GetDirWithVal(bool with, T t)
+    {
+        List<Value2D<T>> list = GetDirsWithVal(with, t);
+        if (list.Count > 0)
+            return list[0];
         return null;
     }
 
-    public virtual List<Value2D<T>> GetDirsWithVal(HashSet<T> set)
+    public virtual Value2D<T> GetDirWithVal(bool with, HashSet<T> t)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
-        foreach (Value2D<T> val in this)
-        {
-            if (val != null && set.Contains(val.val))
-            {
-                ret.Add(val);
-            }
-        }
-        return ret;
-    }
-
-    // Returns a direction containing one of the given values that also passes the filter.
-    // Null if none found.
-    public virtual Value2D<T> GetDirWithVal(params T[] types)
-    {
-        return GetDirWithVal(new HashSet<T>(types));
-    }
-
-    public virtual List<Value2D<T>> GetDirsWithVal(params T[] types)
-    {
-        return GetDirsWithVal(new HashSet<T>(types));
-    }
-	
-    // Returns a direction that does not contain given value.
-    // Null if none found.
-	public virtual Value2D<T> GetDirWithoutVal(T t)
-	{
-		foreach (Value2D<T> val in this)
-		{
-			if (val != null && !val.val.Equals(t))
-			{
-				return val;	
-			}
-		}
-		return null;
-	}
-
-    public virtual List<Value2D<T>> GetDirsWithoutVal(T t)
-    {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
-        foreach (Value2D<T> val in this)
-        {
-            if (val != null && !val.val.Equals(t))
-            {
-                ret.Add(val);
-            }
-        }
-        return ret;
-    }
-
-
-    // Returns a direction not contained in the given set, that also passes the filter.
-    // Null if none found.
-    public virtual Value2D<T> GetDirWithoutVal(params T[] types)
-    {
-        return GetDirWithoutVal(new HashSet<T>(types));
-    }
-
-    public virtual List<Value2D<T>> GetDirsWithoutVal(params T[] types)
-    {
-        return GetDirsWithoutVal(new HashSet<T>(types));
-    }
-
-    // Returns a direction not contained in the given set, that also passes the filter.
-    // Null if none found.
-    public virtual Value2D<T> GetDirWithoutVal(HashSet<T> set)
-    {
-        foreach (Value2D<T> val in this)
-        {
-            if (val != null && !set.Contains(val.val))
-            {
-                return val;
-            }
-        }
+        List<Value2D<T>> list = GetDirsWithVal(with, t);
+        if (list.Count > 0)
+            return list[0];
         return null;
     }
 
-    public virtual List<Value2D<T>> GetDirsWithoutVal(HashSet<T> set)
+    public virtual Value2D<T> GetDirWithVal(bool with, params T[] t)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
-        foreach (Value2D<T> val in this)
-        {
-            if (val != null && !set.Contains(val.val))
-            {
-                ret.Add(val);
-            }
-        }
-        return ret;
+        List<Value2D<T>> list = GetDirsWithVal(with, t);
+        if (list.Count > 0)
+            return list[0];
+        return null;
     }
 
     // True if current space is cornered by values given.

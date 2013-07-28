@@ -184,7 +184,7 @@ abstract public class LayoutObject
         foreach (Value2D<GridType> val in targets)
         {
             surround.Load(val);
-            Value2D<GridType> nullDir = surround.GetDirWithVal(GridType.NULL);
+            Value2D<GridType> nullDir = surround.GetDirWithVal(true, GridType.NULL);
             if (nullDir != null)
             {
                 ret[val] = val.val;
@@ -234,7 +234,7 @@ abstract public class LayoutObject
             {
                 surround.Load(val);
                 // If space is an edge (next to a false)
-                if (surround.GetDirWithVal(false) != null)
+                if (surround.GetDirWithVal(true, false) != null)
                 {
                     ret[val.x, val.y] = grids[val.x, val.y];
                 }

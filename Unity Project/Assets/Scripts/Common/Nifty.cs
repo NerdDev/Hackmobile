@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
-public class Nifty
+public static class Nifty
 {
     static public int GCD(int a, int b)
     {
@@ -17,6 +17,18 @@ public class Nifty
         }
 		return a;
 	}
+
+    static public bool Contains<T>(this T[] arr, T val)
+    {
+        foreach (T t in arr)
+        {
+            if (t.Equals(val))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     static public void DeleteContainedFiles(String dirPath, bool recursive)
     {

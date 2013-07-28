@@ -9,7 +9,7 @@ public class SurroundingInt : Surrounding<int> {
         
     }
 
-	public override Value2D<int> GetDirWithVal(int t)
+	public Value2D<int> GetDirWithVal(int t)
 	{
 		foreach (Value2D<int> val in this)
 		{
@@ -21,7 +21,7 @@ public class SurroundingInt : Surrounding<int> {
 		return null;
 	}
 	
-	public override Value2D<int> GetDirWithoutVal(int t)
+	public Value2D<int> GetDirWithoutVal(int t)
 	{
 		foreach (Value2D<int> val in this)
 		{

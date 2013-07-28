@@ -13,7 +13,7 @@ public class FilterNextToNull : PassFilter<Value2D<GridType>>
     public bool pass(Value2D<GridType> dir)
     {
         surround.Load(dir);
-        Value2D<GridType> nullDir = surround.GetDirWithVal(GridType.NULL);
+        Value2D<GridType> nullDir = surround.GetDirWithVal(true, GridType.NULL);
         return nullDir != null;
     }
 }

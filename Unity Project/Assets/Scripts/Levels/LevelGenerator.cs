@@ -411,7 +411,7 @@ public class LevelGenerator
         {
             // Block nearby floor from being found
             surround.Load(door);
-            Value2D<GridType> floor = surround.GetDirWithVal(GridType.Floor);
+            Value2D<GridType> floor = surround.GetDirWithVal(true, GridType.Floor);
             if (floor != null)
             {
                 grids[floor] = GridType.INTERNAL_RESERVED_BLOCKED;
