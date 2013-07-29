@@ -68,7 +68,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
                        && right < arr.GetLength(1)
                        && down >= 0
                        && up < arr.GetLength(0))
-        {
+        { // Completely in range
             this[GridLocation.LEFT] = new Value2D<T>(left, y, arr[y, left]);
             this[GridLocation.RIGHT] = new Value2D<T>(right, y, arr[y, right]);
             this[GridLocation.DOWN] = new Value2D<T>(x, down, arr[down, x]);
@@ -82,8 +82,8 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
             }
         }
         else
-        {
-            #region OUT OF RANGE
+        { // On edge of array
+            #region EDGE OF RANGE
             if (left >= 0)
             {
                 this[GridLocation.LEFT] = new Value2D<T>(left, y, arr[y, left]);

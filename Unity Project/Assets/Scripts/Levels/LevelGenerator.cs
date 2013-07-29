@@ -521,7 +521,7 @@ public class LevelGenerator
             layout.ToLog(DebugManager.Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
-        Surrounding<GridType> surround = new Surrounding<GridType>(arr);
+        Surrounding<GridType> surround = new Surrounding<GridType>(arr, true);
         LayoutObjectLeaf leaf = new LayoutObjectLeaf(arr.getWidth(), arr.getHeight());
         layout.AddObject(leaf);
         foreach (Value2D<GridType> val in arr)
