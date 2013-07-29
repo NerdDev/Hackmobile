@@ -396,6 +396,7 @@ public class LevelGenerator
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Paths");
+            layout.ToLog(DebugManager.Logs.LevelGen, "Pre Path Layout");
         }
         #endregion
         var grids = layout.GetArray(layoutMargin);
@@ -451,6 +452,7 @@ public class LevelGenerator
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
+            layout.ToLog(DebugManager.Logs.LevelGen, "Final Layout");
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion

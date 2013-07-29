@@ -55,13 +55,23 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         }
         return ret;
     }
-    
+
     public override GridArray GetArray()
     {
         GridArray ret = new GridArray(GetBounding(), false);
         foreach (LayoutObject obj in this)
         {
             ret.PutAll(obj);
+        }
+        return ret;
+    }
+
+    public override GridArray GetPrintArray()
+    {
+        GridArray ret = new GridArray(GetBounding(), false);
+        foreach (LayoutObject obj in this)
+        {
+            ret.PutAll(obj.GetPrintArray(), obj.GetShift());
         }
         return ret;
     }

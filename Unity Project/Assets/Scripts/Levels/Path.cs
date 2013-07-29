@@ -47,7 +47,7 @@ public class Path : LayoutObjectLeaf
 
     public override GridArray GetArray()
     {
-        return GetArray(true);
+        return GetArray(false);
     }
 
     public override GridArray GetPrintArray()
@@ -138,10 +138,6 @@ public class Path : LayoutObjectLeaf
                         backward = cur;
                         cur = forward;
                     }
-                    else
-                    {
-                        ret[forward.x, forward.y] = GridType.Floor;
-                    }
                 }
                 ret[forward.x, forward.y] = GridType.INTERNAL_RESERVED_CUR;
             }
@@ -154,8 +150,8 @@ public class Path : LayoutObjectLeaf
                     last = val;
                     ret[val] = GridType.Floor;
                 }
-                ret[first] = GridType.NULL;
-                ret[last] = GridType.NULL;
+                ret.PutNull(first.x, first.y);
+                ret.PutNull(last.x, last.y);
             }
         }
         return ret;

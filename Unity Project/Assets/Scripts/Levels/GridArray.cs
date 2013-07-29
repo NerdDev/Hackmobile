@@ -45,6 +45,11 @@ public class GridArray : Array2D<GridType>
 			base.Put(val, x, y);
 		}
     }
+
+    public void PutNull(int x, int y)
+    {
+        base.Put(GridType.NULL, x, y);
+    }
 	
 	public void PutAll(LayoutObject obj, Bounding origBound)
 	{
