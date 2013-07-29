@@ -70,7 +70,6 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     {
         var bounds = GetBounding();
         bounds.expand(buffer);
-        bounds.ShiftNonNeg();
         return GetArray(bounds);
     }
 	
