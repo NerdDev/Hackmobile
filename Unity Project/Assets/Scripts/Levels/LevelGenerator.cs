@@ -512,7 +512,8 @@ public class LevelGenerator
 
     private static void ConfirmEdges(LevelLayout layout)
     {
-        GridArray arr = layout.GetArray(layoutMargin);
+        layout.ShiftAll(1,1);
+        GridArray arr = layout.GetArray(1);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {

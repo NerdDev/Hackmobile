@@ -30,6 +30,34 @@ public static class Nifty
         return false;
     }
 
+    static public List<string> ToRowStrings<T>(this T[,] array)
+    {
+        List<string> ret = new List<string>();
+		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
+            string rowStr = "";
+    		for (int x = 0; x < array.GetLength(1); x += 1) {
+                rowStr += array[y, x].ToString();
+    		}
+            ret.Add(rowStr);
+		}
+        return ret;
+    }
+   
+    public static void ToLog<T>(this T[,] array, DebugManager.Logs log, params string[] customContent)
+    {
+        if (DebugManager.logging(log))
+        {
+            foreach (string s in customContent)
+            {
+                DebugManager.w(log, s);
+            }
+            foreach (string s in array.ToRowStrings())
+            {
+                DebugManager.w(log, s);
+            }
+        }   
+    }
+
     static public void DeleteContainedFiles(String dirPath, bool recursive)
     {
         DeleteContainedFiles(new DirectoryInfo(dirPath), recursive);
