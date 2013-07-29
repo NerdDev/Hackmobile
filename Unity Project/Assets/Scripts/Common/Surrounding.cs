@@ -9,10 +9,17 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     }
     public PassFilter<Value2D<T>> Filter { get; set; } 
     public T[,] arr;
+    public bool Cornered { get; set; }
 	
     public Surrounding(T[,] srcArr)
+        : this(srcArr, false)
+    {
+    }
+
+    public Surrounding(T[,] srcArr, bool corners)
     {
         arr = srcArr;
+        Cornered = corners;
     }
 
     public Value2D<T> this[GridLocation loc]
@@ -50,60 +57,72 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public void Load(int x, int y)
     {
-        EdgePosition xPos = GetPos(x, arr.GetLength(1));
-        EdgePosition yPos = GetPos(y, arr.GetLength(0));
-
         Clear();
-        if (xPos == EdgePosition.Out || yPos == EdgePosition.Out)
-        { // Bad Query
-            return;
-        }
 
         // Create Values
-        if (xPos != EdgePosition.BottomEdge)
+        int left = x - 1;
+        int right = x + 1;
+        int up = y + 1;
+        int down = y - 1;
+        if (left >= 0
+                       && right < arr.GetLength(1)
+                       && down >= 0
+                       && up < arr.GetLength(0))
         {
-            this[GridLocation.LEFT] = new Value2D<T>(x - 1, y, arr[y, x - 1]);
+            this[GridLocation.LEFT] = new Value2D<T>(left, y, arr[y, left]);
+            this[GridLocation.RIGHT] = new Value2D<T>(right, y, arr[y, right]);
+            this[GridLocation.DOWN] = new Value2D<T>(x, down, arr[down, x]);
+            this[GridLocation.UP] = new Value2D<T>(x, up, arr[up, x]);
+            if (Cornered)
+            {
+                this[GridLocation.BOTTOMLEFT] = new Value2D<T>(left, down, arr[down, left]);
+                this[GridLocation.TOPLEFT] = new Value2D<T>(left, up, arr[up, left]);
+                this[GridLocation.BOTTOMRIGHT] = new Value2D<T>(right, down, arr[down, right]);
+                this[GridLocation.TOPRIGHT] = new Value2D<T>(right, up, arr[up, right]);
+            }
         }
-        if (xPos != EdgePosition.TopEdge)
+        else
         {
-            this[GridLocation.RIGHT] = new Value2D<T>(x + 1, y, arr[y, x + 1]);
-        }
-        if (yPos != EdgePosition.BottomEdge)
-        {
-            this[GridLocation.DOWN] = new Value2D<T>(x, y - 1, arr[y - 1, x]);
-        }
-        if (yPos != EdgePosition.TopEdge)
-        {
-            this[GridLocation.UP] = new Value2D<T>(x, y + 1, arr[y + 1, x]);
+            #region OUT OF RANGE
+            if (left >= 0)
+            {
+                this[GridLocation.LEFT] = new Value2D<T>(left, y, arr[y, left]);
+            }
+            if (right < arr.GetLength(1))
+            {
+                this[GridLocation.RIGHT] = new Value2D<T>(right, y, arr[y, right]);
+            }
+            if (down >= 0)
+            {
+                this[GridLocation.DOWN] = new Value2D<T>(x, down, arr[down, x]);
+            }
+            if (up < arr.GetLength(0))
+            {
+                this[GridLocation.UP] = new Value2D<T>(x, up, arr[up, x]);
+            }
+            if (Cornered)
+            {
+                if (left >= 0 && down >= 0)
+                {
+                    this[GridLocation.BOTTOMLEFT] = new Value2D<T>(left, down, arr[down, left]);
+                }
+                if (left >= 0 && up < arr.GetLength(0))
+                {
+                    this[GridLocation.TOPLEFT] = new Value2D<T>(left, up, arr[up, left]);
+                }
+                if (right < arr.GetLength(1) && down >= 0)
+                {
+                    this[GridLocation.BOTTOMRIGHT] = new Value2D<T>(right, down, arr[down, right]);
+                }
+                if (right < arr.GetLength(1) && up < arr.GetLength(0))
+                {
+                    this[GridLocation.TOPRIGHT] = new Value2D<T>(right, up, arr[up, right]);
+                }
+            }
+            #endregion
         }
 
         FilterExec(Filter);
-    }
-
-    static EdgePosition GetPos(int val, int arrLim)
-    {
-        arrLim -= 1;
-        if (val > 0 && val < arrLim)
-        {
-            return EdgePosition.In;
-        }
-        if (val == 0)
-        {
-            return EdgePosition.BottomEdge;
-        }
-        if (val == arrLim)
-        {
-            return EdgePosition.TopEdge;
-        }
-        return EdgePosition.Out;
-    }
-
-    private enum EdgePosition
-    {
-        Out,
-        BottomEdge,
-        In,
-        TopEdge
     }
 
     public virtual List<Value2D<T>> GetDirsWithVal(bool with, T t)
