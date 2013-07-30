@@ -1,16 +1,23 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Surrounding<T> : IEnumerable<Value2D<T>>
 {
-    Value2D<T>[] dirs = new Value2D<T>[Enum.GetNames(typeof(GridLocation)).Length];
-    public int Count {
+    private static readonly int arrLen = Enum.GetNames(typeof (GridLocation)).Length;
+    private readonly Value2D<T>[] dirs = new Value2D<T>[arrLen];
+
+    public int Count
+    {
         get { return CountInternal(); }
     }
-    public PassFilter<Value2D<T>> Filter { get; set; } 
-    public T[,] arr;
+
+    public PassFilter<Value2D<T>> Filter { get; set; }
+    protected T[,] Arr;
+    protected int CurX;
+    protected int CurY;
     public bool Cornered { get; set; }
-	
+
     public Surrounding(T[,] srcArr)
         : this(srcArr, false)
     {
@@ -18,14 +25,25 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public Surrounding(T[,] srcArr, bool corners)
     {
-        arr = srcArr;
+        Arr = srcArr;
         Cornered = corners;
     }
 
     public Value2D<T> this[GridLocation loc]
     {
-        get { return dirs[(int) loc]; }
-        set { dirs[(int) loc] = value; }
+        get
+        {
+            if (dirs[(int) loc] == null)
+            {
+                Get(loc);
+            }
+            return dirs[(int) loc];
+        }
+        set
+        {
+            dirs[(int) loc] = value;
+            Arr[value.x, value.y] = value.val;
+        }
     }
 
     public void Clear()
@@ -36,7 +54,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         }
     }
 
-    public void FilterExec(PassFilter<Value2D<T>> filter)
+    protected void FilterExec(PassFilter<Value2D<T>> filter)
     {
         if (filter != null)
         {
@@ -50,6 +68,17 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         }
     }
 
+    private Value2D<GridType> Get(GridLocation loc)
+    {
+        // Assume we are not on the edge
+        switch (loc)
+        {
+            case GridLocation.DOWN:
+                return new Value2D<GridType>(CurX - 1, CurY, Arr[C]);
+                break;
+        }
+    }
+
     public void Load(Value2D<T> val)
     {
         Load(val.x, val.y);
@@ -59,76 +88,63 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     {
         Clear();
 
-        // Create Values
-        int left = x - 1;
-        int right = x + 1;
-        int up = y + 1;
-        int down = y - 1;
-        if (left >= 0
-                       && right < arr.GetLength(1)
-                       && down >= 0
-                       && up < arr.GetLength(0))
-        { // Completely in range
-            this[GridLocation.LEFT] = new Value2D<T>(left, y, arr[y, left]);
-            this[GridLocation.RIGHT] = new Value2D<T>(right, y, arr[y, right]);
-            this[GridLocation.DOWN] = new Value2D<T>(x, down, arr[down, x]);
-            this[GridLocation.UP] = new Value2D<T>(x, up, arr[up, x]);
-            if (Cornered)
-            {
-                this[GridLocation.BOTTOMLEFT] = new Value2D<T>(left, down, arr[down, left]);
-                this[GridLocation.TOPLEFT] = new Value2D<T>(left, up, arr[up, left]);
-                this[GridLocation.BOTTOMRIGHT] = new Value2D<T>(right, down, arr[down, right]);
-                this[GridLocation.TOPRIGHT] = new Value2D<T>(right, up, arr[up, right]);
-            }
-        }
-        else
-        { // On edge of array
-            #region EDGE OF RANGE
+        CurX = x;
+        CurY = y;
+        if (x <= 1
+            || y <= 1
+            || x + 1 >= Arr.GetLength(1)
+            || y + 1 >= Arr.GetLength(0)) ;
+        {
+            // On edge of array.  Handle all outputs now, so normal
+            // non-edge queries don't have to worry and check
+
+            int left = x - 1;
+            int right = x + 1;
+            int up = y + 1;
+            int down = y - 1;
             if (left >= 0)
             {
-                this[GridLocation.LEFT] = new Value2D<T>(left, y, arr[y, left]);
+                this[GridLocation.LEFT] = new Value2D<T>(left, y, Arr[y, left]);
             }
-            if (right < arr.GetLength(1))
+            if (right < Arr.GetLength(1))
             {
-                this[GridLocation.RIGHT] = new Value2D<T>(right, y, arr[y, right]);
+                this[GridLocation.RIGHT] = new Value2D<T>(right, y, Arr[y, right]);
             }
             if (down >= 0)
             {
-                this[GridLocation.DOWN] = new Value2D<T>(x, down, arr[down, x]);
+                this[GridLocation.DOWN] = new Value2D<T>(x, down, Arr[down, x]);
             }
-            if (up < arr.GetLength(0))
+            if (up < Arr.GetLength(0))
             {
-                this[GridLocation.UP] = new Value2D<T>(x, up, arr[up, x]);
+                this[GridLocation.UP] = new Value2D<T>(x, up, Arr[up, x]);
             }
             if (Cornered)
             {
                 if (left >= 0 && down >= 0)
                 {
-                    this[GridLocation.BOTTOMLEFT] = new Value2D<T>(left, down, arr[down, left]);
+                    this[GridLocation.BOTTOMLEFT] = new Value2D<T>(left, down, Arr[down, left]);
                 }
-                if (left >= 0 && up < arr.GetLength(0))
+                if (left >= 0 && up < Arr.GetLength(0))
                 {
-                    this[GridLocation.TOPLEFT] = new Value2D<T>(left, up, arr[up, left]);
+                    this[GridLocation.TOPLEFT] = new Value2D<T>(left, up, Arr[up, left]);
                 }
-                if (right < arr.GetLength(1) && down >= 0)
+                if (right < Arr.GetLength(1) && down >= 0)
                 {
-                    this[GridLocation.BOTTOMRIGHT] = new Value2D<T>(right, down, arr[down, right]);
+                    this[GridLocation.BOTTOMRIGHT] = new Value2D<T>(right, down, Arr[down, right]);
                 }
-                if (right < arr.GetLength(1) && up < arr.GetLength(0))
+                if (right < Arr.GetLength(1) && up < Arr.GetLength(0))
                 {
-                    this[GridLocation.TOPRIGHT] = new Value2D<T>(right, up, arr[up, right]);
+                    this[GridLocation.TOPRIGHT] = new Value2D<T>(right, up, Arr[up, right]);
                 }
             }
-            #endregion
+            FilterExec(Filter);
         }
-
-        FilterExec(Filter);
     }
 
     public virtual List<Value2D<T>> GetDirsWithVal(bool with, T t)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
-        foreach (Value2D<T> val in this)
+        var ret = new List<Value2D<T>>();
+        foreach (var val in this)
         {
             if (val != null && val.val.Equals(t) == with)
             {
@@ -140,8 +156,8 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public virtual List<Value2D<T>> GetDirsWithVal(bool with, HashSet<T> set)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
-        foreach (Value2D<T> val in this)
+        var ret = new List<Value2D<T>>();
+        foreach (var val in this)
         {
             if (val != null && set.Contains(val.val) == with)
             {
@@ -153,8 +169,8 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public virtual List<Value2D<T>> GetDirsWithVal(bool with, params T[] types)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
-        foreach (Value2D<T> val in this)
+        var ret = new List<Value2D<T>>();
+        foreach (var val in this)
         {
             if (val != null && types.Contains(val.val) == with)
             {
@@ -193,7 +209,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     public virtual bool IsCorneredBy(HashSet<T> by)
     {
         return GetNeighbor(GridDirection.HORIZ, by) != null
-            && GetNeighbor(GridDirection.VERT, by) != null;
+               && GetNeighbor(GridDirection.VERT, by) != null;
     }
 
     // True if current space is cornered by values given.
@@ -233,7 +249,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public List<Value2D<T>> GetNeighbors(GridDirection d, T t)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
+        var ret = new List<Value2D<T>>();
         IEnumerator<Value2D<T>> en = GetEnumerator(d);
         while (en.MoveNext())
         {
@@ -252,7 +268,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public List<Value2D<T>> GetNeighbors(GridDirection d, HashSet<T> ofType)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
+        var ret = new List<Value2D<T>>();
         IEnumerator<Value2D<T>> en = GetEnumerator(d);
         while (en.MoveNext())
         {
@@ -266,8 +282,8 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public Value2D<T> GetRandom(Random rand)
     {
-        List<Value2D<T>> options = new List<Value2D<T>>();
-        foreach (Value2D<T> val in this)
+        var options = new List<Value2D<T>>();
+        foreach (var val in this)
         {
             options.Add(val);
         }
@@ -291,7 +307,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public IEnumerator<Value2D<T>> GetEnumerator()
     {
-        foreach (Value2D<T> val in dirs)
+        foreach (var val in dirs)
         {
             if (val != null)
             {
@@ -311,8 +327,8 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         }
     }
 
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        return this.GetEnumerator();
+        return GetEnumerator();
     }
 }
