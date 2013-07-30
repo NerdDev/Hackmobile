@@ -69,6 +69,7 @@ public class DebugManager : MonoBehaviour
         putName(Logs.NPCs, "NPCs");
 		
 		// Set Logging to be on
+        logging(true);
 		logging (Logs.Main, true);
 		logging (Logs.LevelGenMain, true);
 		logging (Logs.LevelGen, true);
