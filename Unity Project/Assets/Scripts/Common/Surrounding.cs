@@ -16,6 +16,10 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     protected T[,] Arr;
     protected int CurX;
     protected int CurY;
+    protected int Up;
+    protected int Down;
+    protected int Left;
+    protected int Right;
     public bool Cornered { get; set; }
 
     public Surrounding(T[,] srcArr)
@@ -68,15 +72,29 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         }
     }
 
-    private Value2D<GridType> Get(GridLocation loc)
+    private Value2D<T> Get(GridLocation loc)
     {
         // Assume we are not on the edge
         switch (loc)
         {
             case GridLocation.DOWN:
-                return new Value2D<GridType>(CurX - 1, CurY, Arr[C]);
-                break;
+                return new Value2D<T>(CurX, Down, Arr[CurX, Down]);
+            case GridLocation.LEFT:
+                return new Value2D<T>(Left, CurY, Arr[Left, CurY]);
+            case GridLocation.UP:
+                return new Value2D<T>(CurX, Up, Arr[CurX, Up]);
+            case GridLocation.RIGHT:
+                return new Value2D<T>(Right, CurY, Arr[Right, CurY]);
+            case GridLocation.BOTTOMLEFT:
+                return Cornered ? new Value2D<T>(Left, Down, Arr[Left, Down]) : null;
+            case GridLocation.BOTTOMRIGHT:
+                return Cornered ? new Value2D<T>(Right, Down, Arr[Right, Down]) : null;
+            case GridLocation.TOPRIGHT:
+                return Cornered ? new Value2D<T>(Right, Up, Arr[Right, Up]) : null;
+            case GridLocation.TOPLEFT:
+                return Cornered ? new Value2D<T>(Left, Up, Arr[Left, Up]) : null;
         }
+        return null;
     }
 
     public void Load(Value2D<T> val)
@@ -90,51 +108,51 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
         CurX = x;
         CurY = y;
+        Left = x - 1;
+        Right = x + 1;
+        Up = y + 1;
+        Down = y - 1;
         if (x <= 1
             || y <= 1
-            || x + 1 >= Arr.GetLength(1)
-            || y + 1 >= Arr.GetLength(0)) ;
+            || Right >= Arr.GetLength(1)
+            || Up >= Arr.GetLength(0)) ;
         {
             // On edge of array.  Handle all outputs now, so normal
             // non-edge queries don't have to worry and check
 
-            int left = x - 1;
-            int right = x + 1;
-            int up = y + 1;
-            int down = y - 1;
-            if (left >= 0)
+            if (Left >= 0)
             {
-                this[GridLocation.LEFT] = new Value2D<T>(left, y, Arr[y, left]);
+                this[GridLocation.LEFT] = new Value2D<T>(Left, y, Arr[y, Left]);
             }
-            if (right < Arr.GetLength(1))
+            if (Right < Arr.GetLength(1))
             {
-                this[GridLocation.RIGHT] = new Value2D<T>(right, y, Arr[y, right]);
+                this[GridLocation.RIGHT] = new Value2D<T>(Right, y, Arr[y, Right]);
             }
-            if (down >= 0)
+            if (Down >= 0)
             {
-                this[GridLocation.DOWN] = new Value2D<T>(x, down, Arr[down, x]);
+                this[GridLocation.DOWN] = new Value2D<T>(x, Down, Arr[Down, x]);
             }
-            if (up < Arr.GetLength(0))
+            if (Up < Arr.GetLength(0))
             {
-                this[GridLocation.UP] = new Value2D<T>(x, up, Arr[up, x]);
+                this[GridLocation.UP] = new Value2D<T>(x, Up, Arr[Up, x]);
             }
             if (Cornered)
             {
-                if (left >= 0 && down >= 0)
+                if (Left >= 0 && Down >= 0)
                 {
-                    this[GridLocation.BOTTOMLEFT] = new Value2D<T>(left, down, Arr[down, left]);
+                    this[GridLocation.BOTTOMLEFT] = new Value2D<T>(Left, Down, Arr[Down, Left]);
                 }
-                if (left >= 0 && up < Arr.GetLength(0))
+                if (Left >= 0 && Up < Arr.GetLength(0))
                 {
-                    this[GridLocation.TOPLEFT] = new Value2D<T>(left, up, Arr[up, left]);
+                    this[GridLocation.TOPLEFT] = new Value2D<T>(Left, Up, Arr[Up, Left]);
                 }
-                if (right < Arr.GetLength(1) && down >= 0)
+                if (Right < Arr.GetLength(1) && Down >= 0)
                 {
-                    this[GridLocation.BOTTOMRIGHT] = new Value2D<T>(right, down, Arr[down, right]);
+                    this[GridLocation.BOTTOMRIGHT] = new Value2D<T>(Right, Down, Arr[Down, Right]);
                 }
-                if (right < Arr.GetLength(1) && up < Arr.GetLength(0))
+                if (Right < Arr.GetLength(1) && Up < Arr.GetLength(0))
                 {
-                    this[GridLocation.TOPRIGHT] = new Value2D<T>(right, up, Arr[up, right]);
+                    this[GridLocation.TOPRIGHT] = new Value2D<T>(Right, Up, Arr[Up, Right]);
                 }
             }
             FilterExec(Filter);
