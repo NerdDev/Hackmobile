@@ -2,17 +2,16 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DFSSearcher
+public class DFSSearcher : Searcher
 {
-    private System.Random _rand;
     public DFSSearcher()
-        : this(new System.Random())
+        : base()
     {
     }
 
     public DFSSearcher(System.Random rand)
+        : base(rand)
     {
-        this._rand = rand;
     }
 
     public Stack<Value2D<GridType>> Search(Value2D<GridType> startPoint, GridType[,] arr, GridSet validSpaces, GridSet targets)
