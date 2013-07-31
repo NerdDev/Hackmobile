@@ -36,7 +36,7 @@ public static class Nifty
 		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
             string rowStr = "";
     		for (int x = 0; x < array.GetLength(1); x += 1) {
-                rowStr += array[y, x].ToString();
+                rowStr += array[y, x].ToString()[0];
     		}
             ret.Add(rowStr);
 		}

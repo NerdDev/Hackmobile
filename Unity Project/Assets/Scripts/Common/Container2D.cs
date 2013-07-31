@@ -86,22 +86,6 @@ abstract public class Container2D<T> {
 	{
 	    return GetArr().ToRowStrings();
 	}
-
-    public static string ToString(T t)
-    {
-        if (t.GetType() == typeof(bool))
-        {
-            if (Boolean.Parse(t.ToString()))
-            {
-                return "T";
-            }
-            else
-            {
-                return "_";
-            }
-        }
-        return t.ToString();
-    }
 	
 	public virtual void ToLog(DebugManager.Logs log)
     {
