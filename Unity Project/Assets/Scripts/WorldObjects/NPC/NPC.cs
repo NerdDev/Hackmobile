@@ -353,12 +353,12 @@ public class NPC : WorldObject
         }
         GridCoordinate = new Vector2(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.z));
         gridCoordInt = new Point(Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y));
-        gridSpace = LevelManager.Level.Arr[gridCoordInt.x, gridCoordInt.y];
+        gridSpace = LevelManager.Level[gridCoordInt.x, gridCoordInt.y];
         LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
 
         //for testing the pathing
-        //buildPath();
+        buildPath();
     }
 
     private void buildPath()
@@ -370,8 +370,8 @@ public class NPC : WorldObject
                 Destroy(go);
             }
             lightList.Clear();
-            Point start = new Point(conv(this.gameObject.transform.position.x), conv(this.gameObject.transform.position.z));
-            Point dest = new Point(conv(BigBoss.Prefabs.Orc.transform.position.x), conv(BigBoss.Prefabs.Orc.transform.position.z));
+            P start = new P(conv(this.gameObject.transform.position.x), conv(this.gameObject.transform.position.z));
+            P dest = new P(conv(BigBoss.Prefabs.Orc.transform.position.x), conv(BigBoss.Prefabs.Orc.transform.position.z));
             PathTree path = new PathTree(start, dest);
             List<PathNode> pathNodes = path.getPath();
 
@@ -389,7 +389,7 @@ public class NPC : WorldObject
     }
     public PathTree getPath(Vector2 destination) 
     {
-        PathTree path = new PathTree(new Point(gridCoordinate.x, gridCoordinate.y), new Point(destination.x, destination.y));
+        PathTree path = new PathTree(new P(gridCoordinate.x, gridCoordinate.y), new P(destination.x, destination.y));
 
         return path;
     }
@@ -779,7 +779,7 @@ public class NPC : WorldObject
             
             try
             {
-                GridSpace grid = LevelManager.Level.Arr[gridCoordInt.x, gridCoordInt.y];
+                GridSpace grid = LevelManager.Level[gridCoordInt.x, gridCoordInt.y];
                 if (this.IsNotAFreaking<Player>())
                 {
                     //MoveNPC(1, 1);

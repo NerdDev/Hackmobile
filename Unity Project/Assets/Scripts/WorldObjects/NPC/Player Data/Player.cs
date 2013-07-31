@@ -70,7 +70,7 @@ public class Player : NPC
         else
         {
             //yes, it's the gspot
-            GridSpace gspot = LevelManager.Level.Arr[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
+            GridSpace gspot = LevelManager.Level[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
             //I KNEW IT EXISTED
             GridType g = gspot.Type;
             switch (g)
@@ -111,23 +111,23 @@ public class Player : NPC
         //}
 
         //test scene instantiation
-        //testScene();
+        testScene();
     }
 
     private static void testScene()
     {
-        GameObject beholder = Instantiate(BigBoss.Prefabs.Beholder, new Vector3(22f, -.5f, 35f), Quaternion.identity) as GameObject;
-        NPC beholderNPC = beholder.GetComponent<NPC>();
-        beholderNPC.setData(BigBoss.WorldObjectManager.getNPC("beholder"));
-        beholderNPC.IsActive = true;
+        //GameObject beholder = Instantiate(BigBoss.Prefabs.Beholder, new Vector3(22f, -.5f, 35f), Quaternion.identity) as GameObject;
+        //NPC beholderNPC = beholder.GetComponent<NPC>();
+        //beholderNPC.setData(BigBoss.WorldObjectManager.getNPC("beholder"));
+        //beholderNPC.IsActive = true;
 
-        GameObject orc = Instantiate(BigBoss.Prefabs.Orc, new Vector3(12f, -.5f, 44f), Quaternion.identity) as GameObject;
+        GameObject orc = Instantiate(BigBoss.Prefabs.Orc, new Vector3(46f, -.5f, 33f), Quaternion.identity) as GameObject;
         NPC orcNPC = orc.GetComponent<NPC>();
         orcNPC.setData(BigBoss.WorldObjectManager.getNPC("orc"));
         orcNPC.IsActive = true;
         BigBoss.Prefabs.Orc = orc;
 
-        GameObject skeleMage = Instantiate(BigBoss.Prefabs.SkeletonMage, new Vector3(22f, -.5f, 42f), Quaternion.identity) as GameObject;
+        GameObject skeleMage = Instantiate(BigBoss.Prefabs.SkeletonMage, new Vector3(41f, -.5f, 43f), Quaternion.identity) as GameObject;
         NPC skeleMageNPC = skeleMage.GetComponent<NPC>();
         skeleMageNPC.setData(BigBoss.WorldObjectManager.getNPC("skeleton"));
         skeleMageNPC.IsActive = true;

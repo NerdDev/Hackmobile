@@ -212,13 +212,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f3e767228a56f24bb61e55205881b39, type: 3}
   m_Name: 
   target: {fileID: 2057465069}
-  height: 10
-  distance: 10
+  height: 20
+  distance: 20
   min: 10
   max: 60
   rotateSpeed: 1
-  doRotate: 1
-  doZoom: 1
+  doRotate: 0
+  doZoom: 0
   zoomStep: 30
   zoomSpeed: 5
 --- !u!114 &95
@@ -234,12 +234,12 @@ MonoBehaviour:
   target: {fileID: 2057465069}
   targetOffset: {x: 0, y: 0, z: 0}
   distance: 5
-  maxDistance: 10
-  minDistance: 2
+  maxDistance: 20
+  minDistance: .600000024
   xSpeed: 200
   ySpeed: 200
-  yMinLimit: 25
-  yMaxLimit: 75
+  yMinLimit: -80
+  yMaxLimit: 80
   zoomRate: 40
   panSpeed: .300000012
   zoomDampening: 5
@@ -253,13 +253,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d6445acabbb33a46ad0dbc646d8615d, type: 3}
   m_Name: 
-  target: {fileID: 2057465069}
-  distance: 5
-  height: 5
+  target: {fileID: 0}
+  distance: 3
+  height: 3
   damping: 5
-  smoothRotation: 0
-  followBehind: 0
-  rotationDamping: 2
+  smoothRotation: 1
+  followBehind: 1
+  rotationDamping: 10
 --- !u!4 &144
 Transform:
   m_ObjectHideFlags: 0
@@ -596,7 +596,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
-  audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
+  audioClip: {fileID: 0}
   trigger: 0
   volume: 1
   pitch: 1
@@ -638,7 +638,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15cc9c62605319f4a9b20b15918913fa, type: 3}
   m_Name: 
-  tweenTarget: {fileID: 2045956483}
+  tweenTarget: {fileID: 0}
   hover: {r: .600000024, g: 1, b: .200000003, a: 1}
   pressed: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
@@ -772,13 +772,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: STATS
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -887,13 +887,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c20815eb3063c24290a61b7020a1836, type: 3}
   m_Name: 
-  foreground: {fileID: 1231777740}
+  foreground: {fileID: 0}
   thumb: {fileID: 0}
   direction: 0
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
-  rawValue: .75
+  rawValue: 1
 --- !u!1 &139964824
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,15 +960,15 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: 0, g: .874125719, b: 1, a: 1}
-  mPivot: 3
-  mDepth: 9
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: GUISlider_Full
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
-  mFillDirection: 0
-  mFillAmount: .75
+  mFillDirection: 4
+  mFillAmount: 1
   mInvert: 0
 --- !u!1 &149810614
 GameObject:
@@ -1069,13 +1069,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'Dex: 7'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -1252,13 +1252,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c20815eb3063c24290a61b7020a1836, type: 3}
   m_Name: 
-  foreground: {fileID: 142597306}
+  foreground: {fileID: 0}
   thumb: {fileID: 0}
   direction: 0
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
-  rawValue: .75
+  rawValue: 1
 --- !u!1 &255769840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1296,15 +1296,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'Int: 7
-
-'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -1354,13 +1352,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 5
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUD_Panel_Label_Inv
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -1405,13 +1403,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c20815eb3063c24290a61b7020a1836, type: 3}
   m_Name: 
-  foreground: {fileID: 501909089}
+  foreground: {fileID: 0}
   thumb: {fileID: 0}
   direction: 0
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
-  rawValue: .693000019
+  rawValue: 1
 --- !u!1 &281589050
 GameObject:
   m_ObjectHideFlags: 0
@@ -1632,11 +1630,11 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: .873134315, g: .575315416, b: .377923816, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: Encumbered
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -1717,9 +1715,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 16
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: A
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -1771,11 +1769,11 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: 0, g: .455223858, b: .30242148, a: 1}
-  mPivot: 3
-  mDepth: 8
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: GUISlider_Empty
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -1819,7 +1817,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
-  uiCamera: {fileID: 707569694}
+  uiCamera: {fileID: 0}
   widgetContainer: {fileID: 0}
   panelContainer: {fileID: 0}
   side: 8
@@ -1862,13 +1860,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: INVENTORY
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -1920,13 +1918,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c20815eb3063c24290a61b7020a1836, type: 3}
   m_Name: 
-  foreground: {fileID: 1553228616}
+  foreground: {fileID: 0}
   thumb: {fileID: 0}
   direction: 0
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
-  rawValue: .75
+  rawValue: 1
 --- !u!1 &356430010
 GameObject:
   m_ObjectHideFlags: 0
@@ -1968,9 +1966,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: XP
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -2020,13 +2018,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 15
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: Key
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -2167,6 +2165,18 @@ Prefab:
       propertyPath: HUD2XPLabel
       value: 
       objectReference: {fileID: 1124358261}
+    - target: {fileID: 11400038, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: Seed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400148, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 54
+      objectReference: {fileID: 0}
+    - target: {fileID: 400148, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 36
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ae5211becf43c9b4398deef128251d7d, type: 2}
   m_RootGameObject: {fileID: 91}
@@ -2213,9 +2223,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 4
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 'Str: 9'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -2753,7 +2763,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
-  audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
+  audioClip: {fileID: 0}
   trigger: 0
   volume: 1
   pitch: 1
@@ -2795,7 +2805,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15cc9c62605319f4a9b20b15918913fa, type: 3}
   m_Name: 
-  tweenTarget: {fileID: 1739281973}
+  tweenTarget: {fileID: 0}
   hover: {r: .600000024, g: 1, b: .200000003, a: 1}
   pressed: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
@@ -2821,8 +2831,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
-  target: {fileID: 83}
-  functionName: HUD2Button_ArrowUP_Click
+  target: {fileID: 0}
+  functionName: 
   trigger: 0
   includeChildren: 0
 --- !u!1 &457540710
@@ -2862,17 +2872,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
-  mColor: {r: .774697006, g: .206616193, b: .791044772, a: 1}
-  mPivot: 3
-  mDepth: 4
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: GUISlider_Full
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
-  mFillDirection: 0
-  mFillAmount: .75
+  mFillDirection: 4
+  mFillAmount: 1
   mInvert: 0
 --- !u!1 &459964355
 GameObject:
@@ -3086,15 +3096,15 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: .29650259, g: .82664454, b: .902985096, a: 1}
-  mPivot: 3
-  mDepth: 9
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: ProgressBar_2
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
-  mFillDirection: 0
-  mFillAmount: .693000019
+  mFillDirection: 4
+  mFillAmount: 1
   mInvert: 0
 --- !u!1 &541756849
 GameObject:
@@ -3135,11 +3145,11 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: 1, g: .944055915, b: 0, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 4
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 4,399 GP
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -3216,13 +3226,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'Wis: 4'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -3387,13 +3397,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: -5
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUDPaneTab1
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -3525,9 +3535,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 'Int: 3'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -3579,11 +3589,11 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: 0, g: .370629311, b: 1, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: Lawful
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -3661,13 +3671,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 15
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: Key
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -3710,13 +3720,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'Chr: 9'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -3805,7 +3815,7 @@ MonoBehaviour:
   stickyPress: 1
   eventReceiverMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 4294967295
   clipRaycasts: 1
   tooltipDelay: 1
   stickyTooltip: 1
@@ -4058,7 +4068,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
-  audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
+  audioClip: {fileID: 0}
   trigger: 0
   volume: 1
   pitch: 1
@@ -4100,7 +4110,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15cc9c62605319f4a9b20b15918913fa, type: 3}
   m_Name: 
-  tweenTarget: {fileID: 1440604505}
+  tweenTarget: {fileID: 0}
   hover: {r: .600000024, g: 1, b: .200000003, a: 1}
   pressed: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
@@ -4221,6 +4231,7 @@ MonoBehaviour:
   m_Name: 
   Theme: {fileID: 11400000, guid: 190358207bedb01488dc7d4be001c31a, type: 2}
   Builder: {fileID: 11400000, guid: ed42e612c387bca4bac91cf44cf1fb33, type: 2}
+  Seed: 10
 --- !u!1 &847365082
 GameObject:
   m_ObjectHideFlags: 0
@@ -4258,13 +4269,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUDPaneTab3
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -4364,13 +4375,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 15
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: Key
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -4508,9 +4519,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 10
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 5 / 100
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -4564,9 +4575,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 5
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 'Dex: 5'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -4631,13 +4642,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c20815eb3063c24290a61b7020a1836, type: 3}
   m_Name: 
-  foreground: {fileID: 457540711}
+  foreground: {fileID: 0}
   thumb: {fileID: 0}
   direction: 0
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
-  rawValue: .75
+  rawValue: 1
 --- !u!4 &970030759
 Transform:
   m_ObjectHideFlags: 0
@@ -4677,13 +4688,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 13
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUDPaneTab2
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -4829,13 +4840,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'XP: 425 / 1000'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -4890,8 +4901,8 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: HUDPanel_2_PreVis
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -5076,17 +5087,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
-  mColor: {r: .426573515, g: 1, b: 0, a: 1}
-  mPivot: 3
-  mDepth: 4
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: GUISlider_Full
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
-  mFillDirection: 0
-  mFillAmount: .75
+  mFillDirection: 4
+  mFillAmount: 1
   mInvert: 0
 --- !u!1 &1239080902
 GameObject:
@@ -5129,9 +5140,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 16
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: S
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -5222,7 +5233,7 @@ Transform:
   m_GameObject: {fileID: 1269852173}
   m_LocalRotation: {x: 0, y: .997508824, z: 0, w: -.0705422834}
   m_LocalPosition: {x: 2, y: 10, z: 40}
-  m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
+  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
   m_Children:
   - {fileID: 296583997}
   m_Father: {fileID: 0}
@@ -5236,9 +5247,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
-  scalingStyle: 0
+  scalingStyle: 1
   automatic: 0
-  manualHeight: 465
+  manualHeight: 720
   minimumHeight: 320
   maximumHeight: 1536
 --- !u!1 &1272249044
@@ -5280,11 +5291,11 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: .873134315, g: .456114948, b: .456114948, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: Hungry
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -5338,9 +5349,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 4
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 'Wis: 4'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -5447,13 +5458,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
-  mColor: {r: 1, g: 0, b: 0, a: 1}
-  mPivot: 3
-  mDepth: 3
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: GUISlider_Empty
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -5500,9 +5511,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: Dungeon Floor 1
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -5554,11 +5565,11 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: .440298498, g: 0, b: 0, a: 1}
-  mPivot: 3
-  mDepth: 8
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: ProgressBar_2
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -5601,13 +5612,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 3
-  mDepth: 2
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'HP:'
+  mPivot: 4
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -5662,7 +5673,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
-  audioClip: {fileID: 8300000, guid: b5083cfe83bb875479bd797c61594131, type: 3}
+  audioClip: {fileID: 0}
   trigger: 0
   volume: 1
   pitch: 1
@@ -5704,7 +5715,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15cc9c62605319f4a9b20b15918913fa, type: 3}
   m_Name: 
-  tweenTarget: {fileID: 267666538}
+  tweenTarget: {fileID: 0}
   hover: {r: .600000024, g: 1, b: .200000003, a: 1}
   pressed: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
@@ -5824,13 +5835,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 5
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUD_Panel_Label_Inv
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -5875,11 +5886,11 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: .0947187096, g: 0, b: .24626863, a: 1}
-  mPivot: 3
-  mDepth: 8
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: ProgressBar_2
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -5924,13 +5935,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c20815eb3063c24290a61b7020a1836, type: 3}
   m_Name: 
-  foreground: {fileID: 1570564179}
+  foreground: {fileID: 0}
   thumb: {fileID: 0}
   direction: 0
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
   numberOfSteps: 0
-  rawValue: .693000019
+  rawValue: 1
 --- !u!1 &1541517090
 GameObject:
   m_ObjectHideFlags: 0
@@ -6058,9 +6069,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 4
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 'Chr: 2'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -6150,13 +6161,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUDPaneTab1
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -6199,17 +6210,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b12228fcbd9f7c4ab404413a6be97f2, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: 1a36ae50b19d00c429256b06738099c2, type: 2}
-  mTex: {fileID: 2800000, guid: e0df0eb6fc62b8a438ff635d36c6a127, type: 3}
-  mColor: {r: 0, g: .874125719, b: 1, a: 1}
-  mPivot: 3
-  mDepth: 9
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: GUISlider_Full
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
-  mFillDirection: 0
-  mFillAmount: .75
+  mFillDirection: 4
+  mFillAmount: 1
   mInvert: 0
 --- !u!1 &1565027267
 GameObject:
@@ -6279,9 +6290,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 16
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: W
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -6333,15 +6344,15 @@ MonoBehaviour:
   m_Name: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: 0, g: 1, b: .0349650383, a: 1}
-  mPivot: 3
-  mDepth: 9
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: ProgressBar_2
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
-  mFillDirection: 0
-  mFillAmount: .693000019
+  mFillDirection: 4
+  mFillAmount: 1
   mInvert: 0
 --- !u!1 &1577420474
 GameObject:
@@ -6384,9 +6395,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 7
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 10
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -6440,9 +6451,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 7
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 8
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -6588,8 +6599,8 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: HUDPanel_2_PreVis
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -6636,9 +6647,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 4
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: Floor B4
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -6688,13 +6699,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: -1
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUD_Arrow_Button
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -6795,13 +6806,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUDPaneTab4
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -6871,13 +6882,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: HERO
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -6984,13 +6995,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 6
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'Str: 5'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -7073,9 +7084,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 3
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: L. 1 Student of Combat
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -7125,13 +7136,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 3
-  mDepth: 2
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: Andrew, Level 2 Digger
+  mPivot: 4
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -7240,13 +7251,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: 1a36ae50b19d00c429256b06738099c2, type: 2}
-  mTex: {fileID: 2800000, guid: e0df0eb6fc62b8a438ff635d36c6a127, type: 3}
-  mColor: {r: 0, g: .455223858, b: .30242148, a: 1}
-  mPivot: 3
-  mDepth: 8
-  mAtlas: {fileID: 11400000, guid: d6b932de5e0f0494b961878238d74727, type: 2}
-  mSpriteName: GUISlider_Empty
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -7400,9 +7411,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 2
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: Andrew, Level 5 Raider
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -7456,9 +7467,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 7
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
-  mText: 8
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -7508,13 +7519,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 14
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'Tiles Crossed:'
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -7564,13 +7575,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 3
-  mDepth: 2
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'En:'
+  mPivot: 4
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -7735,13 +7746,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 15
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: Key
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -7784,13 +7795,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 5
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: HUD_Panel_Label_Inv
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -7819,7 +7830,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2046289847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.499993116, y: .500106752, z: -.000793387822}
+  m_LocalPosition: {x: -.750013113, y: .750160217, z: .000193700151}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2124491335}
@@ -7866,7 +7877,7 @@ Transform:
   m_PrefabInternal: {fileID: 393662136}
   m_GameObject: {fileID: 2057465068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13, y: -.5, z: 35}
+  m_LocalPosition: {x: 54, y: -.5, z: 36}
   m_LocalScale: {x: .621715784, y: .621715784, z: .621715784}
   m_Children:
   - {fileID: 1217525390}
@@ -8012,8 +8023,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
   scalingStyle: 1
-  automatic: 1
-  manualHeight: 639
+  automatic: 0
+  manualHeight: 720
   minimumHeight: 320
   maximumHeight: 1536
 --- !u!4 &2062194370
@@ -8065,13 +8076,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
-  mMat: {fileID: 2100000, guid: a721afbc15582a24191dcf929652d848, type: 2}
-  mTex: {fileID: 2800000, guid: 49c53c16f45945b4cab9dfdd14d679a3, type: 3}
-  mColor: {r: .5, g: .409090936, b: 0, a: 1}
-  mPivot: 3
-  mDepth: 3
-  mAtlas: {fileID: 11400000, guid: 766316236602372478e5e0df474c419e, type: 2}
-  mSpriteName: GUISlider_Empty
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mAtlas: {fileID: 0}
+  mSpriteName: 
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -8118,9 +8129,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 16
-  mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: D
+  mDepth: 0
+  mFont: {fileID: 0}
+  mText: 
   mMaxLineWidth: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -8377,32 +8388,22 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 478eb5102c6de9e47a38f5c182a424be, type: 3}
   m_Name: 
-  tweenName: TweenUp
-  playAutomatically: 0
+  tweenName: 
+  playAutomatically: 1
   delay: 0
   type: 17
   showIconInInspector: 1
-  keys:
-  - position
-  - islocal
-  - time
-  - easetype
-  indexes: 00000000000000000000000000000000
-  metadatas:
-  - v
-  - 
-  - 
-  - 
+  keys: []
+  indexes: 
+  metadatas: []
   ints: 
-  floats:
-  - 1
-  bools: 01
+  floats: []
+  bools: 
   strings: []
-  vector3s:
-  - {x: -3, y: 50, z: -5}
+  vector3s: []
   colors: []
   spaces: 
-  easeTypes: 05000000
+  easeTypes: 
   loopTypes: 
   gameObjects: []
   transforms: []
@@ -8421,32 +8422,22 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 478eb5102c6de9e47a38f5c182a424be, type: 3}
   m_Name: 
-  tweenName: TweenDown
-  playAutomatically: 0
+  tweenName: 
+  playAutomatically: 1
   delay: 0
   type: 17
   showIconInInspector: 1
-  keys:
-  - position
-  - islocal
-  - time
-  - easetype
-  indexes: 00000000000000000000000000000000
-  metadatas:
-  - v
-  - 
-  - 
-  - 
+  keys: []
+  indexes: 
+  metadatas: []
   ints: 
-  floats:
-  - 1
-  bools: 01
+  floats: []
+  bools: 
   strings: []
-  vector3s:
-  - {x: -3, y: -75, z: -5}
+  vector3s: []
   colors: []
   spaces: 
-  easeTypes: 05000000
+  easeTypes: 
   loopTypes: 
   gameObjects: []
   transforms: []
