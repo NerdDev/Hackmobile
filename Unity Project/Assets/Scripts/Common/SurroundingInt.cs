@@ -8,30 +8,6 @@ public class SurroundingInt : Surrounding<int> {
     {
         
     }
-
-	public Value2D<int> GetDirWithVal(int t)
-	{
-		foreach (Value2D<int> val in this)
-		{
-			if (val != null && val.val == t)
-			{
-				return val;	
-			}
-		}
-		return null;
-	}
-	
-	public Value2D<int> GetDirWithoutVal(int t)
-	{
-		foreach (Value2D<int> val in this)
-		{
-			if (val != null && val.val != t)
-			{
-				return val;	
-			}
-		}
-		return null;
-	}
 	
 	public Value2D<int> GetDirWithValDiff(int initVal, int diff)
 	{
