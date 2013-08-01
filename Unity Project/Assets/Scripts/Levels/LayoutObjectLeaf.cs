@@ -164,13 +164,6 @@ public class LayoutObjectLeaf : LayoutObject {
                 radiusError += 2 * (y - x + 1);
             }
         }
-        /*for (int yy = -radius; yy <= radius; yy++)
-        {
-            for (int xx = -radius; xx <= radius; xx++)
-            {
-                if (xx * xx + yy * yy <= radius * radius) put(fill, x0 + xx, y0 + yy);
-            }
-        }*/
     }
     #endregion FillMethods
 
