@@ -46,7 +46,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         set
         {
             dirs[(int) loc] = value;
-            Arr[value.x, value.y] = value.val;
+            Arr[value.y, value.x] = value.val;
         }
     }
 
