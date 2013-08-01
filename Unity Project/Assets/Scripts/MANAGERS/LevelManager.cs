@@ -23,7 +23,6 @@ public class LevelManager : MonoBehaviour {
         Levels = new Level[MaxLevels];
         _gen = new LevelGenerator();
 
-        GenerateLevel(0);
         SetCurLevel(0);
         
         JustinTest();
@@ -32,10 +31,19 @@ public class LevelManager : MonoBehaviour {
 
     void SetCurLevel(int num)
     {
+        Level = GetLevel(num);
         CurLevelDepth = num;
-        Level = Levels[num];
         Deploy(Level);
         // Need to switch out game blocks when level switching is implemented
+    }
+
+    public Level GetLevel(int num)
+    {
+        if (Levels[num] == null)
+        {
+            GenerateLevel(num);
+        }
+        return Levels[num];
     }
 
     void Destroy(Level level)
