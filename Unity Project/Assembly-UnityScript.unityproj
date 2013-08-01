@@ -44,21 +44,12 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\EVIL WATCHER\Scripts\MouseOrbit.js" />
-     <Compile Include="Assets\EVIL WATCHER\Scripts\ThirdPersonController.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_UVScroller.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_animRandomizer.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_animSpeedRandomizer.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_destroyThisTimed.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_effectCaster.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_materialColorRandomizer.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_moveThis.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_prefabGenerator.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_randomRotation.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_randomScale.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_rotateThis.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_stohasticArrowMovement.js" />
-     <Compile Include="Assets\ShurikenMagic\Scripts\SM_trailFade.js" />
+     <Compile Include="Assets\EasyTouch\Example\C# Example\Examples for EasyTouch\Example-Multiplefingers\_OtherScript\bord.js" />
+     <Compile Include="Assets\EasyTouch\Plugins\_Java-Event-Template\J_EasyButtonTemplate.js" />
+     <Compile Include="Assets\EasyTouch\Plugins\_Java-Event-Template\J_EasyJoystickTemplate.js" />
+     <Compile Include="Assets\EasyTouch\Plugins\_Java-Event-Template\J_EasyTouchTemplate.js" />
+     <Compile Include="Assets\IMPORT\EVIL WATCHER\Scripts\MouseOrbit.js" />
+     <Compile Include="Assets\IMPORT\EVIL WATCHER\Scripts\ThirdPersonController.js" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\dynamon animations.txt" />
      <None Include="Assets\AudioToolkit\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
@@ -73,13 +64,13 @@
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc2 scholar animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\Arteria3d cartoon fantasy pack 1 README.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
+     <None Include="Assets\EasyTouch\Readme_first.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 1 animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
      <None Include="Assets\IMPORT\wizard\wizard.skeleton.xml" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\npc1 baker animations.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 2 animations.txt" />
-     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutlineHard.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\peasant animations.txt" />
@@ -99,7 +90,6 @@
      <None Include="Assets\iTweenEditor\README.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
-     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimLight.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
      <None Include="Assets\NGUI\ReadMe - 2.0.3d.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
@@ -115,15 +105,11 @@
      <None Include="Assets\IMPORT\SkeletonData\animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\monster 3 animations.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
-     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimAlpha.shader" />
      <None Include="Assets\Resources\XML\materials.xml" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2 animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
      <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
-     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutline.shader" />
-     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth.shader" />
-     <None Include="Assets\ShurikenMagic\Shaders\SM_2sided_transparent.shader" />
      <None Include="Assets\IMPORT\Fantasy Weapons\knife1\knife1.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\guard animations.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
@@ -133,21 +119,8 @@
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\Priest animations.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2_&amp;_santa_animations.txt" />
      <None Include="Assets\Resources\XML\titles.xml" />
-     <None Include="Assets\ShurikenMagic\Shaders\SM_TransparentRim.shader" />
  <Reference Include="AudioToolkit_FreeVersion">
  <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
- </Reference>
- <Reference Include="OSCsharp">
- <HintPath>Assets\TouchScript\Plugins\OSCsharp.dll</HintPath>
- </Reference>
- <Reference Include="TouchScript">
- <HintPath>Assets\TouchScript\Plugins\TouchScript.dll</HintPath>
- </Reference>
- <Reference Include="TouchScript.Pro">
- <HintPath>Assets\TouchScript\Plugins\TouchScript.Pro.dll</HintPath>
- </Reference>
- <Reference Include="TUIOsharp">
- <HintPath>Assets\TouchScript\Plugins\TUIOsharp.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
