@@ -45,6 +45,11 @@ public class GridArray : Array2D<GridType>
 			base.Put(val, x, y);
 		}
     }
+
+    public void PutNull(int x, int y)
+    {
+        base.Put(GridType.NULL, x, y);
+    }
 	
 	public void PutAll(LayoutObject obj, Bounding origBound)
 	{
@@ -58,11 +63,11 @@ public class GridArray : Array2D<GridType>
         PutAll(rhs.GetArray(), rhs.GetShift());
     }
 
-    public void PutAsBlocked(GridArray rhs)
+    public void PutAs(GridArray rhs, GridType type)
     {
         foreach (Value2D<GridType> val in rhs)
         {
-            Put(GridType.INTERNAL_RESERVED_BLOCKED, val.x, val.y);
+            Put(type, val.x, val.y);
         }
     }
 	

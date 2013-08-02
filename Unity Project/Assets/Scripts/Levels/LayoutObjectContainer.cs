@@ -55,7 +55,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         }
         return ret;
     }
-    
+
     public override GridArray GetArray()
     {
         GridArray ret = new GridArray(GetBounding(), false);
@@ -64,6 +64,23 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
             ret.PutAll(obj);
         }
         return ret;
+    }
+
+    public override GridArray GetPrintArray()
+    {
+        GridArray ret = new GridArray(GetBounding(), false);
+        foreach (LayoutObject obj in this)
+        {
+            ret.PutAll(obj.GetPrintArray(), obj.GetShift());
+        }
+        return ret;
+    }
+
+    public GridArray GetArray(int buffer)
+    {
+        var bounds = GetBounding();
+        bounds.expand(buffer);
+        return GetArray(bounds);
     }
 	
     public IEnumerator<LayoutObject> GetEnumerator()

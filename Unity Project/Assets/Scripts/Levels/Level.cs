@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
-    protected LevelLayout Layout;
     private GridSpace[,] Arr;
 
     public Level(LevelLayout layout)
@@ -84,8 +83,11 @@ public class Level : IEnumerable<Value2D<GridSpace>>
 
     public void ToLog(DebugManager.Logs log, params string[] customContent)
     {
-        GridArray ga = this;
-        ga.ToLog(log, customContent);
+        if (DebugManager.logging(log))
+        {
+            GridArray ga = this;
+            ga.ToLog(log, customContent);
+        }
     }
 
     public static implicit operator GridArray(Level lev)

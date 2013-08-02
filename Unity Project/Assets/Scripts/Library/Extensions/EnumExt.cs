@@ -115,12 +115,17 @@ public static class EnumExt
     */
     public static bool Missing<T>(this Enum obj, T value)
     {
-        return !EnumExt.Has<T>(obj, value);
+        return !Has(obj, value);
     }
 
     public static long val(this Enum obj)
     {
         return Convert.ToInt64(obj);
+    }
+
+    public static int Length(this Enum obj)
+    {
+        return Enum.GetValues(obj.GetType()).Length;
     }
 
     #endregion

@@ -166,7 +166,8 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public void RemoveAllBut(HashSet<T> types)
     {
-        foreach (Value2D<T> val in this)
+        List<Value2D<T>> vals = new List<Value2D<T>>(this);
+        foreach (Value2D<T> val in vals)
         {
             if (!types.Contains(val.val))
             {

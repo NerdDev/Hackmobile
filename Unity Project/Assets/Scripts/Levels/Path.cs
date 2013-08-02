@@ -5,27 +5,19 @@ using System.Collections.Generic;
 public class Path : LayoutObjectLeaf
 {
 
-    private static GridType[] types = new GridType[]
+    private static GridType[] searchTypes = new GridType[]
         {
-            GridType.Path_Horiz, 
-            GridType.Path_LB, 
-            GridType.Path_LT, 
-            GridType.Path_RB, 
-            GridType.Path_RT, 
-            GridType.Path_Vert
+            GridType.Floor,
+            GridType.Door
         };
-    private static HashSet<GridType> typesSet = new HashSet<GridType>(types);
+    private static GridSet typesSet = new GridSet(searchTypes);
     List<Value2D<GridType>> _list;
 
     public Path(Value2D<GridType> startPoint, GridArray grids)
-        : this(LevelGenerator.DepthFirstSearchFor(startPoint, grids, GridType.Door,
-                                           GridType.Path_Horiz,
-                                           GridType.Path_Vert,
-                                           GridType.Path_LB,
-                                           GridType.Path_LT,
-                                           GridType.Path_RB,
-                                           GridType.Path_RT))
+        : base()
     {
+        DFSSearcher searcher = new DFSSearcher(LevelGenerator.Rand);
+        _list = new List<Value2D<GridType>>(searcher.Search(startPoint, grids, GridType.NULL, typesSet));
     }
 
     public Path(IEnumerable<Value2D<GridType>> stack)
@@ -34,7 +26,7 @@ public class Path : LayoutObjectLeaf
         _list = new List<Value2D<GridType>>(stack);
 	}
 
-    public static HashSet<GridType> PathTypes()
+    public static GridSet PathTypes()
     {
         return typesSet;
     }
@@ -58,6 +50,11 @@ public class Path : LayoutObjectLeaf
         return GetArray(false);
     }
 
+    public override GridArray GetPrintArray()
+    {
+        return GetArray(true);
+    }
+
     public void Finalize(LayoutObjectContainer obj)
     {
         Simplify();
@@ -72,7 +69,7 @@ public class Path : LayoutObjectLeaf
         base.Bake(shiftCompensate);
     }
 
-    public GridArray GetArray(bool ending)
+    public GridArray GetArray(bool print)
     {
         if (grids != null)
         {
@@ -82,62 +79,79 @@ public class Path : LayoutObjectLeaf
         GridArray ret = new GridArray(bounds, false);
         if (_list.Count > 0)
         {
-            Value2D<GridType> backwardPt = null;
-            Value2D<GridType> curPoint = null;
-            foreach (Value2D<GridType> forwardPt in _list)
+            if (print)
             {
-                if (curPoint != null)
+                Value2D<GridType> backward = null;
+                Value2D<GridType> cur = null;
+                Value2D<GridType> forward = null;
+                foreach (Value2D<GridType> val in _list)
                 {
-                    if (backwardPt == null)
-                    { // Start Point
-                        if (ending)
+                    forward = val;
+                    if (print)
+                    { // Handle piping print logic
+                        if (cur != null)
                         {
-                            ret[curPoint.x, curPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-                        }
-                    }
-                    else if (Mathf.Abs(forwardPt.x - backwardPt.x) == 2)
-                    { // Horizontal
-                        ret[curPoint.x, curPoint.y] = GridType.Path_Horiz;
-                    }
-                    else if (Mathf.Abs(forwardPt.y - backwardPt.y) == 2)
-                    { // Vertical
-                        ret[curPoint.x, curPoint.y] = GridType.Path_Vert;
-                    }
-                    else
-                    { // Corner
-                        bool top = (forwardPt.y == (curPoint.y + 1)) || (backwardPt.y == (curPoint.y + 1));
-                        bool right = (forwardPt.x == (curPoint.x + 1)) || (backwardPt.x == (curPoint.x + 1));
-                        if (top)
-                        {
-                            if (right)
+                            if (backward == null)
                             {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_RT;
+                                ret[cur.x, cur.y] = GridType.INTERNAL_RESERVED_CUR;
+                            }
+                            else if (Mathf.Abs(forward.x - backward.x) == 2)
+                            {
+                                // Horizontal
+                                ret[cur.x, cur.y] = GridType.Path_Horiz;
+                            }
+                            else if (Mathf.Abs(forward.y - backward.y) == 2)
+                            {
+                                // Vertical
+                                ret[cur.x, cur.y] = GridType.Path_Vert;
                             }
                             else
                             {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_LT;
+                                // Corner
+                                bool top = (forward.y == (cur.y + 1)) || (backward.y == (cur.y + 1));
+                                bool right = (forward.x == (cur.x + 1)) || (backward.x == (cur.x + 1));
+                                if (top)
+                                {
+                                    if (right)
+                                    {
+                                        ret[cur.x, cur.y] = GridType.Path_RT;
+                                    }
+                                    else
+                                    {
+                                        ret[cur.x, cur.y] = GridType.Path_LT;
+                                    }
+                                }
+                                else
+                                {
+                                    if (right)
+                                    {
+                                        ret[cur.x, cur.y] = GridType.Path_RB;
+                                    }
+                                    else
+                                    {
+                                        ret[cur.x, cur.y] = GridType.Path_LB;
+                                    }
+                                }
                             }
                         }
-                        else
-                        {
-                            if (right)
-                            {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_RB;
-                            }
-                            else
-                            {
-                                ret[curPoint.x, curPoint.y] = GridType.Path_LB;
-                            }
-                        }
+                        // Set up for next point
+                        backward = cur;
+                        cur = forward;
                     }
                 }
-                // Set up for next point
-                backwardPt = curPoint;
-                curPoint = forwardPt;
+                ret[forward.x, forward.y] = GridType.INTERNAL_RESERVED_CUR;
             }
-            if (ending)
+            else
             {
-                ret[curPoint.x, curPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                Value2D<GridType> first = _list[0];
+                Value2D<GridType> last = null;
+                foreach (Value2D<GridType> val in _list)
+                {
+                    last = val;
+                    ret[val] = GridType.Floor;
+                }
+                ret.PutNull(first.x, first.y);
+                ret.PutNull(last.x, last.y);
             }
         }
         return ret;
@@ -159,10 +173,11 @@ public class Path : LayoutObjectLeaf
         Bounding bounds = GetBounding();
         Array2D<int> indexes = new Array2D<int>(bounds, false);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
+        SurroundingInt surround = new SurroundingInt(indexes.GetArr());
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
-            SurroundingInt surround = SurroundingInt.Get(indexes, val.x, val.y);
+            surround.Load(val.x, val.y);
             Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))

@@ -90,42 +90,13 @@ abstract public class Container2D<T> {
             putRow(t, xl, xr, yb);
         }
     }
-    public abstract T[,] GetArr();
 
-    public Surrounding<T> GetSurrounding(Value2D<T> val)
-    {
-        return Surrounding<T>.Get(GetArr(), val);
-    }
+    public abstract T[,] GetArr();
 	
 	public virtual List<string> ToRowStrings()
 	{
-		T[,] array = GetArr ();
-        List<string> ret = new List<string>();
-		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
-            string rowStr = "";
-    		for (int x = 0; x < array.GetLength(1); x += 1) {
-                rowStr += ToString(array[y, x]);
-    		}
-            ret.Add(rowStr);
-		}
-        return ret;	
+	    return GetArr().ToRowStrings();
 	}
-
-    public static string ToString(T t)
-    {
-        if (t.GetType() == typeof(bool))
-        {
-            if (Boolean.Parse(t.ToString()))
-            {
-                return "T";
-            }
-            else
-            {
-                return "_";
-            }
-        }
-        return t.ToString();
-    }
 	
 	public virtual void ToLog(DebugManager.Logs log)
     {
