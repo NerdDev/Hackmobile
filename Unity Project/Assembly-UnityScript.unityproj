@@ -50,6 +50,12 @@
      <Compile Include="Assets\EasyTouch\Plugins\_Java-Event-Template\J_EasyTouchTemplate.js" />
      <Compile Include="Assets\IMPORT\EVIL WATCHER\Scripts\MouseOrbit.js" />
      <Compile Include="Assets\IMPORT\EVIL WATCHER\Scripts\ThirdPersonController.js" />
+     <Compile Include="Assets\IMPORT\MagicalEffects\Scripts\FxGateA_Add.js" />
+     <Compile Include="Assets\IMPORT\MagicalEffects\Scripts\fps.js" />
+     <Compile Include="Assets\IMPORT\MagicalEffects\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" />
+     <Compile Include="Assets\IMPORT\MagicalEffects\Standard Assets\Character Controllers\Sources\Scripts\FPSInputController.js" />
+     <Compile Include="Assets\IMPORT\MagicalEffects\Standard Assets\Character Controllers\Sources\Scripts\PlatformInputController.js" />
+     <Compile Include="Assets\IMPORT\MagicalEffects\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonCamera.js" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\dynamon animations.txt" />
      <None Include="Assets\AudioToolkit\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
