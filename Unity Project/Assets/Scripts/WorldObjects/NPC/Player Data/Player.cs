@@ -58,6 +58,7 @@ public class Player : NPC
 
     #endregion
 
+    int lastCollisionTime = 0;
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Collision!");

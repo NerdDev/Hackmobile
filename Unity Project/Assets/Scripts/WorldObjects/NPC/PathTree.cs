@@ -130,7 +130,19 @@ public class PathTree
         {
             try
             {
-                if (!LevelManager.Level[p.x, p.y].IsBlocked())
+                if (p == dest)
+                {
+                    return true;
+                }
+                GridSpace grid = LevelManager.Level[p.x, p.y];
+                if (!grid.IsBlocked()
+                    && (grid.Type == GridType.Floor || grid.Type == GridType.Door
+                    || grid.Type == GridType.Path_Horiz
+                    || grid.Type == GridType.Path_LB
+                    || grid.Type == GridType.Path_LT
+                    || grid.Type == GridType.Path_RB
+                    || grid.Type == GridType.Path_RT
+                    || grid.Type == GridType.Path_Vert))
                 {
                     return true;
                 }
@@ -230,7 +242,6 @@ public class PathNode : IComparable, IEquatable<PathNode>
 
     public bool isOpen;
 
-    public Value2D<int> loca;
     public P loc;
     public PathNode parent;
     public bool diagonalFromParent;
@@ -450,5 +461,23 @@ public class P
     {
         this.x = Convert.ToInt32(x);
         this.y = Convert.ToInt32(y);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+        P point = obj as P;
+        if (point.x != this.x)
+        {
+            return false;
+        }
+        if (point.y != this.y)
+        {
+            return false;
+        }
+        return true;
     }
 }

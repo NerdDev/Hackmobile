@@ -118,7 +118,7 @@ public class NPC : WorldObject
         set { gridCoordinate = value; }
     }
     //X, Y in integers
-    private Point gridCoordInt;
+    private P gridCoordInt;
 
     //GridSpace reference
     public GridSpace gridSpace;
@@ -302,7 +302,7 @@ public class NPC : WorldObject
     public void MoveNPC(int x, int y)
     {
         //Debug.Log(this.gameObject.name);
-        Vector3 gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x + x, -.5f, CurrentOccupiedGridCenterWorldPoint.z + y);
+        Vector3 gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x - x, -.5f, CurrentOccupiedGridCenterWorldPoint.z - y);
         Vector3 heading = gridCoords - CurrentOccupiedGridCenterWorldPoint;
 
         //Debug.Log("Starting move sequence with: gridcoords - " + gridCoords + " and heading - " + heading);
@@ -352,26 +352,27 @@ public class NPC : WorldObject
             gridSpace.Remove(this);
         }
         GridCoordinate = new Vector2(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.z));
-        gridCoordInt = new Point(Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y));
+        gridCoordInt = new P(Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y));
         gridSpace = LevelManager.Level[gridCoordInt.x, gridCoordInt.y];
+        gridSpace.Accept(this);
         LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
 
         //for testing the pathing
-        buildPath();
+        //buildPath();
     }
 
-    private void buildPath()
+    private void buildPath(P start, P dest)
     {
-        if (this is Player && BigBoss.TimeKeeper.turnsPassed != 0)
+        if (BigBoss.TimeKeeper.turnsPassed != 0)
         {
             foreach (GameObject go in lightList)
             {
                 Destroy(go);
             }
             lightList.Clear();
-            P start = new P(conv(this.gameObject.transform.position.x), conv(this.gameObject.transform.position.z));
-            P dest = new P(conv(BigBoss.Prefabs.Orc.transform.position.x), conv(BigBoss.Prefabs.Orc.transform.position.z));
+            //P start = new P(conv(this.gameObject.transform.position.x), conv(this.gameObject.transform.position.z));
+            //P dest = new P(conv(BigBoss.Prefabs.Orc.transform.position.x), conv(BigBoss.Prefabs.Orc.transform.position.z));
             PathTree path = new PathTree(start, dest);
             List<PathNode> pathNodes = path.getPath();
 
@@ -775,7 +776,7 @@ public class NPC : WorldObject
     {
         if (IsActive)
         {
-            UpdateCurrentTileVectors();
+            //UpdateCurrentTileVectors();
             
             try
             {
@@ -783,6 +784,17 @@ public class NPC : WorldObject
                 if (this.IsNotAFreaking<Player>())
                 {
                     //MoveNPC(1, 1);
+                    PathTree pathToPlayer = getPath(BigBoss.PlayerInfo.gridCoordinate);
+                    List<PathNode> nodes = pathToPlayer.getPath();
+                    if (nodes.Count > 2)
+                    {
+                        move(nodes);
+                        UpdateCurrentTileVectors();
+                    }
+                    else
+                    {
+                        attack(BigBoss.PlayerInfo);
+                    }
                 }
             }
             catch (NullReferenceException)
@@ -829,5 +841,17 @@ public class NPC : WorldObject
             this.isActive = value;
         }
     }
+    #endregion
+
+    #region AI
+
+    private void move(List<PathNode> nodes)
+    {
+        P firstDest = nodes[nodes.Count - 2].loc;
+        Debug.Log("First Dest: (" + firstDest.x + ", " + firstDest.y + ")");
+        Debug.Log("Current Location: (" + gridCoordInt.x + ", " + gridCoordInt.y + ")");
+        MoveNPC(gridCoordInt.x - firstDest.x, gridCoordInt.y - firstDest.y);
+    }
+
     #endregion
 }
