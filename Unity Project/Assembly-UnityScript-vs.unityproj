@@ -117,6 +117,7 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\Priest animations.txt" />
+     <None Include="Assets\BM_1.6\Script\BatchApply_README.txt" />
      <None Include="Assets\IMPORT\Arteria3d_cartoonpack1\characters\goblin 2_&amp;_santa_animations.txt" />
      <None Include="Assets\Resources\XML\titles.xml" />
  <Reference Include="AudioToolkit_FreeVersion">
