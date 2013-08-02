@@ -23,6 +23,11 @@ public class LevelLayout : LayoutObjectContainer {
 		return new List<Room>(rooms);
 	}
 
+    public Room GetRandomRoom()
+    {
+        return rooms[LevelGenerator.Rand.Next(rooms.Count)];
+    }
+
     public void AddPath(Path p)
     {
         paths.Add(p);

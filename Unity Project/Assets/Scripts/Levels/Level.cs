@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
+    private LevelLayout Layout { get; set; }
+    public bool Populated { get; set; }
     private GridSpace[,] Arr;
 
     public Level(LevelLayout layout)
     {
+        Layout = layout;
         Arr = GridSpace.Convert(layout.GetArray());
     }
 

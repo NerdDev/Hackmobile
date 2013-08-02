@@ -3,8 +3,20 @@ using System.Collections;
 
 public class DungeonMaster : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	    
-	}
+    public static void PopulateLevel(Level l)
+    {
+        if (!l.Populated)
+        {
+            ForcePopulateLevel(l);
+        }
+    }
+
+    static void ForcePopulateLevel(Level l)
+    {
+        l.Populated = true;
+    }
+
+    static void PickStartLocation(Level l)
+    {
+    }
 }
