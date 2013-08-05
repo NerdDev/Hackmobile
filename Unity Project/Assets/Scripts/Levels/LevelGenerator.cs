@@ -29,6 +29,11 @@ public class LevelGenerator
     // Room modifier probabilies
     public static int maxFlexMod { get { return 5; } } //Max not inclusive
     public static int chanceNoFinalMod { get { return 40; } }
+
+    // Cluster probabilities
+    public static int minRoomClusters { get; set; }
+    public static int maxRoomClusters { get; set; }
+    public static int clusterProbability { get; set; }
     #endregion
 
     public static System.Random Rand = new System.Random();
@@ -70,6 +75,17 @@ public class LevelGenerator
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Modding Rooms took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Cluster Rooms");
+            }
+        }
+        ClusterRooms(rooms);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Cluster Rooms took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -266,6 +282,23 @@ public class LevelGenerator
         }
         #endregion
         return mods;
+    }
+
+    static void ClusterRooms(List<Room> rooms)
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Custer Rooms");
+        }
+        #endregion
+        int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
     }
 
     static void PlaceRooms(List<Room> rooms, LevelLayout layout)
