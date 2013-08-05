@@ -81,6 +81,7 @@ public class LevelGenerator
                 DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Cluster Rooms");
             }
         }
+        #endregion
         ClusterRooms(rooms);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
