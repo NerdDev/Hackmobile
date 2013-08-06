@@ -117,11 +117,9 @@ public class NPC : WorldObject
         get { return gridCoordinate; }
         set { gridCoordinate = value; }
     }
-    //X, Y in integers
-    private P gridCoordInt;
+    //X, Y in integers, GridSpace ref
+    private Value2D<GridSpace> gridSpace;
 
-    //GridSpace reference
-    public GridSpace gridSpace;
     #endregion
 
     public NPC()
@@ -306,32 +304,28 @@ public class NPC : WorldObject
         Vector3 heading = gridCoords - CurrentOccupiedGridCenterWorldPoint;
 
         //Debug.Log("Starting move sequence with: gridcoords - " + gridCoords + " and heading - " + heading);
-        while (MoveNPCStepwise(heading, gridCoords))
-        {
+        //while (!checkPosition(this.gameObject.transform.position, gridCoords))
+        //{
+        //    MoveNPCStepwise(heading, gridCoords);
             //Debug.Log("Still moving!");
-        }
+        //}
 
         this.gameObject.transform.position = gridCoords;
     }
 
-    private bool MoveNPCStepwise(Vector3 heading, Vector3 gridCoords)
+    private void MoveNPCStepwise(Vector3 heading, Vector3 gridCoords)
     {
         //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
         //Translation toward a precalculated heading:
-        //Debug.Log("Moving NPC at " + heading);
-        //Debug.Log("Destination: " + gridCoords);
         gameObject.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         //Lerping rotation so we don't get jitter:
         Quaternion toRot = Quaternion.LookRotation(heading);//does this need to be normalized?
         this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, toRot, NPCRotationSpeed);
-        if (!checkPosition(this.gameObject.transform.position, gridCoords))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        //StartCoroutine(Wait(.1f));
+    }
+    IEnumerator Wait(float time)
+    {
+        yield return new WaitForSeconds(time);
     }
 
     private float variance = .08f;
@@ -340,21 +334,21 @@ public class NPC : WorldObject
         if (Math.Abs(playPos.x - curPos.x) > variance ||
             Math.Abs(playPos.z - curPos.z) > variance)
         {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
     List<GameObject> lightList = new List<GameObject>();
     protected void UpdateCurrentTileVectors()
     {
-        if (gridSpace != null)
+        if (gridSpace != null && gridSpace.val != null)
         {
-            gridSpace.Remove(this);
+            gridSpace.val.Remove(this);
         }
         GridCoordinate = new Vector2(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.z));
-        gridCoordInt = new P(Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y));
-        gridSpace = LevelManager.Level[gridCoordInt.x, gridCoordInt.y];
-        gridSpace.Accept(this);
+        gridSpace = new Value2D<GridSpace>(Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y));
+        gridSpace.val = LevelManager.Level[gridSpace.x, gridSpace.y];
+        gridSpace.val.Accept(this);
         LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
 
@@ -362,7 +356,7 @@ public class NPC : WorldObject
         //buildPath();
     }
 
-    private void buildPath(P start, P dest)
+    private void buildPath(GridSpace start, GridSpace dest)
     {
         if (BigBoss.TimeKeeper.turnsPassed != 0)
         {
@@ -373,24 +367,25 @@ public class NPC : WorldObject
             lightList.Clear();
             //P start = new P(conv(this.gameObject.transform.position.x), conv(this.gameObject.transform.position.z));
             //P dest = new P(conv(BigBoss.Prefabs.Orc.transform.position.x), conv(BigBoss.Prefabs.Orc.transform.position.z));
-            PathTree path = new PathTree(start, dest);
-            List<PathNode> pathNodes = path.getPath();
+            //PathTree path = new PathTree(new Value2D<GridSpace>(start, dest);
+            //List<PathNode> pathNodes = path.getPath();
 
-            foreach (PathNode node in pathNodes)
-            {
-                GameObject go = Instantiate(BigBoss.Prefabs.lightMarker, new Vector3(node.loc.x, .3f, node.loc.y), Quaternion.identity) as GameObject;
-                go.transform.Rotate(Vector3.left, -90f);
-                lightList.Add(go);
-            }
+            //foreach (PathNode node in pathNodes)
+            //{
+            //    GameObject go = Instantiate(BigBoss.Prefabs.lightMarker, new Vector3(node.loc.x, .3f, node.loc.y), Quaternion.identity) as GameObject;
+            //    go.transform.Rotate(Vector3.left, -90f);
+            //    lightList.Add(go);
+            //}
         }
     }
     public int conv(float x)
     {
         return Convert.ToInt32(x);
     }
+
     public PathTree getPath(Vector2 destination) 
     {
-        PathTree path = new PathTree(new P(gridCoordinate.x, gridCoordinate.y), new P(destination.x, destination.y));
+        PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(conv(destination.x), conv(destination.y)));
 
         return path;
     }
@@ -774,13 +769,12 @@ public class NPC : WorldObject
 
     public override void UpdateTurn()
     {
-        if (IsActive)
+        if (IsActive && BigBoss.TimeKeeper.turnsPassed != 0)
         {
             //UpdateCurrentTileVectors();
             
             try
             {
-                GridSpace grid = LevelManager.Level[gridCoordInt.x, gridCoordInt.y];
                 if (this.IsNotAFreaking<Player>())
                 {
                     //MoveNPC(1, 1);
@@ -847,10 +841,8 @@ public class NPC : WorldObject
 
     private void move(List<PathNode> nodes)
     {
-        P firstDest = nodes[nodes.Count - 2].loc;
-        Debug.Log("First Dest: (" + firstDest.x + ", " + firstDest.y + ")");
-        Debug.Log("Current Location: (" + gridCoordInt.x + ", " + gridCoordInt.y + ")");
-        MoveNPC(gridCoordInt.x - firstDest.x, gridCoordInt.y - firstDest.y);
+        Value2D<GridSpace> firstDest = nodes[nodes.Count - 2].loc;
+        MoveNPC(gridSpace.x - firstDest.x, gridSpace.y - firstDest.y);
     }
 
     #endregion

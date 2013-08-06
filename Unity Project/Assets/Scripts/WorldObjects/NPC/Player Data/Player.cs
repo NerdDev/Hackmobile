@@ -134,11 +134,6 @@ public class Player : NPC
         skeleMageNPC.IsActive = true;
     }
 
-    public int conv(float x)
-    {
-        return Convert.ToInt32(x);
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -187,7 +182,7 @@ public class Player : NPC
             }
             if (UnityEngine.Time.time > timePassed)
             {
-                if (checkPosition(playerAvatar.transform.position, CurrentOccupiedGridCenterWorldPoint))
+                if (!checkPosition(playerAvatar.transform.position, CurrentOccupiedGridCenterWorldPoint))
                 {
                     //VECTORS ARE RETARDED
 
@@ -257,9 +252,9 @@ public class Player : NPC
         if (Math.Abs(playPos.x - curPos.x) > playervariance ||
             Math.Abs(playPos.z - curPos.z) > playervariance)
         {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     //BRAD WHAT DOES THIS DO?!

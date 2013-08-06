@@ -5,10 +5,12 @@ using System.Collections.Generic;
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
     private GridSpace[,] Arr;
+    private Surrounding<GridSpace> surr;
 
     public Level(LevelLayout layout)
     {
         Arr = GridSpace.Convert(layout.GetArray());
+        loadSurrounding();
     }
 
     public GridSpace this[int x, int y]
@@ -129,5 +131,19 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return this.GetEnumerator();
+    }
+
+    void loadSurrounding()
+    {
+        surr = new Surrounding<GridSpace>(Arr, true);
+    }
+
+    public IEnumerable<Value2D<GridSpace>> getSurroundingSpaces(int x, int y)
+    {
+        surr.Load(x, y);
+        foreach (Value2D<GridSpace> val in surr)
+        {
+            yield return val;
+        }
     }
 }

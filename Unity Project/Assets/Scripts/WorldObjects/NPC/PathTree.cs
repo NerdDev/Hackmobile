@@ -6,14 +6,15 @@ using System.Text;
 
 public class PathTree
 {
-    static PathNode[,] Arr = new PathNode[1000, 1000];
+    static PathNode[,] Arr = new PathNode[100, 100];
     protected List<PathNode> closed = new List<PathNode>();
-    P start, dest;
+    System.Random rand = new System.Random();
+    Value2D<GridSpace> start, dest;
     SortedDictionary<PathNode, PathNode> openNodes = new SortedDictionary<PathNode, PathNode>();
 
     bool pathComplete;
 
-    public PathTree(P start, P dest)
+    public PathTree(Value2D<GridSpace> start, Value2D<GridSpace> dest)
     {
         this.start = start;
         this.dest = dest;
@@ -38,6 +39,10 @@ public class PathTree
         {
             Arr[pn.loc.x, pn.loc.y] = null;
         }
+        foreach (PathNode pn in listONodes)
+        {
+            Arr[pn.loc.x, pn.loc.y] = null;
+        }
         //*/
         return listONodes;
     }
@@ -45,16 +50,22 @@ public class PathTree
     public void getNextNodes(PathNode origin)
     {
         origin.isOpen = false;
+        if (Arr[origin.loc.x, origin.loc.y] == null)
+        {
+            Arr[origin.loc.x, origin.loc.y] = origin;
+        }
         openNodes.Remove(origin);
         closed.Add(origin);
-        List<P> surroundingSpaces = getSurroundingSpaces(origin.loc);
-        pointsToNodes(surroundingSpaces, origin);
+        pointsToNodes(origin);
     }
 
     private void checkValidNodes()
     {
         PathNode choice = optimalNode(openNodes);
-
+        if (Arr[choice.loc.x, choice.loc.y] == null)
+        {
+            Arr[choice.loc.x, choice.loc.y] = choice;
+        }
         if (choice != null)
         {
             if (choice.loc.x == dest.x && choice.loc.y == dest.y)
@@ -71,78 +82,17 @@ public class PathTree
         }
     }
 
-    public List<P> getSurroundingSpaces(P root)
-    {
-        List<P> nodes = new List<P>();
-        P p;
-
-        //horizontal
-        p = new P(root.x, root.y + 1);
-        if (isValidSpace(p))
-        {
-            nodes.Add(p);
-        }
-        p = new P(root.x, root.y - 1);
-        if (isValidSpace(p))
-        {
-            nodes.Add(p);
-        }
-
-        //vertical
-        p = new P(root.x + 1, root.y);
-        if (isValidSpace(p))
-        {
-            nodes.Add(p);
-        }
-        p = new P(root.x - 1, root.y);
-        if (isValidSpace(p))
-        {
-            nodes.Add(p);
-        }
-
-        //diagonals
-        p = new P(root.x + 1, root.y + 1);
-        if (isValidSpace(p))
-        {
-            nodes.Add(p);
-        }
-        p = new P(root.x - 1, root.y - 1);
-        if (isValidSpace(p))
-        {
-            nodes.Add(p);
-        }
-        p = new P(root.x + 1, root.y - 1);
-        if (isValidSpace(p))
-        {
-            nodes.Add(p);
-        }
-        p = new P(root.x - 1, root.y + 1);
-        if (isValidSpace(p))
-        {
-            nodes.Add(p);
-        }
-        return nodes;
-    }
-
-    public bool isValidSpace(P p)
+    public bool isValidSpace(Value2D<GridSpace> p)
     {
         if (p.x > -1 && p.y > -1)
         {
             try
             {
-                if (p == dest)
+                if (p.Equals(dest))
                 {
                     return true;
                 }
-                GridSpace grid = LevelManager.Level[p.x, p.y];
-                if (!grid.IsBlocked()
-                    && (grid.Type == GridType.Floor || grid.Type == GridType.Door
-                    || grid.Type == GridType.Path_Horiz
-                    || grid.Type == GridType.Path_LB
-                    || grid.Type == GridType.Path_LT
-                    || grid.Type == GridType.Path_RB
-                    || grid.Type == GridType.Path_RT
-                    || grid.Type == GridType.Path_Vert))
+                if ((p.val.Type == GridType.Floor || p.val.Type == GridType.Door))
                 {
                     return true;
                 }
@@ -155,49 +105,43 @@ public class PathTree
         return false;
     }
 
-    public void pointsToNodes(List<P> list, PathNode origin)
+    public void pointsToNodes(PathNode origin)
     {
-        foreach (P p in list)
+        foreach (Value2D<GridSpace> p in LevelManager.Level.getSurroundingSpaces(origin.loc.x, origin.loc.y))
         {
-            if (Arr[p.x, p.y] == null)
+            if (isValidSpace(p))
             {
-                PathNode asnode = new PathNode(p, dest, origin);
-                try
+                if (Arr[p.x, p.y] == null)
                 {
+                    PathNode asnode = new PathNode(p, dest, origin);
+                    Arr[p.x, p.y] = asnode;
                     openNodes.Add(asnode, asnode);
                 }
-                catch
+                else
                 {
-
-                }
-                Arr[p.x, p.y] = asnode;
-            }
-
-            else
-            {
-                PathNode asnode = Arr[p.x, p.y];
-                if (asnode.isOpen)
-                {
-                    int curG = asnode.g;
-                    int testG;
-                    bool diag = asnode.getDiagonal(origin);
-
-                    if (diag)
+                    PathNode asnode = Arr[p.x, p.y];
+                    if (asnode.isOpen)
                     {
-                        testG = origin.g + 10;
-                    }
-                    else
-                    {
-                        testG = origin.g + 14;
-                    }
+                        int curG = asnode.g;
+                        int testG;
+                        bool diag = asnode.getDiagonal(origin);
 
-                    if (curG > testG)
-                    {
-                        asnode.setParent(origin, diag);
+                        if (diag)
+                        {
+                            testG = origin.g + 10;
+                        }
+                        else
+                        {
+                            testG = origin.g + 14;
+                        }
+
+                        if (curG > testG)
+                        {
+                            asnode.setParent(origin, diag);
+                        }
                     }
                 }
             }
-
         }
     }
 
@@ -226,15 +170,9 @@ public class PathTree
             buildPath(node.parent);
         }
     }
-
-    public PathNode pickNode(List<PathNode> list)
-    {
-        System.Random rand = new System.Random();
-        return list[rand.Next(list.Count)];
-    }
 }
 
-public class PathNode : IComparable, IEquatable<PathNode>
+public class PathNode : IComparable, IEquatable<PathNode>, IEqualityComparer<PathNode>
 {
     public int f;
     public int g;
@@ -242,11 +180,11 @@ public class PathNode : IComparable, IEquatable<PathNode>
 
     public bool isOpen;
 
-    public P loc;
+    public Value2D<GridSpace> loc;
     public PathNode parent;
     public bool diagonalFromParent;
 
-    public PathNode(P origin, P destination, PathNode parent)
+    public PathNode(Value2D<GridSpace> origin, Value2D<GridSpace> destination, PathNode parent)
     {
         loc = origin;
         h = getManhattan(origin, destination);
@@ -273,7 +211,7 @@ public class PathNode : IComparable, IEquatable<PathNode>
         f = g + h;
     }
 
-    private int getManhattan(P start, P dest)
+    private int getManhattan(Value2D<GridSpace> start, Value2D<GridSpace> dest)
     {
         int x = Math.Abs(start.x - dest.x);
         int y = Math.Abs(start.y - dest.y);
@@ -368,7 +306,24 @@ public class PathNode : IComparable, IEquatable<PathNode>
                 }
                 else if (this.h == o.h)
                 {
-                    return 0;
+                    if (this.loc.x == o.loc.x
+                        && this.loc.y == o.loc.y)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        System.Random rand = new System.Random();
+                        int testVal = rand.Next(0, 2);
+                        if (testVal == 0)
+                        {
+                            return -1;
+                        }
+                        else
+                        {
+                            return 1;
+                        }
+                    }
                 }
             }
         }
@@ -381,25 +336,8 @@ public class PathNode : IComparable, IEquatable<PathNode>
         {
             return false;
         }
-
         PathNode node = obj as PathNode;
-        if (f != node.f)
-        {
-            return false;
-        }
-        if (g != node.g)
-        {
-            return false;
-        }
-        if (h != node.h)
-        {
-            return false;
-        }
-        if (loc.x != node.loc.x && loc.y != node.loc.y)
-        {
-            return false;
-        }
-        return true;
+        return this.Equals(node);
     }
 
     public override int GetHashCode()
@@ -422,62 +360,52 @@ public class PathNode : IComparable, IEquatable<PathNode>
 
     public bool Equals(PathNode node)
     {
-        if (node == null)
-        {
-            return false;
-        }
         if (this == node) //check the reference before checking data
         {
             return true;
         }
-        if (h != node.h)
+        if (this.h != node.h)
         {
             return false;
         }
-        if (loc.x != node.loc.x)
+        if (this.loc.x != node.loc.x)
         {
             return false;
         }
-        if (loc.y != node.loc.y)
+        if (this.loc.y != node.loc.y)
         {
             return false;
         }
-        return true;
-    }
-}
-
-public class P
-{
-    public int x;
-    public int y;
-
-    public P(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-
-    public P(float x, float y)
-    {
-        this.x = Convert.ToInt32(x);
-        this.y = Convert.ToInt32(y);
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj == null || GetType() != obj.GetType())
+        if (this.f != node.f)
         {
             return false;
         }
-        P point = obj as P;
-        if (point.x != this.x)
+        if (!this.parent.Equals(node.parent))
         {
             return false;
         }
-        if (point.y != this.y)
+        if (this.isOpen != node.isOpen)
+        {
+            return false;
+        }
+        if (this.diagonalFromParent != node.diagonalFromParent)
+        {
+            return false;
+        }
+        if (this.g != node.g)
         {
             return false;
         }
         return true;
+    }
+
+    bool IEqualityComparer<PathNode>.Equals(PathNode x, PathNode y)
+    {
+        return x.Equals(y);
+    }
+
+    int IEqualityComparer<PathNode>.GetHashCode(PathNode obj)
+    {
+        return obj.GetHashCode();
     }
 }

@@ -20,6 +20,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     protected int Down;
     protected int Left;
     protected int Right;
+    private bool p;
     public bool Cornered { get; set; }
 
     public Surrounding(T[,] srcArr)
