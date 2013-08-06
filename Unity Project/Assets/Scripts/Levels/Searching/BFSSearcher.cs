@@ -1,8 +1,9 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class BFSSearcher : Searcher {
+public class BFSSearcher : GridSearcher {
     
     public BFSSearcher()
         : base()
@@ -19,7 +20,7 @@ public class BFSSearcher : Searcher {
         return SearchFill(startPoint, grids, null, targets);
     }
 
-    public Array2D<bool> SearchFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, GridSet targets)
+    public Array2D<bool> SearchFill(Value2D<GridType> startPoint, GridArray grids, Func<Value2D<GridType>,bool> pass, GridSet targets)
     {
         #region DEBUG
         if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))

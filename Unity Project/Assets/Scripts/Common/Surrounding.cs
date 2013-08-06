@@ -12,7 +12,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         get { return CountInternal(); }
     }
 
-    public PassFilter<Value2D<T>> Filter { get; set; }
+    public Func<Value2D<T>, bool> Filter { get; set; }
     protected T[,] Arr;
     protected int CurX;
     protected int CurY;
@@ -20,6 +20,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     protected int Down;
     protected int Left;
     protected int Right;
+    public bool Edge { get; protected set; }
     public bool Cornered { get; set; }
 
     public Surrounding(T[,] srcArr)
@@ -37,7 +38,7 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     {
         get
         {
-            if (dirs[(int) loc] == null)
+            if (!Edge && dirs[(int)loc] == null)
             {
                 Get(loc);
             }
@@ -58,13 +59,13 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         }
     }
 
-    protected void FilterExec(PassFilter<Value2D<T>> filter)
+    protected void FilterExec(Func<Value2D<T>, bool> filter)
     {
         if (filter != null)
         {
             for (int i = 0; i < dirs.Length; i++)
             {
-                if (!filter.pass(dirs[i]))
+                if (!filter(dirs[i]))
                 {
                     dirs[i] = null;
                 }
@@ -78,21 +79,21 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         switch (loc)
         {
             case GridLocation.DOWN:
-                return new Value2D<T>(CurX, Down, Arr[CurX, Down]);
+                return new Value2D<T>(CurX, Down, Arr[Down, CurX]);
             case GridLocation.LEFT:
-                return new Value2D<T>(Left, CurY, Arr[Left, CurY]);
+                return new Value2D<T>(Left, CurY, Arr[CurY, Left]);
             case GridLocation.UP:
-                return new Value2D<T>(CurX, Up, Arr[CurX, Up]);
+                return new Value2D<T>(CurX, Up, Arr[Up, CurX]);
             case GridLocation.RIGHT:
-                return new Value2D<T>(Right, CurY, Arr[Right, CurY]);
+                return new Value2D<T>(Right, CurY, Arr[CurY, Right]);
             case GridLocation.BOTTOMLEFT:
-                return Cornered ? new Value2D<T>(Left, Down, Arr[Left, Down]) : null;
+                return Cornered ? new Value2D<T>(Left, Down, Arr[Down, Left]) : null;
             case GridLocation.BOTTOMRIGHT:
-                return Cornered ? new Value2D<T>(Right, Down, Arr[Right, Down]) : null;
+                return Cornered ? new Value2D<T>(Right, Down, Arr[Down, Right]) : null;
             case GridLocation.TOPRIGHT:
-                return Cornered ? new Value2D<T>(Right, Up, Arr[Right, Up]) : null;
+                return Cornered ? new Value2D<T>(Right, Up, Arr[Up, Right]) : null;
             case GridLocation.TOPLEFT:
-                return Cornered ? new Value2D<T>(Left, Up, Arr[Left, Up]) : null;
+                return Cornered ? new Value2D<T>(Left, Up, Arr[Up, Left]) : null;
         }
         return null;
     }
@@ -112,10 +113,13 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         Right = x + 1;
         Up = y + 1;
         Down = y - 1;
-        if (x <= 1
-            || y <= 1
-            || Right >= Arr.GetLength(1)
-            || Up >= Arr.GetLength(0)) ;
+        int height = Arr.GetLength(0);
+        int width = Arr.GetLength(1);
+        Edge = x == 0
+            || y == 0
+            || Right >= width
+            || Up >= height;
+        if (Edge)
         {
             // On edge of array.  Handle all outputs now, so normal
             // non-edge queries don't have to worry and check
@@ -325,12 +329,11 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public IEnumerator<Value2D<T>> GetEnumerator()
     {
-        foreach (var val in dirs)
+        foreach (GridLocation loc in Enum.GetValues(typeof(GridLocation)))
         {
+            Value2D<T> val = this[loc];
             if (val != null)
-            {
                 yield return val;
-            }
         }
     }
 
