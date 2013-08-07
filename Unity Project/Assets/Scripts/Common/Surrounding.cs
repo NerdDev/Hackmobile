@@ -118,13 +118,10 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
         Right = x + 1;
         Up = y + 1;
         Down = y - 1;
-        int height = Arr.GetLength(0);
-        int width = Arr.GetLength(1);
-        Edge = x == 0
-            || y == 0
-            || Right >= width
-            || Up >= height;
-        if (Edge)
+        if (x <= 1
+            || y <= 1
+            || Right >= Arr.GetLength(1)
+            || Up >= Arr.GetLength(0))
         {
             // On edge of array.  Handle all outputs now, so normal
             // non-edge queries don't have to worry and check
