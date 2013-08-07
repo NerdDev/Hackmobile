@@ -38,11 +38,16 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
     {
         get
         {
-            if (!Edge && dirs[(int)loc] == null)
+            Value2D<T> ret = dirs[(int) loc];
+            if (!Edge && ret == null)
             {
-                Get(loc);
+                ret = Get(loc);
+                dirs[(int) loc] = ret;
             }
-            return dirs[(int) loc];
+            if (Filter == null || Filter(ret))
+                return ret;
+            else
+                return null;
         }
         set
         {
