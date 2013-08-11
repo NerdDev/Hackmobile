@@ -69,7 +69,7 @@ public class LevelGenerator
         Rand = new System.Random(seed);
         Random.seed = Rand.Next();
         LevelLayout layout = new LevelLayout();
-        List<Room> rooms = generateRooms();
+        List<Room> rooms = GenerateRoomShells();
         ModRooms(rooms);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
@@ -162,7 +162,7 @@ public class LevelGenerator
         return layout;
     }
 
-    List<Room> generateRooms()
+    List<Room> GenerateRoomShells()
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -285,7 +285,7 @@ public class LevelGenerator
         return mods;
     }
 
-    static void ClusterRooms(List<Room> rooms)
+    static List<LayoutObject> ClusterRooms(List<Room> rooms)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -293,13 +293,36 @@ public class LevelGenerator
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Custer Rooms");
         }
         #endregion
+        List<LayoutObject> ret = new List<LayoutObject>();
         int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
+        // Num clusters cannot be more than half num rooms
+        if (numClusters > rooms.Count / 2)
+            numClusters = rooms.Count / 2;
+        List<RoomCluster> clusters = new List<RoomCluster>().Populate(numClusters);
+        // Add two rooms to each
+        foreach (RoomCluster cluster in clusters)
+        {
+            cluster.AddRoom(rooms.Take());
+            cluster.AddRoom(rooms.Take());
+        }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Number of clusters: " + numClusters + ", Rooms left: " + rooms.Count);
+        }
+        #endregion
+        // For remaining rooms, put into random clusters
+        foreach (Room r in rooms)
+        {
+
+        }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
+        return ret;
     }
 
     static void PlaceRooms(List<Room> rooms, LevelLayout layout)
@@ -649,7 +672,7 @@ public class LevelGenerator
         #endregion
     }
 
-    static Point GenerateShiftMagnitude(int mag)
+    public static Point GenerateShiftMagnitude(int mag)
     {
         Vector2 vect = Random.insideUnitCircle * mag;
         Point p = new Point(vect);
