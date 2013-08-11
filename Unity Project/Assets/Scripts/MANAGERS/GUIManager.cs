@@ -13,18 +13,13 @@ public class GUIManager : MonoBehaviour {
 		Managers.Gooey.CreateText(GUIManager.TextLocations.TopLeft,"Works!");
 	*/
 	
-	//Safeties:
-		public bool confirmationWindowOpen;
-		public bool tooltipOpen;
+	//SAFETIES WHICH ANY SCRIPT CAN CHECK THROUGH BIGBOSS:
+	public bool confirmationWindowOpen;
+	public bool tooltipOpen;
+	public bool isInventoryOpen = false;
 	
-		public GameObject debugText;
-	//public int iTweenReference;
-	//Window References:
+	public GameObject debugText;
 		
-	//Textures:
-		//public Texture testTexture;
-		
-	
 	public List<UILabel> textPopList; //A dynamic array of created textPop objects - used for orderly management and GO cleanup
 		
 	
@@ -94,19 +89,46 @@ public class GUIManager : MonoBehaviour {
 	
 	#endregion
 	
+	#region Clean Inventory Variables 
+	
+	//Panels:
+	public UIPanel inventoryPanel;
+		
+	//Sprites:
+	
+	//Anims
+	private TweenPosition invPanelTweenPos;
+	
+	//Misc NGUI Integration:
+	public ItemStorage inventoryStorageScript;
+	public UISprite[] inventoryIconArray;
+	#endregion
 
 	void Start () 
 	{
 		//StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
 	
-//			GrabNGUIReferences();
+//			GrabNGUIReferences();   //will probably reactivate this later in development
 		
-		tweenPanelBUp = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenUp");
-		tweenPanelBDown = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenDown");
-		MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenDown;
-				
-
+		//FIND A BETTER PLACE FOR OR ELIMINATE THESE REFERENCES
+		//tweenPanelBUp = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenUp");
+		//tweenPanelBDown = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenDown");
+		//MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenDown;
+		
+		
+		InventoryGUIInit();//better convention to call this from player eventually
+		
+		//SeedInventory(BigBoss.PlayerInfo.PlayerInventory);
+		CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
+		//Item iScript = BigBoss.WorldObjectManager.CreateItem(new Vector3(0,0,0),"ABITEMLOLZ");
+		
+		//BigBoss.PlayerInfo.addToInventory(iScript);
+		
+		
+		
 	}
+
+	
 	
 	
 	
@@ -175,6 +197,69 @@ public class GUIManager : MonoBehaviour {
 		
 	}
 	
+	#region INVENTORY
+	
+	
+	public void InventoryGUIInit ()//To refresh references when game starts or upon inventory max size change:
+	{
+		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;//consider coming back to recapture the GO reference in case it gets broken
+		inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();	
+		//Icon array to switch on visuals, initializing to size:
+		//inventoryIconArray = new UISprite[itemStorageScript.maxItemCount];
+		//inventoryIconArray = itemStorageScript.gameObject.GetComponentsInChildren<UISprite>();
+		
+		//Debug:
+		//Debug.Log(inventoryIconArray.Length);
+	}
+	
+	public void OpenInventoryUI()
+	{
+		//Calling tween pos script on panel object
+		invPanelTweenPos.duration = .75f;
+		invPanelTweenPos.from = new Vector3 (-1000f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.to = new Vector3 (-500f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.Reset();
+		invPanelTweenPos.Play(true);
+		isInventoryOpen = true;
+	}
+	
+	public void CloseInventoryUI()
+	{
+		//Calling tween pos script on panel object
+		invPanelTweenPos.duration = .35f;
+		invPanelTweenPos.from = new Vector3 (-500f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.to = new Vector3 (-1000f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.Reset();
+		invPanelTweenPos.Play(true);	
+		isInventoryOpen = false;
+	}
+	
+	public void SeedInventory(List<Item> invList)
+	{
+		
+		
+//		foreach (UISprite icon in inventoryIconArray)
+//		{
+//			
+//		}
+		Debug.Log("Seeding inventory..." + invList.Count + " items in player's list.");
+		foreach (Item item in invList) 
+		{
+			//Debugging:
+			Debug.Log(item.name);
+			string iconToSetString = item.ModelTexture.ToString();
+			
+			//inventoryStorageScript.items.Add(item);
+			Debug.Log(item + " added.");
+		}
+		
+		Debug.Log("Seed Inventory end - " + inventoryStorageScript.items.Count + " items in player's UIStorage.");
+	}
+	
+	
+	
+	#endregion
+	
 	#region UPDATING OF VARIOUS NGUI ELEMENTS - GENERALLY DRIVEN FROM CODE ELSEWHERE IN THE PROJECT
 	public void UpdateHealthBar()
 	{
@@ -199,6 +284,19 @@ public class GUIManager : MonoBehaviour {
 		tilesCrossedLabel.text = "Tiles Crossed: " + BigBoss.TimeKeeper.numTilesCrossed;
 	}
 	
+	
+	public void CreateTextPop(Vector3 worldPosition, string message) //no color arg version
+	{
+		//Vector3 actualLoc = new Vector3(worldPosition.x,worldPosition.y,worldPosition.z);
+		Vector3 camPoint = Camera.mainCamera.WorldToViewportPoint(worldPosition);
+		Debug.Log(camPoint);
+		GameObject go = Instantiate(BigBoss.Prefabs.textPopPrefab,camPoint,Quaternion.identity) as GameObject;
+		GUIText textComp = (GUIText) go.GetComponent<GUIText>();
+		textComp.text = message;
+		textComp.material.color = Color.white; //only this line differs
+		
+	}
+	
 	public void CreateTextPop(Vector3 worldPosition, string message, Color col)
 	{
 		//Vector3 actualLoc = new Vector3(worldPosition.x,worldPosition.y,worldPosition.z);
@@ -210,6 +308,8 @@ public class GUIManager : MonoBehaviour {
 		textComp.material.color = col;
 		
 	}
+	
+	
 //	public void TextPopEnd()  //This is method is called when the iTween on TextPops Completes.  Signals destruction of GO
 //	{
 //		DestroyEarliestTextPop();//iTween event was thrown - we can safely assume it's the first object in the list since we created in order

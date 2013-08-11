@@ -10,8 +10,9 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   - 136: {fileID: 13600000}
-  - 114: {fileID: 11400020}
   - 114: {fileID: 11400010}
+  - 114: {fileID: 11400012}
+  - 114: {fileID: 11400014}
   m_Layer: 0
   m_Name: Orc
   m_TagString: Untagged
@@ -1261,7 +1262,7 @@ EditorExtensionImpl:
   serializedVersion: 6
 --- !u!114 &11400010
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
@@ -1274,9 +1275,30 @@ MonoBehaviour:
 --- !u!1002 &11400011
 EditorExtensionImpl:
   serializedVersion: 6
+--- !u!114 &11400012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb5a46fe53751ae41980843a556d012e, type: 3}
+  m_Name: 
+  itemIDs: 000000000100000008000000
 --- !u!1002 &11400013
 EditorExtensionImpl:
   serializedVersion: 6
+--- !u!114 &11400014
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669bf9dcd99e8c6448f446db4f3c10fc, type: 3}
+  m_Name: 
 --- !u!1002 &11400015
 EditorExtensionImpl:
   serializedVersion: 6
@@ -1308,20 +1330,6 @@ MonoBehaviour:
 --- !u!1002 &11400019
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400020
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d3104b55e021cd44b393da49ef2ffad, type: 3}
-  m_Name: 
-  race: 5
-  role: 1
-  speed: 1.5
-  rotationSpeed: .150000006
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1

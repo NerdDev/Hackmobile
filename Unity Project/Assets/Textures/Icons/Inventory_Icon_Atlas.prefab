@@ -79,13 +79,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 319
+      y: 239
       width: 64
       height: 64
     inner:
       serializedVersion: 2
       x: 0
-      y: 319
+      y: 239
       width: 64
       height: 64
     rotated: 0
@@ -96,14 +96,14 @@ MonoBehaviour:
   - name: Essence_03
     outer:
       serializedVersion: 2
-      x: 0
-      y: 254
+      x: 65
+      y: 239
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 0
-      y: 254
+      x: 65
+      y: 239
       width: 64
       height: 64
     rotated: 0
@@ -115,13 +115,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 189
+      y: 174
       width: 64
       height: 64
     inner:
       serializedVersion: 2
       x: 0
-      y: 189
+      y: 174
       width: 64
       height: 64
     rotated: 0
@@ -132,14 +132,14 @@ MonoBehaviour:
   - name: Necklace_02
     outer:
       serializedVersion: 2
-      x: 0
-      y: 124
+      x: 65
+      y: 174
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 0
-      y: 124
+      x: 65
+      y: 174
       width: 64
       height: 64
     rotated: 0
@@ -151,13 +151,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 0
-      y: 59
+      y: 109
       width: 64
       height: 64
     inner:
       serializedVersion: 2
       x: 0
-      y: 59
+      y: 109
       width: 64
       height: 64
     rotated: 0
@@ -187,13 +187,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 65
-      y: 319
+      y: 109
       width: 64
       height: 64
     inner:
       serializedVersion: 2
       x: 65
-      y: 319
+      y: 109
       width: 64
       height: 64
     rotated: 0
@@ -204,14 +204,14 @@ MonoBehaviour:
   - name: Cloak_03
     outer:
       serializedVersion: 2
-      x: 65
-      y: 254
+      x: 0
+      y: 44
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 65
-      y: 254
+      x: 0
+      y: 44
       width: 64
       height: 64
     rotated: 0
@@ -223,13 +223,13 @@ MonoBehaviour:
     outer:
       serializedVersion: 2
       x: 65
-      y: 189
+      y: 44
       width: 64
       height: 64
     inner:
       serializedVersion: 2
       x: 65
-      y: 189
+      y: 44
       width: 64
       height: 64
     rotated: 0
@@ -240,14 +240,14 @@ MonoBehaviour:
   - name: Book_03
     outer:
       serializedVersion: 2
-      x: 65
-      y: 124
+      x: 163
+      y: 319
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 65
-      y: 124
+      x: 163
+      y: 319
       width: 64
       height: 64
     rotated: 0
@@ -258,14 +258,14 @@ MonoBehaviour:
   - name: Flower Bunch_03
     outer:
       serializedVersion: 2
-      x: 65
-      y: 59
+      x: 228
+      y: 319
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 65
-      y: 59
+      x: 228
+      y: 319
       width: 64
       height: 64
     rotated: 0
@@ -312,13 +312,13 @@ MonoBehaviour:
   - name: metal chest plate
     outer:
       serializedVersion: 2
-      x: 130
+      x: 293
       y: 319
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 130
+      x: 293
       y: 319
       width: 64
       height: 64
@@ -330,13 +330,13 @@ MonoBehaviour:
   - name: Crystal Ball_02
     outer:
       serializedVersion: 2
-      x: 195
+      x: 358
       y: 319
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 195
+      x: 358
       y: 319
       width: 64
       height: 64
@@ -348,13 +348,13 @@ MonoBehaviour:
   - name: Wood_00
     outer:
       serializedVersion: 2
-      x: 260
+      x: 423
       y: 319
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 260
+      x: 423
       y: 319
       width: 64
       height: 64
@@ -366,14 +366,14 @@ MonoBehaviour:
   - name: Shirt_00
     outer:
       serializedVersion: 2
-      x: 325
-      y: 319
+      x: 163
+      y: 254
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 325
-      y: 319
+      x: 163
+      y: 254
       width: 64
       height: 64
     rotated: 0
@@ -384,14 +384,14 @@ MonoBehaviour:
   - name: Coin_03
     outer:
       serializedVersion: 2
-      x: 390
-      y: 319
+      x: 163
+      y: 189
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 390
-      y: 319
+      x: 163
+      y: 189
       width: 64
       height: 64
     rotated: 0
@@ -402,14 +402,14 @@ MonoBehaviour:
   - name: Berry_03
     outer:
       serializedVersion: 2
-      x: 130
-      y: 254
+      x: 163
+      y: 124
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 130
-      y: 254
+      x: 163
+      y: 124
       width: 64
       height: 64
     rotated: 0
@@ -420,14 +420,14 @@ MonoBehaviour:
   - name: Wood_01
     outer:
       serializedVersion: 2
-      x: 130
-      y: 189
+      x: 163
+      y: 59
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 130
-      y: 189
+      x: 163
+      y: 59
       width: 64
       height: 64
     rotated: 0
@@ -438,14 +438,14 @@ MonoBehaviour:
   - name: metal sword
     outer:
       serializedVersion: 2
-      x: 130
-      y: 124
+      x: 228
+      y: 254
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 130
-      y: 124
+      x: 228
+      y: 254
       width: 64
       height: 64
     rotated: 0
@@ -456,14 +456,14 @@ MonoBehaviour:
   - name: Ornament_02
     outer:
       serializedVersion: 2
-      x: 130
-      y: 59
+      x: 293
+      y: 254
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 130
-      y: 59
+      x: 293
+      y: 254
       width: 64
       height: 64
     rotated: 0
@@ -474,13 +474,13 @@ MonoBehaviour:
   - name: Gems_01
     outer:
       serializedVersion: 2
-      x: 195
+      x: 358
       y: 254
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 195
+      x: 358
       y: 254
       width: 64
       height: 64
@@ -492,13 +492,13 @@ MonoBehaviour:
   - name: Shirt_01
     outer:
       serializedVersion: 2
-      x: 260
+      x: 423
       y: 254
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 260
+      x: 423
       y: 254
       width: 64
       height: 64
@@ -510,14 +510,14 @@ MonoBehaviour:
   - name: Gems_03
     outer:
       serializedVersion: 2
-      x: 325
-      y: 254
+      x: 228
+      y: 189
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 325
-      y: 254
+      x: 228
+      y: 189
       width: 64
       height: 64
     rotated: 0
@@ -528,14 +528,14 @@ MonoBehaviour:
   - name: Necklace_03
     outer:
       serializedVersion: 2
-      x: 390
-      y: 254
+      x: 228
+      y: 124
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 390
-      y: 254
+      x: 228
+      y: 124
       width: 64
       height: 64
     rotated: 0
@@ -546,14 +546,14 @@ MonoBehaviour:
   - name: Cloak_02
     outer:
       serializedVersion: 2
-      x: 195
-      y: 189
+      x: 228
+      y: 59
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 195
-      y: 189
+      x: 228
+      y: 59
       width: 64
       height: 64
     rotated: 0
@@ -564,14 +564,14 @@ MonoBehaviour:
   - name: Ruin Stone_02
     outer:
       serializedVersion: 2
-      x: 195
-      y: 124
+      x: 293
+      y: 189
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 195
-      y: 124
+      x: 293
+      y: 189
       width: 64
       height: 64
     rotated: 0
@@ -582,14 +582,14 @@ MonoBehaviour:
   - name: Ruin Stone_01
     outer:
       serializedVersion: 2
-      x: 195
-      y: 59
+      x: 358
+      y: 189
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 195
-      y: 59
+      x: 358
+      y: 189
       width: 64
       height: 64
     rotated: 0
@@ -600,13 +600,13 @@ MonoBehaviour:
   - name: Crystal Ball_03
     outer:
       serializedVersion: 2
-      x: 260
+      x: 423
       y: 189
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 260
+      x: 423
       y: 189
       width: 64
       height: 64
@@ -618,16 +618,34 @@ MonoBehaviour:
   - name: Book_00
     outer:
       serializedVersion: 2
-      x: 325
-      y: 189
+      x: 293
+      y: 124
       width: 64
       height: 64
     inner:
       serializedVersion: 2
-      x: 325
-      y: 189
+      x: 293
+      y: 124
       width: 64
       height: 64
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: HUDPanel_2_PreVis
+    outer:
+      serializedVersion: 2
+      x: 0
+      y: 304
+      width: 162
+      height: 79
+    inner:
+      serializedVersion: 2
+      x: 0
+      y: 304
+      width: 162
+      height: 79
     rotated: 0
     paddingLeft: 0
     paddingRight: 0

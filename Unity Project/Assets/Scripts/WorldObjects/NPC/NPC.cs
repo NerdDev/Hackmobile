@@ -395,7 +395,11 @@ public class NPC : WorldObject
         if (inventory.ContainsKey(i))
         {
             //item was just eaten, take it outta that list
-            unequipItem(i);
+            if (i.itemFlags[ItemFlags.IS_EQUIPPED]) 
+			{
+               unequipItem(i);
+           	}
+           removeFromInventory(i);
 
             //unless you're Jose, in which case you'll be using a mac
             //and who knows what happens when mac people eat
