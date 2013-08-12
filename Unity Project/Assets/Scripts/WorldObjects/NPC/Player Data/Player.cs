@@ -145,16 +145,17 @@ public class Player : NPC
         //beholderNPC.setData(BigBoss.WorldObjectManager.getNPC("beholder"));
         //beholderNPC.IsActive = true;
 
-        GameObject orc = Instantiate(BigBoss.Prefabs.Orc, new Vector3(46f, -.5f, 33f), Quaternion.identity) as GameObject;
-        NPC orcNPC = orc.GetComponent<NPC>();
-        orcNPC.setData(BigBoss.WorldObjectManager.getNPC("orc"));
-        orcNPC.IsActive = true;
-        BigBoss.Prefabs.Orc = orc;
+        //GameObject orc = Instantiate(BigBoss.Prefabs.Orc, new Vector3(46f, -.5f, 33f), Quaternion.identity) as GameObject;
+        //NPC orcNPC = orc.GetComponent<NPC>();
+        //orcNPC.setData(BigBoss.WorldObjectManager.getNPC("orc"));
+        //orcNPC.IsActive = true;
+        //BigBoss.Prefabs.Orc = orc;
+        BigBoss.DungeonMaster.SpawnCreature("orc", 46, 33);
 
-        GameObject skeleMage = Instantiate(BigBoss.Prefabs.SkeletonMage, new Vector3(41f, -.5f, 43f), Quaternion.identity) as GameObject;
-        NPC skeleMageNPC = skeleMage.GetComponent<NPC>();
-        skeleMageNPC.setData(BigBoss.WorldObjectManager.getNPC("skeleton"));
-        skeleMageNPC.IsActive = true;
+        //GameObject skeleMage = Instantiate(BigBoss.Prefabs.SkeletonMage, new Vector3(41f, -.5f, 43f), Quaternion.identity) as GameObject;
+        //NPC skeleMageNPC = skeleMage.GetComponent<NPC>();
+        //skeleMageNPC.setData(BigBoss.WorldObjectManager.getNPC("skeleton"));
+        //skeleMageNPC.IsActive = true;
     }
 
     // Update is called once per frame

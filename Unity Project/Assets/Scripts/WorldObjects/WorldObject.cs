@@ -18,11 +18,17 @@ public class WorldObject : MonoBehaviour, PassesTurns
         get { return modelTexture; }
         set { this.modelTexture = value; }
     }
-    private new string name;
+    private string name;
     public string Name
     {
         get { return name; }
         set { this.name = value; }
+    }
+    private string prefab;
+    public string Prefab
+    {
+        get { return prefab; }
+        set { this.prefab = value; }
     }
     #endregion
 
@@ -37,6 +43,7 @@ public class WorldObject : MonoBehaviour, PassesTurns
         this.Model = wo.Model;
         this.ModelTexture = wo.ModelTexture;
         this.Name = wo.Name;
+        this.Prefab = wo.Prefab;
     }
 
     public virtual void parseXML(XMLNode x)
@@ -44,6 +51,7 @@ public class WorldObject : MonoBehaviour, PassesTurns
         //name is handled in DataManager so we get the GameObject name
         this.Model = x.SelectString("model");
         this.ModelTexture = x.SelectString("modeltexture");
+        this.Prefab = x.SelectString("prefab");
     }
 
     public virtual void setNull()
@@ -52,6 +60,7 @@ public class WorldObject : MonoBehaviour, PassesTurns
         this.Model = "";
         this.ModelTexture = "";
         this.Name = "null";
+        this.Prefab = "";
     }
     #endregion
 
