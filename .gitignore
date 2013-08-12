@@ -3,7 +3,7 @@
 ######################
 
 Unity Project/Assets/Resources/
-
+*.unityproj
 Unity Project/Debug Logs/
 Unity Project/Assets/ShurikenMagic/
 Unity Project/Temp/
