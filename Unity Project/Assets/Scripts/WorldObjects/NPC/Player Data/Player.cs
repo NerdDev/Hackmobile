@@ -11,7 +11,7 @@ public class Player : NPC
 
     #region General Player Info:
 
-    private string playerChosenName = "Kurtis";
+    private string playerChosenName = "Andrew";
     public string PlayerChosenName { get { return playerChosenName; } }  //read only - set at char creation
 
     private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
@@ -41,7 +41,30 @@ public class Player : NPC
 
     #region INVENTORY
     //Inventory Array - Will have to confirm typing when NGUI integration is set up...
-    public List<GameObject> PlayerInventory = new List<GameObject>();
+    public List<Item> PlayerInventory = new List<Item>();
+	
+	public virtual void addToInventory(Item item)
+    {
+        this.addToInventory(item, 1);
+		//GUI Stuff:
+		
+    }
+
+    public virtual void addToInventory(Item item, int count)
+    {
+        if (inventory.ContainsKey(item))
+        {
+            inventory[item] += count;
+			//GUI Stuff:
+			
+        }
+        else
+        {
+            inventory.Add(item, count);
+			//GUI Stuff:
+        }
+        stats.Encumbrance += item.Weight * count;
+    }
     #endregion
 
     #region ANIMATION
@@ -58,17 +81,22 @@ public class Player : NPC
 
     #endregion
 
+    int lastCollisionTime = 0;
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Collision!");
         if (collision.gameObject.GetComponent<NPC>() != null)
         {
             Debug.Log("You walked into an NPC!");
+            Debug.Log("Attacking!");
+            attack(collision.gameObject.GetComponent<NPC>());
         }
         else
         {
-            GridType g = LevelManager.Level[Convert.ToInt32(collision.gameObject.transform.position.x), 
-                Convert.ToInt32(collision.gameObject.transform.position.z)];
+            //yes, it's the gspot
+            GridSpace gspot = LevelManager.Level[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
+            //I KNEW IT EXISTED
+            GridType g = gspot.Type;
             switch (g)
             {
                 case GridType.Wall:
@@ -92,11 +120,10 @@ public class Player : NPC
     {
         //use the internal assignation reference for clarity
         this.playerAvatar = this.gameObject;
-        stats.MaxEncumbrance = getMaxInventoryWeight();
+        this.setData(BigBoss.WorldObjectManager.getNPC("player"));
         stats.Hunger = 900;
-        stats.MaxHealth = 100;
-        stats.CurrentHealth = 100;
         IsActive = true;
+        calcStats();
 
         anim = playerAvatar.GetComponent<Animator>() as Animator;
 
@@ -106,6 +133,28 @@ public class Player : NPC
         //{
         //	foo;
         //}
+
+        //test scene instantiation
+        testScene();
+    }
+
+    private static void testScene()
+    {
+        //GameObject beholder = Instantiate(BigBoss.Prefabs.Beholder, new Vector3(22f, -.5f, 35f), Quaternion.identity) as GameObject;
+        //NPC beholderNPC = beholder.GetComponent<NPC>();
+        //beholderNPC.setData(BigBoss.WorldObjectManager.getNPC("beholder"));
+        //beholderNPC.IsActive = true;
+
+        GameObject orc = Instantiate(BigBoss.Prefabs.Orc, new Vector3(46f, -.5f, 33f), Quaternion.identity) as GameObject;
+        NPC orcNPC = orc.GetComponent<NPC>();
+        orcNPC.setData(BigBoss.WorldObjectManager.getNPC("orc"));
+        orcNPC.IsActive = true;
+        BigBoss.Prefabs.Orc = orc;
+
+        GameObject skeleMage = Instantiate(BigBoss.Prefabs.SkeletonMage, new Vector3(41f, -.5f, 43f), Quaternion.identity) as GameObject;
+        NPC skeleMageNPC = skeleMage.GetComponent<NPC>();
+        skeleMageNPC.setData(BigBoss.WorldObjectManager.getNPC("skeleton"));
+        skeleMageNPC.IsActive = true;
     }
 
     // Update is called once per frame
@@ -116,17 +165,7 @@ public class Player : NPC
 
     #region Combat
 
-    public void attack(NPC n)
-    {
-        List<Item> weapons = equipment.getItems(EquipTypes.HAND);
-        if (weapons.Count > 0)
-        {
-            foreach (Item i in weapons)
-            {
-                n.damage(i.getDamage());
-            }
-        }
-    }
+
 
     #endregion
 
@@ -166,7 +205,7 @@ public class Player : NPC
             }
             if (UnityEngine.Time.time > timePassed)
             {
-                if (checkPosition(playerAvatar.transform.position, CurrentOccupiedGridCenterWorldPoint))
+                if (!checkPosition(playerAvatar.transform.position, CurrentOccupiedGridCenterWorldPoint))
                 {
                     //VECTORS ARE RETARDED
 
@@ -228,15 +267,6 @@ public class Player : NPC
 
     private void applyTileEffect()
     {
-        GridType grid = LevelManager.Level[Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y)];
-        switch (grid)
-        {
-            case GridType.Wall:
-                applyEffect(Properties.POISONED, 3, false);
-                break;
-            default:
-                break;
-        }
     }
 
     private float playervariance = .08f;
@@ -245,9 +275,9 @@ public class Player : NPC
         if (Math.Abs(playPos.x - curPos.x) > playervariance ||
             Math.Abs(playPos.z - curPos.z) > playervariance)
         {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     //BRAD WHAT DOES THIS DO?!
@@ -299,7 +329,7 @@ public class Player : NPC
 
     #region Adjust Player Stats/Attr's/Data
 
-    public override float AdjustHunger(int amount)
+    public override float AdjustHunger(float amount)
     {
         base.AdjustHunger(amount);
 

@@ -37,6 +37,17 @@ abstract public class Container2D<T> {
             Put(value, val.x, val.y);
         }
     }
+    public T this[Point val]
+    {
+        get
+        {
+            return Get(val.x, val.y);
+        }
+        set
+        {
+            Put(value, val.x, val.y);
+        }
+    }
     protected abstract T Get(int x, int y);
     public bool ContainsPoint(Value2D<T> val)
     {

@@ -449,7 +449,7 @@ abstract public class LayoutObject
 		return null != intersectObj(list, buffer);
     }
 	
-	public LayoutObject intersectObj(List<LayoutObject> list, int buffer)
+	public LayoutObject intersectObj<T>(IEnumerable<T> list, int buffer) where T : LayoutObject
 	{
         foreach (LayoutObject rhs in list)
         {

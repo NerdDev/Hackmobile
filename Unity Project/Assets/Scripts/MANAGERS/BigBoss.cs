@@ -24,6 +24,10 @@ using System.Collections;
 
 public class BigBoss : MonoBehaviour
 {  
+    public static void Log(string log) 
+    {
+        Debug.Log(log);
+    }
  
 //    private static AudioManager audioManager;
 //    public static AudioManager Audio				//Obsolete with the use of AudioToolkit

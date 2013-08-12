@@ -1,9 +1,0 @@
-Goblin 1 Animations
-
-
-Idle        = 0,128
-Walk        = 129,164 
-Attack      = 165,255
-Death       = 226,305
-
-

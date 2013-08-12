@@ -1,9 +1,0 @@
-Npc 1 Baker animations
-
-
-
-Idle          = 70,199
-Walk          = 200,238 
-Attack        = 0,65
-Death         = 236,312
-

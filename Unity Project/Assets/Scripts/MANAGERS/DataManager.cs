@@ -99,6 +99,7 @@ public class DataManager : MonoBehaviour
             n.Name = npcName;
             n.parseXML(m);
             BigBoss.WorldObjectManager.getNPCs().Add(n.Name, n);
+            n.IsActive = false;
         }
     }
 
