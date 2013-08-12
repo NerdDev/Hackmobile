@@ -1,17 +1,30 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DFSSearcher : Searcher
+public class DFSSearcher : GridSearcher
 {
+    Array2D<bool> blockedPoints;
+    GridSet targets;
+
     public DFSSearcher()
         : base()
     {
+        Filter = DFSFilter;
     }
 
     public DFSSearcher(System.Random rand)
         : base(rand)
     {
+        Filter = DFSFilter;
+    }
+
+    bool DFSFilter(Value2D<GridType> dir)
+    {
+        return dir != null
+            && !blockedPoints[dir.x, dir.y] // If not blocked
+            && (dir.val == GridType.NULL || targets.Contains(dir.val)); // If open space or target
     }
 
     public Stack<Value2D<GridType>> Search(Value2D<GridType> startPoint, GridType[,] arr, GridSet validSpaces, GridSet targets)
@@ -25,10 +38,11 @@ public class DFSSearcher : Searcher
             tmp.ToLog(DebugManager.Logs.LevelGen, "Starting Map:");
         }
         #endregion
-        Array2D<bool> blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
+        this.targets = targets;
+        blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
         Surrounding<GridType> options = new Surrounding<GridType>(arr);
-        options.Filter = new FilterDFS(blockedPoints, targets);
+        options.Filter = Filter;
         #region DEBUG
         GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
         #endregion

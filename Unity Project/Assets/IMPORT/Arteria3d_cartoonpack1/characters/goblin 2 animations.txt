@@ -1,8 +1,0 @@
-Goblin 2 Animations
-
-Idle         = 0,126
-Walk         = 127,163 
-Attack       = 164,223
-Death        = 224,302
-
-
