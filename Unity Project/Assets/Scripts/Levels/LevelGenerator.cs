@@ -299,16 +299,28 @@ public class LevelGenerator
         if (numClusters > rooms.Count / 2)
             numClusters = rooms.Count / 2;
         List<LayoutCluster> clusters = new List<LayoutCluster>().Populate(numClusters);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Number of clusters: " + numClusters);
+        }
+        #endregion
         // Add two rooms to each
         foreach (LayoutCluster cluster in clusters)
         {
             cluster.AddObject(rooms.Take());
             cluster.AddObject(rooms.Take());
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                cluster.ToLog(DebugManager.Logs.LevelGen);
+            }
+            #endregion
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Number of clusters: " + numClusters + ", Rooms left: " + rooms.Count);
+            DebugManager.w(DebugManager.Logs.LevelGen, "Rooms left: " + rooms.Count);
         }
         #endregion
         // For remaining rooms, put into random clusters
@@ -316,7 +328,14 @@ public class LevelGenerator
         {
             if (Rand.Percent(clusterProbability))
             {
-                clusters.Random(Rand).AddObject(r);
+                LayoutCluster cluster = clusters.Random(Rand);
+                cluster.AddObject(r);
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    cluster.ToLog(DebugManager.Logs.LevelGen);
+                }
+                #endregion
             }
         }
         #region DEBUG
