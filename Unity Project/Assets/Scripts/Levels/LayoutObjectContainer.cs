@@ -5,7 +5,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     protected List<LayoutObject> Objects = new List<LayoutObject>(); 
 
-    public void AddObject(LayoutObject obj, int buffer)
+    public virtual void AddObject(LayoutObject obj, int buffer)
     {
         Objects.Add(obj);
         /// Shift so nothing is in the negative 
@@ -22,7 +22,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         }
     }
 
-    public void AddObject(LayoutObject obj)
+    public virtual void AddObject(LayoutObject obj)
     {
         AddObject(obj, LevelGenerator.layoutMargin);
     }

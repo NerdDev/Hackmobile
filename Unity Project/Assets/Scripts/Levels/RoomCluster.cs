@@ -2,18 +2,17 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class RoomCluster : LayoutObjectContainer {
+public class LayoutCluster : LayoutObjectContainer {
 
-    List<Room> cluster = new List<Room>();
-
-    public void AddRoom(Room r)
+    public override void AddObject(LayoutObject r)
     {
         Point shiftDir = LevelGenerator.GenerateShiftMagnitude(1);
         LayoutObject intersect;
-        while ((intersect = r.intersectObj(cluster, 0)) != null)
+        while ((intersect = r.intersectObj(Objects, 0)) != null)
         {
             r.ShiftOutside(intersect, shiftDir);
         }
+        base.AddObject(r);
     }
 
     public override string GetTypeString()
