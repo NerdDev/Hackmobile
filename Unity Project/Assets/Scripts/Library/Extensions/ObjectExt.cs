@@ -25,6 +25,21 @@ namespace System
         {
             return !(obj is T);
         }
+
+        public static string Dump(this object element)
+        {
+            return Dump(element, 2, new List<string>());
+        }
+
+        public static string Dump(this object element, List<string> filter)
+        {
+            return Dump(element, 2, filter);
+        }
+
+        public static string Dump(this object element, int indentSize, List<string> filter)
+        {
+            return ObjDump.Dump(element, indentSize, filter);
+        }
     }
 
     public class ObjDump

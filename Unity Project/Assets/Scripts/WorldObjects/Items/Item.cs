@@ -10,7 +10,7 @@ public class Item : WorldObject, PassesTurns
 	//ex:  register my existence and key information to the item master singleton so i'm not lost in the game world
 	
 	// Use this for initialization
-	void Awake () 
+	void Start () 
 	{
 		RegisterItemToSingleton();
 	}

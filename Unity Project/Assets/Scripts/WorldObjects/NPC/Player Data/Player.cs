@@ -126,36 +126,6 @@ public class Player : NPC
         calcStats();
 
         anim = playerAvatar.GetComponent<Animator>() as Animator;
-
-        //Example of LevelLayout Surrounding() call:
-        //if grid type is wall:
-        //if (GridType.Wall == LevelManager.array[x,y])
-        //{
-        //	foo;
-        //}
-
-        //test scene instantiation
-        testScene();
-    }
-
-    private static void testScene()
-    {
-        //GameObject beholder = Instantiate(BigBoss.Prefabs.Beholder, new Vector3(22f, -.5f, 35f), Quaternion.identity) as GameObject;
-        //NPC beholderNPC = beholder.GetComponent<NPC>();
-        //beholderNPC.setData(BigBoss.WorldObjectManager.getNPC("beholder"));
-        //beholderNPC.IsActive = true;
-
-        //GameObject orc = Instantiate(BigBoss.Prefabs.Orc, new Vector3(46f, -.5f, 33f), Quaternion.identity) as GameObject;
-        //NPC orcNPC = orc.GetComponent<NPC>();
-        //orcNPC.setData(BigBoss.WorldObjectManager.getNPC("orc"));
-        //orcNPC.IsActive = true;
-        //BigBoss.Prefabs.Orc = orc;
-        BigBoss.DungeonMaster.SpawnCreature("orc", 46, 33);
-
-        //GameObject skeleMage = Instantiate(BigBoss.Prefabs.SkeletonMage, new Vector3(41f, -.5f, 43f), Quaternion.identity) as GameObject;
-        //NPC skeleMageNPC = skeleMage.GetComponent<NPC>();
-        //skeleMageNPC.setData(BigBoss.WorldObjectManager.getNPC("skeleton"));
-        //skeleMageNPC.IsActive = true;
     }
 
     // Update is called once per frame
@@ -208,23 +178,6 @@ public class Player : NPC
             {
                 if (!checkPosition(playerAvatar.transform.position, CurrentOccupiedGridCenterWorldPoint))
                 {
-                    //VECTORS ARE RETARDED
-
-                    //THESE VECTORS WOULD GO AWAY FROM THE PLAYER
-
-                    //WHY
-
-                    //WHY OH WHY
-
-                    //GRID POINT - POSITION SHOULD NOT SEND THE PLAYER AWAY
-
-                    //sigh
-
-                    //vectorToGrid = currentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;
-                    //vectorToGrid = Vector3.Lerp(playerAvatar.transform.position, currentOccupiedGridCenterWorldPoint, 1f);
-                    //playerAvatar.transform.Translate(vectorToGrid.normalized * Time.deltaTime);
-
-                    //so I just did this. and it rotates the player. and it's annoying.
                     MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime, .75f, .25f);
                     isMoving = true;
                 }
@@ -258,7 +211,8 @@ public class Player : NPC
 
     private void MovePlayer(Vector3 heading, float playerSpeed, float playerRotationSpeed)
     {
-        //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
+        //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - 
+        // MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
         //Translation toward a precalculated heading:
         gameObject.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
         //Lerping rotation so we don't get jitter:

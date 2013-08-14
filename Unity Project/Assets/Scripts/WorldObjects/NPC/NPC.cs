@@ -39,7 +39,6 @@ public class NPC : WorldObject
     public virtual void RegisterNPCToSingleton()
     {
         BigBoss.WorldObjectManager.AddNPCToMasterList(this);
-        
         BigBoss.TimeKeeper.RegisterToUpdateList(this);
     }
 
@@ -120,6 +119,11 @@ public class NPC : WorldObject
     //X, Y in integers, GridSpace ref
     private Value2D<GridSpace> gridSpace;
 
+    bool moving;
+    Vector3 gridCoords;
+    Vector3 heading;
+    Vector3 target;
+
     #endregion
 
     public NPC()
@@ -128,14 +132,39 @@ public class NPC : WorldObject
 
     void Start()
     {
+    }
+
+    public void init()
+    {
         calcStats();
         bodyparts.Arms = 2;
         bodyparts.Legs = 2;
         bodyparts.Heads = 1;
         equipment = new Equipment(this.bodyparts);
-        if (IsActive) 
+        if (IsActive)
         {
             UpdateCurrentTileVectors();
+        }
+    }
+
+    void Update()
+    {
+        if (IsActive)
+        {
+            if (moving)
+            {
+                if (!checkPosition(this.gameObject.transform.position, gridCoords))
+                {
+                    MoveNPCStepwise(gridCoords);
+                }
+                else
+                {
+                    Debug.Log("Not movin' anymore!");
+                    moving = false;
+                    this.gameObject.transform.position = gridCoords;
+                    UpdateCurrentTileVectors();
+                }
+            }
         }
     }
 
@@ -299,33 +328,19 @@ public class NPC : WorldObject
 
     public void MoveNPC(int x, int y)
     {
-        //Debug.Log(this.gameObject.name);
-        Vector3 gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x - x, -.5f, CurrentOccupiedGridCenterWorldPoint.z - y);
-        Vector3 heading = gridCoords - CurrentOccupiedGridCenterWorldPoint;
-
-        //Debug.Log("Starting move sequence with: gridcoords - " + gridCoords + " and heading - " + heading);
-        //while (!checkPosition(this.gameObject.transform.position, gridCoords))
-        //{
-        //    MoveNPCStepwise(heading, gridCoords);
-            //Debug.Log("Still moving!");
-        //}
-
-        this.gameObject.transform.position = gridCoords;
+        gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x - x, -.5f, CurrentOccupiedGridCenterWorldPoint.z - y);
+        heading = gridCoords - this.gameObject.transform.position;
     }
 
-    private void MoveNPCStepwise(Vector3 heading, Vector3 gridCoords)
+    private void MoveNPCStepwise(Vector3 gridCoords)
     {
+        heading = gridCoords - this.gameObject.transform.position;
         //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
         //Translation toward a precalculated heading:
         gameObject.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         //Lerping rotation so we don't get jitter:
         Quaternion toRot = Quaternion.LookRotation(heading);//does this need to be normalized?
         this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, toRot, NPCRotationSpeed);
-        //StartCoroutine(Wait(.1f));
-    }
-    IEnumerator Wait(float time)
-    {
-        yield return new WaitForSeconds(time);
     }
 
     private float variance = .08f;
@@ -339,6 +354,9 @@ public class NPC : WorldObject
         return true;
     }
     List<GameObject> lightList = new List<GameObject>();
+
+    bool testInit = false;
+
     protected void UpdateCurrentTileVectors()
     {
         if (gridSpace != null && gridSpace.val != null)
@@ -779,6 +797,7 @@ public class NPC : WorldObject
                 if (this.IsNotAFreaking<Player>())
                 {
                     //MoveNPC(1, 1);
+                    Debug.Log(this.Name);
                     PathTree pathToPlayer = getPath(BigBoss.PlayerInfo.gridCoordinate);
                     List<PathNode> nodes = pathToPlayer.getPath();
                     if (nodes.Count > 2)
@@ -797,7 +816,7 @@ public class NPC : WorldObject
                 //do nothing
             }
             
-            AdjustHunger(-1);
+            //AdjustHunger(-1);
         }
     }
 
@@ -842,6 +861,7 @@ public class NPC : WorldObject
 
     private void move(List<PathNode> nodes)
     {
+        moving = true;
         Value2D<GridSpace> firstDest = nodes[nodes.Count - 2].loc;
         MoveNPC(gridSpace.x - firstDest.x, gridSpace.y - firstDest.y);
     }

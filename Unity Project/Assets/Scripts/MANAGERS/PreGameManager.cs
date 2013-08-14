@@ -30,7 +30,13 @@ public class PreGameManager : MonoBehaviour {
     void justinTestingFunction()
     {
     }
-	
+
+    void Start()
+    {
+        BigBoss.DungeonMaster.SpawnCreature("orc", 28, 57);
+        BigBoss.DungeonMaster.SpawnCreature("skeleton", 18, 52);
+        BigBoss.DungeonMaster.SpawnCreature("skeleton", 22, 55);
+    }
 	// Update is called once per frame
 	void Update () 
 	{

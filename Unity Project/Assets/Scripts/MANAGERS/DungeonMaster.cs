@@ -27,5 +27,7 @@ public class DungeonMaster : MonoBehaviour {
         GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
         NPC newNPC = gameObject.AddComponent<NPC>();
         newNPC.setData(n);
+        newNPC.IsActive = true;
+        newNPC.init();
     }
 }

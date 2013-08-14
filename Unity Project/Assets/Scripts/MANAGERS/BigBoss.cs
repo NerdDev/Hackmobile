@@ -135,8 +135,7 @@ public class BigBoss : MonoBehaviour
 		
 		//audioManager = GetComponentInChildren<AudioManager>() as AudioManager;//Obsolete with the use of AudioToolkit
 		prefabManager = GetComponentInChildren<PrefabManager>() as PrefabManager;
-        if (prefabManager != null)
-            playerManager = prefabManager.player.GetComponent<Player>();
+        worldObjectManager = GetComponentInChildren<WorldObjectManager>() as WorldObjectManager;
 		guiManager = GetComponentInChildren<GUIManager>() as GUIManager;
         inputManager = GetComponentInChildren<InputManager>() as InputManager;
         levelLoadManager = GetComponentInChildren<LevelLoadManager>() as LevelLoadManager;
@@ -147,9 +146,10 @@ public class BigBoss : MonoBehaviour
 		camManager = GetComponentInChildren<CameraManager>() as CameraManager;
 		preGameManager = GetComponentInChildren<PreGameManager>() as PreGameManager;
         dungeonMaster = GetComponentInChildren<DungeonMaster>() as DungeonMaster;
-        worldObjectManager = GetComponentInChildren<WorldObjectManager>() as WorldObjectManager;
 		debugManager = GetComponentInChildren<DebugManager>() as DebugManager;
         dataManager = GetComponentInChildren<DataManager>() as DataManager;
+        if (prefabManager != null)
+            playerManager = prefabManager.player.GetComponent<Player>();
 
 		//Make this game object persistent
         DontDestroyOnLoad(gameObject);

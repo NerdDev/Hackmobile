@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -131,6 +132,11 @@ public class TimeManager : MonoBehaviour
         {
             if (obj.IsActive)
             {
+                if (obj is NPC)
+                {
+                    NPC n = obj as NPC;
+                    Debug.Log(n.Name);
+                }
                 runUpdate(obj, turnPoints);
             }
         }
@@ -158,6 +164,7 @@ public class TimeManager : MonoBehaviour
         // and we can update it based on stats to make them move more or less often
         if (obj.CurrentPoints >= obj.BasePoints)
         {
+            //Debug.Log(updateList.Dump());
             obj.UpdateTurn();
             obj.CurrentPoints -= obj.BasePoints;
         }
