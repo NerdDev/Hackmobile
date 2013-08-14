@@ -18,11 +18,11 @@ public class WorldObject : MonoBehaviour, PassesTurns
         get { return modelTexture; }
         set { this.modelTexture = value; }
     }
-    private string name;
+    private string objectName;
     public string Name
     {
-        get { return name; }
-        set { this.name = value; }
+        get { return objectName; }
+        set { this.objectName = value; }
     }
     private string prefab;
     public string Prefab

@@ -150,5 +150,10 @@ public static class Nifty
     {
         return list[rand.Next(list.Count)];
     }
+
+    public static int ToInt(this float x)
+    {
+        return Convert.ToInt32(x);
+    }
 }
 

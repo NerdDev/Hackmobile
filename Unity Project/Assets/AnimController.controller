@@ -28,7 +28,7 @@ State:
   m_Motions:
   - {fileID: 0}
   m_ParentStateMachine: {fileID: 110700000}
-  m_Position: {x: 146, y: 132, z: 0}
+  m_Position: {x: 144, y: 132, z: 0}
   m_IKOnFeet: 1
   m_Tag: 
 --- !u!1107 &110700000

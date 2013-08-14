@@ -8,7 +8,6 @@ using System;
  */
 public class Player : NPC
 {
-
     #region General Player Info:
 
     private string playerChosenName = "Andrew";
@@ -24,13 +23,6 @@ public class Player : NPC
 
     #endregion
 
-    #region TRANSFORMS AND GRID DATA
-
-    public Vector3 avatarStartLocation;
-    public float tileMovementTolerance = .85f;  //radius
-
-    #endregion
-
     #region Player Stats (For all the Player-only statistics)
     public float playerSpeed = 1.5f;  //temporarily hard-coded
     public float PlayerSpeed { get { return playerSpeed; } }
@@ -40,23 +32,12 @@ public class Player : NPC
     #endregion
 
     #region INVENTORY
-    //Inventory Array - Will have to confirm typing when NGUI integration is set up...
-    public List<Item> PlayerInventory = new List<Item>();
-	
-	public virtual void addToInventory(Item item)
-    {
-        this.addToInventory(item, 1);
-		//GUI Stuff:
-		
-    }
-
-    public virtual void addToInventory(Item item, int count)
+    public override void addToInventory(Item item, int count)
     {
         if (inventory.ContainsKey(item))
         {
             inventory[item] += count;
 			//GUI Stuff:
-			
         }
         else
         {
@@ -67,34 +48,19 @@ public class Player : NPC
     }
     #endregion
 
-    #region ANIMATION
-
-    private Animator anim;							// a reference to the animator on the character
-    private AnimatorStateInfo currentBaseState;			// a reference to the current state of the animator, used for base layer
-    private AnimatorStateInfo layer2CurrentState;	// a reference to the current state of the animator, used for layer 2
-
-    //static int idleState = Animator.StringToHash("Base Layer.Idle");
-    //static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
-
-    Vector3 currentGridLoc;
-    Vector3 currentGridCenterPointWithoffset;
-
-    #endregion
-
-    int lastCollisionTime = 0;
+    #region Physics
+    int lastCollisionTime = 0; //unused atm
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision!");
         if (collision.gameObject.GetComponent<NPC>() != null)
         {
-            Debug.Log("You walked into an NPC!");
-            Debug.Log("Attacking!");
             attack(collision.gameObject.GetComponent<NPC>());
         }
         else
         {
             //yes, it's the gspot
-            GridSpace gspot = LevelManager.Level[Convert.ToInt32(collision.gameObject.transform.position.x), Convert.ToInt32(collision.gameObject.transform.position.z)];
+            GridSpace gspot = LevelManager.Level[collision.gameObject.transform.position.x.ToInt(), 
+                collision.gameObject.transform.position.z.ToInt()];
             //I KNEW IT EXISTED
             GridType g = gspot.Type;
             switch (g)
@@ -114,6 +80,7 @@ public class Player : NPC
             }
         }
     }
+    #endregion
 
     // Use this for initialization
     void Start()
@@ -140,12 +107,26 @@ public class Player : NPC
 
     #endregion
 
-    #region Movement
+    #region Movement and Animation
+
+    #region Movement/Animation Properties
+    private Animator anim;							// a reference to the animator on the character
+    private AnimatorStateInfo currentBaseState;			// a reference to the current state of the animator, used for base layer
+    private AnimatorStateInfo layer2CurrentState;	// a reference to the current state of the animator, used for layer 2
+    ///static int idleState = Animator.StringToHash("Base Layer.Idle");
+    ///static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
+    Vector3 currentGridLoc;
+    Vector3 currentGridCenterPointWithoffset;
+
+    public Vector3 avatarStartLocation;
+    public float tileMovementTolerance = .85f;  //radius
 
     float timePassed = 0;
     float timeVar = 1.5f;
     bool timeSet;
     bool isMoving;
+    private float playervariance = .08f;
+    #endregion
 
     private void movement()
     {
@@ -211,20 +192,11 @@ public class Player : NPC
 
     private void MovePlayer(Vector3 heading, float playerSpeed, float playerRotationSpeed)
     {
-        //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - 
-        // MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
-        //Translation toward a precalculated heading:
         gameObject.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
-        //Lerping rotation so we don't get jitter:
-        Quaternion toRot = Quaternion.LookRotation(heading);//does this need to be normalized?
+        Quaternion toRot = Quaternion.LookRotation(heading);
         playerAvatar.transform.rotation = Quaternion.Slerp(playerAvatar.transform.rotation, toRot, playerRotationSpeed);
     }
 
-    private void applyTileEffect()
-    {
-    }
-
-    private float playervariance = .08f;
     private bool checkPosition(Vector3 playPos, Vector3 curPos)
     {
         if (Math.Abs(playPos.x - curPos.x) > playervariance ||
@@ -257,94 +229,6 @@ public class Player : NPC
         //			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation
 
     }
-    #endregion
-
-    #region Calculation Methods (Hunger, Stats, etc)
-
-    private string getPlayerTitle()
-    {
-        //Change this to a generic chosen profession later
-        playerTitle = BigBoss.DataManager.playerProfessions.getTitle(PlayerProfessions.Archaeologist, this.stats.Level);
-        string finalTitle = playerChosenName + ", " + playerTitle;// + " of " + playerTitleCombatArea;
-        return finalTitle;
-    }
-
-    #endregion
-
-    #region Effects
-
-    public override void applyEffect(Properties e, int priority, bool isItem, int turnsToProcess)
-    {
-        base.applyEffect(e, priority, isItem, turnsToProcess);
-        //BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
-        //update gui
-    }
-
-    #endregion
-
-    #region Adjust Player Stats/Attr's/Data
-
-    public override float AdjustHunger(float amount)
-    {
-        base.AdjustHunger(amount);
-
-        //Update GUI here
-
-        return stats.Hunger;
-    }
-
-    public override void AddLevel()
-    {
-        base.AddLevel();
-
-        //Update GUI here
-    }
-
-    public override void AdjustHealth(int amount)
-    {
-        base.AdjustHealth(amount);
-
-        //Do all GUI updates here
-        BigBoss.Gooey.UpdateHealthBar();
-    }
-
-    public override void AdjustMaxHealth(int amount)
-    {
-        base.AdjustMaxHealth(amount);
-
-        //GUI updates
-    }
-
-    public override void AdjustXP(float amount)
-    {
-        base.AdjustXP(amount);
-
-        //GUI updates
-        BigBoss.Gooey.UpdateXPBar();
-    }
-
-    public override void AdjustAttribute(Attributes attr, int amount)
-    {
-        base.AdjustAttribute(attr, amount);
-        //update gui:
-    }
-
-    #endregion
-
-    #region SETFUCTIONS   //THESE SHOULD BE USED IN GAME ONLY FOR VERY SPECIFIC SITUATIONS AND/OR EVENTS
-
-    public int SetHealth(int newHealthAmount)
-    {
-
-        Debug.Log("SetHealth() called.  Target health should be " + newHealthAmount);
-
-        stats.CurrentHealth = newHealthAmount;
-        BigBoss.Gooey.UpdateHealthBar();
-        Debug.Log("SetHealth() successfully completed - " + stats.CurrentHealth + " is current health.");
-        return stats.CurrentHealth;
-    }
-
-    #endregion
 
     #region MECANIM EXAMPLE SCRIPT
     //	using UnityEngine;
@@ -425,6 +309,73 @@ public class Player : NPC
     //		}
     //	}
     //}
+
+    #endregion
+    #endregion
+
+    #region Stats
+    private string getPlayerTitle()
+    {
+        //Change this to a generic chosen profession later
+        playerTitle = BigBoss.DataManager.playerProfessions.getTitle(PlayerProfessions.Archaeologist, this.stats.Level);
+        string finalTitle = playerChosenName + ", " + playerTitle;// + " of " + playerTitleCombatArea;
+        return finalTitle;
+    }
+
+    public override float AdjustHunger(float amount)
+    {
+        base.AdjustHunger(amount);
+
+        //Update GUI here
+
+        return stats.Hunger;
+    }
+
+    public override void AddLevel()
+    {
+        base.AddLevel();
+
+        //Update GUI here
+    }
+
+    public override void AdjustHealth(int amount)
+    {
+        base.AdjustHealth(amount);
+
+        //Do all GUI updates here
+        BigBoss.Gooey.UpdateHealthBar();
+    }
+
+    public override void AdjustMaxHealth(int amount)
+    {
+        base.AdjustMaxHealth(amount);
+
+        //GUI updates
+    }
+
+    public override void AdjustXP(float amount)
+    {
+        base.AdjustXP(amount);
+
+        //GUI updates
+        BigBoss.Gooey.UpdateXPBar();
+    }
+
+    public override void AdjustAttribute(Attributes attr, int amount)
+    {
+        base.AdjustAttribute(attr, amount);
+        //update gui:
+    }
+    #endregion
+
+    #region Effects
+
+    public override void applyEffect(Properties e, int priority = 1, bool isItem = false, int turnsToProcess = -1)
+    {
+        base.applyEffect(e, priority, isItem, turnsToProcess);
+        //BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
+        //update gui
+    }
 
     #endregion
 
