@@ -3,7 +3,8 @@
 ######################
 
 Unity Project/Assets/Resources/
-*.unityproj
+Unity Project/Assembly-UnityScript-vs.unityproj
+Unity Project/Assembly-UnityScript.unityproj
 Unity Project/Debug Logs/
 Unity Project/Assets/ShurikenMagic/
 Unity Project/Temp/

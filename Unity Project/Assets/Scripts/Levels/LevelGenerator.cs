@@ -31,9 +31,9 @@ public class LevelGenerator
     public static int chanceNoFinalMod { get { return 40; } }
 
     // Cluster probabilities
-    public static int minRoomClusters { get; set; }
-    public static int maxRoomClusters { get; set; }
-    public static int clusterProbability { get; set; }
+    public static int minRoomClusters { get { return 2; } }
+    public static int maxRoomClusters { get { return 5; } }
+    public static int clusterProbability { get { return 90; } }
     #endregion
 
     public static System.Random Rand = new System.Random();
@@ -298,12 +298,12 @@ public class LevelGenerator
         // Num clusters cannot be more than half num rooms
         if (numClusters > rooms.Count / 2)
             numClusters = rooms.Count / 2;
-        List<RoomCluster> clusters = new List<RoomCluster>().Populate(numClusters);
+        List<LayoutCluster> clusters = new List<LayoutCluster>().Populate(numClusters);
         // Add two rooms to each
-        foreach (RoomCluster cluster in clusters)
+        foreach (LayoutCluster cluster in clusters)
         {
-            cluster.AddRoom(rooms.Take());
-            cluster.AddRoom(rooms.Take());
+            cluster.AddObject(rooms.Take());
+            cluster.AddObject(rooms.Take());
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -314,11 +314,18 @@ public class LevelGenerator
         // For remaining rooms, put into random clusters
         foreach (Room r in rooms)
         {
-
+            if (Rand.Percent(clusterProbability))
+            {
+                clusters.Random(Rand).AddObject(r);
+            }
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
+            foreach (LayoutCluster cluster in clusters)
+            {
+                cluster.ToLog(DebugManager.Logs.LevelGen);
+            }
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
