@@ -5,7 +5,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     protected List<LayoutObject> Objects = new List<LayoutObject>(); 
 
-    public void AddObject(LayoutObject obj, int buffer)
+    public virtual void AddObject(LayoutObject obj, int buffer)
     {
         Objects.Add(obj);
         /// Shift so nothing is in the negative 
@@ -22,7 +22,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         }
     }
 
-    public void AddObject(LayoutObject obj)
+    public virtual void AddObject(LayoutObject obj)
     {
         AddObject(obj, LevelGenerator.layoutMargin);
     }
@@ -55,7 +55,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         }
         return ret;
     }
-    
+
     public override GridArray GetArray()
     {
         GridArray ret = new GridArray(GetBounding(), false);
@@ -64,6 +64,23 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
             ret.PutAll(obj);
         }
         return ret;
+    }
+
+    public override GridArray GetPrintArray()
+    {
+        GridArray ret = new GridArray(GetBounding(), false);
+        foreach (LayoutObject obj in this)
+        {
+            ret.PutAll(obj.GetPrintArray(), obj.GetShift());
+        }
+        return ret;
+    }
+
+    public GridArray GetArray(int buffer)
+    {
+        var bounds = GetBounding();
+        bounds.expand(buffer);
+        return GetArray(bounds);
     }
 	
     public IEnumerator<LayoutObject> GetEnumerator()

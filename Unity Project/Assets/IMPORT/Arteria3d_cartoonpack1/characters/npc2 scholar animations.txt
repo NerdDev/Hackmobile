@@ -1,7 +1,0 @@
-NPC 2 SCholar animations
-
-Idle        = 67,196
-WAlk        = 200,237 
-Attack      = 0,62
-Death       = 238,312
-

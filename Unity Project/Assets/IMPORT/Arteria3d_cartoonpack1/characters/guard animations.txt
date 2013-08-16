@@ -1,8 +1,0 @@
-Guard Animations
-
-
-
-Idle        = 68,198
-Walk        = 199,236 
-Attack      = 342,366
-death       = 237,314

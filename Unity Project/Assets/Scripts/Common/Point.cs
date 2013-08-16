@@ -79,4 +79,33 @@ public class Point {
 		int gcd = Nifty.GCD(x, y);
 		return new Point(x / gcd, y / gcd);
 	}
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Point p = obj as Point;
+        if (x != p.x)
+        {
+            return false;
+        }
+        if (y != p.y)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public override int GetHashCode()
+    {
+        int hash = 3;
+
+        hash = 5 * hash + x;
+        hash = 11 * hash + y;
+        
+        return hash;
+    }
 }

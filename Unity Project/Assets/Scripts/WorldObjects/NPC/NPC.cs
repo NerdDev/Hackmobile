@@ -26,6 +26,9 @@ using XML;
  */
 public class NPC : WorldObject
 {
+    /**
+     * Initialization Methods
+     */
     #region BIGBOSSMANAGEMENT
     // Use this for initialization
     void Awake()
@@ -39,7 +42,6 @@ public class NPC : WorldObject
     public virtual void RegisterNPCToSingleton()
     {
         BigBoss.WorldObjectManager.AddNPCToMasterList(this);
-        
         BigBoss.TimeKeeper.RegisterToUpdateList(this);
     }
 
@@ -49,45 +51,49 @@ public class NPC : WorldObject
         BigBoss.TimeKeeper.RemoveFromUpdateList(this);
         Destroy(this.gameObject);
     }
+
+    /**
+     * This method should be phased out down the line, it is used for temporary
+     * data that needs initialized while other information is not known.
+     */
+    public void init()
+    {
+        calcStats();
+        bodyparts.Arms = 2;
+        bodyparts.Legs = 2;
+        bodyparts.Heads = 1;
+        equipment = new Equipment(this.bodyparts);
+        if (IsActive)
+        {
+            UpdateCurrentTileVectors();
+        }
+    }
     #endregion
+    
+    /**
+     * All the properties of the NPC should be contained here.
+     */
+    #region NPC Properties
 
-    //TODO:
-    //  -- Refactor all public access to get/set functions? (annoying with unity, can't modify then).
-    //  -- Refine the NPC's movement functions?
-
-    #region Base NPC Properties
-    //Local variables
-    public List<NPCItem> baseInventory = null;
-    #endregion
-
-    #region NPC Instance Properties
-    //Initialized all to null for the base.
-    //Converted from base properties upon creation of instance.
-    public Dictionary<Item, int> inventory = null;
-    protected List<Item> equippedItems = null;
-    protected Equipment equipment = null;
-    #endregion
-
-    #region Generic NPC Properties
-    //Properties stored here.
     public GenericFlags<Properties> properties = new GenericFlags<Properties>();
     //When accessing, use the long value of NPC Properties.
     protected NPCEffect[] effects = new NPCEffect[(long)Properties.LAST];
-
-    //All sets of flags
     GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
-
-    //Enums
     public Race race;
     public Role role;
-
-    //Separate classes
     public AttributesData attributes = new AttributesData();
     public BodyParts bodyparts = new BodyParts();
     public Stats stats = new Stats();
+
+    public Dictionary<Item, int> inventory = new Dictionary<Item, int>();
+    protected List<Item> equippedItems = new List<Item>();
+    protected Equipment equipment = null;
     
     #endregion
 
+    /**
+     * Anything relating to movement.
+     */
     #region NPC Movement Properties
 
     public float speed = 1.5f;  //temporarily hard-coded
@@ -117,6 +123,14 @@ public class NPC : WorldObject
         get { return gridCoordinate; }
         set { gridCoordinate = value; }
     }
+    //X, Y in integers, GridSpace ref
+    private Value2D<GridSpace> gridSpace;
+
+    bool moving; //stores moving condition
+    Vector3 gridCoords; //this refs target grid coords in pathing
+    Vector3 heading; //this is the heading of target minus current location
+    Vector3 target;
+
     #endregion
 
     public NPC()
@@ -125,27 +139,40 @@ public class NPC : WorldObject
 
     void Start()
     {
-        UpdateCurrentTileVectors();
     }
 
-    private void killThisNPC()
+    void Update()
     {
-        //do all the calculations/etc here
-        //drop the items here
-        //etc etc
-
-        if (this.IsNotAFreaking<Player>())
+        if (IsActive)
         {
-            DestroyThisItem();
-        }
-        else
-        {
-            Debug.Log("Player is dead! Uhh, what do we do now?");
+            if (moving)
+            {
+                if (!checkPosition(this.gameObject.transform.position, gridCoords))
+                {
+                    MoveNPCStepwise(gridCoords);
+                }
+                else
+                {
+                    moving = false;
+                    this.gameObject.transform.position = gridCoords;
+                    UpdateCurrentTileVectors();
+                }
+            }
         }
     }
 
     #region Stats
-    public virtual float AdjustHunger(int amount)
+    public bool get(NPCFlags fl)
+    {
+        return flags[fl];
+    }
+
+    public void set(NPCFlags fl, bool on)
+    {
+        flags[fl] = on;
+    }
+
+    public virtual float AdjustHunger(float amount)
     {
         stats.Hunger += amount;
         getHungerLevel(stats.Hunger);
@@ -161,8 +188,11 @@ public class NPC : WorldObject
 
     public virtual void AdjustHealth(int amount)
     {
-        Debug.Log("Adjusting Health: " + amount);
-        if (stats.CurrentHealth + amount > stats.MaxHealth)
+        if (amount < 0)
+        {
+            damage(-amount);
+        }
+        else if (stats.CurrentHealth + amount > stats.MaxHealth)
         {
             stats.CurrentHealth = stats.MaxHealth;
         }
@@ -172,18 +202,18 @@ public class NPC : WorldObject
         }
     }
 
-    public virtual void damage(int amount)
+    public virtual bool damage(int amount)
     {
-        Debug.Log("Adjusting Health: " + amount);
         if (stats.CurrentHealth - amount > 0)
         {
             stats.CurrentHealth = stats.CurrentHealth - amount;
             BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Damaged for " + amount + "!", Color.red);
+            return false;
         }
         else
         {
-            //NPC is now dead!
-            this.killThisNPC();
+            this.killThisNPC(); //NPC is now dead!
+            return true;
         }
     }
 
@@ -210,13 +240,14 @@ public class NPC : WorldObject
 
     #region Stat Calculations
     //Use this for a re-calc on level up or any attribute changes.
-    void calcStats()
+    protected void calcStats()
     {
+        stats.Encumbrance = getCurrentInventoryWeight();
         stats.MaxEncumbrance = getMaxInventoryWeight();
         stats.XPToNextLevel = calcXPForNextLevel();
     }
 
-    float calcXPForNextLevel()
+    protected float calcXPForNextLevel()
     {
         //do calc here
         return (100 + ((Mathf.Pow(stats.Level, 3f) / 2)));
@@ -268,39 +299,28 @@ public class NPC : WorldObject
     {
         BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
     }
+
+    public float getXPfromNPC() 
+    {
+        //how much XP is this NPC worth?
+        return 10f;
+    }
     #endregion
 
     #region Movement
-
-    public void MoveNPC(int x, int y)
+    public void move(int x, int y)
     {
-        //Debug.Log(this.gameObject.name);
-        Vector3 gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x + x, -.5f, CurrentOccupiedGridCenterWorldPoint.z + y);
-        //Vector3 heading = gridCoords - CurrentOccupiedGridCenterWorldPoint;
-
-        //while (!MoveNPCStepwise(heading, gridCoords))
-        //{
-        //}
-
-        this.gameObject.transform.position = gridCoords;
+        moving = true;
+        gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x - x, -.5f, CurrentOccupiedGridCenterWorldPoint.z - y);
+        heading = gridCoords - this.gameObject.transform.position;
     }
 
-    private bool MoveNPCStepwise(Vector3 heading, Vector3 gridCoords)
+    private void MoveNPCStepwise(Vector3 gridCoords)
     {
-        //THE INCOMING HEADING VECTOR3 DOES NOT HAVE TO BE PRENORMALIZED TO BE PASSED IN - MAKE SURE TO NORMALIZE ANY HEADING CALC'S IN THE TRANS FUNCTION
-        //Translation toward a precalculated heading:
+        heading = gridCoords - this.gameObject.transform.position;
         gameObject.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
-        //Lerping rotation so we don't get jitter:
-        Quaternion toRot = Quaternion.LookRotation(heading);//does this need to be normalized?
+        Quaternion toRot = Quaternion.LookRotation(heading);
         this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, toRot, NPCRotationSpeed);
-        if (checkPosition(this.gameObject.transform.position, gridCoords))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     private float variance = .08f;
@@ -309,49 +329,38 @@ public class NPC : WorldObject
         if (Math.Abs(playPos.x - curPos.x) > variance ||
             Math.Abs(playPos.z - curPos.z) > variance)
         {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     protected void UpdateCurrentTileVectors()
     {
+        if (gridSpace != null && gridSpace.val != null)
+        {
+            gridSpace.val.Remove(this);
+        }
         GridCoordinate = new Vector2(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.z));
+        gridSpace = new Value2D<GridSpace>(Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y));
+        gridSpace.val = LevelManager.Level[gridSpace.x, gridSpace.y];
+        gridSpace.val.Accept(this);
         LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
     }
+
+    public PathTree getPathTree(int x, int y) 
+    {
+        PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(x, y));
+        return path;
+    }
+
     #endregion
 
     #region Effects
-
-    /**
-     * Just some various overloads. If not specified, it is 
-     * assumed to be priority 1, infinite turns, and not an item.
-     */
-    public virtual void applyEffect(Properties e)
-    {
-        applyEffect(e, 1, false, -1);
-    }
-
-    public virtual void applyEffect(Properties e, int priority)
-    {
-        applyEffect(e, priority, false, -1);
-    }
-
-    public virtual void applyEffect(Properties e, bool isItem)
-    {
-        applyEffect(e, 1, isItem, -1);
-    }
-
-    public virtual void applyEffect(Properties e, int priority, bool isItem)
-    {
-        applyEffect(e, priority, isItem, -1);
-    }
-
     /**
      * Does nothing if the NONE property is applied.
      */
-    public virtual void applyEffect(Properties e, int priority, bool isItem, int turnsToProcess)
+    public virtual void applyEffect(Properties e, int priority = 1, bool isItem = false, int turnsToProcess = -1)
     {
         if (e != Properties.NONE)
         {
@@ -395,7 +404,11 @@ public class NPC : WorldObject
         if (inventory.ContainsKey(i))
         {
             //item was just eaten, take it outta that list
-            unequipItem(i);
+            if (i.itemFlags[ItemFlags.IS_EQUIPPED]) 
+			{
+               unequipItem(i);
+           	}
+           removeFromInventory(i);
 
             //unless you're Jose, in which case you'll be using a mac
             //and who knows what happens when mac people eat
@@ -418,49 +431,93 @@ public class NPC : WorldObject
         }
     }
 
-    #endregion
-
-    #region Equipment Management
-
-    public bool equipItem(Item i)
+    public void attack(NPC n)
     {
-        if (equipment.equipItem(i))
+        if (equipment == null)
         {
-            i.onEquipEvent(this);
-            equippedItems.Add(i);
-            return true;
+            Debug.Log("Null equipment");
         }
-        return false;
-    }
-
-    public bool unequipItem(Item i)
-    {
-        if (i.isUnEquippable() && equipment.removeItem(i))
+        if (equipment.getItems(EquipTypes.HAND) != null)
         {
-            i.onUnEquipEvent(this);
-            if (equippedItems.Contains(i))
+            List<Item> weapons = equipment.getItems(EquipTypes.HAND);
+            if (weapons.Count > 0)
             {
-                equippedItems.Remove(i);
+                foreach (Item i in weapons)
+                {
+                    if (!n.damage(i.getDamage()))
+                    {
+                    }
+                    else
+                    {
+                        AdjustXP(n.getXPfromNPC());
+                    }
+                }
             }
-            return true;
+            else
+            {
+                if (!n.damage(calcHandDamage()))
+                {
+                }
+                else
+                {
+                    AdjustXP(n.getXPfromNPC());
+                }
+            }
         }
-        return false;
+        else
+        {
+            //attacking with bare hands
+            if (!n.damage(calcHandDamage()))
+            {
+            }
+            else
+            {
+                AdjustXP(n.getXPfromNPC());
+            }
+        }
     }
 
-    public List<Item> getEquippedItems()
+    public void MoveNPC(Value2D<GridSpace> node)
     {
-        return equippedItems;
+        MoveNPC(gridSpace.x - node.x, gridSpace.y - node.y);
     }
 
+    public void MoveNPC(int x, int y)
+    {
+        moving = true;
+        move(x, y);
+    }
+
+    protected int calcHandDamage()
+    {
+        return (new System.Random()).Next(0, attributes.Strength);
+    }
+
+    private void killThisNPC()
+    {
+        //do all the calculations/etc here
+        //drop the items here
+        //etc etc
+
+        if (this.IsNotAFreaking<Player>())
+        {
+            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, name + " is dead!", Color.red);
+            DestroyThisItem();
+        }
+        else
+        {
+            Debug.Log("Player is dead! Uhh, what do we do now?");
+        }
+    }
     #endregion
 
-    #region Inventory
+    #region Inventory, Items, and Equipment
     public void addToInventory(Item item)
     {
         this.addToInventory(item, 1);
     }
 
-    public void addToInventory(Item item, int count)
+    public virtual void addToInventory(Item item, int count)
     {
         if (inventory.ContainsKey(item))
         {
@@ -517,22 +574,39 @@ public class NPC : WorldObject
         invWeightMax = (25 * (attributes.Strength + attributes.Constitution) + 50);
         return invWeightMax;
     }
-    #endregion
 
-    #region Get/Set of flags
-    public bool get(NPCFlags fl)
+    public bool equipItem(Item i)
     {
-        return flags[fl];
+        if (equipment.equipItem(i))
+        {
+            i.onEquipEvent(this);
+            equippedItems.Add(i);
+            return true;
+        }
+        return false;
     }
 
-    public void set(NPCFlags fl, bool on)
+    public bool unequipItem(Item i)
     {
-        flags[fl] = on;
+        if (i.isUnEquippable() && equipment.removeItem(i))
+        {
+            i.onUnEquipEvent(this);
+            if (equippedItems.Contains(i))
+            {
+                equippedItems.Remove(i);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public List<Item> getEquippedItems()
+    {
+        return equippedItems;
     }
     #endregion
 
-    #region NPC Management for instances
-    //These are probably incomplete at this point, I haven't updated them consistently.
+    #region NPC Data Management for Instances
     public void setData(string npcName)
     {
         this.setData(BigBoss.WorldObjectManager.getNPC(npcName));
@@ -589,7 +663,6 @@ public class NPC : WorldObject
         IsActive = false;
     }
 
-    #region XML Parsing
     public override void parseXML(XMLNode x)
     {
         //name is handled in DataManager so we get the GameObject name
@@ -626,15 +699,14 @@ public class NPC : WorldObject
         this.attributes.parseXML(x.select("attributes"));
 
         //inventory
-        baseInventory = new List<NPCItem>();
-        foreach (XMLNode xnode in x.select("inventory").get())
-        {
-            NPCItem baseItem = new NPCItem();
-            baseItem.parseXML(xnode);
-            this.baseInventory.Add(baseItem);
-        }
+        //baseInventory = new List<NPCItem>();
+        //foreach (XMLNode xnode in x.select("inventory").get())
+        //{
+        //    NPCItem baseItem = new NPCItem();
+        //    baseItem.parseXML(xnode);
+        //    this.baseInventory.Add(baseItem);
+        //}
     }
-    #endregion
 
     #endregion
 
@@ -643,27 +715,34 @@ public class NPC : WorldObject
     private int npcPoints = 0;
     private int baseNPCPoints = 60;
     
-
     public override void UpdateTurn()
     {
-        if (base.isActive)
+        if (IsActive && BigBoss.TimeKeeper.turnsPassed != 0)
         {
-            UpdateCurrentTileVectors();
-            /**
             try
             {
-                GridSpace grid = LevelManager.blocks[Convert.ToInt32(this.GridCoordinate.x), Convert.ToInt32(this.GridCoordinate.y)].GetComponent<GridSpace>();
                 if (this.IsNotAFreaking<Player>())
                 {
-                    MoveNPC(1, 1);
+                    Debug.Log(this.Name);
+                    PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
+                    List<PathNode> nodes = pathToPlayer.getPath();
+                    if (nodes.Count > 2)
+                    {
+                        MoveNPC(nodes[nodes.Count - 2].loc);
+                        UpdateCurrentTileVectors();
+                    }
+                    else
+                    {
+                        attack(BigBoss.PlayerInfo);
+                    }
                 }
             }
             catch (NullReferenceException)
             {
                 //do nothing
             }
-            */
-            AdjustHunger(-1);
+            
+            //AdjustHunger(-1);
         }
     }
 

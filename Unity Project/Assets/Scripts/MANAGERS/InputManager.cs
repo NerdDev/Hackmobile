@@ -83,6 +83,21 @@ public class InputManager : MonoBehaviour
             mCam.enabled = !mCam.enabled;
             BigBoss.Gooey.CreateTextPop(BigBoss.PlayerInfo.transform.position + Vector3.up * .75f, " CAMERA SWAP ", Color.white);
         }
+		
+		 if (Input.GetKeyDown(KeyCode.O))
+        {
+            BigBoss.Gooey.OpenInventoryUI();
+        }
+		 if (Input.GetKeyDown(KeyCode.C))
+        {
+            BigBoss.Gooey.CloseInventoryUI();
+        }
+		 if (Input.GetKeyDown(KeyCode.F1))
+        {
+            //Item theItem = BigBoss.WorldObjectManager.CreateRandomItem(new Vector3 (0,0,0));
+			//Testing out an NGUI texture swap:
+			
+        }
     }
 
     #endregion

@@ -33,6 +33,11 @@ public class LevelGenerator
     // Room modifier probabilies
     public static int maxFlexMod { get { return 5; } } //Max not inclusive
     public static int chanceNoFinalMod { get { return 40; } }
+
+    // Cluster probabilities
+    public static int minRoomClusters { get { return 2; } }
+    public static int maxRoomClusters { get { return 5; } }
+    public static int clusterProbability { get { return 90; } }
     #endregion
 
     public static System.Random Rand = new System.Random();
@@ -40,11 +45,15 @@ public class LevelGenerator
 
     public LevelLayout GenerateLayout(int levelDepth)
     {
-        return GenerateLayout(levelDepth, Rand.Next(), Rand.Next());
+        return GenerateLayout(levelDepth, Rand.Next());
     }
 
-    public LevelLayout GenerateLayout(int levelDepth, int seed, int unitySeed)
+    public LevelLayout GenerateLayout(int levelDepth, int seed)
     {
+        if (seed == -1)
+        {
+            return GenerateLayout(levelDepth);
+        }
         #region DEBUG
         int debugNum = 1;
         float stepTime = 0, startTime = 0;
@@ -53,7 +62,7 @@ public class LevelGenerator
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
                 DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
-                DebugManager.w(DebugManager.Logs.LevelGenMain, "Random/Unity seed ints: " + seed + ", " + unitySeed);
+                DebugManager.w(DebugManager.Logs.LevelGenMain, "Random seed int: " + seed);
                 DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
                 DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
             }
@@ -62,14 +71,26 @@ public class LevelGenerator
         }
         #endregion
         Rand = new System.Random(seed);
-        Random.seed = unitySeed;
+        Random.seed = Rand.Next();
         LevelLayout layout = new LevelLayout();
-        List<Room> rooms = generateRooms();
+        List<Room> rooms = GenerateRoomShells();
         ModRooms(rooms);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Modding Rooms took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Cluster Rooms");
+            }
+        }
+        #endregion
+        ClusterRooms(rooms);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Cluster Rooms took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -119,6 +140,18 @@ public class LevelGenerator
         {
             DebugManager.w(DebugManager.Logs.LevelGenMain, "Confirm Connection took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Edges");
+            }
+        }
+        #endregion
+        ConfirmEdges(layout);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGenMain, "Confirm Edges took: " + (Time.realtimeSinceStartup - stepTime));
+            stepTime = Time.realtimeSinceStartup;
         }
         #endregion
 
@@ -133,7 +166,7 @@ public class LevelGenerator
         return layout;
     }
 
-    List<Room> generateRooms()
+    List<Room> GenerateRoomShells()
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -254,6 +287,53 @@ public class LevelGenerator
         }
         #endregion
         return mods;
+    }
+
+    static List<LayoutObject> ClusterRooms(List<Room> rooms)
+    {
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Custer Rooms");
+        }
+        #endregion
+        List<LayoutObject> ret = new List<LayoutObject>();
+        int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
+        // Num clusters cannot be more than half num rooms
+        if (numClusters > rooms.Count / 2)
+            numClusters = rooms.Count / 2;
+        List<LayoutCluster> clusters = new List<LayoutCluster>().Populate(numClusters);
+        // Add two rooms to each
+        foreach (LayoutCluster cluster in clusters)
+        {
+            cluster.AddObject(rooms.Take());
+            cluster.AddObject(rooms.Take());
+        }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Number of clusters: " + numClusters + ", Rooms left: " + rooms.Count);
+        }
+        #endregion
+        // For remaining rooms, put into random clusters
+        foreach (Room r in rooms)
+        {
+            if (Rand.Percent(clusterProbability))
+            {
+                clusters.Random(Rand).AddObject(r);
+            }
+        }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            foreach (LayoutCluster cluster in clusters)
+            {
+                cluster.ToLog(DebugManager.Logs.LevelGen);
+            }
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+        return ret;
     }
 
     static void PlaceRooms(List<Room> rooms, LevelLayout layout)
@@ -384,45 +464,63 @@ public class LevelGenerator
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Paths");
+            layout.ToLog(DebugManager.Logs.LevelGen, "Pre Path Layout");
         }
         #endregion
-        var bounds = layout.GetBounding();
-        bounds.expand(layoutMargin);
-        bounds.ShiftNonNeg();
-        var grids = layout.GetArray(bounds);
+        var grids = layout.GetArray(layoutMargin);
         GridMap doors = layout.getTypes(grids, GridType.Door);
+        Surrounding<GridType> surround = new Surrounding<GridType>(grids);
+        #region DEBUG
+        GridArray debugArr = null;
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            debugArr = new GridArray(grids);
+        }
+        #endregion
         foreach (var door in doors)
         {
-            var path = new Path(door, grids);
-            #region DEBUG
-
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            // Block nearby floor from being found
+            surround.Load(door);
+            Value2D<GridType> floor = surround.GetDirWithVal(true, GridType.Floor);
+            if (floor != null)
             {
-                GridArray tmp = new GridArray(grids);
-                tmp.PutAll(path.GetArray());
-                tmp.ToLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
+                grids[floor] = GridType.INTERNAL_RESERVED_BLOCKED;
             }
 
+            var path = new Path(door, grids);
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                GridArray messyPathArr = new GridArray(debugArr);
+                messyPathArr.PutAll(path.GetArray());
+                messyPathArr.ToLog(DebugManager.Logs.LevelGen, "Map after placing for door: " + door);
+            }
             #endregion
             if (path.isValid())
             {
-                path.Finalize(layout);
+                path.Simplify();
+                path.ConnectEnds(layout);
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    debugArr.PutAll(path);
+                }
+                #endregion
+                path.Bake(true);
                 grids.PutAll(path);
                 layout.AddPath(path);
             }
             #region DEBUG
-
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
-                grids.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
-                layout.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door TEST: " + door);
+                debugArr.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
             }
-
             #endregion
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
+            layout.ToLog(DebugManager.Logs.LevelGen, "Final Layout");
             DebugManager.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
@@ -482,6 +580,43 @@ public class LevelGenerator
         #endregion
     }
 
+    private static void ConfirmEdges(LevelLayout layout)
+    {
+        layout.ShiftAll(1,1);
+        GridArray arr = layout.GetArray(1);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Confirm Edges");
+            layout.ToLog(DebugManager.Logs.LevelGen, "Pre Confirm Edges");
+        }
+        #endregion
+        Surrounding<GridType> surround = new Surrounding<GridType>(arr, true);
+        LayoutObjectLeaf leaf = new LayoutObjectLeaf(arr.getWidth(), arr.getHeight());
+        layout.AddObject(leaf);
+        foreach (Value2D<GridType> val in arr)
+        {
+            if (val.val == GridType.Floor)
+            {
+                surround.Load(val);
+                foreach (Value2D<GridType> neighbor in surround)
+                {
+                    if (neighbor.val == GridType.NULL)
+                    {
+                        leaf.put(GridType.Wall, neighbor.x, neighbor.y);
+                    }
+                }
+            }
+        }
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            layout.ToLog(DebugManager.Logs.LevelGen, "Post Confirm Edges");
+            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        }
+        #endregion
+    }
+
     private static void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
     {
         #region DEBUG
@@ -493,7 +628,7 @@ public class LevelGenerator
         GridArray smallest;
         GridArray largest;
         GridArray layoutArr = layout.GetArray();
-        layoutArr.PutAsBlocked(layoutArr);
+        layoutArr.PutAs(layoutArr, GridType.INTERNAL_RESERVED_BLOCKED);
         Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -502,7 +637,8 @@ public class LevelGenerator
             largest.ToLog(DebugManager.Logs.LevelGen, "Largest");
         }
         #endregion
-        var startPtStack = DepthFirstSearchFor(new Value2D<GridType>(), smallest, Path.PathTypes());
+        DFSSearcher searcher = new DFSSearcher(Rand);
+        var startPtStack = searcher.Search(new Value2D<GridType>(), smallest, GridType.NULL, Path.PathTypes());
         if (startPtStack.Count > 0)
         {
             layoutArr.PutAll(largest);
@@ -547,167 +683,7 @@ public class LevelGenerator
         #endregion
     }
 
-    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
-    {
-        return DepthFirstSearchFor(startPoint, grids, new HashSet<GridType>(targets));
-    }
-
-    public static Stack<Value2D<GridType>> DepthFirstSearchFor(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
-    {
-        #region DEBUG
-        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
-            GridArray tmp = new GridArray(grids);
-            tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-            tmp.ToLog(DebugManager.Logs.LevelGen, "Starting Map:");
-        }
-        #endregion
-        // Init
-        GridType[,] arr = grids.GetArr();
-        Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
-        Array2D<bool> blockedPoints = new Array2D<bool>(grids.GetBoundingInternal(), false);
-        FilterDFS filter = new FilterDFS(blockedPoints, targets);
-        #region DEBUG
-        GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
-        #endregion
-
-        // Push start point onto path
-        pathTaken.Push(startPoint);
-        while (pathTaken.Count > 0)
-        {
-            startPoint = pathTaken.Peek();
-            // Don't want to visit the same point on a different route later
-            blockedPoints[startPoint.x, startPoint.y] = true;
-            #region DEBUG
-            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-            { // Set up new print array
-                debugGrid = new GridArray(grids);
-                // Fill in blocked points
-                foreach (Value2D<bool> blockedPt in blockedPoints)
-                {
-                    if (blockedPt.val)
-                    {
-                        debugGrid[blockedPt.x, blockedPt.y] = GridType.INTERNAL_RESERVED_BLOCKED;
-                    }
-                }
-                Path tmpPath = new Path(pathTaken);
-                debugGrid.PutAll(tmpPath.GetArray());
-            }
-            #endregion
-
-            // Get surrounding points
-            Surrounding<GridType> options = Surrounding<GridType>.Get(arr, startPoint.x, startPoint.y, filter);
-            #region DEBUG
-            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-            {
-                debugGrid.ToLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options.");
-            }
-            #endregion
-
-            // If found target, return path we took
-            Value2D<GridType> targetDir = options.GetDirWithVal(targets);
-            if (targetDir != null)
-            {
-                #region DEBUG
-                if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-                {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
-                    DebugManager.printFooter(DebugManager.Logs.LevelGen);
-                }
-                #endregion
-                pathTaken.Push(targetDir);
-                return pathTaken;
-            }
-
-            // Didn't find target, pick random direction
-            targetDir = options.GetRandom(Rand);
-            if (targetDir == null)
-            { // If all directions are bad, back up
-                pathTaken.Pop();
-            }
-            else
-            {
-                #region DEBUG
-                if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-                {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "Chose Direction: " + targetDir);
-                }
-                #endregion
-                startPoint = targetDir;
-                pathTaken.Push(startPoint);
-            }
-        }
-        #region DEBUG
-        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
-        }
-        #endregion
-        return pathTaken;
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, params GridType[] targets)
-    {
-        return BreadthFirstFill(startPoint, grids, null, targets);
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, params GridType[] targets)
-    {
-        return BreadthFirstFill(startPoint, grids, pass, new HashSet<GridType>(targets));
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, HashSet<GridType> targets)
-    {
-        return BreadthFirstFill(startPoint, grids, null, targets);
-    }
-
-    public static Array2D<bool> BreadthFirstFill(Value2D<GridType> startPoint, GridArray grids, PassFilter<Value2D<GridType>> pass, HashSet<GridType> targets)
-    {
-        #region DEBUG
-        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Breadth First Search Fill");
-            GridArray tmp = new GridArray(grids);
-            tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-            tmp.ToLog(DebugManager.Logs.LevelGen, "Starting Map:");
-        }
-        #endregion
-        Queue<Value2D<GridType>> queue = new Queue<Value2D<GridType>>();
-        queue.Enqueue(startPoint);
-        GridType[,] targetArr = grids.GetArr();
-        Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
-        outGridArr[startPoint.x, startPoint.y] = true;
-        Value2D<GridType> curPoint;
-        while (queue.Count > 0)
-        {
-            curPoint = queue.Dequeue();
-            Surrounding<GridType> options = Surrounding<GridType>.Get(targetArr, curPoint.x, curPoint.y, pass);
-            #region DEBUG
-            if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-            {
-                outGridArr.ToLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count() + " options. Evaluating " + curPoint);
-            }
-            #endregion
-            foreach (Value2D<GridType> option in options)
-            {
-                if (targets.Contains(option.val) && !outGridArr[option.x, option.y])
-                {
-                    queue.Enqueue(option);
-                    outGridArr[option.x, option.y] = true;
-                }
-            }
-        }
-        #region DEBUG
-        if (DebugManager.Flag(DebugManager.DebugFlag.SearchSteps) && DebugManager.logging(DebugManager.Logs.LevelGen))
-        {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
-        }
-        #endregion
-        return outGridArr;
-    }
-
-    static Point GenerateShiftMagnitude(int mag)
+    public static Point GenerateShiftMagnitude(int mag)
     {
         Vector2 vect = Random.insideUnitCircle * mag;
         Point p = new Point(vect);

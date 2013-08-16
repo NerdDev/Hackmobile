@@ -2,11 +2,16 @@
 #   NerdDev Ignore
 ######################
 
+Unity Project/Assets/Resources/
+Unity Project/Assembly-UnityScript-vs.unityproj
+Unity Project/Assembly-UnityScript.unityproj
 Unity Project/Debug Logs/
 Unity Project/Assets/ShurikenMagic/
 Unity Project/Temp/
 Unity Project/Library/
 Unity Project/Assets/NGUI/Examples/
+Unity Project/Assets/Resources_WIP/
+Unity Project/Assets/Resources_WIP.meta
 
 *.csproj
 *.sln

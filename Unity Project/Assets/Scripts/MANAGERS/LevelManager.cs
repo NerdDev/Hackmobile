@@ -1,37 +1,82 @@
-using UnityEngine;
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class LevelManager : MonoBehaviour {
 	
+    // Internal
 	public Theme Theme;
     public LevelBuilder Builder;
-    public static GameObject[,] Blocks { get; private set; }
-    public static GridArray Array { get; private set; }
-    private static LevelGenerator gen;
+    public int Seed = -1;
+    private const int MaxLevels = 100;
+    private static LevelGenerator _gen;
+    private static Level[] Levels;
+
+    // Public Access
+    public static Level Level { get; private set; }
+    public static int CurLevelDepth { get; private set; }
 
     void Start()
     {
+        Builder.Theme = Theme;
         RoomModifier.RegisterModifiers();
-        gen = new LevelGenerator();
-        LevelLayout layout;
-        layout = gen.GenerateLayout(0);
-//        layout = GenerateLevels(30);
-        Array = layout.GetArray();
-		Blocks = Builder.Build(Array, Theme);
+        Levels = new Level[MaxLevels];
+        _gen = new LevelGenerator();
 
+        SetCurLevel(0);
+        
         JustinTest();
         JoseTest();
     }
 
-    LevelLayout GenerateLevels(int num)
+    void SetCurLevel(int num)
     {
-        LevelLayout last = null;
+        Level = GetLevel(num);
+        CurLevelDepth = num;
+        Deploy(Level);
+        // Need to switch out game blocks when level switching is implemented
+    }
+
+    public Level GetLevel(int num)
+    {
+        if (Levels[num] == null)
+        {
+            GenerateLevel(num);
+        }
+        return Levels[num];
+    }
+
+    void Destroy(Level level)
+    {
+        IEnumerator<GridSpace> grids = Level.GetBasicEnumerator();
+        while (grids.MoveNext())
+        {
+            // Delete block
+        }
+    }
+
+    void Deploy(Level level)
+    {
+        foreach(Value2D<GridSpace> space in level)
+        {
+            if (space != null)
+            {
+                Builder.Build(space);
+            }
+        }
+    }
+
+    void GenerateLevels(int num)
+    {
         for (int i = 0; i < num; i++)
         {
-            last = gen.GenerateLayout(i);
+            GenerateLevel(num);
         }
-        return last;
+    }
+
+    void GenerateLevel(int num)
+    {
+        Levels[num] = new Level(_gen.GenerateLayout(num, Seed));
     }
 
     void TestModifier(RoomModifier mod, int seed)

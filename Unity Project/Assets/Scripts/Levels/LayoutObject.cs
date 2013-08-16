@@ -179,11 +179,12 @@ abstract public class LayoutObject
     {
         GridMap ret = new GridMap();
         GridArray grids = GetArray();
+        Surrounding<GridType> surround = new Surrounding<GridType>(grids);
         GridMap targets = getType(grids, target);
         foreach (Value2D<GridType> val in targets)
         {
-            Surrounding<GridType> surround = Surrounding<GridType>.Get(grids, val, null);
-            Value2D<GridType> nullDir = surround.GetDirWithVal(GridType.NULL);
+            surround.Load(val);
+            Value2D<GridType> nullDir = surround.GetDirWithVal(true, GridType.NULL);
             if (nullDir != null)
             {
                 ret[val] = val.val;
@@ -222,17 +223,19 @@ abstract public class LayoutObject
         GridArray grids = GetArray();
         GridMap ret = new GridMap();
         // Get null spaces surrounding room
-        Array2D<bool> bfs = LevelGenerator.BreadthFirstFill(new Value2D<GridType>(), grids, GridType.NULL);
+        BFSSearcher searcher = new BFSSearcher(LevelGenerator.Rand);
+        Array2D<bool> bfs = searcher.SearchFill(new Value2D<GridType>(), grids, GridType.NULL);
         // Invert to be room
         Array2D<bool>.invert(bfs);
+        Surrounding<bool> surround = new Surrounding<bool>(bfs.GetArr());
         foreach (Value2D<bool> val in bfs)
         {
             // If space part of room
             if (val.val)
             {
-                Surrounding<bool> surround = Surrounding<bool>.Get(bfs.GetArr(), val);
+                surround.Load(val);
                 // If space is an edge (next to a false)
-                if (surround.GetDirWithVal(false) != null)
+                if (surround.GetDirWithVal(true, false) != null)
                 {
                     ret[val.x, val.y] = grids[val.x, val.y];
                 }
@@ -446,7 +449,7 @@ abstract public class LayoutObject
 		return null != intersectObj(list, buffer);
     }
 	
-	public LayoutObject intersectObj(List<LayoutObject> list, int buffer)
+	public LayoutObject intersectObj<T>(IEnumerable<T> list, int buffer) where T : LayoutObject
 	{
         foreach (LayoutObject rhs in list)
         {

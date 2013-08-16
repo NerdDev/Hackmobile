@@ -1,8 +1,0 @@
-NPC3 Female Animations
-
-
-Idle        = 67,196
-Walk        = 198,235 
-Attack      = 0,65
-Death       = 236,312
-
