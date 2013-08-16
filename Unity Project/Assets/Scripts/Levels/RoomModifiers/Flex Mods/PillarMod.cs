@@ -10,7 +10,7 @@ public class PillarMod : RoomModifier {
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + 3)
             {
-                room.put(GridType.Wall, x, y);
+                if (room.get(x, y) == GridType.Floor) room.put(GridType.Wall, x, y);
             }
         }
     }

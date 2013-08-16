@@ -10,8 +10,10 @@ abstract public class RoomModifier : ProbabilityItem {
     public static void RegisterModifiers()
     {
         List<RoomModifier> modPrototypes = new List<RoomModifier>();
-        modPrototypes.Add(new SquareRoom());
+        //modPrototypes.Add(new SquareRoom());
+        modPrototypes.Add(new CircleRoom());
         modPrototypes.Add(new PillarMod());
+        modPrototypes.Add(new TreasureRoomMod());
         //modPrototypes.Add(new HiddenRoomMod());
         modPrototypes.Add(new FinalMod());
 

@@ -127,6 +127,44 @@ public class LayoutObjectLeaf : LayoutObject {
     {
         grids.putSquare(t, xl, xr, yb, yt);
     }
+
+    public void CircularStrokeAndFill(GridType stroke, GridType fill, int radius)
+    {
+        int centerX = grids.getWidth() / 2;
+        int centerY = grids.getHeight() / 2;
+        CircularStrokeAndFill(stroke, fill, centerX, centerY, radius);
+    }
+    public void CircularStrokeAndFill(GridType stroke, GridType fill, int x0, int y0, int radius)
+    {
+        int x = radius, y = 0;
+        int radiusError = 1 - x;
+
+        while (x >= y)
+        {
+            put(stroke, x + x0, y + y0);
+            put(stroke, y + x0, x + y0);
+            put(stroke, -x + x0, y + y0);
+            put(stroke, -y + x0, x + y0);
+            put(stroke, -x + x0, -y + y0);
+            put(stroke, -y + x0, -x + y0);
+            put(stroke, x + x0, -y + y0);
+            put(stroke, y + x0, -x + y0);
+
+            putRow(fill, x0 - x, x0 + x, y + y0);
+            putRow(fill, x0 - x, x0 + x, y0 - y);
+            putCol(fill, y0 - x, y0 + x, y + x0);
+            putCol(fill, y0 - x, y0 + x, x0 - y);
+
+            y++;
+
+            if (radiusError < 0) radiusError += 2 * y + 1;
+            else
+            {
+                x--;
+                radiusError += 2 * (y - x + 1);
+            }
+        }
+    }
     #endregion FillMethods
 
     public override bool ContainsPoint(Value2D<GridType> val)
