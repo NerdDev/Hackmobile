@@ -146,11 +146,6 @@ public static class Nifty
         return list[rand.Next(list.Count)];
     }
 
-    public static T Random<T>(List<T> list, System.Random rand)
-    {
-        return list[rand.Next(list.Count)];
-    }
-
     public static int ToInt(this float x)
     {
         return Convert.ToInt32(x);

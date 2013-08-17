@@ -16,8 +16,6 @@ public class ProfessionTitles
             Titles t = titles[(int)prof];
             t.parseXML(xnode);
         }
-        //This needs moved after main menu/something to delay player creation is set up
-        BigBoss.PlayerInfo.PlayerTitle = this.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
     }
 
     public string getTitle(PlayerProfessions prof, int level)

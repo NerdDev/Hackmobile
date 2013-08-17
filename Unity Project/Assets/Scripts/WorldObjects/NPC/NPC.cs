@@ -723,7 +723,6 @@ public class NPC : WorldObject
             {
                 if (this.IsNotAFreaking<Player>())
                 {
-                    Debug.Log(this.Name);
                     PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
                     List<PathNode> nodes = pathToPlayer.getPath();
                     if (nodes.Count > 2)

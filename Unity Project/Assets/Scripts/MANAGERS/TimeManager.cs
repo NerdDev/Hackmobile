@@ -132,11 +132,6 @@ public class TimeManager : MonoBehaviour
         {
             if (obj.IsActive)
             {
-                if (obj is NPC)
-                {
-                    NPC n = obj as NPC;
-                    Debug.Log(n.Name);
-                }
                 runUpdate(obj, turnPoints);
             }
         }

@@ -8,7 +8,7 @@ using System.IO;
 public class DataManager : MonoBehaviour
 {
     #region XML Paths.
-    string XMLPath = "Assets/Resources/XML/";
+    string XMLPath = "Assets/Scripts/XML/";
 
     Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
     #endregion
@@ -35,8 +35,6 @@ public class DataManager : MonoBehaviour
         {
             buildXML(file);
         }
-
-        //BigBoss.NPCManager.Log();
     }
 
     private void buildXML(string file)
