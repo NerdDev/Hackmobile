@@ -16,7 +16,7 @@ public class GUIManager : MonoBehaviour {
 	//SAFETIES WHICH ANY SCRIPT CAN CHECK THROUGH BIGBOSS:
 	public bool confirmationWindowOpen;
 	public bool tooltipOpen;
-	public bool isInventoryOpen = false;
+	
 	
 	public GameObject debugText;
 		
@@ -30,6 +30,7 @@ public class GUIManager : MonoBehaviour {
 	
 	#region Clean Inventory Variables 
 	
+	public bool isInventoryOpen = false;
 	//Panels:
 	private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
 		
@@ -50,8 +51,9 @@ public class GUIManager : MonoBehaviour {
 		//Feel free to relocate these init calls when pre-game stuff is utilized
 		InventoryGUIInit();//better convention to call this from player eventually
 		
-		inventoryFrameSprite.transform.localPosition = new Vector3(Screen.width/2,0,0);
-		Debug.Log(inventoryFrameSprite.mainTexture.width + inventoryFrameSprite.mainTexture.height);
+		inventoryPanel.transform.localPosition = new Vector3(Screen.width/2,0,0);
+		//Debug.Log(inventoryFrameSprite.mainTexture.width + " by " + inventoryFrameSprite.mainTexture.height);
+		Debug.Log(NGUIMath.CalculateAbsoluteWidgetBounds(inventoryFrameSprite.transform));
 		
 		CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
 		
@@ -158,8 +160,8 @@ public class GUIManager : MonoBehaviour {
 	{
 		//Calling tween pos script on panel object
 		invPanelTweenPos.duration = .75f;
-		invPanelTweenPos.from = new Vector3 (-1000f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
-		invPanelTweenPos.to = new Vector3 (-500f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.from = new Vector3 (inventoryPanel.transform.localPosition.x,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.to = new Vector3 (160f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
 		invPanelTweenPos.Reset();
 		invPanelTweenPos.Play(true);
 		isInventoryOpen = true;
@@ -169,8 +171,8 @@ public class GUIManager : MonoBehaviour {
 	{
 		//Calling tween pos script on panel object
 		invPanelTweenPos.duration = .35f;
-		invPanelTweenPos.from = new Vector3 (-500f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
-		invPanelTweenPos.to = new Vector3 (-1000f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.from = new Vector3 (inventoryPanel.transform.localPosition.x,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.to = new Vector3 (600,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
 		invPanelTweenPos.Reset();
 		invPanelTweenPos.Play(true);	
 		isInventoryOpen = false;
@@ -231,7 +233,7 @@ public class GUIManager : MonoBehaviour {
 	{
 		//Vector3 actualLoc = new Vector3(worldPosition.x,worldPosition.y,worldPosition.z);
 		Vector3 camPoint = Camera.mainCamera.WorldToViewportPoint(worldPosition);
-		Debug.Log(camPoint);
+		//Debug.Log(camPoint);
 		GameObject go = Instantiate(textPopPrefab,camPoint,Quaternion.identity) as GameObject;
 		GUIText textComp = (GUIText) go.GetComponent<GUIText>();
 		textComp.text = message;

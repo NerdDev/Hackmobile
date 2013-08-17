@@ -27,9 +27,21 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
-        Debug.Log("Camera Screen space center point calculated: " + centerPointInScreenSpace);
+        //Debug.Log("Camera Screen space center point calculated: " + centerPointInScreenSpace);
+		
+		SubscribeToEasyTouchMethods();  //feel free to relocate this
     }
-
+	
+	public void SubscribeToEasyTouchMethods()
+	{
+		EasyTouch.On_TouchDown += OnTouchDown;
+	}
+	
+	public void UnSubscribeToEasyTouchMethods()
+	{
+		EasyTouch.On_TouchDown -= OnTouchDown;
+	}
+	
     void Update()
     {
 
@@ -50,6 +62,22 @@ public class InputManager : MonoBehaviour
             }
         }
     }
+
+	public void OnTouchDown (Gesture gesture)
+	{
+		//Debug Block:
+		
+		try 
+		{
+			Debug.Log("Object Picked: " + gesture.pickObject.name);
+		} 
+		catch (System.Exception ex) 
+		{
+			Debug.Log("Event thrown, but no pick object: Exception: " + ex.Message);
+		}
+		
+		
+	}
 
     #region KEYBOARD
 
@@ -74,24 +102,9 @@ public class InputManager : MonoBehaviour
             BigBoss.PlayerInfo.playerAvatar.transform.position = BigBoss.PlayerInfo.avatarStartLocation;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            //Debug only code:
-            HeroCam hCam = (HeroCam)Camera.main.GetComponent("HeroCam") as HeroCam;
-            hCam.enabled = !hCam.enabled;
-            maxCamera mCam = (maxCamera)Camera.main.GetComponent("maxCamera") as maxCamera;
-            mCam.enabled = !mCam.enabled;
-            BigBoss.Gooey.CreateTextPop(BigBoss.PlayerInfo.transform.position + Vector3.up * .75f, " CAMERA SWAP ", Color.white);
-        }
+        
 		
-		 if (Input.GetKeyDown(KeyCode.O))
-        {
-            BigBoss.Gooey.OpenInventoryUI();
-        }
-		 if (Input.GetKeyDown(KeyCode.C))
-        {
-            BigBoss.Gooey.CloseInventoryUI();
-        }
+		 
 		 if (Input.GetKeyDown(KeyCode.F1))
         {
             //Item theItem = BigBoss.WorldObjectManager.CreateRandomItem(new Vector3 (0,0,0));
