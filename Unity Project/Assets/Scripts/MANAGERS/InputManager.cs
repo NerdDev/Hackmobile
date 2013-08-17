@@ -34,12 +34,12 @@ public class InputManager : MonoBehaviour
 	
 	public void SubscribeToEasyTouchMethods()
 	{
-		EasyTouch.On_TouchDown += OnTouchDown;
+		EasyTouch.On_TouchStart += OnTouchStart;
 	}
 	
 	public void UnSubscribeToEasyTouchMethods()
 	{
-		EasyTouch.On_TouchDown -= OnTouchDown;
+		EasyTouch.On_TouchStart -= OnTouchStart;
 	}
 	
     void Update()
@@ -63,17 +63,21 @@ public class InputManager : MonoBehaviour
         }
     }
 
-	public void OnTouchDown (Gesture gesture)
+	public void OnTouchStart (Gesture gesture)
 	{
 		//Debug Block:
 		
 		try 
 		{
 			Debug.Log("Object Picked: " + gesture.pickObject.name);
+			if (gesture.pickObject == (GameObject)GameObject.Find("PlayerA"))//COME BACK AND OPTIMIZE THIS CHECK - NEED A STATIC REF TO PLAYER OBJECT
+			{
+				BigBoss.Gooey.ToggleInventoryPanel();	
+			}
 		} 
 		catch (System.Exception ex) 
 		{
-			Debug.Log("Event thrown, but no pick object: Exception: " + ex.Message);
+			Debug.Log("Event sent, but no pick object: Exception: " + ex.Message);
 		}
 		
 		

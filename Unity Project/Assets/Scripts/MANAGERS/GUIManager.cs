@@ -37,7 +37,7 @@ public class GUIManager : MonoBehaviour {
 	//Sprites:
 	private UISprite inventoryFrameSprite;
 	//Anims
-	private TweenPosition invPanelTweenPos;
+	public TweenPosition invPanelTweenPos;
 	
 	//Misc NGUI Integration:
 	private ItemStorage inventoryStorageScript;
@@ -154,6 +154,22 @@ public class GUIManager : MonoBehaviour {
 		
 		//Debug:
 		//Debug.Log(inventoryIconArray.Length);
+	}
+	
+	public void ToggleInventoryPanel()
+	{
+		if (isInventoryOpen)
+		{
+			Debug.Log("Calling CloseInventory()...");
+			CloseInventoryUI();
+		}
+		else
+		{
+			Debug.Log("Calling OpenInventory()...");
+			OpenInventoryUI();
+		}
+		
+		
 	}
 	
 	public void OpenInventoryUI()
