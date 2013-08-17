@@ -9,7 +9,8 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     {
         Objects.Add(obj);
         /// Shift so nothing is in the negative 
-        Point shift = obj.GetBounding().GetShiftNonNeg(buffer);
+        Bounding bounds = obj.GetBounding();
+        Point shift = bounds.GetShiftNonNeg(buffer);
         if (!shift.isZero())
         {
             #region DEBUG
@@ -45,13 +46,16 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         ShiftAll(shift.x, shift.y);
     }
 
-    public GridArray GetArray(Bounding bound)
+    public GridArray GetArray(Bounding bound, bool minimize)
     {
         adjustBounding(bound, false);
-        GridArray ret = new GridArray(bound, true);
+        GridArray ret = new GridArray(bound, minimize);
         foreach (LayoutObject obj in this)
         {
-            ret.PutAll(obj, bound);
+            if (minimize)
+                ret.PutAll(obj, bound);
+            else
+                ret.PutAll(obj);
         }
         return ret;
     }
@@ -80,7 +84,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     {
         var bounds = GetBounding();
         bounds.expand(buffer);
-        return GetArray(bounds);
+        return GetArray(bounds, false);
     }
 	
     public IEnumerator<LayoutObject> GetEnumerator()
