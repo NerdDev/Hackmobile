@@ -31,10 +31,10 @@ public class GUIManager : MonoBehaviour {
 	#region Clean Inventory Variables 
 	
 	//Panels:
-	private UIPanel inventoryPanel;
+	private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
 		
 	//Sprites:
-	
+	private UISprite inventoryFrameSprite;
 	//Anims
 	private TweenPosition invPanelTweenPos;
 	
@@ -50,8 +50,15 @@ public class GUIManager : MonoBehaviour {
 		//Feel free to relocate these init calls when pre-game stuff is utilized
 		InventoryGUIInit();//better convention to call this from player eventually
 		
-		//SeedInventory(BigBoss.PlayerInfo.PlayerInventory);
+		inventoryFrameSprite.transform.localPosition = new Vector3(Screen.width/2,0,0);
+		Debug.Log(inventoryFrameSprite.mainTexture.width + inventoryFrameSprite.mainTexture.height);
+		
 		CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
+		
+		
+		
+		
+		
 		//Item iScript = BigBoss.WorldObjectManager.CreateItem(new Vector3(0,0,0),"ABITEMLOLZ");
 		
 		//BigBoss.PlayerInfo.addToInventory(iScript);
@@ -133,11 +140,11 @@ public class GUIManager : MonoBehaviour {
 	public void InventoryGUIInit ()//To refresh references when game starts or upon inventory max size change:
 	{
 		
-		
+		//NEED TO PUT A FAILSAFE HERE IN CASE ONE RETURNS NULL!!!!!!!
 		inventoryPanel = GameObject.Find("Inventory_Panel").GetComponent("UIPanel") as UIPanel;
 		inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();	
 		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;
-		
+		inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
 
 		//Icon array to switch on visuals, initializing to size:
 		//inventoryIconArray = new UISprite[itemStorageScript.maxItemCount];

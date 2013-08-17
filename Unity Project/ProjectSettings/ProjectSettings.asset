@@ -14,10 +14,10 @@ PlayerSettings:
   productName: LevelGen And Test Navigation
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  defaultScreenWidth: 640
-  defaultScreenHeight: 960
-  defaultScreenWidthWeb: 800
-  defaultScreenHeightWeb: 450
+  defaultScreenWidth: 720
+  defaultScreenHeight: 480
+  defaultScreenWidthWeb: 720
+  defaultScreenHeightWeb: 480
   m_RenderingPath: 2
   m_ActiveColorSpace: 0
   m_MTRendering: 1
@@ -146,13 +146,19 @@ PlayerSettings:
   scriptingDefineSymbols:
     data:
       first: 1
-      second: 
+      second: Sprite_InventoryFrame
     data:
       first: 2
-      second: 
+      second: Sprite_InventoryFrame
     data:
       first: 7
-      second: 
+      second: Sprite_InventoryFrame
+    data:
+      first: 11
+      second: Sprite_InventoryFrame
+    data:
+      first: 12
+      second: Sprite_InventoryFrame
   metroPackageName: TemplateProject
   metroPackageLogo: 
   metroPackageVersion: 
