@@ -37,12 +37,14 @@ public class Player : NPC
         if (inventory.ContainsKey(item))
         {
             inventory[item] += count;
-			//GUI Stuff:
+			//GUI Stuff: Updating GUI Label quantity
+			
         }
         else
         {
             inventory.Add(item, count);
 			//GUI Stuff:
+			BigBoss.Gooey.AddItemToGUIInventory(item,count);
         }
         stats.Encumbrance += item.Weight * count;
     }

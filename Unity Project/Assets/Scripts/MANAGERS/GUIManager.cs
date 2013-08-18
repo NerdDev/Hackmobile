@@ -73,12 +73,7 @@ public class GUIManager : MonoBehaviour {
 		
 	}
 		
-	public void SetInventorySlotsToEmpty()
-	{
-			
-		
-		
-	}
+	
 	
 //	void Update () 
 //	{
@@ -201,6 +196,31 @@ public class GUIManager : MonoBehaviour {
 		isInventoryOpen = false;
 	}
 	
+	public void ClearAllInventorySprites()
+	{
+			
+		foreach (ItemSlot sl in inventoryStorageScript.InventorySlots) 
+		{
+		
+			sl.icon.enabled = false;
+			//Debug.Log(sl.icon.spriteName);
+		}
+		
+	}
+	
+	public void AddItemToGUIInventory(Item item, int count)
+	{
+		
+		ItemSlot slot = inventoryStorageScript.InventorySlots[count];
+		
+		
+		slot.icon.spriteName = "berry02"; //DOUBLE CHECK IF THE ZERO INDEXING IS CORRECT!!!!!!
+		//Quantity Label:
+		slot.label.enabled = true;
+		slot.label.text = count.ToString();
+		
+	}
+	
 	public void SeedInventory(List<Item> invList)
 	{
 		
@@ -284,7 +304,7 @@ public class GUIManager : MonoBehaviour {
 	public void PlayerTouched()
 	{
 		ToggleInventoryPanel();
-		
+		ClearAllInventorySprites();
 		
 	}
 	
