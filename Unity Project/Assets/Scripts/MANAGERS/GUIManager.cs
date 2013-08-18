@@ -50,9 +50,9 @@ public class GUIManager : MonoBehaviour {
 		
 	
 		//Feel free to relocate these init calls when pre-game stuff is utilized
-		InventoryGUIInit();//better convention to call this from player eventually
+		InventoryGUICaptureReferences();//better convention to call this from player eventually
 		
-		inventoryPanel.transform.localPosition = new Vector3(Screen.width/2,0,0);
+		inventoryPanel.transform.localPosition = new Vector3(Screen.width/2,Screen.height/3,0);
 		//Debug.Log(inventoryFrameSprite.mainTexture.width + " by " + inventoryFrameSprite.mainTexture.height);
 		Debug.Log(NGUIMath.CalculateAbsoluteWidgetBounds(inventoryFrameSprite.transform));
 		
@@ -73,6 +73,12 @@ public class GUIManager : MonoBehaviour {
 		
 	}
 		
+	public void SetInventorySlotsToEmpty()
+	{
+			
+		
+		
+	}
 	
 //	void Update () 
 //	{
@@ -140,11 +146,11 @@ public class GUIManager : MonoBehaviour {
 	#region INVENTORY
 	
 	
-	public void InventoryGUIInit ()//To refresh references when game starts or upon inventory max size change:
+	public void InventoryGUICaptureReferences ()//To refresh references when game starts or upon inventory max size change:
 	{
 		
 		//NEED TO PUT A FAILSAFE HERE IN CASE ONE RETURNS NULL!!!!!!!
-		inventoryPanel = GameObject.Find("Inventory_Panel").GetComponent("UIPanel") as UIPanel;
+		inventoryPanel = GameObject.Find("Inventory_Panel_Background").GetComponent("UIPanel") as UIPanel;
 		inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();	
 		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;
 		inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
