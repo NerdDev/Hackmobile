@@ -20,7 +20,8 @@ public class GUIManager : MonoBehaviour {
 	
 	public GameObject debugText;
 		
-	private List<UILabel> textPopList; //A dynamic array of created textPop objects - used for orderly management and GO cleanup
+	//Flagged for deletion:
+	//private List<UILabel> textPopList; //A dynamic array of created textPop objects - used for orderly management and GO cleanup
 		
 	#region PREFAB REFERENCES WHICH ARE SAFE TO PUT IN OTHER MANAGERS
 	
@@ -160,12 +161,12 @@ public class GUIManager : MonoBehaviour {
 	{
 		if (isInventoryOpen)
 		{
-			Debug.Log("Calling CloseInventory()...");
+			//Debug.Log("Calling CloseInventory()...");
 			CloseInventoryUI();
 		}
 		else
 		{
-			Debug.Log("Calling OpenInventory()...");
+			//Debug.Log("Calling OpenInventory()...");
 			OpenInventoryUI();
 		}
 		
@@ -274,10 +275,11 @@ public class GUIManager : MonoBehaviour {
 	#endregion
 	
 	
-	#region HUD B INTERACTIONS:
-	
+	public void PlayerTouched()
+	{
+		ToggleInventoryPanel();
 		
-	
-	#endregion
+		
+	}
 	
 }

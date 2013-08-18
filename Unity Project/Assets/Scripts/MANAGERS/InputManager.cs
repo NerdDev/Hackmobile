@@ -72,7 +72,7 @@ public class InputManager : MonoBehaviour
 			Debug.Log("Object Picked: " + gesture.pickObject.name);
 			if (gesture.pickObject == (GameObject)GameObject.Find("PlayerA"))//COME BACK AND OPTIMIZE THIS CHECK - NEED A STATIC REF TO PLAYER OBJECT
 			{
-				BigBoss.Gooey.ToggleInventoryPanel();	
+				BigBoss.Gooey.PlayerTouched();	
 			}
 		} 
 		catch (System.Exception ex) 
