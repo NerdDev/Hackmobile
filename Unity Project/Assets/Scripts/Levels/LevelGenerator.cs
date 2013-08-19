@@ -385,7 +385,7 @@ public class LevelGenerator
             #endregion
             // Keep moving until room doesn't overlap any other rooms
             LayoutObject intersect;
-            while ((intersect = room.intersectObj(placedRooms, 1)) != null)
+            while ((intersect = room.IntersectObjBounds(placedRooms, 1)) != null)
             {
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -394,7 +394,7 @@ public class LevelGenerator
                     layout.ToLog(DebugManager.Logs.LevelGen);
                 }
                 #endregion
-                room.ShiftOutside(intersect, shiftMagn);
+                room.ShiftOutside(intersect, shiftMagn, true, true);
             }
             placedRooms.Add(room);
             layout.AddRoom(room);

@@ -39,8 +39,8 @@ public class Bounding
     }
 
     public Bounding(Point leftdownOrigin, int width, int height)
-        : this (leftdownOrigin.x, leftdownOrigin.x + width, 
-        leftdownOrigin.y, leftdownOrigin.y + height)
+        : this (leftdownOrigin.x, leftdownOrigin.x + width - 1, 
+        leftdownOrigin.y, leftdownOrigin.y + height - 1)
     {
         
     }
@@ -144,11 +144,13 @@ public class Bounding
         return false;
     }
 
+    // True if completely contained in RHS horizontally
     public bool InsideHoriz(Bounding rhs)
     {
         return XMin > rhs.XMin && XMax < rhs.XMax;
     }
 
+    // True if completely contained in RHS vertically
     public bool InsideVert(Bounding rhs)
     {
         return YMin > rhs.YMin && YMax < rhs.YMax;
@@ -158,12 +160,12 @@ public class Bounding
     public int IntersectingWidth(Bounding rhs, out int outWidth)
     {
         if (InsideHoriz(rhs))
-        {
+        { // If completely inside RHS
             outWidth = Width;
             return XMin;
         }
         if (rhs.InsideHoriz(this))
-        {
+        { // If completely containing RHS
             outWidth = rhs.Width;
             return rhs.XMin;
         }
@@ -174,12 +176,12 @@ public class Bounding
     public int IntersectingHeight(Bounding rhs, out int outHeight)
     {
         if (InsideVert(rhs))
-        {
+        { // If completely inside RHS
             outHeight = Height;
             return YMin;
         }
         if (rhs.InsideVert(this))
-        {
+        { // If completely containing RHS
             outHeight = rhs.Height;
             return rhs.YMin;
         }

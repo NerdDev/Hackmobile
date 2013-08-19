@@ -69,7 +69,7 @@ public class LayoutObjectLeaf : LayoutObject {
         Point minimizeShift = grids.Minimize(1);
         if (shiftCompensate)
         {
-            ShiftP.shift(minimizeShift);
+            ShiftP.Shift(minimizeShift);
         }
         bakedBounds = grids.GetBoundingInternal();
         finalized = true;
