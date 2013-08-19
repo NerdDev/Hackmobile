@@ -27,7 +27,7 @@ RenderSettings:
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-GameManager:
+LevelGameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -289,14 +289,18 @@ MonoBehaviour:
   enablePinch: 1
   easyTouchCamera: {fileID: 0}
   autoSelect: 1
-  pickableLayers: {}
+  pickableLayers:
+    serializedVersion: 2
+    m_Bits: 256
   StationnaryTolerance: 25
   longTapTime: 1
   swipeTolerance: .850000024
   minPinchLength: 0
   minTwistAngle: 1
   enabledNGuiMode: 0
-  nGUILayers: {}
+  nGUILayers:
+    serializedVersion: 2
+    m_Bits: 0
   nGUICameras: []
   reservedAreas: []
   enableReservedArea: 0
