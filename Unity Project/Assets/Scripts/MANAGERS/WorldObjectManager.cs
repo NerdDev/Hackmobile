@@ -16,7 +16,7 @@ public class WorldObjectManager : MonoBehaviour {
     Dictionary<string, List<Item>> itemCategories = new Dictionary<string, List<Item>>();
     Dictionary<string, MaterialType> materials = new Dictionary<string, MaterialType>();
 
-    void Awake()
+    void Start()
     {
         initializeNullData();
     }

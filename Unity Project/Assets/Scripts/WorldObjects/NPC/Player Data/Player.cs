@@ -91,7 +91,7 @@ public class Player : NPC
         stats.Hunger = 900;
         IsActive = true;
         calcStats();
-
+        this.PlayerTitle = BigBoss.DataManager.playerProfessions.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
         anim = playerAvatar.GetComponent<Animator>() as Animator;
     }
 
@@ -220,7 +220,7 @@ public class Player : NPC
         }
         
         //Debug.Log("V: " + v);
-        anim.SetFloat("Speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
+        anim.SetFloat("speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
         //anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
         //anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
         currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
