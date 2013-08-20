@@ -7,7 +7,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     private LevelLayout Layout { get; set; }
     public bool Populated { get; set; }
     private GridSpace[,] Arr;
-    private Surrounding<GridSpace> surr;
+    public Surrounding<GridSpace> surr;
 
     public Level(LevelLayout layout)
     {

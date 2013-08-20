@@ -18,6 +18,7 @@ public class PrefabManager : MonoBehaviour {
 	public GameObject Orc;
 	public GameObject Beholder;
 	public GameObject lightMarker;
+    public Mesh cylinder;
 //	public GameObject prefabName;
 //	public GameObject prefabName;
 //	public GameObject prefabName;

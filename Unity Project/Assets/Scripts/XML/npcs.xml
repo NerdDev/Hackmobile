@@ -85,7 +85,7 @@
 	<npc name="skeleton">
 		<model> </model>
 		<modeltexture> </modeltexture>
-		<prefab>Prefabs/NPCs/Skeleton</prefab>
+		<prefab>Prefabs/NPCs/Skeleton1</prefab>
 		<role>Mage</role>
 		<race>Undead</race>
 		<flags>

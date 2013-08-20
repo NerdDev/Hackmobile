@@ -18,7 +18,14 @@ public class GridSpace
     public void Put(WorldObject obj)
     {
         // Implement sorting later
-        PutFree(obj);
+        if (obj is NPC)
+        {
+            PutBlocking(obj);
+        }
+        else
+        {
+            PutFree(obj);
+        }
     }
 
     protected void PutFree(WorldObject obj)

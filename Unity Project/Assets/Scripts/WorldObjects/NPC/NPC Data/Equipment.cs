@@ -77,7 +77,7 @@ public class Equipment
 
     public List<Item> getItems(EquipTypes et)
     {
-        return getItemsIE(et) as List<Item>;
+        return getItemsIE(et);
     }
 
     public bool equipItem(Item i)
@@ -124,15 +124,17 @@ public class Equipment
 
     /// Private functions
 
-    private IEnumerable<Item> getItemsIE(EquipTypes et)
+    private List<Item> getItemsIE(EquipTypes et)
     {
+        List<Item> list = new List<Item>();
         foreach (EquipSlot es in equipSlots[(int)et])
         {
-            if (es.isFree())
+            if (!es.isFree())
             {
-                yield return es.getItem();
+                list.Add(es.getItem());
             }
         }
+        return list;
     }
 
     private EquipSlot getFreeSlot(EquipTypes et)
