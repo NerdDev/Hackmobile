@@ -9,12 +9,15 @@ public class ProfessionTitles
 
     public void parseXML(XMLNode x)
     {
-        foreach (XMLNode xnode in x.get())
+        if (x != null)
         {
-            PlayerProfessions prof = xnode.SelectEnum<PlayerProfessions>("name");
-            titles[(int)prof] = new Titles();
-            Titles t = titles[(int)prof];
-            t.parseXML(xnode);
+            foreach (XMLNode xnode in x.get())
+            {
+                PlayerProfessions prof = xnode.SelectEnum<PlayerProfessions>("name");
+                titles[(int)prof] = new Titles();
+                Titles t = titles[(int)prof];
+                t.parseXML(xnode);
+            }
         }
     }
 

@@ -21,6 +21,13 @@ namespace XML
         }
 
         /**
+         * For creating a blank node.
+         */
+        public XMLNode()
+        {
+        }
+
+        /**
          * @param key The string key to set for the XMLNode.
          */
         public void setKey(string key)
@@ -162,7 +169,14 @@ namespace XML
          */
         public string getText()
         {
-            return text;
+            if (text != null)
+            {
+                return text;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /**
@@ -175,32 +189,86 @@ namespace XML
 
         public int SelectInt(string toParse)
         {
-            return XMLNifty.StringToInt(this.select(toParse).getText());
+            XMLNode x = this.select(toParse);
+            if (x != null)
+            {
+                string sel = x.getText();
+                if (sel != null)
+                {
+                    return sel.ToInt();
+                }
+            }
+            return 0;
         }
 
         public double SelectDouble(string toParse)
         {
-            return XMLNifty.StringToDouble(this.select(toParse).getText());
+            XMLNode x = this.select(toParse);
+            if (x != null)
+            {
+                string sel = x.getText();
+                if (sel != null)
+                {
+                    return sel.ToDouble();
+                }
+            }
+            return 0;
         }
 
         public float SelectFloat(string toParse)
         {
-            return XMLNifty.StringToFloat(this.select(toParse).getText());
+            XMLNode x = this.select(toParse);
+            if (x != null)
+            {
+                string sel = x.getText();
+                if (sel != null)
+                {
+                    return sel.ToFloat();
+                }
+            }
+            return 0;
         }
 
         public T SelectEnum<T>(string toParse)
         {
-            return (T)Enum.Parse(typeof(T), this.select(toParse).getText(), true);
+            XMLNode x = this.select(toParse);
+            if (x != null)
+            {
+                string sel = x.getText();
+                if (sel != null)
+                {
+                    return (T)Enum.Parse(typeof(T), sel, true);
+                }
+            }
+            return default(T);
         }
 
         public string SelectString(string node)
         {
-            return this.select(node).getText();
+            XMLNode x = this.select(node);
+            if (x != null)
+            {
+                string sel = x.getText();
+                if (sel != null)
+                {
+                    return sel;
+                }
+            }
+            return "";
         }
 
         public bool SelectBool(string toParse)
         {
-            return XMLNifty.StringToBool(this.select(toParse).getText());
+            XMLNode x = this.select(toParse);
+            if (x != null)
+            {
+                string sel = x.getText();
+                if (sel != null)
+                {
+                    return sel.ToBool();
+                }
+            }
+            return false;
         }
     }
 }

@@ -30,11 +30,15 @@ public class Stats
         Level = 0;
     }
 
-    public void parseXML(XMLNode x)
+    public void parseXML(XMLNode xnode)
     {
-        MaxHealth = x.SelectInt("maxhealth");
-        MaxPower = x.SelectInt("maxpower");
-        Level = x.SelectInt("level");
+        //Assignation
+        XMLNode x = XMLNifty.select(xnode, "stats");
+
+        //Variables
+        MaxHealth = XMLNifty.SelectInt(x, "maxhealth");
+        MaxPower = XMLNifty.SelectInt(x, "maxpower");
+        Level = XMLNifty.SelectInt(x, "level");
         initialize();
     }
 

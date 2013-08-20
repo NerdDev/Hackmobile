@@ -17,11 +17,15 @@ public class BodyParts
         this.Heads = nbp.Heads;
     }
 
-    public void parseXML(XMLNode x)
+    public void parseXML(XMLNode xnode)
     {
-        Arms = x.SelectInt("arms");
-        Legs = x.SelectInt("legs");
-        Heads = x.SelectInt("heads");
+        //Assignation of node
+        XMLNode x = XMLNifty.select(xnode, "bodyparts");
+
+        //Variable parse
+        Arms = XMLNifty.SelectInt(x, "arms");
+        Legs = XMLNifty.SelectInt(x, "legs");
+        Heads = XMLNifty.SelectInt(x, "heads");
     }
 
     public void setNull()

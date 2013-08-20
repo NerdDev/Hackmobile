@@ -28,8 +28,12 @@ public class ItemStats
         set { this.size = value; }
     }
 
-    public void parseXML(XMLNode x)
+    public void parseXML(XMLNode xnode)
     {
+        //Assignation
+        XMLNode x = XMLNifty.select(xnode, "stats");
+
+        //Variables
         this.Weight = x.SelectInt("weight");
         this.Cost = x.SelectInt("cost");
         this.Nutrition = x.SelectInt("nutrition");

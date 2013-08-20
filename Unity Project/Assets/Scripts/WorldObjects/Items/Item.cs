@@ -115,6 +115,7 @@ public class Item : WorldObject, PassesTurns
     public void onEatenEvent(NPC n)
     {
         n.applyEffect(this.onEaten, 1, false);
+        n.AdjustHunger(this.stats.Nutrition);
     }
 
     public bool isUsable()
@@ -126,7 +127,10 @@ public class Item : WorldObject, PassesTurns
 
     public void onUseEvent(NPC n)
     {
-        n.applyEffect(onUse, 1, false);
+        if (onUse != null)
+        {
+            n.applyEffect(onUse, 1, false);
+        }
 
         //if usage needs restricted, change that here
     }
@@ -145,12 +149,18 @@ public class Item : WorldObject, PassesTurns
 
     public void onEquipEvent(NPC n)
     {
-        n.applyEffect(onEquip, 1, true);
+        if (onEquip != null)
+        {
+            n.applyEffect(onEquip, 1, true);
+        }
     }
 
     public void onUnEquipEvent(NPC n)
     {
-        n.applyEffect(onEquip, -1, true);
+        if (onEquip != null)
+        {
+            n.applyEffect(onEquip, -1, true);
+        }
     }
 
     public int getDamage()
@@ -196,16 +206,17 @@ public class Item : WorldObject, PassesTurns
         stats.setNull();
     }
 
-    #region XML Parsing
     public override void parseXML(XMLNode x)
     {
         base.parseXML(x);
         this.Damage = Probability.getDice(x.SelectString("damage"));
-        this.mat = x.SelectString("material");
-        stats.parseXML(x.select("stats"));
+        this.mat = XMLNifty.SelectString(x, "material");
+        this.EquipType = XMLNifty.SelectEnum<EquipTypes>(x, "equiptype");
+        this.onEquip = XMLNifty.SelectEnum<Properties>(x, "OnEquipEffect");
+        this.onUse = XMLNifty.SelectEnum<Properties>(x, "OnUseEvent");
+        this.onEaten = XMLNifty.SelectEnum<Properties>(x, "OnEatenEffect");
+        stats.parseXML(x);
     }
-    #endregion
-
     #endregion
 
     #region Turn Management
