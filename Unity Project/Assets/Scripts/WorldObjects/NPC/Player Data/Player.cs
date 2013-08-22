@@ -38,11 +38,13 @@ public class Player : NPC
         {
             inventory[item] += count;
             //GUI Stuff:
+			
         }
         else
         {
             inventory.Add(item, count);
             //GUI Stuff:
+			BigBoss.Gooey.AddItemToGUIInventory(item,count);
         }
         stats.Encumbrance += item.props.Weight * count;
     }

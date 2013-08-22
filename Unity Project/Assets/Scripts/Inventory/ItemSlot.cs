@@ -93,12 +93,9 @@ public class ItemSlot : MonoBehaviour
 	/// Allow to move objects around via drag & drop.
 	/// </summary>
 
-	void OnClick ()
-	{
-		
-		
-		
-		
+//	void OnClick ()
+//	{
+			
 		//NGUI Implementation:
 //		if (mDraggedItem != null)
 //		{
@@ -110,22 +107,22 @@ public class ItemSlot : MonoBehaviour
 //			if (mDraggedItem != null) NGUITools.PlaySound(grabSound);
 //			UpdateCursor();
 //		}
-	}
+//	}
 
 	/// <summary>
 	/// Start dragging the item.
 	/// </summary>
 
-	void OnDrag (Vector2 delta)
-	{
-		if (mDraggedItem == null && mItem != null)
-		{
-			UICamera.currentTouch.clickNotification = UICamera.ClickNotification.BasedOnDelta;
-			mDraggedItem = Replace(null);
-			NGUITools.PlaySound(grabSound);
-			//UpdateCursor();
-		}
-	}
+//	void OnDrag (Vector2 delta)
+//	{
+//		if (mDraggedItem == null && mItem != null)
+//		{
+//			UICamera.currentTouch.clickNotification = UICamera.ClickNotification.BasedOnDelta;
+//			mDraggedItem = Replace(null);
+//			NGUITools.PlaySound(grabSound);
+//			//UpdateCursor();
+//		}
+//	}
 
 	/// <summary>
 	/// Stop dragging the item.
@@ -209,21 +206,21 @@ public class ItemSlot : MonoBehaviour
 	public ItemStorage storage;
 	public int slot = 0;
 
-	public Item observedItem
-	{
-		get
-		{
-			return (storage != null) ? storage.GetItem(slot) : null;
-		}
-	}
+//	public Item observedItem
+//	{
+//		get
+//		{
+//			return (storage != null) ? storage.GetItem(slot) : null;
+//		}
+//	}
 
 	/// <summary>
 	/// Replace the observed item with the specified value. Should return the item that was replaced.
 	/// </summary>
 
-	public Item Replace (Item item)
-	{
-		return (storage != null) ? storage.Replace(slot, item) : item;
-	}
+//	public Item Replace (Item item)
+//	{
+//		return (storage != null) ? storage.Replace(slot, item) : item;
+//	}
 	
 }

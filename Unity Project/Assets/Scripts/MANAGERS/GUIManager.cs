@@ -16,120 +16,63 @@ public class GUIManager : MonoBehaviour {
 	//SAFETIES WHICH ANY SCRIPT CAN CHECK THROUGH BIGBOSS:
 	public bool confirmationWindowOpen;
 	public bool tooltipOpen;
-	public bool isInventoryOpen = false;
+	
 	
 	public GameObject debugText;
 		
-	public List<UILabel> textPopList; //A dynamic array of created textPop objects - used for orderly management and GO cleanup
+	//Flagged for deletion:
+	//private List<UILabel> textPopList; //A dynamic array of created textPop objects - used for orderly management and GO cleanup
 		
+	#region PREFAB REFERENCES WHICH ARE SAFE TO PUT IN OTHER MANAGERS
 	
-	#region NGUI REFERENCES FOR TYPE A UI   //these get switched to private towards completion - public now for editor hookups
-	//Panels
-	public UIPanel mainHUDPanel;
-	
-	//Sliders & Progress Bars
-	public UISlider HUDxpbar;
-	public UISlider HUDplayerHealthBar;
-	
-	//Labels
-	public UILabel HUDHealthBarNumberLabel;
-	public UILabel HUDcharacterNameLabel;
-	public UILabel HUDcharacterTitleLabel;
-	public UILabel HUDDungeonLevelLabel;
-	public UILabel HUDStrengthLabel;
-	public UILabel HUDStrengthValue;
-	public UILabel HUDIntelligenceLabel;
-	public UILabel HUDIntelligenceValue;
-	public UILabel HUDDexterityLabel;
-	public UILabel HUDDexterityValue;
-	public UILabel hungerLabel;
-	public UILabel tilesCrossedLabel;  //currently for dev only
-	
-	
-	#endregion
-	
-	#region NGUI REFERENCES FOR TYPE B UI   //these get switched to private towards completion - public now for editor hookups
-	//Panels
-	public UIPanel MainHUDTypeBMotherPanel;
-	public UISprite mainHUDTabA; //hero
-	public UISprite mainHUDTabB;  //inventory
-	public UISprite mainHUDTabC; //stats/dungeon/achievements
-	public UISprite mainHUDTabD;  //option tab
-	
-	public UISprite keyWSprite;
-	public UISprite keyASprite;
-	public UISprite keySSprite;
-	public UISprite keyDSprite;
-	
-	bool isUIPanelBUp = false;
-	public iTweenEvent tweenPanelBUp;
-	public iTweenEvent tweenPanelBDown;
-	//Code transform location for the mother panel:
-	public Vector3 HUDBPanelMotherLocationWhenUp = new Vector3 (-3f,50f,-5f);
-	public Vector3 HUDBPanelMotherLocationWhenDown = new Vector3 (-3f,-75f,-5f);
-	
-	//Buttons:
-	public UIImageButton HUDBarrowPullUpButton;
-	//Sliders & Progress Bars
-//	public UISlider HUDxpbar;
-//	public UISlider HUDplayerHealthBar;
-//	
-//	//Labels
-	public UILabel HUD2XPLabel;
-//	public UILabel HUDcharacterNameLabel;
-//	public UILabel HUDcharacterTitleLabel;
-//	public UILabel HUDDungeonLevelLabel;
-//	public UILabel HUDStrengthLabel;
-//	public UILabel HUDStrengthValue;
-//	public UILabel HUDIntelligenceLabel;
-//	public UILabel HUDIntelligenceValue;
-//	public UILabel HUDDexterityLabel;
-//	public UILabel HUDDexterityValue;
-//	public UILabel hungerLabel;
+	public GameObject textPopPrefab;
 	
 	#endregion
 	
 	#region Clean Inventory Variables 
 	
+	public bool isInventoryOpen = false;
 	//Panels:
-	public UIPanel inventoryPanel;
+	private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
 		
 	//Sprites:
-	
+	private UISprite inventoryFrameSprite;
 	//Anims
-	private TweenPosition invPanelTweenPos;
+	public TweenPosition invPanelTweenPos;
 	
 	//Misc NGUI Integration:
-	public ItemStorage inventoryStorageScript;
+	private ItemStorage inventoryStorageScript;
 	public UISprite[] inventoryIconArray;
 	#endregion
 
 	void Start () 
 	{
-		//StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
+		
 	
-//			GrabNGUIReferences();   //will probably reactivate this later in development
+		//Feel free to relocate these init calls when pre-game stuff is utilized
+		InventoryGUICaptureReferences();//better convention to call this from player eventually
 		
-		//FIND A BETTER PLACE FOR OR ELIMINATE THESE REFERENCES
-		//tweenPanelBUp = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenUp");
-		//tweenPanelBDown = iTweenEvent.GetEvent(MainHUDTypeBMotherPanel.gameObject,"TweenDown");
-		//MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenDown;
+		inventoryPanel.transform.localPosition = new Vector3(Screen.width/2,Screen.height/3,0);
+		//Debug.Log(inventoryFrameSprite.mainTexture.width + " by " + inventoryFrameSprite.mainTexture.height);
+		Debug.Log(NGUIMath.CalculateAbsoluteWidgetBounds(inventoryFrameSprite.transform));
 		
-		
-		InventoryGUIInit();//better convention to call this from player eventually
-		
-		//SeedInventory(BigBoss.PlayerInfo.PlayerInventory);
 		CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
+		
+		
+		
+		
+		
 		//Item iScript = BigBoss.WorldObjectManager.CreateItem(new Vector3(0,0,0),"ABITEMLOLZ");
 		
 		//BigBoss.PlayerInfo.addToInventory(iScript);
 		
+		//Debug.Log(NGUITools.GetRoot(inventoryPanel.gameObject).GetComponentInChildren(typeof<UIAnchor>()));
+
 		
+		//StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
 		
 	}
-
-	
-	
+		
 	
 	
 //	void Update () 
@@ -137,8 +80,6 @@ public class GUIManager : MonoBehaviour {
 //		
 //		
 //	}
-	
-	
 	
 	
 	//Debugging Coroutine
@@ -200,10 +141,15 @@ public class GUIManager : MonoBehaviour {
 	#region INVENTORY
 	
 	
-	public void InventoryGUIInit ()//To refresh references when game starts or upon inventory max size change:
+	public void InventoryGUICaptureReferences ()//To refresh references when game starts or upon inventory max size change:
 	{
-		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;//consider coming back to recapture the GO reference in case it gets broken
+		
+		//NEED TO PUT A FAILSAFE HERE IN CASE ONE RETURNS NULL!!!!!!!
+		inventoryPanel = GameObject.Find("Inventory_Panel_Background").GetComponent("UIPanel") as UIPanel;
 		inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();	
+		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;
+		inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
+
 		//Icon array to switch on visuals, initializing to size:
 		//inventoryIconArray = new UISprite[itemStorageScript.maxItemCount];
 		//inventoryIconArray = itemStorageScript.gameObject.GetComponentsInChildren<UISprite>();
@@ -212,12 +158,28 @@ public class GUIManager : MonoBehaviour {
 		//Debug.Log(inventoryIconArray.Length);
 	}
 	
+	public void ToggleInventoryPanel()
+	{
+		if (isInventoryOpen)
+		{
+			//Debug.Log("Calling CloseInventory()...");
+			CloseInventoryUI();
+		}
+		else
+		{
+			//Debug.Log("Calling OpenInventory()...");
+			OpenInventoryUI();
+		}
+		
+		
+	}
+	
 	public void OpenInventoryUI()
 	{
 		//Calling tween pos script on panel object
 		invPanelTweenPos.duration = .75f;
-		invPanelTweenPos.from = new Vector3 (-1000f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
-		invPanelTweenPos.to = new Vector3 (-500f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.from = new Vector3 (inventoryPanel.transform.localPosition.x,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.to = new Vector3 (160f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
 		invPanelTweenPos.Reset();
 		invPanelTweenPos.Play(true);
 		isInventoryOpen = true;
@@ -227,11 +189,36 @@ public class GUIManager : MonoBehaviour {
 	{
 		//Calling tween pos script on panel object
 		invPanelTweenPos.duration = .35f;
-		invPanelTweenPos.from = new Vector3 (-500f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
-		invPanelTweenPos.to = new Vector3 (-1000f,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.from = new Vector3 (inventoryPanel.transform.localPosition.x,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
+		invPanelTweenPos.to = new Vector3 (600,inventoryPanel.transform.localPosition.y,0);//wrap these up into variables
 		invPanelTweenPos.Reset();
 		invPanelTweenPos.Play(true);	
 		isInventoryOpen = false;
+	}
+	
+	public void ClearAllInventorySprites()
+	{
+			
+		foreach (ItemSlot sl in inventoryStorageScript.InventorySlots) 
+		{
+		
+			sl.icon.enabled = false;
+			//Debug.Log(sl.icon.spriteName);
+		}
+		
+	}
+	
+	public void AddItemToGUIInventory(Item item, int count)
+	{
+		
+		ItemSlot slot = inventoryStorageScript.InventorySlots[count];
+		
+		
+		slot.icon.spriteName = "berry02"; //DOUBLE CHECK IF THE ZERO INDEXING IS CORRECT!!!!!!
+		//Quantity Label:
+		slot.label.enabled = true;
+		slot.label.text = count.ToString();
+		
 	}
 	
 	public void SeedInventory(List<Item> invList)
@@ -263,25 +250,25 @@ public class GUIManager : MonoBehaviour {
 	#region UPDATING OF VARIOUS NGUI ELEMENTS - GENERALLY DRIVEN FROM CODE ELSEWHERE IN THE PROJECT
 	public void UpdateHealthBar()
 	{
-		HUDplayerHealthBar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentHealth/(float)BigBoss.PlayerInfo.stats.MaxHealth;	
-		HUDHealthBarNumberLabel.text = BigBoss.PlayerInfo.stats.CurrentHealth + " / " + BigBoss.PlayerInfo.stats.MaxHealth;
+//		HUDplayerHealthBar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentHealth/(float)BigBoss.PlayerInfo.stats.MaxHealth;	
+//		HUDHealthBarNumberLabel.text = BigBoss.PlayerInfo.stats.CurrentHealth + " / " + BigBoss.PlayerInfo.stats.MaxHealth;
 	}
 	
 	public void UpdateHungerText(Color theCol)
 	{
-		hungerLabel.text = BigBoss.PlayerInfo.stats.HungerLevel.ToString();
-		hungerLabel.color = theCol;
+//		hungerLabel.text = BigBoss.PlayerInfo.stats.HungerLevel.ToString();
+//		hungerLabel.color = theCol;
 	}
 	
 	public void UpdateXPBar()
 	{
-		HUDxpbar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentXP/1000f;
-		HUD2XPLabel.text = BigBoss.PlayerInfo.stats.CurrentXP + " / 1000";
+//		HUDxpbar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentXP/1000f;
+//		HUD2XPLabel.text = BigBoss.PlayerInfo.stats.CurrentXP + " / 1000";
 	}
 	
 	public void UpdateTilesCrossedLabel()
 	{
-		tilesCrossedLabel.text = "Tiles Crossed: " + BigBoss.TimeKeeper.numTilesCrossed;
+		//tilesCrossedLabel.text = "Tiles Crossed: " + BigBoss.TimeKeeper.numTilesCrossed;
 	}
 	
 	
@@ -289,8 +276,8 @@ public class GUIManager : MonoBehaviour {
 	{
 		//Vector3 actualLoc = new Vector3(worldPosition.x,worldPosition.y,worldPosition.z);
 		Vector3 camPoint = Camera.mainCamera.WorldToViewportPoint(worldPosition);
-		Debug.Log(camPoint);
-		GameObject go = Instantiate(BigBoss.Prefabs.textPopPrefab,camPoint,Quaternion.identity) as GameObject;
+		//Debug.Log(camPoint);
+		GameObject go = Instantiate(textPopPrefab,camPoint,Quaternion.identity) as GameObject;
 		GUIText textComp = (GUIText) go.GetComponent<GUIText>();
 		textComp.text = message;
 		textComp.material.color = Color.white; //only this line differs
@@ -302,50 +289,23 @@ public class GUIManager : MonoBehaviour {
 		//Vector3 actualLoc = new Vector3(worldPosition.x,worldPosition.y,worldPosition.z);
 		Vector3 camPoint = Camera.mainCamera.WorldToViewportPoint(worldPosition);
 		Debug.Log(camPoint);
-		GameObject go = Instantiate(BigBoss.Prefabs.textPopPrefab,camPoint,Quaternion.identity) as GameObject;
+		GameObject go = Instantiate(textPopPrefab,camPoint,Quaternion.identity) as GameObject;
 		GUIText textComp = (GUIText) go.GetComponent<GUIText>();
 		textComp.text = message;
 		textComp.material.color = col;
 	}
 
-//	public void TextPopEnd()  //This is method is called when the iTween on TextPops Completes.  Signals destruction of GO
-//	{
-//		DestroyEarliestTextPop();//iTween event was thrown - we can safely assume it's the first object in the list since we created in order
-//	}//FLAGGED FOR DELETION
 
 
 	
 	#endregion
 	
 	
-	#region HUD B INTERACTIONS:
-	
-	public void HUD2Button_ArrowUP_Click()
+	public void PlayerTouched()
 	{
-	
-		if (isUIPanelBUp == false) //panel is down - tween up
-		{
-			//MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenUp;
-			tweenPanelBUp.Play();
-			isUIPanelBUp = true;
-			
-			
-		}
-		else if(isUIPanelBUp == true) //panel is up - tween down
-		{
-			//MainHUDTypeBMotherPanel.gameObject.transform.localPosition = HUDBPanelMotherLocationWhenDown;
-			tweenPanelBDown.Play();
-			isUIPanelBUp = false;
-			
-		}
-	}
-	
-	
-	#endregion
-	void GrabNGUIReferences ()
-	{
-		//GUIButtonTest = (UIButton)GameObject.Find("ButtonTest").GetComponent(typeof(UIButton));
+		ToggleInventoryPanel();
+		ClearAllInventorySprites();
 		
-
 	}
+	
 }

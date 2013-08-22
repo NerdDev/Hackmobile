@@ -147,6 +147,11 @@ public static class Nifty
         return list[rand.Next(list.Count)];
     }
 
+    public static bool Percent(this System.Random rand, int percent)
+    {
+        return percent > rand.Next(100);
+    }
+
     public static int ToInt(this float x)
     {
         return Convert.ToInt32(x);
