@@ -901,7 +901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd4e00e9db95dbd4bbba9353bbae9d44, type: 3}
   m_Name: 
   player: {fileID: 280466535}
-  textPopPrefab: {fileID: 0}
+  textPopPrefab: {fileID: 100000, guid: 362767f1360705748a41c364c8747a93, type: 2}
   introSplashObject: {fileID: 0}
   enemy1: {fileID: 0}
   potion: {fileID: 0}
@@ -2485,7 +2485,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 821127894}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.541787028, y: 1.08352649, z: .00251300866}
+  m_LocalPosition: {x: -.500024319, y: 1.00000477, z: .00231929775}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2022881336}
@@ -4602,7 +4602,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1693563693
 Transform:
   m_ObjectHideFlags: 0
