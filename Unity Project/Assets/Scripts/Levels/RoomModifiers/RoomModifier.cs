@@ -20,7 +20,7 @@ abstract public class RoomModifier : ProbabilityItem {
         #region Internal
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
-            mods[(int)e] = new ProbabilityList<RoomModifier>();
+            mods[(int)e] = new ProbabilityList<RoomModifier>(Probability.LevelRand);
         }
         foreach (RoomModifier mod in modPrototypes)
         {
@@ -50,7 +50,7 @@ abstract public class RoomModifier : ProbabilityItem {
     }
 
     // Inherited Functions
-    public abstract void Modify(Room room, System.Random rand);
+    public abstract void Modify(Room room, RandomGen rand);
 
     public new abstract RoomModType GetType();
 

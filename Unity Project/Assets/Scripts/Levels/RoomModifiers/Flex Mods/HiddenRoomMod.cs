@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HiddenRoomMod : RoomModifier {
 
-  public override void Modify(Room room, System.Random rand)
+    public override void Modify(Room room, RandomGen rand)
     {
         int secretRoomSize = 2;
         #region DEBUG

@@ -16,7 +16,7 @@ public class Path : LayoutObjectLeaf
     public Path(Value2D<GridType> startPoint, GridArray grids)
         : base()
     {
-        DFSSearcher searcher = new DFSSearcher(LevelGenerator.Rand);
+        DFSSearcher searcher = new DFSSearcher(Probability.LevelRand);
         _list = new List<Value2D<GridType>>(searcher.Search(startPoint, grids, GridType.NULL, typesSet));
     }
 

@@ -1,23 +1,27 @@
-﻿using System;
+using System;
+using UnityEngine;
 using System.Collections.Generic;
 
 public static class Probability
 {
-    static Random rand = new Random();
+    private static RandomGen _rand = new RandomGen();
+    public static RandomGen Rand { get { return _rand; } set { _rand = value; } }
+    private static RandomGen _levelRand = new RandomGen();
+    public static RandomGen LevelRand { get { return _levelRand; } set { _levelRand = value; } }
 
     public static int getRandomInt() 
     {
-        return rand.Next();
+        return Rand.Next();
     }
 
     public static int getRandomInt(int maxVal)
     {
-        return rand.Next(maxVal);
+        return Rand.Next(maxVal);
     }
 
     public static double getRandomDouble()
     {
-        return rand.NextDouble();
+        return Rand.NextDouble();
     }
 
     #region Dice Calcs

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 class TreasureRoomMod : RoomModifier
 {
-    public override void Modify(Room room, System.Random rand)
+    public override void Modify(Room room, RandomGen rand)
     {
         Bounding bounds = room.GetBounding();
         int centerX = (bounds.XMin + bounds.XMax) / 2;

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PillarMod : RoomModifier {
 
-    public override void Modify(Room room, System.Random rand)
+    public override void Modify(Room room, RandomGen rand)
     {
         Bounding bounds = room.GetBounding();
         for (int x = bounds.XMin; x < bounds.XMax; x = x + 3)

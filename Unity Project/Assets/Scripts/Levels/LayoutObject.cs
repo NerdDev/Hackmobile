@@ -231,7 +231,7 @@ abstract public class LayoutObject
         GridArray grids = GetArray();
         GridMap ret = new GridMap();
         // Get null spaces surrounding room
-        BFSSearcher searcher = new BFSSearcher(LevelGenerator.Rand);
+        BFSSearcher searcher = new BFSSearcher(Probability.LevelRand);
         Array2D<bool> bfs = searcher.SearchFill(new Value2D<GridType>(), grids, GridType.NULL);
         // Invert to be room
         Array2D<bool>.invert(bfs);
