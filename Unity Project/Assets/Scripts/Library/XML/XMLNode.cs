@@ -237,7 +237,14 @@ namespace XML
                 string sel = x.getText();
                 if (sel != null)
                 {
-                    return (T)Enum.Parse(typeof(T), sel, true);
+                    try
+                    {
+                        return (T)Enum.Parse(typeof(T), sel, true);
+                    }
+                    catch (ArgumentException)
+                    {
+                        return default(T);
+                    }
                 }
             }
             return default(T);

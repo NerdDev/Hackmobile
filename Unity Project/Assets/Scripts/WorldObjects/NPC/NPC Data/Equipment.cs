@@ -82,9 +82,9 @@ public class Equipment
 
     public bool equipItem(Item i)
     {
-        if (isFreeSlot(i.EquipType))
+        if (isFreeSlot(i.props.EquipType))
         {
-            EquipSlot es = getFreeSlot(i.EquipType);
+            EquipSlot es = getFreeSlot(i.props.EquipType);
             es.equipItem(i);
             return true;
         }
@@ -96,7 +96,7 @@ public class Equipment
 
     public bool removeItem(Item i)
     {
-        EquipTypes et = i.EquipType;
+        EquipTypes et = i.props.EquipType;
         switch (et)
         {
             case EquipTypes.LEFT_RING:

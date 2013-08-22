@@ -15,11 +15,7 @@ public class MaterialType
 
     public void setNull()
     {
-        Name = "null";
-        Oxidizes = false;
-        Burns = false;
-        Hardness = 0;
-        Density = 0;
+        this.parseXML(new XMLNode());
     }
 
     public void parseXML(XMLNode x)

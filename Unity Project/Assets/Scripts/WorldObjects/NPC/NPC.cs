@@ -208,8 +208,8 @@ public class NPC : WorldObject
         if (stats.CurrentHealth - amount > 0)
         {
             stats.CurrentHealth = stats.CurrentHealth - amount;
-            Debug.Log(this.Name + " was damaged for " + amount + "!");
-            //BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Damaged for " + amount + "!", Color.red);
+            //Debug.Log(this.Name + " was damaged for " + amount + "!");
+            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Damaged for " + amount + "!", Color.red);
             return false;
         }
         else
@@ -336,7 +336,7 @@ public class NPC : WorldObject
         return true;
     }
 
-    protected void UpdateCurrentTileVectors()
+    protected virtual bool UpdateCurrentTileVectors()
     {
         if (gridSpace != null && gridSpace.val != null)
         {
@@ -347,6 +347,7 @@ public class NPC : WorldObject
         gridSpace.val = LevelManager.Level[gridSpace.x, gridSpace.y];
         gridSpace.val.Put(this);
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
+        return true;
     }
 
     public PathTree getPathTree(int x, int y) 
@@ -382,7 +383,7 @@ public class NPC : WorldObject
                 effects[(long)e].apply(priority, isItem, turnsToProcess);
             }
         }
-        //BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, e.ToString(), Color.green);
+        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, e.ToString(), Color.green);
     }
 
     /**
@@ -410,6 +411,7 @@ public class NPC : WorldObject
 			{
                unequipItem(i);
            	}
+            i.onEatenEvent(this);
            removeFromInventory(i);
 
             //unless you're Jose, in which case you'll be using a mac
@@ -420,8 +422,8 @@ public class NPC : WorldObject
            i.onEatenEvent(this);
 
            //removes item permanently
-           DestroyObject(i.gameObject);
-           DestroyObject(i);
+           //DestroyObject(i.gameObject);
+           //DestroyObject(i);
         }
     }
 
@@ -511,7 +513,7 @@ public class NPC : WorldObject
 
         if (this.IsNotAFreaking<Player>())
         {
-            //BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, name + " is dead!", Color.red);
+            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, name + " is dead!", Color.red);
             Debug.Log(this.Name + " was killed!");
             DestroyThisItem();
         }
@@ -538,7 +540,7 @@ public class NPC : WorldObject
         {
             inventory.Add(item, count);
         }
-        stats.Encumbrance += item.Weight * count;
+        stats.Encumbrance += item.props.Weight * count;
         Debug.Log("Item " + item.Name + " with count " + count + " added to inventory.");
     }
 
@@ -560,7 +562,7 @@ public class NPC : WorldObject
             {
                 inventory[item] -= count;
             }
-            stats.Encumbrance -= item.Weight * count;
+            stats.Encumbrance -= item.props.Weight * count;
             Debug.Log("Item " + item.Name + " with count " + count + " removed from inventory.");
         }
         else
@@ -574,7 +576,7 @@ public class NPC : WorldObject
         float tempWeight = 0;
         foreach (KeyValuePair<Item, int> kvp in inventory)
         {
-            tempWeight += kvp.Key.Weight * kvp.Value;
+            tempWeight += kvp.Key.props.Weight * kvp.Value;
         }
 
         return tempWeight;

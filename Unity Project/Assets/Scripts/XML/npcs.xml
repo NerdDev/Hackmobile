@@ -1,8 +1,5 @@
 <npcs>
 	<npc name="player">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab> </prefab>
 		<role>Archaelogist</role>
 		<race>Human</race>
 		<flags>

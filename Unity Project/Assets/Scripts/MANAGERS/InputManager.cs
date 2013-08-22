@@ -98,6 +98,22 @@ public class InputManager : MonoBehaviour
 			//Testing out an NGUI texture swap:
 			
         }
+         if (Input.GetKeyDown(KeyCode.P))
+         {
+             Item food = null;
+             foreach (Item i in BigBoss.PlayerInfo.inventory.Keys)
+             {
+                 if (i.Name.Equals("spoiled bread"))
+                 {
+                     food = i;
+                     break;
+                 }
+             }
+             if (food != null)
+             {
+                 BigBoss.PlayerInfo.eatItem(food);
+             }
+         }
     }
 
     #endregion

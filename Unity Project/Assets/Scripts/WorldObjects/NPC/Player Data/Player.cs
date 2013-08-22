@@ -44,7 +44,7 @@ public class Player : NPC
             inventory.Add(item, count);
             //GUI Stuff:
         }
-        stats.Encumbrance += item.Weight * count;
+        stats.Encumbrance += item.props.Weight * count;
     }
     #endregion
 
@@ -60,16 +60,16 @@ public class Player : NPC
         switch (g)
         {
             case GridType.Wall:
-                Debug.Log("You walked into a wall!");
+                //Debug.Log("You walked into a wall!");
                 break;
             case GridType.Door:
-                Debug.Log("You walked through the door!");
+                //Debug.Log("You walked through the door!");
                 break;
             case GridType.Floor:
-                Debug.Log("You ended up in the floor. Don't ask how.");
+                //Debug.Log("You ended up in the floor. Don't ask how.");
                 break;
             default:
-                Debug.Log("I'm not sure what you collided with.");
+                //Debug.Log("I'm not sure what you collided with.");
                 break;
         }
     }
@@ -96,13 +96,12 @@ public class Player : NPC
         this.addToInventory(i);
         this.equipItem(i);
 
-        GameObject item = new GameObject();
-        Item i = item.AddComponent<Item>();
-        Item baseI = BigBoss.WorldObjectManager.getItem("sword1");
-        i.setData(baseI);
-        i.IsActive = true;
-        this.addToInventory(i);
-        this.equipItem(i);
+        GameObject item2 = new GameObject();
+        Item i2 = item2.AddComponent<Item>();
+        Item food = BigBoss.WorldObjectManager.getItem("spoiled bread");
+        i2.setData(food);
+        i2.IsActive = true;
+        this.addToInventory(i2, 5);
     }
 
     // Update is called once per frame
@@ -206,7 +205,7 @@ public class Player : NPC
         MovePlayer(heading, playerSpeed, playerRotationSpeed);
     }
 
-    protected bool UpdateCurrentTileVectors()
+    protected override bool UpdateCurrentTileVectors()
     {
         GridCoordinate = new Vector2(this.gameObject.transform.position.x.Round(), this.gameObject.transform.position.z.Round());
         newGridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
@@ -382,7 +381,7 @@ public class Player : NPC
         base.AdjustHealth(amount);
 
         //Do all GUI updates here
-        //BigBoss.Gooey.UpdateHealthBar();
+        BigBoss.Gooey.UpdateHealthBar();
     }
 
     public override void AdjustMaxHealth(int amount)
@@ -397,7 +396,7 @@ public class Player : NPC
         base.AdjustXP(amount);
 
         //GUI updates
-        //BigBoss.Gooey.UpdateXPBar();
+        BigBoss.Gooey.UpdateXPBar();
     }
 
     public override void AdjustAttribute(Attributes attr, int amount)
@@ -412,7 +411,7 @@ public class Player : NPC
     public override void applyEffect(Properties e, int priority = 1, bool isItem = false, int turnsToProcess = -1)
     {
         base.applyEffect(e, priority, isItem, turnsToProcess);
-        //BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
+        BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
         //update gui
     }
 

@@ -7,9 +7,11 @@
 				<equipsize>medium</equipsize>
 				<nutrition>0</nutrition>
 			</stats>
-			<equiptype>HAND</equiptype>
-			<damage>2d6</damage>
-			<material>steel</material>
+			<properties>
+				<equiptype>HAND</equiptype>
+				<damage>2d6</damage>
+				<material>steel</material>
+			</properties>
 			<model>weapons/axe2/axe2</model>
 			<modeltexture>weapons/axe2/mat_axe2_1</modeltexture>
 			<prefab> </prefab>
@@ -21,9 +23,11 @@
 				<equipsize>small</equipsize>
 				<nutrition>0</nutrition>
 			</stats>
-			<equiptype>HAND</equiptype>
-			<damage>2d6</damage>
-			<material>steel</material>
+			<properties>
+				<equiptype>HAND</equiptype>
+				<damage>2d6</damage>
+				<material>steel</material>
+			</properties>
 			<model>weapons/knife1/knife</model>
 			<modeltexture>weapons/knife1/Material01</modeltexture>
 			<prefab> </prefab>
@@ -35,9 +39,11 @@
 				<equipsize>medium</equipsize>
 				<nutrition>0</nutrition>
 			</stats>
-			<equiptype>HAND</equiptype>
-			<damage>2d6</damage>
-			<material>steel</material>
+			<properties>
+				<equiptype>HAND</equiptype>
+				<damage>2d6</damage>
+				<material>steel</material>
+			</properties>
 			<model>weapons\sword1\sword1</model>
 			<modeltexture>weapons\sword1\Material03</modeltexture>
 			<prefab> </prefab>
@@ -49,9 +55,11 @@
 				<equipsize>medium</equipsize>
 				<nutrition>0</nutrition>
 			</stats>
-			<equiptype>HAND</equiptype>
-			<damage>2d6</damage>
-			<material>steel</material>
+			<properties>
+				<equiptype>HAND</equiptype>
+				<damage>2d6</damage>
+				<material>steel</material>
+			</properties>
 			<model>weapons/sword2/sword2</model>
 			<modeltexture>weapons/sword2/mat_sword2_1</modeltexture>
 			<prefab> </prefab>
@@ -63,9 +71,11 @@
 				<equipsize>medium</equipsize>
 				<nutrition>0</nutrition>
 			</stats>
-			<equiptype>HAND</equiptype>
-			<damage>2d6</damage>
-			<material>steel</material>
+			<properties>
+				<equiptype>HAND</equiptype>
+				<damage>2d6</damage>
+				<material>steel</material>
+			</properties>
 			<model>weapons/sword3/sword3</model>
 			<modeltexture>weapons/sword3/Material06</modeltexture>
 			<prefab> </prefab>
