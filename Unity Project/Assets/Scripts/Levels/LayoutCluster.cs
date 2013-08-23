@@ -6,11 +6,11 @@ public class LayoutCluster : LayoutObjectContainer {
 
     public override void AddObject(LayoutObject r)
     {
-        Point shiftDir = LevelGenerator.GenerateShiftMagnitude(1);
+        Point shiftDir = LevelGenerator.GenerateShiftMagnitude(5);
         LayoutObject intersect;
-        while ((intersect = r.intersectObj(Objects, 0)) != null)
+        while ((intersect = r.IntersectSmart(Objects)) != null)
         {
-            r.ShiftOutside(intersect, shiftDir);
+            r.ShiftOutside(intersect, shiftDir, false, false);
         }
         base.AddObject(r);
     }

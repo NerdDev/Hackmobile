@@ -4,18 +4,17 @@ using System.Collections.Generic;
 
 public class ProbabilityList<T> where T : ProbabilityItem
 {
-    static System.Random staticRand = new System.Random();
-    System.Random rand;
+    RandomGen rand;
     int maxNum = 0;
     int largestDiv = -1;
     List<ProbContainer> itemList = new List<ProbContainer>();
 
-    public ProbabilityList(System.Random rand)
+    public ProbabilityList(RandomGen rand)
     {
         this.rand = rand;
     }
 
-    public ProbabilityList () : this(staticRand)
+    public ProbabilityList () : this(Probability.Rand)
     {
     }
 
@@ -35,7 +34,7 @@ public class ProbabilityList<T> where T : ProbabilityItem
         itemList.Add(cont);
         int probDiv = cont.item.ProbabilityDiv();
         if (probDiv > largestDiv)
-        {
+        { // If div is largest, recalc
             largestDiv = probDiv;
             return true;
         }
@@ -46,12 +45,14 @@ public class ProbabilityList<T> where T : ProbabilityItem
     {
         ProbContainer cont = new ProbContainer(item);
         if (AddInternal(cont))
-        {
+        { // Recalc all probnums since we have new largest div
             evaluateProbNums();
         }
         else
-        {
-            cont.SetNum(largestDiv, itemList[itemList.Count - 1].num);
+        { // Scale number to largest div
+            ProbContainer lastCont = itemList[itemList.Count - 2];
+            cont.SetNum(largestDiv, lastCont.num);
+            maxNum = cont.num;
         }
     }
 
@@ -70,7 +71,7 @@ public class ProbabilityList<T> where T : ProbabilityItem
         foreach (ProbContainer cont in itemList)
         {
             cont.SetNum(largestDiv, maxNum);
-            maxNum += cont.num;
+            maxNum = cont.num;
         }
     }
 

@@ -44,7 +44,7 @@ public class Theme : MonoBehaviour {
             case GridType.Path_LB:
                 return getFloor();
             default:
-                return null;
+                return getFloor();
         }
     }
 
