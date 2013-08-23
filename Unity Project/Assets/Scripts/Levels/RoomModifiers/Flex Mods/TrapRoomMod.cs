@@ -14,7 +14,7 @@ public class TrapRoomMod : RoomModifier
         #endregion
         int treasurePercent = LevelGenerator.Rand.Next(0, 100);
         int treasureInRoom;
-        if (treasurePercent <= 15) treasureInRoom = 0;
+        if (treasurePercent <= 20) treasureInRoom = 0;
         else if (treasurePercent <= 75) treasureInRoom = 1;
         else if (treasurePercent <= 90) treasureInRoom = 2;
         else treasureInRoom = 3;
@@ -32,8 +32,19 @@ public class TrapRoomMod : RoomModifier
             DebugManager.w(DebugManager.Logs.LevelGen, "Floor Space: " + floorSpace + " Traps In Room: " + trapsInRoom);
         }
         #endregion
+        GridMap grid = room.GetFloors();
+        Stack stk = new Stack();
         while (treasureInRoom > 0)
         {
+            int x = rand.Next(floorSpace-1);
+            if (x < 0) break;
+            if (!stk.Contains(x))
+            {
+                room.put(GridType.Chest, grid.GetNth(x).x, grid.GetNth(x).y);
+                stk.Push(x);
+                treasureInRoom--;
+            }
+            /*
             int x = rand.Next(room.GetBounding().Width);
             int y = rand.Next(room.GetBounding().Height);
 
@@ -42,17 +53,18 @@ public class TrapRoomMod : RoomModifier
                 room.put(GridType.Chest, x, y);
                 treasureInRoom--;
             }
+             * */
         }
 
         while (trapsInRoom > 0)
         {
-            int x = rand.Next(room.GetBounding().Width);
-            int y = rand.Next(room.GetBounding().Height);
-
-            if (room.get(x, y) == GridType.Floor)
+            int x = rand.Next(floorSpace - 1);
+            if (x < 0) break;
+            if (!stk.Contains(x))
             {
-                room.put(GridType.Trap, x, y);
-                treasureInRoom--;
+                room.put(GridType.Trap, grid.GetNth(x).x, grid.GetNth(x).y);
+                stk.Push(x);
+                trapsInRoom--;
             }
         }
         #region DEBUG

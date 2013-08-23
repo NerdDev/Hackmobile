@@ -8,7 +8,7 @@ public class Room : LayoutObjectLeaf {
         : base(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2)
     {
     }
-	
+    
 	public GridMap GetWalls() 
     {
 		return getTypes(GridType.Wall);
