@@ -4,7 +4,7 @@ using System.Collections;
 public class TrapRoomMod : RoomModifier
 {
 
-    public override void Modify(Room room, System.Random rand)
+    public override void Modify(Room room, RandomGen rand)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -12,7 +12,7 @@ public class TrapRoomMod : RoomModifier
             DebugManager.printHeader(DebugManager.Logs.LevelGen, ToString());
         }
         #endregion
-        int treasurePercent = LevelGenerator.Rand.Next(0, 100);
+        int treasurePercent = rand.Next(0, 100);
         int treasureInRoom;
         if (treasurePercent <= 20) treasureInRoom = 0;
         else if (treasurePercent <= 75) treasureInRoom = 1;
@@ -25,7 +25,7 @@ public class TrapRoomMod : RoomModifier
         }
         #endregion
         int floorSpace = room.CountGridType(GridType.Floor);
-        int trapsInRoom = (floorSpace - treasureInRoom) / 3;
+        int trapsInRoom = (floorSpace - treasureInRoom) / 8;
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
@@ -44,16 +44,6 @@ public class TrapRoomMod : RoomModifier
                 stk.Push(x);
                 treasureInRoom--;
             }
-            /*
-            int x = rand.Next(room.GetBounding().Width);
-            int y = rand.Next(room.GetBounding().Height);
-
-            if (room.get(x, y) == GridType.Floor)
-            {
-                room.put(GridType.Chest, x, y);
-                treasureInRoom--;
-            }
-             * */
         }
 
         while (trapsInRoom > 0)
