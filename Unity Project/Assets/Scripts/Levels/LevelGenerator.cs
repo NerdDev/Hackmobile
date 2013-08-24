@@ -40,12 +40,9 @@ public class LevelGenerator
     public static int clusterProbability { get { return 90; } }
     #endregion
 
-    public static System.Random Rand = new System.Random();
-    public static Random UnityRand = new Random();
-
     public LevelLayout GenerateLayout(int levelDepth)
     {
-        return GenerateLayout(levelDepth, Rand.Next());
+        return GenerateLayout(levelDepth, Probability.LevelRand.Next());
     }
 
     public LevelLayout GenerateLayout(int levelDepth, int seed)
@@ -70,8 +67,7 @@ public class LevelGenerator
             startTime = stepTime;
         }
         #endregion
-        Rand = new System.Random(seed);
-        Random.seed = Rand.Next();
+        Probability.LevelRand.SetSeed(seed);
         LevelLayout layout = new LevelLayout();
         List<Room> rooms = GenerateRoomShells();
         ModRooms(rooms);
@@ -175,7 +171,7 @@ public class LevelGenerator
         }
         #endregion
         List<Room> rooms = new List<Room>();
-        int numRooms = Rand.Next(minRooms, maxRooms);
+        int numRooms = Probability.LevelRand.Next(minRooms, maxRooms);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
@@ -220,7 +216,7 @@ public class LevelGenerator
                     DebugManager.w(DebugManager.Logs.LevelGen, "Applying: " + mod);
                 }
                 #endregion
-                mod.Modify(room, Rand);
+                mod.Modify(room, Probability.LevelRand);
             }
             room.Bake(false);
             #region DEBUG
@@ -256,7 +252,7 @@ public class LevelGenerator
             DebugManager.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + baseMod);
         }
         #endregion
-        int numFlex = Rand.Next(1, maxFlexMod);
+        int numFlex = Probability.LevelRand.Next(1, maxFlexMod);
         List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex);
         mods.AddRange(flexMods);
         #region DEBUG
@@ -269,7 +265,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        if (chanceNoFinalMod < Rand.Next(100))
+        if (chanceNoFinalMod < Probability.LevelRand.Next(100))
         {
             RoomModifier finalMod = RoomModifier.GetFinal();
             mods.Add(finalMod);
@@ -298,29 +294,48 @@ public class LevelGenerator
         }
         #endregion
         List<LayoutObject> ret = new List<LayoutObject>();
-        int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
+        int numClusters = Probability.LevelRand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
         // Num clusters cannot be more than half num rooms
         if (numClusters > rooms.Count / 2)
             numClusters = rooms.Count / 2;
         List<LayoutCluster> clusters = new List<LayoutCluster>().Populate(numClusters);
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
+            DebugManager.w(DebugManager.Logs.LevelGen, "Number of clusters: " + numClusters);
+        }
+        #endregion
         // Add two rooms to each
         foreach (LayoutCluster cluster in clusters)
         {
             cluster.AddObject(rooms.Take());
             cluster.AddObject(rooms.Take());
+            #region DEBUG
+            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            {
+                cluster.ToLog(DebugManager.Logs.LevelGen);
+            }
+            #endregion
         }
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Number of clusters: " + numClusters + ", Rooms left: " + rooms.Count);
+            DebugManager.w(DebugManager.Logs.LevelGen, "Rooms left: " + rooms.Count);
         }
         #endregion
         // For remaining rooms, put into random clusters
         foreach (Room r in rooms)
         {
-            if (Rand.Percent(clusterProbability))
+            if (Probability.LevelRand.Percent(clusterProbability))
             {
-                clusters.Random(Rand).AddObject(r);
+                LayoutCluster cluster = clusters.Random(Probability.LevelRand);
+                cluster.AddObject(r);
+                #region DEBUG
+                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                {
+                    cluster.ToLog(DebugManager.Logs.LevelGen);
+                }
+                #endregion
             }
         }
         #region DEBUG
@@ -351,7 +366,7 @@ public class LevelGenerator
         foreach (Room room in rooms)
         {
             // Find room it will start from
-            int roomNum = Rand.Next(placedRooms.Count);
+            int roomNum = Probability.Rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
             room.setShift(startRoom);
             // Find where it will shift away
@@ -366,7 +381,7 @@ public class LevelGenerator
             #endregion
             // Keep moving until room doesn't overlap any other rooms
             LayoutObject intersect;
-            while ((intersect = room.intersectObj(placedRooms, 1)) != null)
+            while ((intersect = room.IntersectObjBounds(placedRooms, 1)) != null)
             {
                 #region DEBUG
                 if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -375,7 +390,7 @@ public class LevelGenerator
                     layout.ToLog(DebugManager.Logs.LevelGen);
                 }
                 #endregion
-                room.ShiftOutside(intersect, shiftMagn);
+                room.ShiftOutside(intersect, shiftMagn, true, true);
             }
             placedRooms.Add(room);
             layout.AddRoom(room);
@@ -411,7 +426,7 @@ public class LevelGenerator
             }
             #endregion
             GridMap potentialDoors = room.GetPotentialExternalDoors();
-            int numDoors = Rand.Next(doorsMin, doorsMax);
+            int numDoors = Probability.LevelRand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (DebugManager.logging(DebugManager.Logs.LevelGen))
             {
@@ -421,7 +436,7 @@ public class LevelGenerator
             #endregion
             for (int i = 0; i < numDoors; i++)
             {
-                Value2D<GridType> doorSpace = potentialDoors.RandomValue(Rand);
+                Value2D<GridType> doorSpace = potentialDoors.RandomValue(Probability.LevelRand);
                 if (doorSpace != null)
                 {
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
@@ -637,7 +652,7 @@ public class LevelGenerator
             largest.ToLog(DebugManager.Logs.LevelGen, "Largest");
         }
         #endregion
-        DFSSearcher searcher = new DFSSearcher(Rand);
+        DFSSearcher searcher = new DFSSearcher(Probability.LevelRand);
         var startPtStack = searcher.Search(new Value2D<GridType>(), smallest, GridType.NULL, Path.PathTypes());
         if (startPtStack.Count > 0)
         {

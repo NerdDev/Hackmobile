@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CircleRoom : RoomModifier {
 
-    public override void Modify(Room room, System.Random rand)
+    public override void Modify(Room room, RandomGen rand)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -11,7 +11,7 @@ public class CircleRoom : RoomModifier {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, ToString());
         }
         #endregion
-        int radius = LevelGenerator.Rand.Next(LevelGenerator.minRadiusSize, LevelGenerator.maxRadiusSize);
+        int radius = Probability.LevelRand.Next(LevelGenerator.minRadiusSize, LevelGenerator.maxRadiusSize);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {

@@ -20,21 +20,21 @@ abstract public class LayoutObject
 
     #region Shifts
     public void shift(int x, int y)
-	{
-		ShiftP.shift(x,y);
-	}
-	
-	public void shift(Point p)
-	{
-		ShiftP.shift(p);	
-	}
+    {
+        ShiftP.Shift(x, y);
+    }
+
+    public void shift(Point p)
+    {
+        ShiftP.Shift(p);
+    }
 
     public void setShift(LayoutObject rhs)
     {
-		Bounding bounds = GetBoundingUnshifted();
-		Bounding rhsBounds = rhs.GetBoundingUnshifted();
-		Point center = bounds.GetCenter();
-		Point centerRhs = rhsBounds.GetCenter();
+        Bounding bounds = GetBoundingUnshifted();
+        Bounding rhsBounds = rhs.GetBoundingUnshifted();
+        Point center = bounds.GetCenter();
+        Point centerRhs = rhsBounds.GetCenter();
         ShiftP.x = rhs.ShiftP.x + (centerRhs.x - center.x);
         ShiftP.y = rhs.ShiftP.y + (centerRhs.y - center.y);
     }
@@ -43,36 +43,44 @@ abstract public class LayoutObject
     {
         return new Value2D<GridType>(val.x + ShiftP.x, val.y + ShiftP.y, val.val);
     }
-	
-	public Point GetShift()
-	{
-		return new Point(ShiftP);	
-	}
 
-    public void ShiftOutside(LayoutObject rhs, Point dir)
+    public Point GetShift()
     {
-        Point reduc = dir.reduce();
-		#region DEBUG
-		if (DebugManager.logging(DebugManager.Logs.LevelGen)) {
+        return new Point(ShiftP);
+    }
+
+    public void ShiftOutside(LayoutObject rhs, Point dir, bool rough, bool finalShift)
+    {
+        Point reducBase = dir.reduce();
+        Point reduc = new Point(reducBase);
+        int xShift, yShift;
+        #region DEBUG
+        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, "Shift Outside " + ToString());
             DebugManager.w(DebugManager.Logs.LevelGen, "Shifting outside of " + rhs.ToString());
             DebugManager.w(DebugManager.Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
-			DebugManager.w (DebugManager.Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
-		}
-		#endregion
-		while(this.intersects(rhs, 0))
-		{
-            // Shift small increments until not overlapping
-            shift(reduc);
-            #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            DebugManager.w(DebugManager.Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
+        }
+        #endregion
+        while (this.IntersectsSmart(rhs))
+        {
+            if (rough)
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Shifted to: " + GetBounding());
+                shift(reduc);
             }
-            #endregion
-		}
-        // Shift final distance away from object
-        shift(dir);
+            else
+            {
+                reduc.Take(out xShift, out yShift);
+                shift(xShift, yShift);
+                if (reduc.isZero())
+                {
+                    reduc = new Point(reducBase);
+                }
+            }
+        }
+        if (finalShift)
+            shift(dir);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
@@ -223,7 +231,7 @@ abstract public class LayoutObject
         GridArray grids = GetArray();
         GridMap ret = new GridMap();
         // Get null spaces surrounding room
-        BFSSearcher searcher = new BFSSearcher(LevelGenerator.Rand);
+        BFSSearcher searcher = new BFSSearcher(Probability.LevelRand);
         Array2D<bool> bfs = searcher.SearchFill(new Value2D<GridType>(), grids, GridType.NULL);
         // Invert to be room
         Array2D<bool>.invert(bfs);
@@ -403,7 +411,7 @@ abstract public class LayoutObject
 
     public bool GetPathTo(LayoutObject target, out List<LayoutObject> list)
     {
-        var visited = new HashSet<LayoutObject> {this};
+        var visited = new HashSet<LayoutObject> { this };
         return GetPathToRecursive(this, target, visited, out list);
     }
 
@@ -433,7 +441,44 @@ abstract public class LayoutObject
     }
 
     #region Intersects
-    public bool intersects(LayoutObject rhs, int buffer)
+    public bool IntersectsSmart(LayoutObject rhs)
+    {
+        // Get Arrays
+        GridType[,] arr = GetArray().GetArr();
+        GridType[,] rhsArr = rhs.GetArray().GetArr();
+
+        // Get Limits
+        Bounding bounds = GetBounding();
+        Bounding rhsBounds = rhs.GetBounding();
+        Bounding intersect = bounds.IntersectBounds(rhsBounds);
+
+        for (int y = intersect.YMin; y < intersect.YMax; y++)
+        {
+            for (int x = intersect.XMin; x < intersect.XMax; x++)
+            {
+                if (arr[y - ShiftP.y, x - ShiftP.x] != GridType.NULL
+                    && rhsArr[y - rhs.ShiftP.y, x - rhs.ShiftP.x] != GridType.NULL)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public LayoutObject IntersectSmart<T>(IEnumerable<T> list) where T : LayoutObject
+    {
+        foreach (LayoutObject rhs in list)
+        {
+            if (IntersectsSmart(rhs))
+            {
+                return rhs;
+            }
+        }
+        return null;
+    }
+
+    public bool IntersectsBounds(LayoutObject rhs, int buffer)
     {
         Bounding rhsBound = rhs.GetBounding();
         if (rhsBound.IsValid())
@@ -444,31 +489,32 @@ abstract public class LayoutObject
         return false;
     }
 
-    public bool intersects(List<LayoutObject> list, int buffer)
+    public bool InsersectsBounds(List<LayoutObject> list, int buffer)
     {
-		return null != intersectObj(list, buffer);
+        return null != IntersectObjBounds(list, buffer);
     }
-	
-	public LayoutObject intersectObj<T>(IEnumerable<T> list, int buffer) where T : LayoutObject
-	{
+
+    public LayoutObject IntersectObjBounds<T>(IEnumerable<T> list, int buffer) where T : LayoutObject
+    {
         foreach (LayoutObject rhs in list)
         {
-            if (intersects(rhs, buffer))
+            if (IntersectsBounds(rhs, buffer))
             {
                 return rhs;
             }
         }
         return null;
-	}
+    }
     #endregion Intersects
 
     #region Printing
-    public override string ToString() {
-		return GetTypeString() + " " + Id;
-	}
+    public override string ToString()
+    {
+        return GetTypeString() + " " + Id;
+    }
 
     public abstract String GetTypeString();
-	
+
     protected string printContent()
     {
         string ret = "";
@@ -481,15 +527,17 @@ abstract public class LayoutObject
 
     protected virtual List<string> ToRowStrings()
     {
-		GridType[,] array = GetMinimizedArray(GetPrintArray());
+        GridType[,] array = GetMinimizedArray(GetPrintArray());
         List<string> ret = new List<string>();
-		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
+        for (int y = array.GetLength(0) - 1; y >= 0; y -= 1)
+        {
             string rowStr = "";
-    		for (int x = 0; x < array.GetLength(1); x += 1) {
-        		rowStr += getAscii(array[y,x]);
-    		}
+            for (int x = 0; x < array.GetLength(1); x += 1)
+            {
+                rowStr += getAscii(array[y, x]);
+            }
             ret.Add(rowStr);
-		}
+        }
         return ret;
     }
 
@@ -512,17 +560,17 @@ abstract public class LayoutObject
             case GridType.INTERNAL_RESERVED_CUR:
                 return '%';
             case GridType.Path_Horiz:
-                return (char) 205;
+                return (char)205;
             case GridType.Path_Vert:
-                return (char) 186;
+                return (char)186;
             case GridType.Path_LT:
-                return (char) 188;
+                return (char)188;
             case GridType.Path_LB:
-                return (char) 187;
+                return (char)187;
             case GridType.Path_RT:
-                return (char) 200;
+                return (char)200;
             case GridType.Path_RB:
-                return (char) 201;
+                return (char)201;
             default:
                 return '?';
         }
@@ -545,7 +593,7 @@ abstract public class LayoutObject
             DebugManager.w(log, "Bounds Shifted: " + bounds.ToString());
             bounds.Shift(ShiftP.Invert());
             DebugManager.w(log, "Bounds: " + bounds.ToString());
-			DebugManager.printFooter(log);
+            DebugManager.printFooter(log);
         }
     }
 
@@ -568,7 +616,7 @@ abstract public class LayoutObject
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((LayoutObject) obj);
+        return Equals((LayoutObject)obj);
     }
 
     public override int GetHashCode()

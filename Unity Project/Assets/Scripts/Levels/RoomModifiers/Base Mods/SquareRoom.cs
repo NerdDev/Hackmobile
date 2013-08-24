@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SquareRoom : RoomModifier {
 
-    public override void Modify(Room room, System.Random rand)
+    public override void Modify(Room room, RandomGen rand)
     {
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
@@ -11,8 +11,8 @@ public class SquareRoom : RoomModifier {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, ToString());
         }
         #endregion
-        int height = LevelGenerator.Rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        int width = LevelGenerator.Rand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int height = Probability.LevelRand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int width = Probability.LevelRand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {

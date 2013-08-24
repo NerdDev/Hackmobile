@@ -37,25 +37,25 @@ public class Point {
     #endregion Ctors
 
     #region Shifts
-    public void shift(int x, int y)
+    public void Shift(int x, int y)
 	{
 		this.x += x;
 		this.y += y;
 	}
 
-    public void shift(float x, float y)
+    public void Shift(float x, float y)
     {
-        shift((int)x, (int)y);
+        Shift((int)x, (int)y);
     }
 
-    public void shift(Vector2 vect)
+    public void Shift(Vector2 vect)
     {
-        shift(vect.x, vect.y);
+        Shift(vect.x, vect.y);
     }
 	
-	public void shift(Point p)
+	public void Shift(Point p)
 	{
-		shift (p.x, p.y);	
+		Shift (p.x, p.y);	
 	}
     #endregion Shifts
 
@@ -79,6 +79,14 @@ public class Point {
 		int gcd = Nifty.GCD(x, y);
 		return new Point(x / gcd, y / gcd);
 	}
+
+    public void Take(out int x, out int y)
+    {
+        x = Math.Sign(this.x);
+        y = Math.Sign(this.y);
+        this.x -= x;
+        this.y -= y;
+    }
 
     public override bool Equals(object obj)
     {
@@ -107,5 +115,20 @@ public class Point {
         hash = 11 * hash + y;
         
         return hash;
+    }
+
+    public static Point operator +(Point p1, Point p2)
+    {
+        Point tmp = new Point(p1);
+        tmp.Shift(p2);
+        return tmp;
+    }
+
+    public static Point operator -(Point p1, Point p2)
+    {
+        Point tmp = new Point(p1);
+        tmp.x -= p2.x;
+        tmp.y -= p2.y;
+        return tmp;
     }
 }

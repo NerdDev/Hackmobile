@@ -10,7 +10,7 @@ public class BFSSearcher : GridSearcher {
     {
     }
 
-    public BFSSearcher(System.Random rand)
+    public BFSSearcher(RandomGen rand)
         : base(rand)
     {
     }

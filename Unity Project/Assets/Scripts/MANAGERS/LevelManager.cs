@@ -81,11 +81,10 @@ public class LevelManager : MonoBehaviour {
 
     void TestModifier(RoomModifier mod, int seed)
     {
-        System.Random rand = new System.Random(seed);
         Room room = new Room();
         SquareRoom square = new SquareRoom();
-        square.Modify(room, rand);
-        mod.Modify(room, rand);
+        square.Modify(room, Probability.LevelRand);
+        mod.Modify(room, Probability.LevelRand);
         DebugManager.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
         room.ToLog(DebugManager.Logs.LevelGenMain);
     }
