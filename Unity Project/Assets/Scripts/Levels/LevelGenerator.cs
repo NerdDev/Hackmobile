@@ -366,7 +366,7 @@ public class LevelGenerator
         foreach (Room room in rooms)
         {
             // Find room it will start from
-            int roomNum = Probability.Rand.Next(placedRooms.Count);
+            int roomNum = Probability.LevelRand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
             room.setShift(startRoom);
             // Find where it will shift away
