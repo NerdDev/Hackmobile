@@ -17,6 +17,8 @@ Mesh:
     localAABB:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: .5, y: .5, z: 0}
+  m_Shapes: []
+  m_ShapeVertices: []
   m_MeshCompression: 0
   m_StreamCompression: 0
   m_IsReadable: 1

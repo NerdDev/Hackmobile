@@ -16,7 +16,7 @@ public class WorldObjectManager : MonoBehaviour {
     Dictionary<string, List<Item>> itemCategories = new Dictionary<string, List<Item>>();
     Dictionary<string, MaterialType> materials = new Dictionary<string, MaterialType>();
 
-    void Awake()
+    void Start()
     {
         initializeNullData();
     }
@@ -59,38 +59,6 @@ public class WorldObjectManager : MonoBehaviour {
         {
             return nullNPC;
         }
-    }
-
-    public void Log()
-    {
-        DebugManager.CreateNewLog(DebugManager.Logs.NPCs, "NPC Logs");
-        foreach (NPC n in baseNPCs.Values)
-        {
-            //DebugManager.w(DebugManager.Logs.NPCs, System.ObjectDumper.Dump(n));
-            List<string> filter = new List<string>();
-            filter.Add("Camera");
-            filter.Add("Rigidbody");
-            filter.Add("GameObject");
-            filter.Add("Light");
-            filter.Add("Animation");
-            filter.Add("ConstantForce");
-            filter.Add("Renderer");
-            filter.Add("AudioSource");
-            filter.Add("GUIText");
-            filter.Add("NetworkView");
-            filter.Add("GUIElement");
-            filter.Add("GUITexture");
-            filter.Add("HingeJoint");
-            filter.Add("Collider");
-            filter.Add("ParticleEmitter");
-            filter.Add("ParticleSystem");
-
-            string s = System.ObjDump.Dump(n, filter);
-            Debug.Log(s);
-            DebugManager.printHeader(DebugManager.Logs.NPCs, "NPC: " + n.Name);
-            DebugManager.w(DebugManager.Logs.NPCs, s);
-        }
-        DebugManager.printFooter(DebugManager.Logs.NPCs);
     }
 
     public Dictionary<string, NPC> getNPCs()

@@ -37,14 +37,16 @@ public class Player : NPC
         if (inventory.ContainsKey(item))
         {
             inventory[item] += count;
-			//GUI Stuff:
+            //GUI Stuff:
+			
         }
         else
         {
             inventory.Add(item, count);
-			//GUI Stuff:
+            //GUI Stuff:
+			BigBoss.Gooey.AddItemToGUIInventory(item,count);
         }
-        stats.Encumbrance += item.Weight * count;
+        stats.Encumbrance += item.props.Weight * count;
     }
     #endregion
 
@@ -52,32 +54,25 @@ public class Player : NPC
     int lastCollisionTime = 0; //unused atm
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<NPC>() != null)
+        //yes, it's the gspot
+        GridSpace gspot = LevelManager.Level[collision.gameObject.transform.position.x.ToInt(),
+            collision.gameObject.transform.position.z.ToInt()];
+        //I KNEW IT EXISTED
+        GridType g = gspot.Type;
+        switch (g)
         {
-            attack(collision.gameObject.GetComponent<NPC>());
-        }
-        else
-        {
-            //yes, it's the gspot
-            GridSpace gspot = LevelManager.Level[collision.gameObject.transform.position.x.ToInt(), 
-                collision.gameObject.transform.position.z.ToInt()];
-            //I KNEW IT EXISTED
-            GridType g = gspot.Type;
-            switch (g)
-            {
-                case GridType.Wall:
-                    Debug.Log("You walked into a wall!");
-                    break;
-                case GridType.Door:
-                    Debug.Log("You walked through the door!");
-                    break;
-                case GridType.Floor:
-                    Debug.Log("You ended up in the floor. Don't ask how.");
-                    break;
-                default:
-                    Debug.Log("I'm not sure what you collided with.");
-                    break;
-            }
+            case GridType.Wall:
+                //Debug.Log("You walked into a wall!");
+                break;
+            case GridType.Door:
+                //Debug.Log("You walked through the door!");
+                break;
+            case GridType.Floor:
+                //Debug.Log("You ended up in the floor. Don't ask how.");
+                break;
+            default:
+                //Debug.Log("I'm not sure what you collided with.");
+                break;
         }
     }
     #endregion
@@ -91,8 +86,24 @@ public class Player : NPC
         stats.Hunger = 900;
         IsActive = true;
         calcStats();
-
+        this.PlayerTitle = BigBoss.DataManager.playerProfessions.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
         anim = playerAvatar.GetComponent<Animator>() as Animator;
+        this.Name = "Kurtis";
+
+        GameObject item = new GameObject();
+        Item i = item.AddComponent<Item>();
+        Item baseI = BigBoss.WorldObjectManager.getItem("sword1");
+        i.setData(baseI);
+        i.IsActive = true;
+        this.addToInventory(i);
+        this.equipItem(i);
+
+        GameObject item2 = new GameObject();
+        Item i2 = item2.AddComponent<Item>();
+        Item food = BigBoss.WorldObjectManager.getItem("spoiled bread");
+        i2.setData(food);
+        i2.IsActive = true;
+        this.addToInventory(i2, 5);
     }
 
     // Update is called once per frame
@@ -101,9 +112,13 @@ public class Player : NPC
         movement();
     }
 
-    #region Combat
+    #region Actions
 
-
+    public override void attack(NPC n)
+    {
+        base.attack(n);
+        BigBoss.TimeKeeper.PassTurn(60);
+    }
 
     #endregion
 
@@ -136,8 +151,10 @@ public class Player : NPC
         //If distance is greater than 1.3 (var), pass turn
         if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
         {
-            UpdateCurrentTileVectors();
-            BigBoss.TimeKeeper.PassTurn(60);
+            if (UpdateCurrentTileVectors())
+            {
+                BigBoss.TimeKeeper.PassTurn(60);
+            }
         }
 
         //Moving toward closest center point if player isn't moving with input:
@@ -190,6 +207,29 @@ public class Player : NPC
         MovePlayer(heading, playerSpeed, playerRotationSpeed);
     }
 
+    protected override bool UpdateCurrentTileVectors()
+    {
+        GridCoordinate = new Vector2(this.gameObject.transform.position.x.Round(), this.gameObject.transform.position.z.Round());
+        newGridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
+        GridSpace newGrid = LevelManager.Level[newGridSpace.x, newGridSpace.y];
+        if (!newGrid.IsBlocked())
+        {
+            if (gridSpace != null && gridSpace.val != null)
+            {
+                gridSpace.val.Remove(this);
+            }
+            newGrid.Put(this);
+            CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
+            newGridSpace.val = newGrid;
+            gridSpace = newGridSpace;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void MovePlayer(Vector3 heading, float playerSpeed, float playerRotationSpeed)
     {
         gameObject.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
@@ -218,9 +258,9 @@ public class Player : NPC
         {
             v = playerSpeed;
         }
-        
+
         //Debug.Log("V: " + v);
-        anim.SetFloat("Speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
+        anim.SetFloat("speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
         //anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
         //anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
         currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
@@ -373,7 +413,7 @@ public class Player : NPC
     public override void applyEffect(Properties e, int priority = 1, bool isItem = false, int turnsToProcess = -1)
     {
         base.applyEffect(e, priority, isItem, turnsToProcess);
-        //BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
+        BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
         //update gui
     }
 

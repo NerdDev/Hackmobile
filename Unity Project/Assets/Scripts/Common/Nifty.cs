@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class Nifty
 {
@@ -154,6 +155,63 @@ public static class Nifty
     public static int ToInt(this float x)
     {
         return Convert.ToInt32(x);
+    }
+
+    static public int ToInt(this string toParse)
+    {
+        int temp;
+        if (int.TryParse(toParse, out temp))
+        {
+            return temp;
+        }
+        else
+        {
+            throw new ArgumentException("String cannot be parsed to integer!");
+        }
+    }
+
+    static public double ToDouble(this string toParse)
+    {
+        double temp;
+        if (double.TryParse(toParse, out temp))
+        {
+            return temp;
+        }
+        else
+        {
+            throw new ArgumentException("String cannot be parsed to double!");
+        }
+    }
+
+    static public float ToFloat(this string toParse)
+    {
+        float temp;
+        if (float.TryParse(toParse, out temp))
+        {
+            return temp;
+        }
+        else
+        {
+            throw new ArgumentException("String cannot be parsed to double!");
+        }
+    }
+
+    static public bool ToBool(this string toParse)
+    {
+        bool temp;
+        if (bool.TryParse(toParse, out temp))
+        {
+            return temp;
+        }
+        else
+        {
+            throw new ArgumentException("String cannot be parsed to boolean!");
+        }
+    }
+
+    public static float Round(this float f)
+    {
+        return Mathf.Round(f);
     }
 }
 

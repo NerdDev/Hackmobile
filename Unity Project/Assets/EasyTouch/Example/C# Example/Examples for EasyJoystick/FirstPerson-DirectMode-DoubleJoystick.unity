@@ -27,7 +27,7 @@ RenderSettings:
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-GameManager:
+LevelGameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -278,17 +278,9 @@ MonoBehaviour:
   showTouch: 1
   showDeadZone: 1
   areaTexture: {fileID: 2800000, guid: e0673e77fbd588747b716fe59f41ec8e, type: 3}
-  areaColor:
-    r: 1
-    g: 1
-    b: 1
-    a: 1
+  areaColor: {r: 1, g: 1, b: 1, a: 1}
   touchTexture: {fileID: 2800000, guid: 1994a81ed8022854695487fad5342005, type: 3}
-  touchColor:
-    r: 1
-    g: 1
-    b: 1
-    a: 1
+  touchColor: {r: 1, g: 1, b: 1, a: 1}
   deadTexture: {fileID: 2800000, guid: 164ae07c6eb4e044683d344e9f66b94e, type: 3}
   showProperties: 1
   showInteraction: 1
@@ -1643,14 +1635,18 @@ MonoBehaviour:
   enablePinch: 1
   easyTouchCamera: {fileID: 0}
   autoSelect: 1
-  pickableLayers: {}
+  pickableLayers:
+    serializedVersion: 2
+    m_Bits: 0
   StationnaryTolerance: 25
   longTapTime: 1
   swipeTolerance: .850000024
   minPinchLength: 0
   minTwistAngle: 1
   enabledNGuiMode: 0
-  nGUILayers: {}
+  nGUILayers:
+    serializedVersion: 2
+    m_Bits: 0
   nGUICameras: []
   reservedAreas: []
   enableReservedArea: 0
@@ -1819,17 +1815,9 @@ MonoBehaviour:
   showTouch: 1
   showDeadZone: 1
   areaTexture: {fileID: 2800000, guid: e0673e77fbd588747b716fe59f41ec8e, type: 3}
-  areaColor:
-    r: 1
-    g: 1
-    b: 1
-    a: 1
+  areaColor: {r: 1, g: 1, b: 1, a: 1}
   touchTexture: {fileID: 2800000, guid: 1994a81ed8022854695487fad5342005, type: 3}
-  touchColor:
-    r: 1
-    g: 1
-    b: 1
-    a: 1
+  touchColor: {r: 1, g: 1, b: 1, a: 1}
   deadTexture: {fileID: 2800000, guid: 164ae07c6eb4e044683d344e9f66b94e, type: 3}
   showProperties: 1
   showInteraction: 1
@@ -2025,17 +2013,9 @@ MonoBehaviour:
   upMethodName: 
   guiDepth: 0
   normalTexture: {fileID: 2800000, guid: 9ab3452544649a746a94e7832b11e1ba, type: 3}
-  buttonNormalColor:
-    r: .0144798281
-    g: .970149279
-    b: .328581095
-    a: 1
+  buttonNormalColor: {r: .0144798281, g: .970149279, b: .328581095, a: 1}
   activeTexture: {fileID: 2800000, guid: 9ab3452544649a746a94e7832b11e1ba, type: 3}
-  buttonActiveColor:
-    r: .895522356
-    g: .0668300241
-    b: .118985645
-    a: 1
+  buttonActiveColor: {r: .895522356, g: .0668300241, b: .118985645, a: 1}
   showInspectorProperties: 1
   showInspectorPosition: 1
   showInspectorEvent: 0

@@ -5,7 +5,7 @@ PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   AndroidProfiler: 0
-  defaultScreenOrientation: 0
+  defaultScreenOrientation: 3
   targetDevice: 2
   targetGlesGraphics: 1
   targetResolution: 0
@@ -14,10 +14,10 @@ PlayerSettings:
   productName: LevelGen And Test Navigation
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  defaultScreenWidth: 640
-  defaultScreenHeight: 960
-  defaultScreenWidthWeb: 800
-  defaultScreenHeightWeb: 450
+  defaultScreenWidth: 720
+  defaultScreenHeight: 480
+  defaultScreenWidthWeb: 720
+  defaultScreenHeightWeb: 480
   m_RenderingPath: 2
   m_ActiveColorSpace: 0
   m_MTRendering: 1
@@ -141,7 +141,22 @@ PlayerSettings:
   ps3SaveGameSlots: 1
   ps3TrialMode: 0
   flashStrippingLevel: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    data:
+      first: 1
+      second: Sprite_InventoryFrame
+    data:
+      first: 2
+      second: Sprite_InventoryFrame
+    data:
+      first: 7
+      second: Sprite_InventoryFrame
+    data:
+      first: 11
+      second: Sprite_InventoryFrame
+    data:
+      first: 12
+      second: Sprite_InventoryFrame
   metroPackageName: TemplateProject
   metroPackageLogo: 
   metroPackageVersion: 

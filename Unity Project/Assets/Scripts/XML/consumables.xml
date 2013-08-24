@@ -1,0 +1,18 @@
+<items>
+	<consumables>
+		<food name="spoiled bread">
+			<stats>
+				<weight>15</weight>
+				<cost>20</cost>
+				<nutrition>50</nutrition>
+				<weight>3</weight>
+			</stats>
+			<prefab> </prefab>
+			<OnEatenEffect>
+				<effect>POISONED</effect>
+				<turns>10</turns>
+				<strength>3</strength>
+			</OnEatenEffect>
+		</food>
+	</consumables>
+ </items>

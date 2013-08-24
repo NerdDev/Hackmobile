@@ -6,14 +6,13 @@ public class Dice
     public int faces;
     public int numDice;
     public string diceName;
-    private Random rand;
+    private Random rand = new Random();
 
     public Dice(int numFaces, int dice)
     {
         this.faces = numFaces;
         this.numDice = dice;
         diceName = numDice + "d" + faces;
-        rand = new Random();
     }
 
     public Dice(string s)

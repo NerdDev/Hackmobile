@@ -69,7 +69,7 @@ public class NPC : WorldObject
         }
     }
     #endregion
-    
+
     /**
      * All the properties of the NPC should be contained here.
      */
@@ -88,7 +88,8 @@ public class NPC : WorldObject
     public Dictionary<Item, int> inventory = new Dictionary<Item, int>();
     protected List<Item> equippedItems = new List<Item>();
     protected Equipment equipment = null;
-    
+
+    protected bool player = false;
     #endregion
 
     /**
@@ -124,12 +125,12 @@ public class NPC : WorldObject
         set { gridCoordinate = value; }
     }
     //X, Y in integers, GridSpace ref
-    private Value2D<GridSpace> gridSpace;
+    protected Value2D<GridSpace> gridSpace;
+    protected Value2D<GridSpace> newGridSpace;
 
     bool moving; //stores moving condition
-    Vector3 gridCoords; //this refs target grid coords in pathing
+    Vector3 targetGridCoords; //this refs target grid coords in pathing
     Vector3 heading; //this is the heading of target minus current location
-    Vector3 target;
 
     #endregion
 
@@ -147,14 +148,14 @@ public class NPC : WorldObject
         {
             if (moving)
             {
-                if (!checkPosition(this.gameObject.transform.position, gridCoords))
+                if (!checkPosition(this.gameObject.transform.position, targetGridCoords))
                 {
-                    MoveNPCStepwise(gridCoords);
+                    MoveNPCStepwise(targetGridCoords);
                 }
                 else
                 {
                     moving = false;
-                    this.gameObject.transform.position = gridCoords;
+                    this.gameObject.transform.position = targetGridCoords;
                     UpdateCurrentTileVectors();
                 }
             }
@@ -207,6 +208,7 @@ public class NPC : WorldObject
         if (stats.CurrentHealth - amount > 0)
         {
             stats.CurrentHealth = stats.CurrentHealth - amount;
+            //Debug.Log(this.Name + " was damaged for " + amount + "!");
             BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Damaged for " + amount + "!", Color.red);
             return false;
         }
@@ -300,7 +302,7 @@ public class NPC : WorldObject
         BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
     }
 
-    public float getXPfromNPC() 
+    public float getXPfromNPC()
     {
         //how much XP is this NPC worth?
         return 10f;
@@ -311,8 +313,8 @@ public class NPC : WorldObject
     public void move(int x, int y)
     {
         moving = true;
-        gridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x - x, -.5f, CurrentOccupiedGridCenterWorldPoint.z - y);
-        heading = gridCoords - this.gameObject.transform.position;
+        targetGridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x - x, -.5f, CurrentOccupiedGridCenterWorldPoint.z - y);
+        heading = targetGridCoords - this.gameObject.transform.position;
     }
 
     private void MoveNPCStepwise(Vector3 gridCoords)
@@ -334,21 +336,21 @@ public class NPC : WorldObject
         return true;
     }
 
-    protected void UpdateCurrentTileVectors()
+    protected virtual bool UpdateCurrentTileVectors()
     {
         if (gridSpace != null && gridSpace.val != null)
         {
             gridSpace.val.Remove(this);
         }
-        GridCoordinate = new Vector2(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.z));
-        gridSpace = new Value2D<GridSpace>(Convert.ToInt32(GridCoordinate.x), Convert.ToInt32(GridCoordinate.y));
+        GridCoordinate = new Vector2(this.gameObject.transform.position.x.Round(), this.gameObject.transform.position.z.Round());
+        gridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
         gridSpace.val = LevelManager.Level[gridSpace.x, gridSpace.y];
-        gridSpace.val.Accept(this);
-        LastOccupiedGridCenterWorldPoint = CurrentOccupiedGridCenterWorldPoint;
+        gridSpace.val.Put(this);
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
+        return true;
     }
 
-    public PathTree getPathTree(int x, int y) 
+    public PathTree getPathTree(int x, int y)
     {
         PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(x, y));
         return path;
@@ -401,26 +403,28 @@ public class NPC : WorldObject
 
     public void eatItem(Item i)
     {
+        //enforces it being in inventory, if that should change we'll rewrite later
         if (inventory.ContainsKey(i))
         {
             //item was just eaten, take it outta that list
-            if (i.itemFlags[ItemFlags.IS_EQUIPPED]) 
-			{
-               unequipItem(i);
-           	}
-           removeFromInventory(i);
+            if (i.itemFlags[ItemFlags.IS_EQUIPPED])
+            {
+                unequipItem(i);
+            }
+            i.onEatenEvent(this);
+            removeFromInventory(i);
 
             //unless you're Jose, in which case you'll be using a mac
             //and who knows what happens when mac people eat
             //no one can finish big macs anyways
+
+            //this allows what to do on an item basis to be in the item class
+            i.onEatenEvent(this);
+
+            //removes item permanently
+            //DestroyObject(i.gameObject);
+            //DestroyObject(i);
         }
-
-        //this allows what to do on an item basis to be in the item class
-        i.onEatenEvent(this);
-
-        //removes item permanently
-        DestroyObject(i.gameObject);
-        DestroyObject(i);
     }
 
     public void useItem(Item i)
@@ -431,12 +435,8 @@ public class NPC : WorldObject
         }
     }
 
-    public void attack(NPC n)
+    public virtual void attack(NPC n)
     {
-        if (equipment == null)
-        {
-            Debug.Log("Null equipment");
-        }
         if (equipment.getItems(EquipTypes.HAND) != null)
         {
             List<Item> weapons = equipment.getItems(EquipTypes.HAND);
@@ -444,6 +444,7 @@ public class NPC : WorldObject
             {
                 foreach (Item i in weapons)
                 {
+                    Debug.Log("The " + this.Name + " swings with his " + i.Name + "!");
                     if (!n.damage(i.getDamage()))
                     {
                     }
@@ -455,6 +456,7 @@ public class NPC : WorldObject
             }
             else
             {
+                Debug.Log("The " + this.Name + " swings with his bare hands!");
                 if (!n.damage(calcHandDamage()))
                 {
                 }
@@ -466,6 +468,7 @@ public class NPC : WorldObject
         }
         else
         {
+            Debug.Log("The " + this.Name + " swings with his bare hands!");
             //attacking with bare hands
             if (!n.damage(calcHandDamage()))
             {
@@ -479,7 +482,16 @@ public class NPC : WorldObject
 
     public void MoveNPC(Value2D<GridSpace> node)
     {
-        MoveNPC(gridSpace.x - node.x, gridSpace.y - node.y);
+        GridSpace grid = LevelManager.Level[node.x, node.y];
+        if (!grid.IsBlocked())
+        {
+            int xmove = gridSpace.x - node.x;
+            int ymove = gridSpace.y - node.y;
+            gridSpace.val.Remove(this);
+            gridSpace = new Value2D<GridSpace>(node.x, node.y, grid);
+            gridSpace.val.Put(this);
+            MoveNPC(xmove, ymove);
+        }
     }
 
     public void MoveNPC(int x, int y)
@@ -502,6 +514,7 @@ public class NPC : WorldObject
         if (this.IsNotAFreaking<Player>())
         {
             BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, name + " is dead!", Color.red);
+            Debug.Log(this.Name + " was killed!");
             DestroyThisItem();
         }
         else
@@ -527,7 +540,8 @@ public class NPC : WorldObject
         {
             inventory.Add(item, count);
         }
-        stats.Encumbrance += item.Weight * count;
+        stats.Encumbrance += item.props.Weight * count;
+        Debug.Log("Item " + item.Name + " with count " + count + " added to inventory.");
     }
 
     public void removeFromInventory(Item item)
@@ -548,7 +562,8 @@ public class NPC : WorldObject
             {
                 inventory[item] -= count;
             }
-            stats.Encumbrance -= item.Weight * count;
+            stats.Encumbrance -= item.props.Weight * count;
+            Debug.Log("Item " + item.Name + " with count " + count + " removed from inventory.");
         }
         else
         {
@@ -561,7 +576,7 @@ public class NPC : WorldObject
         float tempWeight = 0;
         foreach (KeyValuePair<Item, int> kvp in inventory)
         {
-            tempWeight += kvp.Key.Weight * kvp.Value;
+            tempWeight += kvp.Key.props.Weight * kvp.Value;
         }
 
         return tempWeight;
@@ -581,6 +596,7 @@ public class NPC : WorldObject
         {
             i.onEquipEvent(this);
             equippedItems.Add(i);
+            Debug.Log("Item " + i.Name + " equipped.");
             return true;
         }
         return false;
@@ -595,6 +611,7 @@ public class NPC : WorldObject
             {
                 equippedItems.Remove(i);
             }
+            Debug.Log("Item " + i.Name + " uneqipped.");
             return true;
         }
         return false;
@@ -646,6 +663,8 @@ public class NPC : WorldObject
 
     public override void setNull()
     {
+        this.parseXML(new XMLNode(null));
+        /*
         base.setNull();
         this.attributes.setNull();
         this.bodyparts.setNull();
@@ -660,6 +679,7 @@ public class NPC : WorldObject
         {
             effects[i] = null;
         }
+        */
         IsActive = false;
     }
 
@@ -668,44 +688,38 @@ public class NPC : WorldObject
         //name is handled in DataManager so we get the GameObject name
         base.parseXML(x);
 
-        this.role = x.SelectEnum<Role>("role");
-        this.race = x.SelectEnum<Race>("race");
+        //Use XMLNifty as it will handle any null refs
+        this.role = XMLNifty.SelectEnum<Role>(x, "role");
+        this.race = XMLNifty.SelectEnum<Race>(x, "race");
 
+        #region Specialized parsing
         //property parsing
-        List<XMLNode> xprops = x.select("properties").selectList("property");
-        foreach (XMLNode xnode in xprops)
-        {
-            Properties np = Nifty.StringToEnum<Properties>(xnode.SelectString("name"));
-            NPCEffect eff = new NPCEffect(np, this);
-            eff.apply(xnode.SelectInt("val"), false);
-            this.effects[(long) np] = new NPCEffect(np, this);
-        }
+        XMLNifty.parseList(x, "properties", "property",
+            obj =>
+            {
+                Properties np = obj.SelectEnum<Properties>("name");
+                NPCEffect eff = new NPCEffect(np, this);
+                eff.apply(obj.SelectInt("val"), false);
+                this.effects[(long)np] = new NPCEffect(np, this);
+            });
 
         //flag parsing
-        List<XMLNode> xflags = x.select("flags").selectList("flag");
-        foreach (XMLNode xnode in xflags)
-        {
-            NPCFlags np = Nifty.StringToEnum<NPCFlags>(xnode.SelectString("name"));
-            this.flags[np] = true;
-        }
+        XMLNifty.parseList(x, "flags", "flag",
+            obj =>
+            {
+                NPCFlags np = obj.SelectEnum<NPCFlags>("name");
+                this.flags[np] = true;
+            });
+        #endregion
 
         //stats
-        this.stats.parseXML(x.select("stats"));
+        this.stats.parseXML(x);
 
         //body part data
-        this.bodyparts.parseXML(x.select("bodyparts"));
+        this.bodyparts.parseXML(x);
 
         //attributes
-        this.attributes.parseXML(x.select("attributes"));
-
-        //inventory
-        //baseInventory = new List<NPCItem>();
-        //foreach (XMLNode xnode in x.select("inventory").get())
-        //{
-        //    NPCItem baseItem = new NPCItem();
-        //    baseItem.parseXML(xnode);
-        //    this.baseInventory.Add(baseItem);
-        //}
+        this.attributes.parseXML(x);
     }
 
     #endregion
@@ -714,7 +728,7 @@ public class NPC : WorldObject
 
     private int npcPoints = 0;
     private int baseNPCPoints = 60;
-    
+
     public override void UpdateTurn()
     {
         if (IsActive && BigBoss.TimeKeeper.turnsPassed != 0)
@@ -723,17 +737,13 @@ public class NPC : WorldObject
             {
                 if (this.IsNotAFreaking<Player>())
                 {
-                    Debug.Log(this.Name);
-                    PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
-                    List<PathNode> nodes = pathToPlayer.getPath();
-                    if (nodes.Count > 2)
+                    if (IsNextToPlayer())
                     {
-                        MoveNPC(nodes[nodes.Count - 2].loc);
-                        UpdateCurrentTileVectors();
+                        NextToPlayer();
                     }
                     else
                     {
-                        attack(BigBoss.PlayerInfo);
+                        DecideWhatToDo();
                     }
                 }
             }
@@ -741,7 +751,7 @@ public class NPC : WorldObject
             {
                 //do nothing
             }
-            
+
             //AdjustHunger(-1);
         }
     }
@@ -779,6 +789,76 @@ public class NPC : WorldObject
         set
         {
             this.isActive = value;
+        }
+    }
+    #endregion
+
+    #region AI
+
+    bool IsNextToPlayer()
+    {
+        Surrounding<GridSpace> s = LevelManager.Level.surr;
+        s.Load(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
+        foreach (Value2D<GridSpace> grid in s)
+        {
+            if (grid.x == gridSpace.x && grid.y == gridSpace.y)
+            {
+                //NPC is next to player
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void NextToPlayer()
+    {
+        //attack?
+        attack(BigBoss.PlayerInfo);
+    }
+
+    void DecideWhatToDo()
+    {
+        //move?
+        PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
+        if (pathToPlayer != null)
+        {
+            List<PathNode> nodes = pathToPlayer.getPath();
+            MoveNPC(nodes[nodes.Count - 2].loc);
+            UpdateCurrentTileVectors();
+        }
+    }
+
+    #endregion
+
+    #region Touch Input
+    void OnEnable()
+    {
+        EasyTouch.On_SimpleTap += On_SimpleTap;
+    }
+
+    void OnDisable()
+    {
+        EasyTouch.On_SimpleTap -= On_SimpleTap;
+    }
+
+    void On_SimpleTap(Gesture gesture)
+    {
+        if (gesture.pickObject != null)
+        {
+            GameObject go = gesture.pickObject;
+            if (this.gameObject == go)
+            {
+                NPC n = go.GetComponent<NPC>();
+                if (this.IsNotAFreaking<Player>() && this == n)
+                {
+                    PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
+                    List<PathNode> nodes = pathToPlayer.getPath();
+                    if (nodes.Count == 2)
+                    {
+                        BigBoss.PlayerInfo.attack(this);
+                    }
+                }
+            }
         }
     }
     #endregion

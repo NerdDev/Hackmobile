@@ -15,25 +15,22 @@ public class MaterialType
 
     public void setNull()
     {
-        Name = "null";
-        Oxidizes = false;
-        Burns = false;
-        Hardness = 0;
-        Density = 0;
+        this.parseXML(new XMLNode());
     }
 
     public void parseXML(XMLNode x)
     {
-        this.Name = x.SelectString("name");
-        this.Hardness = x.SelectInt("hardness");
-        this.Burns = x.SelectBool("burns");
-        this.Oxidizes = x.SelectBool("oxidizes");
+        this.Name = XMLNifty.SelectString(x, "name");
+        this.Hardness = XMLNifty.SelectInt(x, "hardness");
+        this.Burns = XMLNifty.SelectBool(x, "burns");
+        this.Oxidizes = XMLNifty.SelectBool(x, "oxidizes");
 
-        density[0] = x.select("density").SelectFloat("min");
-        density[2] = x.select("density").SelectFloat("max");
+        XMLNode densityNode = XMLNifty.select(x, "density");
+        density[0] = XMLNifty.SelectFloat(densityNode, "min");
+        density[2] = XMLNifty.SelectFloat(densityNode, "max");
         density[1] = (density[0] + density[2]) / 2;
         this.Density = density[Probability.getRandomInt(3)];
 
-        this.MeltingPoint = x.SelectInt("meltingpoint");
+        this.MeltingPoint = XMLNifty.SelectInt(x, "meltingpoint");
     }
 }

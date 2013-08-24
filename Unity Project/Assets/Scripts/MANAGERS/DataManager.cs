@@ -8,7 +8,7 @@ using System.IO;
 public class DataManager : MonoBehaviour
 {
     #region XML Paths.
-    string XMLPath = "Assets/Resources/XML/";
+    string XMLPath = "Assets/Scripts/XML/";
 
     Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
     #endregion
@@ -62,7 +62,9 @@ public class DataManager : MonoBehaviour
             List<Item> items = new List<Item>();
             foreach (XMLNode xnode in x.get())
             {
-                items.Add(parseItem(xnode));
+                Item i = parseItem(xnode);
+                items.Add(i);
+                BigBoss.WorldObjectManager.getItems().Add(i.Name, i);
             }
             BigBoss.WorldObjectManager.getCategories().Add(x.getKey(), items);
         }
@@ -93,7 +95,7 @@ public class DataManager : MonoBehaviour
     {
         foreach (XMLNode m in x.get())
         {
-            string npcName = m.SelectString("name");
+            string npcName = XMLNifty.SelectString(m, "name");
             GameObject go = new GameObject(npcName);
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;

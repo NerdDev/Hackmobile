@@ -1,80 +1,82 @@
 ﻿using System;
+using System.Collections.Generic;
 using XML;
 
 namespace XML
 {
     public class XMLNifty
     {
-        static public int StringToInt(string toParse)
+        internal static int SelectInt(XMLNode x, string toParse)
         {
-            int temp;
-            if (int.TryParse(toParse, out temp))
+            if (x != null)
             {
-                return temp;
+                return x.SelectInt(toParse);
             }
-            else
+            return 0;
+        }
+
+        internal static T SelectEnum<T>(XMLNode x, string toParse)
+        {
+            if (x != null)
             {
-                throw new ArgumentException("String cannot be parsed to integer!");
+                return x.SelectEnum<T>(toParse);
+            }
+            return default(T);
+        }
+
+        internal static string SelectString(XMLNode x, string node)
+        {
+            if (x != null)
+            {
+                return x.SelectString(node);
+            }
+            return "";
+        }
+
+        internal static bool SelectBool(XMLNode x, string toParse)
+        {
+            if (x != null)
+            {
+                return x.SelectBool(toParse);
+            }
+            return false;
+        }
+
+        internal static XMLNode select(XMLNode x, string p)
+        {
+            if (x != null)
+            {
+                return x.select(p);
+            }
+            return new XMLNode();
+        }
+
+        internal static void parseList(XMLNode x, string topNode, string bottomNode, Action<XMLNode> a)
+        {
+            if (x != null)
+            {
+                XMLNode temp = x.select(topNode);
+                if (temp != null)
+                {
+                    List<XMLNode> xprops = temp.selectList(bottomNode);
+                    if (xprops != null)
+                    {
+                        foreach (XMLNode xnode in xprops)
+                        {
+                            a(xnode);
+                        }
+                    }
+                }
             }
         }
 
-        static public double StringToDouble(string toParse)
+        internal static float SelectFloat(XMLNode x, string toParse)
         {
-            double temp;
-            if (double.TryParse(toParse, out temp))
+            if (x != null)
             {
-                return temp;
+                return x.SelectFloat(toParse);
             }
-            else
-            {
-                throw new ArgumentException("String cannot be parsed to double!");
-            }
-        }
-
-        static public float StringToFloat(string toParse)
-        {
-            float temp;
-            if (float.TryParse(toParse, out temp))
-            {
-                return temp;
-            }
-            else
-            {
-                throw new ArgumentException("String cannot be parsed to double!");
-            }
-        }
-
-        static public bool StringToBool(string toParse)
-        {
-            bool temp;
-            if (bool.TryParse(toParse, out temp))
-            {
-                return temp;
-            }
-            else
-            {
-                throw new ArgumentException("String cannot be parsed to boolean!");
-            }
-        }
-
-        public static int SelectInt(XMLNode x, string toParse)
-        {
-            return StringToInt(x.select(toParse).getText());
-        }
-
-        public static T SelectEnum<T>(XMLNode x, string toParse)
-        {
-            return (T)Enum.Parse(typeof(T), x.select(toParse).getText(), true);
-        }
-
-        public static string SelectString(XMLNode x, string node)
-        {
-            return x.select(node).getText();
-        }
-
-        public static bool SelectBool(XMLNode x, string toParse)
-        {
-            return StringToBool(x.select(toParse).getText());
+            return 0;
         }
     }
 }

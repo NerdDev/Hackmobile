@@ -16,6 +16,8 @@ Unity Project/Assets/Resources_WIP.meta
 *.csproj
 *.sln
 *.userprefs
+## Class Diagrams
+*.cd
 Unity Project/Assets/UnityVS/
 Unity Project/Assets/UnityVS.meta
 Unity Project/UnityVS.*

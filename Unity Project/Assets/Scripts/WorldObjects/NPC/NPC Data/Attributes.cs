@@ -110,16 +110,17 @@ public class AttributesData
         this.Size = Size.NONE;
     }
 
-    public void parseXML(XMLNode x)
+    public void parseXML(XMLNode xnode)
     {
-        this.Strength = x.SelectInt("strength");
-        this.Charisma = x.SelectInt("charisma");
-        this.Intelligence = x.SelectInt("intelligence");
-        this.Wisdom = x.SelectInt("wisdom");
-        this.Dexterity = x.SelectInt("dexterity");
-        this.Constitution = x.SelectInt("constitution");
-        this.Difficulty = x.SelectInt("difficulty");
-        this.Size = x.SelectEnum<Size>("size");
+        XMLNode x = XMLNifty.select(xnode, "attributes");
+        this.Strength = XMLNifty.SelectInt(x, "strength");
+        this.Charisma = XMLNifty.SelectInt(x, "charisma");
+        this.Intelligence = XMLNifty.SelectInt(x, "intelligence");
+        this.Wisdom = XMLNifty.SelectInt(x, "wisdom");
+        this.Dexterity = XMLNifty.SelectInt(x, "dexterity");
+        this.Constitution = XMLNifty.SelectInt(x, "constitution");
+        this.Difficulty = XMLNifty.SelectInt(x, "difficulty");
+        this.Size = XMLNifty.SelectEnum<Size>(x, "size");
     }
 }
 

@@ -49,9 +49,9 @@ public class WorldObject : MonoBehaviour, PassesTurns
     public virtual void parseXML(XMLNode x)
     {
         //name is handled in DataManager so we get the GameObject name
-        this.Model = x.SelectString("model");
-        this.ModelTexture = x.SelectString("modeltexture");
-        this.Prefab = x.SelectString("prefab");
+        this.Model = XMLNifty.SelectString(x, "model");
+        this.ModelTexture = XMLNifty.SelectString(x, "modeltexture");
+        this.Prefab = XMLNifty.SelectString(x, "prefab");
     }
 
     public virtual void setNull()

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// Storage container that stores items.
 /// </summary>
 
-[AddComponentMenu("NGUI/Examples/ Item Storage")]
+//[AddComponentMenu("NGUI/Examples/ Item Storage")]
 public class ItemStorage : MonoBehaviour
 {
 	/// <summary>
@@ -54,7 +54,9 @@ public class ItemStorage : MonoBehaviour
 	/// </summary>
 
 	public int padding = 10;
-
+	
+	#region NGUI INVENTORY IMPLEMENTATION WHICH I PROBABLY WONT NEED ANYMORE
+	
 	List<Item> mItems = new List<Item>();
 
 	/// <summary>
@@ -84,6 +86,12 @@ public class ItemStorage : MonoBehaviour
 		}
 		return item;
 	}
+	
+	#endregion
+	
+	
+	public List<ItemSlot> InventorySlots = new List<ItemSlot>();
+	
 
 	/// <summary>
 	/// Initialize the container and create an appropriate number of UI slots.
@@ -103,15 +111,18 @@ public class ItemStorage : MonoBehaviour
 					GameObject go = NGUITools.AddChild(gameObject, template);
 					Transform t = go.transform;
 					t.localPosition = new Vector3(padding + (x + 0.5f) * spacing, -padding - (y + 0.5f) * spacing, 0f);
-					t.localScale = new Vector3(2f,2f,2f);  //custom scaling line
+					t.localScale = new Vector3(2f,2f,2f);  //custom scaling line - MAY HAVE SOLVED THIS IN THE EDITOR BE CAREFUL
 					
 					//Lines flagged for re-implementation:
 					ItemSlot slot = go.GetComponent<ItemSlot>();
-										
+					
+					
 					if (slot != null)
 					{
 						slot.storage = this;
 						slot.slot = count;
+						slot.label.enabled = false; //0 item so no label
+						InventorySlots.Add(slot);
 					}
 
 					b.Encapsulate(new Vector3(padding * 2f + (x + 1) * spacing, -padding * 2f - (y + 1) * spacing, 0f));

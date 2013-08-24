@@ -29,7 +29,7 @@ public class Item : WorldObject, PassesTurns
 	}
     #endregion
 
-    #region Generic Properties of Items
+    #region Properties of Items
 
     //Properties
     private string type;
@@ -38,52 +38,7 @@ public class Item : WorldObject, PassesTurns
         get { return type; }
         set { this.type = value; }
     }
-    private BUC buc;
-    public BUC BUC
-    {
-        get { return buc; }
-        set { this.buc = value; }
-    }
-    private int size;
-    public int Size
-    {
-        get
-        {
-            return size;
-        }
-        set
-        {
-            this.size = value;
-        }
-    }
-    public float Weight
-    {
-        get
-        {
-            return (Size * Material.Density) / 1000;
-        }
-    }
-
-    //These map to existing values upon a dictionary stored in ItemMaster
-    private string damage;
-    public Dice Damage
-    {
-        get { return Probability.getDice(damage); }
-        set { this.damage = value.diceName; }
-    }
-    private string mat;
-    public MaterialType Material
-    {
-        get { return BigBoss.WorldObjectManager.getMaterial(mat); }
-        set { this.mat = value.Name; }
-    }
-
-    private EquipTypes equipType;
-    public EquipTypes EquipType
-    {
-        get { return equipType; }
-        set { this.equipType = value; }
-    }
+    public ItemProperties props = new ItemProperties();
 
     //flags
     public Flags<ItemFlags> itemFlags = new Flags<ItemFlags>();
@@ -92,18 +47,10 @@ public class Item : WorldObject, PassesTurns
     public ItemStats stats = new ItemStats();
 
     //effects
-    protected Properties onEaten;
-    protected Properties onEquip;
-    protected Properties onUse;
+    protected ItemEffect onEaten = new ItemEffect();
+    protected ItemEffect onEquip = new ItemEffect();
+    protected ItemEffect onUse = new ItemEffect();
 
-    #endregion
-
-    #region Instanced Properties of Items
-    //none atm
-    #endregion
-
-    #region Base Properties of Items
-    //none atm
     #endregion
 
     public Item()
@@ -114,7 +61,11 @@ public class Item : WorldObject, PassesTurns
 
     public void onEatenEvent(NPC n)
     {
-        n.applyEffect(this.onEaten, 1, false);
+        if (onEaten != null)
+        {
+            n.applyEffect(onEaten.prop, onEaten.strength, false, onEaten.turns);
+        }
+        n.AdjustHunger(this.stats.Nutrition);
     }
 
     public bool isUsable()
@@ -126,14 +77,17 @@ public class Item : WorldObject, PassesTurns
 
     public void onUseEvent(NPC n)
     {
-        n.applyEffect(onUse, 1, false);
+        if (onUse != null)
+        {
+            n.applyEffect(onUse.prop, onUse.strength, false, onUse.turns);
+        }
 
         //if usage needs restricted, change that here
     }
 
     public bool isUnEquippable()
     {
-        if (BUC == global::BUC.BLESSED || BUC == global::BUC.UNCURSED)
+        if (props.BUC == global::BUC.BLESSED || props.BUC == global::BUC.UNCURSED)
         {
             return true;
         }
@@ -145,17 +99,23 @@ public class Item : WorldObject, PassesTurns
 
     public void onEquipEvent(NPC n)
     {
-        n.applyEffect(onEquip, 1, true);
+        if (onEquip != null)
+        {
+            n.applyEffect(onEquip.prop, 1, true);
+        }
     }
 
     public void onUnEquipEvent(NPC n)
     {
-        n.applyEffect(onEquip, -1, true);
+        if (onEquip != null)
+        {
+            n.applyEffect(onEquip.prop, -1, true);
+        }
     }
 
     public int getDamage()
     {
-        return this.Damage.getValue();
+        return this.props.Damage.getValue();
     }
 
     #endregion
@@ -175,37 +135,29 @@ public class Item : WorldObject, PassesTurns
         this.stats = baseItem.stats.Copy();
         //properties
         this.Type = baseItem.Type;
-        this.BUC = baseItem.BUC;
-        this.Damage = baseItem.Damage;
-        this.Material = baseItem.Material;
-        this.EquipType = baseItem.EquipType;
-        this.Size = baseItem.Size;
+        this.props.BUC = baseItem.props.BUC;
+        this.props.Damage = baseItem.props.Damage;
+        this.props.Material = baseItem.props.Material;
+        this.props.EquipType = baseItem.props.EquipType;
+        this.props.Size = baseItem.props.Size;
     }
 
     public override void setNull()
     {
         //Initialize to null stats essentially. Needed/Not needed? Dunno.
-        base.setNull();
-        //properties
-        type = "null";
-        BUC = BUC.CURSED;
-        damage = "d1";
-        mat = "null";
-        EquipType = EquipTypes.LAST;
-        //classes
-        stats.setNull();
+        parseXML(new XMLNode());
+        IsActive = false;
     }
 
-    #region XML Parsing
     public override void parseXML(XMLNode x)
     {
         base.parseXML(x);
-        this.Damage = Probability.getDice(x.SelectString("damage"));
-        this.mat = x.SelectString("material");
-        stats.parseXML(x.select("stats"));
+        props.parseXML(x);
+        this.onEquip.parseXML(XMLNifty.select(x, "OnEquipEffect"));
+        this.onUse.parseXML(XMLNifty.select(x, "OnUseEvent"));
+        this.onEaten.parseXML(XMLNifty.select(x, "OnEatenEffect"));
+        stats.parseXML(x);
     }
-    #endregion
-
     #endregion
 
     #region Turn Management

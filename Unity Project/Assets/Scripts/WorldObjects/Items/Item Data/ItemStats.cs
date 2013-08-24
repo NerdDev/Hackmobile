@@ -28,12 +28,16 @@ public class ItemStats
         set { this.size = value; }
     }
 
-    public void parseXML(XMLNode x)
+    public void parseXML(XMLNode xnode)
     {
-        this.Weight = x.SelectInt("weight");
-        this.Cost = x.SelectInt("cost");
-        this.Nutrition = x.SelectInt("nutrition");
-        this.Size = x.SelectEnum<Size>("equipsize");
+        //Assignation
+        XMLNode x = XMLNifty.select(xnode, "stats");
+
+        //Variables
+        this.Weight = XMLNifty.SelectInt(x, "weight");
+        this.Cost = XMLNifty.SelectInt(x, "cost");
+        this.Nutrition = XMLNifty.SelectInt(x, "nutrition");
+        this.Size = XMLNifty.SelectEnum<Size>(x, "equipsize");
     }
 
     public void setNull()
