@@ -60,4 +60,9 @@ abstract public class RoomModifier : ProbabilityItem {
     {
         return 1;
     }
+
+    public bool IsUnique()
+    {
+        return false;
+    }
 }

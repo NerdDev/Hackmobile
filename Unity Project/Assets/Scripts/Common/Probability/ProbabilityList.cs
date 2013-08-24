@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 public class ProbabilityList<T> where T : ProbabilityItem
 {
-    RandomGen rand;
-    int maxNum = 0;
-    int largestDiv = -1;
-    List<ProbContainer> itemList = new List<ProbContainer>();
+    protected RandomGen rand;
+    protected int maxNum = 0;
+    protected int largestDiv = -1;
+    protected List<ProbContainer> itemList = new List<ProbContainer>();
+    protected bool hasUnique = false;
 
     public ProbabilityList(RandomGen rand)
     {
@@ -32,6 +33,8 @@ public class ProbabilityList<T> where T : ProbabilityItem
     private bool AddInternal(ProbContainer cont)
     {
         itemList.Add(cont);
+        if (cont.item.IsUnique())
+            hasUnique = true;
         int probDiv = cont.item.ProbabilityDiv();
         if (probDiv > largestDiv)
         { // If div is largest, recalc
@@ -89,39 +92,63 @@ public class ProbabilityList<T> where T : ProbabilityItem
         }
     }
 
+    public bool Get(out T item, out int resultIndex)
+    {
+        int picked = rand.Next(maxNum);
+        resultIndex = 0;
+        foreach (ProbContainer cont in itemList)
+        {
+            if (picked < cont.num)
+            {
+                item = cont.item;
+                return true;
+            }
+            resultIndex++;
+        }
+        item = default(T);
+        return false;
+    }
+
+    public bool Get(out T item)
+    {
+        int picked = rand.Next(maxNum);
+        foreach (ProbContainer cont in itemList)
+        {
+            if (picked < cont.num)
+            {
+                item = cont.item;
+                return true;
+            }
+        }
+        item = default(T);
+        return false;
+    }
+
     public T Get()
     {
-        int picked = rand.Next(maxNum);
-        foreach (ProbContainer cont in itemList)
-        {
-            if (picked < cont.num)
-            {
-                return cont.item;
-            }
-        }
-        return default(T);
+        T item;
+        Get(out item);
+        return item;
     }
 
-    T GetRemove()
+    bool GetRemove(out T item)
     {
-        int picked = rand.Next(maxNum);
-        int i = 0;
-        foreach (ProbContainer cont in itemList)
+        int index;
+        if (Get(out item, out index))
         {
-            if (picked < cont.num)
-            {
-                itemList.RemoveAt(i);
-                return cont.item;
-            }
-            i++;
+            itemList.RemoveAt(index);
+            return true;
         }
-        return default(T);
+        return false;
     }
 
+    // Gets desired rolls from the list
+    // While only walking it once
     List<T> Get(List<int> randNums)
     {
+        randNums.Sort();
         List<T> ret = new List<T>();
-        List<int> removeIndices = new List<int>();
+        int removeCount = -1;
         foreach (ProbContainer cont in itemList)
         {
             foreach (int picked in randNums)
@@ -129,16 +156,17 @@ public class ProbabilityList<T> where T : ProbabilityItem
                 if (picked < cont.num)
                 {
                     ret.Add(cont.item);
-                    removeIndices.Add(picked);
+                    removeCount++;
+                }
+                else
+                { // Since randNums are sorted we can skip rest
+                    continue;
                 }
             }
-            if (removeIndices.Count > 0)
+            if (removeCount > 0)
             {
-                foreach (int remove in removeIndices)
-                {
-                    randNums.Remove(remove);
-                }
-                removeIndices.Clear();
+                randNums.RemoveRange(0, removeCount);
+                removeCount = 0;
             }
         }
         return ret;
@@ -148,10 +176,10 @@ public class ProbabilityList<T> where T : ProbabilityItem
     {
         List<T> ret = new List<T>();
         ProbabilityList<T> copy = new ProbabilityList<T>(this);
+        T item;
         for (int i = 0; i < amount; i++)
         {
-            T item = copy.GetRemove();
-            if (item != null)
+            if (copy.GetRemove(out item))
             {
                 ret.Add(item);
             }
@@ -161,15 +189,37 @@ public class ProbabilityList<T> where T : ProbabilityItem
 
     public List<T> Get(int amount)
     {
-        List<int> randNums = new List<int>();
-        for (int i = 0; i < amount; i++)
-        {
-            randNums.Add(rand.Next(maxNum));
+        if (hasUnique)
+        { // Has a unique item on the list
+            List<T> ret = new List<T>();
+            ProbabilityList<T> copy = new ProbabilityList<T>(this);
+            int index;
+            T item;
+            for (int i = 0; i < amount; i++)
+            {
+                if (copy.Get(out item, out index))
+                {
+                    if (item.IsUnique())
+                    {
+                        copy.itemList.RemoveAt(index);
+                    }
+                    ret.Add(item);
+                }
+            }
+            return ret;
         }
-        return Get(randNums);
+        else
+        { // Simpler if no uniques
+            List<int> randNums = new List<int>();
+            for (int i = 0; i < amount; i++)
+            {
+                randNums.Add(rand.Next(maxNum));
+            }
+            return Get(randNums);
+        }
     }
 
-    class ProbContainer {
+    protected class ProbContainer {
         public T item;
         private int num_ = 0;
         public int num { get { return num_; } }
