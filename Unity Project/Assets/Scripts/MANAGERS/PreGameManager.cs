@@ -35,15 +35,15 @@ public class PreGameManager : MonoBehaviour {
     {
         if (LevelManager.Level[28, 57] != null)
         {
-            BigBoss.DungeonMaster.SpawnCreature("orc", 28, 57);
+            BigBoss.DungeonMaster.SpawnCreature("orc", 93, 104);
         }
         if (LevelManager.Level[18, 52] != null)
         {
-            BigBoss.DungeonMaster.SpawnCreature("skeleton", 18, 52);
+            BigBoss.DungeonMaster.SpawnCreature("skeleton", 75, 91);
         }
         if (LevelManager.Level[22, 55] != null)
         {
-            BigBoss.DungeonMaster.SpawnCreature("skeleton", 22, 55);
+            BigBoss.DungeonMaster.SpawnCreature("skeleton", 117, 104);
         }
     }
 	// Update is called once per frame

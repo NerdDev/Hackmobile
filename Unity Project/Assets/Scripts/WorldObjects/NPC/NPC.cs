@@ -352,8 +352,15 @@ public class NPC : WorldObject
 
     public PathTree getPathTree(int x, int y) 
     {
-        PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(x, y));
-        return path;
+        if (LevelManager.Level[gridSpace.x, gridSpace.y] != null && LevelManager.Level[x, y] != null)
+        {
+            PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(x, y));
+            return path;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     #endregion
@@ -819,9 +826,12 @@ public class NPC : WorldObject
     {
         //move?
         PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
-        List<PathNode> nodes = pathToPlayer.getPath();
-        MoveNPC(nodes[nodes.Count - 2].loc);
-        UpdateCurrentTileVectors();
+        if (pathToPlayer != null) 
+        {
+            List<PathNode> nodes = pathToPlayer.getPath();
+            MoveNPC(nodes[nodes.Count - 2].loc);
+            UpdateCurrentTileVectors();
+        }
     }
 
     #endregion
