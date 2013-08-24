@@ -5406,7 +5406,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1656110902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26, y: -.5, z: 45}
+  m_LocalPosition: {x: 115, y: -.5, z: 120}
   m_LocalScale: {x: .5, y: .5, z: .5}
   m_Children:
   - {fileID: 40657488}
@@ -5496,7 +5496,7 @@ MonoBehaviour:
   PlayerChosenProfession: 0
   playerSpeed: 1.20000005
   playerRotationSpeed: .150000006
-  avatarStartLocation: {x: 26, y: -.5, z: 45}
+  avatarStartLocation: {x: 115, y: -.5, z: 120}
   tileMovementTolerance: .850000024
 --- !u!95 &1656110908
 Animator:

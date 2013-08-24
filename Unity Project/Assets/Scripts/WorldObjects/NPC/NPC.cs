@@ -69,7 +69,7 @@ public class NPC : WorldObject
         }
     }
     #endregion
-    
+
     /**
      * All the properties of the NPC should be contained here.
      */
@@ -302,7 +302,7 @@ public class NPC : WorldObject
         BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
     }
 
-    public float getXPfromNPC() 
+    public float getXPfromNPC()
     {
         //how much XP is this NPC worth?
         return 10f;
@@ -350,17 +350,10 @@ public class NPC : WorldObject
         return true;
     }
 
-    public PathTree getPathTree(int x, int y) 
+    public PathTree getPathTree(int x, int y)
     {
-        if (LevelManager.Level[gridSpace.x, gridSpace.y] != null && LevelManager.Level[x, y] != null)
-        {
-            PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(x, y));
-            return path;
-        }
-        else
-        {
-            return null;
-        }
+        PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(x, y));
+        return path;
     }
 
     #endregion
@@ -414,23 +407,23 @@ public class NPC : WorldObject
         if (inventory.ContainsKey(i))
         {
             //item was just eaten, take it outta that list
-            if (i.itemFlags[ItemFlags.IS_EQUIPPED]) 
-			{
-               unequipItem(i);
-           	}
+            if (i.itemFlags[ItemFlags.IS_EQUIPPED])
+            {
+                unequipItem(i);
+            }
             i.onEatenEvent(this);
-           removeFromInventory(i);
+            removeFromInventory(i);
 
             //unless you're Jose, in which case you'll be using a mac
             //and who knows what happens when mac people eat
             //no one can finish big macs anyways
 
-           //this allows what to do on an item basis to be in the item class
-           i.onEatenEvent(this);
+            //this allows what to do on an item basis to be in the item class
+            i.onEatenEvent(this);
 
-           //removes item permanently
-           //DestroyObject(i.gameObject);
-           //DestroyObject(i);
+            //removes item permanently
+            //DestroyObject(i.gameObject);
+            //DestroyObject(i);
         }
     }
 
@@ -702,7 +695,8 @@ public class NPC : WorldObject
         #region Specialized parsing
         //property parsing
         XMLNifty.parseList(x, "properties", "property",
-            obj => {
+            obj =>
+            {
                 Properties np = obj.SelectEnum<Properties>("name");
                 NPCEffect eff = new NPCEffect(np, this);
                 eff.apply(obj.SelectInt("val"), false);
@@ -734,7 +728,7 @@ public class NPC : WorldObject
 
     private int npcPoints = 0;
     private int baseNPCPoints = 60;
-    
+
     public override void UpdateTurn()
     {
         if (IsActive && BigBoss.TimeKeeper.turnsPassed != 0)
@@ -757,7 +751,7 @@ public class NPC : WorldObject
             {
                 //do nothing
             }
-            
+
             //AdjustHunger(-1);
         }
     }
@@ -826,7 +820,7 @@ public class NPC : WorldObject
     {
         //move?
         PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
-        if (pathToPlayer != null) 
+        if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
             MoveNPC(nodes[nodes.Count - 2].loc);
