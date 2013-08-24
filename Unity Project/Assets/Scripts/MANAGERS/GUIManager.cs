@@ -146,7 +146,7 @@ public class GUIManager : MonoBehaviour {
 		
 		//NEED TO PUT A FAILSAFE HERE IN CASE ONE RETURNS NULL!!!!!!!
 		inventoryPanel = GameObject.Find("Inventory_Panel_Background").GetComponent("UIPanel") as UIPanel;
-		inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();	
+        inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();
 		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;
 		inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
 
@@ -210,9 +210,7 @@ public class GUIManager : MonoBehaviour {
 	
 	public void AddItemToGUIInventory(Item item, int count)
 	{
-		
 		ItemSlot slot = inventoryStorageScript.InventorySlots[count];
-		
 		
 		slot.icon.spriteName = "berry02"; //DOUBLE CHECK IF THE ZERO INDEXING IS CORRECT!!!!!!
 		//Quantity Label:
