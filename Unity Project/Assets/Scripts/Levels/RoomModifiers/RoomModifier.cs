@@ -24,7 +24,7 @@ abstract public class RoomModifier : ProbabilityItem {
         }
         foreach (RoomModifier mod in modPrototypes)
         {
-            mods[(int)mod.GetType()].Add(mod, mod.ProbabilityDiv(), mod.IsUnique());
+            mods[(int)mod.GetType()].Add(mod);
         }
         #endregion Internal
     }

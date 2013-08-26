@@ -51,6 +51,17 @@ public class ProbabilityList<T>
         return false;
     }
 
+    public void Add(T item)
+    {
+        if (item is ProbabilityItem)
+        {
+            ProbabilityItem p = (ProbabilityItem)item;
+            Add(item, p.ProbabilityDiv(), p.IsUnique());
+        }
+        ProbabilityItem prob = (ProbabilityItem) item;
+        Add(item, prob.ProbabilityDiv(), prob.IsUnique());
+    }
+
     public void Add(T item, float probDiv, bool unique)
     {
         ProbContainer cont = new ProbContainer(item, probDiv, unique);
@@ -210,6 +221,25 @@ public class ProbabilityList<T>
             randNums.Add(rand.Next(Max));
         }
         return Get(randNums);
+    }
+
+    protected class ProbItemInstantiation : ProbabilityItem
+    {
+        Object item;
+        public ProbItemInstantiation(Object item)
+        {
+            this.item = item;
+        }
+
+        public int ProbabilityDiv()
+        {
+            return 1;
+        }
+
+        public bool IsUnique()
+        {
+            return false;
+        }
     }
 
     protected class ProbContainer {
