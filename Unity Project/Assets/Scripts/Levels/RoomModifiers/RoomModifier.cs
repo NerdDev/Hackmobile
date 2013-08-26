@@ -56,12 +56,12 @@ abstract public class RoomModifier : ProbabilityItem {
 
     public abstract string GetName();
 
-    public int ProbabilityDiv()
+    public virtual int ProbabilityDiv()
     {
         return 1;
     }
 
-    public bool IsUnique()
+    public virtual bool IsUnique()
     {
         return false;
     }

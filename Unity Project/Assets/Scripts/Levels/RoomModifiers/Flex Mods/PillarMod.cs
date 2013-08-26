@@ -24,4 +24,9 @@ public class PillarMod : RoomModifier {
     {
         return "Pillars";
     }
+
+    public override bool IsUnique()
+    {
+        return true;
+    }
 }

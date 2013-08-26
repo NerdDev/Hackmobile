@@ -58,8 +58,11 @@ public class ProbabilityList<T>
             ProbabilityItem p = (ProbabilityItem)item;
             Add(item, p.ProbabilityDiv(), p.IsUnique());
         }
-        ProbabilityItem prob = (ProbabilityItem) item;
-        Add(item, prob.ProbabilityDiv(), prob.IsUnique());
+        else
+        {
+            ProbabilityItem prob = (ProbabilityItem)item;
+            Add(item, prob.ProbabilityDiv(), prob.IsUnique());
+        }
     }
 
     public void Add(T item, float probDiv, bool unique)
@@ -116,10 +119,18 @@ public class ProbabilityList<T>
         foreach (ProbContainer cont in itemList)
         {
             curNum += cont.num;
-            if (picked < curNum && !cont.skip)
+            if (picked < curNum)
             {
-                item = cont.item;
-                return true;
+                if (!cont.skip)
+                {
+                    HandleUnique(cont);
+                    item = cont.item;
+                    return true;
+                }
+                else
+                {
+                    picked += cont.num;
+                }
             }
             resultIndex++;
         }
@@ -161,38 +172,6 @@ public class ProbabilityList<T>
         return false;
     }
 
-    // Gets desired rolls from the list
-    // While only walking it once
-    List<T> Get(List<int> randNums)
-    {
-        randNums.Sort();
-        List<T> ret = new List<T>();
-        int removeCount = 0;
-        int curNum = 0;
-        foreach (ProbContainer cont in itemList)
-        {
-            curNum += cont.num;
-            foreach (int picked in randNums)
-            {
-                if (picked < curNum)
-                {
-                    ret.Add(cont.item);
-                    removeCount++;
-                }
-                else
-                { // Since randNums are sorted we can skip rest
-                    continue;
-                }
-            }
-            if (removeCount > 0)
-            {
-                randNums.RemoveRange(0, removeCount);
-                removeCount = 0;
-            }
-        }
-        return ret;
-    }
-
     bool GetUnique(out T item)
     {
         int index;
@@ -215,12 +194,14 @@ public class ProbabilityList<T>
 
     public List<T> Get(int amount)
     {
-        List<int> randNums = new List<int>();
+        List<T> picks = new List<T>();
+        T item;
         for (int i = 0; i < amount; i++)
         {
-            randNums.Add(rand.Next(Max));
+            if (Get(out item))
+                picks.Add(item);
         }
-        return Get(randNums);
+        return picks;
     }
 
     protected class ProbItemInstantiation : ProbabilityItem
