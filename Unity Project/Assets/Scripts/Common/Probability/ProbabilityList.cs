@@ -2,13 +2,22 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ProbabilityList<T> where T : ProbabilityItem
+public class ProbabilityList<T>
 {
     protected RandomGen rand;
     protected int maxNum = 0;
-    protected int largestDiv = -1;
+    protected int tmpMax = 0;
+    protected float largestDiv = -1;
     protected List<ProbContainer> itemList = new List<ProbContainer>();
-    protected bool hasUnique = false;
+    protected int Max { 
+        get { 
+            return tmpMax; 
+        } 
+        set {
+            maxNum = value;
+            tmpMax = value;
+        }
+    }
 
     public ProbabilityList(RandomGen rand)
     {
@@ -23,6 +32,7 @@ public class ProbabilityList<T> where T : ProbabilityItem
     {
         this.rand = rhs.rand;
         this.maxNum = rhs.maxNum;
+        this.tmpMax = rhs.maxNum;
         this.largestDiv = rhs.largestDiv;
         foreach (ProbContainer cont in rhs.itemList)
         {
@@ -33,49 +43,44 @@ public class ProbabilityList<T> where T : ProbabilityItem
     private bool AddInternal(ProbContainer cont)
     {
         itemList.Add(cont);
-        if (cont.item.IsUnique())
-            hasUnique = true;
-        int probDiv = cont.item.ProbabilityDiv();
-        if (probDiv > largestDiv)
+        if (cont.probDiv > largestDiv)
         { // If div is largest, recalc
-            largestDiv = probDiv;
+            largestDiv = cont.probDiv;
             return true;
         }
         return false;
     }
 
-    public void Add(T item)
+    public void Add(T item, float probDiv, bool unique)
     {
-        ProbContainer cont = new ProbContainer(item);
+        ProbContainer cont = new ProbContainer(item, probDiv, unique);
         if (AddInternal(cont))
         { // Recalc all probnums since we have new largest div
-            evaluateProbNums();
+            EvaluateProbNums();
         }
         else
         { // Scale number to largest div
-            ProbContainer lastCont = itemList[itemList.Count - 2];
-            cont.SetNum(largestDiv, lastCont.num);
-            maxNum = cont.num;
+            cont.SetNum(largestDiv);
+            Max += cont.num;
         }
     }
 
-    public void Add(List<T> items)
+    public void ClearUnique()
     {
-        foreach (T item in items)
-        {
-            AddInternal(new ProbContainer(item));
-        }
-        evaluateProbNums();
+        foreach (ProbContainer cont in itemList)
+            cont.skip = false;
+        tmpMax = maxNum;
     }
 
-    void evaluateProbNums()
+    void EvaluateProbNums()
     {
         maxNum = 0;
         foreach (ProbContainer cont in itemList)
         {
-            cont.SetNum(largestDiv, maxNum);
-            maxNum = cont.num;
+            cont.SetNum(largestDiv);
+            maxNum += cont.num;
         }
+        Max = maxNum;
     }
 
     public void ToLog(DebugManager.Logs log)
@@ -94,11 +99,13 @@ public class ProbabilityList<T> where T : ProbabilityItem
 
     public bool Get(out T item, out int resultIndex)
     {
-        int picked = rand.Next(maxNum);
+        int picked = rand.Next(Max);
         resultIndex = 0;
+        int curNum = 0;
         foreach (ProbContainer cont in itemList)
         {
-            if (picked < cont.num)
+            curNum += cont.num;
+            if (picked < curNum && !cont.skip)
             {
                 item = cont.item;
                 return true;
@@ -109,19 +116,20 @@ public class ProbabilityList<T> where T : ProbabilityItem
         return false;
     }
 
+    protected bool HandleUnique(ProbContainer cont)
+    {
+        if (cont.unique)
+        {
+            cont.skip = true;
+            tmpMax -= cont.num;
+        }
+        return true;
+    }
+
     public bool Get(out T item)
     {
-        int picked = rand.Next(maxNum);
-        foreach (ProbContainer cont in itemList)
-        {
-            if (picked < cont.num)
-            {
-                item = cont.item;
-                return true;
-            }
-        }
-        item = default(T);
-        return false;
+        int num;
+        return Get(out item, out num);
     }
 
     public T Get()
@@ -148,12 +156,14 @@ public class ProbabilityList<T> where T : ProbabilityItem
     {
         randNums.Sort();
         List<T> ret = new List<T>();
-        int removeCount = -1;
+        int removeCount = 0;
+        int curNum = 0;
         foreach (ProbContainer cont in itemList)
         {
+            curNum += cont.num;
             foreach (int picked in randNums)
             {
-                if (picked < cont.num)
+                if (picked < curNum)
                 {
                     ret.Add(cont.item);
                     removeCount++;
@@ -172,74 +182,62 @@ public class ProbabilityList<T> where T : ProbabilityItem
         return ret;
     }
 
+    bool GetUnique(out T item)
+    {
+        int index;
+        bool ret = Get(out item, out index);
+        itemList[index].skip = true;
+        return ret;
+    }
+
     public List<T> GetUnique(int amount)
     {
-        List<T> ret = new List<T>();
-        ProbabilityList<T> copy = new ProbabilityList<T>(this);
         T item;
+        List<T> ret = new List<T>();
         for (int i = 0; i < amount; i++)
         {
-            if (copy.GetRemove(out item))
-            {
+            if (GetUnique(out item))
                 ret.Add(item);
-            }
         }
         return ret;
     }
 
     public List<T> Get(int amount)
     {
-        if (hasUnique)
-        { // Has a unique item on the list
-            List<T> ret = new List<T>();
-            ProbabilityList<T> copy = new ProbabilityList<T>(this);
-            int index;
-            T item;
-            for (int i = 0; i < amount; i++)
-            {
-                if (copy.Get(out item, out index))
-                {
-                    if (item.IsUnique())
-                    {
-                        copy.itemList.RemoveAt(index);
-                    }
-                    ret.Add(item);
-                }
-            }
-            return ret;
+        List<int> randNums = new List<int>();
+        for (int i = 0; i < amount; i++)
+        {
+            randNums.Add(rand.Next(Max));
         }
-        else
-        { // Simpler if no uniques
-            List<int> randNums = new List<int>();
-            for (int i = 0; i < amount; i++)
-            {
-                randNums.Add(rand.Next(maxNum));
-            }
-            return Get(randNums);
-        }
+        return Get(randNums);
     }
 
     protected class ProbContainer {
         public T item;
-        private int num_ = 0;
-        public int num { get { return num_; } }
+        public int num { get; protected set; }
+        public bool skip { get; set; }
+        public float probDiv { get; set; }
+        public bool unique { get; set; }
 
-        public ProbContainer(T item)
+        public ProbContainer(T item, float probDiv, bool unique)
         {
             this.item = item;
+            this.probDiv = probDiv;
+            this.unique = unique;
         }
 
         public ProbContainer(ProbContainer rhs)
         {
             this.item = rhs.item;
-            this.num_ = rhs.num_;
+            this.num = rhs.num;
+            this.skip = rhs.skip;
+            this.probDiv = rhs.probDiv;
+            this.unique = rhs.unique;
         }
 
-        public void SetNum(int maxDivider, int curNum)
+        public void SetNum(float maxDivider)
         {
-            float ratio = ((float)item.ProbabilityDiv()) / ((float)maxDivider);
-            num_ = (int)(1F / ratio);
-            num_ += curNum;
+            num = (int)(maxDivider / probDiv);
         }
     }
 }
