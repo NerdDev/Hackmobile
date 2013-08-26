@@ -9,6 +9,7 @@ public class ProbabilityList<T>
     protected int tmpMax = 0;
     protected float largestDiv = -1;
     protected List<ProbContainer> itemList = new List<ProbContainer>();
+    public bool Fresh { get; protected set; }
     protected int Max { 
         get { 
             return tmpMax; 
@@ -144,6 +145,7 @@ public class ProbabilityList<T>
         {
             cont.skip = true;
             tmpMax -= cont.num;
+            Fresh = false;
         }
         return true;
     }
