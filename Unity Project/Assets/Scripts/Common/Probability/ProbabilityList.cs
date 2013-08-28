@@ -2,14 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ProbabilityList<T>
+public class ProbabilityList<T> : ProbabilityPool<T>
 {
-    protected RandomGen rand;
     protected int maxNum = 0;
     protected int tmpMax = 0;
     protected float largestDiv = -1;
     protected List<ProbContainer> itemList = new List<ProbContainer>();
-    public bool Fresh { get; protected set; }
     protected int Max { 
         get { 
             return tmpMax; 
@@ -21,8 +19,8 @@ public class ProbabilityList<T>
     }
 
     public ProbabilityList(RandomGen rand)
+        : base(rand)
     {
-        this.rand = rand;
     }
 
     public ProbabilityList () : this(Probability.Rand)
@@ -30,8 +28,8 @@ public class ProbabilityList<T>
     }
 
     public ProbabilityList (ProbabilityList<T> rhs)
+        : base(rhs)
     {
-        this.rand = rhs.rand;
         this.maxNum = rhs.maxNum;
         this.tmpMax = rhs.maxNum;
         this.largestDiv = rhs.largestDiv;
@@ -52,21 +50,7 @@ public class ProbabilityList<T>
         return false;
     }
 
-    public void Add(T item)
-    {
-        if (item is ProbabilityItem)
-        {
-            ProbabilityItem p = (ProbabilityItem)item;
-            Add(item, p.ProbabilityDiv(), p.IsUnique());
-        }
-        else
-        {
-            ProbabilityItem prob = (ProbabilityItem)item;
-            Add(item, prob.ProbabilityDiv(), prob.IsUnique());
-        }
-    }
-
-    public void Add(T item, float probDiv, bool unique)
+    public override void Add(T item, float probDiv, bool unique)
     {
         ProbContainer cont = new ProbContainer(item, probDiv, unique);
         if (AddInternal(cont))
@@ -80,7 +64,7 @@ public class ProbabilityList<T>
         }
     }
 
-    public void ClearUnique()
+    public override void ClearUnique()
     {
         foreach (ProbContainer cont in itemList)
             cont.skip = false;
@@ -98,7 +82,7 @@ public class ProbabilityList<T>
         Max = maxNum;
     }
 
-    public void ToLog(DebugManager.Logs log)
+    public override void ToLog(DebugManager.Logs log)
     {
         if (DebugManager.logging(log) && DebugManager.Flag(DebugManager.DebugFlag.Probability))
         {
@@ -150,17 +134,10 @@ public class ProbabilityList<T>
         return true;
     }
 
-    public bool Get(out T item)
+    public override bool Get(out T item)
     {
         int num;
         return Get(out item, out num);
-    }
-
-    public T Get()
-    {
-        T item;
-        Get(out item);
-        return item;
     }
 
     bool GetRemove(out T item)
@@ -174,55 +151,12 @@ public class ProbabilityList<T>
         return false;
     }
 
-    bool GetUnique(out T item)
+    public override bool GetUnique(out T item)
     {
         int index;
         bool ret = Get(out item, out index);
         itemList[index].skip = true;
         return ret;
-    }
-
-    public List<T> GetUnique(int amount)
-    {
-        T item;
-        List<T> ret = new List<T>();
-        for (int i = 0; i < amount; i++)
-        {
-            if (GetUnique(out item))
-                ret.Add(item);
-        }
-        return ret;
-    }
-
-    public List<T> Get(int amount)
-    {
-        List<T> picks = new List<T>();
-        T item;
-        for (int i = 0; i < amount; i++)
-        {
-            if (Get(out item))
-                picks.Add(item);
-        }
-        return picks;
-    }
-
-    protected class ProbItemInstantiation : ProbabilityItem
-    {
-        Object item;
-        public ProbItemInstantiation(Object item)
-        {
-            this.item = item;
-        }
-
-        public int ProbabilityDiv()
-        {
-            return 1;
-        }
-
-        public bool IsUnique()
-        {
-            return false;
-        }
     }
 
     protected class ProbContainer {
