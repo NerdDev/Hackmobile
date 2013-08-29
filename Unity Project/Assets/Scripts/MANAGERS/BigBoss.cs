@@ -147,8 +147,9 @@ public class BigBoss : MonoBehaviour
 		camManager = GetComponentInChildren<CameraManager>() as CameraManager;
         dungeonMaster = GetComponentInChildren<DungeonMaster>() as DungeonMaster;
 		debugManager = GetComponentInChildren<DebugManager>() as DebugManager;
-        if (prefabManager != null)
-            playerManager = prefabManager.player.GetComponent<Player>();
+        playerManager = GetComponentInChildren<Player>() as Player;
+        //if (prefabManager != null)
+        //    playerManager = prefabManager.player.GetComponent<Player>();
         preGameManager = GetComponentInChildren<PreGameManager>() as PreGameManager;
 
 		//Make this game object persistent

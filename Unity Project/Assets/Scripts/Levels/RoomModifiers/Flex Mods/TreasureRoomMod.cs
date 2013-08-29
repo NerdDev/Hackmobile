@@ -43,4 +43,9 @@ class TreasureRoomMod : RoomModifier
     {
         return "Treasure Room";
     }
+
+    public override bool IsUnique()
+    {
+        return true;
+    }
 }

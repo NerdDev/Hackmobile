@@ -37,12 +37,12 @@ public class NPC : WorldObject
         {
             RegisterNPCToSingleton();
         }
+        BigBoss.TimeKeeper.RegisterToUpdateList(this);
     }
 
     public virtual void RegisterNPCToSingleton()
     {
         BigBoss.WorldObjectManager.AddNPCToMasterList(this);
-        BigBoss.TimeKeeper.RegisterToUpdateList(this);
     }
 
     public virtual void DestroyThisItem()
@@ -76,9 +76,8 @@ public class NPC : WorldObject
     #region NPC Properties
 
     public GenericFlags<Properties> properties = new GenericFlags<Properties>();
-    //When accessing, use the long value of NPC Properties.
-    protected NPCEffect[] effects = new NPCEffect[(long)Properties.LAST];
-    GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
+    public Dictionary<string, EffectInstance> effects = new Dictionary<string, EffectInstance>();
+    public GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
     public Race race;
     public Role role;
     public AttributesData attributes = new AttributesData();
@@ -129,6 +128,10 @@ public class NPC : WorldObject
     protected Value2D<GridSpace> newGridSpace;
 
     bool moving; //stores moving condition
+    protected bool verticalMoving;
+    protected bool movingUp;
+    protected Vector3 targetVerticalCoords;
+    protected float verticalOffset;
     Vector3 targetGridCoords; //this refs target grid coords in pathing
     Vector3 heading; //this is the heading of target minus current location
 
@@ -148,16 +151,11 @@ public class NPC : WorldObject
         {
             if (moving)
             {
-                if (!checkPosition(this.gameObject.transform.position, targetGridCoords))
-                {
-                    MoveNPCStepwise(targetGridCoords);
-                }
-                else
-                {
-                    moving = false;
-                    this.gameObject.transform.position = targetGridCoords;
-                    UpdateCurrentTileVectors();
-                }
+                movement();
+            }
+            if (verticalMoving)
+            {
+                verticalMovement();
             }
         }
     }
@@ -176,6 +174,7 @@ public class NPC : WorldObject
     public virtual float AdjustHunger(float amount)
     {
         stats.Hunger += amount;
+        Debug.Log("Gained " + amount + " of nutrition.");
         getHungerLevel(stats.Hunger);
         return stats.Hunger;
     }
@@ -196,10 +195,12 @@ public class NPC : WorldObject
         else if (stats.CurrentHealth + amount > stats.MaxHealth)
         {
             stats.CurrentHealth = stats.MaxHealth;
+            Debug.Log(this.Name + " gained " + amount + " in health.");
         }
         else
         {
             stats.CurrentHealth = stats.CurrentHealth + amount;
+            Debug.Log(this.Name + " gained " + amount + " in health.");
         }
     }
 
@@ -310,6 +311,35 @@ public class NPC : WorldObject
     #endregion
 
     #region Movement
+    private void movement()
+    {
+        if (!checkPosition(this.gameObject.transform.position, targetGridCoords))
+        {
+            MoveNPCStepwise(targetGridCoords);
+        }
+        else
+        {
+            moving = false;
+            this.gameObject.transform.position = targetGridCoords;
+            UpdateCurrentTileVectors();
+        }
+    }
+
+    protected void verticalMovement()
+    {
+        if (!checkVerticalPosition(this.gameObject.transform.position, targetVerticalCoords))
+        {
+            MoveNPCStepwiseUp();
+        }
+        else
+        {
+            verticalMoving = false;
+            Vector3 pos = this.gameObject.transform.position;
+            pos.y = targetVerticalCoords.y;
+            this.gameObject.transform.position = pos;
+        }
+    }
+
     public void move(int x, int y)
     {
         moving = true;
@@ -317,7 +347,25 @@ public class NPC : WorldObject
         heading = targetGridCoords - this.gameObject.transform.position;
     }
 
-    private void MoveNPCStepwise(Vector3 gridCoords)
+    public void verticalMove(float z)
+    {
+        verticalMoving = true;
+        verticalOffset = z;
+        if (z > 0)
+        {
+            movingUp = true;
+        }
+        else
+        {
+            movingUp = false;
+        }
+        targetVerticalCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x, CurrentOccupiedGridCenterWorldPoint.y + z, CurrentOccupiedGridCenterWorldPoint.z);
+        Vector3 pos = CurrentOccupiedGridCenterWorldPoint;
+        pos.y += verticalOffset;
+        CurrentOccupiedGridCenterWorldPoint = pos;
+    }
+
+    void MoveNPCStepwise(Vector3 gridCoords)
     {
         heading = gridCoords - this.gameObject.transform.position;
         gameObject.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
@@ -325,11 +373,32 @@ public class NPC : WorldObject
         this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, toRot, NPCRotationSpeed);
     }
 
-    private float variance = .08f;
-    private bool checkPosition(Vector3 playPos, Vector3 curPos)
+    void MoveNPCStepwiseUp()
+    {
+        if (movingUp)
+        {
+            gameObject.transform.Translate(Vector3.up * NPCSpeed * Time.deltaTime, Space.Self);
+        }
+        else
+        {
+            gameObject.transform.Translate(Vector3.down * NPCSpeed * Time.deltaTime, Space.Self);
+        }
+    }
+
+    protected float variance = .08f;
+    protected bool checkPosition(Vector3 playPos, Vector3 curPos)
     {
         if (Math.Abs(playPos.x - curPos.x) > variance ||
             Math.Abs(playPos.z - curPos.z) > variance)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    protected bool checkVerticalPosition(Vector3 playPos, Vector3 curPos)
+    {
+        if (Math.Abs(playPos.y - curPos.y) > variance)
         {
             return false;
         }
@@ -346,7 +415,7 @@ public class NPC : WorldObject
         gridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
         gridSpace.val = LevelManager.Level[gridSpace.x, gridSpace.y];
         gridSpace.val.Put(this);
-        CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
+        CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
         return true;
     }
 
@@ -359,42 +428,29 @@ public class NPC : WorldObject
     #endregion
 
     #region Effects
-    /**
-     * Does nothing if the NONE property is applied.
-     */
-    public virtual void applyEffect(Properties e, int priority = 1, bool isItem = false, int turnsToProcess = -1)
+    public virtual void applyEffect(EffectBase effectBase)
     {
-        if (e != Properties.NONE)
+        if (effects.ContainsKey(effectBase.effect))
         {
-            if (effects[(long)e] == null)
-            {
-                NPCEffect eff = new NPCEffect(e, this);
-                if (this.properties[Properties.NONE])
-                {
-                    this.properties[Properties.NONE] = false;
-                }
-
-                effects[(long)e] = eff;
-                eff.apply(priority, isItem, turnsToProcess);
-
-            }
-            else
-            {
-                effects[(long)e].apply(priority, isItem, turnsToProcess);
-            }
+            effects[effectBase.effect] = effects[effectBase.effect].merge(effectBase);
         }
-        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, e.ToString(), Color.green);
+        else
+        {
+            effects.Add(effectBase.effect, effectBase.activate(this));
+        }
     }
 
-    /**
-     * This entirely removes the effect from the NPC. If applied again later, it'll create a new one.
-     */
-    public void removeEffect(Properties e)
+    public void removeEffect(string effect)
     {
-        if (effects[(long)e] != null)
+        if (effects.ContainsKey(effect))
         {
-            BigBoss.TimeKeeper.RemoveFromUpdateList(effects[(long)e]);
-            effects[(long)e] = null;
+            BigBoss.TimeKeeper.RemoveFromUpdateList(effects[effect]);
+            effects[effect].IsActive = false;
+            effects.Remove(effect);
+        }
+        else
+        {
+            //effect doesn't exist on the NPC
         }
     }
     #endregion
@@ -417,9 +473,6 @@ public class NPC : WorldObject
             //unless you're Jose, in which case you'll be using a mac
             //and who knows what happens when mac people eat
             //no one can finish big macs anyways
-
-            //this allows what to do on an item basis to be in the item class
-            i.onEatenEvent(this);
 
             //removes item permanently
             //DestroyObject(i.gameObject);
@@ -643,6 +696,7 @@ public class NPC : WorldObject
         this.race = npc.race;
         this.role = npc.role;
         //lists
+        //if (this is Player)
         this.effects = npc.effects.Copy();
         //inventory
         inventory = new Dictionary<Item, int>();
@@ -698,9 +752,7 @@ public class NPC : WorldObject
             obj =>
             {
                 Properties np = obj.SelectEnum<Properties>("name");
-                NPCEffect eff = new NPCEffect(np, this);
-                eff.apply(obj.SelectInt("val"), false);
-                this.effects[(long)np] = new NPCEffect(np, this);
+                this.properties[np] = true;
             });
 
         //flag parsing
