@@ -15,6 +15,7 @@ abstract public class RoomModifier : ProbabilityItem {
         modPrototypes.Add(new CircleRoom());
         modPrototypes.Add(new TrapRoomMod());
         modPrototypes.Add(new PillarMod());
+        modPrototypes.Add(new GiantPillarMod());
         modPrototypes.Add(new SplitterMod());
         modPrototypes.Add(new TreasureRoomMod());
         modPrototypes.Add(new HiddenRoomMod());
