@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 abstract public class RoomModifier : ProbabilityItem {
 
-    static ProbabilityList<RoomModifier>[] mods = new ProbabilityList<RoomModifier>[Enum.GetNames(typeof(RoomModType)).Length];
+    static ProbabilityPool<RoomModifier>[] mods = new ProbabilityPool<RoomModifier>[Enum.GetNames(typeof(RoomModType)).Length];
 
     public static void RegisterModifiers()
     {
@@ -20,7 +20,7 @@ abstract public class RoomModifier : ProbabilityItem {
         #region Internal
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
-            mods[(int)e] = new ProbabilityList<RoomModifier>(Probability.LevelRand);
+            mods[(int)e] = ProbabilityPool<RoomModifier>.Create(Probability.LevelRand);
         }
         foreach (RoomModifier mod in modPrototypes)
         {
@@ -56,12 +56,12 @@ abstract public class RoomModifier : ProbabilityItem {
 
     public abstract string GetName();
 
-    public int ProbabilityDiv()
+    public virtual int ProbabilityDiv()
     {
         return 1;
     }
 
-    public bool IsUnique()
+    public virtual bool IsUnique()
     {
         return false;
     }
