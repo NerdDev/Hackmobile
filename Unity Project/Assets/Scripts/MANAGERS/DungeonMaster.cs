@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DungeonMaster : MonoBehaviour {
 
-    public static void PopulateLevel(Level l)
+    public void PopulateLevel(Level l)
     {
         if (!l.Populated)
         {
@@ -11,12 +11,20 @@ public class DungeonMaster : MonoBehaviour {
         }
     }
 
-    static void ForcePopulateLevel(Level l)
+    void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
+        foreach (Room room in l.Layout.GetRooms())
+        {
+            GridMap map = room.GetFloors();
+            Value2D<GridType> space = map.RandomValue(Probability.SpawnRand);
+            int wer = 23;
+            wer++;
+            SpawnCreature("skeleton", space.x, space.y);
+        }
     }
 
-    static void PickStartLocation(Level l)
+    void PickStartLocation(Level l)
     {
     }
 

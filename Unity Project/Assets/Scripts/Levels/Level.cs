@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
-    private LevelLayout Layout { get; set; }
+    public LevelLayout Layout { get; private set; }
     public bool Populated { get; set; }
     private GridSpace[,] Arr;
     public Surrounding<GridSpace> surr;

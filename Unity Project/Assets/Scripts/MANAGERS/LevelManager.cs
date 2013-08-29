@@ -24,7 +24,10 @@ public class LevelManager : MonoBehaviour {
         _gen = new LevelGenerator();
 
         SetCurLevel(0);
-        
+
+        if (BigBoss.DungeonMaster != null)
+            BigBoss.DungeonMaster.PopulateLevel(Level);
+
         JustinTest();
         JoseTest();
     }
