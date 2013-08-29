@@ -92,6 +92,9 @@
 		<properties>
 			<!-- none -->
 		</properties>
+		<keywords>
+			<keyword name="undead" />
+		</keywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>

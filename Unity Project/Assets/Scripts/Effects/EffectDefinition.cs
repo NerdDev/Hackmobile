@@ -7,7 +7,6 @@ public class EffectDefinition
 {
     public virtual void apply(NPC n, float strength)
     {
-        
     }
 
     public virtual EffectInstance merge(EffectInstance firstInstance, EffectBase secondInstance)
@@ -17,11 +16,9 @@ public class EffectDefinition
 
     public virtual void init(NPC n, float strength)
     {
-
     }
 
     public virtual void remove(NPC n, float strength)
     {
-
     }
 }

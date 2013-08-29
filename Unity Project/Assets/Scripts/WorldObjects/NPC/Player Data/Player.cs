@@ -90,20 +90,15 @@ public class Player : NPC
         anim = playerAvatar.GetComponent<Animator>() as Animator;
         this.Name = "Kurtis";
 
-        GameObject item = new GameObject();
-        Item i = item.AddComponent<Item>();
-        Item baseI = BigBoss.WorldObjectManager.getItem("sword1");
-        i.setData(baseI);
-        i.IsActive = true;
+        Item i = BigBoss.WorldObjectManager.CreateItem("sword1");
         this.addToInventory(i);
         this.equipItem(i);
 
-        GameObject item2 = new GameObject();
-        Item i2 = item2.AddComponent<Item>();
-        Item food = BigBoss.WorldObjectManager.getItem("spoiled bread");
-        i2.setData(food);
-        i2.IsActive = true;
-        this.addToInventory(i2, 5);
+        Item food = BigBoss.WorldObjectManager.CreateItem("spoiled bread");
+        this.addToInventory(food, 5);
+
+        Item potion = BigBoss.WorldObjectManager.CreateItem("health potion");
+        this.addToInventory(potion, 3);
     }
 
     // Update is called once per frame
@@ -124,6 +119,17 @@ public class Player : NPC
         BigBoss.TimeKeeper.PassTurn(60);
     }
 
+    public override void eatItem(Item i)
+    {
+        base.eatItem(i);
+        BigBoss.TimeKeeper.PassTurn(60);
+    }
+
+    public override void useItem(Item i)
+    {
+        base.useItem(i);
+        BigBoss.TimeKeeper.PassTurn(60);
+    }
     #endregion
 
     #region Movement and Animation

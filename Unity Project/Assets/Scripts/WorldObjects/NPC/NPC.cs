@@ -78,6 +78,7 @@ public class NPC : WorldObject
     public GenericFlags<Properties> properties = new GenericFlags<Properties>();
     public Dictionary<string, EffectInstance> effects = new Dictionary<string, EffectInstance>();
     public GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
+    public GenericFlags<Keywords> keywords = new GenericFlags<Keywords>();
     public Race race;
     public Role role;
     public AttributesData attributes = new AttributesData();
@@ -350,7 +351,7 @@ public class NPC : WorldObject
     public void verticalMove(float z)
     {
         verticalMoving = true;
-        verticalOffset = z;
+        verticalOffset += z;
         if (z > 0)
         {
             movingUp = true;
@@ -430,13 +431,20 @@ public class NPC : WorldObject
     #region Effects
     public virtual void applyEffect(EffectBase effectBase)
     {
-        if (effects.ContainsKey(effectBase.effect))
+        if (effectBase.turns != 0)
         {
-            effects[effectBase.effect] = effects[effectBase.effect].merge(effectBase);
+            if (effects.ContainsKey(effectBase.effect))
+            {
+                effects[effectBase.effect] = effects[effectBase.effect].merge(effectBase);
+            }
+            else
+            {
+                effects.Add(effectBase.effect, effectBase.activate(this));
+            }
         }
         else
         {
-            effects.Add(effectBase.effect, effectBase.activate(this));
+            effectBase.activate(this);
         }
     }
 
@@ -457,7 +465,7 @@ public class NPC : WorldObject
 
     #region Actions
 
-    public void eatItem(Item i)
+    public virtual void eatItem(Item i)
     {
         //enforces it being in inventory, if that should change we'll rewrite later
         if (inventory.ContainsKey(i))
@@ -480,7 +488,7 @@ public class NPC : WorldObject
         }
     }
 
-    public void useItem(Item i)
+    public virtual void useItem(Item i)
     {
         if (i.isUsable())
         {
@@ -686,26 +694,21 @@ public class NPC : WorldObject
     {
         //Anything performing the conversion from base NPC -> instance of NPC goes here.
         base.setData(npc);
-        //classes
-        this.stats = npc.stats.Copy();
+        //data
+        this.properties = npc.properties.Copy();
+        this.effects = npc.effects.Copy();
+        this.flags = npc.flags.Copy();
+        this.keywords = npc.keywords.Copy();
         this.attributes = npc.attributes.Copy();
         this.bodyparts = npc.bodyparts.Copy();
-        //flags
-        this.flags = npc.flags.Copy();
-        //enums
+        this.stats = npc.stats.Copy();
         this.race = npc.race;
         this.role = npc.role;
-        //lists
-        //if (this is Player)
-        this.effects = npc.effects.Copy();
-        //inventory
-        inventory = new Dictionary<Item, int>();
-        //foreach (NPCItem nitem in baseInventory)
-        //{
-        //    //go to inventory
-        //}
-        equippedItems = new List<Item>();
-        equipment = new Equipment(this.bodyparts);
+        inventory = npc.inventory.Copy();
+        equippedItems = npc.equippedItems.Copy();
+        this.equipment = npc.equipment != null ? npc.equipment.Copy() : new Equipment(this.bodyparts);
+
+        //basic stat data that is reset based on the NPC
         stats.MaxEncumbrance = getMaxInventoryWeight();
         stats.Encumbrance = getCurrentInventoryWeight();
         stats.CurrentHealth = stats.MaxHealth;
@@ -718,22 +721,6 @@ public class NPC : WorldObject
     public override void setNull()
     {
         this.parseXML(new XMLNode(null));
-        /*
-        base.setNull();
-        this.attributes.setNull();
-        this.bodyparts.setNull();
-        if (equipment != null)
-        {
-            this.equipment.setNull();
-        }  
-        this.flags.setNull();
-        this.race = Race.NONE;
-        this.role = Role.NONE;
-        for (int i = 0; i < effects.Length; i++)
-        {
-            effects[i] = null;
-        }
-        */
         IsActive = false;
     }
 
@@ -761,6 +748,12 @@ public class NPC : WorldObject
             {
                 NPCFlags np = obj.SelectEnum<NPCFlags>("name");
                 this.flags[np] = true;
+            });
+        XMLNifty.parseList(x, "keywords", "keyword",
+            obj =>
+            {
+                Keywords kw = obj.SelectEnum<Keywords>("name");
+                this.keywords[kw] = true;
             });
         #endregion
 

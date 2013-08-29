@@ -63,7 +63,7 @@ public class GenericFlags<T> where T : IComparable, IConvertible
         return ba.Get(Convert.ToInt32(index));
     }
 
-    public bool getAnd(Ops o, params T[] index)
+    public bool getAnd(params T[] index)
     {
         for (int i = 0; i < index.Length; i++)
         {

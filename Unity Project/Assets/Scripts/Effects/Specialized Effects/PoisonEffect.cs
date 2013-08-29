@@ -15,5 +15,12 @@ public class PoisonEffect : EffectDefinition
     {
         base.init(n, strength);
         BigBoss.Gooey.CreateTextPop(n.gameObject.transform.position, "Poisoned!", UnityEngine.Color.green);
+        n.properties[Properties.POISONED] = true;
+    }
+
+    public override void remove(NPC n, float strength)
+    {
+        base.remove(n, strength);
+        n.properties[Properties.POISONED] = false;
     }
 }

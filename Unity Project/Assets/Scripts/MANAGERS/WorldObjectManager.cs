@@ -16,6 +16,7 @@ public class WorldObjectManager : MonoBehaviour {
     Dictionary<string, List<Item>> itemCategories = new Dictionary<string, List<Item>>();
     Dictionary<string, MaterialType> materials = new Dictionary<string, MaterialType>();
 
+
     void Start()
     {
         initializeNullData();
@@ -66,18 +67,18 @@ public class WorldObjectManager : MonoBehaviour {
         return baseNPCs;
     }
 
-	public NPC CreateNPC(Vector3 location, string npcName)
-	{
-        GameObject go = new GameObject(npcName);
-        go.transform.position = location;
-        NPC npc = go.AddComponent<NPC>();
-        npc.setData(npcName);
-        MeshFilter mf = go.AddComponent<MeshFilter>();
-        mf.mesh = (Resources.Load(npc.Model) as GameObject).GetComponent<MeshFilter>().mesh;
-        MeshRenderer mr = go.AddComponent<MeshRenderer>();
-        mr.material = Resources.Load(npc.ModelTexture) as Material;
-		return npc;
-	}
+    public List<NPC> getExistingNPCs(params Keywords[] kw)
+    {
+        List<NPC> list = new List<NPC>();
+        foreach (NPC n in totalNumberOfNPCs)
+        {
+            if (n.keywords.getAnd(kw))
+            {
+                list.Add(n);
+            }
+        }
+        return list;
+    }
 
     public void AddItemToMasterList(Item theItemScript)
     {
@@ -86,7 +87,6 @@ public class WorldObjectManager : MonoBehaviour {
 
     public void RemoveItemFromMasterList(Item theItemScript)
     {
-
         TotalItemsInExistence.Remove(theItemScript);//look up this generic method and see if we leave a memory leak
     }
 
@@ -129,22 +129,19 @@ public class WorldObjectManager : MonoBehaviour {
         return materials;
     }
 
-    public Item CreateItem(Vector3 location, string itemName)
+    public Item CreateItem(string itemName)
     {
-        GameObject go = new GameObject(itemName);
-        go.transform.position = location;
-        Item item = go.AddComponent<Item>();
-        item.setData(itemName);
-        MeshFilter mf = go.AddComponent<MeshFilter>();
-        mf.mesh = (Resources.Load(item.Model) as GameObject).GetComponent<MeshFilter>().mesh;
-        MeshRenderer mr = go.AddComponent<MeshRenderer>();
-        mr.material = Resources.Load(item.ModelTexture) as Material;
-        return item;
+        GameObject item = new GameObject();
+        Item i = item.AddComponent<Item>();
+        Item baseI = BigBoss.WorldObjectManager.getItem(itemName);
+        i.setData(baseI);
+        i.IsActive = true;
+        return i;
     }
 
-    public Item CreateRandomItem(Vector3 location)
+    public Item CreateRandomItem()
     {
         Item i = (Item)Nifty.RandomValue(baseItems);
-        return CreateItem(location, i.Name);
+        return CreateItem(i.Name);
     }
 }

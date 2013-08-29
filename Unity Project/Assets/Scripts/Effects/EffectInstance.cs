@@ -29,6 +29,7 @@ public class EffectInstance : PassesTurns
         {
             EffectManager.effects[effect].init(worldObject, strength);
             EffectManager.effects[effect].apply(worldObject, strength);
+            EffectManager.effects[effect].remove(worldObject, strength);
         }
         else
         {
@@ -62,6 +63,7 @@ public class EffectInstance : PassesTurns
         else if (turnsToProcess == 0)
         {
             EffectManager.effects[effect].remove(wo, strength);
+            wo.removeEffect(effect);
             return false;
         }
         else

@@ -28,28 +28,28 @@ public class InputManager : MonoBehaviour
     {
         centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
         //Debug.Log("Camera Screen space center point calculated: " + centerPointInScreenSpace);
-		
-		SubscribeToEasyTouchMethods();  //feel free to relocate this
+
+        SubscribeToEasyTouchMethods();  //feel free to relocate this
     }
-	
-	public void SubscribeToEasyTouchMethods()
-	{
-		EasyTouch.On_TouchStart += OnTouchStart;
-	}
-	
-	public void UnSubscribeToEasyTouchMethods()
-	{
-		EasyTouch.On_TouchStart -= OnTouchStart;
-	}
-	
+
+    public void SubscribeToEasyTouchMethods()
+    {
+        EasyTouch.On_TouchStart += OnTouchStart;
+    }
+
+    public void UnSubscribeToEasyTouchMethods()
+    {
+        EasyTouch.On_TouchStart -= OnTouchStart;
+    }
+
     void Update()
     {
 
         if (allowPlayerInput)
         {
             //Toggle Debug Mode:
-            if (Input.GetKeyDown(KeyCode.BackQuote)) 
-            { 
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
                 //BigBoss.GameStateManager.ToggleDebugMode(); 
             }
             if (allowKeyboardInput)
@@ -63,25 +63,25 @@ public class InputManager : MonoBehaviour
         }
     }
 
-	public void OnTouchStart (Gesture gesture)
-	{
-		//Debug Block:
-		
-		try 
-		{
-			Debug.Log("Object Picked: " + gesture.pickObject.name);
-			if (gesture.pickObject == (GameObject)GameObject.Find("PlayerA"))//COME BACK AND OPTIMIZE THIS CHECK - NEED A STATIC REF TO PLAYER OBJECT
-			{
-				BigBoss.Gooey.PlayerTouched();	
-			}
-		} 
-		catch (System.Exception ex) 
-		{
-			Debug.Log("Event sent, but no pick object: Exception: " + ex.Message);
-		}
-		
-		
-	}
+    public void OnTouchStart(Gesture gesture)
+    {
+        //Debug Block:
+
+        try
+        {
+            Debug.Log("Object Picked: " + gesture.pickObject.name);
+            if (gesture.pickObject == (GameObject)GameObject.Find("PlayerA"))//COME BACK AND OPTIMIZE THIS CHECK - NEED A STATIC REF TO PLAYER OBJECT
+            {
+                BigBoss.Gooey.PlayerTouched();
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log("Event sent, but no pick object: Exception: " + ex.Message);
+        }
+
+
+    }
 
     #region KEYBOARD
 
@@ -91,46 +91,48 @@ public class InputManager : MonoBehaviour
         {
             BigBoss.TimeKeeper.TogglePause();
         }
-
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            Vector3 place = new Vector3(15f, .5f, 18);
-            BigBoss.WorldObjectManager.CreateRandomItem(place);
-            Debug.Log("X");
-        }
-		
-		
-
         if (Input.GetKeyDown(KeyCode.Z))
         {
             BigBoss.PlayerInfo.playerAvatar.transform.position = BigBoss.PlayerInfo.avatarStartLocation;
         }
-
-        
-		
-		 
-		 if (Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
             //Item theItem = BigBoss.WorldObjectManager.CreateRandomItem(new Vector3 (0,0,0));
-			//Testing out an NGUI texture swap:
-			
+            //Testing out an NGUI texture swap:
+
         }
-         if (Input.GetKeyDown(KeyCode.P))
-         {
-             Item food = null;
-             foreach (Item i in BigBoss.PlayerInfo.inventory.Keys)
-             {
-                 if (i.Name.Equals("spoiled bread"))
-                 {
-                     food = i;
-                     break;
-                 }
-             }
-             if (food != null)
-             {
-                 BigBoss.PlayerInfo.eatItem(food);
-             }
-         }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Item food = null;
+            foreach (Item i in BigBoss.PlayerInfo.inventory.Keys)
+            {
+                if (i.Name.Equals("spoiled bread"))
+                {
+                    food = i;
+                    break;
+                }
+            }
+            if (food != null)
+            {
+                BigBoss.PlayerInfo.eatItem(food);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Item food = null;
+            foreach (Item i in BigBoss.PlayerInfo.inventory.Keys)
+            {
+                if (i.Name.Equals("health potion"))
+                {
+                    food = i;
+                    break;
+                }
+            }
+            if (food != null)
+            {
+                BigBoss.PlayerInfo.eatItem(food);
+            }
+        }
     }
 
     #endregion

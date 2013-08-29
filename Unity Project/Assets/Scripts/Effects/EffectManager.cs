@@ -10,5 +10,6 @@ public static class EffectManager
         effects.Add("poison", new PoisonEffect());
         effects.Add("nutrition", new NutritionEffect());
         effects.Add("levitation", new LevitationEffect());
+        effects.Add("addhealth", new AddHealth());
     }
 }
