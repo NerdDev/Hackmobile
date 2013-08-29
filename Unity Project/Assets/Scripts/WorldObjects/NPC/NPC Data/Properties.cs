@@ -4,7 +4,7 @@ public enum Properties : long
 {
     //store the NPC's properties here
     //ex:
-    NONE, 
+    NONE = 0, 
     LEVITATION,
     FLYING,
     TELEPATHY,
@@ -32,4 +32,7 @@ public enum Properties : long
     POISONED,
 
     LAST, //this is a marker of the number of properties in the enum
+
+    //Duplicates for clarity
+    HEALTHLOSS = POISONED,
 }

@@ -30,10 +30,16 @@ namespace System
                 var arrayType = typeToReflect.GetElementType();
                 if (IsPrimitive(arrayType) == false)
                 {
-                    Array clonedArray = (Array)cloneObject;
-                    clonedArray.ForEach((array, indices) => array.SetValue(InternalCopy(clonedArray.GetValue(indices), visited), indices));
+                    Array arrayObject = (Array)(originalObject);
+                    //Array clonedArray = (Array)cloneObject;
+                    Array temp = Array.CreateInstance(arrayType, arrayObject.Length);
+                    for (int i = 0; i < arrayObject.Length; ++i)
+                    {
+                        temp.SetValue(InternalCopy(arrayObject.GetValue(i), visited), i);
+                    }
+                    //clonedArray.ForEach((array, indices) => array.SetValue(InternalCopy(clonedArray.GetValue(indices), visited), indices));
+                    cloneObject = temp;
                 }
-
             }
             visited.Add(originalObject, cloneObject);
             CopyFields(originalObject, visited, cloneObject, typeToReflect);

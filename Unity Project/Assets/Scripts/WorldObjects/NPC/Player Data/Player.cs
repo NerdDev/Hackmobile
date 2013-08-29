@@ -38,13 +38,13 @@ public class Player : NPC
         {
             inventory[item] += count;
             //GUI Stuff:
-			
+
         }
         else
         {
             inventory.Add(item, count);
             //GUI Stuff:
-			BigBoss.Gooey.AddItemToGUIInventory(item,count);
+            BigBoss.Gooey.AddItemToGUIInventory(item, count);
         }
         stats.Encumbrance += item.props.Weight * count;
     }
@@ -110,6 +110,10 @@ public class Player : NPC
     void Update()
     {
         movement();
+        if (verticalMoving)
+        {
+            verticalMovement();
+        }
     }
 
     #region Actions
@@ -140,12 +144,11 @@ public class Player : NPC
     float timeVar = 1.5f;
     bool timeSet;
     bool isMoving;
-    private float playervariance = .08f;
     #endregion
 
     private void movement()
     {
-        Vector3 lookVectorToOccupiedTile = CurrentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;  //relocate this into InputMgr
+        Vector3 lookVectorToOccupiedTile = CurrentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;
         Debug.DrawLine(playerAvatar.transform.position + Vector3.up, CurrentOccupiedGridCenterWorldPoint, Color.green);
 
         //If distance is greater than 1.3 (var), pass turn
@@ -219,7 +222,7 @@ public class Player : NPC
                 gridSpace.val.Remove(this);
             }
             newGrid.Put(this);
-            CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f, GridCoordinate.y);
+            CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
             newGridSpace.val = newGrid;
             gridSpace = newGridSpace;
             return true;
@@ -235,16 +238,6 @@ public class Player : NPC
         gameObject.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
         Quaternion toRot = Quaternion.LookRotation(heading);
         playerAvatar.transform.rotation = Quaternion.Slerp(playerAvatar.transform.rotation, toRot, playerRotationSpeed);
-    }
-
-    private bool checkPosition(Vector3 playPos, Vector3 curPos)
-    {
-        if (Math.Abs(playPos.x - curPos.x) > playervariance ||
-            Math.Abs(playPos.z - curPos.z) > playervariance)
-        {
-            return false;
-        }
-        return true;
     }
 
     //BRAD WHAT DOES THIS DO?!
@@ -406,17 +399,6 @@ public class Player : NPC
         base.AdjustAttribute(attr, amount);
         //update gui:
     }
-    #endregion
-
-    #region Effects
-
-    public override void applyEffect(Properties e, int priority = 1, bool isItem = false, int turnsToProcess = -1)
-    {
-        base.applyEffect(e, priority, isItem, turnsToProcess);
-        BigBoss.Gooey.CreateTextPop(playerAvatar.transform.position, e.ToString(), Color.green);
-        //update gui
-    }
-
     #endregion
 
     #region Time Management

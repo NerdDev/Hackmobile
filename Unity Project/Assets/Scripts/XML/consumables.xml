@@ -1,17 +1,28 @@
 <items>
 	<consumables>
 		<food name="spoiled bread">
+			<icon>spoiled bread</icon>
 			<stats>
 				<weight>15</weight>
 				<cost>20</cost>
-				<nutrition>50</nutrition>
 				<weight>3</weight>
 			</stats>
 			<prefab> </prefab>
 			<OnEatenEffect>
-				<effect>POISONED</effect>
-				<turns>10</turns>
-				<strength>3</strength>
+				<effect>
+					<type>poison</type>
+					<turns>10</turns>
+					<strength>3</strength>
+				</effect>
+				<effect>
+					<type>nutrition</type>
+					<strength>50</strength>
+				</effect>
+				<effect>
+					<type>levitation</type>
+					<turns>10</turns>
+					<strength>.5</strength>
+				</effect>
 			</OnEatenEffect>
 		</food>
 	</consumables>

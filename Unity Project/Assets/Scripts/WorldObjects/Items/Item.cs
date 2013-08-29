@@ -7,26 +7,26 @@ public class Item : WorldObject, PassesTurns
 {
     #region BIGBOSSMANAGEMENT
     //consider some abtract/virtual methods and variables here for cleanliness
-	//ex:  register my existence and key information to the item master singleton so i'm not lost in the game world
-	
-	// Use this for initialization
-	void Start () 
-	{
-		RegisterItemToSingleton();
-	}
-	
-	public virtual void RegisterItemToSingleton() //if we decide to make Item.cs structural only, then switch these to abstract
-	{
-		BigBoss.WorldObjectManager.AddItemToMasterList(this);//registering existence with singleton
+    //ex:  register my existence and key information to the item master singleton so i'm not lost in the game world
+
+    // Use this for initialization
+    void Start()
+    {
+        RegisterItemToSingleton();
+    }
+
+    public virtual void RegisterItemToSingleton() //if we decide to make Item.cs structural only, then switch these to abstract
+    {
+        BigBoss.WorldObjectManager.AddItemToMasterList(this);//registering existence with singleton
         BigBoss.TimeKeeper.RegisterToUpdateList(this);
-	}
-	
-	public virtual void DestroyThisItem()
-	{
-		BigBoss.WorldObjectManager.RemoveItemFromMasterList(this);//removing existence with singleton
+    }
+
+    public virtual void DestroyThisItem()
+    {
+        BigBoss.WorldObjectManager.RemoveItemFromMasterList(this);//removing existence with singleton
         BigBoss.TimeKeeper.RemoveFromUpdateList(this);
-		Destroy (this.gameObject);
-	}
+        Destroy(this.gameObject);
+    }
     #endregion
 
     #region Properties of Items
@@ -38,6 +38,12 @@ public class Item : WorldObject, PassesTurns
         get { return type; }
         set { this.type = value; }
     }
+    private string icon;
+    public string Icon
+    {
+        get { return icon; }
+        set { this.icon = value; }
+    }
     public ItemProperties props = new ItemProperties();
 
     //flags
@@ -47,9 +53,9 @@ public class Item : WorldObject, PassesTurns
     public ItemStats stats = new ItemStats();
 
     //effects
-    protected ItemEffect onEaten = new ItemEffect();
-    protected ItemEffect onEquip = new ItemEffect();
-    protected ItemEffect onUse = new ItemEffect();
+    protected EffectEvent onEaten = new EffectEvent();
+    protected EffectEvent onEquip = new EffectEvent();
+    protected EffectEvent onUse = new EffectEvent();
 
     #endregion
 
@@ -63,9 +69,9 @@ public class Item : WorldObject, PassesTurns
     {
         if (onEaten != null)
         {
-            n.applyEffect(onEaten.prop, onEaten.strength, false, onEaten.turns);
+            Debug.Log("Activating OnEatenEvent()");
+            onEaten.activate(n);
         }
-        n.AdjustHunger(this.stats.Nutrition);
     }
 
     public bool isUsable()
@@ -79,7 +85,7 @@ public class Item : WorldObject, PassesTurns
     {
         if (onUse != null)
         {
-            n.applyEffect(onUse.prop, onUse.strength, false, onUse.turns);
+            onUse.activate(n);
         }
 
         //if usage needs restricted, change that here
@@ -101,7 +107,7 @@ public class Item : WorldObject, PassesTurns
     {
         if (onEquip != null)
         {
-            n.applyEffect(onEquip.prop, 1, true);
+            onEquip.activate(n);
         }
     }
 
@@ -109,7 +115,7 @@ public class Item : WorldObject, PassesTurns
     {
         if (onEquip != null)
         {
-            n.applyEffect(onEquip.prop, -1, true);
+            onEquip.activate(n);
         }
     }
 
@@ -122,7 +128,7 @@ public class Item : WorldObject, PassesTurns
 
     #region Data Management for Item Instances
 
-    public void setData(string itemName) 
+    public void setData(string itemName)
     {
         this.setData(BigBoss.WorldObjectManager.getItem(itemName));
     }
@@ -135,11 +141,12 @@ public class Item : WorldObject, PassesTurns
         this.stats = baseItem.stats.Copy();
         //properties
         this.Type = baseItem.Type;
-        this.props.BUC = baseItem.props.BUC;
-        this.props.Damage = baseItem.props.Damage;
-        this.props.Material = baseItem.props.Material;
-        this.props.EquipType = baseItem.props.EquipType;
-        this.props.Size = baseItem.props.Size;
+        this.props = baseItem.props.Copy();
+        this.icon = baseItem.icon;
+        this.itemFlags = baseItem.itemFlags.Copy();
+        this.onEaten = baseItem.onEaten.Copy();
+        this.onEquip = baseItem.onEquip.Copy();
+        this.onUse = baseItem.onUse.Copy();
     }
 
     public override void setNull()
@@ -153,10 +160,11 @@ public class Item : WorldObject, PassesTurns
     {
         base.parseXML(x);
         props.parseXML(x);
-        this.onEquip.parseXML(XMLNifty.select(x, "OnEquipEffect"));
-        this.onUse.parseXML(XMLNifty.select(x, "OnUseEvent"));
-        this.onEaten.parseXML(XMLNifty.select(x, "OnEatenEffect"));
+        onEquip.parseXML(XMLNifty.select(x, "OnEquipEffect"));
+        onUse.parseXML(XMLNifty.select(x, "OnUseEvent"));
+        onEaten.parseXML(XMLNifty.select(x, "OnEatenEffect"));
         stats.parseXML(x);
+        icon = XMLNifty.SelectString(x, "icon");
     }
     #endregion
 

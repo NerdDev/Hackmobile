@@ -78,5 +78,14 @@ namespace XML
             }
             return 0;
         }
+
+        internal static List<XMLNode> SelectList(XMLNode x, string key)
+        {
+            if (x != null)
+            {
+                return x.selectList(key);
+            }
+            return null;
+        }
     }
 }
