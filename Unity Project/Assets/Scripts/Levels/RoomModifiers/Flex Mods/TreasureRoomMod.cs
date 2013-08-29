@@ -28,7 +28,10 @@ class TreasureRoomMod : RoomModifier
             }
         }
         room.put(GridType.Door, centerX, centerY + 2);
-        room.put(GridType.Chest, centerX, centerY - 1);
+        room.put(GridType.Door, centerX, centerY - 2);
+        room.put(GridType.Door, centerX + 2, centerY);
+        room.put(GridType.Door, centerX - 2, centerY);
+        room.put(GridType.Chest, centerX, centerY);
     }
 
     public override RoomModType GetType()

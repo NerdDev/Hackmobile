@@ -8,7 +8,7 @@ public class Room : LayoutObjectLeaf {
         : base(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2)
     {
     }
-	
+    
 	public GridMap GetWalls() 
     {
 		return getTypes(GridType.Wall);
@@ -19,10 +19,35 @@ public class Room : LayoutObjectLeaf {
 		return getTypes(GridType.Floor);
 	}
 	
-	public GridMap GetDoors() 
+	public GridMap GetSmallLoots() 
     {
-		return getTypes(GridType.Door);
+		return getTypes(GridType.SmallLoot);
 	}
+
+    public GridMap GetSecrets()
+    {
+        return getTypes(GridType.Secret);
+    }
+
+    public GridMap GetChests()
+    {
+        return getTypes(GridType.Chest);
+    }
+
+    public GridMap GetTraps()
+    {
+        return getTypes(GridType.Trap);
+    }
+
+    public GridMap GetTrapDoors()
+    {
+        return getTypes(GridType.TrapDoor);
+    }
+
+    public GridMap GetDoors()
+    {
+        return getTypes(GridType.Door);
+    }
 
     public GridMap GetPotentialExternalDoors()
     {
@@ -37,6 +62,29 @@ public class Room : LayoutObjectLeaf {
         GridMap potentialDoors = GetWalls();
         RemoveBadDoorWalls(potentialDoors);
         return potentialDoors;
+    }
+
+    public int CountGridType(GridType type)
+    {
+        int ctr = 0;
+        GridMap grid;
+
+        switch (type)
+        {
+            case GridType.Floor: grid = GetFloors(); break;
+            case GridType.Wall: grid = GetWalls(); break;
+            case GridType.Chest: grid = GetChests(); break;
+            case GridType.SmallLoot: grid = GetSmallLoots(); break;
+            case GridType.Secret: grid = GetSecrets(); break;
+            case GridType.Trap: grid = GetTraps(); break;
+            case GridType.TrapDoor: grid = GetTrapDoors(); break;
+            case GridType.Door: grid = GetDoors(); break;
+            default: grid = null; break;
+        }
+
+        if (grid != null) ctr = grid.Count();
+
+        return ctr;
     }
 
     void RemoveBadDoorWalls(GridMap potentialDoors)

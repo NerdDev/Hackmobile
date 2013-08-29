@@ -1,7 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class SquareRoom : RoomModifier {
+public class RectangularRoom : RoomModifier
+{
 
     public override void Modify(Room room, RandomGen rand)
     {
@@ -11,14 +12,15 @@ public class SquareRoom : RoomModifier {
             DebugManager.printHeader(DebugManager.Logs.LevelGen, ToString());
         }
         #endregion
-        int side = Probability.LevelRand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int height = Probability.LevelRand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int width = Probability.LevelRand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Side: " + side);
+            DebugManager.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
         }
         #endregion
-        room.BoxStrokeAndFill(GridType.Wall, GridType.Floor, side, side);
+        room.BoxStrokeAndFill(GridType.Wall, GridType.Floor, width, height);
         #region DEBUG
         if (DebugManager.logging(DebugManager.Logs.LevelGen))
         {
@@ -34,6 +36,6 @@ public class SquareRoom : RoomModifier {
 
     public override string GetName()
     {
-        return "Square Room";
+        return "Rectangular Room";
     }
 }
