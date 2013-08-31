@@ -82,17 +82,17 @@ public class Player : NPC
     {
         //use the internal assignation reference for clarity
         this.playerAvatar = this.gameObject;
-        this.setData(BigBoss.WorldObjectManager.getNPC("player"));
+        this.setData(BigBoss.WorldObject.getNPC("player"));
         stats.Hunger = 900;
         IsActive = true;
         calcStats();
-        this.PlayerTitle = BigBoss.DataManager.playerProfessions.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
+        this.PlayerTitle = BigBoss.Data.playerProfessions.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
         anim = playerAvatar.GetComponent<Animator>() as Animator;
         this.Name = "Kurtis";
 
         GameObject item = new GameObject();
         Item i = item.AddComponent<Item>();
-        Item baseI = BigBoss.WorldObjectManager.getItem("sword1");
+        Item baseI = BigBoss.WorldObject.getItem("sword1");
         i.setData(baseI);
         i.IsActive = true;
         this.addToInventory(i);
@@ -100,7 +100,7 @@ public class Player : NPC
 
         GameObject item2 = new GameObject();
         Item i2 = item2.AddComponent<Item>();
-        Item food = BigBoss.WorldObjectManager.getItem("spoiled bread");
+        Item food = BigBoss.WorldObject.getItem("spoiled bread");
         i2.setData(food);
         i2.IsActive = true;
         this.addToInventory(i2, 5);
@@ -117,7 +117,7 @@ public class Player : NPC
     public override void attack(NPC n)
     {
         base.attack(n);
-        BigBoss.TimeKeeper.PassTurn(60);
+        BigBoss.Time.PassTurn(60);
     }
 
     #endregion
@@ -153,7 +153,7 @@ public class Player : NPC
         {
             if (UpdateCurrentTileVectors())
             {
-                BigBoss.TimeKeeper.PassTurn(60);
+                BigBoss.Time.PassTurn(60);
             }
         }
 
@@ -357,7 +357,7 @@ public class Player : NPC
     private string getPlayerTitle()
     {
         //Change this to a generic chosen profession later
-        playerTitle = BigBoss.DataManager.playerProfessions.getTitle(PlayerProfessions.Archaeologist, this.stats.Level);
+        playerTitle = BigBoss.Data.playerProfessions.getTitle(PlayerProfessions.Archaeologist, this.stats.Level);
         string finalTitle = playerChosenName + ", " + playerTitle;// + " of " + playerTitleCombatArea;
         return finalTitle;
     }
@@ -424,7 +424,7 @@ public class Player : NPC
     public override void UpdateTurn()
     {
         base.UpdateTurn();
-        BigBoss.TimeKeeper.numTilesCrossed++;
+        BigBoss.Time.numTilesCrossed++;
         BigBoss.Gooey.UpdateTilesCrossedLabel();
     }
 

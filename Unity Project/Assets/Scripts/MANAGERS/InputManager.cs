@@ -89,13 +89,13 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            BigBoss.TimeKeeper.TogglePause();
+            BigBoss.Time.TogglePause();
         }
 
         if (Input.GetKeyDown(KeyCode.X))
         {
             Vector3 place = new Vector3(15f, .5f, 18);
-            BigBoss.WorldObjectManager.CreateRandomItem(place);
+            BigBoss.WorldObject.CreateRandomItem(place);
             Debug.Log("X");
         }
 		

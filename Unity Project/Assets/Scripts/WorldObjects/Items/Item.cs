@@ -17,14 +17,14 @@ public class Item : WorldObject, PassesTurns
 	
 	public virtual void RegisterItemToSingleton() //if we decide to make Item.cs structural only, then switch these to abstract
 	{
-		BigBoss.WorldObjectManager.AddItemToMasterList(this);//registering existence with singleton
-        BigBoss.TimeKeeper.RegisterToUpdateList(this);
+		BigBoss.WorldObject.AddItemToMasterList(this);//registering existence with singleton
+        BigBoss.Time.RegisterToUpdateList(this);
 	}
 	
 	public virtual void DestroyThisItem()
 	{
-		BigBoss.WorldObjectManager.RemoveItemFromMasterList(this);//removing existence with singleton
-        BigBoss.TimeKeeper.RemoveFromUpdateList(this);
+		BigBoss.WorldObject.RemoveItemFromMasterList(this);//removing existence with singleton
+        BigBoss.Time.RemoveFromUpdateList(this);
 		Destroy (this.gameObject);
 	}
     #endregion
@@ -124,7 +124,7 @@ public class Item : WorldObject, PassesTurns
 
     public void setData(string itemName) 
     {
-        this.setData(BigBoss.WorldObjectManager.getItem(itemName));
+        this.setData(BigBoss.WorldObject.getItem(itemName));
     }
 
     //use this to do a conversion of a base item to instanced item

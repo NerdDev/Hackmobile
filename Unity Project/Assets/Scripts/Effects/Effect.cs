@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 public class Effect : PassesTurns
 {
@@ -13,14 +13,14 @@ public class Effect : PassesTurns
         eff = 0;
         itemEff = 0;
         stacking = false;
-        BigBoss.TimeKeeper.RegisterToUpdateList(this);
+        BigBoss.Time.RegisterToUpdateList(this);
     }
 
     ~Effect()
     {
-        if (BigBoss.TimeKeeper.updateList.Contains(this))
+        if (BigBoss.Time.updateList.Contains(this))
         {
-            BigBoss.TimeKeeper.RemoveFromUpdateList(this);
+            BigBoss.Time.RemoveFromUpdateList(this);
         }
     }
 

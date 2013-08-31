@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using XML;
 
 public class ItemProperties
@@ -45,7 +45,7 @@ public class ItemProperties
     private string mat;
     public MaterialType Material
     {
-        get { return BigBoss.WorldObjectManager.getMaterial(mat); }
+        get { return BigBoss.WorldObject.getMaterial(mat); }
         set
         {
             if (value != null) { this.mat = value.Name; }
