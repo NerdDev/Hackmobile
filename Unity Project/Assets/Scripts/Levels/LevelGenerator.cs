@@ -54,14 +54,14 @@ public class LevelGenerator
         #region DEBUG
         int debugNum = 1;
         float stepTime = 0, startTime = 0;
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGenMain))
         {
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
-                DebugManager.w(DebugManager.Logs.LevelGenMain, "Random seed int: " + seed);
-                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
-                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
+                BigBoss.Debug.printHeader(DebugManager.Logs.LevelGenMain, "Generating Level: " + levelDepth);
+                BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Random seed int: " + seed);
+                BigBoss.Debug.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
+                BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Generating level: " + levelDepth);
             }
             stepTime = Time.realtimeSinceStartup;
             startTime = stepTime;
@@ -72,91 +72,91 @@ public class LevelGenerator
         List<Room> rooms = GenerateRoomShells();
         ModRooms(rooms);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Modding Rooms took: " + (Time.realtimeSinceStartup - stepTime));
+            BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Modding Rooms took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Cluster Rooms");
+                BigBoss.Debug.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Cluster Rooms");
             }
         }
         #endregion
         ClusterRooms(rooms);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Cluster Rooms took: " + (Time.realtimeSinceStartup - stepTime));
+            BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Cluster Rooms took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
+                BigBoss.Debug.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
             }
         }
         #endregion
         PlaceRooms(rooms, layout);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Rooms took: " + (Time.realtimeSinceStartup - stepTime));
+            BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Place Rooms took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
+                BigBoss.Debug.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
             }
         }
         #endregion
         PlaceDoors(layout);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Place Doors took: " + (Time.realtimeSinceStartup - stepTime));
+            BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Place Doors took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
+                BigBoss.Debug.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
             }
         }
         #endregion
         PlacePaths(layout);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Place paths took: " + (Time.realtimeSinceStartup - stepTime));
+            BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Place paths took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Connections");
+                BigBoss.Debug.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Connections");
             }
         }
         #endregion
         ConfirmConnection(layout);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Confirm Connection took: " + (Time.realtimeSinceStartup - stepTime));
+            BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Confirm Connection took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Edges");
+                BigBoss.Debug.CreateNewLog(DebugManager.Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Edges");
             }
         }
         #endregion
         ConfirmEdges(layout);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGenMain))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGenMain))
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Confirm Edges took: " + (Time.realtimeSinceStartup - stepTime));
+            BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Confirm Edges took: " + (Time.realtimeSinceStartup - stepTime));
             stepTime = Time.realtimeSinceStartup;
         }
         #endregion
 
         #region DEBUG
-        if (DebugManager.logging())
+        if (BigBoss.Debug.logging())
         {
-            DebugManager.w(DebugManager.Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
+            BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
             layout.ToLog(DebugManager.Logs.LevelGenMain);
-            DebugManager.printFooter(DebugManager.Logs.LevelGenMain);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGenMain);
         }
         #endregion
         return layout;
@@ -165,17 +165,17 @@ public class LevelGenerator
     List<Room> GenerateRoomShells()
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Generate Rooms");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Generate Rooms");
         }
         #endregion
         List<Room> rooms = new List<Room>();
         int numRooms = Probability.LevelRand.Next(minRooms, maxRooms);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Generating " + numRooms + " rooms.");
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Generating " + numRooms + " rooms.");
         }
         #endregion
         for (int i = 1; i <= numRooms; i++)
@@ -184,9 +184,9 @@ public class LevelGenerator
             rooms.Add(room);
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
         return rooms;
@@ -195,42 +195,42 @@ public class LevelGenerator
     void ModRooms(IEnumerable<Room> rooms)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Mod Rooms");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Mod Rooms");
         }
         #endregion
         foreach (Room room in rooms)
         {
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Modding " + room);
+                BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Modding " + room);
             }
             #endregion
             foreach (RoomModifier mod in PickMods())
             {
                 #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                 {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "Applying: " + mod);
+                    BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Applying: " + mod);
                 }
                 #endregion
                 mod.Modify(room, Probability.LevelRand);
             }
             room.Bake(false);
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 room.ToLog(DebugManager.Logs.LevelGen);
-                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+                BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }
@@ -238,30 +238,30 @@ public class LevelGenerator
     static List<RoomModifier> PickMods()
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Pick Mods");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Pick Mods");
         }
         #endregion
         List<RoomModifier> mods = new List<RoomModifier>();
         RoomModifier baseMod = RoomModifier.GetBase();
         mods.Add(baseMod);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + baseMod);
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + baseMod);
         }
         #endregion
         int numFlex = Probability.LevelRand.Next(1, maxFlexMod);
         List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex);
         mods.AddRange(flexMods);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Picked " + numFlex + " flex modifiers: ");
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Picked " + numFlex + " flex modifiers: ");
             foreach (RoomModifier mod in flexMods)
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, 1, mod.ToString());
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, 1, mod.ToString());
             }
         }
         #endregion
@@ -270,16 +270,16 @@ public class LevelGenerator
             RoomModifier finalMod = RoomModifier.GetFinal();
             mods.Add(finalMod);
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + finalMod);
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Picked Base Mod: " + finalMod);
             }
             #endregion
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
         return mods;
@@ -288,9 +288,9 @@ public class LevelGenerator
     static List<LayoutObject> ClusterRooms(List<Room> rooms)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Custer Rooms");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Custer Rooms");
         }
         #endregion
         List<LayoutObject> ret = new List<LayoutObject>();
@@ -300,9 +300,9 @@ public class LevelGenerator
             numClusters = rooms.Count / 2;
         List<LayoutCluster> clusters = new List<LayoutCluster>().Populate(numClusters);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Number of clusters: " + numClusters);
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Number of clusters: " + numClusters);
         }
         #endregion
         // Add two rooms to each
@@ -311,16 +311,16 @@ public class LevelGenerator
             cluster.AddObject(rooms.Take());
             cluster.AddObject(rooms.Take());
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 cluster.ToLog(DebugManager.Logs.LevelGen);
             }
             #endregion
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Rooms left: " + rooms.Count);
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Rooms left: " + rooms.Count);
         }
         #endregion
         // For remaining rooms, put into random clusters
@@ -331,7 +331,7 @@ public class LevelGenerator
                 LayoutCluster cluster = clusters.Random(Probability.LevelRand);
                 cluster.AddObject(r);
                 #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                 {
                     cluster.ToLog(DebugManager.Logs.LevelGen);
                 }
@@ -339,13 +339,13 @@ public class LevelGenerator
             }
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             foreach (LayoutCluster cluster in clusters)
             {
                 cluster.ToLog(DebugManager.Logs.LevelGen);
             }
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
         return ret;
@@ -354,9 +354,9 @@ public class LevelGenerator
     static void PlaceRooms(List<Room> rooms, LevelLayout layout)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Rooms");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Place Rooms");
         }
         #endregion
         List<LayoutObject> placedRooms = new List<LayoutObject>();
@@ -372,11 +372,11 @@ public class LevelGenerator
             // Find where it will shift away
             Point shiftMagn = GenerateShiftMagnitude(shiftRange);
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Placing room: " + room);
-                DebugManager.w(DebugManager.Logs.LevelGen, "Picked starting room number: " + roomNum);
-                DebugManager.w(DebugManager.Logs.LevelGen, "Shift: " + shiftMagn);
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Placing room: " + room);
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Picked starting room number: " + roomNum);
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Shift: " + shiftMagn);
             }
             #endregion
             // Keep moving until room doesn't overlap any other rooms
@@ -384,9 +384,9 @@ public class LevelGenerator
             while ((intersect = room.IntersectObjBounds(placedRooms, 1)) != null)
             {
                 #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                 {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "This layout led to an overlap: " + room.GetBounding());
+                    BigBoss.Debug.w(DebugManager.Logs.LevelGen, "This layout led to an overlap: " + room.GetBounding());
                     layout.ToLog(DebugManager.Logs.LevelGen);
                 }
                 #endregion
@@ -396,42 +396,42 @@ public class LevelGenerator
             layout.AddRoom(room);
             layout.RemoveObject(seedRoom);
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Layout after placing room at: " + room.GetBounding());
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Layout after placing room at: " + room.GetBounding());
                 layout.ToLog(DebugManager.Logs.LevelGen);
-                DebugManager.printBreakers(DebugManager.Logs.LevelGen, 4);
+                BigBoss.Debug.printBreakers(DebugManager.Logs.LevelGen, 4);
             }
             #endregion
         }
         #region DEBUG
-        DebugManager.printFooter(DebugManager.Logs.LevelGen);
+        BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         #endregion
     }
 
     static void PlaceDoors(LevelLayout layout)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Place Doors");
         }
         #endregion
         foreach (Room room in layout.GetRooms())
         {
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Doors on " + room);
+                BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
             GridMap potentialDoors = room.GetPotentialExternalDoors();
             int numDoors = Probability.LevelRand.Next(doorsMin, doorsMax);
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 potentialDoors.ToLog(DebugManager.Logs.LevelGen, "Potential Doors");
-                DebugManager.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
             for (int i = 0; i < numDoors; i++)
@@ -442,7 +442,7 @@ public class LevelGenerator
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
                     potentialDoors.Remove(doorSpace.x, doorSpace.y, minDoorSpacing - 1);
                     #region DEBUG
-                    if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                    if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                     {
                         room.ToLog(DebugManager.Logs.LevelGen, "Generated door at: " + doorSpace);
                         potentialDoors.ToLog(DebugManager.Logs.LevelGen, "Remaining options");
@@ -450,25 +450,25 @@ public class LevelGenerator
                     #endregion
                 }
                 #region DEBUG
-                else if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                else if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                 {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "No door options remain.");
+                    BigBoss.Debug.w(DebugManager.Logs.LevelGen, "No door options remain.");
                 }
                 #endregion
             }
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 room.ToLog(DebugManager.Logs.LevelGen, "Final Room After placing doors");
-                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+                BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             layout.ToLog(DebugManager.Logs.LevelGen);
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }
@@ -476,9 +476,9 @@ public class LevelGenerator
     static void PlacePaths(LevelLayout layout)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Place Paths");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Place Paths");
             layout.ToLog(DebugManager.Logs.LevelGen, "Pre Path Layout");
         }
         #endregion
@@ -487,7 +487,7 @@ public class LevelGenerator
         Surrounding<GridType> surround = new Surrounding<GridType>(grids);
         #region DEBUG
         GridArray debugArr = null;
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             debugArr = new GridArray(grids);
         }
@@ -504,7 +504,7 @@ public class LevelGenerator
 
             var path = new Path(door, grids);
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 GridArray messyPathArr = new GridArray(debugArr);
                 messyPathArr.PutAll(path.GetArray());
@@ -516,7 +516,7 @@ public class LevelGenerator
                 path.Simplify();
                 path.ConnectEnds(layout);
                 #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                 {
                     debugArr.PutAll(path);
                 }
@@ -526,17 +526,17 @@ public class LevelGenerator
                 layout.AddPath(path);
             }
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 debugArr.ToLog(DebugManager.Logs.LevelGen, "Map after simplifying path for door: " + door);
             }
             #endregion
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             layout.ToLog(DebugManager.Logs.LevelGen, "Final Layout");
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }
@@ -544,26 +544,26 @@ public class LevelGenerator
     private static void ConfirmConnection(LevelLayout layout)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Confirm Connections");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Confirm Connections");
         }
         #endregion
         var roomsToConnect = new List<LayoutObject>(layout.GetRooms().Cast<LayoutObject>());
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Connecting List:");
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Connecting List:");
             foreach (var layoutobj in layout.GetRooms())
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, 1, layoutobj.ToString());       
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, 1, layoutobj.ToString());       
             }
         }
         #endregion
         foreach (var layoutObj in layout.GetRooms())
         {
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 layoutObj.ToLog(DebugManager.Logs.LevelGen, "Connecting");
             }
@@ -573,7 +573,7 @@ public class LevelGenerator
             if (!layoutObj.ConnectedTo(roomsToConnect, out fail))
             {
                 #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                 {
                     fail.ToLog(DebugManager.Logs.LevelGen, layoutObj + " failed to connect to:");
                 }
@@ -581,16 +581,16 @@ public class LevelGenerator
                 MakeConnection(layout, layoutObj, fail);
             }
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
-                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+                BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }
@@ -600,9 +600,9 @@ public class LevelGenerator
         layout.ShiftAll(1,1);
         GridArray arr = layout.GetArray(1);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Confirm Edges");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Confirm Edges");
             layout.ToLog(DebugManager.Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
@@ -624,10 +624,10 @@ public class LevelGenerator
             }
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             layout.ToLog(DebugManager.Logs.LevelGen, "Post Confirm Edges");
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }
@@ -635,9 +635,9 @@ public class LevelGenerator
     private static void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Make Connection - " + obj1 + " AND " + obj2);
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Make Connection - " + obj1 + " AND " + obj2);
         }
         #endregion
         GridArray smallest;
@@ -646,7 +646,7 @@ public class LevelGenerator
         layoutArr.PutAs(layoutArr, GridType.INTERNAL_RESERVED_BLOCKED);
         Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             smallest.ToLog(DebugManager.Logs.LevelGen, "Smallest");
             largest.ToLog(DebugManager.Logs.LevelGen, "Largest");
@@ -659,18 +659,18 @@ public class LevelGenerator
             layoutArr.PutAll(largest);
             Value2D<GridType> startPoint = startPtStack.Pop();
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 layoutArr[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
                 layoutArr.ToLog(DebugManager.Logs.LevelGen, "Largest after putting blocked");
-                DebugManager.w(DebugManager.Logs.LevelGen, "Start Point:" + startPoint);
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Start Point:" + startPoint);
             }
             #endregion
             var path = new Path(startPoint, layoutArr);
             if (path.isValid())
             {
                 #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                 {
                     largest.PutAll(path);
                     largest.ToLog(DebugManager.Logs.LevelGen, "Connecting Path");
@@ -679,7 +679,7 @@ public class LevelGenerator
                 path.Finalize(layout);
                 layout.AddPath(path);
                 #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
                 {
                     layout.ToLog(DebugManager.Logs.LevelGen, "Final Connection");
                 }
@@ -687,13 +687,13 @@ public class LevelGenerator
             }
         }
         #region DEBUG
-        else if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        else if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Could not make an initial start point connection.");
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Could not make an initial start point connection.");
         }
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }

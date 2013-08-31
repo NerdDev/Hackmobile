@@ -14,118 +14,92 @@ using System.Collections;
 
 public class BigBoss : MonoBehaviour
 {
-    private static BigBoss bigBoss;
-    protected static BigBoss BBoss
-    {
-        get
-        {
-            if (bigBoss == null)
-            {
-                bigBoss = Instantiate(BBoss) as BigBoss;
-            }
-            return bigBoss;
-        }
-    }
-
-    private static GUIManager guiManager;
+    protected static BigBoss BBoss { get; set; }
+    private static GUIManager gooey;
     public static GUIManager Gooey
     {
         get
         {
-            if (guiManager == null)
+            if (gooey == null)
             {
-                guiManager = Instantiate<GUIManager>();
+                gooey = BBoss.Instantiate<GUIManager>();
             }
-            return guiManager;
+            return gooey;
         }
     }
-
-    private static InputManager inputManager;
+    private static InputManager playerInput;
     public static InputManager PlayerInput
     {
         get
         {
-            if (inputManager == null)
+            if (playerInput == null)
             {
-                inputManager = Instantiate<InputManager>();
+                playerInput = BBoss.Instantiate<InputManager>();
             }
-            return inputManager;
+            return playerInput;
         }
     }
-
-    private static LevelManager levelManager;
+    private static LevelManager levels;
     public static LevelManager Levels
     {
         get
         {
-            if (levelManager == null)
+            if (levels == null)
             {
-                levelManager = Instantiate<LevelManager>();
+                levels = BBoss.Instantiate<LevelManager>();
             }
-            return levelManager;
+            return levels;
         }
     }
-
-    private static TimeManager timeManager;
+    private static TimeManager time;
     public static TimeManager Time
     {
         get
         {
-            if (timeManager == null)
+            if (time == null)
             {
-                timeManager = Instantiate<TimeManager>();
+                time = BBoss.Instantiate<TimeManager>();
             }
-            return timeManager;
+            return time;
         }
     }
-
-    private static Player playerManager;
+    private static Player playerInfo;
     public static Player PlayerInfo
     {
         get
         {
-            if (playerManager == null)
+            if (playerInfo == null)
             {
-                playerManager = Instantiate<Player>();
+                playerInfo = BBoss.Instantiate<Player>();
             }
-            return playerManager;
+            return playerInfo;
         }
     }
-
-    public static WorldObjectManager Enemy
-    {
-        get
-        {
-            return WorldObject;
-        }
-    }
-
-    private static CameraManager camManager;
+    public static WorldObjectManager Enemy { get { return WorldObject; } }
+    private static CameraManager camera;
     public static CameraManager Camera
     {
         get
         {
-            if (camManager == null)
+            if (camera == null)
             {
-                camManager = Instantiate<CameraManager>();
+                camera = BBoss.Instantiate<CameraManager>();
             }
-            return camManager;
+            return camera;
         }
     }
-
-    private static PreGameManager preGameManager;
+    private static PreGameManager preGame;
     public static PreGameManager PreGame
     {
         get
         {
-            if (preGameManager == null)
+            if (preGame == null)
             {
-                preGameManager = Instantiate<PreGameManager>();
+                preGame = BBoss.Instantiate<PreGameManager>();
             }
-            return preGameManager;
+            return preGame;
         }
     }
-
     private static DungeonMaster dungeonMaster;
     public static DungeonMaster DungeonMaster
     {
@@ -133,66 +107,64 @@ public class BigBoss : MonoBehaviour
         {
             if (dungeonMaster == null)
             {
-                dungeonMaster = Instantiate<DungeonMaster>();
+                dungeonMaster = BBoss.Instantiate<DungeonMaster>();
             }
             return dungeonMaster;
         }
     }
-
-    private static WorldObjectManager worldObjectManager;
+    private static WorldObjectManager worldObject;
     public static WorldObjectManager WorldObject
     {
         get
         {
-            if (worldObjectManager == null)
+            if (worldObject == null)
             {
-                worldObjectManager = Instantiate<WorldObjectManager>();
+                worldObject = BBoss.Instantiate<WorldObjectManager>();
             }
-            return worldObjectManager;
+            return worldObject;
         }
     }
-
-    private static DebugManager debugManager;
+    private static DebugManager debug;
     public static DebugManager Debug
     {
         get
         {
-            if (debugManager == null)
+            if (debug == null)
             {
-                debugManager = Instantiate<DebugManager>();
+                debug = BBoss.Instantiate<DebugManager>();
             }
-            return debugManager;
+            return debug;
         }
     }
-
-    private static DataManager dataManager;
+    private static DataManager data;
     public static DataManager Data
     {
         get
         {
-            if (dataManager == null)
+            if (data == null)
             {
-                dataManager = Instantiate<DataManager>();
+                data = BBoss.Instantiate<DataManager>();
             }
-            return dataManager;
+            return data;
         }
     }
 
-    protected static T Instantiate<T>() where T : UnityEngine.Component, new()
+    protected T Instantiate<T>() where T : UnityEngine.Component
     {
-        BigBoss bb = BigBoss.BBoss;
-        T ret = bb.GetComponentInChildren<T>();
+        T ret = this.GetComponentInChildren<T>();
         if (ret == null)
         {
-            ret = new T();
-            ret = Instantiate(ret) as T;
-            ret.transform.parent = BigBoss.BBoss.transform;
+            GameObject go = new GameObject();
+            go.AddComponent<T>();
+            ret = go.GetComponent<T>();
+            ret.transform.parent = this.transform;
         }
         return ret;
     }
 
     void Awake()
     {
+        BBoss = this;
         //Make this game object persistent
         DontDestroyOnLoad(gameObject);
     }

@@ -84,15 +84,15 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public override void ToLog(DebugManager.Logs log)
     {
-        if (DebugManager.logging(log) && DebugManager.Flag(DebugManager.DebugFlag.Probability))
+        if (BigBoss.Debug.logging(log) && BigBoss.Debug.Flag(DebugManager.DebugFlag.Probability))
         {
-            DebugManager.printHeader(log, "Probability List - State");
-            DebugManager.w(log, "Largest Div: " + largestDiv + ", Max Num: " + maxNum);
+            BigBoss.Debug.printHeader(log, "Probability List - State");
+            BigBoss.Debug.w(log, "Largest Div: " + largestDiv + ", Max Num: " + maxNum);
             foreach (ProbContainer cont in itemList)
             {
-                DebugManager.w(log, cont.num + " - " + cont.item);
+                BigBoss.Debug.w(log, cont.num + " - " + cont.item);
             }
-            DebugManager.printFooter(log);
+            BigBoss.Debug.printFooter(log);
         }
     }
 

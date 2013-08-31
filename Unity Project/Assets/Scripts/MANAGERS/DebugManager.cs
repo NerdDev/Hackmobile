@@ -16,20 +16,20 @@ public class DebugManager : MonoBehaviour
         Items,
         NPCs,
     };
-    static string[] logPaths;
-    static string[] logNames;
-    static bool[] logOn;
+    string[] logPaths;
+    string[] logNames;
+    bool[] logOn;
     #endregion
 
     #region StringConstants
-    static string debugFolder = @"Debug Logs\";
-    static string depthStrExtra = "  ";
-    static string depthStr = "|   ";
-    static string headerStrMid = @"/=============  ";
-    static string headerStrMid2 = @"  =============\";
-    static string headerStrFoot = @"\=================================================/";
-    static string breaker =  @"___________________________________________________";
-    static string breaker2 = @"|/////////////////////////////////////////////////|";
+    const string debugFolder = @"Debug Logs\";
+    const string depthStrExtra = "  ";
+    const string depthStr = "|   ";
+    const string headerStrMid = @"/=============  ";
+    const string headerStrMid2 = @"  =============\";
+    const string headerStrFoot = @"\=================================================/";
+    const string breaker = @"___________________________________________________";
+    const string breaker2 = @"|/////////////////////////////////////////////////|";
     #endregion
 
     public enum DebugFlag 
@@ -47,7 +47,7 @@ public class DebugManager : MonoBehaviour
     // Log storage
     static Log[] logs;
 
-	void Start ()
+	void Awake ()
     {
         // Create arrays with size = enum length
         logs = new Log[Enum.GetNames(typeof(Logs)).Length];
@@ -79,33 +79,33 @@ public class DebugManager : MonoBehaviour
         flags[DebugFlag.LevelGen_Connected_To] = false;
 
         // Test output
-        if (DebugManager.logging(DebugManager.Logs.Main))
+        if (logging(DebugManager.Logs.Main))
         {
-            DebugManager.w(DebugManager.Logs.Main, "Debug Manager Started.");
+            w(DebugManager.Logs.Main, "Debug Manager Started.");
 			if (logging(Logs.LevelGen))
 			{
-            	DebugManager.w(DebugManager.Logs.Main, "Level Gen Debugging On.");
+            	w(DebugManager.Logs.Main, "Level Gen Debugging On.");
 			}
         }
 	}
 
     void OnDestroy()
     {
-        DebugManager.close();
+        close();
     }
 	
     #region Accessors
-    public static bool Flag(DebugFlag flag)
+    public bool Flag(DebugFlag flag)
     {
         return flags[flag];
     }
 
-    public static void SetFlag(DebugFlag flag, bool on)
+    public void SetFlag(DebugFlag flag, bool on)
     {
         flags[flag] = on;
     }
 
-	public static void nl(Logs e)
+	public void nl(Logs e)
 	{
         if (logging(e))
         {
@@ -113,7 +113,7 @@ public class DebugManager : MonoBehaviour
         }
 	}
 
-    public static void w(Logs e, string line)
+    public void w(Logs e, string line)
     {
         if (logging(e))
         {
@@ -121,7 +121,7 @@ public class DebugManager : MonoBehaviour
         }
     }
 
-    public static void w(Logs e, int depthModifier, string line)
+    public void w(Logs e, int depthModifier, string line)
     {
         if (logging(e))
         {
@@ -129,7 +129,7 @@ public class DebugManager : MonoBehaviour
         }
     }
 
-    public static void printHeader(Logs e, string line)
+    public void printHeader(Logs e, string line)
     {
         if (logging(e))
         {
@@ -137,7 +137,7 @@ public class DebugManager : MonoBehaviour
         }
     }
 
-    public static void printFooter(Logs e)
+    public void printFooter(Logs e)
     {
         if (logging(e))
         {
@@ -145,7 +145,7 @@ public class DebugManager : MonoBehaviour
         }
     }
 
-    public static void printBreakers(Logs e, int num)
+    public void printBreakers(Logs e, int num)
     {
         if (logging(e))
         {
@@ -153,12 +153,12 @@ public class DebugManager : MonoBehaviour
         }
     }
 	
-	public static void logException(Logs e)
+	public void logException(Logs e)
 	{
 		
 	}
 	
-	public static void incrementDepth(Logs e)
+	public void incrementDepth(Logs e)
 	{
         if (logging(e))
         {
@@ -166,7 +166,7 @@ public class DebugManager : MonoBehaviour
         }
 	}
 	
-	public static void decrementDepth(Logs e)
+	public void decrementDepth(Logs e)
 	{
         if (logging(e))
         {
@@ -174,7 +174,7 @@ public class DebugManager : MonoBehaviour
         }
 	}
 	
-	public static void resetDepth(Logs e)
+	public void resetDepth(Logs e)
 	{
         if (logging(e))
         {
@@ -182,27 +182,27 @@ public class DebugManager : MonoBehaviour
         }
 	}
 
-    static string getName(Logs e)
+    string getName(Logs e)
     {
         return logNames[(int) e];
     }
 	
-	static void putName(Logs e, string name)
+	void putName(Logs e, string name)
 	{
 		logNames[(int) e] = name;	
 	}
 
-    static string getPath(Logs e)
+    string getPath(Logs e)
     {
         return logPaths[(int) e];
     }
 	
-	static void putPath(Logs e, string path)
+	void putPath(Logs e, string path)
 	{
 		logPaths[(int) e] = path;	
 	}
 
-    static Log Get(Logs e)
+    Log Get(Logs e)
     {
         if (logs[(int)e] == null)
         {
@@ -211,7 +211,7 @@ public class DebugManager : MonoBehaviour
         return logs[(int)e];
     }
 
-    public static void CreateNewLog(Logs e, string logName)
+    public void CreateNewLog(Logs e, string logName)
     {
 		Log prev = logs[(int)e];
         // Create actual path
@@ -220,7 +220,7 @@ public class DebugManager : MonoBehaviour
         string dir = System.IO.Path.GetDirectoryName(logName);
         Directory.CreateDirectory(dir);
         // Create new log
-		Log newLog = new Log(logName);
+		Log newLog = new Log(logName, this);
         logs[(int)e] = newLog;
         if (prev != null)
         { // Close previous log
@@ -228,7 +228,7 @@ public class DebugManager : MonoBehaviour
         }
     }
 
-    public static void close()
+    public void close()
     {
         foreach (Log l in logs)
         {
@@ -239,22 +239,22 @@ public class DebugManager : MonoBehaviour
         }
     }
 
-    public static bool logging()
+    public bool logging()
     {
         return flags[DebugFlag.GlobalLogging];
     }
 
-    public static bool logging(Logs e)
+    public bool logging(Logs e)
     {
         return logging() && logOn[(int)e];
     }
 
-    public static void logging(bool logging)
+    public void logging(bool logging)
     {
         flags[DebugFlag.GlobalLogging] = logging;
     }
 
-    public static void logging(Logs e, bool logging)
+    public void logging(Logs e, bool logging)
     {
         logOn[(int) e] = logging;
     }
@@ -266,13 +266,21 @@ public class DebugManager : MonoBehaviour
         StreamWriter writer;
         string depth = "";
         int lineNum = 1;
+        DebugManager manager;
 
-        public Log(string path)
+        private Log(DebugManager manager)
+        {
+            this.manager = manager;
+        }
+
+        public Log(string path, DebugManager manager)
+            : this(manager)
         {
             writer = new StreamWriter(path);
         }
 
-        public Log(FileStream fstream)
+        public Log(FileStream fstream, DebugManager manager)
+            : this(manager)
         {
             writer = new StreamWriter(fstream);
         }
@@ -309,7 +317,7 @@ public class DebugManager : MonoBehaviour
         public void w(int depthModifier, string line)
         {
             string toWrite = "";
-            if (DebugManager.Flag(DebugFlag.LineNumbers))
+            if (manager.Flag(DebugFlag.LineNumbers))
             {
                 toWrite += "[" + lineNum + "] ";
             }

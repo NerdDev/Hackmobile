@@ -46,15 +46,15 @@ public static class Nifty
    
     public static void ToLog<T>(this T[,] array, DebugManager.Logs log, params string[] customContent)
     {
-        if (DebugManager.logging(log))
+        if (BigBoss.Debug.logging(log))
         {
             foreach (string s in customContent)
             {
-                DebugManager.w(log, s);
+                BigBoss.Debug.w(log, s);
             }
             foreach (string s in array.ToRowStrings())
             {
-                DebugManager.w(log, s);
+                BigBoss.Debug.w(log, s);
             }
         }   
     }

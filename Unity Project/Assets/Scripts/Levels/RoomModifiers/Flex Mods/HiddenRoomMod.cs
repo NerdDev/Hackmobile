@@ -7,14 +7,14 @@ public class HiddenRoomMod : RoomModifier {
     {
         int secretRoomSize = 2;
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Hidden Room Mod");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Hidden Room Mod");
         }
         #endregion
             GridMap potentialDoors = room.GetPotentialExternalDoors();
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 potentialDoors.ToLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
             }
@@ -28,17 +28,17 @@ public class HiddenRoomMod : RoomModifier {
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
                 }
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
                 room.ToLog(DebugManager.Logs.LevelGen, "Final Room After placing doors");
-                DebugManager.printFooter(DebugManager.Logs.LevelGen);
+                BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
             }
             #endregion
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             //layout.ToLog(DebugManager.Logs.LevelGen);
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }

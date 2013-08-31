@@ -85,7 +85,7 @@ public class LevelManager : MonoBehaviour {
         SquareRoom square = new SquareRoom();
         square.Modify(room, Probability.LevelRand);
         mod.Modify(room, Probability.LevelRand);
-        DebugManager.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
+        BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
         room.ToLog(DebugManager.Logs.LevelGenMain);
     }
 
