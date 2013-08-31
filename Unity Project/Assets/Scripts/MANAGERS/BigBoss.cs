@@ -10,42 +10,44 @@ using System.Collections;
  * 		This Managers.cs script should ONLY contain static references to the other managers.  It does not contain any game information or class members therein.
  * */
 
-
-//[RequireComponent(typeof(AudioManager))]
-//[RequireComponent(typeof(PrefabManager))]
-//[RequireComponent(typeof(GUIManager))]
-//[RequireComponent(typeof(InputManager))]
-//[RequireComponent(typeof(LevelManager))]
-//[RequireComponent(typeof(TimeManager))]
-//[RequireComponent(typeof(GameStateManager))]
-//[RequireComponent(typeof(PlayerManager))]
-
-
-
 public class BigBoss : MonoBehaviour
-{  
-    public static void Log(string log) 
+{
+    public static void Log(string log)
     {
         Debug.Log(log);
     }
- 
-//    private static AudioManager audioManager;
-//    public static AudioManager Audio				//Obsolete with the use of AudioToolkit
-//    {
-//        get { return audioManager; }				//
-//    }
-	private static PrefabManager prefabManager;
+
+    //    private static AudioManager audioManager;
+    //    public static AudioManager Audio				//Obsolete with the use of AudioToolkit
+    //    {
+    //        get { return audioManager; }				//
+    //    }
+
+    private static BigBoss bigBoss;
+    public static BigBoss BigBoss
+    {
+        get
+        {
+            if (bigBoss == null)
+            {
+                bigBoss = Instantiate(BigBoss) as BigBoss;
+            }
+            return bigBoss;
+        }
+    }
+
+    private static PrefabManager prefabManager;
     public static PrefabManager Prefabs
     {
         get { return prefabManager; }
     }
-	
- 	private static GUIManager guiManager;
+
+    private static GUIManager guiManager;
     public static GUIManager Gooey
     {
         get { return guiManager; }
     }
-	
+
     private static InputManager inputManager;
     public static InputManager PlayerInput
     {
@@ -63,53 +65,74 @@ public class BigBoss : MonoBehaviour
     {
         get { return levelManager; }
     }
-	
-	private static TimeManager timeManager;
+
+    private static TimeManager timeManager;
     public static TimeManager TimeKeeper
     {
         get { return timeManager; }
     }
-	
-	private static Player playerManager;
+
+    private static Player playerManager;
     public static Player PlayerInfo
     {
         get { return playerManager; }
     }
-	
-	private static WorldObjectManager enemyManager;
+
+    private static WorldObjectManager enemyManager;
     public static WorldObjectManager Enemy
     {
         get { return enemyManager; }
-    } 
-    
-	private static CameraManager camManager;
+    }
+
+    private static CameraManager camManager;
     public static CameraManager CameraManager
     {
         get { return camManager; }
     }
-	
-	private static PreGameManager preGameManager;
+
+    private static PreGameManager preGameManager;
     public static PreGameManager PreGameManager
     {
         get { return preGameManager; }
     }
-	
-	private static DungeonMaster dungeonMaster;
+
+    private static DungeonMaster dungeonMaster;
     public static DungeonMaster DungeonMaster
     {
         get { return dungeonMaster; }
     }
-	
-	private static WorldObjectManager worldObjectManager;
+
+    private static WorldObjectManager worldObjectManager;
     public static WorldObjectManager WorldObjectManager
     {
         get { return worldObjectManager; }
     }
 
-	private static DebugManager debugManager;
+    private static DebugManager debugManager;
     public static DebugManager DebugManager
     {
-        get { return debugManager; }
+        get
+        {
+            if (debugManager == null)
+            {
+                BigBoss bb = BigBoss.BigBoss;
+                debugManager = bb.GetComponentInChildren<DebugManager>() as DebugManager;
+                if (debugManager == null)
+                {
+                    debugManager = Instantiate(DebugManager) as DebugManager;
+                    debugManager.transform.parent = BigBoss.BigBoss.transform;
+                }
+            }
+            return debugManager;
+        }
+    }
+
+    protected static T Instantiate<T>(out T reference) where T : new()
+    {
+        if (reference == null)
+        {
+
+        }
     }
 
     private static DataManager dataManager;
@@ -117,44 +140,41 @@ public class BigBoss : MonoBehaviour
     {
         get { return dataManager; }
     }
- 
+
     // Use this for initialization
-    void Awake ()
+    void Awake()
     {
         //Find the references
-        
+
         //Obsolete Method of centralized government - BAD!
-//      audioManager = GetComponentInChildren<AudioManager>() as AudioManager;
-//		prefabManager = GetComponent("PrefabManager") as PrefabManager;
-//		guiManager = GetComponent("GUIManager") as GUIManager;
-//		inputManager = GetComponent("InputManager") as InputManager;
-//      levelManager = GetComponent("LevelManager") as LevelManager;
-// 		timeManager = GetComponent<TimeManager>();;
-//		gameManager = GetComponent("GameStateManager") as GameStateManager;
-//		playerManager = GetComponent("PlayerManager") as PlayerManager;
-		
-		//audioManager = GetComponentInChildren<AudioManager>() as AudioManager;//Obsolete with the use of AudioToolkit
-		prefabManager = GetComponentInChildren<PrefabManager>() as PrefabManager;
+        //      audioManager = GetComponentInChildren<AudioManager>() as AudioManager;
+        //		prefabManager = GetComponent("PrefabManager") as PrefabManager;
+        //		guiManager = GetComponent("GUIManager") as GUIManager;
+        //		inputManager = GetComponent("InputManager") as InputManager;
+        //      levelManager = GetComponent("LevelManager") as LevelManager;
+        // 		timeManager = GetComponent<TimeManager>();;
+        //		gameManager = GetComponent("GameStateManager") as GameStateManager;
+        //		playerManager = GetComponent("PlayerManager") as PlayerManager;
+
+        //audioManager = GetComponentInChildren<AudioManager>() as AudioManager;//Obsolete with the use of AudioToolkit
+        prefabManager = GetComponentInChildren<PrefabManager>() as PrefabManager;
         dataManager = GetComponentInChildren<DataManager>() as DataManager;
         worldObjectManager = GetComponentInChildren<WorldObjectManager>() as WorldObjectManager;
-		guiManager = GetComponentInChildren<GUIManager>() as GUIManager;
+        guiManager = GetComponentInChildren<GUIManager>() as GUIManager;
         inputManager = GetComponentInChildren<InputManager>() as InputManager;
         levelLoadManager = GetComponentInChildren<LevelLoadManager>() as LevelLoadManager;
         levelManager = GetComponentInChildren<LevelManager>() as LevelManager;
- 		timeManager = GetComponentInChildren<TimeManager>() as TimeManager;
-		//playerManager = GetComponentInChildren<PlayerManager>() as PlayerManager; //moved below
-		enemyManager = GetComponentInChildren<WorldObjectManager>() as WorldObjectManager;
-		camManager = GetComponentInChildren<CameraManager>() as CameraManager;
+        timeManager = GetComponentInChildren<TimeManager>() as TimeManager;
+        //playerManager = GetComponentInChildren<PlayerManager>() as PlayerManager; //moved below
+        enemyManager = GetComponentInChildren<WorldObjectManager>() as WorldObjectManager;
+        camManager = GetComponentInChildren<CameraManager>() as CameraManager;
         dungeonMaster = GetComponentInChildren<DungeonMaster>() as DungeonMaster;
-		debugManager = GetComponentInChildren<DebugManager>() as DebugManager;
+        debugManager = GetComponentInChildren<DebugManager>() as DebugManager;
         if (prefabManager != null)
             playerManager = prefabManager.player.GetComponent<Player>();
         preGameManager = GetComponentInChildren<PreGameManager>() as PreGameManager;
 
-		//Make this game object persistent
+        //Make this game object persistent
         DontDestroyOnLoad(gameObject);
     }
-	
-	
-	
 }
