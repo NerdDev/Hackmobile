@@ -21,6 +21,10 @@ public class DebugManager : MonoBehaviour
     bool[] logOn;
     #endregion
 
+    #region Editor Properties
+    public bool LevelGen = false;
+    #endregion
+
     #region StringConstants
     const string debugFolder = @"Debug Logs\";
     const string depthStrExtra = "  ";
@@ -72,7 +76,7 @@ public class DebugManager : MonoBehaviour
 	    logging(true);
 		logging (Logs.Main, true);
 		logging (Logs.LevelGenMain, true);
-		logging (Logs.LevelGen, true);
+		logging (Logs.LevelGen, LevelGen);
 		logging(Logs.NPCs, true);
         flags[DebugFlag.SearchSteps] = false;
         flags[DebugFlag.LevelGen_Path_Simplify_Prune] = false;

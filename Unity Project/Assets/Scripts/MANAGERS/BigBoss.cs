@@ -1,17 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-
-/*  IMPORTANT NOTES REGARDING MY MANAGER SYSTEM - The concept is credited to the work done by Daniel Rodriguez of the Silent Kraken blog.
- * http://www.blog.silentkraken.com/2010/06/22/unity3d-manager-systems/
- * Things to note:
- * 		As of 3.4, Properties do not show up in the inspector.  Workaround is to create a new script in the editor folder and mimic the TimeManagerEditor.cs.
- * 			
- * 		This Managers.cs script should ONLY contain static references to the other managers.  It does not contain any game information or class members therein.
- *
- * Apparently this guy thinks he's cool for re-inventing singletons.
- */
-
 public class BigBoss : MonoBehaviour
 {
     protected static BigBoss BBoss { get; set; }
