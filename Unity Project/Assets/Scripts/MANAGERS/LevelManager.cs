@@ -27,6 +27,24 @@ public class LevelManager : MonoBehaviour {
         
         JustinTest();
         JoseTest();
+
+        EnumStringTest();
+    }
+
+    void EnumStringTest()
+    {
+        var dict = new Dictionary<EnumStringKey<NPCFlags>, string>();
+        dict.Add(NPCFlags.COVETOUS, "HELLO");
+        string s = "";
+        Console.WriteLine(dict[NPCFlags.COVETOUS]);
+        s += dict[NPCFlags.COVETOUS];
+        dict.Add("Bloop", "HI");
+        Console.WriteLine(dict["Bloop"]);
+        s += dict["Bloop"];
+        Console.WriteLine(dict["BlooP"]);
+        s += dict["BlooP"];
+        int wer = 23;
+        wer++;
     }
 
     void SetCurLevel(int num)
