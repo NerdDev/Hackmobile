@@ -16,9 +16,16 @@ public class WorldObjectManager : MonoBehaviour {
     Dictionary<string, List<Item>> itemCategories = new Dictionary<string, List<Item>>();
     Dictionary<string, MaterialType> materials = new Dictionary<string, MaterialType>();
 
+    void Awake()
+    {
+        BigBoss.Debug.w(DebugManager.Logs.Main, "Starting World Object Manager");
+        //Initialize Data Manager
+        DataManager dm = BigBoss.Data;
+        initializeNullData();
+    }
+
     void Start()
     {
-        initializeNullData();
     }
 
     private void initializeNullData()

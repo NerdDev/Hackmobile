@@ -21,8 +21,9 @@ public class DataManager : MonoBehaviour
     public ProfessionTitles playerProfessions = new ProfessionTitles();
     #endregion
 
-    void Start ()
+    void Awake()
     {
+        BigBoss.Debug.w(DebugManager.Logs.Main, "Starting Data Manager");
         //Parsing functions here
         parsing.Add("items", parseItems);
         parsing.Add("npcs", parseNPCs);
@@ -37,6 +38,10 @@ public class DataManager : MonoBehaviour
         }
 
         //BigBoss.NPCManager.Log();
+    }
+
+    void Start ()
+    {
     }
 
     private void buildXML(string file)

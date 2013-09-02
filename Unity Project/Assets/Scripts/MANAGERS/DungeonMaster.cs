@@ -30,6 +30,7 @@ public class DungeonMaster : MonoBehaviour {
 
     public void SpawnCreature(string npc, int x, int y)
     {
+        BigBoss.Debug.w(DebugManager.Logs.Main, "Spawning");
         NPC n = BigBoss.WorldObject.getNPC(npc);
         GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
         NPC newNPC = gameObject.AddComponent<NPC>();
