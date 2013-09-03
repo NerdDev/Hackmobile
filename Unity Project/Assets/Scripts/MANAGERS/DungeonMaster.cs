@@ -1,7 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class DungeonMaster : MonoBehaviour {
+public class DungeonMaster : MonoBehaviour, IManager {
+
+    public void Initialize()
+    {
+    }
 
     public void PopulateLevel(Level l)
     {

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class WorldObjectManager : MonoBehaviour {
+public class WorldObjectManager : MonoBehaviour, IManager {
 
     //This may be changed depending on how we utilize objects in the game world
     //globally accessible list of types for iteration:
@@ -16,7 +16,7 @@ public class WorldObjectManager : MonoBehaviour {
     Dictionary<string, List<Item>> itemCategories = new Dictionary<string, List<Item>>();
     Dictionary<string, MaterialType> materials = new Dictionary<string, MaterialType>();
 
-    void Awake()
+    public void Initialize()
     {
         BigBoss.Debug.w(DebugManager.Logs.Main, "Starting World Object Manager");
         //Initialize Data Manager
@@ -44,7 +44,7 @@ public class WorldObjectManager : MonoBehaviour {
         nullItem.setNull();
     }
 
-	public List<NPC> totalNumberOfNPCs;
+	public List<NPC> totalNumberOfNPCs = new List<NPC>();
 
     public void AddNPCToMasterList(NPC npc)
     {

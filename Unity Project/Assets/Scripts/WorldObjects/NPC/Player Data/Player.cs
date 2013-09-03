@@ -6,7 +6,7 @@ using System;
 /*   
  * As long as this isn't an MMO, this Player class should be able to hold most if not all of player information.
  */
-public class Player : NPC
+public class Player : NPC, IManager
 {
     #region General Player Info:
 
@@ -77,8 +77,7 @@ public class Player : NPC
     }
     #endregion
 
-    // Use this for initialization
-    void Start()
+    public void Initialize()
     {
         //use the internal assignation reference for clarity
         this.playerAvatar = this.gameObject;

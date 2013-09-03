@@ -1,10 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class PreGameManager : MonoBehaviour {
+public class PreGameManager : MonoBehaviour, IManager {
 	
 	//private MovieTexture introMovie;
 	private GameObject introSplashGameObject;
+
+    public void Initialize()
+    {
+    }
+
 	// Use this for initialization
 //	IEnumerator Start () 
 //	{
@@ -21,24 +26,6 @@ public class PreGameManager : MonoBehaviour {
 //		//load resources folder and prep next scene
 //		yield return null;	
 //	}
-
-    void onStart()
-    {
-        justinTestingFunction();
-    }
-
-    void justinTestingFunction()
-    {
-    }
-
-    void Start()
-    {
-    }
-	// Update is called once per frame
-	void Update () 
-	{
-	
-	}
 	
 //	public IEnumerator StartIntroSequence()
 //	{

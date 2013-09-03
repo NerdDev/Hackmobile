@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-public class DebugManager : MonoBehaviour
+public class DebugManager : MonoBehaviour, IManager
 {
 
     #region LogTypes
@@ -51,7 +51,7 @@ public class DebugManager : MonoBehaviour
     // Log storage
     static Log[] logs;
 
-	void Awake ()
+	public void Initialize()
     {
         // Create arrays with size = enum length
         logs = new Log[Enum.GetNames(typeof(Logs)).Length];

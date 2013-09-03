@@ -5,7 +5,7 @@ using XML;
 using System.IO;
 
 
-public class DataManager : MonoBehaviour
+public class DataManager : MonoBehaviour, IManager
 {
     #region XML Paths.
     string XMLPath = "Assets/Scripts/XML/";
@@ -21,7 +21,7 @@ public class DataManager : MonoBehaviour
     public ProfessionTitles playerProfessions = new ProfessionTitles();
     #endregion
 
-    void Awake()
+    public void Initialize()
     {
         BigBoss.Debug.w(DebugManager.Logs.Main, "Starting Data Manager");
         //Parsing functions here

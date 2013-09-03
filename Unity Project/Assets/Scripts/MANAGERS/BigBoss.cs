@@ -11,7 +11,7 @@ public class BigBoss : MonoBehaviour
         {
             if (gooey == null)
             {
-                gooey = BBoss.Instantiate<GUIManager>();
+                BBoss.Instantiate<GUIManager>(out gooey);
             }
             return gooey;
         }
@@ -23,7 +23,7 @@ public class BigBoss : MonoBehaviour
         {
             if (playerInput == null)
             {
-                playerInput = BBoss.Instantiate<InputManager>();
+                BBoss.Instantiate<InputManager>(out playerInput);
             }
             return playerInput;
         }
@@ -35,7 +35,7 @@ public class BigBoss : MonoBehaviour
         {
             if (levels == null)
             {
-                levels = BBoss.Instantiate<LevelManager>();
+                BBoss.Instantiate<LevelManager>(out levels);
             }
             return levels;
         }
@@ -47,7 +47,7 @@ public class BigBoss : MonoBehaviour
         {
             if (time == null)
             {
-                time = BBoss.Instantiate<TimeManager>();
+                BBoss.Instantiate<TimeManager>(out time);
             }
             return time;
         }
@@ -59,7 +59,7 @@ public class BigBoss : MonoBehaviour
         {
             if (playerInfo == null)
             {
-                playerInfo = BBoss.Instantiate<Player>();
+                BBoss.Instantiate<Player>(out playerInfo);
             }
             return playerInfo;
         }
@@ -72,7 +72,7 @@ public class BigBoss : MonoBehaviour
         {
             if (camera == null)
             {
-                camera = BBoss.Instantiate<CameraManager>();
+                BBoss.Instantiate<CameraManager>(out camera);
             }
             return camera;
         }
@@ -84,7 +84,7 @@ public class BigBoss : MonoBehaviour
         {
             if (preGame == null)
             {
-                preGame = BBoss.Instantiate<PreGameManager>();
+                BBoss.Instantiate<PreGameManager>(out preGame);
             }
             return preGame;
         }
@@ -96,7 +96,7 @@ public class BigBoss : MonoBehaviour
         {
             if (dungeonMaster == null)
             {
-                dungeonMaster = BBoss.Instantiate<DungeonMaster>();
+                BBoss.Instantiate<DungeonMaster>(out dungeonMaster);
             }
             return dungeonMaster;
         }
@@ -108,7 +108,7 @@ public class BigBoss : MonoBehaviour
         {
             if (worldObject == null)
             {
-                worldObject = BBoss.Instantiate<WorldObjectManager>();
+                BBoss.Instantiate<WorldObjectManager>(out worldObject);
             }
             return worldObject;
         }
@@ -120,7 +120,7 @@ public class BigBoss : MonoBehaviour
         {
             if (debug == null)
             {
-                debug = BBoss.Instantiate<DebugManager>();
+                BBoss.Instantiate<DebugManager>(out debug);
             }
             return debug;
         }
@@ -132,28 +132,33 @@ public class BigBoss : MonoBehaviour
         {
             if (data == null)
             {
-                data = BBoss.Instantiate<DataManager>();
+                BBoss.Instantiate<DataManager>(out data);
             }
             return data;
         }
     }
 
-    protected T Instantiate<T>() where T : UnityEngine.Component
+    protected void Instantiate<T>(out T ret) where T : UnityEngine.Component, IManager
     {
-        T ret = this.GetComponentInChildren<T>();
+        ret = this.GetComponentInChildren<T>();
         if (ret == null)
         {
             GameObject go = new GameObject();
-            go.AddComponent<T>();
-            ret = go.GetComponent<T>();
+            ret = go.AddComponent<T>();
+            ret.Initialize();
             ret.transform.parent = this.transform;
         }
-        return ret;
     }
 
     void Awake()
     {
         BBoss = this;
+
+        foreach (IManager manager in this.gameObject.GetInterfacesInChildren<IManager>())
+        {
+            manager.Initialize();
+        }
+
         //Make this game object persistent
         DontDestroyOnLoad(gameObject);
     }

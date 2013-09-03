@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TimeManager : MonoBehaviour
+public class TimeManager : MonoBehaviour, IManager
 {
 
     /* The Time Manager script is responsible for handling as many time related functions in game as possible.  The purpose of 
@@ -69,13 +69,10 @@ public class TimeManager : MonoBehaviour
     }
     #endregion
 
-    // Use this for initialization
-    void Start()
+    public void Initialize()
     {
-
         totalTimePlayed = PlayerPrefs.GetInt("MinutesPlayed", totalTimePlayed);
         StartCoroutine(TheseThingsWillHappenOncePerMinute());
-
     }
 
     // Update is called once per frame

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour, IManager {
 	
     // Internal
 	public Theme Theme;
@@ -16,13 +16,16 @@ public class LevelManager : MonoBehaviour {
     public static Level Level { get; private set; }
     public static int CurLevelDepth { get; private set; }
 
-    void Start()
+    public void Initialize()
     {
         Builder.Theme = Theme;
         RoomModifier.RegisterModifiers();
         Levels = new Level[MaxLevels];
         _gen = new LevelGenerator();
-
+    }
+    
+    void Start()
+    {
         SetCurLevel(0);
 
         if (BigBoss.DungeonMaster != null)
