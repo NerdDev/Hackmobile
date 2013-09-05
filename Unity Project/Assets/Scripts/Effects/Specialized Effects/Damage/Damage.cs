@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using XML;
 
@@ -6,9 +6,8 @@ public abstract class DamageEffect : EffectInstance
 {
     protected int strength;
 
-    protected override void parseXML(XMLNode x)
+    public override void SetParams()
     {
-        base.parseXML(x);
-        strength = XMLNifty.SelectInt(x, "strength");
+        strength = Add<Integer>("strength");
     }
 }

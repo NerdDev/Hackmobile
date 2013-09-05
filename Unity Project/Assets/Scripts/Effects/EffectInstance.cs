@@ -4,22 +4,35 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class EffectInstance : PassesTurns
+public abstract class EffectInstance : PassesTurns
 {
     public int turnsToProcess;
     public NPC npc; //ref to NPC this is on
+    public XMLNode x;
     public string effect;
-    XMLNode x;
-    public Dictionary<string, Field> map = new Dictionary<string, Field>();
+    private Dictionary<string, Field> map = new Dictionary<string, Field>();
 
     public EffectInstance()
     {
     }
 
+    public abstract void SetParams();
+
+    public T Add<T>(string name) where T : Field, new()
+    {
+        Field item;
+        if (!map.TryGetValue(name, out item))
+        {
+            T param = new T();
+            param.parseXML(x, name);
+            map.Add(name, param);
+            return param;
+        }
+        return (T)item;
+    }
+
     public void initialize(XMLNode x)
     {
-        this.x = x;
-        this.parseXML(x);
         this.IsActive = false;
     }
 
@@ -37,20 +50,13 @@ public class EffectInstance : PassesTurns
         }
     }
 
-    protected virtual void parseXML(XMLNode x)
-    {
-        foreach (KeyValuePair<string, Field> field in map)
-        {
-            field.Value.parseXML(x, field.Key);
-        }
-    }
-
     public EffectInstance activate(NPC n)
     {
         Type t = EffectManager.effects[effect];
         EffectInstance instance = (EffectInstance) Activator.CreateInstance(EffectManager.effects[effect]);
         instance.npc = n;
-        instance.parseXML(x);
+        instance.x = x;
+        instance.map = map;
         instance.initialize();
         return instance;
     }
@@ -72,7 +78,8 @@ public class EffectInstance : PassesTurns
 
     public virtual EffectInstance merge(EffectInstance instance)
     {
-        return new EffectInstance();
+        // Default is to block rhs
+        return this;
     }
 
     #region Turn Management

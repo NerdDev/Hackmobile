@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using XML;
 
 public class AddHealth : EffectInstance
 {
-    FloatValue strength;
+    Float strength;
 
     public override void apply()
     {
@@ -11,9 +11,8 @@ public class AddHealth : EffectInstance
         npc.AdjustHealth(Convert.ToInt32(strength));
     }
 
-    protected override void parseXML(XMLNode x)
+    public override void SetParams()
     {
-        base.parseXML(x);
-        strength = XMLNifty.SelectFloat(x, "strength");
+        strength = Add<Float>("strength");
     }
 }

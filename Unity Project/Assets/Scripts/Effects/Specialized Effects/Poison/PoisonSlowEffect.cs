@@ -1,15 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using XML;
 
 public class PoisonSlowEffect : PoisonEffect
 {
-    IntegerValue strength;
-    FloatValue slowPercentage;
+    Integer strength;
+    Float slowPercentage;
     public PoisonSlowEffect()
     {
-        map.Add("strength", strength);
-        map.Add("slow", slowPercentage);
     }
 
     public override void apply()
@@ -30,10 +28,9 @@ public class PoisonSlowEffect : PoisonEffect
         base.remove();
     }
 
-    protected override void parseXML(XMLNode x)
+    public override void SetParams()
     {
-        base.parseXML(x);
-        strength = XMLNifty.SelectInt(x, "strength");
-        slowPercentage = XMLNifty.SelectFloat(x, "slow");
+        strength = Add<Integer>("strength");
+        slowPercentage = Add<Float>("slow");
     }
 }
