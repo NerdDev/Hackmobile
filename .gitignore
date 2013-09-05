@@ -13,7 +13,7 @@ Unity Project/Assets/NGUI/Examples/
 Unity Project/Assets/Resources_WIP/
 Unity Project/Assets/Resources_WIP.meta
 
-*.csproj
+## *.csproj
 *.sln
 *.userprefs
 ## Class Diagrams
