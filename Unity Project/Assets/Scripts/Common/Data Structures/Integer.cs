@@ -1,23 +1,23 @@
 ﻿using System;
 using XML;
 
-public struct Integer : Field
+public struct IntegerValue : Field
 {
     int i;
 
-    public Integer(int i)
+    public IntegerValue(int i)
     {
         this.i = i;
     }
 
-    public static implicit operator int(Integer i)
+    public static implicit operator int(IntegerValue i)
     {
         return i.i;
     }
 
-    public static implicit operator Integer(int i)
+    public static implicit operator IntegerValue(int i)
     {
-        return new Integer(i);
+        return new IntegerValue(i);
     }
 
     public void parseXML(XMLNode x, string name)

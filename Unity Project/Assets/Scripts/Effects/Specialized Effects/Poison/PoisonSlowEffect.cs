@@ -4,8 +4,8 @@ using XML;
 
 public class PoisonSlowEffect : PoisonEffect
 {
-    Integer strength;
-    Float slowPercentage;
+    IntegerValue strength;
+    FloatValue slowPercentage;
     public PoisonSlowEffect()
     {
         map.Add("strength", strength);

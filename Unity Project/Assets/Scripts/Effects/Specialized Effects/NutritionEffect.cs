@@ -5,7 +5,7 @@ using System.Text;
 
 public class NutritionEffect : EffectInstance
 {
-    Integer strength;
+    IntegerValue strength;
 
     public override void apply()
     {

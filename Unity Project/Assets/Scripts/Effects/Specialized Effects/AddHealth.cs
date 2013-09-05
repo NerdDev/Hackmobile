@@ -3,7 +3,7 @@ using XML;
 
 public class AddHealth : EffectInstance
 {
-    Float strength;
+    FloatValue strength;
 
     public override void apply()
     {

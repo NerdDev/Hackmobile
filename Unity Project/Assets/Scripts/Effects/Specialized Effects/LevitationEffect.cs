@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class LevitationEffect : EffectInstance
 {
-    Integer strength;
+    FloatValue strength;
 
     public override void init()
     {
         base.init();
-        n.verticalMove(strength);
+        npc.verticalMove(strength);
     }
 
     public override void remove()
