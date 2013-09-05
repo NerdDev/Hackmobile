@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class NutritionEffect : EffectInstance
+public class StoningEffect : EffectInstance
 {
-    Integer strength;
-
     public override void apply()
     {
         base.apply();
-        npc.AdjustHunger(strength);
     }
 }

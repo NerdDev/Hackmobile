@@ -90,14 +90,16 @@ public class Player : NPC, IManager
         this.Name = "Kurtis";
 
         Item i = BigBoss.WorldObject.CreateItem("sword1");
-        this.addToInventory(i);
-        this.equipItem(i);
+        //this.addToInventory(i);
+        //this.equipItem(i);
 
         Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
-        this.addToInventory(food, 5);
+        //this.addToInventory(food, 5);
 
         Item potion = BigBoss.WorldObject.CreateItem("health potion");
-        this.addToInventory(potion, 3);
+        //this.addToInventory(potion, 3);
+
+        Debug.Log(EffectManager.effects.Dump());
     }
 
     // Update is called once per frame

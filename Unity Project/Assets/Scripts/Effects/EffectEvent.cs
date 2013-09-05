@@ -4,13 +4,12 @@ using XML;
 
 public class EffectEvent
 {
-    public List<EffectBase> effects = new List<EffectBase>();
+    public List<EffectInstance> effects = new List<EffectInstance>();
 
     public void activate(NPC wo)
     {
-        foreach (EffectBase e in effects)
+        foreach (EffectInstance e in effects)
         {
-            //BigBoss.Log("Activating effect: " + e.effect + ".");
             e.activate(wo);
         }
     }
@@ -22,8 +21,17 @@ public class EffectEvent
         {
             foreach (XMLNode xnode in nodes)
             {
-                EffectBase baseEffect = new EffectBase(xnode);
-                effects.Add(baseEffect);
+                string type = XMLNifty.SelectString(xnode, "type");
+                try
+                {
+                    EffectInstance instance = (EffectInstance)Activator.CreateInstance(EffectManager.effects[type]);
+                    instance.effect = type;
+                    instance.initialize(xnode);
+                    effects.Add(instance);
+                }
+                catch
+                {
+                }
             }
         }
     }

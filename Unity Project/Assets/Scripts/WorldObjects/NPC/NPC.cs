@@ -429,26 +429,26 @@ public class NPC : WorldObject
     #endregion
 
     #region Effects
-    public virtual void applyEffect(EffectBase effectBase)
+    public virtual void ApplyEffect(EffectInstance effect)
     {
-        if (effectBase.turns != 0)
+        if (effect.turnsToProcess != 0)
         {
-            if (effects.ContainsKey(effectBase.effect))
+            if (effects.ContainsKey(effect.effect))
             {
-                effects[effectBase.effect] = effects[effectBase.effect].merge(effectBase);
+                effects[effect.effect] = effects[effect.effect].merge(effect);
             }
             else
             {
-                effects.Add(effectBase.effect, effectBase.activate(this));
+                effects.Add(effect.effect, effect.activate(this));
             }
         }
         else
         {
-            effectBase.activate(this);
+            effect.activate(this);
         }
     }
 
-    public void removeEffect(string effect)
+    public void RemoveEffect(string effect)
     {
         if (effects.ContainsKey(effect))
         {
@@ -459,6 +459,30 @@ public class NPC : WorldObject
         else
         {
             //effect doesn't exist on the NPC
+        }
+    }
+
+    public void RemoveEffect<T>()
+    {
+        Type t = typeof(T);
+        RemoveEffect(t.ToString());
+    }
+
+    public bool HasEffect<T>()
+    {
+        Type t = typeof(T);
+        return this.HasEffect(t.ToString());
+    }
+
+    public bool HasEffect(string key)
+    {
+        if (effects.ContainsKey(key))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
     #endregion
@@ -544,14 +568,14 @@ public class NPC : WorldObject
     public void MoveNPC(Value2D<GridSpace> node)
     {
         GridSpace grid = LevelManager.Level[node.x, node.y];
-        if (!grid.IsBlocked())
+        if (!grid.IsBlocked() && subtractPoints(BigBoss.TimeKeeper.regularMoveCost))
         {
             int xmove = gridSpace.x - node.x;
             int ymove = gridSpace.y - node.y;
-            gridSpace.val.Remove(this);
-            gridSpace = new Value2D<GridSpace>(node.x, node.y, grid);
-            gridSpace.val.Put(this);
-            MoveNPC(xmove, ymove);
+                gridSpace.val.Remove(this);
+                gridSpace = new Value2D<GridSpace>(node.x, node.y, grid);
+                gridSpace.val.Put(this);
+                MoveNPC(xmove, ymove);
         }
     }
 
@@ -772,7 +796,20 @@ public class NPC : WorldObject
     #region Turn Management
 
     private int npcPoints = 0;
-    private int baseNPCPoints = 60;
+    private int baseNPCPoints = 1;
+
+    private bool subtractPoints(int points)
+    {
+        if (npcPoints > points)
+        {
+            npcPoints -= points;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public override void UpdateTurn()
     {
@@ -782,14 +819,7 @@ public class NPC : WorldObject
             {
                 if (this.IsNotAFreaking<Player>())
                 {
-                    if (IsNextToPlayer())
-                    {
-                        NextToPlayer();
-                    }
-                    else
-                    {
-                        DecideWhatToDo();
-                    }
+                    DecideWhatToDo();
                 }
             }
             catch (NullReferenceException)
@@ -855,20 +885,46 @@ public class NPC : WorldObject
         return false;
     }
 
-    void NextToPlayer()
-    {
-        //attack?
-        attack(BigBoss.PlayerInfo);
-    }
-
     void DecideWhatToDo()
     {
-        //move?
+        if (IsNextToPlayer())
+        {
+            AIAttack();
+        }
+        else
+        {
+            AIMove();
+        }
+    }
+
+    private void AIAttack()
+    {
+        if (subtractPoints(BigBoss.TimeKeeper.attackCost))
+        {
+            attack(BigBoss.PlayerInfo);
+        }
+    }
+
+    private void AIMove()
+    {
         PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
         if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
-            MoveNPC(nodes[nodes.Count - 2].loc);
+            Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
+            int moveCost;
+            if (Nifty.diagonal(gridSpace.x, gridSpace.y, nodeToMove.x, nodeToMove.y))
+            {
+                moveCost = BigBoss.TimeKeeper.diagonalMoveCost;
+            }
+            else
+            {
+                moveCost = BigBoss.TimeKeeper.regularMoveCost;
+            }
+            if (subtractPoints(moveCost))
+            {
+                MoveNPC(nodeToMove);
+            }
             UpdateCurrentTileVectors();
         }
     }
