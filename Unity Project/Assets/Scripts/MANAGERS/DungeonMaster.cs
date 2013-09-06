@@ -1,9 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
-public class DungeonMaster : MonoBehaviour {
+public class DungeonMaster : MonoBehaviour, IManager {
 
-    public static void PopulateLevel(Level l)
+    public void Initialize()
+    {
+    }
+
+    public void PopulateLevel(Level l)
     {
         if (!l.Populated)
         {
@@ -11,18 +15,27 @@ public class DungeonMaster : MonoBehaviour {
         }
     }
 
-    static void ForcePopulateLevel(Level l)
+    void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
+        foreach (Room room in l.Layout.GetRooms())
+        {
+            GridMap map = room.GetFloors();
+            Value2D<GridType> space = map.RandomValue(Probability.SpawnRand);
+            int wer = 23;
+            wer++;
+            SpawnCreature("skeleton", space.x, space.y);
+        }
     }
 
-    static void PickStartLocation(Level l)
+    void PickStartLocation(Level l)
     {
     }
 
     public void SpawnCreature(string npc, int x, int y)
     {
-        NPC n = BigBoss.WorldObjectManager.getNPC(npc);
+        BigBoss.Debug.w(DebugManager.Logs.Main, "Spawning");
+        NPC n = BigBoss.WorldObject.getNPC(npc);
         GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
         NPC newNPC = gameObject.AddComponent<NPC>();
         newNPC.setData(n);

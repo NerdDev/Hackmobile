@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour, IManager {
 	
     // Internal
 	public Theme Theme;
@@ -16,15 +16,21 @@ public class LevelManager : MonoBehaviour {
     public static Level Level { get; private set; }
     public static int CurLevelDepth { get; private set; }
 
-    void Start()
+    public void Initialize()
     {
         Builder.Theme = Theme;
         RoomModifier.RegisterModifiers();
         Levels = new Level[MaxLevels];
         _gen = new LevelGenerator();
-
+    }
+    
+    void Start()
+    {
         SetCurLevel(0);
-        
+
+        if (BigBoss.DungeonMaster != null)
+            BigBoss.DungeonMaster.PopulateLevel(Level);
+
         JustinTest();
         JoseTest();
 
@@ -103,7 +109,7 @@ public class LevelManager : MonoBehaviour {
         SquareRoom square = new SquareRoom();
         square.Modify(room, Probability.LevelRand);
         mod.Modify(room, Probability.LevelRand);
-        DebugManager.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
+        BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
         room.ToLog(DebugManager.Logs.LevelGenMain);
     }
 

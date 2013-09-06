@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class InputManager : MonoBehaviour
+public class InputManager : MonoBehaviour, IManager
 {
     /* This manager class handles all player input, in addition to arbritrary related states - i.e. "Player Typing", or "Phone Upside Down".
      Booleans for key combinations can be a possibility.  If it's related to player interaction with hardware, it should probably go here.
@@ -23,6 +23,10 @@ public class InputManager : MonoBehaviour
 
     //Screen/Cam space vars:
     public Vector2 centerPointInScreenSpace;
+
+    public void Initialize()
+    {
+    }
 
     void Start()
     {
@@ -89,8 +93,16 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            BigBoss.TimeKeeper.TogglePause();
+            BigBoss.Time.TogglePause();
         }
+        {
+            Vector3 place = new Vector3(15f, .5f, 18);
+            BigBoss.WorldObject.CreateRandomItem(place);
+            Debug.Log("X");
+        }
+		
+		
+
         if (Input.GetKeyDown(KeyCode.Z))
         {
             BigBoss.PlayerInfo.playerAvatar.transform.position = BigBoss.PlayerInfo.avatarStartLocation;
@@ -99,7 +111,6 @@ public class InputManager : MonoBehaviour
         {
             //Item theItem = BigBoss.WorldObjectManager.CreateRandomItem(new Vector3 (0,0,0));
             //Testing out an NGUI texture swap:
-
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -162,4 +173,4 @@ public class InputManager : MonoBehaviour
     }
 
     #endregion
-}//end Mono
+}

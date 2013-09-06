@@ -7,24 +7,24 @@ public class Item : WorldObject, PassesTurns
 {
     #region BIGBOSSMANAGEMENT
     //consider some abtract/virtual methods and variables here for cleanliness
-    //ex:  register my existence and key information to the item master singleton so i'm not lost in the game world
-
-    // Use this for initialization
-    void Start()
-    {
-        RegisterItemToSingleton();
-    }
-
-    public virtual void RegisterItemToSingleton() //if we decide to make Item.cs structural only, then switch these to abstract
-    {
-        BigBoss.WorldObjectManager.AddItemToMasterList(this);//registering existence with singleton
-        BigBoss.TimeKeeper.RegisterToUpdateList(this);
-    }
-
-    public virtual void DestroyThisItem()
-    {
-        BigBoss.WorldObjectManager.RemoveItemFromMasterList(this);//removing existence with singleton
-        BigBoss.TimeKeeper.RemoveFromUpdateList(this);
+	//ex:  register my existence and key information to the item master singleton so i'm not lost in the game world
+	
+	// Use this for initialization
+	void Start () 
+	{
+		RegisterItemToSingleton();
+	}
+	
+	public virtual void RegisterItemToSingleton() //if we decide to make Item.cs structural only, then switch these to abstract
+	{
+		BigBoss.WorldObject.AddItemToMasterList(this);//registering existence with singleton
+        BigBoss.Time.RegisterToUpdateList(this);
+	}
+	
+	public virtual void DestroyThisItem()
+	{
+		BigBoss.WorldObject.RemoveItemFromMasterList(this);//removing existence with singleton
+        BigBoss.Time.RemoveFromUpdateList(this);
         Destroy(this.gameObject);
     }
     #endregion
@@ -130,7 +130,7 @@ public class Item : WorldObject, PassesTurns
 
     public void setData(string itemName)
     {
-        this.setData(BigBoss.WorldObjectManager.getItem(itemName));
+        this.setData(BigBoss.WorldObject.getItem(itemName));
     }
 
     //use this to do a conversion of a base item to instanced item

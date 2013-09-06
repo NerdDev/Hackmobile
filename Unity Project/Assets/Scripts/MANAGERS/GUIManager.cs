@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GUIManager : MonoBehaviour {
+public class GUIManager : MonoBehaviour, IManager {
 
 	/*
 	 * The role of GUIManager is to centralize the use of methods that can be overloaded in order
@@ -45,10 +45,8 @@ public class GUIManager : MonoBehaviour {
 	public UISprite[] inventoryIconArray;
 	#endregion
 
-	void Start () 
+	public void Initialize () 
 	{
-		
-	
 		//Feel free to relocate these init calls when pre-game stuff is utilized
 		InventoryGUICaptureReferences();//better convention to call this from player eventually
 		
@@ -57,11 +55,7 @@ public class GUIManager : MonoBehaviour {
 		Debug.Log(NGUIMath.CalculateAbsoluteWidgetBounds(inventoryFrameSprite.transform));
 		
 		CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
-		
-		
-		
-		
-		
+
 		//Item iScript = BigBoss.WorldObjectManager.CreateItem(new Vector3(0,0,0),"ABITEMLOLZ");
 		
 		//BigBoss.PlayerInfo.addToInventory(iScript);
@@ -305,5 +299,5 @@ public class GUIManager : MonoBehaviour {
 		ClearAllInventorySprites();
 		
 	}
-	
+
 }

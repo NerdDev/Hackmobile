@@ -1,10 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class PreGameManager : MonoBehaviour {
+public class PreGameManager : MonoBehaviour, IManager {
 	
 	//private MovieTexture introMovie;
 	private GameObject introSplashGameObject;
+
+    public void Initialize()
+    {
+    }
+
 	// Use this for initialization
 //	IEnumerator Start () 
 //	{
@@ -21,36 +26,6 @@ public class PreGameManager : MonoBehaviour {
 //		//load resources folder and prep next scene
 //		yield return null;	
 //	}
-
-    void onStart()
-    {
-        justinTestingFunction();
-    }
-
-    void justinTestingFunction()
-    {
-    }
-
-    void Start()
-    {
-        if (LevelManager.Level[28, 57] != null)
-        {
-            BigBoss.DungeonMaster.SpawnCreature("orc", 106, 109);
-        }
-        if (LevelManager.Level[18, 52] != null)
-        {
-            BigBoss.DungeonMaster.SpawnCreature("skeleton", 91, 98);
-        }
-        if (LevelManager.Level[22, 55] != null)
-        {
-            BigBoss.DungeonMaster.SpawnCreature("skeleton", 115, 106);
-        }
-    }
-	// Update is called once per frame
-	void Update () 
-	{
-	
-	}
 	
 //	public IEnumerator StartIntroSequence()
 //	{

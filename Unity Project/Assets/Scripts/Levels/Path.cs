@@ -165,9 +165,9 @@ public class Path : LayoutObjectLeaf
     void Prune()
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Prune");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Prune");
         }
         #endregion
         Bounding bounds = GetBounding();
@@ -180,12 +180,12 @@ public class Path : LayoutObjectLeaf
             surround.Load(val.x, val.y);
             Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);
             #region DEBUG
-            if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
             {
-                DebugManager.w(DebugManager.Logs.LevelGen, "Evaluating " + val);
+                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Evaluating " + val);
                 if (neighbor != null)
                 {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "Found Neighbor " + neighbor);
+                    BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Found Neighbor " + neighbor);
                 }
             }
             #endregion
@@ -204,9 +204,9 @@ public class Path : LayoutObjectLeaf
                 // Set next index to proper number
                 index = neighbor.val + 1;
                 #region DEBUG
-                if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
                 {
-                    DebugManager.w(DebugManager.Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count);
+                    BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count);
                     ToLog(DebugManager.Logs.LevelGen);
                 }
                 #endregion
@@ -215,9 +215,9 @@ public class Path : LayoutObjectLeaf
             index++;
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen) && DebugManager.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
         {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }
@@ -230,17 +230,17 @@ public class Path : LayoutObjectLeaf
     public void ConnectEnds(LayoutObjectContainer container)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, "Connect Ends");
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Connect Ends");
         }
         #endregion
         container.FindAndConnect(this, _list[0]);
         container.FindAndConnect(this, _list[_list.Count - 1]);
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }

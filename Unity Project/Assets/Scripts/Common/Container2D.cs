@@ -100,7 +100,7 @@ abstract public class Container2D<T> {
 	
 	public virtual void ToLog(DebugManager.Logs log)
     {
-        if (DebugManager.logging(log))
+        if (BigBoss.Debug.logging(log))
         {
             ToLog(log, new String[0]);
         }
@@ -108,19 +108,19 @@ abstract public class Container2D<T> {
 
     public virtual void ToLog(DebugManager.Logs log, params string[] customContent)
     {
-        if (DebugManager.logging(log))
+        if (BigBoss.Debug.logging(log))
         {
-            DebugManager.printHeader(log, ToString());
+            BigBoss.Debug.printHeader(log, ToString());
             foreach (string s in customContent)
             {
-                DebugManager.w(log, s);
+                BigBoss.Debug.w(log, s);
             }
             foreach (string s in ToRowStrings())
             {
-                DebugManager.w(log, s);
+                BigBoss.Debug.w(log, s);
             }
-            DebugManager.w(log, "Bounds: " + GetBounding().ToString());
-            DebugManager.printFooter(log);
+            BigBoss.Debug.w(log, "Bounds: " + GetBounding().ToString());
+            BigBoss.Debug.printFooter(log);
         }
     }
 

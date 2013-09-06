@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using XML;
 using System.IO;
 
 
-public class DataManager : MonoBehaviour
+public class DataManager : MonoBehaviour, IManager
 {
     #region XML Paths.
     string XMLPath = "Assets/Scripts/XML/";
@@ -21,8 +21,9 @@ public class DataManager : MonoBehaviour
     public ProfessionTitles playerProfessions = new ProfessionTitles();
     #endregion
 
-    void Start ()
+    public void Initialize()
     {
+        BigBoss.Debug.w(DebugManager.Logs.Main, "Starting Data Manager");
         //Parsing functions here
         parsing.Add("items", parseItems);
         parsing.Add("npcs", parseNPCs);
@@ -37,6 +38,10 @@ public class DataManager : MonoBehaviour
         }
 
         //BigBoss.NPCManager.Log();
+    }
+
+    void Start ()
+    {
     }
 
     private void buildXML(string file)
@@ -64,9 +69,9 @@ public class DataManager : MonoBehaviour
             {
                 Item i = parseItem(xnode);
                 items.Add(i);
-                BigBoss.WorldObjectManager.getItems().Add(i.Name, i);
+                BigBoss.WorldObject.getItems().Add(i.Name, i);
             }
-            BigBoss.WorldObjectManager.getCategories().Add(x.getKey(), items);
+            BigBoss.WorldObject.getCategories().Add(x.getKey(), items);
         }
     }
 
@@ -87,7 +92,7 @@ public class DataManager : MonoBehaviour
         {
             MaterialType mat = new MaterialType();
             mat.parseXML(m);
-            BigBoss.WorldObjectManager.getMaterials().Add(mat.Name, mat);
+            BigBoss.WorldObject.getMaterials().Add(mat.Name, mat);
         }
     }
 
@@ -100,7 +105,7 @@ public class DataManager : MonoBehaviour
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;
             n.parseXML(m);
-            BigBoss.WorldObjectManager.getNPCs().Add(n.Name, n);
+            BigBoss.WorldObject.getNPCs().Add(n.Name, n);
             n.IsActive = false;
         }
     }

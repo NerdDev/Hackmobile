@@ -8,6 +8,8 @@ public static class Probability
     public static RandomGen Rand { get { return _rand; } set { _rand = value; } }
     private static RandomGen _levelRand = new RandomGen();
     public static RandomGen LevelRand { get { return _levelRand; } set { _levelRand = value; } }
+    private static RandomGen _spawnRand = new RandomGen();
+    public static RandomGen SpawnRand { get { return _levelRand; } set { _levelRand = value; } }
 
     public static int getRandomInt() 
     {

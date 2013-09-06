@@ -42,13 +42,13 @@ public class NPC : WorldObject
 
     public virtual void RegisterNPCToSingleton()
     {
-        BigBoss.WorldObjectManager.AddNPCToMasterList(this);
+        BigBoss.WorldObject.AddNPCToMasterList(this);
     }
 
     public virtual void DestroyThisItem()
     {
-        BigBoss.WorldObjectManager.RemoveNPCFromMasterList(this);
-        BigBoss.TimeKeeper.RemoveFromUpdateList(this);
+        BigBoss.WorldObject.RemoveNPCFromMasterList(this);
+        BigBoss.Time.RemoveFromUpdateList(this);
         Destroy(this.gameObject);
     }
 
@@ -452,7 +452,7 @@ public class NPC : WorldObject
     {
         if (effects.ContainsKey(effect))
         {
-            BigBoss.TimeKeeper.RemoveFromUpdateList(effects[effect]);
+            BigBoss.Time.RemoveFromUpdateList(effects[effect]);
             effects[effect].IsActive = false;
             effects.Remove(effect);
         }
@@ -687,7 +687,7 @@ public class NPC : WorldObject
     #region NPC Data Management for Instances
     public void setData(string npcName)
     {
-        this.setData(BigBoss.WorldObjectManager.getNPC(npcName));
+        this.setData(BigBoss.WorldObject.getNPC(npcName));
     }
 
     public void setData(NPC npc)
@@ -776,7 +776,7 @@ public class NPC : WorldObject
 
     public override void UpdateTurn()
     {
-        if (IsActive && BigBoss.TimeKeeper.turnsPassed != 0)
+        if (IsActive && BigBoss.Time.turnsPassed != 0)
         {
             try
             {
