@@ -7,9 +7,9 @@ public class TrapRoomMod : RoomModifier
     public override void Modify(Room room, RandomGen rand)
     {
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printHeader(DebugManager.Logs.LevelGen, ToString());
+            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, ToString());
         }
         #endregion
         int treasurePercent = rand.Next(0, 100);
@@ -19,17 +19,17 @@ public class TrapRoomMod : RoomModifier
         else if (treasurePercent <= 90) treasureInRoom = 2;
         else treasureInRoom = 3;
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Treasure Percent: " + treasurePercent + " Treasure In Room: " + treasureInRoom);
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Treasure Percent: " + treasurePercent + " Treasure In Room: " + treasureInRoom);
         }
         #endregion
         int floorSpace = room.CountGridType(GridType.Floor);
         int trapsInRoom = (floorSpace - treasureInRoom) / 8;
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.w(DebugManager.Logs.LevelGen, "Floor Space: " + floorSpace + " Traps In Room: " + trapsInRoom);
+            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Floor Space: " + floorSpace + " Traps In Room: " + trapsInRoom);
         }
         #endregion
         GridMap grid = room.GetFloors();
@@ -58,9 +58,9 @@ public class TrapRoomMod : RoomModifier
             }
         }
         #region DEBUG
-        if (DebugManager.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
-            DebugManager.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
     }

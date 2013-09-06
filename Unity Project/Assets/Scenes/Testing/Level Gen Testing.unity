@@ -212,6 +212,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a8e122e8b0def44f9497a4dd4bd576b, type: 3}
   m_Name: 
+  LevelGen: 0
 --- !u!1 &1041270598
 GameObject:
   m_ObjectHideFlags: 0

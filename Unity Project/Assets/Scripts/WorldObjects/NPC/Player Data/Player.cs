@@ -121,13 +121,13 @@ public class Player : NPC, IManager
     public override void eatItem(Item i)
     {
         base.eatItem(i);
-        BigBoss.TimeKeeper.PassTurn(60);
+        BigBoss.Time.PassTurn(60);
     }
 
     public override void useItem(Item i)
     {
         base.useItem(i);
-        BigBoss.TimeKeeper.PassTurn(60);
+        BigBoss.Time.PassTurn(60);
     }
     #endregion
 

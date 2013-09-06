@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using XML;
 
@@ -10,7 +10,7 @@ public class EffectEvent
     {
         foreach (EffectBase e in effects)
         {
-            BigBoss.Log("Activating effect: " + e.effect + ".");
+            //BigBoss.Log("Activating effect: " + e.effect + ".");
             e.activate(wo);
         }
     }

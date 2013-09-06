@@ -97,7 +97,7 @@ public class InputManager : MonoBehaviour, IManager
         }
         {
             Vector3 place = new Vector3(15f, .5f, 18);
-            BigBoss.WorldObject.CreateRandomItem(place);
+            BigBoss.WorldObject.CreateRandomItem();
             Debug.Log("X");
         }
 		

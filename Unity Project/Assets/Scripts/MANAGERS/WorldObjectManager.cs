@@ -139,7 +139,7 @@ public class WorldObjectManager : MonoBehaviour, IManager {
     {
         GameObject item = new GameObject();
         Item i = item.AddComponent<Item>();
-        Item baseI = BigBoss.WorldObjectManager.getItem(itemName);
+        Item baseI = BigBoss.WorldObject.getItem(itemName);
         i.setData(baseI);
         i.IsActive = true;
         return i;

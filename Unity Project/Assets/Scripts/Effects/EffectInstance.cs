@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,7 +35,7 @@ public class EffectInstance : PassesTurns
         {
             EffectManager.effects[effect].init(worldObject, strength);
             IsActive = true;
-            BigBoss.TimeKeeper.RegisterToUpdateList(this);
+            BigBoss.Time.RegisterToUpdateList(this);
         }
     }
 

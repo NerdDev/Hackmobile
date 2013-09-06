@@ -37,7 +37,7 @@ public class NPC : WorldObject
         {
             RegisterNPCToSingleton();
         }
-        BigBoss.TimeKeeper.RegisterToUpdateList(this);
+        BigBoss.Time.RegisterToUpdateList(this);
     }
 
     public virtual void RegisterNPCToSingleton()
