@@ -230,28 +230,27 @@ public static class Nifty
 
     public static List<Type> GetSubclassesOf(this Type type)
     {
+        return AppDomain.CurrentDomain.GetAssemblies().ToList()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => type.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract && !p.IsInterface).ToList();
+        /*
         List<Type> list = new List<Type>();
-        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        foreach (Assembly a in assemblies)
         {
-            try
-            {
-                if (!assembly.FullName.StartsWith("System."))
+            if (!a.FullName.StartsWith("System")) {
+                Type[] types = a.GetTypes();
+                foreach (Type t in types)
                 {
-                    Type[] types = assembly.GetTypes();
-                    foreach (Type t in types)
+                    if (t.IsAssignableFrom(type) && t.IsClass && !t.IsAbstract && !t.IsInterface)
                     {
-                        if (t.IsAssignableFrom(type) && t.IsClass && !t.IsInterface && !t.IsAbstract)
-                        {
-                            list.Add(t);
-                        }
+                        list.Add(t);
                     }
                 }
             }
-            catch
-            {
-            }
         }
         return list;
+        */
     }
 }
 

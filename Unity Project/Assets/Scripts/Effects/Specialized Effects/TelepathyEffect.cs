@@ -4,24 +4,24 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class Levitation : EffectInstance
+public class Telepathy : EffectInstance
 {
-    Float strength;
-
     public override void init()
     {
         base.init();
-        npc.verticalMove(strength);
+        //--player
+        //attach FOW revealers to sentient NPC's within a certain distance so they can be seen
+        //--npc
+        //affects targeting, no effect in here?
     }
 
     public override void remove()
     {
-        base.remove();
-        npc.verticalMove(-strength);
+        base.apply();
+        //reverse init()
     }
 
     public override void SetParams()
     {
-        strength = Add<Float>("strength");
     }
 }

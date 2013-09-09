@@ -8,7 +8,7 @@ public class DamageShock : DamageEffect
     public override void apply()
     {
         base.apply();
-        if (!npc.HasEffect<ResistanceShock>())
+        if (!npc.HasEffect<ShockResistance>())
         {
             npc.AdjustHealth(Convert.ToInt32(-strength));
         }

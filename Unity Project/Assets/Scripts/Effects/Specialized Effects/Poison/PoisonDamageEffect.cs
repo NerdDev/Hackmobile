@@ -4,12 +4,15 @@ using XML;
 
 public class PoisonDamageEffect : PoisonEffect
 {
-    int strength;
+    Integer strength;
 
     public override void apply()
     {
         base.apply();
-        npc.AdjustHealth(Convert.ToInt32(-strength));
+        if (!npc.HasEffect<PoisonResistance>())
+        {
+            npc.AdjustHealth(Convert.ToInt32(-strength));
+        }
     }
 
     public override void init()

@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using XML;
 
-public class EffectEvent
+public class EffectEvent : List<EffectInstance>
 {
-    public List<EffectInstance> effects = new List<EffectInstance>();
-
     public void activate(NPC wo)
     {
-        foreach (EffectInstance e in effects)
+        BigBoss.Log(this.Dump());
+        foreach (EffectInstance e in this)
         {
+            BigBoss.Log(e.ToString());
             e.activate(wo);
         }
     }
@@ -27,7 +27,7 @@ public class EffectEvent
                     EffectInstance instance = (EffectInstance)Activator.CreateInstance(EffectManager.effects[type]);
                     instance.effect = type;
                     instance.initialize(xnode);
-                    effects.Add(instance);
+                    this.Add(instance);
                 }
                 catch
                 {

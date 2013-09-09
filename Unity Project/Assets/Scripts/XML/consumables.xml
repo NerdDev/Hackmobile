@@ -9,18 +9,13 @@
 			<prefab> </prefab>
 			<OnEatenEffect>
 				<effect>
-					<type>poison</type>
+					<type>PoisonDamageEffect</type>
 					<turns>10</turns>
 					<strength>3</strength>
 				</effect>
 				<effect>
-					<type>nutrition</type>
+					<type>NutritionEffect</type>
 					<strength>50</strength>
-				</effect>
-				<effect>
-					<type>levitation</type>
-					<turns>10</turns>
-					<strength>.5</strength>
 				</effect>
 			</OnEatenEffect>
 		</food>
@@ -34,6 +29,45 @@
 				<effect>
 					<type>addhealth</type>
 					<strength>40</type>
+				</effect>
+			</OnEatenEffect>
+		</potion>
+		<potion name="health potion">
+			<icon>potion1</icon>
+			<stats>
+				<weight>3</weight>
+				<cost>120</cost>
+			</stats>
+			<OnEatenEffect>
+				<effect>
+					<type>AddHealth</type>
+					<strength>40</type>
+				</effect>
+			</OnEatenEffect>
+		</potion>
+		<potion name="potion of cure poison">
+			<icon>potion1</icon>
+			<stats>
+				<weight>3</weight>
+				<cost>120</cost>
+			</stats>
+			<OnEatenEffect>
+				<effect>
+					<type>addhealth</type>
+					<strength>40</type>
+				</effect>
+			</OnEatenEffect>
+		</potion>
+		<potion name="potion of levitation">
+			<icon>potion1</icon>
+			<stats>
+				<weight>3</weight>
+				<cost>120</cost>
+			</stats>
+			<OnEatenEffect>
+				<effect>
+					<type>LevitationEffect</type>
+					<strength>.2</type>
 				</effect>
 			</OnEatenEffect>
 		</potion>

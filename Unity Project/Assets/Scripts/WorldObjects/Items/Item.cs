@@ -93,7 +93,7 @@ public class Item : WorldObject, PassesTurns
 
     public bool isUnEquippable()
     {
-        if (props.BUC == global::BUC.BLESSED || props.BUC == global::BUC.UNCURSED)
+        if (props.BUC != BUC.CURSED)
         {
             return true;
         }

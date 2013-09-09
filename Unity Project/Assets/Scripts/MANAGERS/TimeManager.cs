@@ -185,7 +185,7 @@ public class TimeManager : MonoBehaviour, IManager
         obj.CurrentPoints += turnPoints;
         //this will prevent AI processing from doing all the small actions constantly
         // and we can update it based on stats to make them move more or less often
-        while (obj.CurrentPoints >= obj.BasePoints)
+        if (obj.CurrentPoints >= obj.BasePoints)
         {
             //The object must lower it's own base points
             obj.UpdateTurn();

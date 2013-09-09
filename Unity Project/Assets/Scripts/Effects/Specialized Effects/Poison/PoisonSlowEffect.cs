@@ -6,9 +6,6 @@ public class PoisonSlowEffect : PoisonEffect
 {
     Integer strength;
     Float slowPercentage;
-    public PoisonSlowEffect()
-    {
-    }
 
     public override void apply()
     {
@@ -19,12 +16,13 @@ public class PoisonSlowEffect : PoisonEffect
     {
         base.init();
         //adjust NPC speed here
+        //adjust NPC health here
         BigBoss.Gooey.CreateTextPop(npc.gameObject.transform.position, "Poisoned!", UnityEngine.Color.green);
     }
 
     public override void remove()
     {
-        //adjust NPC speed here
+        //adjust NPC speed here back to normal
         base.remove();
     }
 

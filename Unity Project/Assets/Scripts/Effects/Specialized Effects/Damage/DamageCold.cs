@@ -8,7 +8,7 @@ public class DamageCold : DamageEffect
     public override void apply()
     {
         base.apply();
-        if (!npc.HasEffect<Cold_Resistance>())
+        if (!npc.HasEffect<ColdResistance>())
         {
             npc.AdjustHealth(Convert.ToInt32(-strength));
         }
