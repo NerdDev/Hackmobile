@@ -213,5 +213,43 @@ public static class Nifty
     {
         return Mathf.Round(f);
     }
+
+    public static List<string> AddRuler(List<string> list, int xLowerBound = 0, int yLowerBound = 0)
+    {
+        List<string> ret = new List<string>();
+        int yWidth = list.Count.ToString().Length + 1;
+        int xLength = 0, xHeight;
+        // Add Left vert ruler
+        yLowerBound--; // To offset ruler properly
+        foreach (string orig in list)
+        {
+            string num = (list.Count + yLowerBound--).ToString();
+            ret.Add(num.PadRight(yWidth, ' ') + orig);
+            xLength = Math.Max(xLength, orig.Length);
+        }
+        ret.Add("");
+        // Add Bottom horiz ruler
+        xHeight = (xLength + xLowerBound).ToString().Length + 1;
+        string pad = "".PadRight(yWidth, ' ');
+        for (int y = 0; y < xHeight; y++)
+        {
+            string line = "";
+            for (int x = 0; x < xLength; x++)
+            {
+                string num = (x + xLowerBound).ToString();
+                line += num.Length > y ? num[y] : ' ';
+            }
+            ret.Add(pad + line);
+        }
+        return ret;
+    }
+
+    public static List<string> AddRuler(List<string> list, Bounding bounds)
+    {
+        bounds.ShiftNonNeg();
+        if (bounds != null && bounds.IsValid())
+            return AddRuler(list, bounds.XMin, bounds.YMin);
+        return AddRuler(list);
+    }
 }
 

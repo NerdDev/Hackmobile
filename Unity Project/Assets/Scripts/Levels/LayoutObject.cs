@@ -527,6 +527,11 @@ abstract public class LayoutObject
 
     protected virtual List<string> ToRowStrings()
     {
+        return ToRowStrings(GetBounding());
+    }
+
+    protected virtual List<string> ToRowStrings(Bounding bounds)
+    {
         GridType[,] array = GetMinimizedArray(GetPrintArray());
         List<string> ret = new List<string>();
         for (int y = array.GetLength(0) - 1; y >= 0; y -= 1)
@@ -538,6 +543,7 @@ abstract public class LayoutObject
             }
             ret.Add(rowStr);
         }
+        ret = Nifty.AddRuler(ret, bounds);
         return ret;
     }
 
