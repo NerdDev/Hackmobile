@@ -8,4 +8,9 @@ public class CurePoison : EffectInstance
         base.init();
         npc.RemoveEffectIfExists<PoisonEffect>();
     }
+
+    public override void SetParams()
+    {
+        throw new NotImplementedException();
+    }
 }

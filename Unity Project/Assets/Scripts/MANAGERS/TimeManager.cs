@@ -88,6 +88,7 @@ public class TimeManager : MonoBehaviour, IManager
     
     #endregion
 
+    public void Initialize()
     {
         totalTimePlayed = PlayerPrefs.GetInt("MinutesPlayed", totalTimePlayed);
         StartCoroutine(TheseThingsWillHappenOncePerMinute());
