@@ -1,22 +1,27 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class LevitationEffect : EffectDefinition
+public class Levitation : EffectInstance
 {
-    public override void init(NPC n, float strength)
+    Float strength;
+
+    public override void init()
     {
-        base.init(n, strength);
-        n.properties[Properties.LEVITATION] = true;
-        n.verticalMove(strength);
+        base.init();
+        npc.verticalMove(strength);
     }
 
-    public override void remove(NPC n, float strength)
+    public override void remove()
     {
-        base.apply(n, strength);
-        n.properties[Properties.LEVITATION] = false;
-        n.verticalMove(-strength);
+        base.remove();
+        npc.verticalMove(-strength);
+    }
+
+    public override void SetParams()
+    {
+        strength = Add<Float>("strength");
     }
 }

@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class EffectManager
 {
-    public static Dictionary<string, EffectDefinition> effects = new Dictionary<string, EffectDefinition>();
+    public static Dictionary<string, Type> effects = new Dictionary<string, Type>();
 
     static EffectManager()
     {
-        effects.Add("poison", new PoisonEffect());
-        effects.Add("nutrition", new NutritionEffect());
-        effects.Add("levitation", new LevitationEffect());
-        effects.Add("addhealth", new AddHealth());
+        Type type = typeof(EffectInstance);
+        List<Type> types = type.GetSubclassesOf();
+        foreach (Type t in types)
+        {
+            effects.Add(t.ToString(), t);
+        }
     }
 }

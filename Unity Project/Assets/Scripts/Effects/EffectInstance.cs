@@ -2,46 +2,94 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using XML;
 
-public class EffectInstance : PassesTurns
+public abstract class EffectInstance : PassesTurns
 {
-    public int turnsToProcess;
-    public float strength; //strength of effect
-    public NPC wo; //ref to NPC this is on
-    public string effect; //string key to effect reference
+    public Integer turnsToProcess;
+    public NPC npc; //ref to NPC this is on
+    public XMLNode x;
+    public string effect;
+    private SortedDictionary<string, Field> map = new SortedDictionary<string, Field>();
 
     public EffectInstance()
     {
     }
 
-    public EffectInstance(NPC wo, string eff, float str, int turns = 0)
+    public abstract void SetParams();
+
+    public T Add<T>(string name) where T : Field, new()
     {
-        apply(wo, eff, str, turns);
+        Field item;
+        if (!map.TryGetValue(name, out item))
+        {
+            T param = new T();
+            param.parseXML(x, name);
+            map.Add(name, param);
+            return param;
+        }
+        return (T)item;
     }
 
-    public void apply(NPC worldObject, string effect, float strength, int turns = 0)
+    //This initialize is called upon parsing the XML
+    public void initialize(XMLNode x)
     {
-        this.wo = worldObject;
-        this.effect = effect;
-        this.strength = strength;
-        this.turnsToProcess = turns;
-        if (turns == 0)
+        this.x = x;
+        //This is required - if the turns entry doesn't exist, it returns 0 and treats as an instant effect.
+        turnsToProcess = Add<Integer>("turns");
+        this.SetParams();
+        this.IsActive = false;
+    }
+
+    //This initialize is called when activating the effect
+    public void initialize()
+    {
+        this.init();
+        if (this.turnsToProcess == 0)
         {
-            EffectManager.effects[effect].init(worldObject, strength);
-            EffectManager.effects[effect].apply(worldObject, strength);
-            EffectManager.effects[effect].remove(worldObject, strength);
+            this.apply();
+            this.remove();
         }
         else
         {
-            EffectManager.effects[effect].init(worldObject, strength);
-            IsActive = true;
             BigBoss.Time.RegisterToUpdateList(this);
         }
     }
 
-    public EffectInstance merge(EffectBase newEffect)
+    public EffectInstance activate(NPC n)
     {
-        return EffectManager.effects[effect].merge(this, newEffect);
+        Type t = EffectManager.effects[effect];
+        EffectInstance instance = (EffectInstance) Activator.CreateInstance(t);
+        instance.npc = n;
+        instance.x = this.x;
+        instance.effect = this.effect;
+        instance.map = this.map.Copy();
+        instance.turnsToProcess = this.turnsToProcess;
+        instance.SetParams();
+        instance.IsActive = true;
+        instance.initialize();
+        return instance;
+    }
+
+    /**
+     * All these are virtual as they are optional overrides.
+     */
+    public virtual void init()
+    {
+    }
+
+    public virtual void apply()
+    {
+    }
+
+    public virtual void remove()
+    {
+    }
+
+    public virtual EffectInstance merge(EffectInstance instance)
+    {
+        // Default is to block rhs
+        return this;
     }
 
     #region Turn Management
@@ -49,7 +97,7 @@ public class EffectInstance : PassesTurns
     {
         if (checkTurns())
         {
-            EffectManager.effects[effect].apply(wo, strength);
+            this.apply();
         }
     }
 
@@ -57,13 +105,14 @@ public class EffectInstance : PassesTurns
     {
         if (turnsToProcess > 0)
         {
-            turnsToProcess--;
+            turnsToProcess -= 1;
             return true;
         }
         else if (turnsToProcess == 0)
         {
-            EffectManager.effects[effect].remove(wo, strength);
-            wo.removeEffect(effect);
+            this.remove();
+            npc.RemoveEffect(effect);
+            this.IsActive = false;
             return false;
         }
         else
@@ -111,4 +160,5 @@ public class EffectInstance : PassesTurns
         }
     }
     #endregion
+
 }

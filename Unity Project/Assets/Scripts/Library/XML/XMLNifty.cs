@@ -79,6 +79,15 @@ namespace XML
             return 0;
         }
 
+        internal static double SelectDouble(XMLNode x, string toParse)
+        {
+            if (x != null)
+            {
+                return x.SelectDouble(toParse);
+            }
+            return 0;
+        }
+
         internal static List<XMLNode> SelectList(XMLNode x, string key)
         {
             if (x != null)

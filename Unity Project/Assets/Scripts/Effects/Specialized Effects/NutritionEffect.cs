@@ -1,13 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class NutritionEffect : EffectDefinition
+public class NutritionEffect : EffectInstance
 {
-    public override void apply(NPC n, float strength)
+    Integer strength;
+
+    public override void apply()
     {
-        base.apply(n, strength);
-        n.AdjustHunger(strength);
+        base.apply();
+        npc.AdjustHunger(strength);
+    }
+
+    public override void SetParams()
+    {
+        strength = Add<Integer>("strength");
     }
 }

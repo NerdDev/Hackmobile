@@ -18,11 +18,22 @@ public class TimeManager : MonoBehaviour, IManager
     public int totalTimePlayed;//This is held here in minutes, and formatted below into a nice string.
 
     //A neat preformatted string that we can easily use for debugging on whoever queries it:
-    public string TotalTimeSinceStartup { get { return "Total time since game was launched:  " + HoursSinceStartup + " Hours and " + (MinutesSinceStartup - 60 * HoursSinceStartup) + " Minutes."; } }
-    public string RealComputerTimeNeat { get { return System.DateTime.Now.ToShortTimeString(); } }
+    public string TotalTimeSinceStartup
+    {
+        get
+        {
+            return "Total time since game was launched:  "
+                + HoursSinceStartup + " Hours and "
+                + (MinutesSinceStartup - 60 * HoursSinceStartup)
+                + " Minutes.";
+        }
+    }
+    public string RealComputerTimeNeat 
+    { 
+        get { return System.DateTime.Now.ToShortTimeString(); } 
+    }
     public string TotalTimePlayedNeat
     {
-
         get
         {
             int hours = (int)System.Math.Round((totalTimePlayed / 60f), 1);
@@ -69,24 +80,21 @@ public class TimeManager : MonoBehaviour, IManager
     }
     #endregion
 
-    public void Initialize()
+    #region Action Costs
+    public int diagonalMoveCost = 84;
+    public int regularMoveCost = 60;
+    public int attackCost = 60;
+    public int eatItemCost = 60;
+    
+    #endregion
+
     {
         totalTimePlayed = PlayerPrefs.GetInt("MinutesPlayed", totalTimePlayed);
         StartCoroutine(TheseThingsWillHappenOncePerMinute());
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-        //Does this do anything for us? Or should it simply not be tracked.
-    //}
-
     public void TogglePause()
     {
-        //Creating a reference to our original State:  NOT SURE IF THIS IS POSSIBLE SINCE WE CANT DETERMINE THE DATA TYPE FOR THE VARIABLE AHEAD OF TIME
-        //string stringRef = Managers.GameStateManager.State.ToString();
-        //GameObject objectRef = GameObject.Find(stringRef);
-
         if (Time.timeScale == 1)//If Unpaused:
         {
             //prePauseState = Managers.GameStateManager.State;
@@ -120,17 +128,29 @@ public class TimeManager : MonoBehaviour, IManager
 
     #region GAME TIME METHODS
 
+    public int CapOnTurnPoints;
     public void PassTurn(int turnPoints)
     {
         turnsPassed++;
         //Justin's hot:
 
-        foreach (PassesTurns obj in updateList)
+        if (turnPoints > CapOnTurnPoints)
         {
-            if (obj.IsActive)
+            List<int> list = new List<int>();
+            while (turnPoints > CapOnTurnPoints)
             {
-                runUpdate(obj, turnPoints);
+                list.Add(CapOnTurnPoints);
+                turnPoints -= CapOnTurnPoints;
             }
+            list.Add(turnPoints);
+            foreach (int i in list)
+            {
+                runGroupUpdate(i);
+            }
+        }
+        else
+        {
+            runGroupUpdate(turnPoints);
         }
     }
 
@@ -149,16 +169,26 @@ public class TimeManager : MonoBehaviour, IManager
         updateList.Remove(obj);
     }
 
+    public void runGroupUpdate(int turnPoints)
+    {
+        foreach (PassesTurns obj in updateList)
+        {
+            if (obj.IsActive)
+            {
+                runUpdate(obj, turnPoints);
+            }
+        }
+    }
+
     public void runUpdate<T>(T obj, int turnPoints) where T : PassesTurns
     {
         obj.CurrentPoints += turnPoints;
         //this will prevent AI processing from doing all the small actions constantly
         // and we can update it based on stats to make them move more or less often
-        while (obj.CurrentPoints >= obj.BasePoints)
+        if (obj.CurrentPoints >= obj.BasePoints)
         {
-            //Debug.Log(updateList.Dump());
+            //The object must lower it's own base points
             obj.UpdateTurn();
-            obj.CurrentPoints -= obj.BasePoints;
         }
     }
     #endregion

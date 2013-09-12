@@ -34,15 +34,19 @@ public class Player : NPC, IManager
     #region INVENTORY
     public override void addToInventory(Item item, int count)
     {
-        if (inventory.ContainsKey(item))
+        if (inventory.Contains(item))
         {
-            inventory[item] += count;
+            //inventory[item] += count;
             //GUI Stuff:
 
         }
         else
         {
-            inventory.Add(item, count);
+            for (int i = 0; i < count - 1; i++)
+            {
+                inventory.Add(item);
+                inventory.Add(item.Copy());
+            }
             //GUI Stuff:
             BigBoss.Gooey.AddItemToGUIInventory(item, count);
         }
@@ -90,14 +94,15 @@ public class Player : NPC, IManager
         this.Name = "Kurtis";
 
         Item i = BigBoss.WorldObject.CreateItem("sword1");
-        this.addToInventory(i);
-        this.equipItem(i);
+        //this.addToInventory(i);
+        //this.equipItem(i);
 
         Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
         this.addToInventory(food, 5);
 
         Item potion = BigBoss.WorldObject.CreateItem("health potion");
-        this.addToInventory(potion, 3);
+        //this.addToInventory(potion, 3);
+
     }
 
     // Update is called once per frame

@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
+using XML;
 
-public class AddHealth : EffectDefinition
+public class AddHealth : EffectInstance
 {
-    public override void apply(NPC n, float strength)
+    Float strength;
+
+    public override void apply()
     {
-        base.apply(n, strength);
-        n.AdjustHealth(Convert.ToInt32(strength));
+        base.apply();
+        npc.AdjustHealth(Convert.ToInt32(strength));
+    }
+
+    public override void SetParams()
+    {
+        strength = Add<Float>("strength");
     }
 }

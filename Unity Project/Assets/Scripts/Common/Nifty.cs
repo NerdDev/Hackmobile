@@ -10,14 +10,14 @@ public static class Nifty
     {
         a = Math.Abs(a);
         b = Math.Abs(b);
-    	while (b != 0)
+        while (b != 0)
         {
- 	       int tmp = b;
-           b = a % b;
-           a = tmp;
+            int tmp = b;
+            b = a % b;
+            a = tmp;
         }
-		return a;
-	}
+        return a;
+    }
 
     static public bool Contains<T>(this T[] arr, T val)
     {
@@ -34,16 +34,18 @@ public static class Nifty
     static public List<string> ToRowStrings<T>(this T[,] array)
     {
         List<string> ret = new List<string>();
-		for (int y = array.GetLength(0) - 1; y >= 0; y -= 1) {
+        for (int y = array.GetLength(0) - 1; y >= 0; y -= 1)
+        {
             string rowStr = "";
-    		for (int x = 0; x < array.GetLength(1); x += 1) {
+            for (int x = 0; x < array.GetLength(1); x += 1)
+            {
                 rowStr += array[y, x].ToString()[0];
-    		}
+            }
             ret.Add(rowStr);
-		}
+        }
         return ret;
     }
-   
+
     public static void ToLog<T>(this T[,] array, DebugManager.Logs log, params string[] customContent)
     {
         if (BigBoss.Debug.logging(log))
@@ -56,7 +58,7 @@ public static class Nifty
             {
                 BigBoss.Debug.w(log, s);
             }
-        }   
+        }
     }
 
     static public void DeleteContainedFiles(String dirPath, bool recursive)
@@ -250,6 +252,39 @@ public static class Nifty
         if (bounds != null && bounds.IsValid())
             return AddRuler(list, bounds.XMin, bounds.YMin);
         return AddRuler(list);
+    }
+    public static bool diagonal(int firstx, int firsty, int secondx, int secondy)
+    {
+        if (Math.Abs(firstx - secondx) == 1 && Math.Abs(firsty - secondy) == 1)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static List<Type> GetSubclassesOf(this Type type)
+    {
+        return AppDomain.CurrentDomain.GetAssemblies().ToList()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => type.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract && !p.IsInterface).ToList();
+        /*
+        List<Type> list = new List<Type>();
+        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        foreach (Assembly a in assemblies)
+        {
+            if (!a.FullName.StartsWith("System")) {
+                Type[] types = a.GetTypes();
+                foreach (Type t in types)
+                {
+                    if (t.IsAssignableFrom(type) && t.IsClass && !t.IsAbstract && !t.IsInterface)
+                    {
+                        list.Add(t);
+                    }
+                }
+            }
+        }
+        return list;
+        */
     }
 }
 

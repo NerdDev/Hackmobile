@@ -76,7 +76,7 @@ public class NPC : WorldObject
     #region NPC Properties
 
     public GenericFlags<Properties> properties = new GenericFlags<Properties>();
-    public Dictionary<string, EffectInstance> effects = new Dictionary<string, EffectInstance>();
+    public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
     public GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
     public GenericFlags<Keywords> keywords = new GenericFlags<Keywords>();
     public Race race;
@@ -85,11 +85,9 @@ public class NPC : WorldObject
     public BodyParts bodyparts = new BodyParts();
     public Stats stats = new Stats();
 
-    public Dictionary<Item, int> inventory = new Dictionary<Item, int>();
+    public List<Item> inventory = new List<Item>();
     protected List<Item> equippedItems = new List<Item>();
     protected Equipment equipment = null;
-
-    protected bool player = false;
     #endregion
 
     /**
@@ -429,26 +427,26 @@ public class NPC : WorldObject
     #endregion
 
     #region Effects
-    public virtual void applyEffect(EffectBase effectBase)
+    public virtual void ApplyEffect(EffectInstance effect)
     {
-        if (effectBase.turns != 0)
+        if (effect.turnsToProcess != 0)
         {
-            if (effects.ContainsKey(effectBase.effect))
+            if (effects.ContainsKey(effect.effect))
             {
-                effects[effectBase.effect] = effects[effectBase.effect].merge(effectBase);
+                effects[effect.effect] = effects[effect.effect].merge(effect);
             }
             else
             {
-                effects.Add(effectBase.effect, effectBase.activate(this));
+                effects.Add(effect.effect, effect.activate(this));
             }
         }
         else
         {
-            effectBase.activate(this);
+            effect.activate(this);
         }
     }
 
-    public void removeEffect(string effect)
+    public void RemoveEffect(string effect)
     {
         if (effects.ContainsKey(effect))
         {
@@ -461,14 +459,65 @@ public class NPC : WorldObject
             //effect doesn't exist on the NPC
         }
     }
+
+    public void RemoveEffect<T>()
+    {
+        Type t = typeof(T);
+        RemoveEffect(t.ToString());
+    }
+
+    public bool RemoveEffectIfExists<T>()
+    {
+        Type t = typeof(T);
+        EffectInstance inst = null;
+        foreach (EffectInstance instance in effects.Values)
+        {
+            if (instance is T)
+            {
+                inst = instance;
+            }
+        }
+        if (inst != null)
+        {
+            effects.Remove(inst.ToString());
+            return true;
+        }
+        return false;
+    }
+
+    public bool HasEffect<T>()
+    {
+        Type t = typeof(T);
+        foreach (EffectInstance instance in effects.Values)
+        {
+            if (instance is T)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool HasEffect(string key)
+    {
+        if (effects.ContainsKey(key))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     #endregion
 
     #region Actions
 
     public virtual void eatItem(Item i)
     {
+        Debug.Log("Eating item");
         //enforces it being in inventory, if that should change we'll rewrite later
-        if (inventory.ContainsKey(i))
+        if (inventory.Contains(i))
         {
             //item was just eaten, take it outta that list
             if (i.itemFlags[ItemFlags.IS_EQUIPPED])
@@ -544,14 +593,14 @@ public class NPC : WorldObject
     public void MoveNPC(Value2D<GridSpace> node)
     {
         GridSpace grid = LevelManager.Level[node.x, node.y];
-        if (!grid.IsBlocked())
+        if (!grid.IsBlocked() && subtractPoints(BigBoss.TimeKeeper.regularMoveCost))
         {
             int xmove = gridSpace.x - node.x;
             int ymove = gridSpace.y - node.y;
-            gridSpace.val.Remove(this);
-            gridSpace = new Value2D<GridSpace>(node.x, node.y, grid);
-            gridSpace.val.Put(this);
-            MoveNPC(xmove, ymove);
+                gridSpace.val.Remove(this);
+                gridSpace = new Value2D<GridSpace>(node.x, node.y, grid);
+                gridSpace.val.Put(this);
+                MoveNPC(xmove, ymove);
         }
     }
 
@@ -593,13 +642,17 @@ public class NPC : WorldObject
 
     public virtual void addToInventory(Item item, int count)
     {
-        if (inventory.ContainsKey(item))
+        if (inventory.Contains(item))
         {
-            inventory[item] += count;
+            //do nothing
         }
         else
         {
-            inventory.Add(item, count);
+            for (int i = 0; i < count - 1; i++)
+            {
+                inventory.Add(item);
+                inventory.Add(item.Copy());
+            }
         }
         stats.Encumbrance += item.props.Weight * count;
         Debug.Log("Item " + item.Name + " with count " + count + " added to inventory.");
@@ -613,17 +666,18 @@ public class NPC : WorldObject
 
     public void removeFromInventory(Item item, int count)
     {
-        if (inventory.ContainsKey(item))
+        if (inventory.Contains(item))
         {
-            if (inventory[item] <= count)
-            {
-                inventory.Remove(item);
-            }
-            else
-            {
-                inventory[item] -= count;
-            }
-            stats.Encumbrance -= item.props.Weight * count;
+            inventory.Remove(item);
+            //if (inventory[item] <= count)
+            //{
+            //    inventory.Remove(item);
+            //}
+            //else
+            //{
+            //    inventory[item] -= count;
+            //}
+            stats.Encumbrance -= item.props.Weight;
             Debug.Log("Item " + item.Name + " with count " + count + " removed from inventory.");
         }
         else
@@ -635,9 +689,9 @@ public class NPC : WorldObject
     public float getCurrentInventoryWeight()
     {
         float tempWeight = 0;
-        foreach (KeyValuePair<Item, int> kvp in inventory)
+        foreach (Item kvp in inventory)
         {
-            tempWeight += kvp.Key.props.Weight * kvp.Value;
+            tempWeight += kvp.props.Weight;
         }
 
         return tempWeight;
@@ -772,7 +826,20 @@ public class NPC : WorldObject
     #region Turn Management
 
     private int npcPoints = 0;
-    private int baseNPCPoints = 60;
+    private int baseNPCPoints = 1;
+
+    private bool subtractPoints(int points)
+    {
+        if (npcPoints > points)
+        {
+            npcPoints -= points;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public override void UpdateTurn()
     {
@@ -782,14 +849,7 @@ public class NPC : WorldObject
             {
                 if (this.IsNotAFreaking<Player>())
                 {
-                    if (IsNextToPlayer())
-                    {
-                        NextToPlayer();
-                    }
-                    else
-                    {
-                        DecideWhatToDo();
-                    }
+                    DecideWhatToDo();
                 }
             }
             catch (NullReferenceException)
@@ -855,20 +915,46 @@ public class NPC : WorldObject
         return false;
     }
 
-    void NextToPlayer()
-    {
-        //attack?
-        attack(BigBoss.PlayerInfo);
-    }
-
     void DecideWhatToDo()
     {
-        //move?
+        if (IsNextToPlayer())
+        {
+            AIAttack();
+        }
+        else
+        {
+            AIMove();
+        }
+    }
+
+    private void AIAttack()
+    {
+        if (subtractPoints(BigBoss.TimeKeeper.attackCost))
+        {
+            attack(BigBoss.PlayerInfo);
+        }
+    }
+
+    private void AIMove()
+    {
         PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
         if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
-            MoveNPC(nodes[nodes.Count - 2].loc);
+            Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
+            int moveCost;
+            if (Nifty.diagonal(gridSpace.x, gridSpace.y, nodeToMove.x, nodeToMove.y))
+            {
+                moveCost = BigBoss.TimeKeeper.diagonalMoveCost;
+            }
+            else
+            {
+                moveCost = BigBoss.TimeKeeper.regularMoveCost;
+            }
+            if (subtractPoints(moveCost))
+            {
+                MoveNPC(nodeToMove);
+            }
             UpdateCurrentTileVectors();
         }
     }

@@ -115,7 +115,7 @@ public class InputManager : MonoBehaviour, IManager
         if (Input.GetKeyDown(KeyCode.B))
         {
             Item food = null;
-            foreach (Item i in BigBoss.PlayerInfo.inventory.Keys)
+            foreach (Item i in BigBoss.PlayerInfo.inventory)
             {
                 if (i.Name.Equals("spoiled bread"))
                 {
@@ -131,7 +131,7 @@ public class InputManager : MonoBehaviour, IManager
         if (Input.GetKeyDown(KeyCode.P))
         {
             Item food = null;
-            foreach (Item i in BigBoss.PlayerInfo.inventory.Keys)
+            foreach (Item i in BigBoss.PlayerInfo.inventory)
             {
                 if (i.Name.Equals("health potion"))
                 {
