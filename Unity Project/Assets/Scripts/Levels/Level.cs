@@ -22,7 +22,14 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         {
             if (x < Arr.GetLength(1) && y < Arr.GetLength(0))
             {
-                return Arr[y, x];
+                GridSpace space = Arr[y, x];
+                if (space == null)
+                { // Create empty gridspace
+                    space = new GridSpace(GridType.NULL);
+                    Arr[y, x] = space;
+                    return space;
+                }
+                return space;
             }
             return null;
         }
