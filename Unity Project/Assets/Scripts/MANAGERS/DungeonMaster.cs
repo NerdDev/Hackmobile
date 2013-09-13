@@ -22,9 +22,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
         {
             GridMap map = room.GetFloors();
             Value2D<GridType> space = map.RandomValue(Probability.SpawnRand);
-            int wer = 23;
-            wer++;
-            SpawnCreature("skeleton", space.x, space.y);
+            SpawnCreature("skeleton_knight", space.x, space.y);
         }
     }
 
