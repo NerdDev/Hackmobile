@@ -5,7 +5,7 @@ using System.Linq;
 
 public static class EffectManager
 {
-    public static Dictionary<string, Type> effects = new Dictionary<string, Type>();
+    public static SortedDictionary<string, Type> effects = new SortedDictionary<string, Type>();
 
     static EffectManager()
     {

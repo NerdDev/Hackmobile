@@ -18,7 +18,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/UnityPro/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/UnityPro/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +222,10 @@
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
      <Compile Include="Assets\Scripts\Common\Comparator.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\Double.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\Field.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\Float.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\Integer.cs" />
      <Compile Include="Assets\Scripts\Common\Dice.cs" />
      <Compile Include="Assets\Scripts\Common\EnumStringKey\EnumKey.cs" />
      <Compile Include="Assets\Scripts\Common\EnumStringKey\EnumStringKey.cs" />
@@ -241,15 +245,30 @@
      <Compile Include="Assets\Scripts\Common\Surrounding.cs" />
      <Compile Include="Assets\Scripts\Common\SurroundingInt.cs" />
      <Compile Include="Assets\Scripts\Common\Value2D.cs" />
-     <Compile Include="Assets\Scripts\Effects\EffectBase.cs" />
-     <Compile Include="Assets\Scripts\Effects\EffectDefinition.cs" />
      <Compile Include="Assets\Scripts\Effects\EffectEvent.cs" />
      <Compile Include="Assets\Scripts\Effects\EffectInstance.cs" />
      <Compile Include="Assets\Scripts\Effects\EffectManager.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\AddHealth.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\BlindnessEffect.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\CurePoison.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Damage\Damage.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Damage\DamageCold.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Damage\DamageFire.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Damage\DamageShock.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\InvisibilityEffect.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\LevitationEffect.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\NutritionEffect.cs" />
-     <Compile Include="Assets\Scripts\Effects\Specialized Effects\PoisonEffect.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\PetrificationEffect.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Poison\PoisonDamageEffect.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Poison\PoisonEffect.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Poison\PoisonSlowEffect.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Resistances\ColdResistance.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Resistances\FireResistance.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Resistances\PoisonResistance.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Resistances\Resistance.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\Resistances\ShockResistance.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\SeeInvisibleEffect.cs" />
+     <Compile Include="Assets\Scripts\Effects\Specialized Effects\TelepathyEffect.cs" />
      <Compile Include="Assets\Scripts\ExposePropertyAttribute.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemStorage.cs" />
@@ -311,6 +330,13 @@
      <Compile Include="Assets\Scripts\MANAGERS\PreGameManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\TimeManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\WorldObjectManager.cs" />
+     <Compile Include="Assets\Scripts\Spells\Spell.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethod.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOE.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Self.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Targeted AOE.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Targeted.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetType.cs" />
      <Compile Include="Assets\Scripts\TimedDestruction.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\BUC.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemFlags.cs" />
@@ -323,6 +349,9 @@
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\EquipTypes.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Equipment.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Flags.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Inventory.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\InventoryCategory.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\ItemList.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Keywords.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\LeveledItem.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Misc Enums.cs" />
@@ -347,7 +376,6 @@
      <None Include="Assets\AudioToolkit\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
      <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
-     <None Include="Assets\Resources\XML\items.xml" />
      <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />

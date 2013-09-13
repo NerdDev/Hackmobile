@@ -233,24 +233,6 @@ public static class Nifty
         return AppDomain.CurrentDomain.GetAssemblies().ToList()
             .SelectMany(s => s.GetTypes())
             .Where(p => type.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract && !p.IsInterface).ToList();
-        /*
-        List<Type> list = new List<Type>();
-        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-        foreach (Assembly a in assemblies)
-        {
-            if (!a.FullName.StartsWith("System")) {
-                Type[] types = a.GetTypes();
-                foreach (Type t in types)
-                {
-                    if (t.IsAssignableFrom(type) && t.IsClass && !t.IsAbstract && !t.IsInterface)
-                    {
-                        list.Add(t);
-                    }
-                }
-            }
-        }
-        return list;
-        */
     }
 }
 

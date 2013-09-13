@@ -3,27 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using XML;
-/**
- * Notes on usage:
- * 
- * Adding a property to an NPC requires adding it in several places;
- *  - The property itself
- *  - In the XML definition (if applicable)
- *  - In the parseXML (if read from XML)
- *  - In the setNull definition (to define a a null NPC)
- *  - In the setData definition (to define an instance of an NPC)
- *  
- * When adding a property, if the property is only useful or applicable to a base NPC
- *  then store it under the region of base NPC properties, and set it to a null initialization.
- *  Add the definition to convert it to whatever is needed for the instance of an NPC
- *  under the setData method.
- *  
- * If it is only applicable to an instance of an NPC, then do the opposite - add it to
- *  the instance NPC properties, and leave the initialization as null until it is defined
- *  in the setData method.
- *  
- * See equipment and equipped items for an example.
- */
+
+
 public class NPC : WorldObject
 {
     /**
@@ -75,7 +56,6 @@ public class NPC : WorldObject
      */
     #region NPC Properties
 
-    public GenericFlags<Properties> properties = new GenericFlags<Properties>();
     public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
     public GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
     public GenericFlags<Keywords> keywords = new GenericFlags<Keywords>();
@@ -85,7 +65,8 @@ public class NPC : WorldObject
     public BodyParts bodyparts = new BodyParts();
     public Stats stats = new Stats();
 
-    public List<Item> inventory = new List<Item>();
+    //public List<Item> inventory = new List<Item>();
+    public Inventory inventory = new Inventory();
     protected List<Item> equippedItems = new List<Item>();
     protected Equipment equipment = null;
     #endregion
@@ -517,7 +498,7 @@ public class NPC : WorldObject
     {
         Debug.Log("Eating item");
         //enforces it being in inventory, if that should change we'll rewrite later
-        if (inventory.Contains(i))
+        if (inventory.Has(i))
         {
             //item was just eaten, take it outta that list
             if (i.itemFlags[ItemFlags.IS_EQUIPPED])
@@ -593,7 +574,7 @@ public class NPC : WorldObject
     public void MoveNPC(Value2D<GridSpace> node)
     {
         GridSpace grid = LevelManager.Level[node.x, node.y];
-        if (!grid.IsBlocked() && subtractPoints(BigBoss.TimeKeeper.regularMoveCost))
+        if (!grid.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
         {
             int xmove = gridSpace.x - node.x;
             int ymove = gridSpace.y - node.y;
@@ -642,7 +623,7 @@ public class NPC : WorldObject
 
     public virtual void addToInventory(Item item, int count)
     {
-        if (inventory.Contains(item))
+        if (inventory.Has(item))
         {
             //do nothing
         }
@@ -666,7 +647,7 @@ public class NPC : WorldObject
 
     public void removeFromInventory(Item item, int count)
     {
-        if (inventory.Contains(item))
+        if (inventory.Has(item))
         {
             inventory.Remove(item);
             //if (inventory[item] <= count)

@@ -6,10 +6,10 @@ public class EffectEvent : List<EffectInstance>
 {
     public void activate(NPC wo)
     {
-        BigBoss.Log(this.Dump());
+        //BigBoss.Log(this.Dump());
         foreach (EffectInstance e in this)
         {
-            BigBoss.Log(e.ToString());
+            //BigBoss.Log(e.ToString());
             e.activate(wo);
         }
     }
