@@ -12,4 +12,5 @@ public class CurePoison : EffectInstance
     public override void SetParams()
     {
     }
+    }
 }

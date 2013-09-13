@@ -87,6 +87,7 @@ public class TimeManager : MonoBehaviour, IManager
     public int eatItemCost = 60;
     
     #endregion
+
     public void Initialize()
     {
         totalTimePlayed = PlayerPrefs.GetInt("MinutesPlayed", totalTimePlayed);

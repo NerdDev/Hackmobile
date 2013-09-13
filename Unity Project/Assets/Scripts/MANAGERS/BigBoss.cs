@@ -52,6 +52,7 @@ public class BigBoss : MonoBehaviour
             return time;
         }
     }
+    public static TimeManager TimeKeeper { get { return Time; } }
     private static Player playerInfo;
     public static Player PlayerInfo
     {

@@ -6,6 +6,9 @@ public class EffectEvent : List<EffectInstance>
 {
     public void activate(NPC wo)
     {
+        // Disabled these because BigBoss's Log doesn't exist.
+        // If these compile for you, make sure you push the BigBoss change
+        // that contains Log so it compiles.
         //BigBoss.Log(this.Dump());
         foreach (EffectInstance e in this)
         {

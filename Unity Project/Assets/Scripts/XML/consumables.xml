@@ -32,7 +32,7 @@
 				</effect>
 			</OnEatenEffect>
 		</potion>
-		<potion name="health potion">
+		<potion name="health potion 2">
 			<icon>potion1</icon>
 			<stats>
 				<weight>3</weight>
