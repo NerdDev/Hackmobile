@@ -66,25 +66,7 @@ public class Room : LayoutObjectLeaf {
 
     public int CountGridType(GridType type)
     {
-        int ctr = 0;
-        GridMap grid;
-
-        switch (type)
-        {
-            case GridType.Floor: grid = GetFloors(); break;
-            case GridType.Wall: grid = GetWalls(); break;
-            case GridType.Chest: grid = GetChests(); break;
-            case GridType.SmallLoot: grid = GetSmallLoots(); break;
-            case GridType.Secret: grid = GetSecrets(); break;
-            case GridType.Trap: grid = GetTraps(); break;
-            case GridType.TrapDoor: grid = GetTrapDoors(); break;
-            case GridType.Door: grid = GetDoors(); break;
-            default: grid = null; break;
-        }
-
-        if (grid != null) ctr = grid.Count();
-
-        return ctr;
+        return getTypes(type).Count();
     }
 
     void RemoveBadDoorWalls(GridMap potentialDoors)
