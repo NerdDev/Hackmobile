@@ -145,11 +145,13 @@ abstract public class LayoutObject
     public GridMap getType(GridArray grids, GridType t)
     {
         GridMap ret = new GridMap();
-        foreach (Value2D<GridType> val in grids)
+        GridType[,] arr = grids;
+        for (int y = 0; y < arr.GetLength(0); y++)
         {
-            if (t == val.val)
+            for (int x = 0; x < arr.GetLength(1); x++)
             {
-                ret.Put(val);
+                if (t == arr[y, x])
+                    ret[x + ShiftP.x, y + ShiftP.y] = arr[y, x];
             }
         }
         return ret;
@@ -173,11 +175,13 @@ abstract public class LayoutObject
     public GridMap getTypes(GridArray grids, HashSet<GridType> ts)
     {
         GridMap ret = new GridMap();
-        foreach (Value2D<GridType> val in grids)
+        GridType[,] arr = grids;
+        for (int y = 0; y < arr.GetLength(0); y++)
         {
-            if (ts.Contains(val.val))
+            for (int x = 0; x < arr.GetLength(1); x++)
             {
-                ret.Put(val);
+                if (ts.Contains(arr[y, x]))
+                    ret[x + ShiftP.x, y + ShiftP.y] = arr[y, x];
             }
         }
         return ret;

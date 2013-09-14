@@ -11,42 +11,42 @@ public class Room : LayoutObjectLeaf {
     
 	public GridMap GetWalls() 
     {
-		return getTypes(GridType.Wall);
+		return getType(GridType.Wall);
 	}
 	
 	public GridMap GetFloors() 
     {
-		return getTypes(GridType.Floor);
+		return getType(GridType.Floor);
 	}
 	
 	public GridMap GetSmallLoots() 
     {
-		return getTypes(GridType.SmallLoot);
+		return getType(GridType.SmallLoot);
 	}
 
     public GridMap GetSecrets()
     {
-        return getTypes(GridType.Secret);
+        return getType(GridType.Secret);
     }
 
     public GridMap GetChests()
     {
-        return getTypes(GridType.Chest);
+        return getType(GridType.Chest);
     }
 
     public GridMap GetTraps()
     {
-        return getTypes(GridType.Trap);
+        return getType(GridType.Trap);
     }
 
     public GridMap GetTrapDoors()
     {
-        return getTypes(GridType.TrapDoor);
+        return getType(GridType.TrapDoor);
     }
 
     public GridMap GetDoors()
     {
-        return getTypes(GridType.Door);
+        return getType(GridType.Door);
     }
 
     public GridMap GetPotentialExternalDoors()
