@@ -72,8 +72,7 @@ public class LevelManager : MonoBehaviour, IManager {
 
     void Destroy(Level level)
     {
-        IEnumerator<GridSpace> grids = Level.GetBasicEnumerator();
-        while (grids.MoveNext())
+        foreach (GridSpace space in Level.Iterate())
         {
             // Delete block
         }

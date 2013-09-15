@@ -286,6 +286,11 @@ public class Bounding
         Shift(GetShiftNonNeg());
     }
 
+    public Bounding InBounds<T>(T[,] arr)
+    {
+        return IntersectBounds(arr.GetBounds());
+    }
+
     #region Printing
     public override string ToString()
     {

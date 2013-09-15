@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DungeonMaster : MonoBehaviour, IManager {
 
@@ -18,12 +19,23 @@ public class DungeonMaster : MonoBehaviour, IManager {
     void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
-        foreach (Room room in l.Layout.GetRooms())
+        foreach (MultiMap<GridSpace> room in l.GetRooms())
         {
-            GridMap map = room.GetFloors();
-            Value2D<GridType> space = map.RandomValue(Probability.SpawnRand);
+            MultiMap<GridSpace> spawn = OnlySpawnable(room);
+            Value2D<GridSpace> space = spawn.RandomValue(Probability.SpawnRand);
             SpawnCreature("skeleton_knight", space.x, space.y);
         }
+    }
+
+    public MultiMap<GridSpace> OnlySpawnable(MultiMap<GridSpace> map)
+    {
+        MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
+        foreach (Value2D<GridSpace> space in map)
+        {
+            if (space.val.Spawnable)
+                ret.Put(space);
+        }
+        return ret;
     }
 
     void PickStartLocation(Level l)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
-    public LevelLayout Layout { get; private set; }
+    protected LevelLayout Layout { get; private set; }
     public bool Populated { get; set; }
     private GridSpace[,] Arr;
     public Surrounding<GridSpace> surr;
@@ -116,7 +116,23 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return new GridArray(ret);
     }
 
-    public IEnumerator<GridSpace> GetBasicEnumerator()
+    public MultiMap<GridSpace> GetArea(Bounding bounds)
+    {
+        MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
+        Bounding inBound = bounds.InBounds(Arr);
+        for (int y = inBound.YMin; y < inBound.YMax; y++)
+        {
+            for (int x = inBound.XMin; x < inBound.XMax; x++)
+            {
+                GridSpace space = Arr[y, x];
+                if (space != null)
+                    ret[x, y] = space;
+            }
+        }
+        return ret;
+    }
+
+    public IEnumerable<GridSpace> Iterate()
     {
         for (int y = 0; y < Arr.GetLength(0); y++)
         {
@@ -124,6 +140,14 @@ public class Level : IEnumerable<Value2D<GridSpace>>
             {
                 yield return Arr[x, y];
             }
+        }
+    }
+
+    public IEnumerable<MultiMap<GridSpace>> GetRooms()
+    {
+        foreach (Room room in Layout.GetRooms())
+        {
+            yield return GetArea(room.GetBounding());
         }
     }
 

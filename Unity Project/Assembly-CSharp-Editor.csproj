@@ -143,14 +143,14 @@
  <Reference Include="AudioToolkit_FreeVersion_Editor">
  <HintPath>Assets\AudioToolkit\AudioToolkit\Editor\AudioToolkit_FreeVersion_Editor.dll</HintPath>
  </Reference>
- <Reference Include="UnityEditor.Graphs">
- <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
- </Reference>
  <Reference Include="CruncherEditor">
  <HintPath>Assets\Resources\Tools\Cruncher\Editor\CruncherEditor.dll</HintPath>
  </Reference>
  <Reference Include="CruncherScripts">
  <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

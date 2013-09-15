@@ -8,6 +8,7 @@ public class GridSpace
     public GameObject Block { get; set; }
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
+    public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
 
     public GridSpace(GridType type)
     {
