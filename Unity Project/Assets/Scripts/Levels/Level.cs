@@ -7,13 +7,29 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     protected LevelLayout Layout { get; private set; }
     public bool Populated { get; set; }
     private GridSpace[,] Arr;
-    public Surrounding<GridSpace> surr;
+    private List<RoomMap> roomMaps = new List<RoomMap>();
+    private MultiMap<RoomMap> roomMapping = new MultiMap<RoomMap>();
+    public Surrounding<GridSpace> Surrounding { get; set; }
 
     public Level(LevelLayout layout)
     {
         Layout = layout;
         Arr = GridSpace.Convert(layout.GetArray());
-        loadSurrounding();
+        Surrounding = new Surrounding<GridSpace>(Arr, true);
+        LoadRoomMaps();
+    }
+
+    private void LoadRoomMaps()
+    {
+        foreach (Room room in Layout.GetRooms())
+        {
+            RoomMap roomMap = new RoomMap(room, Arr);
+            roomMaps.Add(roomMap);
+            foreach (Value2D<GridSpace> floor in roomMap)
+            {
+                roomMapping[floor.x, floor.y] = roomMap;
+            }
+        }
     }
 
     public GridSpace this[int x, int y]
@@ -143,14 +159,9 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         }
     }
 
-    public List<MultiMap<GridSpace>> GetRooms()
+    public List<RoomMap> GetRooms()
     {
-        List<MultiMap<GridSpace>> ret = new List<MultiMap<GridSpace>>();
-        foreach (Room room in Layout.GetRooms())
-        {
-            ret.Add(GetArea(room.GetBounding()));
-        }
-        return ret;
+        return roomMaps;
     }
 
     public IEnumerator<Value2D<GridSpace>> GetEnumerator()
@@ -169,15 +180,10 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return this.GetEnumerator();
     }
 
-    void loadSurrounding()
-    {
-        surr = new Surrounding<GridSpace>(Arr, true);
-    }
-
     public IEnumerable<Value2D<GridSpace>> getSurroundingSpaces(int x, int y)
     {
-        surr.Load(x, y);
-        foreach (Value2D<GridSpace> val in surr)
+        Surrounding.Load(x, y);
+        foreach (Value2D<GridSpace> val in Surrounding)
         {
             yield return val;
         }

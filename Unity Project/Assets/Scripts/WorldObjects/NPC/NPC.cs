@@ -902,7 +902,7 @@ public class NPC : WorldObject
 
     bool IsNextToPlayer()
     {
-        Surrounding<GridSpace> s = LevelManager.Level.surr;
+        Surrounding<GridSpace> s = LevelManager.Level.Surrounding;
         s.Load(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
         foreach (Value2D<GridSpace> grid in s)
         {

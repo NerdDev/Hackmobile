@@ -54,7 +54,7 @@ abstract public class Container2D<T> {
         return !Get(val.x, val.y).Equals(default(T));
     }
     public abstract bool InRange(int x, int y);
-    protected virtual void Put(T val, int x, int y)
+    public virtual void Put(T val, int x, int y)
     {
         if (
 			InRange(x, y)
