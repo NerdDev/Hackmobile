@@ -143,12 +143,14 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         }
     }
 
-    public IEnumerable<MultiMap<GridSpace>> GetRooms()
+    public List<MultiMap<GridSpace>> GetRooms()
     {
+        List<MultiMap<GridSpace>> ret = new List<MultiMap<GridSpace>>();
         foreach (Room room in Layout.GetRooms())
         {
-            yield return GetArea(room.GetBounding());
+            ret.Add(GetArea(room.GetBounding()));
         }
+        return ret;
     }
 
     public IEnumerator<Value2D<GridSpace>> GetEnumerator()

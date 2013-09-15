@@ -21,13 +21,13 @@ public class DungeonMaster : MonoBehaviour, IManager {
         l.Populated = true;
         foreach (MultiMap<GridSpace> room in l.GetRooms())
         {
-            MultiMap<GridSpace> spawn = OnlySpawnable(room);
+            MultiMap<GridSpace> spawn = Spawnable(room);
             Value2D<GridSpace> space = spawn.RandomValue(Probability.SpawnRand);
             SpawnCreature("skeleton_knight", space.x, space.y);
         }
     }
 
-    public MultiMap<GridSpace> OnlySpawnable(MultiMap<GridSpace> map)
+    public MultiMap<GridSpace> Spawnable(MultiMap<GridSpace> map)
     {
         MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
         foreach (Value2D<GridSpace> space in map)
@@ -38,8 +38,10 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return ret;
     }
 
-    void PickStartLocation(Level l)
+    public Value2D<GridSpace> PickStartLocation(Level l)
     {
+        MultiMap<GridSpace> room = Spawnable(l.GetRooms().Random(Probability.SpawnRand));
+        return room.RandomValue(Probability.SpawnRand);
     }
 
     public void SpawnCreature(string npc, int x, int y)
