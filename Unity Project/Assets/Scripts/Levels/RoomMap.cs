@@ -10,4 +10,9 @@ public class RoomMap : MultiMap<GridSpace> {
             this.Put(arr[floor.y, floor.x], floor.x, floor.y);
         }
     }
+
+    public MultiMap<GridSpace> Spawnable()
+    {
+        return DungeonMaster.Spawnable(this);
+    }
 }

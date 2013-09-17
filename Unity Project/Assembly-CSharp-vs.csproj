@@ -332,6 +332,8 @@
      <Compile Include="Assets\Scripts\MANAGERS\PreGameManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\TimeManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\WorldObjectManager.cs" />
+     <Compile Include="Assets\Scripts\Spawning\SpawnModifier.cs" />
+     <Compile Include="Assets\Scripts\Spawning\SpawnModifiers\SpawnNPCs.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethod.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOE.cs" />

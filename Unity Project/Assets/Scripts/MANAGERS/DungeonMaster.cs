@@ -6,6 +6,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
 
     public void Initialize()
     {
+        SpawnModifier.RegisterModifiers();
     }
 
     public void PopulateLevel(Level l)
@@ -19,15 +20,14 @@ public class DungeonMaster : MonoBehaviour, IManager {
     void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
-        foreach (MultiMap<GridSpace> room in l.GetRooms())
+        foreach (RoomMap room in l.GetRooms())
         {
-            MultiMap<GridSpace> spawn = Spawnable(room);
-            Value2D<GridSpace> space = spawn.RandomValue(Probability.SpawnRand);
-            SpawnCreature("skeleton_knight", space.x, space.y);
+            SpawnModifier mod = SpawnModifier.GetMod();
+            mod.Modify(room, Probability.SpawnRand);
         }
     }
 
-    public MultiMap<GridSpace> Spawnable(MultiMap<GridSpace> map)
+    public static MultiMap<GridSpace> Spawnable(MultiMap<GridSpace> map)
     {
         MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
         foreach (Value2D<GridSpace> space in map)
