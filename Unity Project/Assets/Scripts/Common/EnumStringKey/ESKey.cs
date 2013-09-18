@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class EnumStringKey<T> where T : struct, IConvertible {
+public class ESKey<T> where T : struct, IConvertible {
 
-    public static EnumStringKey<T> Get(string s)
+    public static ESKey<T> Get(string s)
     {
         try
         {
@@ -18,21 +18,21 @@ public class EnumStringKey<T> where T : struct, IConvertible {
         }
     }
 
-    public static EnumStringKey<T> Get(T e)
+    public static ESKey<T> Get(T e)
     {
         return new EnumKey<T>(e);
     }
 
-    public EnumStringKey()
+    public ESKey()
     {
     }
 
-    static public implicit operator EnumStringKey<T>(T e)
+    static public implicit operator ESKey<T>(T e)
     {
         return Get(e);
     }
 
-    static public implicit operator EnumStringKey<T>(string s)
+    static public implicit operator ESKey<T>(string s)
     {
         return Get(s);
     }

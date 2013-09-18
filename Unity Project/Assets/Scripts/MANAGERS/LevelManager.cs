@@ -39,7 +39,7 @@ public class LevelManager : MonoBehaviour, IManager {
 
     void EnumStringTest()
     {
-        var dict = new Dictionary<EnumStringKey<NPCFlags>, string>();
+        var dict = new Dictionary<ESKey<NPCFlags>, string>();
         dict.Add(NPCFlags.COVETOUS, "HELLO");
         string s = "";
         Console.WriteLine(dict[NPCFlags.COVETOUS]);

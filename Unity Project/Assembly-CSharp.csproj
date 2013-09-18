@@ -227,8 +227,9 @@
      <Compile Include="Assets\Scripts\Common\Data Structures\Float.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\Integer.cs" />
      <Compile Include="Assets\Scripts\Common\Dice.cs" />
+     <Compile Include="Assets\Scripts\Common\ESFlags.cs" />
+     <Compile Include="Assets\Scripts\Common\EnumStringKey\ESKey.cs" />
      <Compile Include="Assets\Scripts\Common\EnumStringKey\EnumKey.cs" />
-     <Compile Include="Assets\Scripts\Common\EnumStringKey\EnumStringKey.cs" />
      <Compile Include="Assets\Scripts\Common\EnumStringKey\StringKey.cs" />
      <Compile Include="Assets\Scripts\Common\Exceptions\InfiniteLoopException.cs" />
      <Compile Include="Assets\Scripts\Common\Flags.cs" />
