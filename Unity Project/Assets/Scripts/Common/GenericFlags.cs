@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 
 /**
@@ -24,19 +24,17 @@ public class GenericFlags<T> where T : IComparable, IConvertible
 
     public GenericFlags()
     {
-        ba = new BitArray(256, false);
+        if (!typeof(T).IsEnum)
+        {
+            throw new ArgumentException("T must be an enumerated type");
+        }
+        ba = new BitArray(Enum.GetValues(typeof(T)).Length, false);
     }
 
     public GenericFlags(T e)
+        : this()
     {
-        ba = new BitArray(256, false);
         ba.Set(Convert.ToInt32(e), true);
-    }
-
-    //This also resets all bits.
-    public void setSize(int size)
-    {
-        ba = new BitArray(size, false);
     }
 
     public bool this[T index]
