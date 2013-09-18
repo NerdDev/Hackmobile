@@ -86,4 +86,9 @@ public class Value2D<T> {
     {
         return !Equals(left, right);
     }
+
+    public static implicit operator Point(Value2D<T> val)
+    {
+        return new Point(val.x, val.y);
+    }
 }

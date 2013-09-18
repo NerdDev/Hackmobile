@@ -6,6 +6,8 @@ public class GridSpace
 {
     public GridType Type { get; private set; }
     public GameObject Block { get; set; }
+    public int X { get { return (int)Block.transform.position.x; } }
+    public int Y { get { return (int)Block.transform.position.y; } }
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
@@ -146,5 +148,10 @@ public class GridSpace
     public static implicit operator GridType(GridSpace space)
     {
         return space.Type;
+    }
+
+    public static implicit operator Point(GridSpace space)
+    {
+        return new Point(space.X, space.Y);
     }
 }

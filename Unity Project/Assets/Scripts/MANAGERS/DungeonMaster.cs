@@ -23,7 +23,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
         foreach (RoomMap room in l.GetRooms())
         {
             SpawnModifier mod = SpawnModifier.GetMod();
-            mod.Modify(room, Probability.SpawnRand);
+            mod.Modify(Probability.SpawnRand, room);
         }
     }
 
@@ -44,14 +44,19 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return room.RandomValue(Probability.SpawnRand);
     }
 
-    public void SpawnCreature(string npc, int x, int y)
+    public void SpawnCreature(Point p, string npc)
     {
         BigBoss.Debug.w(DebugManager.Logs.Main, "Spawning");
         NPC n = BigBoss.WorldObject.getNPC(npc);
-        GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
+        GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
         NPC newNPC = gameObject.AddComponent<NPC>();
         newNPC.setData(n);
         newNPC.IsActive = true;
         newNPC.init();
+    }
+
+    public void SpawnCreature(Point p, params Keywords[] keywords)
+    {
+
     }
 }
