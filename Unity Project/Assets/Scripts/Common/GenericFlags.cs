@@ -102,9 +102,4 @@ public class GenericFlags<T> where T : struct, IComparable, IConvertible
     {
         return new GenericFlags<T>(src);
     }
-
-    public void setNull()
-    {
-        ba = new BitArray(1, false);
-    }
 }

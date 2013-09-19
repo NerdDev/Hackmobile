@@ -33,4 +33,45 @@ public class ESFlags<T> where T : struct, IComparable, IConvertible
             }
         }
     }
+
+    public bool Get(T e)
+    {
+        return this[e];
+    }
+
+    public bool Get(string s)
+    {
+        return this[s];
+    }
+
+    public void Set(bool val, T e)
+    {
+        this[e] = val;
+    }
+
+    public void Set(bool val, string s)
+    {
+        this[s] = val;
+    }
+
+    public void Set(bool val, T[] es)
+    {
+        foreach (T e in es)
+        {
+            this[e] = val;
+        }
+    }
+
+    public void Set(bool val, string[] strs)
+    {
+        foreach (string s in strs)
+        {
+            this[s] = val;
+        }
+    }
+
+    public bool getAnd(params T[] index)
+    {
+        throw new NotImplementedException();
+    }
 }

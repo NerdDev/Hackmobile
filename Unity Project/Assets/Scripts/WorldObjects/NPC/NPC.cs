@@ -75,10 +75,10 @@ public class NPC : WorldObject
      */
     #region NPC Properties
 
-    public GenericFlags<Properties> properties = new GenericFlags<Properties>();
+    public ESFlags<Properties> properties = new ESFlags<Properties>();
     public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
-    public GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
-    public GenericFlags<Keywords> keywords = new GenericFlags<Keywords>();
+    public ESFlags<NPCFlags> flags = new ESFlags<NPCFlags>();
+    public ESFlags<Keywords> keywords = new ESFlags<Keywords>();
     public Race race;
     public Role role;
     public AttributesData attributes = new AttributesData();
