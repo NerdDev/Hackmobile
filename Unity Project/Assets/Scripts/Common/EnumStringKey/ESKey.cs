@@ -3,16 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class ESKey<T> where T : struct, IConvertible {
+public class ESKey<T> where T : struct, IComparable, IConvertible {
 
     public static ESKey<T> Get(string s)
     {
-        try
+        T e;
+        if (s.ToEnum<T>(out e))
         {
             EnumKey<T> ekey = new EnumKey<T>((T)Enum.Parse(typeof(T), s, true));
             return ekey;
         }
-        catch (ArgumentException)
+        else
         {
             return new StringKey<T>(s);
         }

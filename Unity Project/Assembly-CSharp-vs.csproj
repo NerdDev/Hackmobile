@@ -313,6 +313,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\EnumExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
      <Compile Include="Assets\Scripts\Library\XML\XMLNifty.cs" />
      <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />

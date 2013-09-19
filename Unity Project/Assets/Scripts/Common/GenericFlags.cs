@@ -18,7 +18,7 @@ using System.Collections;
  *  fl.get(GenericFlags<>.Ops.AND, SomeEnum.VALUE1, SomeEnum.VALUE2) //gets VALUE1 & VALUE2
  * 
  */
-public class GenericFlags<T> where T : IComparable, IConvertible
+public class GenericFlags<T> where T : struct, IComparable, IConvertible
 {
     public BitArray ba;
 
@@ -106,11 +106,5 @@ public class GenericFlags<T> where T : IComparable, IConvertible
     public void setNull()
     {
         ba = new BitArray(1, false);
-    }
-
-    public enum Ops
-    {
-        AND,
-        OR,
     }
 }
