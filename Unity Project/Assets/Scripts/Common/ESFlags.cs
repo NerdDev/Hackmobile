@@ -13,9 +13,14 @@ public class ESFlags<T> where T : struct, IComparable, IConvertible
         {
             T e;
             if (index.ToEnum<T>(out e))
+            {
                 return this[e];
+            }
             else
+            {
+                index = index.ToUpper();
                 return strings.Contains(index);
+            }
         }
         set
         {
@@ -26,6 +31,7 @@ public class ESFlags<T> where T : struct, IComparable, IConvertible
             }
             else
             {
+                index = index.ToUpper();
                 if (value)
                     strings.Add(index);
                 else

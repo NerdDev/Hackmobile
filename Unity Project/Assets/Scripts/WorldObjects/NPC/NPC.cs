@@ -792,22 +792,19 @@ public class NPC : WorldObject
         XMLNifty.parseList(x, "properties", "property",
             obj =>
             {
-                Properties np = obj.SelectEnum<Properties>("name");
-                this.properties[np] = true;
+                this.properties[obj.SelectString("name")] = true;
             });
 
         //flag parsing
         XMLNifty.parseList(x, "flags", "flag",
             obj =>
             {
-                NPCFlags np = obj.SelectEnum<NPCFlags>("name");
-                this.flags[np] = true;
+                this.flags[obj.SelectString("name")] = true;
             });
         XMLNifty.parseList(x, "keywords", "keyword",
             obj =>
             {
-                Keywords kw = obj.SelectEnum<Keywords>("name");
-                this.keywords[kw] = true;
+                this.keywords[obj.SelectString("name")] = true;
             });
         #endregion
 
