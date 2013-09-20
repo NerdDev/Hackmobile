@@ -237,6 +237,7 @@
      <Compile Include="Assets\Scripts\Common\Loom.cs" />
      <Compile Include="Assets\Scripts\Common\MultiMap.cs" />
      <Compile Include="Assets\Scripts\Common\Nifty.cs" />
+     <Compile Include="Assets\Scripts\Common\Percent.cs" />
      <Compile Include="Assets\Scripts\Common\Point.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\Probability.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityItem.cs" />

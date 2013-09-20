@@ -55,6 +55,19 @@ public class DungeonMaster : MonoBehaviour, IManager {
         newNPC.init();
     }
 
+    public void SpawnRandomLeveledCreature(Point p)
+    {
+
+    }
+
+    public void SpawnCreature(Point p, Percent variety, params Keywords[] keywords)
+    {
+        if (Probability.SpawnRand.Percent(variety))
+            SpawnRandomLeveledCreature(p);
+        else
+            SpawnCreature(p, keywords);
+    }
+
     public void SpawnCreature(Point p, params Keywords[] keywords)
     {
 
