@@ -354,6 +354,13 @@
     <Compile Include="Assets\Scripts\MANAGERS\WorldObjectManager.cs" />
     <Compile Include="Assets\Scripts\Spawning\SpawnModifier.cs" />
     <Compile Include="Assets\Scripts\Spawning\SpawnModifiers\SpawnNPCs.cs" />
+    <Compile Include="Assets\Scripts\Spells\Spell.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethod.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOE.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Self.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Targeted AOE.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Targeted.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetType.cs" />
     <Compile Include="Assets\Scripts\TimedDestruction.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\BUC.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemFlags.cs" />
