@@ -86,6 +86,11 @@ public class GenericFlags<T> where T : struct, IComparable, IConvertible
         return false;
     }
 
+    public bool Contains(GenericFlags<T> rhs)
+    {
+        return ba.And(rhs.ba).Equals(rhs.ba);
+    }
+
     public void set(bool val, params T[] index)
     {
         for (int i = 0; i < index.Length; i++)
