@@ -35,7 +35,7 @@ public abstract class SpawnModifier : ProbabilityItem {
         return GetType().Name;
     }
 
-    public abstract void Modify(RandomGen rand, RoomMap room, params Keywords[] keywords);
+    public abstract bool Modify(SpawnSpec spec);
 
     public abstract bool ShouldSpawn(RoomMap room, params Keywords[] keywords);
 }

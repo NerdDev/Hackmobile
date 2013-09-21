@@ -6,6 +6,8 @@ public class Theme : MonoBehaviour {
 	public GameObject door;
 	public GameObject floor;
 
+    public string[] keywords;
+
     public GameObject getFloor()
     {
         return floor;

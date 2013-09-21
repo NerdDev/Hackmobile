@@ -22,8 +22,9 @@ public class DungeonMaster : MonoBehaviour, IManager {
         l.Populated = true;
         foreach (RoomMap room in l.GetRooms())
         {
+            SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, l.Theme, room);
             SpawnModifier mod = SpawnModifier.GetMod();
-            mod.Modify(Probability.SpawnRand, room);
+            mod.Modify(spec);
         }
     }
 

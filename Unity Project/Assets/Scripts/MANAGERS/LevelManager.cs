@@ -9,7 +9,6 @@ public class LevelManager : MonoBehaviour, IManager {
     public LevelBuilder Builder;
     public int Seed = -1;
     private const int MaxLevels = 100;
-    private static LevelGenerator _gen;
     private static Level[] Levels;
 
     // Public Access
@@ -21,7 +20,6 @@ public class LevelManager : MonoBehaviour, IManager {
         Builder.Theme = Theme;
         RoomModifier.RegisterModifiers();
         Levels = new Level[MaxLevels];
-        _gen = new LevelGenerator();
     }
     
     void Start()
@@ -30,27 +28,6 @@ public class LevelManager : MonoBehaviour, IManager {
 
         if (BigBoss.DungeonMaster != null)
             BigBoss.DungeonMaster.PopulateLevel(Level);
-
-        JustinTest();
-        JoseTest();
-
-        EnumStringTest();
-    }
-
-    void EnumStringTest()
-    {
-        var dict = new Dictionary<ESKey<NPCFlags>, string>();
-        dict.Add(NPCFlags.COVETOUS, "HELLO");
-        string s = "";
-        Console.WriteLine(dict[NPCFlags.COVETOUS]);
-        s += dict[NPCFlags.COVETOUS];
-        dict.Add("Bloop", "HI");
-        Console.WriteLine(dict["Bloop"]);
-        s += dict["Bloop"];
-        Console.WriteLine(dict["BlooP"]);
-        s += dict["BlooP"];
-        int wer = 23;
-        wer++;
     }
 
     void SetCurLevel(int num)
@@ -99,28 +76,13 @@ public class LevelManager : MonoBehaviour, IManager {
 
     void GenerateLevel(int num)
     {
-        Levels[num] = new Level(_gen.GenerateLayout(num, Seed));
+        Theme theme = GetTheme();
+        LevelGenerator gen = new LevelGenerator(theme, num);
+        Levels[num] = new Level(gen.GenerateLayout(Seed), theme);
     }
 
-    void TestModifier(RoomModifier mod, int seed)
+    Theme GetTheme()
     {
-        Room room = new Room();
-        SquareRoom square = new SquareRoom();
-        square.Modify(room, Probability.LevelRand);
-        mod.Modify(room, Probability.LevelRand);
-        BigBoss.Debug.w(DebugManager.Logs.LevelGenMain, "Testing Room Modifier: " + mod + " with seed: " + seed);
-        room.ToLog(DebugManager.Logs.LevelGenMain);
-    }
-
-    void JustinTest()
-    {
-        System.Random rand = new System.Random();
-        TestModifier(new PillarMod(), rand.Next()); 
-    }
-
-    void JoseTest()
-    {
-        System.Random rand = new System.Random();
-        TestModifier(new HiddenRoomMod(), rand.Next());
+        return Theme;
     }
 }

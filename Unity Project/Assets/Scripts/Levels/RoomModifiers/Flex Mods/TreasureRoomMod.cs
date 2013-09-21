@@ -5,8 +5,9 @@ using System.Text;
 
 class TreasureRoomMod : RoomModifier
 {
-    public override void Modify(Room room, RandomGen rand)
+    public override bool Modify(RoomSpec spec)
     {
+        Room room = spec.Room;
         Bounding bounds = room.GetBounding();
         int centerX = (bounds.XMin + bounds.XMax) / 2;
         int centerY = (bounds.YMin + bounds.YMax) / 2;
@@ -32,6 +33,8 @@ class TreasureRoomMod : RoomModifier
         room.put(GridType.Door, centerX + 2, centerY);
         room.put(GridType.Door, centerX - 2, centerY);
         room.put(GridType.Chest, centerX, centerY);
+
+        return true;
     }
 
     public override RoomModType GetType()

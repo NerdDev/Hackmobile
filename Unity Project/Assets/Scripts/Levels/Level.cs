@@ -10,13 +10,15 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     private List<RoomMap> roomMaps = new List<RoomMap>();
     private MultiMap<RoomMap> roomMapping = new MultiMap<RoomMap>();
     public Surrounding<GridSpace> Surrounding { get; set; }
+    public Theme Theme { get; protected set; }
 
-    public Level(LevelLayout layout)
+    public Level(LevelLayout layout, Theme theme)
     {
         Layout = layout;
         Arr = GridSpace.Convert(layout.GetArray());
         Surrounding = new Surrounding<GridSpace>(Arr, true);
         LoadRoomMaps();
+        Theme = theme;
     }
 
     private void LoadRoomMaps()

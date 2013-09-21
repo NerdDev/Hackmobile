@@ -40,12 +40,21 @@ public class LevelGenerator
     public static int clusterProbability { get { return 90; } }
     #endregion
 
-    public LevelLayout GenerateLayout(int levelDepth)
+    Theme theme;
+    int levelDepth;
+
+    public LevelGenerator(Theme theme, int levelDepth)
     {
-        return GenerateLayout(levelDepth, Probability.LevelRand.Next());
+        this.theme = theme;
+        this.levelDepth = levelDepth;
     }
 
-    public LevelLayout GenerateLayout(int levelDepth, int seed)
+    public LevelLayout GenerateLayout()
+    {
+        return GenerateLayout(Probability.LevelRand.Next());
+    }
+
+    public LevelLayout GenerateLayout(int seed)
     {
         if (seed == -1)
         {
@@ -202,6 +211,7 @@ public class LevelGenerator
         #endregion
         foreach (Room room in rooms)
         {
+            RoomSpec spec = new RoomSpec(room, levelDepth, theme, Probability.LevelRand);
             #region DEBUG
             if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
             {
@@ -216,7 +226,7 @@ public class LevelGenerator
                     BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Applying: " + mod);
                 }
                 #endregion
-                mod.Modify(room, Probability.LevelRand);
+                mod.Modify(spec);
             }
             room.Bake(false);
             #region DEBUG

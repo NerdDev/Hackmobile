@@ -306,6 +306,7 @@
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\Flex Mods\TreasureRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModType.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModifier.cs" />
+     <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomSpec.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\BFSSearcher.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\DFSSearcher.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
@@ -337,6 +338,7 @@
      <Compile Include="Assets\Scripts\MANAGERS\WorldObjectManager.cs" />
      <Compile Include="Assets\Scripts\Spawning\SpawnModifier.cs" />
      <Compile Include="Assets\Scripts\Spawning\SpawnModifiers\SpawnNPCs.cs" />
+     <Compile Include="Assets\Scripts\Spawning\SpawnSpec.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethod.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOE.cs" />
