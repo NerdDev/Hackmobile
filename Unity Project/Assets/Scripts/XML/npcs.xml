@@ -3,8 +3,8 @@
 		<role>Archaelogist</role>
 		<race>Human</race>
 		<flags>
-			<flag name="nopoly" />
-			<flag name="leaves_corpse" />
+			<entry name="nopoly" />
+			<entry name="leaves_corpse" />
 		</flags>
 		<properties>
 		</properties>

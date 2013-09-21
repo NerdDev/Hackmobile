@@ -32,7 +32,7 @@ public abstract class EffectInstance : PassesTurns
     }
 
     //This initialize is called upon parsing the XML
-    public void initialize(XMLNode x)
+    public void parseXML(XMLNode x)
     {
         this.x = x;
         //This is required - if the turns entry doesn't exist, it returns 0 and treats as an instant effect.

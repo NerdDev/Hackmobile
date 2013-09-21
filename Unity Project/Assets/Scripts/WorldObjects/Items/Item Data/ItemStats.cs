@@ -1,7 +1,7 @@
 ﻿using System;
 using XML;
 
-public class ItemStats
+public class ItemStats : FieldContainerClass
 {
     private int cost;
     public int Cost
@@ -28,23 +28,12 @@ public class ItemStats
         set { this.size = value; }
     }
 
-    public void parseXML(XMLNode xnode)
+    public override void SetParams()
     {
-        //Assignation
-        XMLNode x = XMLNifty.select(xnode, "stats");
-
-        //Variables
-        this.Weight = XMLNifty.SelectInt(x, "weight");
-        this.Cost = XMLNifty.SelectInt(x, "cost");
-        this.Nutrition = XMLNifty.SelectInt(x, "nutrition");
-        this.Size = XMLNifty.SelectEnum<Size>(x, "equipsize");
-    }
-
-    public void setNull()
-    {
-        this.Cost = 0;
-        this.Weight = 0;
-        this.nutrition = 0;
-        this.Size = Size.NONE;
+        base.SetParams();
+        Weight = map.Add<Integer>("weight");
+        Cost = map.Add<Integer>("cost");
+        Nutrition = map.Add<Integer>("nutrition");
+        Size = map.Add<EnumField<Size>>("equipsize");
     }
 }

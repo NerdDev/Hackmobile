@@ -56,7 +56,8 @@ public class NPC : WorldObject
      */
     #region NPC Properties
 
-    public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
+    public Effects effects = new Effects();
+    //public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
     public GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
     public GenericFlags<Keywords> keywords = new GenericFlags<Keywords>();
     public Race race;
@@ -670,10 +671,10 @@ public class NPC : WorldObject
     public float getCurrentInventoryWeight()
     {
         float tempWeight = 0;
-        foreach (Item kvp in inventory)
-        {
-            tempWeight += kvp.props.Weight;
-        }
+        //foreach (Item kvp in inventory)
+        //{
+        //    tempWeight += kvp.props.Weight;
+        //}
 
         return tempWeight;
     }
@@ -729,19 +730,10 @@ public class NPC : WorldObject
     {
         //Anything performing the conversion from base NPC -> instance of NPC goes here.
         base.setData(npc);
-        //data
-        this.properties = npc.properties.Copy();
-        this.effects = npc.effects.Copy();
-        this.flags = npc.flags.Copy();
-        this.keywords = npc.keywords.Copy();
-        this.attributes = npc.attributes.Copy();
-        this.bodyparts = npc.bodyparts.Copy();
-        this.stats = npc.stats.Copy();
-        this.race = npc.race;
-        this.role = npc.role;
-        inventory = npc.inventory.Copy();
-        equippedItems = npc.equippedItems.Copy();
-        this.equipment = npc.equipment != null ? npc.equipment.Copy() : new Equipment(this.bodyparts);
+
+        //Set equipment/etc here
+        this.equipment = new Equipment(this.bodyparts);
+        //run AI routines for equipment
 
         //basic stat data that is reset based on the NPC
         stats.MaxEncumbrance = getMaxInventoryWeight();
@@ -753,53 +745,20 @@ public class NPC : WorldObject
         stats.hungerRate = 1;
     }
 
-    public override void setNull()
+    public override void SetParams()
     {
-        this.parseXML(new XMLNode(null));
-        IsActive = false;
-    }
+        base.SetParams();
 
-    public override void parseXML(XMLNode x)
-    {
-        //name is handled in DataManager so we get the GameObject name
-        base.parseXML(x);
+        map.Add("effects", effects);
+        map.Add("inventory", inventory);
 
-        //Use XMLNifty as it will handle any null refs
-        this.role = XMLNifty.SelectEnum<Role>(x, "role");
-        this.race = XMLNifty.SelectEnum<Race>(x, "race");
-
-        #region Specialized parsing
-        //property parsing
-        XMLNifty.parseList(x, "properties", "property",
-            obj =>
-            {
-                Properties np = obj.SelectEnum<Properties>("name");
-                this.properties[np] = true;
-            });
-
-        //flag parsing
-        XMLNifty.parseList(x, "flags", "flag",
-            obj =>
-            {
-                NPCFlags np = obj.SelectEnum<NPCFlags>("name");
-                this.flags[np] = true;
-            });
-        XMLNifty.parseList(x, "keywords", "keyword",
-            obj =>
-            {
-                Keywords kw = obj.SelectEnum<Keywords>("name");
-                this.keywords[kw] = true;
-            });
-        #endregion
-
-        //stats
-        this.stats.parseXML(x);
-
-        //body part data
-        this.bodyparts.parseXML(x);
-
-        //attributes
-        this.attributes.parseXML(x);
+        race = (Race) map.Add<EnumField<Race>>("race");
+        role = (Role) map.Add<EnumField<Role>>("role");
+        attributes = map.Add<AttributesData>("attributes");
+        bodyparts = map.Add<BodyParts>("bodyparts");
+        stats = map.Add<Stats>("stats");
+        flags = map.Add<GenericFlags<NPCFlags>>("flags");
+        keywords = map.Add<GenericFlags<Keywords>>("keywords");
     }
 
     #endregion

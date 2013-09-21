@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using XML;
 
-public class Stats
+public class Stats : FieldContainerClass
 {
     public int MaxHealth { get; set; }
     public int CurrentHealth { get; set; }
@@ -22,23 +22,12 @@ public class Stats
     {
     }
 
-    public void setNull()
+    public override void SetParams()
     {
-        MaxHealth = 0;
-        MaxPower = 0;
-        MaxEncumbrance = 0;
-        Level = 0;
-    }
-
-    public void parseXML(XMLNode xnode)
-    {
-        //Assignation
-        XMLNode x = XMLNifty.select(xnode, "stats");
-
-        //Variables
-        MaxHealth = XMLNifty.SelectInt(x, "maxhealth");
-        MaxPower = XMLNifty.SelectInt(x, "maxpower");
-        Level = XMLNifty.SelectInt(x, "level");
+        base.SetParams();
+        MaxHealth = map.Add<Integer>("maxhealth");
+        MaxPower = map.Add<Integer>("maxpower");
+        Level = map.Add<Integer>("level");
         initialize();
     }
 

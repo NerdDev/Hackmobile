@@ -1,7 +1,7 @@
 using System;
 using XML;
 
-public class ItemProperties
+public class ItemProperties : FieldContainerClass
 {
     //Properties
     private BUC buc;
@@ -60,12 +60,12 @@ public class ItemProperties
         set { this.equipType = value; }
     }
 
-    internal void parseXML(XML.XMLNode xnode)
+    public override void SetParams()
     {
-        XMLNode x = XMLNifty.select(xnode, "properties");
-        damage = XMLNifty.SelectString(x, "damage");
-        this.mat = XMLNifty.SelectString(x, "material");
-        if (this.mat == null) { this.weight = XMLNifty.SelectInt(x, "weight"); }
-        this.EquipType = XMLNifty.SelectEnum<EquipTypes>(x, "equiptype");
+        base.SetParams();
+        damage = map.Add<String>("damage");
+        mat = map.Add<String>("material");
+        if (this.mat == null) { this.weight = map.Add<Integer>("weight"); }
+        EquipType = map.Add<EnumField<EquipTypes>>("equiptype");
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using XML;
 
-public class AttributesData
+public class AttributesData : FieldContainerClass
 {
     //store stat data here
     private int strength;
@@ -99,28 +99,17 @@ public class AttributesData
         return false;
     }
 
-    public void setNull() {
-        this.Strength = 0;
-        this.Charisma = 0;
-        this.Intelligence = 0;
-        this.Wisdom = 0;
-        this.Dexterity = 0;
-        this.Constitution = 0;
-        this.Difficulty = 0;
-        this.Size = Size.NONE;
-    }
-
-    public void parseXML(XMLNode xnode)
+    public override void SetParams()
     {
-        XMLNode x = XMLNifty.select(xnode, "attributes");
-        this.Strength = XMLNifty.SelectInt(x, "strength");
-        this.Charisma = XMLNifty.SelectInt(x, "charisma");
-        this.Intelligence = XMLNifty.SelectInt(x, "intelligence");
-        this.Wisdom = XMLNifty.SelectInt(x, "wisdom");
-        this.Dexterity = XMLNifty.SelectInt(x, "dexterity");
-        this.Constitution = XMLNifty.SelectInt(x, "constitution");
-        this.Difficulty = XMLNifty.SelectInt(x, "difficulty");
-        this.Size = XMLNifty.SelectEnum<Size>(x, "size");
+        base.SetParams();
+        this.Strength = map.Add<Integer>("strength");
+        this.Charisma = map.Add<Integer>("charisma");
+        this.Intelligence = map.Add<Integer>("intelligence");
+        this.Wisdom = map.Add<Integer>("wisdom");
+        this.Dexterity = map.Add<Integer>("dexterity");
+        this.Constitution = map.Add<Integer>("constitution");
+        this.Difficulty = map.Add<Integer>("difficulty");
+        this.Size = map.Add<EnumField<Size>>("size");
     }
 }
 

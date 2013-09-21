@@ -2,8 +2,9 @@ using UnityEngine;
 using System;
 using System.Collections;
 using XML;
+using System.Collections.Generic;
 
-public class Item : WorldObject, PassesTurns
+public class Item : WorldObject, PassesTurns, FieldContainer
 {
     #region BIGBOSSMANAGEMENT
     //consider some abtract/virtual methods and variables here for cleanliness
@@ -133,38 +134,17 @@ public class Item : WorldObject, PassesTurns
         this.setData(BigBoss.WorldObject.getItem(itemName));
     }
 
-    //use this to do a conversion of a base item to instanced item
-    public void setData(Item baseItem)
+    public override void SetParams()
     {
-        base.setData(baseItem);
-        //classes
-        this.stats = baseItem.stats.Copy();
-        //properties
-        this.Type = baseItem.Type;
-        this.props = baseItem.props.Copy();
-        this.icon = baseItem.icon;
-        this.itemFlags = baseItem.itemFlags.Copy();
-        this.onEaten = baseItem.onEaten.Copy();
-        this.onEquip = baseItem.onEquip.Copy();
-        this.onUse = baseItem.onUse.Copy();
-    }
-
-    public override void setNull()
-    {
-        //Initialize to null stats essentially. Needed/Not needed? Dunno.
-        parseXML(new XMLNode());
-        IsActive = false;
-    }
-
-    public override void parseXML(XMLNode x)
-    {
-        base.parseXML(x);
-        props.parseXML(x);
-        onEquip.parseXML(XMLNifty.select(x, "OnEquipEffect"));
-        onUse.parseXML(XMLNifty.select(x, "OnUseEvent"));
-        onEaten.parseXML(XMLNifty.select(x, "OnEatenEffect"));
-        stats.parseXML(x);
-        icon = XMLNifty.SelectString(x, "icon");
+        base.SetParams();
+        BigBoss.Log(this.Name);
+        props = map.Add<ItemProperties>("properties");
+        onEquip = map.Add<EffectEvent>("OnEquipEffect");
+        onUse = map.Add<EffectEvent>("OnUseEffect");
+        onEaten = map.Add<EffectEvent>("OnEatenEffect");
+        stats = map.Add<ItemStats>("stats");
+        Icon = map.Add<String>("icon");
+        map.Add("type", new String(Type));
     }
     #endregion
 

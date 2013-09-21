@@ -34,7 +34,7 @@ public class Player : NPC, IManager
     #region INVENTORY
     public override void addToInventory(Item item, int count)
     {
-        if (inventory.Contains(item))
+        if (inventory.Has(item))
         {
             //inventory[item] += count;
             //GUI Stuff:
@@ -263,10 +263,10 @@ public class Player : NPC, IManager
         }
 
         //Debug.Log("V: " + v);
-        anim.SetFloat("speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
+        //anim.SetFloat("speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
         //anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
         //anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
-        currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
+        //currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
 
         //		if(anim.layerCount ==2)		
         //			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation

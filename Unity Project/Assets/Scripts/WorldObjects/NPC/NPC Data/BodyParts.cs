@@ -1,7 +1,7 @@
 ﻿using System;
 using XML;
 
-public class BodyParts
+public class BodyParts : FieldContainerClass
 {
     private int arms;
     public int Arms { get { return arms; } set { this.arms = value; } }
@@ -10,28 +10,11 @@ public class BodyParts
     private int heads;
     public int Heads { get { return heads; } set { this.heads = value; } }
 
-    public void setData(BodyParts nbp)
+    public override void SetParams()
     {
-        this.Arms = nbp.Arms;
-        this.Legs = nbp.Legs;
-        this.Heads = nbp.Heads;
-    }
-
-    public void parseXML(XMLNode xnode)
-    {
-        //Assignation of node
-        XMLNode x = XMLNifty.select(xnode, "bodyparts");
-
-        //Variable parse
-        Arms = XMLNifty.SelectInt(x, "arms");
-        Legs = XMLNifty.SelectInt(x, "legs");
-        Heads = XMLNifty.SelectInt(x, "heads");
-    }
-
-    public void setNull()
-    {
-        this.Arms = 0;
-        this.Legs = 0;
-        this.Heads = 0;
+        base.SetParams();
+        Arms = map.Add<Integer>("arms");
+        Legs = map.Add<Integer>("legs");
+        Heads = map.Add<Integer>("heads");
     }
 }

@@ -1,11 +1,15 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using XML;
 
-public class WorldObject : MonoBehaviour, PassesTurns
+public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
 {
-
     #region Generic Object Properties (graphical info, names, etc).
+
+    public FieldMap map;
+
     private string model;
     public string Model
     {
@@ -33,34 +37,34 @@ public class WorldObject : MonoBehaviour, PassesTurns
     #endregion
 
     // Use this for initialization
-	void Start () {
-	
+	void Start ()
+    {
 	}
 
     #region Data Management for Instances
     public virtual void setData(WorldObject wo)
     {
-        this.Model = wo.Model;
-        this.ModelTexture = wo.ModelTexture;
-        this.Name = wo.Name;
-        this.Prefab = wo.Prefab;
+        this.map = wo.map.Copy();
     }
 
     public virtual void parseXML(XMLNode x)
     {
-        //name is handled in DataManager so we get the GameObject name
-        this.Model = XMLNifty.SelectString(x, "model");
-        this.ModelTexture = XMLNifty.SelectString(x, "modeltexture");
-        this.Prefab = XMLNifty.SelectString(x, "prefab");
+        map = new FieldMap(x);
+        this.SetParams();
     }
 
     public virtual void setNull()
     {
-        //these should be set to some type of model that we can tell shouldn't be ingame
-        this.Model = "";
-        this.ModelTexture = "";
-        this.Name = "null";
-        this.Prefab = "";
+        this.parseXML(new XMLNode());
+        IsActive = false;
+    }
+
+    public virtual void SetParams()
+    {
+        Name = map.Add<String>("name");
+        Model = map.Add<String>("model");
+        ModelTexture = map.Add<String>("modeltexture");
+        Prefab = map.Add<String>("prefab");
     }
     #endregion
 

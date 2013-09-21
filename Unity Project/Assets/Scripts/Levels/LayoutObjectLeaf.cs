@@ -172,7 +172,7 @@ public class LayoutObjectLeaf : LayoutObject {
         return grids.ContainsPoint(val);
     }
 
-    public override String GetTypeString()
+    public override string GetTypeString()
     {
         return "Layout Object Leaf";
     }

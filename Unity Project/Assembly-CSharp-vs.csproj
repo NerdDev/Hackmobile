@@ -223,9 +223,14 @@
      <Compile Include="Assets\Scripts\Common\Comparator.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\Double.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\EnumField.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\Field.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\FieldContainer.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\FieldContainerClass.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\FieldMap.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\Float.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\Integer.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\String.cs" />
      <Compile Include="Assets\Scripts\Common\Dice.cs" />
      <Compile Include="Assets\Scripts\Common\EnumStringKey\EnumKey.cs" />
      <Compile Include="Assets\Scripts\Common\EnumStringKey\EnumStringKey.cs" />
@@ -346,6 +351,7 @@
      <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Effects.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\EquipTypes.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Equipment.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Flags.cs" />
@@ -387,6 +393,7 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
+     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
      <None Include="Assets\Fog of War\FoW\FOW.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
@@ -420,6 +427,9 @@
      <None Include="Assets\Scripts\XML\titles.xml" />
  <Reference Include="AudioToolkit_FreeVersion">
  <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
+ </Reference>
+ <Reference Include="CruncherScripts">
+ <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

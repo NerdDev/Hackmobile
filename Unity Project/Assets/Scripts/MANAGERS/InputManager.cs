@@ -95,13 +95,6 @@ public class InputManager : MonoBehaviour, IManager
         {
             BigBoss.Time.TogglePause();
         }
-        {
-            Vector3 place = new Vector3(15f, .5f, 18);
-            BigBoss.WorldObject.CreateRandomItem();
-            Debug.Log("X");
-        }
-		
-		
 
         if (Input.GetKeyDown(KeyCode.Z))
         {

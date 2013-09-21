@@ -40,7 +40,7 @@ public class LevelLayout : LayoutObjectContainer {
 		return ret;
 	}
 
-    public override String GetTypeString()
+    public override string GetTypeString()
     {
         return "Level Layout";
     }

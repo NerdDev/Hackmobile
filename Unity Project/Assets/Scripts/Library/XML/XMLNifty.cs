@@ -51,20 +51,16 @@ namespace XML
             return new XMLNode();
         }
 
-        internal static void parseList(XMLNode x, string topNode, string bottomNode, Action<XMLNode> a)
+        internal static void parseList(XMLNode x, string node, Action<XMLNode> a)
         {
             if (x != null)
             {
-                XMLNode temp = x.select(topNode);
-                if (temp != null)
+                List<XMLNode> xprops = x.selectList(node);
+                if (xprops != null)
                 {
-                    List<XMLNode> xprops = temp.selectList(bottomNode);
-                    if (xprops != null)
+                    foreach (XMLNode xnode in xprops)
                     {
-                        foreach (XMLNode xnode in xprops)
-                        {
-                            a(xnode);
-                        }
+                        a(xnode);
                     }
                 }
             }

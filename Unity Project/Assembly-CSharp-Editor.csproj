@@ -104,6 +104,7 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
+     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
      <None Include="Assets\Fog of War\FoW\FOW.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
@@ -140,6 +141,12 @@
  </Reference>
  <Reference Include="AudioToolkit_FreeVersion_Editor">
  <HintPath>Assets\AudioToolkit\AudioToolkit\Editor\AudioToolkit_FreeVersion_Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="CruncherEditor">
+ <HintPath>Assets\Resources\Tools\Cruncher\Editor\CruncherEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="CruncherScripts">
+ <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
  </Reference>
  <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
  <HintPath>Assets\UnityVS\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>

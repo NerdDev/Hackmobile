@@ -98,7 +98,7 @@ public class Room : LayoutObjectLeaf {
         return GetBfsPerimeter();
     }
 
-    public override String GetTypeString()
+    public override string GetTypeString()
     {
         return "Room";
     }

@@ -102,7 +102,7 @@ abstract public class Container2D<T> {
     {
         if (BigBoss.Debug.logging(log))
         {
-            ToLog(log, new String[0]);
+            ToLog(log, new string[0]);
         }
     }
 

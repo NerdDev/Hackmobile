@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class Inventory : SortedDictionary<string, InventoryCategory>
+public class Inventory : SortedDictionary<string, InventoryCategory>, Field
 {
     public void Add(Item i)
     {
@@ -53,6 +53,18 @@ public class Inventory : SortedDictionary<string, InventoryCategory>
         return false;
     }
 
+    public bool Has(string item)
+    {
+        foreach (InventoryCategory ic in this.Values)
+        {
+            if (ic.Has(item))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public bool Has(Item i)
     {
         if (this.ContainsKey(i.Type))
@@ -60,5 +72,9 @@ public class Inventory : SortedDictionary<string, InventoryCategory>
             return this[i.Type].Has(i);
         }
         return false;
+    }
+
+    public void parseXML(XML.XMLNode x, string name)
+    {
     }
 }

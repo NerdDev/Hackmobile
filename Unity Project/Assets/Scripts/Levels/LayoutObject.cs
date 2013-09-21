@@ -513,7 +513,7 @@ abstract public class LayoutObject
         return GetTypeString() + " " + Id;
     }
 
-    public abstract String GetTypeString();
+    public abstract string GetTypeString();
 
     protected string printContent()
     {

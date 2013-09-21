@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using XML;
 
 /**
  * Helper class for dealing with flags.
@@ -18,7 +19,7 @@ using System.Collections;
  *  fl.get(GenericFlags<>.Ops.AND, SomeEnum.VALUE1, SomeEnum.VALUE2) //gets VALUE1 & VALUE2
  * 
  */
-public class GenericFlags<T> where T : IComparable, IConvertible
+public class GenericFlags<T> : FieldContainerClass where T : IComparable, IConvertible
 {
     public BitArray ba;
 
@@ -114,5 +115,16 @@ public class GenericFlags<T> where T : IComparable, IConvertible
     {
         AND,
         OR,
+    }
+
+    public override void SetParams()
+    {
+        base.SetParams();
+        XMLNifty.parseList(map.x, "entry",
+            obj =>
+            {
+                T np = obj.SelectEnum<T>("name");
+                this[np] = true;
+            });
     }
 }

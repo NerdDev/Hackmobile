@@ -9,7 +9,7 @@ namespace XML
     {
         public string key;
         public string text;
-        public XMLNodeList nodeList;
+        public XMLNodeList nodeList = new XMLNodeList();
 
         /**
         * @param key The string key to make for the XMLNode.
@@ -137,14 +137,20 @@ namespace XML
              */
         public IEnumerable<XMLNode> children(XMLNode m)
         {
-            Stack<XMLNode> maps = new Stack<XMLNode>(new[] { m });
-            while (maps.Any())
+            if (m != null)
             {
-                XMLNode map = maps.Pop();
-                yield return map;
-                foreach (XMLNode funmap in map.get())
+                Stack<XMLNode> maps = new Stack<XMLNode>(new[] { m });
+                while (maps.Any())
                 {
-                    maps.Push(funmap);
+                    XMLNode map = maps.Pop();
+                    yield return map;
+                    if (map.get() != null)
+                    {
+                        foreach (XMLNode funmap in map.get())
+                        {
+                            maps.Push(funmap);
+                        }
+                    }
                 }
             }
         }
@@ -161,7 +167,14 @@ namespace XML
          */
         public List<XMLNode> selectList(string key)
         {
-            return children(this).Where(node => node.getKey().Equals(key)).ToList<XMLNode>();
+            return children(this).Where(node => {
+                if (node.getKey() != null)
+                {
+                    return node.getKey().Equals(key);
+                }
+                return false;
+            }
+            ).ToList<XMLNode>();
         }
 
         /**

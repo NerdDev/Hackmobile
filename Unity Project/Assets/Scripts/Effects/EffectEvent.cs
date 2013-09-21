@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using XML;
 
-public class EffectEvent : List<EffectInstance>
+public class EffectEvent : List<EffectInstance>, Field
 {
     public void activate(NPC wo)
     {
@@ -17,19 +17,20 @@ public class EffectEvent : List<EffectInstance>
         }
     }
 
-    public void parseXML(XMLNode x)
+    public void parseXML(XMLNode topNode, string name)
     {
-        List<XMLNode> nodes = XMLNifty.SelectList(x, "effect");
+        XMLNode xnode = XMLNifty.select(topNode, name);
+        List<XMLNode> nodes = XMLNifty.SelectList(xnode, "effect");
         if (nodes != null)
         {
-            foreach (XMLNode xnode in nodes)
+            foreach (XMLNode x in nodes)
             {
-                string type = XMLNifty.SelectString(xnode, "type");
+                string type = XMLNifty.SelectString(x, "type");
                 try
                 {
                     EffectInstance instance = (EffectInstance)Activator.CreateInstance(EffectManager.effects[type]);
                     instance.effect = type;
-                    instance.initialize(xnode);
+                    instance.parseXML(x);
                     this.Add(instance);
                 }
                 catch

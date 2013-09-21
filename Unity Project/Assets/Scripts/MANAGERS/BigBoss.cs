@@ -163,4 +163,9 @@ public class BigBoss : MonoBehaviour
         //Make this game object persistent
         DontDestroyOnLoad(gameObject);
     }
+
+    public static void Log(string input)
+    {
+        UnityEngine.Debug.Log(input);
+    }
 }

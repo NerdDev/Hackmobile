@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class Equipment
+public class Equipment : FieldContainerClass
 {
     List<EquipSlot>[] equipSlots = new List<EquipSlot>[(int)EquipTypes.LAST];
 
