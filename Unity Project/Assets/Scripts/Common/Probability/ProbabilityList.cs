@@ -39,7 +39,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         }
     }
 
-    private bool AddInternal(ProbContainer cont)
+    protected bool AddInternal(ProbContainer cont)
     {
         itemList.Add(cont);
         if (cont.probDiv > largestDiv)
@@ -48,6 +48,17 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             return true;
         }
         return false;
+    }
+
+    protected void Add(IEnumerable<ProbContainer> conts)
+    {
+        bool changed = false;
+        foreach (ProbContainer cont in conts)
+        {
+            changed = changed || AddInternal(cont);
+        }
+        if (changed)
+            EvaluateProbNums();
     }
 
     public override void Add(T item, float probDiv, bool unique)
@@ -156,6 +167,19 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         int index;
         bool ret = Get(out item, out index);
         itemList[index].skip = true;
+        return ret;
+    }
+
+    public override ProbabilityPool<T> Filter(System.Func<T, bool> filter)
+    {
+        ProbabilityList<T> ret = new ProbabilityList<T>(rand);
+        List<ProbContainer> filtered = new List<ProbContainer>();
+        foreach (ProbContainer cont in itemList)
+        {
+            if (filter(cont.item))
+                filtered.Add(cont);
+        }
+        ret.Add(filtered);
         return ret;
     }
 

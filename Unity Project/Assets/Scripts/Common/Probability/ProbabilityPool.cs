@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Collections;
 
@@ -81,6 +82,8 @@ public abstract class ProbabilityPool<T>  {
         }
         return ret;
     }
+
+    public abstract ProbabilityPool<T> Filter(Func<T, bool> filter);
 
     public abstract void ClearUnique();
 
