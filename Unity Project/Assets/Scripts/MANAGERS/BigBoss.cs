@@ -148,6 +148,7 @@ public class BigBoss : MonoBehaviour
             ret = go.AddComponent<T>();
             ret.Initialize();
             ret.transform.parent = this.transform;
+            ret.name = ret.GetType().Name;
         }
     }
 
