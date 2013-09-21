@@ -4,16 +4,16 @@ using System;
 
 public class StringKey<T> : ESKey<T> where T : struct, IComparable, IConvertible
 {
-    string str;
+    public string Key { get; protected set; }
 
     public StringKey(string key)
     {
-        str = key.ToUpper();
+        Key = key.ToUpper();
     }
 
     public override int GetHashCode()
     {
-        return str.GetHashCode();
+        return Key.GetHashCode();
     }
 
     public override bool Equals(object obj)
@@ -26,6 +26,6 @@ public class StringKey<T> : ESKey<T> where T : struct, IComparable, IConvertible
 
         StringKey<T> rhs = (StringKey<T>)obj;
 
-        return str.Equals(rhs.str);
+        return Key.Equals(rhs.Key);
     }
 }

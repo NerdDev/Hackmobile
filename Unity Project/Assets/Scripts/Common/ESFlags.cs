@@ -40,6 +40,35 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
             }
         }
     }
+    public bool this[ESKey<T> key]
+    {
+        get
+        {
+            if (key is StringKey<T>)
+            {
+                StringKey<T> str = (StringKey<T>)key;
+                return this[str.Key];
+            }
+            else
+            {
+                EnumKey<T> e = (EnumKey<T>)key;
+                return this[e.Key];
+            }
+        }
+        set
+        {
+            if (key is StringKey<T>)
+            {
+                StringKey<T> str = (StringKey<T>)key;
+                this[str.Key] = value;
+            }
+            else
+            {
+                EnumKey<T> e = (EnumKey<T>)key;
+                this[e.Key] = value;
+            }
+        }
+    }
 
     public bool Get(T e)
     {
@@ -51,6 +80,11 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
         return this[s];
     }
 
+    public bool Get(ESKey<T> key)
+    {
+        return this[key];
+    }
+
     public void Set(bool val, T e)
     {
         this[e] = val;
@@ -59,6 +93,11 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
     public void Set(bool val, string s)
     {
         this[s] = val;
+    }
+
+    public void Set(bool val, ESKey<T> key)
+    {
+        this[key] = val;
     }
 
     public void Set(bool val, T[] es)
@@ -74,6 +113,14 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
         foreach (string s in strs)
         {
             this[s] = val;
+        }
+    }
+
+    public void Set(bool val, ESKey<T>[] keys)
+    {
+        foreach (ESKey<T> key in keys)
+        {
+            this[key] = val;
         }
     }
 

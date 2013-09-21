@@ -4,16 +4,16 @@ using System;
 
 public class EnumKey<T> : ESKey<T> where T : struct, IComparable, IConvertible
 {
-    T e;
+    public T Key { get; protected set; }
 
     public EnumKey(T e)
     {
-        this.e = e;
+        this.Key = e;
     }
 
     public override int GetHashCode()
     {
-        return e.GetHashCode();
+        return Key.GetHashCode();
     }
 
     public override bool Equals(object obj)
@@ -26,6 +26,6 @@ public class EnumKey<T> : ESKey<T> where T : struct, IComparable, IConvertible
 
         EnumKey<T> rhs = (EnumKey<T>)obj;
 
-        return e.Equals(rhs.e);
+        return Key.Equals(rhs.Key);
     }
 }
