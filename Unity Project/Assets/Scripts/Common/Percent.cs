@@ -2,17 +2,21 @@ using System;
 
 public class Percent
 {
+    float f;
     public float Float
     {
-        get;
+        get
+        {
+            return f;
+        }
         protected set
         {
             if (value < 0)
-                Float = 0;
+                f = 0;
             else if (value > 1)
-                Float = 1;
+                f = 1;
             else
-                Float = value;
+                f = value;
         }
     }
     public int Int
