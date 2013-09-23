@@ -48,13 +48,13 @@ public class GUIManager : MonoBehaviour, IManager {
 	public void Initialize () 
 	{
 		//Feel free to relocate these init calls when pre-game stuff is utilized
-		InventoryGUICaptureReferences();//better convention to call this from player eventually
+		//InventoryGUICaptureReferences();//better convention to call this from player eventually
 		
-		inventoryPanel.transform.localPosition = new Vector3(Screen.width/2,Screen.height/3,0);
+		//inventoryPanel.transform.localPosition = new Vector3(Screen.width/2,Screen.height/3,0);
 		//Debug.Log(inventoryFrameSprite.mainTexture.width + " by " + inventoryFrameSprite.mainTexture.height);
-		Debug.Log(NGUIMath.CalculateAbsoluteWidgetBounds(inventoryFrameSprite.transform));
+		//Debug.Log(NGUIMath.CalculateAbsoluteWidgetBounds(inventoryFrameSprite.transform));
 		
-		CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
+		//CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
 
 		//Item iScript = BigBoss.WorldObjectManager.CreateItem(new Vector3(0,0,0),"ABITEMLOLZ");
 		

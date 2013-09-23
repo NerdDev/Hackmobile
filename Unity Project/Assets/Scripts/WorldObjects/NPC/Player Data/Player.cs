@@ -42,13 +42,13 @@ public class Player : NPC, IManager
         }
         else
         {
+            inventory.Add(item);
             for (int i = 0; i < count - 1; i++)
             {
-                inventory.Add(item);
                 inventory.Add(item.Copy());
             }
             //GUI Stuff:
-            BigBoss.Gooey.AddItemToGUIInventory(item, count);
+            //BigBoss.Gooey.AddItemToGUIInventory(item, count);
         }
         stats.Encumbrance += item.props.Weight * count;
     }
@@ -94,13 +94,13 @@ public class Player : NPC, IManager
         this.Name = "Kurtis";
 
         Item i = BigBoss.WorldObject.CreateItem("sword1");
-        //this.addToInventory(i);
+        this.addToInventory(i);
         //this.equipItem(i);
 
-        Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
-        this.addToInventory(food, 5);
+       // Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
+        //this.addToInventory(food, 5);
 
-        Item potion = BigBoss.WorldObject.CreateItem("health potion");
+        //Item potion = BigBoss.WorldObject.CreateItem("health potion");
         //this.addToInventory(potion, 3);
 
     }

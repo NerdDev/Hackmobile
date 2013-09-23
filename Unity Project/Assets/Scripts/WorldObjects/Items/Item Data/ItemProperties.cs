@@ -27,7 +27,7 @@ public class ItemProperties : FieldContainerClass
     {
         get
         {
-            if (Material != null && Size != 0) {
+            if (!Material.Name.Equals("") && Size != 0) {
                 return (Size * Material.Density) / 1000;
             } else {
                 return weight;
@@ -42,7 +42,7 @@ public class ItemProperties : FieldContainerClass
         get { return Probability.getDice(damage); }
         set { this.damage = value.diceName; }
     }
-    private string mat;
+    private string mat = "";
     public MaterialType Material
     {
         get { return BigBoss.WorldObject.getMaterial(mat); }
@@ -65,7 +65,7 @@ public class ItemProperties : FieldContainerClass
         base.SetParams();
         damage = map.Add<String>("damage");
         mat = map.Add<String>("material");
-        if (this.mat == null) { this.weight = map.Add<Integer>("weight"); }
+        if (this.mat.Equals("")) { this.weight = map.Add<Integer>("weight"); }
         EquipType = map.Add<EnumField<EquipTypes>>("equiptype");
     }
 }

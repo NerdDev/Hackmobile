@@ -22,13 +22,16 @@ public class FieldMap : SortedDictionary<string, Field>
         if (!this.TryGetValue(name, out item))
         {
             T param = new T();
+            XMLNode xnode;
             if (param is FieldContainer || param is EffectEvent)
             {
-                //BigBoss.Log("Param is FieldContainer");
-                //BigBoss.Log("T is: " + typeof(T).ToString());
-                x = XMLNifty.select(x, name);
+                xnode = XMLNifty.select(x, name);
             }
-            param.parseXML(x, name);
+            else
+            {
+                xnode = this.x;
+            }
+            param.parseXML(xnode, name);
             this.Add(name, param);
             return param;
         }

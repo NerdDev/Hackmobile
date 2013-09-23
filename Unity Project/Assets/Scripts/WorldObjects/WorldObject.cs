@@ -37,17 +37,21 @@ public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
     #endregion
 
     // Use this for initialization
-	void Start ()
+    void Start()
     {
-	}
+    }
 
     #region Data Management for Instances
     public virtual void setData(WorldObject wo)
     {
-        this.map = wo.map.Copy();
+        if (map == null)
+        {
+            map = new FieldMap(wo.map.x);
+        }
+        this.SetParams();
     }
 
-    public virtual void parseXML(XMLNode x)
+    public void parseXML(XMLNode x)
     {
         map = new FieldMap(x);
         this.SetParams();

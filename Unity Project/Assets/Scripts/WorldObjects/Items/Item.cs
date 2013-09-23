@@ -137,14 +137,16 @@ public class Item : WorldObject, PassesTurns, FieldContainer
     public override void SetParams()
     {
         base.SetParams();
-        BigBoss.Log(this.Name);
+        //this is slightly jury-rigged as the Type is stored in the XML key, not a separate node
+        map.Add("type", new String(map.x.getKey()));
+        type = map.Add<String>("type");
+        //rest of it is normal
         props = map.Add<ItemProperties>("properties");
         onEquip = map.Add<EffectEvent>("OnEquipEffect");
         onUse = map.Add<EffectEvent>("OnUseEffect");
         onEaten = map.Add<EffectEvent>("OnEatenEffect");
         stats = map.Add<ItemStats>("stats");
         Icon = map.Add<String>("icon");
-        map.Add("type", new String(Type));
     }
     #endregion
 

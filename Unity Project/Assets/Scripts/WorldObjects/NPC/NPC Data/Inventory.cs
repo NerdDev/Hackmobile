@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using XML;
 
 public class Inventory : SortedDictionary<string, InventoryCategory>, Field
 {
@@ -74,7 +75,7 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, Field
         return false;
     }
 
-    public void parseXML(XML.XMLNode x, string name)
+    public void parseXML(XMLNode x, string name)
     {
     }
 }

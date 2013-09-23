@@ -1,9 +1,14 @@
 using System;
 using XML;
 
-public struct String : Field
+public class String : Field
 {
     string s;
+
+    public String()
+    {
+        s = "";
+    }
 
     public String(string s)
     {
