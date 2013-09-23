@@ -3,8 +3,9 @@ using System.Collections;
 
 public class HiddenRoomMod : RoomModifier {
 
-    public override void Modify(Room room, RandomGen rand)
+    public override bool Modify(RoomSpec spec)
     {
+        Room room = spec.Room;
         int secretRoomSize = 2;
         #region DEBUG
         if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
@@ -19,10 +20,10 @@ public class HiddenRoomMod : RoomModifier {
                 potentialDoors.ToLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
             }
             #endregion
-            Value2D<GridType> doorSpace = potentialDoors.RandomValue(rand);
+            Value2D<GridType> doorSpace = potentialDoors.RandomValue(spec.Random);
                 if (doorSpace != null)
-                { 
-                    room.BoxStrokeAndFill(GridType.Wall,GridType.Floor,
+                {
+                    room.BoxStrokeAndFill(GridType.Wall, GridType.Floor,
                         (doorSpace.x-secretRoomSize),(doorSpace.x+secretRoomSize),
                         (doorSpace.y-secretRoomSize),(doorSpace.y+secretRoomSize));
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
@@ -41,6 +42,7 @@ public class HiddenRoomMod : RoomModifier {
             BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
+        return true;
     }
 
     public override RoomModType GetType()

@@ -58,8 +58,8 @@ public class NPC : WorldObject
 
     public Effects effects = new Effects();
     //public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
-    public GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
-    public GenericFlags<Keywords> keywords = new GenericFlags<Keywords>();
+    public ESFlags<NPCFlags> flags = new ESFlags<NPCFlags>();
+    public ESFlags<Keywords> keywords = new ESFlags<Keywords>();
     public Race race;
     public Role role;
     public AttributesData attributes = new AttributesData();
@@ -842,7 +842,7 @@ public class NPC : WorldObject
 
     bool IsNextToPlayer()
     {
-        Surrounding<GridSpace> s = LevelManager.Level.surr;
+        Surrounding<GridSpace> s = LevelManager.Level.Surrounding;
         s.Load(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
         foreach (Value2D<GridSpace> grid in s)
         {

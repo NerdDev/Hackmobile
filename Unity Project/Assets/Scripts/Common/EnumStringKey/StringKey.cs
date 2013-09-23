@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class StringKey<T> : EnumStringKey<T> where T : struct, IConvertible
+public class StringKey<T> : ESKey<T> where T : struct, IComparable, IConvertible
 {
     string str;
 

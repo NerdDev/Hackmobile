@@ -149,9 +149,9 @@ public static class Nifty
         return list[rand.Next(list.Count)];
     }
 
-    public static bool Percent(this System.Random rand, int percent)
+    public static bool Percent(this System.Random rand, Percent percent)
     {
-        return percent > rand.Next(100);
+        return percent.Float > rand.NextDouble();
     }
 
     public static int ToInt(this float x)

@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class SplitterMod : RoomModifier
 {
 
-    public override void Modify(Room room, RandomGen rand)
+    public override bool Modify(RoomSpec spec)
     {
+        Room room = spec.Room;
+        RandomGen rand = spec.Random;
         Bounding bounds = room.GetBounding();
         int x = rand.Next(bounds.XMin + 3, bounds.XMax - 3);
         int y = rand.Next(bounds.YMin + 3, bounds.YMax - 3);
@@ -65,6 +67,7 @@ public class SplitterMod : RoomModifier
             else ctr++;
         }
         ctr = 0;
+        return true;
     }
 
     public override RoomModType GetType()

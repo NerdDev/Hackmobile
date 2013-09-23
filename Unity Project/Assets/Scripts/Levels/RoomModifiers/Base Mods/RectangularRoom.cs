@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class RectangularRoom : RoomModifier
 {
 
-    public override void Modify(Room room, RandomGen rand)
+    public override bool Modify(RoomSpec spec)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
@@ -20,13 +20,14 @@ public class RectangularRoom : RoomModifier
             BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Height: " + height + ", Width: " + width);
         }
         #endregion
-        room.BoxStrokeAndFill(GridType.Wall, GridType.Floor, width, height);
+        spec.Room.BoxStrokeAndFill(GridType.Wall, GridType.Floor, width, height);
         #region DEBUG
         if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
+        return true;
     }
 
     public override RoomModType GetType()

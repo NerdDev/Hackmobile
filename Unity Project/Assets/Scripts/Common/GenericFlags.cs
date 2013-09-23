@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using XML;
 
@@ -19,25 +19,23 @@ using XML;
  *  fl.get(GenericFlags<>.Ops.AND, SomeEnum.VALUE1, SomeEnum.VALUE2) //gets VALUE1 & VALUE2
  * 
  */
-public class GenericFlags<T> : FieldContainerClass where T : IComparable, IConvertible
+public class GenericFlags<T> : FieldContainerClass where T : struct, IComparable, IConvertible
 {
     public BitArray ba;
 
     public GenericFlags()
     {
-        ba = new BitArray(256, false);
+        if (!typeof(T).IsEnum)
+        {
+            throw new ArgumentException("T must be an enumerated type");
+        }
+        ba = new BitArray(Enum.GetValues(typeof(T)).Length, false);
     }
 
     public GenericFlags(T e)
+        : this()
     {
-        ba = new BitArray(256, false);
         ba.Set(Convert.ToInt32(e), true);
-    }
-
-    //This also resets all bits.
-    public void setSize(int size)
-    {
-        ba = new BitArray(size, false);
     }
 
     public bool this[T index]
@@ -104,17 +102,6 @@ public class GenericFlags<T> : FieldContainerClass where T : IComparable, IConve
     public static implicit operator GenericFlags<T>(T src)
     {
         return new GenericFlags<T>(src);
-    }
-
-    public void setNull()
-    {
-        ba = new BitArray(1, false);
-    }
-
-    public enum Ops
-    {
-        AND,
-        OR,
     }
 
     public override void SetParams()

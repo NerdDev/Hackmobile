@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SquareRoom : RoomModifier {
 
-    public override void Modify(Room room, RandomGen rand)
+    public override bool Modify(RoomSpec spec)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
@@ -18,13 +18,14 @@ public class SquareRoom : RoomModifier {
             BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Side: " + side);
         }
         #endregion
-        room.BoxStrokeAndFill(GridType.Wall, GridType.Floor, side, side);
+        spec.Room.BoxStrokeAndFill(GridType.Wall, GridType.Floor, side, side);
         #region DEBUG
         if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
+        return true;
     }
 
     public override RoomModType GetType()

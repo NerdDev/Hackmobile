@@ -75,7 +75,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return row;
     }
 
-    protected override void Put(T val, int x, int y)
+    public override void Put(T val, int x, int y)
     {
         PutInternal(val, x, y);
     }

@@ -11,42 +11,42 @@ public class Room : LayoutObjectLeaf {
     
 	public GridMap GetWalls() 
     {
-		return getTypes(GridType.Wall);
+		return getType(GridType.Wall);
 	}
 	
 	public GridMap GetFloors() 
     {
-		return getTypes(GridType.Floor);
+		return getType(GridType.Floor);
 	}
 	
 	public GridMap GetSmallLoots() 
     {
-		return getTypes(GridType.SmallLoot);
+		return getType(GridType.SmallLoot);
 	}
 
     public GridMap GetSecrets()
     {
-        return getTypes(GridType.Secret);
+        return getType(GridType.Secret);
     }
 
     public GridMap GetChests()
     {
-        return getTypes(GridType.Chest);
+        return getType(GridType.Chest);
     }
 
     public GridMap GetTraps()
     {
-        return getTypes(GridType.Trap);
+        return getType(GridType.Trap);
     }
 
     public GridMap GetTrapDoors()
     {
-        return getTypes(GridType.TrapDoor);
+        return getType(GridType.TrapDoor);
     }
 
     public GridMap GetDoors()
     {
-        return getTypes(GridType.Door);
+        return getType(GridType.Door);
     }
 
     public GridMap GetPotentialExternalDoors()
@@ -66,25 +66,7 @@ public class Room : LayoutObjectLeaf {
 
     public int CountGridType(GridType type)
     {
-        int ctr = 0;
-        GridMap grid;
-
-        switch (type)
-        {
-            case GridType.Floor: grid = GetFloors(); break;
-            case GridType.Wall: grid = GetWalls(); break;
-            case GridType.Chest: grid = GetChests(); break;
-            case GridType.SmallLoot: grid = GetSmallLoots(); break;
-            case GridType.Secret: grid = GetSecrets(); break;
-            case GridType.Trap: grid = GetTraps(); break;
-            case GridType.TrapDoor: grid = GetTrapDoors(); break;
-            case GridType.Door: grid = GetDoors(); break;
-            default: grid = null; break;
-        }
-
-        if (grid != null) ctr = grid.Count();
-
-        return ctr;
+        return getTypes(type).Count();
     }
 
     void RemoveBadDoorWalls(GridMap potentialDoors)

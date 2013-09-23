@@ -47,7 +47,7 @@ public class RandomGen {
         return rand.NextDouble();
     }
 
-    public bool Percent(int percent)
+    public bool Percent(Percent percent)
     {
         return rand.Percent(percent);
     }

@@ -93,6 +93,52 @@
 			<!-- none -->
 		</properties>
 		<keywords>
+      <keyword name="undead" />
+      <keyword name="spikey" />
+		</keywords>
+		<stats>
+			<maxhealth>25</maxhealth>
+			<maxpower>75</maxpower>
+			<level>2</level>
+		</stats>
+		<attributes>
+			<charisma>3</charisma>
+			<constitution>22</constitution>
+			<wisdom>15</wisdom>
+			<dexterity>7</dexterity>
+			<intelligence>17</intelligence>
+			<strength>4</strength>
+			<difficulty>2</difficulty>
+			<size>medium</size>
+		</attributes>
+		<inventory>
+			<item>
+				<itemname>axe2</itemname>
+				<chance>100</chance>
+				<number>1</number>
+			</item>
+		</inventory>
+		<bodyparts>
+			<arms>2</arms>
+			<legs>2</legs>
+			<heads>1</heads>
+			<!-- body is implicitly assumed -->
+		</bodyparts>
+	</npc>
+	<npc name="skeleton_knight">
+		<model> </model>
+		<modeltexture> </modeltexture>
+		<prefab>Prefabs_Meshes/NPCs/Skeleton_Knight</prefab>
+		<role>Mage</role>
+		<race>Undead</race>
+		<flags>
+			<flag name="nopoly" />
+			<flag name="leaves_corpse" />
+		</flags>
+		<properties>
+			<!-- none -->
+		</properties>
+		<keywords>
 			<keyword name="undead" />
 		</keywords>
 		<stats>

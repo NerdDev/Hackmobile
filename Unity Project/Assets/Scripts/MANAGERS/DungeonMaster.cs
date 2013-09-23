@@ -8,6 +8,7 @@ public class DungeonMaster : MonoBehaviour, IManager
 
     public void Initialize()
     {
+        SpawnModifier.RegisterModifiers();
     }
 
     public void PopulateLevel(Level l)
@@ -29,40 +30,58 @@ public class DungeonMaster : MonoBehaviour, IManager
     void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
-        foreach (Room room in l.Layout.GetRooms())
+        foreach (RoomMap room in l.GetRooms())
         {
-            GridMap map = room.GetFloors();
-            Value2D<GridType> space = map.RandomValue(Probability.SpawnRand);
-            int wer = 23;
-            wer++;
-            if (LevelManager.Level[space.x, space.y] != null)
-            {
-                SpawnCreature("skeleton", space.x, space.y);
-            }
+            SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, l.Theme, room);
+            SpawnModifier mod = SpawnModifier.GetMod();
+            mod.Modify(spec);
+
         }
     }
 
-    void PickStartLocation(Level l)
+    public static MultiMap<GridSpace> Spawnable(MultiMap<GridSpace> map)
     {
-        //List<Room> rooms = l.Layout.GetRooms();
-        //Room room = rooms[Probability.Rand.Next(rooms.Count)];
-        //GridMap map = room.GetFloors();
-        //Value2D<GridType> space = map.RandomValue(Probability.Rand);
-        //Debug.Log("Space chosen: " + space.x + ", " + space.y);
-
-        BigBoss.PlayerInfo.transform.position = new Vector3(14f, -.5f, 14f);
-        BigBoss.PlayerInfo.avatarStartLocation = BigBoss.PlayerInfo.transform.position;
-        BigBoss.GetCamera.target = BigBoss.PlayerInfo.transform;
+        MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
+        foreach (Value2D<GridSpace> space in map)
+        {
+            if (space.val.Spawnable)
+                ret.Put(space);
+        }
+        return ret;
     }
 
-    public void SpawnCreature(string npc, int x, int y)
+    public Value2D<GridSpace> PickStartLocation(Level l)
+    {
+        MultiMap<GridSpace> room = Spawnable(l.GetRooms().Random(Probability.SpawnRand));
+        return room.RandomValue(Probability.SpawnRand);
+    }
+
+    public void SpawnCreature(Point p, string npc)
     {
         BigBoss.Debug.w(DebugManager.Logs.Main, "Spawning");
         NPC n = BigBoss.WorldObject.getNPC(npc);
-        GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
+        GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
         NPC newNPC = gameObject.AddComponent<NPC>();
         newNPC.setData(n);
         newNPC.IsActive = true;
         newNPC.init();
+    }
+
+    public void SpawnRandomLeveledCreature(Point p)
+    {
+
+    }
+
+    public void SpawnCreature(Point p, Percent variety, params Keywords[] keywords)
+    {
+        if (Probability.SpawnRand.Percent(variety))
+            SpawnRandomLeveledCreature(p);
+        else
+            SpawnCreature(p, keywords);
+    }
+
+    public void SpawnCreature(Point p, params Keywords[] keywords)
+    {
+
     }
 }

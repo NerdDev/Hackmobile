@@ -100,7 +100,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return arr.GetLength(0);
     }
 
-    protected override void Put(T val, int x, int y)
+    public override void Put(T val, int x, int y)
     {
         if (InRange(x, y))
         {

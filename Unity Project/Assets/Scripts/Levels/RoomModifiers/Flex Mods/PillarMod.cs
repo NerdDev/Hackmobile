@@ -3,16 +3,18 @@ using System.Collections;
 
 public class PillarMod : RoomModifier {
 
-    public override void Modify(Room room, RandomGen rand)
+    public override bool Modify(RoomSpec spec)
     {
-        Bounding bounds = room.GetBounding();
+        Bounding bounds = spec.Room.GetBounding();
         for (int x = bounds.XMin; x < bounds.XMax; x = x + 3)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + 3)
             {
-                if (room.get(x, y) == GridType.Floor || room.get(x, y) == GridType.Trap) room.put(GridType.Wall, x, y);
+                if (spec.Room.get(x, y) == GridType.Floor || spec.Room.get(x, y) == GridType.Trap) spec.Room.put(GridType.Wall, x, y);
             }
         }
+
+        return true;
     }
 
     public override RoomModType GetType()

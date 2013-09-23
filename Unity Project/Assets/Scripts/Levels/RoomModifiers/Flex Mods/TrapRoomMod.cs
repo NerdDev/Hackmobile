@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class TrapRoomMod : RoomModifier
 {
 
-    public override void Modify(Room room, RandomGen rand)
+    public override bool Modify(RoomSpec spec)
     {
+        RandomGen rand = spec.Random;
+        Room room = spec.Room;
         #region DEBUG
         if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
@@ -63,6 +65,7 @@ public class TrapRoomMod : RoomModifier
             BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
+        return true;
     }
 
     public override RoomModType GetType()

@@ -4,16 +4,34 @@ using System.Collections.Generic;
 
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
-    public LevelLayout Layout { get; private set; }
+    protected LevelLayout Layout { get; private set; }
     public bool Populated { get; set; }
     private GridSpace[,] Arr;
-    public Surrounding<GridSpace> surr;
+    private List<RoomMap> roomMaps = new List<RoomMap>();
+    private MultiMap<RoomMap> roomMapping = new MultiMap<RoomMap>();
+    public Surrounding<GridSpace> Surrounding { get; set; }
+    public Theme Theme { get; protected set; }
 
-    public Level(LevelLayout layout)
+    public Level(LevelLayout layout, Theme theme)
     {
         Layout = layout;
         Arr = GridSpace.Convert(layout.GetArray());
-        loadSurrounding();
+        Surrounding = new Surrounding<GridSpace>(Arr, true);
+        LoadRoomMaps();
+        Theme = theme;
+    }
+
+    private void LoadRoomMaps()
+    {
+        foreach (Room room in Layout.GetRooms())
+        {
+            RoomMap roomMap = new RoomMap(room, Arr);
+            roomMaps.Add(roomMap);
+            foreach (Value2D<GridSpace> floor in roomMap)
+            {
+                roomMapping[floor.x, floor.y] = roomMap;
+            }
+        }
     }
 
     public GridSpace this[int x, int y]
@@ -22,7 +40,14 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         {
             if (x < Arr.GetLength(1) && y < Arr.GetLength(0))
             {
-                return Arr[y, x];
+                GridSpace space = Arr[y, x];
+                if (space == null)
+                { // Create empty gridspace
+                    space = new GridSpace(GridType.NULL);
+                    Arr[y, x] = space;
+                    return space;
+                }
+                return space;
             }
             return null;
         }
@@ -109,7 +134,23 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return new GridArray(ret);
     }
 
-    public IEnumerator<GridSpace> GetBasicEnumerator()
+    public MultiMap<GridSpace> GetArea(Bounding bounds)
+    {
+        MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
+        Bounding inBound = bounds.InBounds(Arr);
+        for (int y = inBound.YMin; y < inBound.YMax; y++)
+        {
+            for (int x = inBound.XMin; x < inBound.XMax; x++)
+            {
+                GridSpace space = Arr[y, x];
+                if (space != null)
+                    ret[x, y] = space;
+            }
+        }
+        return ret;
+    }
+
+    public IEnumerable<GridSpace> Iterate()
     {
         for (int y = 0; y < Arr.GetLength(0); y++)
         {
@@ -118,6 +159,11 @@ public class Level : IEnumerable<Value2D<GridSpace>>
                 yield return Arr[x, y];
             }
         }
+    }
+
+    public List<RoomMap> GetRooms()
+    {
+        return roomMaps;
     }
 
     public IEnumerator<Value2D<GridSpace>> GetEnumerator()
@@ -136,15 +182,10 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return this.GetEnumerator();
     }
 
-    void loadSurrounding()
-    {
-        surr = new Surrounding<GridSpace>(Arr, true);
-    }
-
     public IEnumerable<Value2D<GridSpace>> getSurroundingSpaces(int x, int y)
     {
-        surr.Load(x, y);
-        foreach (Value2D<GridSpace> val in surr)
+        Surrounding.Load(x, y);
+        foreach (Value2D<GridSpace> val in Surrounding)
         {
             yield return val;
         }

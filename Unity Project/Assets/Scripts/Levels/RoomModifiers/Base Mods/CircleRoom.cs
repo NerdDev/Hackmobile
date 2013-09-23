@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CircleRoom : RoomModifier {
 
-    public override void Modify(Room room, RandomGen rand)
+    public override bool Modify(RoomSpec spec)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
@@ -18,13 +18,14 @@ public class CircleRoom : RoomModifier {
             BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Radius: " + radius);
         }
         #endregion
-        room.CircularStrokeAndFill(GridType.Wall, GridType.Floor, radius);
+        spec.Room.CircularStrokeAndFill(GridType.Wall, GridType.Floor, radius);
         #region DEBUG
         if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
         {
             BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
         }
         #endregion
+        return true;
     }
 
     public override RoomModType GetType()
