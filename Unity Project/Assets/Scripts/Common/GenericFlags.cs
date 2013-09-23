@@ -19,7 +19,7 @@ using XML;
  *  fl.get(GenericFlags<>.Ops.AND, SomeEnum.VALUE1, SomeEnum.VALUE2) //gets VALUE1 & VALUE2
  * 
  */
-public class GenericFlags<T> : FieldContainerClass where T : struct, IComparable, IConvertible
+public class GenericFlags<T> where T : struct, IComparable, IConvertible
 {
     public BitArray ba;
 
@@ -102,16 +102,5 @@ public class GenericFlags<T> : FieldContainerClass where T : struct, IComparable
     public static implicit operator GenericFlags<T>(T src)
     {
         return new GenericFlags<T>(src);
-    }
-
-    public override void SetParams()
-    {
-        base.SetParams();
-        XMLNifty.parseList(map.x, "entry",
-            obj =>
-            {
-                T np = obj.SelectEnum<T>("name");
-                this[np] = true;
-            });
     }
 }

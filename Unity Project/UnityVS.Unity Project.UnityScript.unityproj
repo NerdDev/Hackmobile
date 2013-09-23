@@ -14,7 +14,7 @@
     <NoStdLib>true</NoStdLib>
     <ProjectTypeGuids>{84365F2C-1DDE-431A-8C14-179ADC971E4D};{1FAC5C55-277D-4884-94A4-83DBDAF57E56}</ProjectTypeGuids>
     <MonoProfile>unity</MonoProfile>
-    <UnityPath>C:\Program Files (x86)\Unity\Editor</UnityPath>
+    <UnityPath>C:\UnityPro\Editor</UnityPath>
     <MonoPath>$(UnityPath)\Data\Mono</MonoPath>
     <LibraryAssembly>Assembly-UnityScript.dll</LibraryAssembly>
     <TargetFrameworkDirectory>$(MonoPath)\lib\mono\$(MonoProfile)</TargetFrameworkDirectory>
@@ -25,7 +25,7 @@
     <OutputPath>Temp\bin\Debug\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +33,7 @@
     <OutputPath>Temp\bin\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib">
@@ -57,6 +57,9 @@
     <Reference Include="AudioToolkit_FreeVersion">
       <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
     </Reference>
+    <Reference Include="CruncherScripts">
+      <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\EasyTouch\Example\C# Example\Examples for EasyTouch\Example-Multiplefingers\_OtherScript\bord.js" />
@@ -65,6 +68,8 @@
     <Compile Include="Assets\EasyTouch\Plugins\_Java-Event-Template\J_EasyTouchTemplate.js" />
     <None Include="Assets\AudioToolkit\Readme.txt" />
     <None Include="Assets\EasyTouch\Readme_first.txt" />
+    <None Include="Assets\Fog of War\FoW\FOW.shader" />
+    <None Include="Assets\Fog of War\ReadMe.txt" />
     <None Include="Assets\iTweenEditor\README.txt" />
     <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
@@ -95,15 +100,20 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
-    <None Include="Assets\Resources\XML\items.xml" />
-    <None Include="Assets\Resources\XML\materials.xml" />
-    <None Include="Assets\Resources\XML\npcs.xml" />
-    <None Include="Assets\Resources\XML\strings.xml" />
-    <None Include="Assets\Resources\XML\titles.xml" />
+    <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
+    <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
+    <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
+    <None Include="Assets\Scripts\XML\consumables.xml" />
+    <None Include="Assets\Scripts\XML\materials.xml" />
+    <None Include="Assets\Scripts\XML\npcs.xml" />
+    <None Include="Assets\Scripts\XML\strings.xml" />
+    <None Include="Assets\Scripts\XML\titles.xml" />
+    <None Include="Assets\Scripts\XML\weapons.xml" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
     <None Include="Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll" />
+    <None Include="Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets" />
@@ -117,6 +127,8 @@
     <Folder Include="Assets\EasyTouch\Example\C# Example\Examples for EasyTouch\Example-Multiplefingers\_OtherScript" />
     <Folder Include="Assets\EasyTouch\Plugins" />
     <Folder Include="Assets\EasyTouch\Plugins\_Java-Event-Template" />
+    <Folder Include="Assets\Fog of War" />
+    <Folder Include="Assets\Fog of War\FoW" />
     <Folder Include="Assets\iTweenEditor" />
     <Folder Include="Assets\NGUI" />
     <Folder Include="Assets\NGUI\Examples" />
@@ -133,7 +145,17 @@
     <Folder Include="Assets\NGUI\Resources" />
     <Folder Include="Assets\NGUI\Resources\Shaders" />
     <Folder Include="Assets\Resources" />
-    <Folder Include="Assets\Resources\XML" />
+    <Folder Include="Assets\Resources\Textures" />
+    <Folder Include="Assets\Resources\Textures\B2M_2.1" />
+    <Folder Include="Assets\Resources\Textures\B2M_2.1\Script" />
+    <Folder Include="Assets\Resources\Tools" />
+    <Folder Include="Assets\Resources\Tools\Cruncher" />
+    <Folder Include="Assets\Resources\Tools\Cruncher\Documentation" />
+    <Folder Include="Assets\Resources\Tools\Cruncher\Scripts" />
+    <Folder Include="Assets\Scripts" />
+    <Folder Include="Assets\Scripts\Library" />
+    <Folder Include="Assets\Scripts\Library\XML" />
+    <Folder Include="Assets\Scripts\XML" />
     <Folder Include="Assets\Standard Assets" />
     <Folder Include="Assets\Standard Assets\Projectors" />
     <Folder Include="Assets\Standard Assets\Projectors\Sources" />

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using XML;
 
-public class ESFlags<T> where T : struct, IComparable, IConvertible
+public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, IConvertible
 {
     GenericFlags<T> flags = new GenericFlags<T>();
     HashSet<string> strings = new HashSet<string>();
@@ -79,5 +80,15 @@ public class ESFlags<T> where T : struct, IComparable, IConvertible
     public bool getAnd(params T[] index)
     {
         throw new NotImplementedException();
+    }
+
+    public override void SetParams()
+    {
+        base.SetParams();
+        XMLNifty.parseList(map.x, "entry",
+            obj =>
+            {
+                this[obj.SelectString("name")] = true;
+            });
     }
 }

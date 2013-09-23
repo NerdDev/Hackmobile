@@ -17,14 +17,8 @@ public class DungeonMaster : MonoBehaviour, IManager
         {
             ForcePopulateLevel(l);
         }
-        try
-        {
-            PickStartLocation(l);
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.StackTrace);
-        }
+        Debug.Log(BigBoss.PlayerInfo.Name);
+        BigBoss.PlayerInfo.transform.position = new Vector3(59f, -.5f, 44f);
     }
 
     void ForcePopulateLevel(Level l)

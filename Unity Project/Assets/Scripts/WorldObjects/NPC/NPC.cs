@@ -757,8 +757,8 @@ public class NPC : WorldObject
         attributes = map.Add<AttributesData>("attributes");
         bodyparts = map.Add<BodyParts>("bodyparts");
         stats = map.Add<Stats>("stats");
-        flags = map.Add<GenericFlags<NPCFlags>>("flags");
-        keywords = map.Add<GenericFlags<Keywords>>("keywords");
+        flags = map.Add<ESFlags<NPCFlags>>("flags");
+        keywords = map.Add<ESFlags<Keywords>>("keywords");
     }
 
     #endregion
