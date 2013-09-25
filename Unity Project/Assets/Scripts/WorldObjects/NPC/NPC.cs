@@ -124,8 +124,6 @@ public class NPC : WorldObject
 
     void Start()
     {
-        Debug.Log("NPC Name: " + this.Name);
-        Debug.Log("boolean isActive - " + IsActive);
     }
 
     void Update()
@@ -581,10 +579,10 @@ public class NPC : WorldObject
         {
             int xmove = gridSpace.x - node.x;
             int ymove = gridSpace.y - node.y;
-                gridSpace.val.Remove(this);
-                gridSpace = new Value2D<GridSpace>(node.x, node.y, grid);
-                gridSpace.val.Put(this);
-                MoveNPC(xmove, ymove);
+            gridSpace.val.Remove(this);
+            gridSpace = new Value2D<GridSpace>(node.x, node.y, grid);
+            gridSpace.val.Put(this);
+            MoveNPC(xmove, ymove);
         }
     }
 
@@ -754,8 +752,8 @@ public class NPC : WorldObject
         map.Add("effects", effects);
         map.Add("inventory", inventory);
 
-        race = (Race) map.Add<EnumField<Race>>("race");
-        role = (Role) map.Add<EnumField<Role>>("role");
+        race = (Race)map.Add<EnumField<Race>>("race");
+        role = (Role)map.Add<EnumField<Role>>("role");
         attributes = map.Add<AttributesData>("attributes");
         bodyparts = map.Add<BodyParts>("bodyparts");
         stats = map.Add<Stats>("stats");
@@ -794,9 +792,10 @@ public class NPC : WorldObject
                     DecideWhatToDo();
                 }
             }
-            catch (NullReferenceException)
+            catch (Exception e)
             {
-                Debug.Log("Exception 0");//do nothing
+                Debug.Log("Exception: ");
+                Debug.Log(e.ToString());
             }
 
             //AdjustHunger(-1);
@@ -861,27 +860,11 @@ public class NPC : WorldObject
     {
         if (IsNextToPlayer())
         {
-            try
-            {
-                AIAttack();
-            }
-            catch
-            {
-                Debug.Log("Exception 1");
-            }
+            AIAttack();
         }
         else
         {
-            try
-            {
-                AIMove();
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Exception 2");
-                Debug.Log(e.StackTrace);
-                Debug.Log(e.ToString());
-            }
+            AIMove();
         }
     }
 
@@ -900,19 +883,7 @@ public class NPC : WorldObject
         {
             List<PathNode> nodes = pathToPlayer.getPath();
             Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
-            //int moveCost;
-            //if (Nifty.diagonal(gridSpace.x, gridSpace.y, nodeToMove.x, nodeToMove.y))
-            //{
-            //    moveCost = BigBoss.TimeKeeper.diagonalMoveCost;
-            //}
-            //else
-            //{
-            //    moveCost = BigBoss.TimeKeeper.regularMoveCost;
-            //}
-            //if (subtractPoints(moveCost))
-            //{
-                MoveNPC(nodeToMove);
-            //}
+            MoveNPC(nodeToMove);
             UpdateCurrentTileVectors();
         }
     }
