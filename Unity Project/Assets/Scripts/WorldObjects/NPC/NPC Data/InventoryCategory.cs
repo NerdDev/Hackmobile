@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class InventoryCategory : SortedDictionary<string, ItemList>
+public class InventoryCategory : Dictionary<string, ItemList>
 {
     public void Add(Item i)
     {

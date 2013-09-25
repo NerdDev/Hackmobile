@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class Inventory : SortedDictionary<string, InventoryCategory>, Field
+public class Inventory : Dictionary<string, InventoryCategory>, Field
 {
     public void Add(Item i)
     {

@@ -17,8 +17,9 @@ public class DungeonMaster : MonoBehaviour, IManager
         {
             ForcePopulateLevel(l);
         }
-        Debug.Log(BigBoss.PlayerInfo.Name);
+        //Debug.Log(BigBoss.PlayerInfo.Name);
         BigBoss.PlayerInfo.transform.position = new Vector3(59f, -.5f, 44f);
+        this.SpawnCreature(new Point(59, 44), "orc");
     }
 
     void ForcePopulateLevel(Level l)

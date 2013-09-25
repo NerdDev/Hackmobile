@@ -85,6 +85,10 @@ public class Player : NPC, IManager
     {
         //use the internal assignation reference for clarity
         this.playerAvatar = this.gameObject;
+        BigBoss.PlayerInput.allowKeyboardInput = true;
+        BigBoss.PlayerInput.allowMouseInput = true;
+        BigBoss.PlayerInput.allowPlayerInput = true;
+        
         this.setData(BigBoss.WorldObject.getNPC("player"));
         stats.Hunger = 900;
         IsActive = true;
@@ -93,8 +97,8 @@ public class Player : NPC, IManager
         anim = playerAvatar.GetComponent<Animator>() as Animator;
         this.Name = "Kurtis";
 
-        Item i = BigBoss.WorldObject.CreateItem("sword1");
-        this.addToInventory(i);
+        //Item i = BigBoss.WorldObject.CreateItem("sword1");
+        //this.addToInventory(i);
         //this.equipItem(i);
 
        // Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
@@ -102,7 +106,7 @@ public class Player : NPC, IManager
 
         //Item potion = BigBoss.WorldObject.CreateItem("health potion");
         //this.addToInventory(potion, 3);
-
+        
     }
 
     // Update is called once per frame

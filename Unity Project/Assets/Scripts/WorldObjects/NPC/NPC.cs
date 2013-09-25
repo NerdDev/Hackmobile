@@ -124,6 +124,8 @@ public class NPC : WorldObject
 
     void Start()
     {
+        Debug.Log("NPC Name: " + this.Name);
+        Debug.Log("boolean isActive - " + IsActive);
     }
 
     void Update()
@@ -783,7 +785,7 @@ public class NPC : WorldObject
 
     public override void UpdateTurn()
     {
-        if (IsActive && BigBoss.Time.turnsPassed != 0)
+        if (IsActive)
         {
             try
             {
@@ -794,7 +796,7 @@ public class NPC : WorldObject
             }
             catch (NullReferenceException)
             {
-                //do nothing
+                Debug.Log("Exception 0");//do nothing
             }
 
             //AdjustHunger(-1);
@@ -859,11 +861,27 @@ public class NPC : WorldObject
     {
         if (IsNextToPlayer())
         {
-            AIAttack();
+            try
+            {
+                AIAttack();
+            }
+            catch
+            {
+                Debug.Log("Exception 1");
+            }
         }
         else
         {
-            AIMove();
+            try
+            {
+                AIMove();
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception 2");
+                Debug.Log(e.StackTrace);
+                Debug.Log(e.ToString());
+            }
         }
     }
 
@@ -882,19 +900,19 @@ public class NPC : WorldObject
         {
             List<PathNode> nodes = pathToPlayer.getPath();
             Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
-            int moveCost;
-            if (Nifty.diagonal(gridSpace.x, gridSpace.y, nodeToMove.x, nodeToMove.y))
-            {
-                moveCost = BigBoss.TimeKeeper.diagonalMoveCost;
-            }
-            else
-            {
-                moveCost = BigBoss.TimeKeeper.regularMoveCost;
-            }
-            if (subtractPoints(moveCost))
-            {
+            //int moveCost;
+            //if (Nifty.diagonal(gridSpace.x, gridSpace.y, nodeToMove.x, nodeToMove.y))
+            //{
+            //    moveCost = BigBoss.TimeKeeper.diagonalMoveCost;
+            //}
+            //else
+            //{
+            //    moveCost = BigBoss.TimeKeeper.regularMoveCost;
+            //}
+            //if (subtractPoints(moveCost))
+            //{
                 MoveNPC(nodeToMove);
-            }
+            //}
             UpdateCurrentTileVectors();
         }
     }

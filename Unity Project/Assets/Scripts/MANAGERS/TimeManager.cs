@@ -134,25 +134,7 @@ public class TimeManager : MonoBehaviour, IManager
     {
         turnsPassed++;
         //Justin's hot:
-
-        if (turnPoints > CapOnTurnPoints)
-        {
-            List<int> list = new List<int>();
-            while (turnPoints > CapOnTurnPoints)
-            {
-                list.Add(CapOnTurnPoints);
-                turnPoints -= CapOnTurnPoints;
-            }
-            list.Add(turnPoints);
-            foreach (int i in list)
-            {
-                runGroupUpdate(i);
-            }
-        }
-        else
-        {
-            runGroupUpdate(turnPoints);
-        }
+        runGroupUpdate(turnPoints);
     }
 
     #endregion
