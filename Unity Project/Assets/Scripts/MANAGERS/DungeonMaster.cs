@@ -17,15 +17,14 @@ public class DungeonMaster : MonoBehaviour, IManager
         {
             ForcePopulateLevel(l);
         }
-        //Debug.Log(BigBoss.PlayerInfo.Name);
         Value2D<GridSpace> loc = PickStartLocation(l);
         BigBoss.PlayerInfo.transform.position = new Vector3(loc.x, -.5f, loc.y);
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
         {
             loc = PickStartLocation(l);
             this.SpawnCreature(new Point(loc.x, loc.y), "skeleton_knight");
         }
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
         {
             loc = PickStartLocation(l);
             this.SpawnCreature(new Point(loc.x, loc.y), "giant_spider");

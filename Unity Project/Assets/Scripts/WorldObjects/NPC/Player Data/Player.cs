@@ -81,11 +81,6 @@ public class Player : NPC, IManager
     }
     #endregion
 
-    public void Start()
-    {
-        Debug.Log(stats.CurrentHealth);
-    }
-
     public void Initialize()
     {
         //use the internal assignation reference for clarity
@@ -102,16 +97,15 @@ public class Player : NPC, IManager
         anim = playerAvatar.GetComponent<Animator>() as Animator;
         this.Name = "Kurtis";
 
-        //Item i = BigBoss.WorldObject.CreateItem("sword1");
-        //this.addToInventory(i);
-        //this.equipItem(i);
+        Item i = BigBoss.WorldObject.CreateItem("sword1");
+        this.addToInventory(i);
+        this.equipItem(i);
 
-       // Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
-        //this.addToInventory(food, 5);
+        Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
+        this.addToInventory(food, 5);
 
-        //Item potion = BigBoss.WorldObject.CreateItem("health potion");
-        //this.addToInventory(potion, 3);
-        
+        Item potion = BigBoss.WorldObject.CreateItem("health potion");
+        this.addToInventory(potion, 3);
     }
 
     // Update is called once per frame

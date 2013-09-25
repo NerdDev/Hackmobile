@@ -786,12 +786,8 @@ public class NPC : WorldObject
         race = (Race)map.Add<EnumField<Race>>("race");
         role = (Role)map.Add<EnumField<Role>>("role");
         attributes = map.Add<AttributesData>("attributes");
-        Debug.Log("Attributes for " + this.Name);
-        Debug.Log(attributes.Dump());
         bodyparts = map.Add<BodyParts>("bodyparts");
         stats = map.Add<Stats>("stats");
-        Debug.Log("Stats health for " + this.Name);
-        Debug.Log(stats.Dump());
         flags = map.Add<ESFlags<NPCFlags>>("flags");
         keywords = map.Add<ESFlags<Keywords>>("keywords");
     }
