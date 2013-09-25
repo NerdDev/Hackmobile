@@ -7,6 +7,35 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
     GenericFlags<T> flags = new GenericFlags<T>();
     HashSet<string> strings = new HashSet<string>();
 
+    public ESFlags()
+    {
+
+    }
+
+    public ESFlags(params T[] es)
+    {
+        this[es] = true;
+    }
+
+    public bool this[T[] indices]
+    {
+        get
+        {
+            foreach (T e in indices)
+            {
+                if (!this[e])
+                    return false;
+            }
+            return true;
+        }
+        set
+        {
+            foreach (T e in indices)
+            {
+                this[e] = value;
+            }
+        }
+    }
     public bool this[T index] { get { return flags[index]; } set { flags[index] = value; } }
     public bool this[string index]
     {
@@ -40,35 +69,6 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
             }
         }
     }
-    public bool this[ESKey<T> key]
-    {
-        get
-        {
-            if (key is StringKey<T>)
-            {
-                StringKey<T> str = (StringKey<T>)key;
-                return this[str.Key];
-            }
-            else
-            {
-                EnumKey<T> e = (EnumKey<T>)key;
-                return this[e.Key];
-            }
-        }
-        set
-        {
-            if (key is StringKey<T>)
-            {
-                StringKey<T> str = (StringKey<T>)key;
-                this[str.Key] = value;
-            }
-            else
-            {
-                EnumKey<T> e = (EnumKey<T>)key;
-                this[e.Key] = value;
-            }
-        }
-    }
 
     public bool Get(T e)
     {
@@ -80,11 +80,6 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
         return this[s];
     }
 
-    public bool Get(ESKey<T> key)
-    {
-        return this[key];
-    }
-
     public void Set(bool val, T e)
     {
         this[e] = val;
@@ -93,11 +88,6 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
     public void Set(bool val, string s)
     {
         this[s] = val;
-    }
-
-    public void Set(bool val, ESKey<T> key)
-    {
-        this[key] = val;
     }
 
     public void Set(bool val, T[] es)
@@ -116,27 +106,28 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
         }
     }
 
-    public void Set(bool val, ESKey<T>[] keys)
-    {
-        foreach (ESKey<T> key in keys)
-        {
-            this[key] = val;
-        }
-    }
-
     public bool Contains(ESFlags<T> rhs)
     {
         return flags.Contains(rhs.flags) && rhs.strings.IsSubsetOf(strings);
     }
 
-    public bool Contains(T e)
-    {
-        return flags[e];
-    }
-
     public bool getAnd(params T[] index)
     {
         throw new NotImplementedException();
+    }
+
+    public static implicit operator ESFlags<T>(T e)
+    {
+        ESFlags<T> ret = new ESFlags<T>();
+        ret[e] = true;
+        return ret;
+    }
+
+    public static implicit operator ESFlags<T>(T[] e)
+    {
+        ESFlags<T> ret = new ESFlags<T>();
+        ret[e] = true;
+        return ret;
     }
 
     public override void SetParams()

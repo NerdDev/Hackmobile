@@ -73,6 +73,11 @@ public class DungeonMaster : MonoBehaviour, IManager
 
     public void SpawnCreature(Point p, params Keywords[] keywords)
     {
+        SpawnCreature(p, (ESFlags<Keywords>) keywords);
+    }
+
+    public void SpawnCreature(Point p, ESFlags<Keywords> keywords)
+    {
 
     }
 }
