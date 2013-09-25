@@ -129,6 +129,11 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
         return flags.Contains(rhs.flags) && rhs.strings.IsSubsetOf(strings);
     }
 
+    public bool Contains(T e)
+    {
+        return flags[e];
+    }
+
     public bool getAnd(params T[] index)
     {
         throw new NotImplementedException();

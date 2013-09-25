@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 
 [FlagsAttribute]
 public enum Keywords
 {
     UNDEAD,
+    SPIKEY,
     DEMON,
 }
