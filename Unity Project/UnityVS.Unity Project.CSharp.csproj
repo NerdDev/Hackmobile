@@ -446,6 +446,7 @@
     <None Include="Assets\Scripts\XML\consumables.xml" />
     <None Include="Assets\Scripts\XML\materials.xml" />
     <None Include="Assets\Scripts\XML\npcs.xml" />
+    <None Include="Assets\Scripts\XML\player.xml" />
     <None Include="Assets\Scripts\XML\strings.xml" />
     <None Include="Assets\Scripts\XML\titles.xml" />
     <None Include="Assets\Scripts\XML\weapons.xml" />

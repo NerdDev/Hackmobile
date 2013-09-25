@@ -20,7 +20,16 @@ public class DungeonMaster : MonoBehaviour, IManager
         //Debug.Log(BigBoss.PlayerInfo.Name);
         Value2D<GridSpace> loc = PickStartLocation(l);
         BigBoss.PlayerInfo.transform.position = new Vector3(loc.x, -.5f, loc.y);
-        this.SpawnCreature(new Point(59, 44), "orc");
+        for (int i = 0; i < 2; i++)
+        {
+            loc = PickStartLocation(l);
+            this.SpawnCreature(new Point(loc.x, loc.y), "skeleton_knight");
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            loc = PickStartLocation(l);
+            this.SpawnCreature(new Point(loc.x, loc.y), "giant_spider");
+        }
     }
 
     void ForcePopulateLevel(Level l)

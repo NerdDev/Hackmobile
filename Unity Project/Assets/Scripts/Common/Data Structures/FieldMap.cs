@@ -22,15 +22,7 @@ public class FieldMap : SortedDictionary<string, Field>
         if (!this.TryGetValue(name, out item))
         {
             T param = new T();
-            XMLNode xnode;
-            if (param is FieldContainer || param is EffectEvent)
-            {
-                xnode = XMLNifty.select(x, name);
-            }
-            else
-            {
-                xnode = this.x;
-            }
+            XMLNode xnode = this.x;
             param.parseXML(xnode, name);
             this.Add(name, param);
             return param;

@@ -81,6 +81,11 @@ public class Player : NPC, IManager
     }
     #endregion
 
+    public void Start()
+    {
+        Debug.Log(stats.CurrentHealth);
+    }
+
     public void Initialize()
     {
         //use the internal assignation reference for clarity
@@ -255,22 +260,33 @@ public class Player : NPC, IManager
     }
 
     //BRAD WHAT DOES THIS DO?!
+    float v;
     void FixedUpdate()
     {
         //float h = Input.GetAxis("Horizontal");				// setup h variable as our horizontal input axis
         //float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
-        float v = 0;
         //if (Input.GetMouseButton(1))
         if (isMoving)
         {
-            v = playerSpeed;
+            if (v < playerSpeed)
+            {
+                v += .01f;
+            }
+            else
+            {
+                v = playerSpeed;
+            }
+        }
+        else
+        {
+            v = 0;
         }
 
         //Debug.Log("V: " + v);
-        //anim.SetFloat("speed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
+        anim.SetFloat("runSpeed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
         //anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
         //anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
-        //currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
+        currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
 
         //		if(anim.layerCount ==2)		
         //			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation

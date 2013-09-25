@@ -116,6 +116,9 @@ public class NPC : WorldObject
     Vector3 targetGridCoords; //this refs target grid coords in pathing
     Vector3 heading; //this is the heading of target minus current location
 
+    Animator animator;
+    float vel;
+
     #endregion
 
     public NPC()
@@ -124,6 +127,7 @@ public class NPC : WorldObject
 
     void Start()
     {
+        animator = this.GetComponent<Animator>() as Animator;
     }
 
     void Update()
@@ -138,6 +142,33 @@ public class NPC : WorldObject
             {
                 verticalMovement();
             }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (moving)
+        {
+            if (vel < NPCSpeed)
+            {
+                vel += .01f;
+            }
+            else
+            {
+                vel = NPCSpeed;
+            }
+        }
+        else
+        {
+            vel = 0;
+        }
+        if (animator == null)
+        {
+            animator = this.GetComponent<Animator>() as Animator;
+        }
+        else
+        {
+            animator.SetFloat("runSpeed", vel);
         }
     }
 
@@ -755,8 +786,12 @@ public class NPC : WorldObject
         race = (Race)map.Add<EnumField<Race>>("race");
         role = (Role)map.Add<EnumField<Role>>("role");
         attributes = map.Add<AttributesData>("attributes");
+        Debug.Log("Attributes for " + this.Name);
+        Debug.Log(attributes.Dump());
         bodyparts = map.Add<BodyParts>("bodyparts");
         stats = map.Add<Stats>("stats");
+        Debug.Log("Stats health for " + this.Name);
+        Debug.Log(stats.Dump());
         flags = map.Add<ESFlags<NPCFlags>>("flags");
         keywords = map.Add<ESFlags<Keywords>>("keywords");
     }

@@ -1,0 +1,40 @@
+<npcs>
+	<npc name="player">
+		<role>Archaelogist</role>
+		<race>Human</race>
+		<flags>
+			<entry name="nopoly" />
+			<entry name="leaves_corpse" />
+		</flags>
+		<properties>
+		</properties>
+		<stats>
+			<maxhealth>100</maxhealth>
+			<maxpower>50</maxpower>
+			<level>1</level>
+		</stats>
+		<attributes>
+			<charisma>12</charisma>
+			<constitution>14</constitution>
+			<wisdom>9</wisdom>
+			<dexterity>17</dexterity>
+			<intelligence>15</intelligence>
+			<strength>16</strength>
+			<difficulty>1</difficulty>
+			<size>medium</size>
+		</attributes>
+		<inventory>
+			<item>
+				<itemname>axe2</itemname>
+				<chance>100</chance>
+				<number>1</number>
+			</item>
+		</inventory>
+		<bodyparts>
+			<arms>2</arms>
+			<legs>2</legs>
+			<heads>1</heads>
+			<!-- body is implicitly assumed -->
+		</bodyparts>
+	</npc>
+</npcs>

@@ -1,130 +1,4 @@
 <npcs>
-	<npc name="player">
-		<role>Archaelogist</role>
-		<race>Human</race>
-		<flags>
-			<entry name="nopoly" />
-			<entry name="leaves_corpse" />
-		</flags>
-		<properties>
-		</properties>
-		<stats>
-			<maxhealth>100</maxhealth>
-			<maxpower>50</maxpower>
-			<level>1</level>
-		</stats>
-		<attributes>
-			<charisma>12</charisma>
-			<constitution>14</constitution>
-			<wisdom>9</wisdom>
-			<dexterity>17</dexterity>
-			<intelligence>15</intelligence>
-			<strength>16</strength>
-			<difficulty>1</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-	</npc>
-	<npc name="orc">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Prefabs/NPCs/Orc</prefab>
-		<role>Barbarian</role>
-		<race>Orc</race>
-		<flags>
-			<flag name="nopoly" />
-			<flag name="leaves_corpse" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<stats>
-			<maxhealth>40</maxhealth>
-			<maxpower>0</maxpower>
-			<level>1</level>
-		</stats>
-		<attributes>
-			<charisma>12</charisma>
-			<constitution>17</constitution>
-			<wisdom>5</wisdom>
-			<dexterity>12</dexterity>
-			<intelligence>7</intelligence>
-			<strength>19</strength>
-			<difficulty>1</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-	</npc>
-	<npc name="skeleton">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Prefabs/NPCs/Skeleton1</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-			<flag name="leaves_corpse" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<keywords>
-      <keyword name="undead" />
-      <keyword name="spikey" />
-		</keywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-	</npc>
 	<npc name="skeleton_knight">
 		<model> </model>
 		<modeltexture> </modeltexture>
@@ -139,7 +13,7 @@
 			<!-- none -->
 		</properties>
 		<keywords>
-			<keyword name="undead" />
+			<entry name="undead" />
 		</keywords>
 		<stats>
 			<maxhealth>25</maxhealth>
@@ -170,12 +44,12 @@
 			<!-- body is implicitly assumed -->
 		</bodyparts>
 	</npc>
-	<npc name="beholder">
+	<npc name="giant_spider">
 		<model> </model>
 		<modeltexture> </modeltexture>
-		<prefab> </prefab>
-		<role>Creature</role>
-		<race>Beholder</race>
+		<prefab>Prefabs_Meshes/NPCs/Giant_Spider</prefab>
+		<role>Mage</role>
+		<race>Undead</race>
 		<flags>
 			<flag name="nopoly" />
 			<flag name="leaves_corpse" />
@@ -183,27 +57,34 @@
 		<properties>
 			<!-- none -->
 		</properties>
+		<keywords>
+			<entry name="undead" />
+		</keywords>
 		<stats>
-			<maxhealth>120</maxhealth>
-			<maxpower>120</maxpower>
-			<level>5</level>
+			<maxhealth>25</maxhealth>
+			<maxpower>75</maxpower>
+			<level>2</level>
 		</stats>
 		<attributes>
-			<charisma>15</charisma>
-			<constitution>15</constitution>
-			<wisdom>18</wisdom>
-			<dexterity>9</dexterity>
-			<intelligence>21</intelligence>
-			<strength>15</strength>
-			<difficulty>3</difficulty>
-			<size>large</size>
+			<charisma>3</charisma>
+			<constitution>22</constitution>
+			<wisdom>15</wisdom>
+			<dexterity>7</dexterity>
+			<intelligence>17</intelligence>
+			<strength>4</strength>
+			<difficulty>2</difficulty>
+			<size>medium</size>
 		</attributes>
 		<inventory>
-			<!-- none -->
+			<item>
+				<itemname>axe2</itemname>
+				<chance>100</chance>
+				<number>1</number>
+			</item>
 		</inventory>
 		<bodyparts>
-			<arms>0</arms>
-			<legs>0</legs>
+			<arms>2</arms>
+			<legs>2</legs>
 			<heads>1</heads>
 			<!-- body is implicitly assumed -->
 		</bodyparts>
