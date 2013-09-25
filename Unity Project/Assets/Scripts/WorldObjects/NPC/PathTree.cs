@@ -62,12 +62,12 @@ public class PathTree
     private void checkValidNodes()
     {
         PathNode choice = optimalNode(openNodes);
-        if (Arr[choice.loc.x, choice.loc.y] == null)
-        {
-            Arr[choice.loc.x, choice.loc.y] = choice;
-        }
         if (choice != null)
         {
+            if (Arr[choice.loc.x, choice.loc.y] == null)
+            {
+                Arr[choice.loc.x, choice.loc.y] = choice;
+            }
             if (choice.loc.x == dest.x && choice.loc.y == dest.y)
             {
                 pathComplete = true;
@@ -88,7 +88,7 @@ public class PathTree
         {
             try
             {
-                if (p.Equals(dest))
+                if (p.x == dest.x && p.y == dest.y)
                 {
                     return true;
                 }
@@ -116,6 +116,13 @@ public class PathTree
                     PathNode asnode = new PathNode(p, dest, origin);
                     Arr[p.x, p.y] = asnode;
                     openNodes.Add(asnode, asnode);
+                    //if (p.x == dest.x && p.y == dest.y)
+                    //{
+                    //    pathComplete = true;
+                    //    listONodes.Add(asnode);
+                    //    buildPath(asnode);
+                    //    return;
+                    //}
                 }
                 else
                 {
@@ -178,7 +185,7 @@ public class PathNode : IComparable, IEquatable<PathNode>, IEqualityComparer<Pat
     public int g;
     public int h;
 
-    public bool isOpen;
+    public bool isOpen = true;
 
     public Value2D<GridSpace> loc;
     public PathNode parent;
