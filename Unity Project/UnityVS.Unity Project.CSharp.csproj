@@ -364,6 +364,7 @@
     <Compile Include="Assets\Scripts\MANAGERS\LevelLoadManager.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\LevelManager.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\PreGameManager.cs" />
+    <Compile Include="Assets\Scripts\MANAGERS\TestManager.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\TimeManager.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\WorldObjectManager.cs" />
     <Compile Include="Assets\Scripts\Spawning\SpawnModifier.cs" />

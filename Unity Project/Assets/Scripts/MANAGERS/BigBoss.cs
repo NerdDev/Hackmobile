@@ -169,12 +169,4 @@ public class BigBoss : MonoBehaviour
     {
         UnityEngine.Debug.Log(input);
     }
-
-    public static maxCamera GetCamera
-    {
-        get
-        {
-            return BBoss.GetComponentInChildren<maxCamera>();
-        }
-    }
 }

@@ -5,10 +5,10 @@ using System;
 
 public class DungeonMaster : MonoBehaviour, IManager
 {
-
     public void Initialize()
     {
         SpawnModifier.RegisterModifiers();
+        TestManager.Start();
     }
 
     public void PopulateLevel(Level l)
@@ -16,18 +16,6 @@ public class DungeonMaster : MonoBehaviour, IManager
         if (!l.Populated)
         {
             ForcePopulateLevel(l);
-        }
-        Value2D<GridSpace> loc = PickStartLocation(l);
-        BigBoss.PlayerInfo.transform.position = new Vector3(loc.x, -.5f, loc.y);
-        for (int i = 0; i < 4; i++)
-        {
-            loc = PickStartLocation(l);
-            this.SpawnCreature(new Point(loc.x, loc.y), "skeleton_knight");
-        }
-        for (int i = 0; i < 4; i++)
-        {
-            loc = PickStartLocation(l);
-            this.SpawnCreature(new Point(loc.x, loc.y), "giant_spider");
         }
     }
 
@@ -39,7 +27,6 @@ public class DungeonMaster : MonoBehaviour, IManager
             SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, l.Theme, room);
             SpawnModifier mod = SpawnModifier.GetMod();
             mod.Modify(spec);
-
         }
     }
 
