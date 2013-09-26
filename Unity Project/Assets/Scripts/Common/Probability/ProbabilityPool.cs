@@ -23,7 +23,7 @@ public abstract class ProbabilityPool<T>  {
         this.rand = rand;
     }
 
-    public ProbabilityPool () : this(Probability.Rand)
+    public ProbabilityPool() : this(Probability.Rand)
     {
     }
 
@@ -43,8 +43,7 @@ public abstract class ProbabilityPool<T>  {
         }
         else
         {
-            ProbabilityItem prob = (ProbabilityItem)item;
-            Add(item, prob.ProbabilityDiv(), prob.IsUnique());
+            Add(item, 1, false);
         }
     }
 
