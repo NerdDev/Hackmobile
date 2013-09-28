@@ -59,11 +59,6 @@ public class GUIManager : MonoBehaviour, IManager {
 
 
             //StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
-        }
-        catch (Exception ex)
-        {  // Why u do such things??!
-            Debug.Log("GUI Exception: " + ex);
-        }
 	}
 		
 	

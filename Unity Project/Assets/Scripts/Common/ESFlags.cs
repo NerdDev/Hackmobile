@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using XML;
 
 public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, IConvertible
 {
