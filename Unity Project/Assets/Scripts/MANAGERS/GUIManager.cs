@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class GUIManager : MonoBehaviour, IManager {
 
@@ -56,15 +57,13 @@ public class GUIManager : MonoBehaviour, IManager {
 		
 		//CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
 
-		//Item iScript = BigBoss.WorldObjectManager.CreateItem(new Vector3(0,0,0),"ABITEMLOLZ");
-		
-		//BigBoss.PlayerInfo.addToInventory(iScript);
-		
-		//Debug.Log(NGUITools.GetRoot(inventoryPanel.gameObject).GetComponentInChildren(typeof<UIAnchor>()));
 
-		
-		//StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
-		
+            //StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
+        }
+        catch (Exception ex)
+        {  // Why u do such things??!
+            Debug.Log("GUI Exception: " + ex);
+        }
 	}
 		
 	
@@ -139,10 +138,17 @@ public class GUIManager : MonoBehaviour, IManager {
 	{
 		
 		//NEED TO PUT A FAILSAFE HERE IN CASE ONE RETURNS NULL!!!!!!!
-		inventoryPanel = GameObject.Find("Inventory_Panel_Background").GetComponent("UIPanel") as UIPanel;
-        inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();
-		invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition")as TweenPosition;
-		inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
+        try
+        {
+            inventoryPanel = GameObject.Find("Inventory_Panel_Background").GetComponent("UIPanel") as UIPanel;
+            inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();
+            invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition") as TweenPosition;
+            inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("GUI Exception: " + ex);
+        }
 
 		//Icon array to switch on visuals, initializing to size:
 		//inventoryIconArray = new UISprite[itemStorageScript.maxItemCount];

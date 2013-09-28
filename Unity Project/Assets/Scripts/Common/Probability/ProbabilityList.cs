@@ -63,6 +63,8 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public override void Add(T item, float probDiv, bool unique)
     {
+        if (probDiv > maxProbDiv)
+            return;
         ProbContainer cont = new ProbContainer(item, probDiv, unique);
         if (AddInternal(cont))
         { // Recalc all probnums since we have new largest div
@@ -169,7 +171,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         itemList[index].skip = true;
         return ret;
     }
-
+    
     public override ProbabilityPool<T> Filter(System.Func<T, bool> filter)
     {
         ProbabilityList<T> ret = new ProbabilityList<T>(rand);

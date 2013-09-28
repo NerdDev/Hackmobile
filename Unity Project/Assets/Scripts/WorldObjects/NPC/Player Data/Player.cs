@@ -19,6 +19,9 @@ public class Player : NPC, IManager
     public GameObject playerAvatar;
     public GameObject PlayerAvatar { get { return playerAvatar; } }//read only global reference to the hero gameobject
 
+    public int level = 10; // Just for testing.  'Prolly change this to 1 later.
+    public int Level { get { return level; } }
+
     public PlayerProfessions PlayerChosenProfession;
 
     #endregion
@@ -97,15 +100,17 @@ public class Player : NPC, IManager
         anim = playerAvatar.GetComponent<Animator>() as Animator;
         this.Name = "Kurtis";
 
-        Item i = BigBoss.WorldObject.CreateItem("sword1");
-        this.addToInventory(i);
-        this.equipItem(i);
+        //Relocate this to a test script in your scene, rather than player itself
+        //Item i = BigBoss.WorldObject.CreateItem("sword1");
+        ////this.addToInventory(i);
+        ////this.equipItem(i);
 
-        Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
-        this.addToInventory(food, 5);
+        //Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
+        //this.addToInventory(food, 5);
 
-        Item potion = BigBoss.WorldObject.CreateItem("health potion");
-        this.addToInventory(potion, 3);
+        //Item potion = BigBoss.WorldObject.CreateItem("health potion");
+        ////this.addToInventory(potion, 3);
+
     }
 
     // Update is called once per frame
@@ -275,6 +280,9 @@ public class Player : NPC, IManager
         {
             v = 0;
         }
+
+        if (anim == null)
+            return; // Why u give null errorz?!
 
         //Debug.Log("V: " + v);
         anim.SetFloat("runSpeed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				

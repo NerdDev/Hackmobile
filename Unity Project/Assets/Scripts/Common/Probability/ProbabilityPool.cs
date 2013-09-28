@@ -6,6 +6,7 @@ using System.Collections;
 public abstract class ProbabilityPool<T>  {
 
     protected RandomGen rand;
+    static protected int maxProbDiv = 100000;
     public bool Fresh { get; protected set; }
 
     public static ProbabilityPool<T> Create()

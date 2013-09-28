@@ -5,8 +5,19 @@ public class Theme : MonoBehaviour {
 	public GameObject wall;
 	public GameObject door;
 	public GameObject floor;
-
-    public string[] keywords;
+    public Keywords[] keywords = new Keywords[0];
+    private ESFlags<Keywords> keywordFlags;
+    public ESFlags<Keywords> Keywords
+    {
+        get
+        {
+            if (keywordFlags == null)
+            {
+                keywordFlags = new ESFlags<Keywords>(keywords);
+            }
+            return keywordFlags;
+        }
+    }
 
     public GameObject getFloor()
     {

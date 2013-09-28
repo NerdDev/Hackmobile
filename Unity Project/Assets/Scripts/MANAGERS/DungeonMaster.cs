@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class DungeonMaster : MonoBehaviour, IManager
-{
+public class DungeonMaster : MonoBehaviour, IManager {
+
+    Dictionary<ESFlags<Keywords>, LeveledPool<NPC>> npcPools = new Dictionary<ESFlags<Keywords>, LeveledPool<NPC>>();
+
     public void Initialize()
     {
         SpawnModifier.RegisterModifiers();
@@ -47,15 +49,18 @@ public class DungeonMaster : MonoBehaviour, IManager
         return room.RandomValue(Probability.SpawnRand);
     }
 
-    public void SpawnCreature(Point p, string npc)
+    public void SpawnCreature(Point p, NPC n)
     {
-        BigBoss.Debug.w(DebugManager.Logs.Main, "Spawning");
-        NPC n = BigBoss.WorldObject.getNPC(npc);
         GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
         NPC newNPC = gameObject.AddComponent<NPC>();
         newNPC.setData(n);
         newNPC.IsActive = true;
         newNPC.init();
+    }
+
+    public void SpawnCreature(Point p, string npc)
+    {
+        SpawnCreature(p, BigBoss.WorldObject.getNPC(npc));
     }
 
     public void SpawnRandomLeveledCreature(Point p)
@@ -78,6 +83,35 @@ public class DungeonMaster : MonoBehaviour, IManager
 
     public void SpawnCreature(Point p, ESFlags<Keywords> keywords)
     {
+        LeveledPool<NPC> pool = GetPool(keywords);
+        NPC n = pool.Get();
+        if (n == null)
+        {
+            throw new ArgumentException("NPC Pool was empty for keywords: " + keywords);
+        }
+        SpawnCreature(p, n);
+    }
 
+    protected LeveledPool<NPC> GetPool(ESFlags<Keywords> keywords)
+    {
+        LeveledPool<NPC> pool;
+        if (!npcPools.TryGetValue(keywords, out pool))
+        {
+            pool = new LeveledPool<NPC>(DefaultLevelCurve);
+            npcPools.Add(keywords, pool);
+            foreach (NPC n in BigBoss.WorldObject.getNPCs().Values)
+            {
+                if (n.keywords.Contains(keywords))
+                {
+                    pool.Add(n);
+                }
+            }
+        }
+        return pool;
+    }
+
+    protected float DefaultLevelCurve(int level)
+    {
+        return 1F;
     }
 }

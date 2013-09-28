@@ -65,6 +65,7 @@ public class BigBoss : MonoBehaviour
             return playerInfo;
         }
     }
+    public static Player Player { get { return PlayerInfo; } }
     public static WorldObjectManager Enemy { get { return WorldObject; } }
     private static CameraManager camera;
     public static CameraManager Camera

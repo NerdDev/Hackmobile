@@ -241,8 +241,10 @@
      <Compile Include="Assets\Scripts\Common\Nifty.cs" />
      <Compile Include="Assets\Scripts\Common\Percent.cs" />
      <Compile Include="Assets\Scripts\Common\Point.cs" />
+     <Compile Include="Assets\Scripts\Common\Probability\LeveledPool.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\Probability.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityItem.cs" />
+     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityLevItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityList.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityPool.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\RandomGen.cs" />
