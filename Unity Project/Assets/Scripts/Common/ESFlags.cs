@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using XML;
+using System.Text;
 
 public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, IConvertible
 {
@@ -109,6 +109,26 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
     public bool Contains(ESFlags<T> rhs)
     {
         return flags.Contains(rhs.flags) && rhs.strings.IsSubsetOf(strings);
+    }
+
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append(flags.ToString());
+        bool first = sb.Length == 0;
+        foreach (string str in strings)
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                sb.Append("|");
+            }
+            sb.Append(str);
+        }
+        return sb.ToString();
     }
 
     public bool getAnd(params T[] index)

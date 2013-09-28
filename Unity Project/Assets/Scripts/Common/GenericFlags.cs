@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
-using XML;
+using System.Collections.Generic;
+using System.Text;
 
 /**
  * Helper class for dealing with flags.
@@ -19,7 +20,7 @@ using XML;
  *  fl.get(GenericFlags<>.Ops.AND, SomeEnum.VALUE1, SomeEnum.VALUE2) //gets VALUE1 & VALUE2
  * 
  */
-public class GenericFlags<T> where T : struct, IComparable, IConvertible
+public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, IConvertible
 {
     public BitArray ba;
 
@@ -88,7 +89,7 @@ public class GenericFlags<T> where T : struct, IComparable, IConvertible
 
     public bool Contains(GenericFlags<T> rhs)
     {
-        return ba.And(rhs.ba).Equals(rhs.ba);
+		return ba.Contains(rhs.ba);
     }
 
     public void set(bool val, params T[] index)
@@ -99,6 +100,25 @@ public class GenericFlags<T> where T : struct, IComparable, IConvertible
         }
     }
 
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        bool first = true;
+        foreach (T t in this)
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                sb.Append("|");
+            }
+            sb.Append(t.ToString());
+        }
+        return sb.ToString();
+    }
+
     public static implicit operator T(GenericFlags<T> src)
     {
         return src != null ? (T)Enum.ToObject(typeof(T), src.ba) : (T)Enum.ToObject(typeof(T), 0);
@@ -107,5 +127,21 @@ public class GenericFlags<T> where T : struct, IComparable, IConvertible
     public static implicit operator GenericFlags<T>(T src)
     {
         return new GenericFlags<T>(src);
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        for (int i = 0; i < ba.Count; i++)
+        {
+            if (ba[i])
+            {
+                yield return (T)Enum.ToObject(typeof(T), i);
+            }
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
 }

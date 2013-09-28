@@ -58,7 +58,8 @@
 			<!-- none -->
 		</properties>
 		<keywords>
-			<entry name="undead" />
+			<keyword name="undead" />
+            <keyword name="spikey" />
 		</keywords>
 		<stats>
 			<maxhealth>25</maxhealth>

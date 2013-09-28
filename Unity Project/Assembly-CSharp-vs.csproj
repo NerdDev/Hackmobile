@@ -315,6 +315,7 @@
      <Compile Include="Assets\Scripts\Levels\Searching\DFSSearcher.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\EnumExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
