@@ -276,7 +276,7 @@ public class GUIManager : MonoBehaviour, IManager
         {
             //Debug.Log("Running display.");
             DisplayTextPops();
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.15f);
         }
     }
 

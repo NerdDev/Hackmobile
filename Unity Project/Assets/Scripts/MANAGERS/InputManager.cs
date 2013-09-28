@@ -34,9 +34,10 @@ public class InputManager : MonoBehaviour, IManager
         centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
         //Debug.Log("Camera Screen space center point calculated: " + centerPointInScreenSpace);
 
-        SubscribeToEasyTouchMethods();  //feel free to relocate this
+        //SubscribeToEasyTouchMethods();  //feel free to relocate this
     }
 
+    /*
     public void SubscribeToEasyTouchMethods()
     {
         EasyTouch.On_TouchStart += OnTouchStart;
@@ -46,6 +47,7 @@ public class InputManager : MonoBehaviour, IManager
     {
         EasyTouch.On_TouchStart -= OnTouchStart;
     }
+    */
 
     void Update()
     {
@@ -68,6 +70,7 @@ public class InputManager : MonoBehaviour, IManager
         }
     }
 
+    /*
     public void OnTouchStart(Gesture gesture)
     {
         //Debug Block:
@@ -84,9 +87,8 @@ public class InputManager : MonoBehaviour, IManager
         {
             Debug.Log("Event sent, but no pick object: Exception: " + ex.Message);
         }
-
-
     }
+    */
 
     #region KEYBOARD
 

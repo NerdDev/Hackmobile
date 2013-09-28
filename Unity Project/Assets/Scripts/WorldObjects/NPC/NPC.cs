@@ -105,7 +105,7 @@ public class NPC : WorldObject
         set { gridCoordinate = value; }
     }
     //X, Y in integers, GridSpace ref
-    protected Value2D<GridSpace> gridSpace;
+    public Value2D<GridSpace> gridSpace;
     protected Value2D<GridSpace> newGridSpace;
 
     bool moving; //stores moving condition
@@ -926,38 +926,5 @@ public class NPC : WorldObject
         }
     }
 
-    #endregion
-
-    #region Touch Input
-    void OnEnable()
-    {
-        EasyTouch.On_SimpleTap += On_SimpleTap;
-    }
-
-    void OnDisable()
-    {
-        EasyTouch.On_SimpleTap -= On_SimpleTap;
-    }
-
-    void On_SimpleTap(Gesture gesture)
-    {
-        if (gesture.pickObject != null)
-        {
-            GameObject go = gesture.pickObject;
-            if (this.gameObject == go)
-            {
-                NPC n = go.GetComponent<NPC>();
-                if (this.IsNotAFreaking<Player>() && this == n)
-                {
-                    PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
-                    List<PathNode> nodes = pathToPlayer.getPath();
-                    if (nodes.Count == 2)
-                    {
-                        BigBoss.PlayerInfo.attack(this);
-                    }
-                }
-            }
-        }
-    }
     #endregion
 }
