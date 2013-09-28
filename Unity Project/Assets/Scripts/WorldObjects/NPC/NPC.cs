@@ -186,7 +186,7 @@ public class NPC : WorldObject
     public virtual float AdjustHunger(float amount)
     {
         stats.Hunger += amount;
-        Debug.Log("Gained " + amount + " of nutrition.");
+        CreateTextPop("Gained " + amount + " of nutrition.", Color.green);
         getHungerLevel(stats.Hunger);
         return stats.Hunger;
     }
@@ -206,13 +206,13 @@ public class NPC : WorldObject
         }
         else if (stats.CurrentHealth + amount > stats.MaxHealth)
         {
+            CreateTextPop(this.Name + " gained " + (stats.MaxHealth - stats.CurrentHealth) + " in health.", Color.green);
             stats.CurrentHealth = stats.MaxHealth;
-            Debug.Log(this.Name + " gained " + amount + " in health.");
         }
         else
         {
+            CreateTextPop(this.Name + " gained " + amount + " in health.", Color.green);
             stats.CurrentHealth = stats.CurrentHealth + amount;
-            Debug.Log(this.Name + " gained " + amount + " in health.");
         }
     }
 
@@ -221,8 +221,7 @@ public class NPC : WorldObject
         if (stats.CurrentHealth - amount > 0)
         {
             stats.CurrentHealth = stats.CurrentHealth - amount;
-            //Debug.Log(this.Name + " was damaged for " + amount + "!");
-            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Damaged for " + amount + "!", Color.red);
+            CreateTextPop(this.Name + " was damaged for " + amount + "!", Color.red);
             return false;
         }
         else
@@ -312,7 +311,7 @@ public class NPC : WorldObject
 
     protected void UpdateHungerLevel(Color guiCol)
     {
-        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
+        CreateTextPop(stats.HungerLevel.ToString() + "!", guiCol);
     }
 
     public float getXPfromNPC()
@@ -437,6 +436,15 @@ public class NPC : WorldObject
         return path;
     }
 
+    public void CreateTextPop(string message)
+    {
+        CreateTextPop(message, Color.yellow);
+    }
+
+    public void CreateTextPop(string message, Color col)
+    {
+        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, message, col);
+    }
     #endregion
 
     #region Effects
@@ -528,7 +536,7 @@ public class NPC : WorldObject
 
     public virtual void eatItem(Item i)
     {
-        Debug.Log("Eating item");
+        CreateTextPop("Eating item " + i.Name);
         //enforces it being in inventory, if that should change we'll rewrite later
         if (inventory.Has(i))
         {
@@ -567,7 +575,7 @@ public class NPC : WorldObject
             {
                 foreach (Item i in weapons)
                 {
-                    Debug.Log("The " + this.Name + " swings with his " + i.Name + "!");
+                    CreateTextPop("The " + this.Name + " swings with his " + i.Name + "!");
                     if (!n.damage(i.getDamage()))
                     {
                     }
@@ -579,7 +587,7 @@ public class NPC : WorldObject
             }
             else
             {
-                Debug.Log("The " + this.Name + " swings with his bare hands!");
+                CreateTextPop("The " + this.Name + " swings with his bare hands!");
                 if (!n.damage(calcHandDamage()))
                 {
                 }
@@ -591,7 +599,7 @@ public class NPC : WorldObject
         }
         else
         {
-            Debug.Log("The " + this.Name + " swings with his bare hands!");
+            CreateTextPop("The " + this.Name + " swings with his bare hands!");
             //attacking with bare hands
             if (!n.damage(calcHandDamage()))
             {
@@ -636,13 +644,12 @@ public class NPC : WorldObject
 
         if (this.IsNotAFreaking<Player>())
         {
-            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, name + " is dead!", Color.red);
-            Debug.Log(this.Name + " was killed!");
+            CreateTextPop(name + " is dead!", Color.red);
             DestroyThisItem();
         }
         else
         {
-            Debug.Log("Player is dead! Uhh, what do we do now?");
+            CreateTextPop("Player is dead! Uhh, what do we do now?");
         }
     }
     #endregion
@@ -724,7 +731,7 @@ public class NPC : WorldObject
         {
             i.onEquipEvent(this);
             equippedItems.Add(i);
-            Debug.Log("Item " + i.Name + " equipped.");
+            CreateTextPop("Item " + i.Name + " equipped.");
             return true;
         }
         return false;
@@ -739,7 +746,7 @@ public class NPC : WorldObject
             {
                 equippedItems.Remove(i);
             }
-            Debug.Log("Item " + i.Name + " uneqipped.");
+            CreateTextPop("Item " + i.Name + " uneqipped.");
             return true;
         }
         return false;

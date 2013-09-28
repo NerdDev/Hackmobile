@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using XML;
 
 public class PoisonDamageEffect : PoisonEffect
@@ -18,7 +19,7 @@ public class PoisonDamageEffect : PoisonEffect
     public override void init()
     {
         base.init();
-        BigBoss.Gooey.CreateTextPop(npc.gameObject.transform.position, "Poisoned!", UnityEngine.Color.green);
+        npc.CreateTextPop("Poisoned!", Color.green);
     }
 
     public override void remove()
