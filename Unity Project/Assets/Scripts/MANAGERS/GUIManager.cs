@@ -249,8 +249,8 @@ public class GUIManager : MonoBehaviour, IManager
     public void CreateTextPop(Vector3 worldPosition, string message, Color col)
     {
         TextPop text = new TextPop(message, worldPosition, col);
-        //textPopList.Enqueue(text);
-        text.Display();
+        textPopList.Enqueue(text);
+        //text.Display();
     }
 
     void DisplayTextPops()
@@ -265,7 +265,7 @@ public class GUIManager : MonoBehaviour, IManager
         }
         else if (textPopList.Count > 0)
         {
-            Debug.Log("Displaying text pop up.");
+            //Debug.Log("Displaying text pop up.");
             textPopList.Dequeue().Display();
         }
     }
@@ -304,11 +304,12 @@ public class GUIManager : MonoBehaviour, IManager
 
         public void Display()
         {
-            Debug.Log("Instantiating prefab.");
+            //Debug.Log("Instantiating prefab.");
             GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, pos, Quaternion.identity) as GameObject;
             GUIText textComp = (GUIText) go.GetComponent<GUIText>();
             textComp.text = str;
             textComp.material.color = col;
+            Debug.Log(str);
         }
     }
 }

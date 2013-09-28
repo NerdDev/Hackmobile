@@ -11,12 +11,14 @@ public class Levitation : EffectInstance
     public override void init()
     {
         base.init();
+        //Debug.Log("Adding lev effect");
         npc.verticalMove(strength);
     }
 
     public override void remove()
     {
         base.remove();
+        //Debug.Log("Removing lev effect");
         npc.verticalMove(-strength);
     }
 
