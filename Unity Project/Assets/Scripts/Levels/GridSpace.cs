@@ -123,6 +123,12 @@ public class GridSpace
     }
     #endregion
 
+    public void SetActive(bool on)
+    {
+        if (Block != null)
+            Block.SetActive(on);
+    }
+
     public static GridSpace[,] Convert(GridArray arr)
     {
         GridSpace[,] arrOut = new GridSpace[arr.getHeight(), arr.getWidth()];

@@ -156,7 +156,9 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         {
             for (int x = 0; x < Arr.GetLength(1); x++)
             {
-                yield return Arr[x, y];
+                GridSpace space = Arr[y, x];
+                if (space != null)
+                    yield return space;
             }
         }
     }
@@ -172,7 +174,9 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         {
             for (int x = 0; x < Arr.GetLength(1); x++)
             {
-                yield return new Value2D<GridSpace>(x, y, Arr[y, x]);
+                GridSpace space = Arr[y, x];
+                if (space != null)
+                    yield return new Value2D<GridSpace>(x, y, Arr[y, x]);
             }
         }
     }

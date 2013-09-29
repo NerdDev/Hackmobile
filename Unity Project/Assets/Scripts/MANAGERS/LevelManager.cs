@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour, IManager {
@@ -26,16 +27,18 @@ public class LevelManager : MonoBehaviour, IManager {
     {
         SetCurLevel(0);
 
-        if (BigBoss.DungeonMaster != null)
-            BigBoss.DungeonMaster.PopulateLevel(Level);
+        //if (BigBoss.DungeonMaster != null)
+        //    BigBoss.DungeonMaster.PopulateLevel(Level);
+
+        SetCurLevel(1);
     }
 
     void SetCurLevel(int num)
     {
+        Destroy(Level);
         Level = GetLevel(num);
         CurLevelDepth = num;
         Deploy(Level);
-        // Need to switch out game blocks when level switching is implemented
     }
 
     public Level GetLevel(int num)
@@ -49,9 +52,10 @@ public class LevelManager : MonoBehaviour, IManager {
 
     void Destroy(Level level)
     {
-        foreach (GridSpace space in Level.Iterate())
+        if (level == null) return;
+        foreach (GridSpace space in level.Iterate())
         {
-            // Delete block
+            space.SetActive(false);
         }
     }
 
@@ -61,7 +65,10 @@ public class LevelManager : MonoBehaviour, IManager {
         {
             if (space != null)
             {
-                Builder.Build(space);
+                if (space.val.Block == null)
+                    Builder.Build(space);
+                else
+                    space.val.SetActive(true);
             }
         }
     }
