@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class InputManager : MonoBehaviour, IManager
@@ -33,9 +34,10 @@ public class InputManager : MonoBehaviour, IManager
         centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
         //Debug.Log("Camera Screen space center point calculated: " + centerPointInScreenSpace);
 
-        SubscribeToEasyTouchMethods();  //feel free to relocate this
+        //SubscribeToEasyTouchMethods();  //feel free to relocate this
     }
 
+    /*
     public void SubscribeToEasyTouchMethods()
     {
         EasyTouch.On_TouchStart += OnTouchStart;
@@ -45,6 +47,7 @@ public class InputManager : MonoBehaviour, IManager
     {
         EasyTouch.On_TouchStart -= OnTouchStart;
     }
+    */
 
     void Update()
     {
@@ -67,6 +70,7 @@ public class InputManager : MonoBehaviour, IManager
         }
     }
 
+    /*
     public void OnTouchStart(Gesture gesture)
     {
         //Debug Block:
@@ -83,9 +87,8 @@ public class InputManager : MonoBehaviour, IManager
         {
             Debug.Log("Event sent, but no pick object: Exception: " + ex.Message);
         }
-
-
     }
+    */
 
     #region KEYBOARD
 
@@ -108,6 +111,14 @@ public class InputManager : MonoBehaviour, IManager
         if (Input.GetKeyDown(KeyCode.B))
         {
             Item food = null;
+            ///foreach (InventoryCategory cat in BigBoss.PlayerInfo.inventory.Values)
+            //{
+            //    Debug.Log(cat.Dump());
+            //    foreach (ItemList ilist in cat.Values)
+            //    {
+            //        Debug.Log(ilist.Dump());
+            //    }
+            //}
             food = BigBoss.PlayerInfo.inventory.Get("food", "spoiled bread")[0];
             if (food != null)
             {
@@ -116,8 +127,9 @@ public class InputManager : MonoBehaviour, IManager
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
+            Debug.Log(BigBoss.PlayerInfo.inventory.Dump());
             Item food = null;
-            food = BigBoss.PlayerInfo.inventory.Get("consumable", "health potion")[0];
+            food = BigBoss.PlayerInfo.inventory.Get("potion", "health potion")[0];
             if (food != null)
             {
                 BigBoss.PlayerInfo.eatItem(food);

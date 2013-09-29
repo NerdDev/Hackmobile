@@ -40,7 +40,7 @@ public class Inventory : Dictionary<string, InventoryCategory>, Field
     {
         if (this.ContainsKey(category))
         {
-            this[category].Get(item);
+            return this[category].Get(item);
         }
         return null; //item isn't there
     }

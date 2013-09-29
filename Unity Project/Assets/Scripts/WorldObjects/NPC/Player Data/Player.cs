@@ -443,4 +443,42 @@ public class Player : NPC, IManager
     }
 
     #endregion
+
+    #region Touch Input
+    void OnEnable()
+    {
+        EasyTouch.On_SimpleTap += On_SimpleTap;
+    }
+
+    void OnDisable()
+    {
+        EasyTouch.On_SimpleTap -= On_SimpleTap;
+    }
+
+    void On_SimpleTap(Gesture gesture)
+    {
+        if (gesture.pickObject != null)
+        {
+            GameObject go = gesture.pickObject;
+            if (go.layer == 12)
+            {
+                Point p = new Point(go.transform.position.x, go.transform.position.z);
+                if (this is Player && LevelManager.Level[p.x, p.y].HasObject())
+                {
+                    List<WorldObject> list = LevelManager.Level[p.x, p.y].GetBlockingObjects();
+                    NPC n = (NPC) list.Find(w => w is NPC);
+                    if (n != null && n.IsNotAFreaking<Player>())
+                    {
+                        PathTree pathToPlayer = this.getPathTree(p.x, p.y);
+                        List<PathNode> nodes = pathToPlayer.getPath();
+                        if (nodes.Count == 2)
+                        {
+                            this.attack(n);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    #endregion
 }
