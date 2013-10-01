@@ -26,11 +26,10 @@ public class NPC : WorldObject
         BigBoss.WorldObject.AddNPCToMasterList(this);
     }
 
-    public virtual void DestroyThisItem()
+    public override void DestroySelf()
     {
+        base.DestroySelf();
         BigBoss.WorldObject.RemoveNPCFromMasterList(this);
-        BigBoss.Time.RemoveFromUpdateList(this);
-        Destroy(this.gameObject);
     }
 
     /**
@@ -40,9 +39,6 @@ public class NPC : WorldObject
     public void init()
     {
         calcStats();
-        bodyparts.Arms = 2;
-        bodyparts.Legs = 2;
-        bodyparts.Heads = 1;
         equipment = new Equipment(this.bodyparts);
         if (IsActive)
         {
@@ -83,29 +79,13 @@ public class NPC : WorldObject
     public float rotationSpeed = .5f;  //temporarily hard-coded
     public float NPCRotationSpeed { get { return rotationSpeed; } }
 
-    private Vector3 currentOccupiedGridCenterWorldPoint;
-    public Vector3 CurrentOccupiedGridCenterWorldPoint
-    {
-        get { return currentOccupiedGridCenterWorldPoint; }
-        set { currentOccupiedGridCenterWorldPoint = value; }
-    }
-
-    private Vector3 lastOccupiedGridCenterWorldPoint;
-    public Vector3 LastOccupiedGridCenterWorldPoint
-    {
-        get { return lastOccupiedGridCenterWorldPoint; }
-        set { lastOccupiedGridCenterWorldPoint = value; }
-    }
+    public Vector3 CurrentOccupiedGridCenterWorldPoint { get; set; }
+    public Vector3 LastOccupiedGridCenterWorldPoint { get; set; }
 
     //X,Y coordinate for other scripts to grab:
-    private Vector2 gridCoordinate;
-    public Vector2 GridCoordinate
-    {
-        get { return gridCoordinate; }
-        set { gridCoordinate = value; }
-    }
+    public Vector2 GridCoordinate { get; set; }
     //X, Y in integers, GridSpace ref
-    public Value2D<GridSpace> gridSpace;
+    protected Value2D<GridSpace> gridSpace;
     protected Value2D<GridSpace> newGridSpace;
 
     bool moving; //stores moving condition
@@ -117,7 +97,7 @@ public class NPC : WorldObject
     Vector3 heading; //this is the heading of target minus current location
 
     Animator animator;
-    float vel;
+    float velocity;
 
     #endregion
 
@@ -149,18 +129,18 @@ public class NPC : WorldObject
     {
         if (moving)
         {
-            if (vel < NPCSpeed)
+            if (velocity < NPCSpeed)
             {
-                vel += .01f;
+                velocity += .01f;
             }
             else
             {
-                vel = NPCSpeed;
+                velocity = NPCSpeed;
             }
         }
         else
         {
-            vel = 0;
+            velocity = 0;
         }
         if (animator == null)
         {
@@ -168,7 +148,7 @@ public class NPC : WorldObject
         }
         else
         {
-            animator.SetFloat("runSpeed", vel);
+            animator.SetFloat("runSpeed", velocity);
         }
     }
 
@@ -186,7 +166,7 @@ public class NPC : WorldObject
     public virtual float AdjustHunger(float amount)
     {
         stats.Hunger += amount;
-        CreateTextPop("Gained " + amount + " of nutrition.", Color.green);
+        Debug.Log("Gained " + amount + " of nutrition.");
         getHungerLevel(stats.Hunger);
         return stats.Hunger;
     }
@@ -206,13 +186,13 @@ public class NPC : WorldObject
         }
         else if (stats.CurrentHealth + amount > stats.MaxHealth)
         {
-            CreateTextPop(this.Name + " gained " + (stats.MaxHealth - stats.CurrentHealth) + " in health.", Color.green);
             stats.CurrentHealth = stats.MaxHealth;
+            Debug.Log(this.Name + " gained " + amount + " in health.");
         }
         else
         {
-            CreateTextPop(this.Name + " gained " + amount + " in health.", Color.green);
             stats.CurrentHealth = stats.CurrentHealth + amount;
+            Debug.Log(this.Name + " gained " + amount + " in health.");
         }
     }
 
@@ -221,7 +201,8 @@ public class NPC : WorldObject
         if (stats.CurrentHealth - amount > 0)
         {
             stats.CurrentHealth = stats.CurrentHealth - amount;
-            CreateTextPop(this.Name + " was damaged for " + amount + "!", Color.red);
+            //Debug.Log(this.Name + " was damaged for " + amount + "!");
+            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Damaged for " + amount + "!", Color.red);
             return false;
         }
         else
@@ -270,48 +251,21 @@ public class NPC : WorldObject
     protected void getHungerLevel(float hunger)
     {
         HungerLevel prior = stats.HungerLevel;
-        Color col = Color.white;
-
+        // These numbers don't make sense.
         if (hunger < 50)
-        {
             stats.HungerLevel = HungerLevel.Faint;
-            col = Color.red;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
         else if (hunger < 130)
-        {
             stats.HungerLevel = HungerLevel.Starving;
-            col = Color.yellow;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
         else if (hunger < 500)
-        {
             stats.HungerLevel = HungerLevel.Hungry;
-            col = Color.yellow;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
         else if (hunger < 800)
-        {
             stats.HungerLevel = HungerLevel.Satiated;
-            col = Color.blue;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
         else if (hunger < 1000)
-        {
             stats.HungerLevel = HungerLevel.Stuffed;
-            col = Color.yellow;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
-
         if (prior != stats.HungerLevel)
         {
-            UpdateHungerLevel(col);
+            BigBoss.Gooey.UpdateHungerLevel(stats.HungerLevel);
         }
-    }
-
-    protected void UpdateHungerLevel(Color guiCol)
-    {
-        CreateTextPop(stats.HungerLevel.ToString() + "!", guiCol);
     }
 
     public float getXPfromNPC()
@@ -436,15 +390,6 @@ public class NPC : WorldObject
         return path;
     }
 
-    public void CreateTextPop(string message)
-    {
-        CreateTextPop(message, Color.yellow);
-    }
-
-    public void CreateTextPop(string message, Color col)
-    {
-        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, message, col);
-    }
     #endregion
 
     #region Effects
@@ -536,7 +481,7 @@ public class NPC : WorldObject
 
     public virtual void eatItem(Item i)
     {
-        CreateTextPop("Eating item " + i.Name);
+        Debug.Log("Eating item");
         //enforces it being in inventory, if that should change we'll rewrite later
         if (inventory.Has(i))
         {
@@ -575,7 +520,7 @@ public class NPC : WorldObject
             {
                 foreach (Item i in weapons)
                 {
-                    CreateTextPop("The " + this.Name + " swings with his " + i.Name + "!");
+                    Debug.Log("The " + this.Name + " swings with his " + i.Name + "!");
                     if (!n.damage(i.getDamage()))
                     {
                     }
@@ -587,7 +532,7 @@ public class NPC : WorldObject
             }
             else
             {
-                CreateTextPop("The " + this.Name + " swings with his bare hands!");
+                Debug.Log("The " + this.Name + " swings with his bare hands!");
                 if (!n.damage(calcHandDamage()))
                 {
                 }
@@ -599,7 +544,7 @@ public class NPC : WorldObject
         }
         else
         {
-            CreateTextPop("The " + this.Name + " swings with his bare hands!");
+            Debug.Log("The " + this.Name + " swings with his bare hands!");
             //attacking with bare hands
             if (!n.damage(calcHandDamage()))
             {
@@ -644,12 +589,13 @@ public class NPC : WorldObject
 
         if (this.IsNotAFreaking<Player>())
         {
-            CreateTextPop(name + " is dead!", Color.red);
-            DestroyThisItem();
+            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, name + " is dead!", Color.red);
+            Debug.Log(this.Name + " was killed!");
+            DestroySelf();
         }
         else
         {
-            CreateTextPop("Player is dead! Uhh, what do we do now?");
+            Debug.Log("Player is dead! Uhh, what do we do now?");
         }
     }
     #endregion
@@ -731,7 +677,7 @@ public class NPC : WorldObject
         {
             i.onEquipEvent(this);
             equippedItems.Add(i);
-            CreateTextPop("Item " + i.Name + " equipped.");
+            Debug.Log("Item " + i.Name + " equipped.");
             return true;
         }
         return false;
@@ -746,7 +692,7 @@ public class NPC : WorldObject
             {
                 equippedItems.Remove(i);
             }
-            CreateTextPop("Item " + i.Name + " uneqipped.");
+            Debug.Log("Item " + i.Name + " uneqipped.");
             return true;
         }
         return false;
@@ -926,5 +872,38 @@ public class NPC : WorldObject
         }
     }
 
+    #endregion
+
+    #region Touch Input
+    void OnEnable()
+    {
+        EasyTouch.On_SimpleTap += On_SimpleTap;
+    }
+
+    void OnDisable()
+    {
+        EasyTouch.On_SimpleTap -= On_SimpleTap;
+    }
+
+    void On_SimpleTap(Gesture gesture)
+    {
+        if (gesture.pickObject != null)
+        {
+            GameObject go = gesture.pickObject;
+            if (this.gameObject == go)
+            {
+                NPC n = go.GetComponent<NPC>();
+                if (this.IsNotAFreaking<Player>() && this == n)
+                {
+                    PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
+                    List<PathNode> nodes = pathToPlayer.getPath();
+                    if (nodes.Count == 2)
+                    {
+                        BigBoss.PlayerInfo.attack(this);
+                    }
+                }
+            }
+        }
+    }
     #endregion
 }

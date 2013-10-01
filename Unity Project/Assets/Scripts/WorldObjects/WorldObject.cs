@@ -72,8 +72,13 @@ public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
     }
     #endregion
 
-    #region Time Management
+    public virtual void DestroySelf()
+    {
+        BigBoss.Time.RemoveFromUpdateList(this);
+        Destroy(this.gameObject);
+    }
 
+    #region Time Management
     int turnPoints = 0;
     int basePoints = 60;
     protected bool isActive = false;

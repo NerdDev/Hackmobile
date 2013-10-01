@@ -1,14 +1,18 @@
-﻿using System;
+using System;
 using XML;
 
 public class BodyParts : FieldContainerClass
 {
-    private int arms;
-    public int Arms { get { return arms; } set { this.arms = value; } }
-    private int legs;
-    public int Legs { get { return legs; } set { this.legs = value; } }
-    private int heads;
-    public int Heads { get { return heads; } set { this.heads = value; } }
+    public int Arms { get; set; }
+    public int Legs { get; set; }
+    public int Heads { get; set; }
+
+    public BodyParts()
+    {
+        Arms = 2;
+        Legs = 2;
+        Heads = 1;
+    }
 
     public override void SetParams()
     {
