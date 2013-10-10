@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -19,18 +18,12 @@ public class GUIManager : MonoBehaviour, IManager
     //SAFETIES WHICH ANY SCRIPT CAN CHECK THROUGH BIGBOSS:
     public bool confirmationWindowOpen;
     public bool tooltipOpen;
+
     public GameObject debugText;
-
     private Queue<TextPop> textPopList = new Queue<TextPop>();
-
-    #region PREFAB REFERENCES WHICH ARE SAFE TO PUT IN OTHER MANAGERS
-
     public GameObject textPopPrefab;
 
-    #endregion
-
     #region Clean Inventory Variables
-
     public bool isInventoryOpen = false;
     //Panels:
     private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
@@ -52,7 +45,6 @@ public class GUIManager : MonoBehaviour, IManager
 
     public void Initialize()
     {
-        #region codey stuffz
         //Feel free to relocate these init calls when pre-game stuff is utilized
         //InventoryGUICaptureReferences();//better convention to call this from player eventually
 
@@ -63,13 +55,13 @@ public class GUIManager : MonoBehaviour, IManager
         //CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
 
 
-            //StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
-        #endregion
+        //StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
     }
 
     //Debugging Coroutine
     private IEnumerator ShowDebugInfo()
     {
+
         GUIText textComp;
         //If text doesn't exist, create one:
         if (GameObject.Find("DEBUG TEXT") == null)
@@ -80,11 +72,10 @@ public class GUIManager : MonoBehaviour, IManager
             textComp.fontSize = 14;
             Vector3 placeToPutIt = new Vector3(0, 1, 1);
             debugText.transform.position = placeToPutIt;
+
         }
-        else
-        {
-            textComp = GameObject.Find("DEBUG TEXT").GetComponent("GUIText") as GUIText;
-        }
+        else textComp = GameObject.Find("DEBUG TEXT").GetComponent("GUIText") as GUIText;
+
         while (this.enabled == true)//Infinite Loop:
         {
             /*
@@ -116,16 +107,15 @@ public class GUIManager : MonoBehaviour, IManager
     }
 
     #region INVENTORY
-
     public void InventoryGUICaptureReferences()//To refresh references when game starts or upon inventory max size change:
     {
         //NEED TO PUT A FAILSAFE HERE IN CASE ONE RETURNS NULL!!!!!!!
         try
         {
-        inventoryPanel = GameObject.Find("Inventory_Panel_Background").GetComponent("UIPanel") as UIPanel;
+            inventoryPanel = GameObject.Find("Inventory_Panel_Background").GetComponent("UIPanel") as UIPanel;
             inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();
-        invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition") as TweenPosition;
-        inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
+            invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition") as TweenPosition;
+            inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
         }
         catch (Exception ex)
         {
@@ -180,7 +170,6 @@ public class GUIManager : MonoBehaviour, IManager
     {
         foreach (ItemSlot sl in inventoryStorageScript.InventorySlots)
         {
-
             sl.icon.enabled = false;
             //Debug.Log(sl.icon.spriteName);
         }
@@ -193,6 +182,7 @@ public class GUIManager : MonoBehaviour, IManager
         //Quantity Label:
         slot.label.enabled = true;
         slot.label.text = count.ToString();
+
     }
 
     public void SeedInventory(List<Item> invList)
@@ -213,9 +203,6 @@ public class GUIManager : MonoBehaviour, IManager
         }
         Debug.Log("Seed Inventory end - " + inventoryStorageScript.items.Count + " items in player's UIStorage.");
     }
-
-
-
     #endregion
 
     #region UPDATING OF VARIOUS NGUI ELEMENTS - GENERALLY DRIVEN FROM CODE ELSEWHERE IN THE PROJECT
@@ -242,17 +229,41 @@ public class GUIManager : MonoBehaviour, IManager
         //tilesCrossedLabel.text = "Tiles Crossed: " + BigBoss.TimeKeeper.numTilesCrossed;
     }
 
+    public void UpdateHungerLevel(HungerLevel hunger)
+    {
+        Color color = Color.white;
+        // These colors don't make sense with the states
+        switch (hunger)
+        {
+            case HungerLevel.Faint:
+                color = Color.red;
+                break;
+            case HungerLevel.Starving:
+                color = Color.yellow;
+                break;
+            case HungerLevel.Hungry:
+                color = Color.yellow;
+                break;
+            case HungerLevel.Satiated:
+                color = Color.blue;
+                break;
+            case HungerLevel.Stuffed:
+                color = Color.yellow;
+                break;
+        }
+        BigBoss.Gooey.UpdateHungerText(color);
+        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, hunger.ToString() + "!", color);
+    }
+
     public void CreateTextPop(Vector3 worldPosition, string message) //no color arg version
     {
         CreateTextPop(worldPosition, message, Color.white);
-
     }
 
     public void CreateTextPop(Vector3 worldPosition, string message, Color col)
     {
         TextPop text = new TextPop(message, worldPosition, col);
         textPopList.Enqueue(text);
-        //text.Display();
     }
 
     void DisplayTextPops()
@@ -282,15 +293,6 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    #endregion
-
-    public void PlayerTouched()
-    {
-        ToggleInventoryPanel();
-        ClearAllInventorySprites();
-
-    }
-
     internal class TextPop
     {
         public string str;
@@ -308,10 +310,17 @@ public class GUIManager : MonoBehaviour, IManager
         {
             //Debug.Log("Instantiating prefab.");
             GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, pos, Quaternion.identity) as GameObject;
-            GUIText textComp = (GUIText) go.GetComponent<GUIText>();
+            GUIText textComp = (GUIText)go.GetComponent<GUIText>();
             textComp.text = str;
             textComp.material.color = col;
             Debug.Log(str);
         }
+    }
+    #endregion
+
+    public void PlayerTouched()
+    {
+        ToggleInventoryPanel();
+        ClearAllInventorySprites();
     }
 }
