@@ -10,7 +10,6 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public void Initialize()
     {
         SpawnModifier.RegisterModifiers();
-        TestManager.Start();
     }
 
     public void PopulateLevel(Level l)

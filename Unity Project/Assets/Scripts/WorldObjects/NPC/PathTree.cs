@@ -7,6 +7,7 @@ using System.Text;
 public class PathTree
 {
     static PathNode[,] Arr = new PathNode[200, 200];
+    int terminateDistance;
     protected List<PathNode> closed = new List<PathNode>();
     System.Random rand = new System.Random();
     Value2D<GridSpace> start, dest;
@@ -22,8 +23,14 @@ public class PathTree
 
     public List<PathNode> getPath()
     {
+        return getPath(300);
+    }
+
+    public List<PathNode> getPath(int terminateDistance)
+    {
         PathNode startNode = new PathNode(start, dest, null);
         startNode.g = 0;
+        this.terminateDistance = terminateDistance;
         Arr[start.x, start.y] = startNode;
         getNextNodes(startNode);
         while (!pathComplete && openNodes.Count > 0)
@@ -68,7 +75,7 @@ public class PathTree
             {
                 Arr[choice.loc.x, choice.loc.y] = choice;
             }
-            if (choice.loc.x == dest.x && choice.loc.y == dest.y)
+            if ((choice.loc.x == dest.x && choice.loc.y == dest.y) || choice.g > terminateDistance)
             {
                 pathComplete = true;
                 listONodes.Add(choice);
@@ -116,13 +123,6 @@ public class PathTree
                     PathNode asnode = new PathNode(p, dest, origin);
                     Arr[p.x, p.y] = asnode;
                     openNodes.Add(asnode, asnode);
-                    //if (p.x == dest.x && p.y == dest.y)
-                    //{
-                    //    pathComplete = true;
-                    //    listONodes.Add(asnode);
-                    //    buildPath(asnode);
-                    //    return;
-                    //}
                 }
                 else
                 {

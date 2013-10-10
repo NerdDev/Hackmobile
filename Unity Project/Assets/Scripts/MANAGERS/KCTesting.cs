@@ -1,21 +1,31 @@
 ﻿using System;
 using UnityEngine;
 
-public static class TestManager
+public class KCTesting : MonoBehaviour
 {
-    public static void Start()
+    void Start()
     {
         Debug.Log("Running KC Method");
         KurtisMethod();
     }
 
-    private static void KurtisMethod()
+    private void KurtisMethod()
     {
         /*
          * Initializes some test spawns and places the Player object.
          */
         Value2D<GridSpace> loc = BigBoss.DungeonMaster.PickStartLocation(LevelManager.Level);
         BigBoss.PlayerInfo.transform.position = new Vector3(loc.x, -.5f, loc.y);
+
+        Item ii = BigBoss.WorldObject.CreateItem("sword1");
+        BigBoss.Player.addToInventory(ii);
+        BigBoss.Player.equipItem(ii);
+
+        Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
+        BigBoss.Player.addToInventory(food, 5);
+
+        Item potion = BigBoss.WorldObject.CreateItem("health potion");
+        BigBoss.Player.addToInventory(potion, 3);
 
         for (int i = 0; i < 4; i++)
         {

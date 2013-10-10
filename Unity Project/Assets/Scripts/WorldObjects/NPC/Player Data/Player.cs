@@ -19,10 +19,10 @@ public class Player : NPC, IManager
     public GameObject playerAvatar;
     public GameObject PlayerAvatar { get { return playerAvatar; } }//read only global reference to the hero gameobject
 
+    public PlayerProfessions PlayerChosenProfession;
+
     public int level = 10; // Just for testing.  'Prolly change this to 1 later.
     public int Level { get { return level; } }
-
-    public PlayerProfessions PlayerChosenProfession;
 
     #endregion
 
@@ -59,6 +59,7 @@ public class Player : NPC, IManager
 
     #region Physics
     int lastCollisionTime = 0; //unused atm
+
     void OnCollisionEnter(Collision collision)
     {
         //yes, it's the gspot
@@ -91,7 +92,7 @@ public class Player : NPC, IManager
         BigBoss.PlayerInput.allowKeyboardInput = true;
         BigBoss.PlayerInput.allowMouseInput = true;
         BigBoss.PlayerInput.allowPlayerInput = true;
-        
+
         this.setData(BigBoss.WorldObject.getNPC("player"));
         stats.Hunger = 900;
         IsActive = true;
@@ -99,18 +100,6 @@ public class Player : NPC, IManager
         this.PlayerTitle = BigBoss.Data.playerProfessions.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
         anim = playerAvatar.GetComponent<Animator>() as Animator;
         this.Name = "Kurtis";
-
-        //Relocate this to a test script in your scene, rather than player itself
-        //Item i = BigBoss.WorldObject.CreateItem("sword1");
-        ////this.addToInventory(i);
-        ////this.equipItem(i);
-
-        //Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
-        //this.addToInventory(food, 5);
-
-        //Item potion = BigBoss.WorldObject.CreateItem("health potion");
-        ////this.addToInventory(potion, 3);
-
     }
 
     // Update is called once per frame
@@ -155,7 +144,6 @@ public class Player : NPC, IManager
     Vector3 currentGridLoc;
     Vector3 currentGridCenterPointWithoffset;
 
-    public Vector3 avatarStartLocation;
     public float tileMovementTolerance = .85f;  //radius
 
     float timePassed = 0;
@@ -221,6 +209,7 @@ public class Player : NPC, IManager
     private void resetPosition()
     {
         this.playerAvatar.transform.position = CurrentOccupiedGridCenterWorldPoint;
+        this.transform.Dump();
     }
 
     public void MovePlayer(Vector3 heading)
@@ -262,9 +251,17 @@ public class Player : NPC, IManager
     float v;
     void FixedUpdate()
     {
-        //float h = Input.GetAxis("Horizontal");				// setup h variable as our horizontal input axis
-        //float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
-        //if (Input.GetMouseButton(1))
+        if (anim == null)
+        {
+            try
+            {
+                anim = playerAvatar.GetComponent<Animator>() as Animator;
+            }
+            catch (Exception e)
+            {
+            }
+            return;
+        }
         if (isMoving)
         {
             if (v < playerSpeed)
@@ -280,16 +277,8 @@ public class Player : NPC, IManager
         {
             v = 0;
         }
-
-        if (anim == null)
-            return; // Why u give null errorz?!
-
-        //Debug.Log("V: " + v);
-        anim.SetFloat("runSpeed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
-        //anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
-        //anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
+        anim.SetFloat("runSpeed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis
         currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
-
         //		if(anim.layerCount ==2)		
         //			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation
 
@@ -466,7 +455,7 @@ public class Player : NPC, IManager
                 if (this is Player && LevelManager.Level[p.x, p.y].HasObject())
                 {
                     List<WorldObject> list = LevelManager.Level[p.x, p.y].GetBlockingObjects();
-                    NPC n = (NPC) list.Find(w => w is NPC);
+                    NPC n = (NPC)list.Find(w => w is NPC);
                     if (n != null && n.IsNotAFreaking<Player>())
                     {
                         PathTree pathToPlayer = this.getPathTree(p.x, p.y);

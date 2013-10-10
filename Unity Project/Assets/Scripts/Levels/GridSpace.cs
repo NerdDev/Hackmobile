@@ -24,6 +24,10 @@ public class GridSpace
         if (obj is NPC)
         {
             PutBlocking(obj);
+            if (obj.IsNotAFreaking<Player>())
+            {
+                Block.collider.isTrigger = false;
+            }
         }
         else
         {
@@ -53,6 +57,10 @@ public class GridSpace
     {
         RemoveFree(obj);
         RemoveBlocked(obj);
+        if (_blockingObjects.Count == 0)
+        {
+            Block.collider.isTrigger = true;
+        }
     }
 
     protected void RemoveFree(WorldObject obj)

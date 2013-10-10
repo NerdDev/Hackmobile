@@ -98,27 +98,9 @@ public class InputManager : MonoBehaviour, IManager
         {
             BigBoss.Time.TogglePause();
         }
-
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            BigBoss.PlayerInfo.playerAvatar.transform.position = BigBoss.PlayerInfo.avatarStartLocation;
-        }
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            //Item theItem = BigBoss.WorldObjectManager.CreateRandomItem(new Vector3 (0,0,0));
-            //Testing out an NGUI texture swap:
-        }
         if (Input.GetKeyDown(KeyCode.B))
         {
             Item food = null;
-            ///foreach (InventoryCategory cat in BigBoss.PlayerInfo.inventory.Values)
-            //{
-            //    Debug.Log(cat.Dump());
-            //    foreach (ItemList ilist in cat.Values)
-            //    {
-            //        Debug.Log(ilist.Dump());
-            //    }
-            //}
             food = BigBoss.PlayerInfo.inventory.Get("food", "spoiled bread")[0];
             if (food != null)
             {

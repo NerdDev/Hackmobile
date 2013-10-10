@@ -866,8 +866,11 @@ public class NPC : WorldObject
         if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
-            Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
-            MoveNPC(nodeToMove);
+            if (nodes.Count > 2)
+            {
+                Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
+                MoveNPC(nodeToMove);
+            }
             UpdateCurrentTileVectors();
         }
     }
