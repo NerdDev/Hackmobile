@@ -13,7 +13,7 @@ public class EffectEvent : List<EffectInstance>, Field
         foreach (EffectInstance e in this)
         {
             //BigBoss.Log(e.ToString());
-            e.activate(wo);
+            e.ActivateOnObject(wo);
         }
     }
 

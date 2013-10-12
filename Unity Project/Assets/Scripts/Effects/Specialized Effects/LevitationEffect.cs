@@ -8,16 +8,14 @@ public class Levitation : EffectInstance
 {
     Float strength;
 
-    public override void init()
+    public override void Init(NPC n)
     {
-        base.init();
-        npc.verticalMove(strength);
+        n.verticalMove(strength);
     }
 
-    public override void remove()
+    public override void Remove(NPC n)
     {
-        base.remove();
-        npc.verticalMove(-strength);
+        n.verticalMove(-strength);
     }
 
     public override void SetParams()

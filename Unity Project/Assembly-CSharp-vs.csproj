@@ -213,6 +213,7 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
      <Compile Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApplySubstance.cs" />
+     <Compile Include="Assets\Scenes\Testing\Justin Effects Testin\JustinEffectsTest.cs" />
      <Compile Include="Assets\Scripts\AtlasGenerator.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\HeroCam.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\MasterCamera.cs" />
@@ -254,6 +255,9 @@
      <Compile Include="Assets\Scripts\Effects\EffectEvent.cs" />
      <Compile Include="Assets\Scripts\Effects\EffectInstance.cs" />
      <Compile Include="Assets\Scripts\Effects\EffectManager.cs" />
+     <Compile Include="Assets\Scripts\Effects\EffectTargetType.cs" />
+     <Compile Include="Assets\Scripts\Effects\Effects.cs" />
+     <Compile Include="Assets\Scripts\Effects\IAffectable.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\AddHealth.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\BlindnessEffect.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\CurePoison.cs" />
@@ -361,7 +365,6 @@
      <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Effects.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\EquipTypes.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Equipment.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Flags.cs" />

@@ -5,10 +5,9 @@ public class AddHealth : EffectInstance
 {
     Float strength;
 
-    public override void apply()
+    public override void Apply(NPC n)
     {
-        base.apply();
-        npc.AdjustHealth(Convert.ToInt32(strength));
+        n.AdjustHealth(Convert.ToInt32(strength));
     }
 
     public override void SetParams()

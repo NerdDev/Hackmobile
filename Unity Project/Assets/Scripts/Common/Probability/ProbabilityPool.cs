@@ -35,7 +35,7 @@ public abstract class ProbabilityPool<T>  {
 
     public abstract void Add(T item, float probDiv, bool unique);
 
-    public void Add(T item)
+    public virtual void Add(T item)
     {
         if (item is ProbabilityItem)
         {

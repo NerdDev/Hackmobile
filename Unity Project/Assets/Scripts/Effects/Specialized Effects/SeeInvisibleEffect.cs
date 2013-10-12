@@ -6,18 +6,16 @@ using UnityEngine;
 
 public class SeeInvisible : EffectInstance
 {
-    public override void init()
+    public override void Init(NPC n)
     {
-        base.init();
         //--player
         //re-enable rendering on all NPC's that are invisible
         //--npc
         //enable targeting for invisible objects in AI functions
     }
 
-    public override void remove()
+    public override void Remove(NPC n)
     {
-        base.apply();
         //--player
         //disable rendering on NPC's that are invisible
         //--npc

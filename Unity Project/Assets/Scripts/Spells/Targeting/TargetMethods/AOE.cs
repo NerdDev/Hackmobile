@@ -5,8 +5,4 @@ using System.Text;
 
 class AOE : TargetMethod
 {
-    public override List<WorldObject> getTargets(int x, int y)
-    {
-        return new List<WorldObject>();
-    }
 }

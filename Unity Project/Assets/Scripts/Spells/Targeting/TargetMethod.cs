@@ -1,23 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 public class TargetMethod
 {
-    public virtual List<WorldObject> getTargets()
+    public virtual List<IAffectable> getTargets()
     {
-        return new List<WorldObject>();
+        return new List<IAffectable>();
     }
 
-    public virtual List<WorldObject> getTargets(int x, int y)
+    public virtual List<IAffectable> getTargets(int x, int y)
     {
-        return new List<WorldObject>();
+        return new List<IAffectable>();
     }
 
-    public virtual NPC getSource()
+    public virtual WorldObject getSource()
     {
-        return new NPC();
+        throw new NotImplementedException();
     }
 
     public virtual bool takesInput()

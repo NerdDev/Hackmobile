@@ -62,7 +62,7 @@ public class Player : NPC, IManager
     void OnCollisionEnter(Collision collision)
     {
         //yes, it's the gspot
-        GridSpace gspot = LevelManager.Level[collision.gameObject.transform.position.x.ToInt(),
+        GridSpace gspot = BigBoss.Levels.Level[collision.gameObject.transform.position.x.ToInt(),
             collision.gameObject.transform.position.z.ToInt()];
         //I KNEW IT EXISTED
         GridType g = gspot.Type;
@@ -232,7 +232,7 @@ public class Player : NPC, IManager
     {
         GridCoordinate = new Vector2(this.gameObject.transform.position.x.Round(), this.gameObject.transform.position.z.Round());
         newGridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
-        GridSpace newGrid = LevelManager.Level[newGridSpace.x, newGridSpace.y];
+        GridSpace newGrid = BigBoss.Levels.Level[newGridSpace.x, newGridSpace.y];
         if (!newGrid.IsBlocked())
         {
             if (gridSpace != null && gridSpace.val != null)

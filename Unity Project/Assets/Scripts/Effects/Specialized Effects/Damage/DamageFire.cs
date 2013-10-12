@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 public class DamageFire : DamageEffect
 {
-    public override void apply()
+    public override void Apply(NPC n)
     {
-        base.apply();
-        if (!npc.HasEffect<FireResistance>())
+        base.Apply(n);
+        if (!n.HasEffect<FireResistance>())
         {
-            npc.AdjustHealth(Convert.ToInt32(-strength));
+            n.AdjustHealth(Convert.ToInt32(-strength));
         }
     }
 }

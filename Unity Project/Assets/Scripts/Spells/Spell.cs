@@ -10,15 +10,11 @@ class Spell
 
     public void activate()
     {
-        foreach (WorldObject wo in method.getTargets())
+        foreach (IAffectable wo in method.getTargets())
         {
-            if (wo is NPC)
+            foreach (EffectInstance eb in effects)
             {
-                NPC n = wo as NPC;
-                foreach (EffectInstance eb in effects)
-                {
-                    eb.activate(n);
-                }
+                eb.ActivateOnObject(wo);
             }
         }
     }

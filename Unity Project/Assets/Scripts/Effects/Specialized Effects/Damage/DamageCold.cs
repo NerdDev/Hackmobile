@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 public class DamageCold : DamageEffect
 {
-    public override void apply()
+    public override void Apply(NPC n)
     {
-        base.apply();
-        if (!npc.HasEffect<ColdResistance>())
+        base.Apply(n);
+        if (!n.HasEffect<ColdResistance>())
         {
-            npc.AdjustHealth(Convert.ToInt32(-strength));
+            n.AdjustHealth(Convert.ToInt32(-strength));
         }
     }
 }

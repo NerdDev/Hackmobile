@@ -7,9 +7,8 @@ public class Petrification : EffectInstance
 {
     int timer = 4;
 
-    public override void apply()
+    public override void Apply(NPC n)
     {
-        base.apply();
         switch (timer)
         {
             case (4):

@@ -3,10 +3,9 @@ using XML;
 
 public class CurePoison : EffectInstance
 {
-    public override void init()
+    public override void Init(NPC n)
     {
-        base.init();
-        npc.RemoveEffectIfExists<PoisonEffect>();
+        n.RemoveAnEffect<PoisonEffect>();
     }
 
     public override void SetParams()

@@ -7,10 +7,9 @@ public class NutritionEffect : EffectInstance
 {
     Integer strength;
 
-    public override void apply()
+    public override void Apply(NPC n)
     {
-        base.apply();
-        npc.AdjustHunger(strength);
+        n.AdjustHunger(strength);
     }
 
     public override void SetParams()

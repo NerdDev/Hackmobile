@@ -83,7 +83,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 11524189}
   - 137: {fileID: 11524190}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: BODY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ GameObject:
   - 4: {fileID: 26059666}
   - 33: {fileID: 26059668}
   - 23: {fileID: 26059667}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Helm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 52059516}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: RBCollection01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,7 +243,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 75017586}
   - 137: {fileID: 75017587}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 90707711}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 R Toe0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 149368403}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: L_Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -357,7 +357,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 163987584}
   - 137: {fileID: 163987585}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -414,7 +414,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 194012851}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +446,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 195884316}
   - 137: {fileID: 195884317}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Shoe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,7 +507,7 @@ GameObject:
   - 4: {fileID: 211416122}
   - 33: {fileID: 211416124}
   - 23: {fileID: 211416123}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -561,7 +561,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 225194868}
   - 137: {fileID: 225194869}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Hip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -617,7 +617,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 240426429}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 R Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -694,7 +694,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 254915298}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -761,7 +761,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 280187450}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 L Finger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -789,7 +789,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 285213989}
   - 137: {fileID: 285213990}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -848,7 +848,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 290783363}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 L Clavicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -877,7 +877,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 345648911}
   - 137: {fileID: 345648912}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -933,7 +933,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 360664766}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: L_Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -960,7 +960,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 399352544}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -986,7 +986,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 404620140}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 R Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1013,7 +1013,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433079183}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: L_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1045,8 +1045,7 @@ GameObject:
   - 54: {fileID: 444396699}
   - 95: {fileID: 444396698}
   - 65: {fileID: 444396697}
-  - 114: {fileID: 444396702}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1061,7 +1060,7 @@ Transform:
   m_GameObject: {fileID: 444396695}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .600000024, y: .600000024, z: .600000024}
+  m_LocalScale: {x: .551295221, y: .551295221, z: .551295221}
   m_Children:
   - {fileID: 1394709805}
   - {fileID: 11524189}
@@ -1134,7 +1133,7 @@ Animator:
   m_PrefabInternal: {fileID: 2110650517}
   m_GameObject: {fileID: 444396695}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 041ea62ae1abd974ba748ed5a8dc72cc, type: 3}
   m_Controller: {fileID: 9100000, guid: 90d1994c566f4f645ac24a51b4cafa35, type: 2}
   m_CullingMode: 1
   m_ApplyRootMotion: 1
@@ -1153,7 +1152,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &444396700
 MonoBehaviour:
@@ -1166,11 +1165,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a25a38057c69d8f4b97023724bf4c658, type: 3}
   m_Name: 
-  race: 3
-  role: 3
+  race: 1
+  role: 0
   speed: 1.20000005
   rotationSpeed: .150000006
   playerAvatar: {fileID: 444396695}
+  level: 10
   PlayerChosenProfession: 0
   playerSpeed: 1.20000005
   playerRotationSpeed: .150000006
@@ -1208,20 +1208,6 @@ Animation:
   m_UserAABB:
     m_Center: {x: .0629487634, y: 1.21839547, z: .315524936}
     m_Extent: {x: 1.18296313, y: 1.4506855, z: 1.4667598}
---- !u!114 &444396702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: e3660a4d226c2524eb9b6cdf34c2b63e,
-    type: 2}
-  m_PrefabInternal: {fileID: 2110650517}
-  m_GameObject: {fileID: 444396695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d896faa75ea396d4baf03f14a79a912d, type: 3}
-  m_Name: 
-  range: {x: 4, y: 4}
-  lineOfSightCheck: 0
-  isActive: 1
 --- !u!1 &487731835
 GameObject:
   m_ObjectHideFlags: 0
@@ -1232,7 +1218,7 @@ GameObject:
   - 4: {fileID: 487731836}
   - 33: {fileID: 487731838}
   - 23: {fileID: 487731837}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1285,7 +1271,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 507539019}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1312,7 +1298,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 591090354}
   - 137: {fileID: 591090355}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: ForeArm01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1372,7 +1358,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 638202938}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1398,7 +1384,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 639236130}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1427,7 +1413,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 654962478}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1453,7 +1439,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 728611461}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1480,7 +1466,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 747538291}
   - 137: {fileID: 747538292}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: ForeArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1537,7 +1523,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 766720026}
   - 137: {fileID: 766720027}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: HeadD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1593,7 +1579,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 802671943}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: R_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1620,7 +1606,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 803487835}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1647,7 +1633,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 824453019}
   - 137: {fileID: 824453020}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: HeadB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1705,7 +1691,7 @@ GameObject:
   - 4: {fileID: 831713369}
   - 33: {fileID: 831713371}
   - 23: {fileID: 831713370}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: HairB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1758,7 +1744,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 848709916}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: L_Shin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1785,7 +1771,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 872360371}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1811,7 +1797,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 874605229}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 L Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1839,7 +1825,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 886318296}
   - 137: {fileID: 886318297}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1900,7 +1886,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 912665220}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: R_Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1929,7 +1915,7 @@ GameObject:
   - 4: {fileID: 918474962}
   - 33: {fileID: 918474964}
   - 23: {fileID: 918474963}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: HairA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2044,7 +2030,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 972402841}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 L Toe0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2108,7 +2094,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 988945547}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2134,7 +2120,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1031918631}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 R Clavicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2162,7 +2148,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1041520904}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2188,7 +2174,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1047512715}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 L Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2215,7 +2201,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1069586204}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2241,7 +2227,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1071948039}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2270,7 +2256,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1094364039}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2297,7 +2283,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1110961015}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2323,7 +2309,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1114225842}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Particle View 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2349,7 +2335,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1132526789}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2405,7 +2391,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1194895879}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 Footsteps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2432,7 +2418,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1227377987}
   - 137: {fileID: 1227377988}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Thigh01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2488,7 +2474,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1267927328}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 R Finger0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2515,7 +2501,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1287525515}
   - 137: {fileID: 1287525516}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2571,7 +2557,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1303326191}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2597,7 +2583,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1311375001}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 L Toe0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2626,7 +2612,7 @@ GameObject:
   - 4: {fileID: 1318715719}
   - 33: {fileID: 1318715721}
   - 23: {fileID: 1318715720}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: HairC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2680,7 +2666,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1329036057}
   - 137: {fileID: 1329036058}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: HeadC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2736,7 +2722,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1359211078}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2762,7 +2748,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1384097969}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2788,7 +2774,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1394709805}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2817,7 +2803,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1422867377}
   - 137: {fileID: 1422867378}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2878,7 +2864,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1438714936}
   - 137: {fileID: 1438714937}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Shoe01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2936,7 +2922,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1469231983}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: R_Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2965,7 +2951,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1486162288}
   - 137: {fileID: 1486162289}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3025,7 +3011,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1534598160}
   - 137: {fileID: 1534598161}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3133,7 +3119,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1605166298}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 R Finger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3160,7 +3146,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1635496884}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3186,7 +3172,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1685445596}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Pelvis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3213,7 +3199,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1702325081}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3240,7 +3226,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1728664950}
   - 137: {fileID: 1728664951}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: HeadA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3296,7 +3282,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1743638774}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3323,7 +3309,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1746250429}
   - 137: {fileID: 1746250430}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3380,7 +3366,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1794325279}
   - 137: {fileID: 1794325280}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3436,7 +3422,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1823865241}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 HeadNub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3462,7 +3448,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1896447234}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: R_Shin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3489,7 +3475,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1903379185}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3515,7 +3501,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1919825888}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: CSolver01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3543,7 +3529,7 @@ GameObject:
   - 4: {fileID: 1977520075}
   - 33: {fileID: 1977520077}
   - 23: {fileID: 1977520076}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Object14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3596,7 +3582,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1985518121}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3622,7 +3608,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1990531867}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 R Toe0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3648,7 +3634,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2047779748}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Bip01 L Finger0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3779,7 +3765,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2108614174}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ragdoll16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3899,7 +3885,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2135560547}
   - 137: {fileID: 2135560548}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}

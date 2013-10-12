@@ -6,24 +6,21 @@ using UnityEngine;
 
 public class Invisibility : EffectInstance
 {
-    public override void init()
+    public override void Init(NPC n)
     {
-        base.init();
         //--npc
         //disable rendering on object
         //--player
         //apply shader to player, NPC's should check for invisibility in their AI functions, not here
     }
 
-    public override void apply()
+    public override void Apply(NPC n)
     {
-        base.apply();
         //check if Player has SeeInvisible and enable rendering if so, disable if otherwise
     }
 
-    public override void remove()
+    public override void Remove(NPC n)
     {
-        base.apply();
         //reverse init()
     }
 

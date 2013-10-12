@@ -6,24 +6,24 @@ public class PoisonDamageEffect : PoisonEffect
 {
     Integer strength;
 
-    public override void apply()
+    public override void Apply(NPC n)
     {
-        base.apply();
-        if (!npc.HasEffect<PoisonResistance>())
+        base.Apply(n);
+        if (!n.HasEffect<PoisonResistance>())
         {
-            npc.AdjustHealth(Convert.ToInt32(-strength));
+            n.AdjustHealth(Convert.ToInt32(-strength));
         }
     }
 
-    public override void init()
+    public override void Init(NPC n)
     {
-        base.init();
-        BigBoss.Gooey.CreateTextPop(npc.gameObject.transform.position, "Poisoned!", UnityEngine.Color.green);
+        base.Init(n);
+        BigBoss.Gooey.CreateTextPop(n.gameObject.transform.position, "Poisoned!", UnityEngine.Color.green);
     }
 
-    public override void remove()
+    public override void Remove(NPC n)
     {
-        base.remove();
+        base.Remove(n);
     }
 
     public override void SetParams()

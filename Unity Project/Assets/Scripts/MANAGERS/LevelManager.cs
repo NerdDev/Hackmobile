@@ -13,8 +13,8 @@ public class LevelManager : MonoBehaviour, IManager {
     private static Level[] Levels;
 
     // Public Access
-    public static Level Level { get; private set; }
-    public static int CurLevelDepth { get; private set; }
+    public Level Level { get; private set; }
+    public int CurLevelDepth { get; private set; }
 
     public void Initialize()
     {

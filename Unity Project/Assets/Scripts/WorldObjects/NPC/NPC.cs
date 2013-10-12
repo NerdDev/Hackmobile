@@ -5,7 +5,7 @@ using System;
 using XML;
 
 
-public class NPC : WorldObject
+public class NPC : WorldObject, IAffectable
 {
     /**
      * Initialization Methods
@@ -55,11 +55,10 @@ public class NPC : WorldObject
      * All the properties of the NPC should be contained here.
      */
     #region NPC Properties
-
-    public Effects effects = new Effects();
     //public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
     public ESFlags<NPCFlags> flags = new ESFlags<NPCFlags>();
     public ESFlags<Keywords> keywords = new ESFlags<Keywords>();
+    protected Effects effects;
     public Race race;
     public Role role;
     public AttributesData attributes = new AttributesData();
@@ -123,6 +122,7 @@ public class NPC : WorldObject
 
     public NPC()
     {
+        effects = new Effects(this);
     }
 
     void Start()
@@ -425,7 +425,7 @@ public class NPC : WorldObject
         }
         GridCoordinate = new Vector2(this.gameObject.transform.position.x.Round(), this.gameObject.transform.position.z.Round());
         gridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
-        gridSpace.val = LevelManager.Level[gridSpace.x, gridSpace.y];
+        gridSpace.val = BigBoss.Levels.Level[gridSpace.x, gridSpace.y];
         gridSpace.val.Put(this);
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
         return true;
@@ -435,92 +435,6 @@ public class NPC : WorldObject
     {
         PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(x, y));
         return path;
-    }
-
-    #endregion
-
-    #region Effects
-    public virtual void ApplyEffect(EffectInstance effect)
-    {
-        if (effect.turnsToProcess != 0)
-        {
-            if (effects.ContainsKey(effect.effect))
-            {
-                effects[effect.effect] = effects[effect.effect].merge(effect);
-            }
-            else
-            {
-                effects.Add(effect.effect, effect.activate(this));
-            }
-        }
-        else
-        {
-            effect.activate(this);
-        }
-    }
-
-    public void RemoveEffect(string effect)
-    {
-        if (effects.ContainsKey(effect))
-        {
-            BigBoss.Time.RemoveFromUpdateList(effects[effect]);
-            effects[effect].IsActive = false;
-            effects.Remove(effect);
-        }
-        else
-        {
-            //effect doesn't exist on the NPC
-        }
-    }
-
-    public void RemoveEffect<T>()
-    {
-        Type t = typeof(T);
-        RemoveEffect(t.ToString());
-    }
-
-    public bool RemoveEffectIfExists<T>()
-    {
-        Type t = typeof(T);
-        EffectInstance inst = null;
-        foreach (EffectInstance instance in effects.Values)
-        {
-            if (instance is T)
-            {
-                inst = instance;
-            }
-        }
-        if (inst != null)
-        {
-            effects.Remove(inst.ToString());
-            return true;
-        }
-        return false;
-    }
-
-    public bool HasEffect<T>()
-    {
-        Type t = typeof(T);
-        foreach (EffectInstance instance in effects.Values)
-        {
-            if (instance is T)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool HasEffect(string key)
-    {
-        if (effects.ContainsKey(key))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
     #endregion
 
@@ -605,7 +519,7 @@ public class NPC : WorldObject
 
     public void MoveNPC(Value2D<GridSpace> node)
     {
-        GridSpace grid = LevelManager.Level[node.x, node.y];
+        GridSpace grid = BigBoss.Levels.Level[node.x, node.y];
         if (!grid.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
         {
             int xmove = gridSpace.x - node.x;
@@ -874,7 +788,7 @@ public class NPC : WorldObject
 
     bool IsNextToPlayer()
     {
-        Surrounding<GridSpace> s = LevelManager.Level.Surrounding;
+        Surrounding<GridSpace> s = BigBoss.Levels.Level.Surrounding;
         s.Load(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
         foreach (Value2D<GridSpace> grid in s)
         {
@@ -951,6 +865,38 @@ public class NPC : WorldObject
                 }
             }
         }
+    }
+    #endregion
+
+    #region IAffectable
+    public void ApplyEffect(EffectInstance effect)
+    {
+        effects.ApplyEffect(effect);
+    }
+
+    public void RemoveEffect(string effect)
+    {
+        effects.RemoveEffect(effect);
+    }
+
+    public void RemoveEffect<T>() where T : EffectInstance
+    {
+        effects.RemoveEffect<T>();
+    }
+
+    public bool RemoveAnEffect<T>() where T : EffectInstance
+    {
+        return effects.RemoveAnEffect<T>();
+    }
+
+    public bool HasEffect<T>() where T : EffectInstance
+    {
+        return effects.HasEffect<T>();
+    }
+
+    public bool HasEffect(string key)
+    {
+        return effects.HasEffect(key);
     }
     #endregion
 }
