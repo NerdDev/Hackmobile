@@ -10,7 +10,6 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public void Initialize()
     {
         SpawnModifier.RegisterModifiers();
-        TestManager.Start();
     }
 
     public void PopulateLevel(Level l)
@@ -49,8 +48,10 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return room.RandomValue(Probability.SpawnRand);
     }
 
-    public void SpawnCreature(Point p, NPC n)
+    public void SpawnNPC(Point p, NPC n)
     {
+        if (p == null)
+            p = PickStartLocation(BigBoss.Levels.Level);
         GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
         NPC newNPC = gameObject.AddComponent<NPC>();
         newNPC.setData(n);
@@ -58,30 +59,25 @@ public class DungeonMaster : MonoBehaviour, IManager {
         newNPC.init();
     }
 
-    public void SpawnCreature(Point p, string npc)
+    public void SpawnNPC(Point p, string npc)
     {
-        SpawnCreature(p, BigBoss.WorldObject.getNPC(npc));
+        SpawnNPC(p, BigBoss.WorldObject.getNPC(npc));
     }
 
-    public void SpawnRandomLeveledCreature(Point p)
-    {
-
-    }
-
-    public void SpawnCreature(Point p, Percent variety, params Keywords[] keywords)
+    public void SpawnNPC(Point p, Percent variety, params Keywords[] keywords)
     {
         if (Probability.SpawnRand.Percent(variety))
-            SpawnRandomLeveledCreature(p);
+            SpawnNPC(p);
         else
-            SpawnCreature(p, keywords);
+            SpawnNPC(p, keywords);
     }
 
-    public void SpawnCreature(Point p, params Keywords[] keywords)
+    public void SpawnNPC(Point p, params Keywords[] keywords)
     {
-        SpawnCreature(p, (ESFlags<Keywords>) keywords);
+        SpawnNPC(p, (ESFlags<Keywords>) keywords);
     }
 
-    public void SpawnCreature(Point p, ESFlags<Keywords> keywords)
+    public void SpawnNPC(Point p, ESFlags<Keywords> keywords)
     {
         LeveledPool<NPC> pool = GetPool(keywords);
         NPC n = pool.Get();
@@ -89,19 +85,20 @@ public class DungeonMaster : MonoBehaviour, IManager {
         {
             throw new ArgumentException("NPC Pool was empty for keywords: " + keywords);
         }
-        SpawnCreature(p, n);
+        SpawnNPC(p, n);
     }
 
     protected LeveledPool<NPC> GetPool(ESFlags<Keywords> keywords)
     {
         LeveledPool<NPC> pool;
+        bool empty = keywords.Empty;
         if (!npcPools.TryGetValue(keywords, out pool))
         {
             pool = new LeveledPool<NPC>(DefaultLevelCurve);
             npcPools.Add(keywords, pool);
             foreach (NPC n in BigBoss.WorldObject.getNPCs().Values)
             {
-                if (n.keywords.Contains(keywords))
+                if (empty || n.keywords.Contains(keywords) )
                 {
                     pool.Add(n);
                 }
