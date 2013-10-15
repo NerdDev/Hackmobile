@@ -14,17 +14,17 @@ public static class TestManager
         /*
          * Initializes some test spawns and places the Player object.
          */
-        Value2D<GridSpace> loc = BigBoss.DungeonMaster.PickStartLocation(BigBoss.Levels.Level);
+        Value2D<GridSpace> loc = BigBoss.DungeonMaster.PickSpawnableLocation(BigBoss.Levels.Level);
         BigBoss.PlayerInfo.transform.position = new Vector3(loc.x, -.5f, loc.y);
 
         for (int i = 0; i < 4; i++)
         {
-            loc = BigBoss.DungeonMaster.PickStartLocation(BigBoss.Levels.Level);
+            loc = BigBoss.DungeonMaster.PickSpawnableLocation(BigBoss.Levels.Level);
             BigBoss.DungeonMaster.SpawnNPC(new Point(loc.x, loc.y), "skeleton_knight");
         }
         for (int i = 0; i < 4; i++)
         {
-            loc = BigBoss.DungeonMaster.PickStartLocation(BigBoss.Levels.Level);
+            loc = BigBoss.DungeonMaster.PickSpawnableLocation(BigBoss.Levels.Level);
             BigBoss.DungeonMaster.SpawnNPC(new Point(loc.x, loc.y), "giant_spider");
         }
 

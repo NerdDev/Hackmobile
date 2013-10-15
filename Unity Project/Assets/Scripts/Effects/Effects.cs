@@ -55,7 +55,6 @@ public class Effects : SortedDictionary<string, EffectInstance>, Field, IAffecta
 
     public bool RemoveAnEffect<T>() where T : EffectInstance
     {
-        Type t = typeof(T);
         EffectInstance inst = null;
         foreach (EffectInstance instance in this.Values)
         {
@@ -74,7 +73,6 @@ public class Effects : SortedDictionary<string, EffectInstance>, Field, IAffecta
 
     public bool HasEffect<T>() where T : EffectInstance
     {
-        Type t = typeof(T);
         foreach (EffectInstance instance in this.Values)
         {
             if (instance is T)
