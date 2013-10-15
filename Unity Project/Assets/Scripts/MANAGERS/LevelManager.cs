@@ -27,8 +27,7 @@ public class LevelManager : MonoBehaviour, IManager {
     {
         SetCurLevel(0);
 
-        //if (BigBoss.DungeonMaster != null)
-        //    BigBoss.DungeonMaster.PopulateLevel(Level);
+        BigBoss.DungeonMaster.PopulateLevel(Level);
 
         SetCurLevel(1);
     }

@@ -42,16 +42,21 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return ret;
     }
 
-    public Value2D<GridSpace> PickStartLocation(Level l)
+    public Value2D<GridSpace> PickSpawnableLocation(Level l)
     {
         MultiMap<GridSpace> room = Spawnable(l.GetRooms().Random(Probability.SpawnRand));
         return room.RandomValue(Probability.SpawnRand);
     }
 
+    public Value2D<GridSpace> PickSpawnableLocation()
+    {
+        return PickSpawnableLocation(BigBoss.Levels.Level);
+    }
+
     public void SpawnNPC(Point p, NPC n)
     {
         if (p == null)
-            p = PickStartLocation(BigBoss.Levels.Level);
+            p = PickSpawnableLocation();
         GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
         NPC newNPC = gameObject.AddComponent<NPC>();
         newNPC.setData(n);

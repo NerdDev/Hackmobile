@@ -425,7 +425,8 @@ public class NPC : WorldObject, IAffectable
         }
         GridCoordinate = new Vector2(this.gameObject.transform.position.x.Round(), this.gameObject.transform.position.z.Round());
         gridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
-        gridSpace.val = BigBoss.Levels.Level[gridSpace.x, gridSpace.y];
+        Level level = BigBoss.Levels.Level;
+        gridSpace.val = level[gridSpace.x, gridSpace.y];
         gridSpace.val.Put(this);
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
         return true;
