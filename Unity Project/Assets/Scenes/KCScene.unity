@@ -1017,7 +1017,7 @@ MonoBehaviour:
   autoSelect: 1
   pickableLayers:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 12288
   StationnaryTolerance: 25
   longTapTime: 1
   swipeTolerance: .850000024

@@ -34,6 +34,7 @@ public class WorldObjectManager : MonoBehaviour, IManager {
         GameObject nullGONPC = new GameObject("nullNPC");
         nullNPC = nullGONPC.AddComponent<NPC>();
         nullNPC.setNull();
+        totalNumberOfNPCs.Remove(nullNPC);
 
         //Null material
         nullMaterial = new MaterialType();
@@ -43,6 +44,7 @@ public class WorldObjectManager : MonoBehaviour, IManager {
         GameObject nullGOItem = new GameObject("nullItem");
         nullItem = nullGOItem.AddComponent<Item>();
         nullItem.setNull();
+        TotalItemsInExistence.Remove(nullItem);
     }
 
 	public List<NPC> totalNumberOfNPCs = new List<NPC>();

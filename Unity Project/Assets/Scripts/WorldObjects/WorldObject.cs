@@ -81,7 +81,7 @@ public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
     #region Time Management
     int turnPoints = 0;
     int basePoints = 60;
-    protected bool isActive = false;
+    public bool isActive = false;
 
     public virtual void UpdateTurn()
     {

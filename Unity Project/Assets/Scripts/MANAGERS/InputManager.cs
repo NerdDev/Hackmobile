@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class InputManager : MonoBehaviour, IManager
 {
@@ -37,17 +39,55 @@ public class InputManager : MonoBehaviour, IManager
         //SubscribeToEasyTouchMethods();  //feel free to relocate this
     }
 
-    /*
-    public void SubscribeToEasyTouchMethods()
+    #region Touch Input
+    void OnEnable()
     {
-        EasyTouch.On_TouchStart += OnTouchStart;
+        EasyTouch.On_SimpleTap += On_SimpleTap;
     }
 
-    public void UnSubscribeToEasyTouchMethods()
+    void OnDisable()
     {
-        EasyTouch.On_TouchStart -= OnTouchStart;
+        EasyTouch.On_SimpleTap -= On_SimpleTap;
     }
-    */
+
+    void On_SimpleTap(Gesture gesture)
+    {
+        if (gesture.pickObject != null)
+        {
+            GameObject go = gesture.pickObject;
+            if (go.layer == 12)
+            {
+                Point p = new Point(go.transform.position.x, go.transform.position.z);
+                if (this is InputManager && LevelManager.Level[p.x, p.y].HasObject())
+                {
+                    List<WorldObject> list = LevelManager.Level[p.x, p.y].GetBlockingObjects();
+                    NPC n = (NPC)list.Find(w => w is NPC);
+                    if (n != null && n.IsNotAFreaking<Player>())
+                    {
+                        Value2D<GridSpace> playerLoc = BigBoss.Player.gridSpace;
+                        IEnumerable<Value2D<GridSpace>> grids = LevelManager.Level.getSurroundingSpaces(p.x, p.y);
+                        if (grids.Single(g => g.x == playerLoc.x && g.y == playerLoc.y) != null)
+                        {
+                            BigBoss.Player.attack(n);
+                        }
+                    }
+                }
+            }
+            else if (go.layer == 13)
+            {
+                //stairs
+                if (go.name.Equals("StairsDown"))
+                {
+                    BigBoss.Levels.SetCurLevel(false);
+                }
+                else if (go.name.Equals("StairsUp"))
+                {
+                    BigBoss.Levels.SetCurLevel(true);
+                }
+            }
+        }
+    }
+    #endregion
 
     void Update()
     {
