@@ -25,12 +25,9 @@ public class LevelManager : MonoBehaviour, IManager {
     
     void Start()
     {
-        SetCurLevel(0);
-
-        BigBoss.DungeonMaster.PopulateLevel(Level);
     }
 
-    void SetCurLevel(int num)
+    public void SetCurLevel(int num)
     {
         Destroy(Level);
         Level = GetLevel(num);

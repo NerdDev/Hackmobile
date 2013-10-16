@@ -7,7 +7,6 @@
     <prefab>Prefabs_Meshes/NPCs/Skeleton_Knight</prefab>
 		<flags>
 			<flag name="nopoly" />
-			<flag name="leaves_corpse" />
 		</flags>
 		<properties>
 			<!-- none -->
@@ -52,7 +51,6 @@
 		<race>Undead</race>
 		<flags>
 			<flag name="nopoly" />
-			<flag name="leaves_corpse" />
 		</flags>
 		<properties>
 			<!-- none -->
