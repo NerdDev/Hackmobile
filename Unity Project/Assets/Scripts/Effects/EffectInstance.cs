@@ -90,24 +90,23 @@ public abstract class EffectInstance : PassesTurns
         }
     }
 
-    public EffectInstance NewInstance()
+    public EffectInstance NewInstance(IAffectable obj = null)
     {
-        Type t = EffectManager.effects[effect];
-        EffectInstance instance = (EffectInstance)Activator.CreateInstance(t);
+        EffectInstance instance = (EffectInstance)Activator.CreateInstance(GetType());
         instance.x = this.x;
         instance.effect = this.effect;
         instance.map = this.map.Copy();
         instance.turnsToProcess = this.turnsToProcess;
         instance.SetParams();
         instance.IsActive = true;
+        instance.obj = obj;
         instance.initialize();
         return instance;
     }
 
     public EffectInstance ActivateOnObject(IAffectable o)
     {
-        EffectInstance instance = NewInstance();
-        instance.obj = o;
+        EffectInstance instance = NewInstance(o);
         return instance;
     }
 

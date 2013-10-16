@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using XML;
 
 public class Effects : SortedDictionary<string, EffectInstance>, Field, IAffectable
 {
@@ -10,7 +11,7 @@ public class Effects : SortedDictionary<string, EffectInstance>, Field, IAffecta
         this.owner = owner;
     }
 
-    public void parseXML(XML.XMLNode x, string name)
+    public void parseXML(XMLNode x, string name)
     {
     }
 

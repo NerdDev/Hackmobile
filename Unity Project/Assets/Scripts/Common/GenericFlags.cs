@@ -27,9 +27,9 @@ public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, ICo
     {
         get
         {
-            foreach (T t in this)
-            { // If a T gets returned, not empty
-                return false;
+            foreach (bool b in ba)
+            {
+                if (b) return false;
             }
             return true;
         }

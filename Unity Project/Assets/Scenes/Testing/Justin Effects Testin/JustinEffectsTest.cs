@@ -7,7 +7,9 @@ public class JustinEffectsTest : MonoBehaviour {
     void Start()
     {
         BigBoss.Levels.SetCurLevel(0);
-        BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level);
+        NPC n = BigBoss.DungeonMaster.SpawnNPC(BigBoss.DungeonMaster.PickSpawnableLocation());
+        AddHealth effect = new AddHealth();
+        n.ApplyEffect(effect);
 	}
 	
 	// Update is called once per frame
