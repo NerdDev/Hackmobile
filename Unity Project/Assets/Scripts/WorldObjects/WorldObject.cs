@@ -34,6 +34,10 @@ public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
         get { return prefab; }
         set { this.prefab = value; }
     }
+    public override string ToString()
+    {
+        return Name;
+    }
     #endregion
 
     // Use this for initialization

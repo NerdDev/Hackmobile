@@ -57,11 +57,18 @@ public class DungeonMaster : MonoBehaviour, IManager {
     {
         if (p == null)
             p = PickSpawnableLocation();
-        GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
-        NPC newNPC = gameObject.AddComponent<NPC>();
-        newNPC.setData(n);
-        newNPC.IsActive = true;
-        newNPC.init();
+        try
+        {
+            GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
+            NPC newNPC = gameObject.AddComponent<NPC>();
+            newNPC.setData(n);
+            newNPC.IsActive = true;
+            newNPC.init();
+        }
+        catch (ArgumentException ex)
+        {
+            throw new ArgumentException("The prefab is null: '" + n.Prefab + "' on NPC " + n.ToString());
+        }
     }
 
     public void SpawnNPC(Point p, string npc)
@@ -103,7 +110,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
             npcPools.Add(keywords, pool);
             foreach (NPC n in BigBoss.WorldObject.getNPCs().Values)
             {
-                if (n.keywords.Contains(keywords) // NPC has keywords
+                if (!empty && n.keywords.Contains(keywords) // NPC has keywords
                     || (empty && !n.flags[NPCFlags.NO_RANDOM_SPAWN])) // If keywords empty
                 {
                     pool.Add(n);
