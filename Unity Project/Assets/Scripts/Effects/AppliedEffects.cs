@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using XML;
 
-public class Effects : SortedDictionary<string, EffectInstance>, Field, IAffectable
+public class AppliedEffects : SortedDictionary<string, EffectInstance>, Field, IAffectable
 {
     IAffectable owner;
 
-    public Effects(IAffectable owner)
+    public AppliedEffects(IAffectable owner)
     {
         this.owner = owner;
     }

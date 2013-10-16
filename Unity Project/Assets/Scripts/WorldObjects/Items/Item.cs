@@ -54,9 +54,9 @@ public class Item : WorldObject, PassesTurns, FieldContainer
     public ItemStats stats = new ItemStats();
 
     //effects
-    protected EffectEvent onEaten = new EffectEvent();
-    protected EffectEvent onEquip = new EffectEvent();
-    protected EffectEvent onUse = new EffectEvent();
+    protected EffectList onEaten = new EffectList();
+    protected EffectList onEquip = new EffectList();
+    protected EffectList onUse = new EffectList();
 
     #endregion
 
@@ -142,9 +142,9 @@ public class Item : WorldObject, PassesTurns, FieldContainer
         type = map.Add<String>("type");
         //rest of it is normal
         props = map.Add<ItemProperties>("properties");
-        onEquip = map.Add<EffectEvent>("OnEquipEffect");
-        onUse = map.Add<EffectEvent>("OnUseEffect");
-        onEaten = map.Add<EffectEvent>("OnEatenEffect");
+        onEquip = map.Add<EffectList>("OnEquipEffect");
+        onUse = map.Add<EffectList>("OnUseEffect");
+        onEaten = map.Add<EffectList>("OnEatenEffect");
         stats = map.Add<ItemStats>("stats");
         Icon = map.Add<String>("icon");
     }

@@ -58,7 +58,7 @@ public class NPC : WorldObject, IAffectable
     //public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
     public ESFlags<NPCFlags> flags = new ESFlags<NPCFlags>();
     public ESFlags<Keywords> keywords = new ESFlags<Keywords>();
-    protected Effects effects;
+    protected AppliedEffects effects;
     public Race race;
     public Role role;
     public AttributesData attributes = new AttributesData();
@@ -122,7 +122,7 @@ public class NPC : WorldObject, IAffectable
 
     public NPC()
     {
-        effects = new Effects(this);
+        effects = new AppliedEffects(this);
     }
 
     void Start()
