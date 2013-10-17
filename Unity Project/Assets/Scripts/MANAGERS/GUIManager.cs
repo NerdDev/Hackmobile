@@ -278,7 +278,6 @@ public class GUIManager : MonoBehaviour, IManager
         }
         else if (textPopList.Count > 0)
         {
-            //Debug.Log("Displaying text pop up.");
             textPopList.Dequeue().Display();
         }
     }
@@ -287,9 +286,8 @@ public class GUIManager : MonoBehaviour, IManager
     {
         while (true)
         {
-            //Debug.Log("Running display.");
             DisplayTextPops();
-            yield return new WaitForSeconds(.15f);
+            yield return new WaitForSeconds(.25f);
         }
     }
 
@@ -308,12 +306,10 @@ public class GUIManager : MonoBehaviour, IManager
 
         public void Display()
         {
-            //Debug.Log("Instantiating prefab.");
-            GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, pos, Quaternion.identity) as GameObject;
+            GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, Camera.mainCamera.WorldToViewportPoint(pos), Quaternion.identity) as GameObject;
             GUIText textComp = (GUIText)go.GetComponent<GUIText>();
             textComp.text = str;
             textComp.material.color = col;
-            Debug.Log(str);
         }
     }
     #endregion

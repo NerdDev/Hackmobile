@@ -47,13 +47,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
                 Destroy(go);
             }
         }
-        foreach (WorldObject wo in BigBoss.WorldObject.getNPCs().Values)
-        {
-            if (wo.IsActive)
-            {
-                wo.DestroySelf();
-            }
-        }
+        BigBoss.WorldObject.ClearNPCs();
     }
 
     public Value2D<GridSpace> CreateStairs(string name, PrimitiveType prim)

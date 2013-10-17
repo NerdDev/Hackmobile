@@ -17,7 +17,7 @@ public class GridSpace
         this.Type = type;
     }
 
-    void ColliderTrigger(bool on)
+    public void ColliderTrigger(bool on)
     {
         if (Block != null && Block.collider != null)
         {

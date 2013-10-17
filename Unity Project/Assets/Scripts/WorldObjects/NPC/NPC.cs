@@ -29,6 +29,7 @@ public class NPC : WorldObject
     public override void DestroySelf()
     {
         base.DestroySelf();
+        this.gridSpace.val.Remove(this);
         BigBoss.WorldObject.RemoveNPCFromMasterList(this);
     }
 

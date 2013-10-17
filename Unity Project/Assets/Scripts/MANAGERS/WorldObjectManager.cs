@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class WorldObjectManager : MonoBehaviour, IManager {
 
@@ -74,6 +75,14 @@ public class WorldObjectManager : MonoBehaviour, IManager {
     public Dictionary<string, NPC> getNPCs()
     {
         return baseNPCs;
+    }
+
+    public void ClearNPCs()
+    {
+        foreach (WorldObject wo in baseNPCs.Values.ToList().FindAll(w => w.IsActive))
+        {
+            wo.DestroySelf();
+        }
     }
 
     public List<NPC> getExistingNPCs(params Keywords[] kw)
