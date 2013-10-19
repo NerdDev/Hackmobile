@@ -5,6 +5,7 @@ using XML;
 public class AppliedEffects : SortedDictionary<string, EffectInstance>, Field, IAffectable
 {
     IAffectable owner;
+    WorldObject IAffectable.Self { get { return owner.Self; } }
 
     public AppliedEffects(IAffectable owner)
     {

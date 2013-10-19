@@ -55,12 +55,12 @@ abstract public class LayoutObject
         Point reduc = new Point(reducBase);
         int xShift, yShift;
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Shift Outside " + ToString());
-            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Shifting outside of " + rhs.ToString());
-            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
-            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Shift Outside " + ToString());
+            BigBoss.Debug.w(Logs.LevelGen, "Shifting outside of " + rhs.ToString());
+            BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
+            BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
         }
         #endregion
         while (this.IntersectsSmart(rhs))
@@ -82,9 +82,9 @@ abstract public class LayoutObject
         if (finalShift)
             shift(dir);
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
     }
@@ -286,9 +286,9 @@ abstract public class LayoutObject
     public GridArray GetConnectedGrid()
     {
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Get Connected Grid " + this);
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Get Connected Grid " + this);
         }
         #endregion
         List<LayoutObject> connected;
@@ -300,9 +300,9 @@ abstract public class LayoutObject
             arrOut.PutAll(obj);
         }
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
         return arrOut;
@@ -312,9 +312,9 @@ abstract public class LayoutObject
     {
         if (obj != null && isValid() && obj.isValid())
         {
-            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Connecting " + ToString() + " to " + obj.ToString());
+                BigBoss.Debug.w(Logs.LevelGen, "Connecting " + ToString() + " to " + obj.ToString());
             }
             _connectedTo.Add(obj);
             obj._connectedTo.Add(this);
@@ -345,13 +345,13 @@ abstract public class LayoutObject
     void ConnectedToRecursive(List<LayoutObject> list, Bounding bounds)
     {
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Connected To Recursive: " + this);
-            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Connected to:");
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Connected To Recursive: " + this);
+            BigBoss.Debug.w(Logs.LevelGen, "Connected to:");
             foreach (var connected in _connectedTo)
             {
-                BigBoss.Debug.w(DebugManager.Logs.LevelGen, 1, connected.ToString());
+                BigBoss.Debug.w(Logs.LevelGen, 1, connected.ToString());
             }
         }
         #endregion
@@ -368,9 +368,9 @@ abstract public class LayoutObject
             }
         }
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
     }
@@ -383,9 +383,9 @@ abstract public class LayoutObject
     public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
     {
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Connected To");
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Connected To");
         }
         #endregion
         failObj = null;
@@ -399,9 +399,9 @@ abstract public class LayoutObject
             }
         }
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
         return failObj == null;
@@ -586,7 +586,7 @@ abstract public class LayoutObject
         }
     }
 
-    public virtual void ToLog(DebugManager.Logs log, params String[] customContent)
+    public virtual void ToLog(Logs log, params String[] customContent)
     {
         if (BigBoss.Debug.logging(log))
         {
@@ -607,7 +607,7 @@ abstract public class LayoutObject
         }
     }
 
-    public virtual void ToLog(DebugManager.Logs log)
+    public virtual void ToLog(Logs log)
     {
         if (BigBoss.Debug.logging(log))
         {

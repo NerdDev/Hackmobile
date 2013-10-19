@@ -115,6 +115,18 @@ public class BigBoss : MonoBehaviour
             return worldObject;
         }
     }
+    private static TypeManager types;
+    public static TypeManager Types
+    {
+        get
+        {
+            if (types == null)
+            {
+                BBoss.Instantiate<TypeManager>(out types);
+            }
+            return types;
+        }
+    }
     private static DebugManager debug;
     public static DebugManager Debug
     {

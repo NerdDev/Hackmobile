@@ -30,12 +30,12 @@ public class DFSSearcher : GridSearcher
     public Stack<Value2D<GridType>> Search(Value2D<GridType> startPoint, GridType[,] arr, GridSet validSpaces, GridSet targets)
     {
         #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Depth First Search");
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Depth First Search");
             GridArray tmp = new GridArray(arr);
             tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-            tmp.ToLog(DebugManager.Logs.LevelGen, "Starting Map:");
+            tmp.ToLog(Logs.LevelGen, "Starting Map:");
         }
         #endregion
         this.targets = targets;
@@ -55,7 +55,7 @@ public class DFSSearcher : GridSearcher
             // Don't want to visit the same point on a different route later
             blockedPoints[startPoint.x, startPoint.y] = true;
             #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             { // Set up new print array
                 debugGrid = new GridArray(arr);
                 // Fill in blocked points
@@ -74,9 +74,9 @@ public class DFSSearcher : GridSearcher
             // Get surrounding points
             options.Load(startPoint.x, startPoint.y);
             #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
-                debugGrid.ToLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count + " options.");
+                debugGrid.ToLog(Logs.LevelGen, "Current Map with " + options.Count + " options.");
             }
             #endregion
 
@@ -85,10 +85,10 @@ public class DFSSearcher : GridSearcher
             if (targetDir != null)
             {
                 #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    BigBoss.Debug.w(DebugManager.Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
-                    BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+                    BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + startPoint);
+                    BigBoss.Debug.printFooter(Logs.LevelGen);
                 }
                 #endregion
                 pathTaken.Push(targetDir);
@@ -104,9 +104,9 @@ public class DFSSearcher : GridSearcher
             else
             {
                 #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Chose Direction: " + targetDir);
+                    BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + targetDir);
                 }
                 #endregion
                 startPoint = targetDir;
@@ -114,9 +114,9 @@ public class DFSSearcher : GridSearcher
             }
         }
         #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
         return pathTaken;

@@ -8,14 +8,6 @@ public class DebugManager : MonoBehaviour, IManager
 {
 
     #region LogTypes
-    public enum Logs
-    {
-        Main,
-        LevelGen,
-        LevelGenMain,
-        Items,
-        NPCs,
-    };
     string[] logPaths;
     string[] logNames;
     bool[] logOn;
@@ -83,12 +75,12 @@ public class DebugManager : MonoBehaviour, IManager
         flags[DebugFlag.LevelGen_Connected_To] = false;
 
         // Test output
-        if (logging(DebugManager.Logs.Main))
+        if (logging(Logs.Main))
         {
-            w(DebugManager.Logs.Main, "Debug Manager Started.");
+            w(Logs.Main, "Debug Manager Started.");
 			if (logging(Logs.LevelGen))
 			{
-            	w(DebugManager.Logs.Main, "Level Gen Debugging On.");
+            	w(Logs.Main, "Level Gen Debugging On.");
 			}
         }
 	}
@@ -131,6 +123,16 @@ public class DebugManager : MonoBehaviour, IManager
         {
             Get(e).w(depthModifier, line);
         }
+    }
+
+    public void log(Logs e, int depthModifier, string line)
+    {
+        w(e, depthModifier, line);
+    }
+
+    public void log(Logs e, string line)
+    {
+        w(e, line);
     }
 
     public void printHeader(Logs e, string line)
@@ -381,3 +383,13 @@ public class DebugManager : MonoBehaviour, IManager
         ObjDump.Dump(o);
     }
 }
+
+public enum Logs
+{
+    Main,
+    LevelGen,
+    LevelGenMain,
+    Items,
+    NPCs,
+    XML
+};

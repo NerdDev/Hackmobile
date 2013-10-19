@@ -95,7 +95,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         Max = maxNum;
     }
 
-    public override void ToLog(DebugManager.Logs log)
+    public override void ToLog(Logs log)
     {
         if (BigBoss.Debug.logging(log) && BigBoss.Debug.Flag(DebugManager.DebugFlag.Probability))
         {

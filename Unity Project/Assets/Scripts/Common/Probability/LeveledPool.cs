@@ -137,7 +137,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
         throw new NotImplementedException();
     }
 
-    public override void ToLog(DebugManager.Logs log)
+    public override void ToLog(Logs log)
     {
         throw new NotImplementedException();
     }

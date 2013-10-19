@@ -4,7 +4,7 @@ using System.Collections;
 using XML;
 using System.Collections.Generic;
 
-public class Item : WorldObject, PassesTurns, FieldContainer
+public class Item : Affectable, PassesTurns, FieldContainer
 {
     #region BIGBOSSMANAGEMENT
     //consider some abtract/virtual methods and variables here for cleanliness
@@ -54,9 +54,9 @@ public class Item : WorldObject, PassesTurns, FieldContainer
     public ItemStats stats = new ItemStats();
 
     //effects
-    protected EffectList onEaten = new EffectList();
-    protected EffectList onEquip = new EffectList();
-    protected EffectList onUse = new EffectList();
+    protected Spell onEaten = new Spell();
+    protected Spell onEquip = new Spell();
+    protected Spell onUse = new Spell();
 
     #endregion
 
@@ -71,7 +71,7 @@ public class Item : WorldObject, PassesTurns, FieldContainer
         if (onEaten != null)
         {
             Debug.Log("Activating OnEatenEvent()");
-            onEaten.activate(n);
+            onEaten.Activate(this, n);
         }
     }
 
@@ -86,7 +86,7 @@ public class Item : WorldObject, PassesTurns, FieldContainer
     {
         if (onUse != null)
         {
-            onUse.activate(n);
+            onUse.Activate(n);
         }
 
         //if usage needs restricted, change that here
@@ -108,7 +108,7 @@ public class Item : WorldObject, PassesTurns, FieldContainer
     {
         if (onEquip != null)
         {
-            onEquip.activate(n);
+            onEquip.Activate(n);
         }
     }
 
@@ -116,7 +116,7 @@ public class Item : WorldObject, PassesTurns, FieldContainer
     {
         if (onEquip != null)
         {
-            onEquip.activate(n);
+            onEquip.Activate(n);
         }
     }
 
@@ -142,9 +142,9 @@ public class Item : WorldObject, PassesTurns, FieldContainer
         type = map.Add<String>("type");
         //rest of it is normal
         props = map.Add<ItemProperties>("properties");
-        onEquip = map.Add<EffectList>("OnEquipEffect");
-        onUse = map.Add<EffectList>("OnUseEffect");
-        onEaten = map.Add<EffectList>("OnEatenEffect");
+        onEquip = map.Add<Spell>("OnEquipEffect");
+        onUse = map.Add<Spell>("OnUseEffect");
+        onEaten = map.Add<Spell>("OnEatenEffect");
         stats = map.Add<ItemStats>("stats");
         Icon = map.Add<String>("icon");
     }

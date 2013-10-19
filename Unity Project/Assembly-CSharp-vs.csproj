@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/UnityPro/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/UnityPro/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -254,8 +254,7 @@
      <Compile Include="Assets\Scripts\Common\Value2D.cs" />
      <Compile Include="Assets\Scripts\Effects\AppliedEffects.cs" />
      <Compile Include="Assets\Scripts\Effects\EffectInstance.cs" />
-     <Compile Include="Assets\Scripts\Effects\EffectManager.cs" />
-     <Compile Include="Assets\Scripts\Effects\EffectTargetType.cs" />
+     <Compile Include="Assets\Scripts\Effects\EffectIntendedTarget.cs" />
      <Compile Include="Assets\Scripts\Effects\IAffectable.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\AddHealth.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\BlindnessEffect.cs" />
@@ -320,7 +319,9 @@
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\DictionaryExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\EnumExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\EnumerableExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
@@ -344,17 +345,53 @@
      <Compile Include="Assets\Scripts\MANAGERS\PreGameManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\TestManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\TimeManager.cs" />
+     <Compile Include="Assets\Scripts\MANAGERS\TypeManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\WorldObjectManager.cs" />
      <Compile Include="Assets\Scripts\Spawning\SpawnModifier.cs" />
      <Compile Include="Assets\Scripts\Spawning\SpawnModifiers\SpawnNPCs.cs" />
      <Compile Include="Assets\Scripts\Spawning\SpawnSpec.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\AppliedEffects.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\EffectInstance.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\EffectManager.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\EffectTargetType.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\IAffectable.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\AddHealth.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\BlindnessEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\CurePoison.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\Damage.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageCold.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageFire.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageShock.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\InvisibilityEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\LevitationEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\NutritionEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\PetrificationEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Poison\PoisonDamageEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Poison\PoisonEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Poison\PoisonSlowEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\ColdResistance.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\FireResistance.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\PoisonResistance.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\Resistance.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\ShockResistance.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\SeeInvisibleEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\TelepathyEffect.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
+     <Compile Include="Assets\Scripts\Spells\SpellAspect.cs" />
+     <Compile Include="Assets\Scripts\Spells\SpellCastInfo.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\ITargeter.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethod.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOE.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOELine.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOELocation.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOESelf.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOETargeted.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Self.cs" />
-     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Targeted AOE.cs" />
-     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Targeted.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedLocation.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedObject.cs" />
+     <Compile Include="Assets\Scripts\Spells\Targeting\TargetingStyle.cs" />
      <Compile Include="Assets\Scripts\TimedDestruction.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\Affectable.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\BUC.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemFlags.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemProperties.cs" />
@@ -390,6 +427,54 @@
      <Compile Include="Assets\iTweenEditor\iTween.cs" />
      <Compile Include="Assets\iTweenEditor\iTweenEvent.cs" />
      <Compile Include="Assets\iTweenEditor\iTweenPath.cs" />
+     <None Include="Assets\AudioToolkit\Readme.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
+     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
+     <None Include="Assets\Resources\XML\items.xml" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+     <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
+     <None Include="Assets\Scripts\XML\weapons.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
+     <None Include="Assets\EasyTouch\Readme_first.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
+     <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
+     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
+     <None Include="Assets\Fog of War\FoW\FOW.shader" />
+     <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
+     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
+     <None Include="Assets\Scripts\XML\strings.xml" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
+     <None Include="Assets\iTweenEditor\README.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
+     <None Include="Assets\Scripts\XML\player.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
+     <None Include="Assets\NGUI\ReadMe - 2.0.3d.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (HardClip).shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
+     <None Include="Assets\NGUI\Examples\Other\English.txt" />
+     <None Include="Assets\NGUI\Examples\Other\French.txt" />
+     <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
+     <None Include="Assets\Scripts\XML\materials.xml" />
+     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
+     <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
+     <None Include="Assets\Scripts\XML\consumables.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth.shader" />
+     <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
+     <None Include="Assets\Scripts\XML\npcs.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
+     <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
+     <None Include="Assets\Fog of War\ReadMe.txt" />
+     <None Include="Assets\Scripts\XML\titles.xml" />
  <Reference Include="AudioToolkit_FreeVersion">
  <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
  </Reference>

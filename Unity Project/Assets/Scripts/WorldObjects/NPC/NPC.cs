@@ -5,7 +5,7 @@ using System;
 using XML;
 
 
-public class NPC : WorldObject, IAffectable
+public class NPC : Affectable
 {
     /**
      * Initialization Methods
@@ -55,10 +55,8 @@ public class NPC : WorldObject, IAffectable
      * All the properties of the NPC should be contained here.
      */
     #region NPC Properties
-    //public SortedDictionary<string, EffectInstance> effects = new SortedDictionary<string, EffectInstance>();
     public ESFlags<NPCFlags> flags = new ESFlags<NPCFlags>();
     public ESFlags<Keywords> keywords = new ESFlags<Keywords>();
-    protected AppliedEffects effects;
     public Race race;
     public Role role;
     public AttributesData attributes = new AttributesData();
@@ -122,7 +120,6 @@ public class NPC : WorldObject, IAffectable
 
     public NPC()
     {
-        effects = new AppliedEffects(this);
     }
 
     void Start()
@@ -694,8 +691,6 @@ public class NPC : WorldObject, IAffectable
     public override void SetParams()
     {
         base.SetParams();
-
-        map.Add("effects", effects);
         map.Add("inventory", inventory);
 
         race = (Race)map.Add<EnumField<Race>>("race");
@@ -866,38 +861,6 @@ public class NPC : WorldObject, IAffectable
                 }
             }
         }
-    }
-    #endregion
-
-    #region IAffectable
-    public void ApplyEffect(EffectInstance effect)
-    {
-        effects.ApplyEffect(effect);
-    }
-
-    public void RemoveEffect(string effect)
-    {
-        effects.RemoveEffect(effect);
-    }
-
-    public void RemoveEffect<T>() where T : EffectInstance
-    {
-        effects.RemoveEffect<T>();
-    }
-
-    public bool RemoveAnEffect<T>() where T : EffectInstance
-    {
-        return effects.RemoveAnEffect<T>();
-    }
-
-    public bool HasEffect<T>() where T : EffectInstance
-    {
-        return effects.HasEffect<T>();
-    }
-
-    public bool HasEffect(string key)
-    {
-        return effects.HasEffect(key);
     }
     #endregion
 }

@@ -7,15 +7,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
     <NoStdLib>true</NoStdLib>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <MonoProfile>unity</MonoProfile>
-    <UnityPath>C:\Program Files (x86)\Unity\Editor</UnityPath>
+    <UnityPath>C:\UnityPro\Editor</UnityPath>
     <MonoPath>$(UnityPath)\Data\Mono</MonoPath>
     <LibraryAssembly>Assembly-CSharp.dll</LibraryAssembly>
     <TargetFrameworkDirectory>$(MonoPath)\lib\mono\$(MonoProfile)</TargetFrameworkDirectory>
@@ -278,10 +277,9 @@
     <Compile Include="Assets\Scripts\Common\Surrounding.cs" />
     <Compile Include="Assets\Scripts\Common\SurroundingInt.cs" />
     <Compile Include="Assets\Scripts\Common\Value2D.cs" />
-    <Compile Include="Assets\Scripts\Effects\EffectInstance.cs" />
-    <Compile Include="Assets\Scripts\Effects\EffectManager.cs" />
     <Compile Include="Assets\Scripts\Effects\AppliedEffects.cs" />
-    <Compile Include="Assets\Scripts\Effects\EffectTargetType.cs" />
+    <Compile Include="Assets\Scripts\Effects\EffectInstance.cs" />
+    <Compile Include="Assets\Scripts\Effects\EffectIntendedTarget.cs" />
     <Compile Include="Assets\Scripts\Effects\IAffectable.cs" />
     <Compile Include="Assets\Scripts\Effects\Specialized Effects\AddHealth.cs" />
     <Compile Include="Assets\Scripts\Effects\Specialized Effects\BlindnessEffect.cs" />
@@ -346,6 +344,8 @@
     <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\DictionaryExt.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\EnumerableExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\EnumExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
@@ -370,17 +370,53 @@
     <Compile Include="Assets\Scripts\MANAGERS\PreGameManager.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\TestManager.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\TimeManager.cs" />
+    <Compile Include="Assets\Scripts\MANAGERS\TypeManager.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\WorldObjectManager.cs" />
     <Compile Include="Assets\Scripts\Spawning\SpawnModifier.cs" />
     <Compile Include="Assets\Scripts\Spawning\SpawnModifiers\SpawnNPCs.cs" />
     <Compile Include="Assets\Scripts\Spawning\SpawnSpec.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\AppliedEffects.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\EffectInstance.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\EffectManager.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\EffectTargetType.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\IAffectable.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\AddHealth.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\BlindnessEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\CurePoison.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\Damage.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageCold.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageFire.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageShock.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\InvisibilityEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\LevitationEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\NutritionEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\PetrificationEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Poison\PoisonDamageEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Poison\PoisonEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Poison\PoisonSlowEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\ColdResistance.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\FireResistance.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\PoisonResistance.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\Resistance.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\ShockResistance.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\SeeInvisibleEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\TelepathyEffect.cs" />
     <Compile Include="Assets\Scripts\Spells\Spell.cs" />
+    <Compile Include="Assets\Scripts\Spells\SpellAspect.cs" />
+    <Compile Include="Assets\Scripts\Spells\SpellCastInfo.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\ITargeter.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetingStyle.cs" />
     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethod.cs" />
     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOE.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOELine.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOESelf.cs" />
     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Self.cs" />
-    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Targeted AOE.cs" />
-    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\Targeted.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOELocation.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedObject.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\AOETargeted.cs" />
+    <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedLocation.cs" />
     <Compile Include="Assets\Scripts\TimedDestruction.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\Affectable.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\BUC.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemFlags.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemProperties.cs" />

@@ -46,7 +46,7 @@ public static class Nifty
         return ret;
     }
 
-    public static void ToLog<T>(this T[,] array, DebugManager.Logs log, params string[] customContent)
+    public static void ToLog<T>(this T[,] array, Logs log, params string[] customContent)
     {
         if (BigBoss.Debug.logging(log))
         {
@@ -146,7 +146,9 @@ public static class Nifty
 
     public static T Random<T>(this List<T> list, System.Random rand)
     {
-        return list[rand.Next(list.Count)];
+        if (list.Count > 0)
+            return list[rand.Next(list.Count)];
+        return default(T);
     }
 
     public static bool Percent(this System.Random rand, Percent percent)

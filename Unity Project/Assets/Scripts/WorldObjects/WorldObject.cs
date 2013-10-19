@@ -9,31 +9,12 @@ public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
     #region Generic Object Properties (graphical info, names, etc).
 
     public FieldMap map;
+    public string Model { get; set; }
+    public string ModelTexture { get; set; }
+    public string Name { get; set; }
+    public string Prefab { get; set; }
+    public GridSpace Location { get; set; }  // Placeholder. Needs to actually be implemented and updated.
 
-    private string model;
-    public string Model
-    {
-        get { return model; }
-        set { this.model = value; }
-    }
-    private string modelTexture;
-    public string ModelTexture
-    {
-        get { return modelTexture; }
-        set { this.modelTexture = value; }
-    }
-    private string objectName;
-    public string Name
-    {
-        get { return objectName; }
-        set { this.objectName = value; }
-    }
-    private string prefab;
-    public string Prefab
-    {
-        get { return prefab; }
-        set { this.prefab = value; }
-    }
     public override string ToString()
     {
         return Name;

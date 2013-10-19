@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using XML;
 
@@ -90,7 +90,7 @@ namespace XML
             {
                 return x.selectList(key);
             }
-            return null;
+            return new List<XMLNode>();
         }
     }
 }

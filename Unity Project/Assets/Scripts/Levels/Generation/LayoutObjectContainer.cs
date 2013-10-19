@@ -14,9 +14,9 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         if (!shift.isZero())
         {
             #region DEBUG
-            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Shifted elements of " + this + " " + shift);
+                BigBoss.Debug.w(Logs.LevelGen, "Shifted elements of " + this + " " + shift);
             }
             #endregion
             ShiftAll(shift);
@@ -124,15 +124,15 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     public LayoutObject GetObjAt(Value2D<GridType> val)
     {
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Get Object At");
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Get Object At");
         }
         #endregion
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Getting object at val " + val);
+            BigBoss.Debug.w(Logs.LevelGen, "Getting object at val " + val);
         }
         #endregion
         foreach (LayoutObject obj in this)
@@ -140,19 +140,19 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
             if (obj.ContainsPoint(val.Unshift(obj.GetShift())))
             {
                 #region DEBUG
-                if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+                if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Returning " + obj);
-                    BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+                    BigBoss.Debug.w(Logs.LevelGen, "Returning " + obj);
+                    BigBoss.Debug.printFooter(Logs.LevelGen);
                 }
                 #endregion
                 return obj;
             }
         }
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
         return null;

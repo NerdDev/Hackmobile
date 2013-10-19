@@ -23,7 +23,7 @@ public class DataManager : MonoBehaviour, IManager
 
     public void Initialize()
     {
-        BigBoss.Debug.w(DebugManager.Logs.Main, "Starting Data Manager");
+        BigBoss.Debug.w(Logs.Main, "Starting Data Manager");
         //Parsing functions here
         parsing.Add("items", parseItems);
         parsing.Add("npcs", parseNPCs);

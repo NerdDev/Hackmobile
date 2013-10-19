@@ -23,12 +23,12 @@ public class BFSSearcher : GridSearcher {
     public Array2D<bool> SearchFill(Value2D<GridType> startPoint, GridArray grids, Func<Value2D<GridType>,bool> pass, GridSet targets)
     {
         #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Breadth First Search Fill");
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Search Fill");
             GridArray tmp = new GridArray(grids);
             tmp[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-            tmp.ToLog(DebugManager.Logs.LevelGen, "Starting Map:");
+            tmp.ToLog(Logs.LevelGen, "Starting Map:");
         }
         #endregion
         Queue<Value2D<GridType>> queue = new Queue<Value2D<GridType>>();
@@ -44,9 +44,9 @@ public class BFSSearcher : GridSearcher {
             curPoint = queue.Dequeue();
             options.Load(curPoint.x, curPoint.y);
             #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
-                outGridArr.ToLog(DebugManager.Logs.LevelGen, "Current Map with " + options.Count + " options. Evaluating " + curPoint);
+                outGridArr.ToLog(Logs.LevelGen, "Current Map with " + options.Count + " options. Evaluating " + curPoint);
             }
             #endregion
             foreach (Value2D<GridType> option in options)
@@ -59,9 +59,9 @@ public class BFSSearcher : GridSearcher {
             }
         }
         #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
         return outGridArr;

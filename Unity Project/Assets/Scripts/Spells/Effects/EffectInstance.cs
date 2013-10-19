@@ -12,7 +12,7 @@ public abstract class EffectInstance : PassesTurns
     public XMLNode x;
     public string effect;
     private SortedDictionary<string, Field> map = new SortedDictionary<string, Field>();
-    private GenericFlags<EffectTargetType> targetTypes = new GenericFlags<EffectTargetType>();
+    private GenericFlags<EffectIntendedTarget> targetTypes = new GenericFlags<EffectIntendedTarget>();
 
     public EffectInstance()
     {
@@ -22,9 +22,9 @@ public abstract class EffectInstance : PassesTurns
     private void InitTargetTypes()
     {
         if (TestTypePresence(typeof(NPC)))
-            targetTypes[EffectTargetType.NPC] = true;
+            targetTypes[EffectIntendedTarget.NPC] = true;
         if (TestTypePresence(typeof(Item)))
-            targetTypes[EffectTargetType.Item] = true;
+            targetTypes[EffectIntendedTarget.Item] = true;
     }
 
     private bool TestTypePresence(Type t)

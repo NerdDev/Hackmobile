@@ -66,7 +66,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
             newNPC.init();
             return newNPC;
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException)
         {
             throw new ArgumentException("The prefab is null: '" + n.Prefab + "' on NPC " + n.ToString());
         }
