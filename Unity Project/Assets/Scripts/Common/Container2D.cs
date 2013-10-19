@@ -98,7 +98,7 @@ abstract public class Container2D<T> {
 	    return GetArr().ToRowStrings();
 	}
 	
-	public virtual void ToLog(DebugManager.Logs log)
+	public virtual void ToLog(Logs log)
     {
         if (BigBoss.Debug.logging(log))
         {
@@ -106,7 +106,7 @@ abstract public class Container2D<T> {
         }
     }
 
-    public virtual void ToLog(DebugManager.Logs log, params string[] customContent)
+    public virtual void ToLog(Logs log, params string[] customContent)
     {
         if (BigBoss.Debug.logging(log))
         {
