@@ -47,7 +47,11 @@ public class BigBoss : MonoBehaviour
         {
             if (time == null)
             {
-                BBoss.Instantiate<TimeManager>(out time);
+                //lock (time)
+                //{
+                //    if (time == null)
+                        BBoss.Instantiate<TimeManager>(out time);
+                //}
             }
             return time;
         }

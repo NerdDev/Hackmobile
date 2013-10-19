@@ -12,15 +12,6 @@ public class NPC : WorldObject
      */
     #region BIGBOSSMANAGEMENT
     // Use this for initialization
-    void Awake()
-    {
-        if (this.IsNotAFreaking<Player>())
-        {
-            RegisterNPCToSingleton();
-        }
-        BigBoss.Time.RegisterToUpdateList(this);
-    }
-
     public virtual void RegisterNPCToSingleton()
     {
         BigBoss.WorldObject.AddNPCToMasterList(this);
@@ -86,8 +77,8 @@ public class NPC : WorldObject
     //X,Y coordinate for other scripts to grab:
     public Vector2 GridCoordinate { get; set; }
     //X, Y in integers, GridSpace ref
-    protected Value2D<GridSpace> gridSpace;
-    protected Value2D<GridSpace> newGridSpace;
+    public Value2D<GridSpace> gridSpace;
+    public Value2D<GridSpace> newGridSpace;
 
     bool moving; //stores moving condition
     protected bool verticalMoving;
@@ -109,6 +100,11 @@ public class NPC : WorldObject
     void Start()
     {
         animator = this.GetComponent<Animator>() as Animator;
+        if (this.IsNotAFreaking<Player>())
+        {
+            RegisterNPCToSingleton();
+        }
+        BigBoss.Time.RegisterToUpdateList(this);
     }
 
     void Update()
@@ -151,6 +147,16 @@ public class NPC : WorldObject
         {
             animator.SetFloat("runSpeed", velocity);
         }
+    }
+
+    public void CreateTextPop(string str)
+    {
+        BigBoss.Gooey.CreateTextPop(this.transform.position, str);
+    }
+
+    public void CreateTextPop(string str, Color col)
+    {
+        BigBoss.Gooey.CreateTextPop(this.transform.position, str, col);
     }
 
     #region Stats

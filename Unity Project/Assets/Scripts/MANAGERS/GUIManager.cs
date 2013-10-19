@@ -28,34 +28,29 @@ public class GUIManager : MonoBehaviour, IManager
     //Panels:
     private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
 
+    //Inventory Grid
+    public UIGrid inventoryGrid;
+    public GameObject InvItemPrefab;
+    public UIDraggablePanel invClipPanel;
+
     //Sprites:
     private UISprite inventoryFrameSprite;
     //Anims
-    public TweenPosition invPanelTweenPos;
+    //public TweenPosition invPanelTweenPos;
 
     //Misc NGUI Integration:
     private ItemStorage inventoryStorageScript;
-    public UISprite[] inventoryIconArray;
+    //public UISprite[] inventoryIconArray;
     #endregion
 
     void Start()
     {
         StartCoroutine(Display());
+        StartCoroutine(DisplayInventory());
     }
 
     public void Initialize()
     {
-        //Feel free to relocate these init calls when pre-game stuff is utilized
-        //InventoryGUICaptureReferences();//better convention to call this from player eventually
-
-        //inventoryPanel.transform.localPosition = new Vector3(Screen.width/2,Screen.height/3,0);
-        //Debug.Log(inventoryFrameSprite.mainTexture.width + " by " + inventoryFrameSprite.mainTexture.height);
-        //Debug.Log(NGUIMath.CalculateAbsoluteWidgetBounds(inventoryFrameSprite.transform));
-
-        //CreateTextPop(BigBoss.PlayerInfo.transform.position,"We have " + inventoryStorageScript.maxItemCount + " total inventory slots!");
-
-
-        //StartCoroutine(ShowDebugInfo());//This handles background data collection and should not be touched
     }
 
     //Debugging Coroutine
@@ -109,6 +104,7 @@ public class GUIManager : MonoBehaviour, IManager
     #region INVENTORY
     public void InventoryGUICaptureReferences()//To refresh references when game starts or upon inventory max size change:
     {
+        /*
         //NEED TO PUT A FAILSAFE HERE IN CASE ONE RETURNS NULL!!!!!!!
         try
         {
@@ -128,6 +124,7 @@ public class GUIManager : MonoBehaviour, IManager
 
         //Debug:
         //Debug.Log(inventoryIconArray.Length);
+         */
     }
 
     public void ToggleInventoryPanel()
@@ -135,15 +132,16 @@ public class GUIManager : MonoBehaviour, IManager
         if (isInventoryOpen)
         {
             //Debug.Log("Calling CloseInventory()...");
-            CloseInventoryUI();
+            //CloseInventoryUI();
         }
         else
         {
             //Debug.Log("Calling OpenInventory()...");
-            OpenInventoryUI();
+           // OpenInventoryUI();
         }
     }
 
+    /*
     public void OpenInventoryUI()
     {
         //Calling tween pos script on panel object
@@ -165,7 +163,8 @@ public class GUIManager : MonoBehaviour, IManager
         invPanelTweenPos.Play(true);
         isInventoryOpen = false;
     }
-
+    */
+    
     public void ClearAllInventorySprites()
     {
         foreach (ItemSlot sl in inventoryStorageScript.InventorySlots)
@@ -203,6 +202,10 @@ public class GUIManager : MonoBehaviour, IManager
         }
         Debug.Log("Seed Inventory end - " + inventoryStorageScript.items.Count + " items in player's UIStorage.");
     }
+    #endregion
+
+    #region KCInventory
+
     #endregion
 
     #region UPDATING OF VARIOUS NGUI ELEMENTS - GENERALLY DRIVEN FROM CODE ELSEWHERE IN THE PROJECT
@@ -289,6 +292,20 @@ public class GUIManager : MonoBehaviour, IManager
             DisplayTextPops();
             yield return new WaitForSeconds(.25f);
         }
+    }
+
+    IEnumerator DisplayInventory()
+    {
+        while (true)
+        {
+            UpdateInventory();
+            yield return new WaitForSeconds(.25f);
+        }
+    }
+
+    void UpdateInventory()
+    {
+        inventoryGrid.Reposition();
     }
 
     internal class TextPop
