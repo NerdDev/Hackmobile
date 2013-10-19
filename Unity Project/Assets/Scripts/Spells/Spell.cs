@@ -45,16 +45,16 @@ public class Spell : Field
 
     public void parseXML(XMLNode topNode, string name)
     {
-        XMLNode xnode = XMLNifty.select(topNode, name);
+        XMLNode spell = topNode.select(name);
 
         // If no targeter specified, assume self
-        AddAspect(new Self(), GetEffects(XMLNifty.SelectList(xnode, "effect")));
+        AddAspect(new Self(), GetEffects(spell.SelectList("effect")));
 
-        foreach (XMLNode targeter in XMLNifty.SelectList(xnode, "targeter"))
+        foreach (XMLNode targeter in spell.SelectList("targeter"))
         {
-            string targeterType = XMLNifty.SelectString(targeter, "type");
+            string targeterType = targeter.SelectString("type");
             AddAspect(BigBoss.Types.Instantiate<ITargeter>(targeterType), 
-                GetEffects(XMLNifty.SelectList(targeter, "effect")));
+                GetEffects(targeter.SelectList("effect")));
         }
     }
 
@@ -70,7 +70,7 @@ public class Spell : Field
         List<EffectInstance> ret = new List<EffectInstance>();
         foreach (XMLNode effect in effects)
         {
-            string type = XMLNifty.SelectString(effect, "type");
+            string type = effect.SelectString("type");
             EffectInstance instance;
             if (BigBoss.Types.TryInstantiate(type, out instance))
             {

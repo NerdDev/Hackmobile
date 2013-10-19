@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,7 +120,7 @@ namespace XML
          * 
          * @return The first XMLNode with the matching key.
          */
-        public XMLNode select(string key)
+        public XMLNode Select(string key)
         {
             return this.find(p => p.getKey().Equals(key));
         }
@@ -202,7 +202,7 @@ namespace XML
 
         public int SelectInt(string toParse)
         {
-            XMLNode x = this.select(toParse);
+            XMLNode x = this.Select(toParse);
             if (x != null)
             {
                 string sel = x.getText();
@@ -216,7 +216,7 @@ namespace XML
 
         public double SelectDouble(string toParse)
         {
-            XMLNode x = this.select(toParse);
+            XMLNode x = this.Select(toParse);
             if (x != null)
             {
                 string sel = x.getText();
@@ -230,7 +230,7 @@ namespace XML
 
         public float SelectFloat(string toParse)
         {
-            XMLNode x = this.select(toParse);
+            XMLNode x = this.Select(toParse);
             if (x != null)
             {
                 string sel = x.getText();
@@ -244,7 +244,7 @@ namespace XML
 
         public T SelectEnum<T>(string toParse)
         {
-            XMLNode x = this.select(toParse);
+            XMLNode x = this.Select(toParse);
             if (x != null)
             {
                 string sel = x.getText();
@@ -265,7 +265,7 @@ namespace XML
 
         public string SelectString(string node)
         {
-            XMLNode x = this.select(node);
+            XMLNode x = this.Select(node);
             if (x != null)
             {
                 string sel = x.getText();
@@ -279,7 +279,7 @@ namespace XML
 
         public bool SelectBool(string toParse)
         {
-            XMLNode x = this.select(toParse);
+            XMLNode x = this.Select(toParse);
             if (x != null)
             {
                 string sel = x.getText();

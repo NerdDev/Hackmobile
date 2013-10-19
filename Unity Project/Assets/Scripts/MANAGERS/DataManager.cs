@@ -100,7 +100,7 @@ public class DataManager : MonoBehaviour, IManager
     {
         foreach (XMLNode m in x.get())
         {
-            string npcName = XMLNifty.SelectString(m, "name");
+            string npcName = m.SelectString("name");
             GameObject go = new GameObject(npcName);
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;

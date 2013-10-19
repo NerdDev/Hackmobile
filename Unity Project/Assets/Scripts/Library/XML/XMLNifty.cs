@@ -4,9 +4,9 @@ using XML;
 
 namespace XML
 {
-    public class XMLNifty
+    public static class XMLNifty
     {
-        internal static int SelectInt(XMLNode x, string toParse)
+        public static int SelectInt(this XMLNode x, string toParse)
         {
             if (x != null)
             {
@@ -15,7 +15,7 @@ namespace XML
             return 0;
         }
 
-        internal static T SelectEnum<T>(XMLNode x, string toParse)
+        public static T SelectEnum<T>(this XMLNode x, string toParse)
         {
             if (x != null)
             {
@@ -24,7 +24,7 @@ namespace XML
             return default(T);
         }
 
-        internal static string SelectString(XMLNode x, string node)
+        public static string SelectString(this XMLNode x, string node)
         {
             if (x != null)
             {
@@ -33,7 +33,7 @@ namespace XML
             return "";
         }
 
-        internal static bool SelectBool(XMLNode x, string toParse)
+        public static bool SelectBool(this XMLNode x, string toParse)
         {
             if (x != null)
             {
@@ -42,16 +42,16 @@ namespace XML
             return false;
         }
 
-        internal static XMLNode select(XMLNode x, string p)
+        public static XMLNode select(this XMLNode x, string p)
         {
             if (x != null)
             {
-                return x.select(p);
+                return x.Select(p);
             }
             return new XMLNode();
         }
 
-        internal static void parseList(XMLNode x, string node, Action<XMLNode> a)
+        public static void parseList(this XMLNode x, string node, Action<XMLNode> a)
         {
             if (x != null)
             {
@@ -66,7 +66,7 @@ namespace XML
             }
         }
 
-        internal static float SelectFloat(XMLNode x, string toParse)
+        public static float SelectFloat(this XMLNode x, string toParse)
         {
             if (x != null)
             {
@@ -75,7 +75,7 @@ namespace XML
             return 0;
         }
 
-        internal static double SelectDouble(XMLNode x, string toParse)
+        public static double SelectDouble(this XMLNode x, string toParse)
         {
             if (x != null)
             {
@@ -84,7 +84,7 @@ namespace XML
             return 0;
         }
 
-        internal static List<XMLNode> SelectList(XMLNode x, string key)
+        public static List<XMLNode> SelectList(this XMLNode x, string key)
         {
             if (x != null)
             {

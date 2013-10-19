@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using XML;
 
@@ -20,17 +20,17 @@ public class MaterialType
 
     public void parseXML(XMLNode x)
     {
-        this.Name = XMLNifty.SelectString(x, "name");
-        this.Hardness = XMLNifty.SelectInt(x, "hardness");
-        this.Burns = XMLNifty.SelectBool(x, "burns");
-        this.Oxidizes = XMLNifty.SelectBool(x, "oxidizes");
+        this.Name = x.SelectString("name");
+        this.Hardness = x.SelectInt("hardness");
+        this.Burns = x.SelectBool("burns");
+        this.Oxidizes = x.SelectBool("oxidizes");
 
-        XMLNode densityNode = XMLNifty.select(x, "density");
-        density[0] = XMLNifty.SelectFloat(densityNode, "min");
-        density[2] = XMLNifty.SelectFloat(densityNode, "max");
+        XMLNode densityNode = x.Select("density");
+        density[0] = densityNode.SelectFloat("min");
+        density[2] = densityNode.SelectFloat("max");
         density[1] = (density[0] + density[2]) / 2;
         this.Density = density[Probability.getRandomInt(3)];
 
-        this.MeltingPoint = XMLNifty.SelectInt(x, "meltingpoint");
+        this.MeltingPoint = x.SelectInt("meltingpoint");
     }
 }

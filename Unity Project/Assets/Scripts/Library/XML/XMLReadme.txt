@@ -12,7 +12,7 @@ The former is fine if you can guarantee x is not null. If you cannot guarantee t
 In an NPC, parseXML is called on a node with a key of "npc". It passes that node into WorldObject.parseXML -
  which then checks for nullity - and then continues to parse the rest. The next line is this:
 
- this.role = XMLNifty.SelectEnum<Role>(x, "role");
+ this.role = x.SelectEnum<Role>("role");
 
  This cannot guarantee that x is not null, so it uses the latter. This selects
  <role>someRole</role>
@@ -24,7 +24,7 @@ In an NPC, parseXML is called on a node with a key of "npc". It passes that node
  This passes the node x to the stats class. In the stats class, the first line is this:
 
 	//Assignation
-    XMLNode x = XMLNifty.select(xnode, "stats");
+    XMLNode x = xnode.select("stats");
 
 This assigns takes the top NPC node and selects the stats node in it. Next, it does this:
 

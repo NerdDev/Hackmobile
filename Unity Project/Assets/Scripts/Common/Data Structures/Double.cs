@@ -22,6 +22,6 @@ public struct DoubleValue : Field
 
     public void parseXML(XMLNode x, string name)
     {
-        this.d = XMLNifty.SelectDouble(x, name);
+        this.d = x.SelectDouble(name);
     }
 }

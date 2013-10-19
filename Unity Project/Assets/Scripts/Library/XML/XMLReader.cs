@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,7 +29,7 @@ namespace XML
          */
         public XMLNode select(string key)
         {
-            return xnode.select(key);
+            return xnode.Select(key);
         }
 
         /**

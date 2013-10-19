@@ -22,6 +22,6 @@ public struct EnumField<T> : Field where T : IComparable, IConvertible
 
     public void parseXML(XMLNode x, string name)
     {
-        e = XMLNifty.SelectEnum<T>(x, name);
+        e = x.SelectEnum<T>(name);
     }
 }
