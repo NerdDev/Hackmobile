@@ -5,7 +5,6 @@ using XML;
 
 public class Spell : Field
 {
-<<<<<<< HEAD
     SpellCastInfo info;
     protected SpellCastInfo CastInfo
     {
@@ -15,26 +14,11 @@ public class Spell : Field
                 info = new SpellCastInfo(aspects);
             return info;
         }
-=======
-    protected List<SpellAspect> aspects = new List<SpellAspect>();
-    //graphical effects?
-
-    public void activate()
-    {
-        //foreach (IAffectable wo in method.getTargets())
-        //{
-        //    foreach (EffectInstance eb in effects)
-        //    {
-        //        eb.ActivateOnObject(wo);
-        //    }
-        //}
->>>>>>> 68b455b8c47a1c99c269085df3d7ef3dc7ce043b
     }
     List<SpellAspect> aspects = new List<SpellAspect>();
 
     public void Activate(IAffectable caster)
     {
-<<<<<<< HEAD
         Activate(new SpellCastInfo(caster));
     }
 
@@ -99,39 +83,4 @@ public class Spell : Field
         }
         return ret;
     }
-=======
-        //foreach (EffectInstance e in effects)
-        //{
-        //    e.ActivateOnObject(wo);
-        //}
-    }
-
-    //public void Add(EffectInstance instance)
-    //{
-    //    effects.Add(instance);
-    //}
-
-    //public void parseXML(XMLNode topNode, string name)
-    //{
-    //    XMLNode xnode = XMLNifty.select(topNode, name);
-    //    List<XMLNode> nodes = XMLNifty.SelectList(xnode, "effect");
-    //    if (nodes != null)
-    //    {
-    //        foreach (XMLNode x in nodes)
-    //        {
-    //            string type = XMLNifty.SelectString(x, "type");
-    //            try
-    //            {
-    //                EffectInstance instance = (EffectInstance)Activator.CreateInstance(EffectManager.effects[type]);
-    //                instance.effect = type;
-    //                instance.parseXML(x);
-    //                this.Add(instance);
-    //            }
-    //            catch
-    //            {
-    //            }
-    //        }
-    //    }
-    //}
->>>>>>> 68b455b8c47a1c99c269085df3d7ef3dc7ce043b
 }
