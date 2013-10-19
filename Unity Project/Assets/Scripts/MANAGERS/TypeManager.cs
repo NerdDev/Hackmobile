@@ -34,6 +34,24 @@ public class TypeManager : MonoBehaviour, IManager
         }
     }
 
+    public List<Type> GetSubclasses<T>()
+    {
+        List<Type> ret = new List<Type>();
+        Dictionary<string, Type> dict;
+        if (codexOfAllLife.TryGetValue(typeof(T), out dict))
+            foreach (Type t in dict.Values)
+                ret.Add(t);
+        return ret;
+    }
+
+    public List<T> GetInstantiations<T>()
+    {
+        List<T> ret = new List<T>();
+        foreach (Type t in GetSubclasses<T>())
+            ret.Add((T)Activator.CreateInstance(t));
+        return ret;
+    }
+
     public bool TryGetValue<T>(string key, out Type type)
     {
         Dictionary<string, Type> dict;
