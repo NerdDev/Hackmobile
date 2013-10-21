@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using XML;
 
@@ -11,7 +11,7 @@ public class ProfessionTitles
     {
         if (x != null)
         {
-            foreach (XMLNode xnode in x.get())
+            foreach (XMLNode xnode in x)
             {
                 PlayerProfessions prof = xnode.SelectEnum<PlayerProfessions>("name");
                 titles[(int)prof] = new Titles();
@@ -32,7 +32,7 @@ public class ProfessionTitles
 
         public void parseXML(XMLNode x)
         {
-            foreach (XMLNode xmlNode in x.selectList("title"))
+            foreach (XMLNode xmlNode in x.SelectList("title"))
             {
                 titles.Add(new Title(xmlNode.SelectInt("level"), xmlNode.SelectString("playertitle")));
             }

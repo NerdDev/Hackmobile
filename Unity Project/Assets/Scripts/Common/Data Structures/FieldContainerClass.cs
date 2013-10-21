@@ -8,7 +8,7 @@ public class FieldContainerClass : FieldContainer, Field
 
     public void parseXML(XMLNode x, string name)
     {
-        map = new FieldMap(x.select(name));
+        map = new FieldMap(x.Select(name));
         this.SetParams();
     }
 

@@ -45,7 +45,7 @@ public class Spell : Field
 
     public void parseXML(XMLNode topNode, string name)
     {
-        XMLNode spell = topNode.select(name);
+        XMLNode spell = topNode.Select(name);
 
         // If no targeter specified, assume self
         AddAspect(new Self(), GetEffects(spell.SelectList("effect")));

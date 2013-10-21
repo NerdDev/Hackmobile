@@ -155,10 +155,7 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
     public override void SetParams()
     {
         base.SetParams();
-        XMLNifty.parseList(map.x, "entry",
-            obj =>
-            {
-                this[obj.SelectString("name")] = true;
-            });
+        foreach (XMLNode node in map.x)
+            this[node.Name] = true;
     }
 }

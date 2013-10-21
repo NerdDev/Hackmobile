@@ -44,7 +44,7 @@ public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
 
     public virtual void setNull()
     {
-        this.parseXML(new XMLNode());
+        this.parseXML(new XMLNode(null));
         IsActive = false;
     }
 

@@ -221,6 +221,7 @@
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
      <Compile Include="Assets\Scripts\Common\Array2Dcoord.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
+     <Compile Include="Assets\Scripts\Common\ByteStream.cs" />
      <Compile Include="Assets\Scripts\Common\Comparator.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\Double.cs" />
@@ -301,11 +302,8 @@
      <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
-     <Compile Include="Assets\Scripts\Library\XML\XMLNifty.cs" />
      <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />
      <Compile Include="Assets\Scripts\Library\XML\XMLNodeList.cs" />
-     <Compile Include="Assets\Scripts\Library\XML\XMLParser.cs" />
-     <Compile Include="Assets\Scripts\Library\XML\XMLReader.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\AudioManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\BigBoss.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\CameraManager.cs" />

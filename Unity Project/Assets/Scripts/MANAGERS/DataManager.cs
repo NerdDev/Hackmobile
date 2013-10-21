@@ -36,8 +36,6 @@ public class DataManager : MonoBehaviour, IManager
         {
             buildXML(file);
         }
-
-        //BigBoss.NPCManager.Log();
     }
 
     void Start ()
@@ -46,78 +44,79 @@ public class DataManager : MonoBehaviour, IManager
 
     private void buildXML(string file)
     {
-        XMLReader xreader = new XMLReader(file);
-        parseXML(xreader);
-        xreader = null; //lets GC collect up.
+        XMLNode root = new XMLNode(null); // No parent
+        root.Parse(System.IO.File.ReadAllText(file));
+        parseXML(root);
     }
 
     #region XML Parsing methods.
 
-    void parseXML(XMLReader xreader)
+    void parseXML(XMLNode root)
     {
-        foreach (XMLNode x in xreader.getRoot().get()) {
-            parsing[x.getKey()](x);
+        foreach (XMLNode baseNode in root)
+        {
+            parsing[baseNode.Key](baseNode);
         }
     }
     
-    void parseItems(XMLNode top)
+    void parseItems(XMLNode itemsNode)
     {
-        foreach (XMLNode x in top.get())
+        foreach (XMLNode categoryNode in itemsNode)
         {
             List<Item> items = new List<Item>();
-            foreach (XMLNode xnode in x.get())
+            foreach (XMLNode itemNode in categoryNode)
             {
-                Item i = parseItem(xnode);
+                Item i = parseItem(itemNode);
                 items.Add(i);
                 BigBoss.WorldObject.getItems().Add(i.Name, i);
             }
-            BigBoss.WorldObject.getCategories().Add(x.getKey(), items);
+            BigBoss.WorldObject.getCategories().Add(categoryNode.Key, items);
         }
     }
 
-    private Item parseItem(XMLNode x)
+    private Item parseItem(XMLNode itemNode)
     {
-        string itemName = x.SelectString("name");
+        string itemName = itemNode.SelectString("name");
         GameObject go = new GameObject(itemName);
         Item i = go.AddComponent<Item>();
-        i.Type = x.getKey();
+        i.Type = itemNode.Key;
         i.Name = itemName;
-        i.parseXML(x);
+        i.parseXML(itemNode);
         return i;
     }
 
-    void parseMaterials(XMLNode x)
+    void parseMaterials(XMLNode materialsNode)
     {
-        foreach (XMLNode m in x.get())
+        foreach (XMLNode materialNode in materialsNode)
         {
             MaterialType mat = new MaterialType();
-            mat.parseXML(m);
+            mat.parseXML(materialNode);
             BigBoss.WorldObject.getMaterials().Add(mat.Name, mat);
         }
     }
 
-    void parseNPCs(XMLNode x)
+    void parseNPCs(XMLNode npcsNode)
     {
-        foreach (XMLNode m in x.get())
+        foreach (XMLNode npcNode in npcsNode)
         {
-            string npcName = m.SelectString("name");
+            string npcName = npcNode.Name;
             GameObject go = new GameObject(npcName);
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;
-            n.parseXML(m);
+            n.parseXML(npcNode);
             BigBoss.WorldObject.getNPCs().Add(n.Name, n);
             n.IsActive = false;
         }
     }
 
-    void parseStrings(XMLNode x)
+    void parseStrings(XMLNode stringsNode)
     {
-        foreach (XMLNode m in x.get())
+        foreach (XMLNode stringNode in stringsNode)
         {
-            string key = m.SelectString("key");
+            string key = stringNode.SelectString("key");
             if (!strings.ContainsKey(key))
             {
-                strings.Add(key, m.SelectString("text"));
+                strings.Add(key, stringNode.SelectString("text"));
             }
         }
     }
