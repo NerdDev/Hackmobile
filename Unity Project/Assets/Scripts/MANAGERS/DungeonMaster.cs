@@ -19,7 +19,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
     {
         if (!l.Populated)
         {
-            ForcePopulateLevel(l);
+            //ForcePopulateLevel(l);
         }
 
         //Place stairs

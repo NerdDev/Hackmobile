@@ -41,28 +41,7 @@ public class KCTesting : MonoBehaviour
         */
 
         Debug.Log("Running GUI initialize.");
-        List<Item> items = new List<Item>();
-
-        foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
-        {
-            foreach (ItemList il in ic.Values)
-            {
-                items.AddRange(il);
-            }
-        }
-
-        foreach (Item i in items)
-        {
-            GameObject go = Instantiate(BigBoss.Gooey.InvItemPrefab) as GameObject;
-            go.transform.parent = BigBoss.Gooey.inventoryGrid.transform;
-            go.name = i.Name;
-            GUIItem guiItem = go.AddComponent<GUIItem>();
-            guiItem.item = i;
-            UILabel itemLabel = go.GetComponentInChildren(typeof(UILabel)) as UILabel;
-            itemLabel.text = i.Name;
-            UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-            uiDrag.draggablePanel = BigBoss.Gooey.invClipPanel;
-        }
+        BigBoss.Gooey.RegenInventoryGUI();
         #region Miscellaneous assignations
         /*
          * Assigns the main camera position.

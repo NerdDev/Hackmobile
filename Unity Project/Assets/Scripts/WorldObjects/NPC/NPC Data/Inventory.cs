@@ -16,13 +16,13 @@ public class Inventory : Dictionary<string, InventoryCategory>, Field
             }
             else
             {
-                this[i.Type] = new InventoryCategory();
+                this[i.Type] = new InventoryCategory(i.Type);
                 this[i.Type].Add(i);
             }
         }
         else
         {
-            this.Add(i.Type, new InventoryCategory());
+            this.Add(i.Type, new InventoryCategory(i.Type));
             this[i.Type].Add(i);
         }
     }

@@ -3,5 +3,15 @@ using UnityEngine;
 
 public class GUIItem : MonoBehaviour
 {
-    public Item item;
+    public ItemList item;
+
+    void OnClick()
+    {
+        
+    }
+
+    void OnDoubleClick()
+    {
+
+    }
 }

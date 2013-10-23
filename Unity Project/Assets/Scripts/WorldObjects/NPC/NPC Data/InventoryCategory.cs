@@ -5,6 +5,13 @@ using System.Text;
 
 public class InventoryCategory : Dictionary<string, ItemList>
 {
+    public string id;
+
+    public InventoryCategory(string id)
+    {
+        this.id = id;
+    }
+
     public void Add(Item i)
     {
         if (this.ContainsKey(i.Name))
@@ -15,13 +22,13 @@ public class InventoryCategory : Dictionary<string, ItemList>
             }
             else
             {
-                this[i.Name] = new ItemList();
+                this[i.Name] = new ItemList(i.Name);
                 this[i.Name].Add(i);
             }
         }
         else
         {
-            this.Add(i.Name, new ItemList());
+            this.Add(i.Name, new ItemList(i.Name));
             this[i.Name].Add(i);
         }
     }

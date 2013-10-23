@@ -32,6 +32,7 @@ public class GUIManager : MonoBehaviour, IManager
     public UIGrid inventoryGrid;
     public GameObject InvItemPrefab;
     public UIDraggablePanel invClipPanel;
+    public UIScrollBar scrollBar;
 
     //Sprites:
     private UISprite inventoryFrameSprite;
@@ -41,6 +42,9 @@ public class GUIManager : MonoBehaviour, IManager
     //Misc NGUI Integration:
     private ItemStorage inventoryStorageScript;
     //public UISprite[] inventoryIconArray;
+
+    public bool categoryDisplay = false;
+    public string category = "";
     #endregion
 
     void Start()
@@ -306,6 +310,90 @@ public class GUIManager : MonoBehaviour, IManager
     void UpdateInventory()
     {
         inventoryGrid.Reposition();
+    }
+
+    internal void RegenInventoryGUI()
+    {
+        this.invClipPanel.ResetPosition();
+        ClearPriorGrid();
+        this.invClipPanel.ResetPosition();
+        if (!categoryDisplay)
+        {
+            foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
+            {
+                CreateCategoryButton(ic);
+            }
+        }
+        else
+        {
+            InventoryCategory ic = BigBoss.Player.inventory[category];
+            foreach (ItemList itemList in ic.Values)
+            {
+                CreateItemButton(itemList);
+            }
+            CreateBackLabel();
+        }
+        this.inventoryGrid.Reposition();
+        this.invClipPanel.ResetPosition();
+        this.scrollBar.onChange(scrollBar);
+        this.scrollBar.ForceUpdate();
+        this.scrollBar.onChange(scrollBar);
+    }
+
+    internal void ClearPriorGrid()
+    {
+        foreach (Transform child in inventoryGrid.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    void CreateBackLabel()
+    {
+        GameObject go = Instantiate(InvItemPrefab) as GameObject;
+        go.transform.parent = inventoryGrid.transform;
+        go.name = "BackButton";
+        GUIBackLabel guiBackLabel = go.AddComponent<GUIBackLabel>();
+        UILabel itemLabel = go.GetComponentInChildren(typeof(UILabel)) as UILabel;
+        itemLabel.text = "Back";
+        UIDragPanelContents uiDragBackLabel = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
+        uiDragBackLabel.draggablePanel = invClipPanel;
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
+        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        //itemLabel.MakePixelPerfect();
+        //itemLabel.MakePositionPerfect();
+    }
+
+    void CreateItemButton(ItemList itemList)
+    {
+        GameObject go = Instantiate(InvItemPrefab) as GameObject;
+        go.transform.parent = inventoryGrid.transform;
+        go.name = itemList.id;
+        GUIItem guiItem = go.AddComponent<GUIItem>();
+        guiItem.item = itemList;
+        UILabel itemLabel = go.GetComponentInChildren(typeof(UILabel)) as UILabel;
+        itemLabel.text = itemList.id;
+        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
+        uiDrag.draggablePanel = invClipPanel;
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
+        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        //itemLabel.MarkAsChanged();
+    }
+
+    void CreateCategoryButton(InventoryCategory ic)
+    {
+        GameObject go = Instantiate(InvItemPrefab) as GameObject;
+        go.transform.parent = inventoryGrid.transform;
+        go.name = ic.id;
+        GUIInventoryCategory guiIC = go.AddComponent<GUIInventoryCategory>();
+        guiIC.category = ic;
+        UILabel itemLabel = go.GetComponentInChildren(typeof(UILabel)) as UILabel;
+        itemLabel.text = ic.id;
+        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
+        uiDrag.draggablePanel = invClipPanel;
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
+        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        //itemLabel.MarkAsChanged();
     }
 
     internal class TextPop

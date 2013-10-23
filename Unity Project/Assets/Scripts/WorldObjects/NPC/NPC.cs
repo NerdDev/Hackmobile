@@ -617,7 +617,10 @@ public class NPC : WorldObject
     {
         if (inventory.Has(item))
         {
-            //do nothing
+            for (int i = 0; i < count - 1; i++)
+            {
+                inventory.Add(item.Copy());
+            }
         }
         else
         {
@@ -628,7 +631,6 @@ public class NPC : WorldObject
             }
         }
         stats.Encumbrance += item.props.Weight * count;
-        Debug.Log("Item " + item.Name + " with count " + count + " added to inventory.");
     }
 
     public void removeFromInventory(Item item)
@@ -637,21 +639,11 @@ public class NPC : WorldObject
 
     }
 
-    public void removeFromInventory(Item item, int count)
+    public virtual void removeFromInventory(Item item, int count)
     {
         if (inventory.Has(item))
         {
             inventory.Remove(item);
-            //if (inventory[item] <= count)
-            //{
-            //    inventory.Remove(item);
-            //}
-            //else
-            //{
-            //    inventory[item] -= count;
-            //}
-            stats.Encumbrance -= item.props.Weight;
-            Debug.Log("Item " + item.Name + " with count " + count + " removed from inventory.");
         }
         else
         {

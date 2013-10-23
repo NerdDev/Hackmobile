@@ -37,23 +37,14 @@ public class Player : NPC, IManager
     #region INVENTORY
     public override void addToInventory(Item item, int count)
     {
-        if (inventory.Has(item))
-        {
-            //inventory[item] += count;
-            //GUI Stuff:
+        base.addToInventory(item, count);
+        BigBoss.Gooey.RegenInventoryGUI();
+    }
 
-        }
-        else
-        {
-            inventory.Add(item);
-            for (int i = 0; i < count - 1; i++)
-            {
-                inventory.Add(item.Copy());
-            }
-            //GUI Stuff:
-            //BigBoss.Gooey.AddItemToGUIInventory(item, count);
-        }
-        stats.Encumbrance += item.props.Weight * count;
+    public override void removeFromInventory(Item item, int count)
+    {
+        base.removeFromInventory(item, count);
+        BigBoss.Gooey.RegenInventoryGUI();
     }
     #endregion
 
@@ -209,7 +200,6 @@ public class Player : NPC, IManager
     private void resetPosition()
     {
         this.playerAvatar.transform.position = CurrentOccupiedGridCenterWorldPoint;
-        this.transform.Dump();
     }
 
     public void MovePlayer(Vector3 heading)

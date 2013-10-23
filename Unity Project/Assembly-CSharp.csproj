@@ -276,6 +276,8 @@
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\SeeInvisibleEffect.cs" />
      <Compile Include="Assets\Scripts\Effects\Specialized Effects\TelepathyEffect.cs" />
      <Compile Include="Assets\Scripts\ExposePropertyAttribute.cs" />
+     <Compile Include="Assets\Scripts\GUI\GUIBackLabel.cs" />
+     <Compile Include="Assets\Scripts\GUI\GUIInventoryCategory.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIItem.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemStorage.cs" />
