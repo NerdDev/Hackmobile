@@ -6,12 +6,11 @@ using System.Collections.Generic;
 abstract public class RoomModifier : ProbabilityItem {
 
     static ProbabilityPool<RoomModifier>[] mods = new ProbabilityPool<RoomModifier>[Enum.GetNames(typeof(RoomModType)).Length];
+    static bool initialized = false;
 
     public static void RegisterModifiers()
     {
         List<RoomModifier> modPrototypes = BigBoss.Types.GetInstantiations<RoomModifier>();
-
-        #region Internal
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
             mods[(int)e] = ProbabilityPool<RoomModifier>.Create(Probability.LevelRand);
@@ -20,21 +19,27 @@ abstract public class RoomModifier : ProbabilityItem {
         {
             mods[(int)mod.GetType()].Add(mod);
         }
-        #endregion Internal
+        initialized = true;
     }
 
     public static RoomModifier GetBase()
     {
+        if (!initialized)
+            RegisterModifiers();
         return mods[(int)RoomModType.Base].Get();
     }
 
     public static List<RoomModifier> GetFlexible(int num)
     {
+        if (!initialized)
+            RegisterModifiers();
         return mods[(int)RoomModType.Flexible].Get(num);
     }
 
     public static RoomModifier GetFinal()
     {
+        if (!initialized)
+            RegisterModifiers();
         return mods[(int)RoomModType.Final].Get();
     }
 

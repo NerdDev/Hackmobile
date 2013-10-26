@@ -28,7 +28,7 @@
 			<OnEatenEffect>
 				<effect>
 					<type>addhealth</type>
-					<strength>40</type>
+					<strength>40</strength>
 				</effect>
 			</OnEatenEffect>
 		</potion>
@@ -41,7 +41,7 @@
 			<OnEatenEffect>
 				<effect>
 					<type>AddHealth</type>
-					<strength>40</type>
+					<strength>40</strength>
 				</effect>
 			</OnEatenEffect>
 		</potion>
@@ -54,7 +54,7 @@
 			<OnEatenEffect>
 				<effect>
 					<type>addhealth</type>
-					<strength>40</type>
+					<strength>40</strength>
 				</effect>
 			</OnEatenEffect>
 		</potion>
@@ -66,8 +66,8 @@
 			</stats>
 			<OnEatenEffect>
 				<effect>
-					<type>LevitationEffect</type>
-					<strength>.2</type>
+					<type>Levitation</type>
+					<strength>.2</strength>
 				</effect>
 			</OnEatenEffect>
 		</potion>

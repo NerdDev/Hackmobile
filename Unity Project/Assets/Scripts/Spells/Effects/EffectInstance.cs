@@ -57,7 +57,7 @@ public abstract class EffectInstance : PassesTurns
         if (!map.TryGetValue(name, out item))
         {
             T param = new T();
-            param.parseXML(x, name);
+            param.ParseXML(x, name);
             map.Add(name, param);
             return param;
         }
@@ -95,7 +95,7 @@ public abstract class EffectInstance : PassesTurns
         EffectInstance instance = (EffectInstance)Activator.CreateInstance(GetType());
         instance.x = this.x;
         instance.effect = this.effect;
-        instance.map = this.map.Copy();
+        instance.map = this.map;
         instance.turnsToProcess = this.turnsToProcess;
         instance.SetParams();
         instance.IsActive = true;

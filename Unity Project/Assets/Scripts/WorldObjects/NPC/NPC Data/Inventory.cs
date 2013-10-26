@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,7 +75,11 @@ public class Inventory : Dictionary<string, InventoryCategory>, Field
         return false;
     }
 
-    public void parseXML(XMLNode x, string name)
+    public void ParseXML(XMLNode x, string name)
+    {
+    }
+
+    public void SetDefault()
     {
     }
 }

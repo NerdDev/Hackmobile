@@ -5,9 +5,14 @@ public struct EnumField<T> : Field where T : IComparable, IConvertible
 {
     public T e;
 
+    public EnumField(T e)
+    {
+        this.e = e;
+    }
+
     public EnumField(EnumField<T> e)
     {
-        this.e = (T) Enum.ToObject(typeof(T), Convert.ToInt32(e.e));
+        this.e = (T)Enum.ToObject(typeof(T), Convert.ToInt32(e.e));
     }
 
     public static implicit operator T(EnumField<T> src)
@@ -20,8 +25,12 @@ public struct EnumField<T> : Field where T : IComparable, IConvertible
         return new EnumField<T>(src);
     }
 
-    public void parseXML(XMLNode x, string name)
+    public void ParseXML(XMLNode x, string name)
     {
         e = x.SelectEnum<T>(name);
+    }
+
+    public void SetDefault()
+    {
     }
 }

@@ -138,7 +138,7 @@ public class Item : Affectable, PassesTurns, FieldContainer
     {
         base.SetParams();
         //this is slightly jury-rigged as the Type is stored in the XML key, not a separate node
-        map.Add("type", new String(map.x.Key));
+        map.Add("type", new String(map.node.Key));
         type = map.Add<String>("type");
         //rest of it is normal
         props = map.Add<ItemProperties>("properties");

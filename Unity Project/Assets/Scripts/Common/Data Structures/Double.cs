@@ -20,8 +20,12 @@ public struct DoubleValue : Field
         return new DoubleValue(d);
     }
 
-    public void parseXML(XMLNode x, string name)
+    public void ParseXML(XMLNode x, string name)
     {
         this.d = x.SelectDouble(name);
+    }
+
+    public void SetDefault()
+    {
     }
 }

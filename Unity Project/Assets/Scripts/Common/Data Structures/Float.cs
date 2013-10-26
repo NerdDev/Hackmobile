@@ -20,8 +20,12 @@ public struct Float : Field
         return new Float(f);
     }
 
-    public void parseXML(XMLNode x, string name)
+    public void ParseXML(XMLNode x, string name)
     {
         f = x.SelectFloat(name);
+    }
+
+    public void SetDefault()
+    {
     }
 }

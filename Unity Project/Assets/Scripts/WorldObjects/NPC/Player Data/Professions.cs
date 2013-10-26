@@ -1,4 +1,4 @@
-﻿public enum PlayerProfessions //are we keeping all of these?  Rename/rework a couple maybe?
+public enum PlayerProfessions //are we keeping all of these?  Rename/rework a couple maybe?
 {
     Archaeologist,
     Barbarian,
@@ -13,5 +13,4 @@
     Tourist,
     Valkyrie,
     Wizard,
-    LAST, //retain this as the last num
 }

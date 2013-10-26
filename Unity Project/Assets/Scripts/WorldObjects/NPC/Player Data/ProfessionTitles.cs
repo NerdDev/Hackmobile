@@ -4,7 +4,7 @@ using XML;
 
 public class ProfessionTitles
 {
-    Titles[] titles = new Titles[(int) PlayerProfessions.LAST];
+    Titles[] titles = new Titles[EnumExt.Length<PlayerProfessions>()];
     public bool isParsed = false;
 
     public void parseXML(XMLNode x)

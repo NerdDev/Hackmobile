@@ -43,10 +43,8 @@ public class Spell : Field
         return new SpellCastInfo(caster, CastInfo);
     }
 
-    public void parseXML(XMLNode topNode, string name)
+    public void ParseXML(XMLNode spell, string name)
     {
-        XMLNode spell = topNode.Select(name);
-
         // If no targeter specified, assume self
         AddAspect(new Self(), GetEffects(spell.SelectList("effect")));
 
@@ -79,8 +77,13 @@ public class Spell : Field
                 ret.Add(instance);
             }
             else if (BigBoss.Debug.logging(Logs.XML))
-                BigBoss.Debug.log(Logs.XML, "Effect didn't exist: " + type);
+                BigBoss.Debug.log(Logs.XML, "Effect didn't exist: " + type + " on node " + effect);
         }
         return ret;
+    }
+
+
+    public void SetDefault()
+    {
     }
 }

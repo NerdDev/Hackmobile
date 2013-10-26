@@ -14,7 +14,9 @@ public class DebugManager : MonoBehaviour, IManager
     #endregion
 
     #region Editor Properties
-    public bool LevelGen = false;
+    public bool Logging = true;
+    public Logs[] ActiveLogs = new Logs[] { Logs.Main, Logs.LevelGenMain, Logs.NPCs };
+    public DebugFlag[] ActiveFlags = new DebugFlag[0];
     #endregion
 
     #region StringConstants
@@ -35,7 +37,8 @@ public class DebugManager : MonoBehaviour, IManager
         SearchSteps,
         Probability,
         LevelGen_Path_Simplify_Prune,
-        LevelGen_Connected_To
+        LevelGen_Connected_To,
+        XML_Print
     }
 
     static GenericFlags<DebugFlag> flags = new GenericFlags<DebugFlag>();
@@ -63,16 +66,15 @@ public class DebugManager : MonoBehaviour, IManager
         putName(Logs.LevelGenMain, "Level Gen Main");
         putPath(Logs.NPCs, "NPCs/");
         putName(Logs.NPCs, "NPCs");
-		
-		// Set Logging to be on
-	    logging(true);
-		logging (Logs.Main, true);
-		logging (Logs.LevelGenMain, true);
-		logging (Logs.LevelGen, LevelGen);
-		logging(Logs.NPCs, true);
-        flags[DebugFlag.SearchSteps] = false;
-        flags[DebugFlag.LevelGen_Path_Simplify_Prune] = false;
-        flags[DebugFlag.LevelGen_Connected_To] = false;
+        putName(Logs.XML, "Xml");
+        putName(Logs.TypeHarvest, "TypeHarvest");
+
+        // Set Logging to be on
+        logging(Logging);
+        foreach (Logs l in ActiveLogs)
+            logging(l, true);
+        foreach (DebugFlag f in ActiveFlags)
+            flags[f] = true;
 
         // Test output
         if (logging(Logs.Main))
@@ -391,5 +393,6 @@ public enum Logs
     LevelGenMain,
     Items,
     NPCs,
-    XML
+    XML,
+    TypeHarvest
 };

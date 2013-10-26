@@ -25,8 +25,12 @@ public class String : Field
         return new String(s);
     }
 
-    public void parseXML(XMLNode x, string name)
+    public void ParseXML(XMLNode x, string name)
     {
         s = x.SelectString(name);
+    }
+
+    public void SetDefault()
+    {
     }
 }

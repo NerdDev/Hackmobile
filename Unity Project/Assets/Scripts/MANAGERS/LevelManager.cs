@@ -19,7 +19,6 @@ public class LevelManager : MonoBehaviour, IManager {
     public void Initialize()
     {
         Builder.Theme = Theme;
-        RoomModifier.RegisterModifiers();
         Levels = new Level[MaxLevels];
     }
     

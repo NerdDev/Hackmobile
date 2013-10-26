@@ -12,7 +12,7 @@ public class AppliedEffects : SortedDictionary<string, EffectInstance>, Field, I
         this.owner = owner;
     }
 
-    public void parseXML(XMLNode x, string name)
+    public void ParseXML(XMLNode x, string name)
     {
     }
 
@@ -95,5 +95,9 @@ public class AppliedEffects : SortedDictionary<string, EffectInstance>, Field, I
         {
             return false;
         }
+    }
+
+    public void SetDefault()
+    {
     }
 }

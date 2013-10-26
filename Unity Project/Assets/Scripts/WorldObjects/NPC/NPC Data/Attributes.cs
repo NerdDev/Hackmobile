@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using XML;
 
 public class AttributesData : FieldContainerClass
@@ -101,7 +101,6 @@ public class AttributesData : FieldContainerClass
 
     public override void SetParams()
     {
-        base.SetParams();
         this.Strength = map.Add<Integer>("strength");
         this.Charisma = map.Add<Integer>("charisma");
         this.Intelligence = map.Add<Integer>("intelligence");

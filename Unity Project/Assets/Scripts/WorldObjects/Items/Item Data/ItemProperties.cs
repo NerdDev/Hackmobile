@@ -62,7 +62,6 @@ public class ItemProperties : FieldContainerClass
 
     public override void SetParams()
     {
-        base.SetParams();
         damage = map.Add<String>("damage");
         mat = map.Add<String>("material");
         if (this.mat.Equals("")) { this.weight = map.Add<Integer>("weight"); }

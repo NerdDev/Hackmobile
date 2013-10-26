@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using XML;
 
 public class FieldMap : SortedDictionary<string, Field>
 {
-    public XMLNode x;
+    public XMLNode node;
 
     public FieldMap()
     {
@@ -13,7 +13,7 @@ public class FieldMap : SortedDictionary<string, Field>
 
     public FieldMap(XMLNode x)
     {
-        this.x = x;
+        this.node = x;
     }
 
     public T Add<T>(string name) where T : Field, new()
@@ -22,8 +22,11 @@ public class FieldMap : SortedDictionary<string, Field>
         if (!this.TryGetValue(name, out item))
         {
             T param = new T();
-            XMLNode xnode = this.x;
-            param.parseXML(xnode, name);
+            XMLNode child = node.Select(name);
+            if (child != null)
+                param.ParseXML(child, name);
+            else
+                param.SetDefault();
             this.Add(name, param);
             return param;
         }

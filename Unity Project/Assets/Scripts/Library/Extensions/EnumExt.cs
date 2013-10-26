@@ -128,6 +128,10 @@ public static class EnumExt
         return Enum.GetValues(obj.GetType()).Length;
     }
 
+    public static int Length<T>() where T : struct, IComparable, IConvertible
+    {
+        return Length((Enum)Activator.CreateInstance(typeof(T)));
+    }
     #endregion
 
     #region Helper Classes

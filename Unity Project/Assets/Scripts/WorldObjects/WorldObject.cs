@@ -31,7 +31,7 @@ public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
     {
         if (map == null)
         {
-            map = new FieldMap(wo.map.x);
+            map = new FieldMap(wo.map.node);
         }
         this.SetParams();
     }

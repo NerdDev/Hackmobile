@@ -15,7 +15,6 @@ public class MaterialType
 
     public void setNull()
     {
-        this.parseXML(new XMLNode(null));
     }
 
     public void parseXML(XMLNode x)

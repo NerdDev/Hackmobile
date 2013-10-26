@@ -18,6 +18,7 @@ public class TypeManager : MonoBehaviour, IManager
 
     public void Initialize()
     {
+        BigBoss.Debug.w(Logs.TypeHarvest, "Initializing");
         Harvest<EffectInstance>();
         Harvest<RoomModifier>();
         Harvest<ITargeter>();
@@ -26,11 +27,13 @@ public class TypeManager : MonoBehaviour, IManager
     protected void Harvest<T>()
     {
         Type type = typeof(T);
+        BigBoss.Debug.w(Logs.TypeHarvest, "Harvesting " + type.Name);
         List<Type> types = type.GetSubclassesOf();
         Dictionary<string, Type> dict = codexOfAllLife.GetCreate(type);
         foreach (Type t in types)
         {
-            dict.Add(t.ToString(), t);
+            BigBoss.Debug.w(Logs.TypeHarvest, "  " + t.Name);
+            dict.Add(t.ToString().ToUpper(), t);
         }
     }
 
@@ -56,7 +59,7 @@ public class TypeManager : MonoBehaviour, IManager
     {
         Dictionary<string, Type> dict;
         if (codexOfAllLife.TryGetValue(typeof(T), out dict))
-            return dict.TryGetValue(key, out type);
+            return dict.TryGetValue(key.ToUpper(), out type);
         type = null;
         return false;
     }

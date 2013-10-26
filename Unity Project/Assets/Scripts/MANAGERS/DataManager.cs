@@ -38,14 +38,21 @@ public class DataManager : MonoBehaviour, IManager
         }
     }
 
-    void Start ()
+    void Start()
     {
     }
 
     private void buildXML(string file)
     {
+        if (BigBoss.Debug.logging(Logs.XML))
+            BigBoss.Debug.w(Logs.XML, "Parsing " + file);
+
         XMLNode root = new XMLNode(null); // No parent
         root.Parse(System.IO.File.ReadAllText(file));
+
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.XML_Print) && BigBoss.Debug.logging(Logs.XML))
+            BigBoss.Debug.w(Logs.XML, root.Print());
+
         parseXML(root);
     }
 
@@ -53,24 +60,32 @@ public class DataManager : MonoBehaviour, IManager
 
     void parseXML(XMLNode root)
     {
-        foreach (XMLNode baseNode in root)
+        if (parsing.ContainsKey(root.Key))
         {
-            parsing[baseNode.Key](baseNode);
+            parsing[root.Key](root);
         }
+        else if (BigBoss.Debug.logging(Logs.XML))
+            BigBoss.Debug.w(Logs.XML, "Basenode key " + root.Key + " did not exist as an option to parse.  Node: " + root);
     }
-    
+
     void parseItems(XMLNode itemsNode)
     {
         foreach (XMLNode categoryNode in itemsNode)
         {
-            List<Item> items = new List<Item>();
+            List<Item> addedItems = new List<Item>();
+            Dictionary<string, Item> items = BigBoss.WorldObject.getItems();
             foreach (XMLNode itemNode in categoryNode)
             {
                 Item i = parseItem(itemNode);
-                items.Add(i);
-                BigBoss.WorldObject.getItems().Add(i.Name, i);
+                if (!items.ContainsKey(i.Name))
+                {
+                    addedItems.Add(i);
+                    BigBoss.WorldObject.getItems().Add(i.Name, i);
+                }
+                else if (BigBoss.Debug.logging(Logs.XML))
+                    BigBoss.Debug.w(Logs.XML, "Item already existed with name: " + i.Name + " under node " + itemNode);
             }
-            BigBoss.WorldObject.getCategories().Add(categoryNode.Key, items);
+            BigBoss.WorldObject.getCategories().Add(categoryNode.Key, addedItems);
         }
     }
 
@@ -97,6 +112,7 @@ public class DataManager : MonoBehaviour, IManager
 
     void parseNPCs(XMLNode npcsNode)
     {
+        Dictionary<string, NPC> npcs = BigBoss.WorldObject.getNPCs();
         foreach (XMLNode npcNode in npcsNode)
         {
             string npcName = npcNode.Name;
@@ -104,7 +120,12 @@ public class DataManager : MonoBehaviour, IManager
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;
             n.parseXML(npcNode);
-            BigBoss.WorldObject.getNPCs().Add(n.Name, n);
+            if (!npcs.ContainsKey(n.Name))
+            {
+                npcs.Add(n.Name, n);
+            }
+            else if (BigBoss.Debug.logging(Logs.XML))
+                BigBoss.Debug.w(Logs.XML, "NPC already existed with name: " + n.Name + " under node " + npcNode);
             n.IsActive = false;
         }
     }

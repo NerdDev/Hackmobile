@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using XML;
 
 public class ItemStats : FieldContainerClass
@@ -30,7 +30,6 @@ public class ItemStats : FieldContainerClass
 
     public override void SetParams()
     {
-        base.SetParams();
         Weight = map.Add<Integer>("weight");
         Cost = map.Add<Integer>("cost");
         Nutrition = map.Add<Integer>("nutrition");

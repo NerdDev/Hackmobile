@@ -20,8 +20,12 @@ public struct Integer : Field
         return new Integer(i);
     }
 
-    public void parseXML(XMLNode x, string name)
+    public void ParseXML(XMLNode x, string name)
     {
         this.i = x.SelectInt(name);
+    }
+
+    public void SetDefault()
+    {
     }
 }

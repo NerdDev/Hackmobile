@@ -154,8 +154,11 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
 
     public override void SetParams()
     {
-        base.SetParams();
-        foreach (XMLNode node in map.x)
+        foreach (XMLNode node in map.node)
             this[node.Name] = true;
+    }
+
+    public override void SetDefault()
+    {
     }
 }

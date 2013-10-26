@@ -9,89 +9,97 @@ namespace XML
     public class XMLNode : IEnumerable<XMLNode>
     {
         #region Constant Chars
+        const int MaxDepth = 25;
         const char LEFTBRACE = '<';
         const char RIGHTBRACE = '>';
-        const char SPACE = ' ';
-        const char QUOTE = '"';
-        const char QUOTE2 = '\'';
         const char SLASH = '/';
-        const char QMARK = '?';
+        const char QUOTE = '"';
         const char EQUALS = '=';
-        const char EXCLAMATION = '!';
-        const char DASH = '-';
-        const char SQR = ']';
+        const string ENDNODE = "</";
+        const string COMMENT = "<!--";
+        const string ENDCOMMENT = "-->";
         #endregion
 
         public string Key { get; set; }
-        public Dictionary<string, XMLNode> Children { get; protected set; }
+        public List<XMLNode> Children { get; protected set; }
         public XMLNode Parent { get; protected set; }
         public string Name { get { return SelectString("name"); } }
         public string Content { get; set; }
+        public int Depth { get; set; }
 
         public XMLNode(XMLNode parent)
         {
-            Children = new Dictionary<string, XMLNode>();
+            Children = new List<XMLNode>();
             Parent = parent;
             Content = "";
+            if (parent == null)
+                Depth = 0;
+            else
+                Depth = parent.Depth + 1;
         }
 
         #region Parsing
-        public void Parse(string str)
+        public bool Parse(string str)
         {
-            Parse(new ByteStream(str));
+            return Parse(new StringStream(str));
         }
 
-        public void Parse(ByteStream stream)
+        public bool Parse(StringStream stream)
         {
-            // Skip whitespace and remove startbrace
-            stream.SkipWhitespace();
-            if (stream.ExtractChar() != LEFTBRACE)
-                throw new FormatException("Node didn't start with " + LEFTBRACE);
-            // Get Name
-            Key = stream.ExtractUntilWhiteSpace().Trim();
-            // Parse content
-            if (ParseAttributes(stream))
-                ParseContent(stream);
+            try
+            {
+                stream.ExtractChar(); //remove startbrace
+                // Get Name
+                Key = stream.ExtractUntil(false, '\n', '\t', ' ', RIGHTBRACE);
+                // Parse content
+                if (ParseAttributes(stream))
+                    ParseContent(stream);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                BigBoss.Debug.w(Logs.XML, "Exception while parsing node: " + this + " " + ex);
+                return false;
+            }
         }
 
-        protected void ParseContent(ByteStream stream)
+        protected void ParseContent(StringStream stream)
         {
-            stream.SkipWhitespace();
             if (stream.GetChar() == LEFTBRACE)
             { // Node content
-                if (IsEndNode(stream))
-                { // Done
+                if (stream.IsNext(ENDNODE))
+                { // End node
+                    stream.ExtractUntil(true, RIGHTBRACE); // Skip to end
                     return;
+                }
+                else if (stream.IsNext(COMMENT))
+                { // Comment
+                    stream.ExtractUntil(ENDCOMMENT, true);
                 }
                 else
                 {
                     XMLNode subNode = new XMLNode(this);
-                    subNode.Parse(stream);
+                    if (!subNode.Parse(stream))
+                    { // Error parsing.  Stop
+                        return;
+                    }
+                    Add(subNode);
                 }
             }
             else
-            { // String content
-                Content = stream.ExtractUntilTrim(LEFTBRACE);
+            { // Text content
+                Content = stream.ExtractUntil(false, LEFTBRACE);
             }
             // Parse rest of content
             ParseContent(stream);
         }
 
-        protected bool IsEndNode(ByteStream stream)
-        {
-            stream.Skip(1); // Skip brace
-            if (stream.GetChar() == SLASH)
-                return true;
-            stream.Skip(-1); // Jump back
-            return false;
-        }
-
         /*
          * Returns whether node has sub-content
          */
-        protected bool ParseAttributes(ByteStream stream)
+        protected bool ParseAttributes(StringStream stream)
         {
-            string str = stream.ExtractUntil(EQUALS, SLASH, RIGHTBRACE);
+            string str = stream.ExtractUntil(false, EQUALS, SLASH, RIGHTBRACE);
             switch (stream.ExtractChar())
             {
                 // An attribute
@@ -99,17 +107,13 @@ namespace XML
                     // Treating attributes as subnodes with text content
                     XMLNode attr = new XMLNode(this);
                     attr.Key = str;
-                    stream.SkipWhitespace();
-                    stream.ExtractChar(); // Skip quote
-                    attr.Content = stream.ExtractUntilTrim(QUOTE); // Grab until next quote
-                    stream.ExtractChar(); // Skip ending quote
+                    attr.Content = stream.ExtractBetween(QUOTE, QUOTE);
                     Add(attr);
                     // Parse more attributes
                     return ParseAttributes(stream);
                 // End of attributes, no content
                 case SLASH:
-                    stream.ExtractUntil(RIGHTBRACE);
-                    stream.ExtractChar(); // Remove right brace
+                    stream.ExtractUntil(true, RIGHTBRACE); // Remove right brace
                     return false;
                 // End of attributes, with content
                 case RIGHTBRACE:
@@ -121,7 +125,7 @@ namespace XML
 
         public void Add(XMLNode node)
         {
-            Children.Add(node.Key, node);
+            Children.Add(node);
         }
 
         /**
@@ -134,11 +138,15 @@ namespace XML
          */
         public XMLNode Find(Func<XMLNode, bool> f)
         {
-            foreach (XMLNode child in Children.Values)
+            if (f(this))
+                return this;
+            foreach (XMLNode child in Children)
             {
                 if (f(child))
                     return child;
-                return child.Find(f); // Recursive
+                XMLNode recursive = child.Find(f);
+                if (recursive != null)
+                    return recursive;
             }
             return null;
         }
@@ -151,62 +159,46 @@ namespace XML
          */
         public XMLNode Select(string key)
         {
-            return this.Find(p => p.Key.Equals(key));
+            if (key == null)
+                return null;
+            return this.Find(p => key.Equals(p.Key));
         }
 
         public int SelectInt(string toParse)
         {
             XMLNode x = this.Select(toParse);
-            if (x != null)
-            {
-                string sel = x.Content;
-                if (sel != null)
-                    return sel.ToInt();
-            }
+            if (x != null && !string.IsNullOrEmpty(x.Content))
+                return x.Content.ToInt();
             return 0;
         }
 
         public double SelectDouble(string toParse)
         {
             XMLNode x = this.Select(toParse);
-            if (x != null)
-            {
-                if (x.Content != null)
-                    return x.Content.ToDouble();
-            }
+            if (x != null && !string.IsNullOrEmpty(x.Content))
+                return x.Content.ToDouble();
             return 0;
         }
 
         public float SelectFloat(string toParse)
         {
             XMLNode x = this.Select(toParse);
-            if (x != null)
-            {
-                string sel = x.Content;
-                if (sel != null)
-                {
-                    return sel.ToFloat();
-                }
-            }
+            if (x != null && !string.IsNullOrEmpty(x.Content))
+                return x.Content.ToFloat();
             return 0;
         }
 
         public T SelectEnum<T>(string toParse)
         {
             XMLNode x = this.Select(toParse);
-            if (x != null)
+            if (x != null && !string.IsNullOrEmpty(x.Content))
             {
-                string sel = x.Content;
-                if (sel != null)
+                try
                 {
-                    try
-                    {
-                        return (T)Enum.Parse(typeof(T), sel, true);
-                    }
-                    catch (ArgumentException)
-                    {
-                        return default(T);
-                    }
+                    return (T)Enum.Parse(typeof(T), x.Content, true);
+                }
+                catch (ArgumentException)
+                {
                 }
             }
             return default(T);
@@ -216,27 +208,15 @@ namespace XML
         {
             XMLNode x = this.Select(node);
             if (x != null)
-            {
-                string sel = x.Content;
-                if (sel != null)
-                {
-                    return sel;
-                }
-            }
+                return x.Content;
             return "";
         }
 
         public bool SelectBool(string toParse)
         {
             XMLNode x = this.Select(toParse);
-            if (x != null)
-            {
-                string sel = x.Content;
-                if (sel != null)
-                {
-                    return sel.ToBool();
-                }
-            }
+            if (x != null && !string.IsNullOrEmpty(x.Content))
+                return x.Content.ToBool();
             return false;
         }
         #endregion
@@ -264,16 +244,42 @@ namespace XML
         {
             StringBuilder sb = new StringBuilder();
             Stack<XMLNode> stack = new Stack<XMLNode>();
+            string name = null;
             for (XMLNode p = this; p != null; p = p.Parent)
+            {
+                if (name == null && !string.IsNullOrEmpty(p.Name))
+                    name = p.Name;
                 stack.Push(p);
+            }
+            sb.Append("(" + name + ")");
             foreach (XMLNode c in stack)
                 sb.Append(c.Key + ":");
             return sb.ToString();
         }
 
+        public string Print()
+        {
+            StringBuilder sb = new StringBuilder();
+            Print(sb, 0);
+            return sb.ToString();
+        }
+
+        protected void Print(StringBuilder sb, int depth)
+        {
+            for(int i = 0 ; i < depth ; i++)
+                sb.Append("  ");
+            sb.Append(Key + ":" + Content);
+            depth++;
+            foreach (XMLNode node in Children)
+            {
+                sb.Append("\n");
+                node.Print(sb, depth);
+            }
+        }
+
         public IEnumerator<XMLNode> GetEnumerator()
         {
-            return Children.Values.GetEnumerator();
+            return Children.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
