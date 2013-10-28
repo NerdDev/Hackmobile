@@ -27,6 +27,9 @@ public class String : Field
 
     public void parseXML(XMLNode x, string name)
     {
-        s = x.SelectString(name);
+        if (x != null)
+            s = x.SelectString(name);
+        else
+            s = "";
     }
 }

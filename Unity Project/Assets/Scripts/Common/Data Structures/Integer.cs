@@ -22,6 +22,9 @@ public struct Integer : Field
 
     public void parseXML(XMLNode x, string name)
     {
-        this.i = x.SelectInt(name);
+        if (x != null)
+            this.i = x.SelectInt(name);
+        else
+            i = 0;
     }
 }

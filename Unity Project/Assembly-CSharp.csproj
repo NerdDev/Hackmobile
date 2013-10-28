@@ -223,6 +223,7 @@
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
      <Compile Include="Assets\Scripts\Common\Comparator.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
+     <Compile Include="Assets\Scripts\Common\Data Structures\Bool.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\Double.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\EnumField.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\Field.cs" />

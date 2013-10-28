@@ -22,6 +22,9 @@ public struct Float : Field
 
     public void parseXML(XMLNode x, string name)
     {
-        f = x.SelectFloat(name);
+        if (x != null)
+            f = x.SelectFloat(name);
+        else
+            f = 0f;
     }
 }

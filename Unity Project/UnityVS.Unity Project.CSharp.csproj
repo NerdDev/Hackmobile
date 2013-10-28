@@ -7,7 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
@@ -248,6 +249,7 @@
     <Compile Include="Assets\Scripts\Common\Bounding.cs" />
     <Compile Include="Assets\Scripts\Common\Comparator.cs" />
     <Compile Include="Assets\Scripts\Common\Container2D.cs" />
+    <Compile Include="Assets\Scripts\Common\Data Structures\Bool.cs" />
     <Compile Include="Assets\Scripts\Common\Data Structures\Double.cs" />
     <Compile Include="Assets\Scripts\Common\Data Structures\EnumField.cs" />
     <Compile Include="Assets\Scripts\Common\Data Structures\Field.cs" />

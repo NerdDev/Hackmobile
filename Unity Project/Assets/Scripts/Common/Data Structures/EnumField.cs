@@ -22,6 +22,9 @@ public struct EnumField<T> : Field where T : IComparable, IConvertible
 
     public void parseXML(XMLNode x, string name)
     {
-        e = x.SelectEnum<T>(name);
+        if (x != null)
+            e = x.SelectEnum<T>(name);
+        else
+            e = default(T);
     }
 }

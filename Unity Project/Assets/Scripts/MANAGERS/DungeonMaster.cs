@@ -24,17 +24,17 @@ public class DungeonMaster : MonoBehaviour, IManager {
 
         //Place stairs
         ClearPriorLevel();
-        Value2D<GridSpace> stairsDown = CreateStairs("StairsDown", PrimitiveType.Sphere);
-        Value2D<GridSpace> stairsUp = CreateStairs("StairsUp", PrimitiveType.Cylinder);
+        Value2D<GridSpace> stairsDown = CreateStairs(l, "StairsDown", PrimitiveType.Sphere);
+        Value2D<GridSpace> stairsUp = CreateStairs(l, "StairsUp", PrimitiveType.Cylinder);
 
         //Place Player
         if (up)
         {
-            PlacePlayer(stairsDown);
+            PlacePlayer(l, stairsDown);
         }
         else
         {
-            PlacePlayer(stairsUp);
+            PlacePlayer(l, stairsUp);
         }
     }
 
@@ -50,9 +50,9 @@ public class DungeonMaster : MonoBehaviour, IManager {
         BigBoss.WorldObject.ClearNPCs();
     }
 
-    public Value2D<GridSpace> CreateStairs(string name, PrimitiveType prim)
+    public Value2D<GridSpace> CreateStairs(Level l, string name, PrimitiveType prim)
     {
-        Value2D<GridSpace> locStairs = BigBoss.DungeonMaster.PickStartLocation(LevelManager.Level);
+        Value2D<GridSpace> locStairs = BigBoss.DungeonMaster.PickSpawnableLocation(l);
         GameObject stairs = GameObject.CreatePrimitive(prim);
         stairs.name = name;
         stairs.transform.position = new Vector3(locStairs.x, 0f, locStairs.y);
@@ -63,9 +63,9 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return locStairs;
     }
 
-    public void PlacePlayer(Value2D<GridSpace> stairsUp)
+    public void PlacePlayer(Level l, Value2D<GridSpace> stairsUp)
     {
-        IEnumerable<Value2D<GridSpace>> grids = LevelManager.Level.getSurroundingSpaces(stairsUp.x, stairsUp.y);
+        IEnumerable<Value2D<GridSpace>> grids = l.getSurroundingSpaces(stairsUp.x, stairsUp.y);
         //List<Value2D<GridSpace>> gridList = grids.ToList();
         Value2D<GridSpace> grid = grids.First(g => g.val.Type == GridType.Floor);
         BigBoss.PlayerInfo.transform.position = new Vector3(grid.x, -.5f, grid.y);

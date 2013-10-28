@@ -58,14 +58,14 @@ public class InputManager : MonoBehaviour, IManager
             if (go.layer == 12)
             {
                 Point p = new Point(go.transform.position.x, go.transform.position.z);
-                if (this is InputManager && LevelManager.Level[p.x, p.y].HasObject())
+                if (this is InputManager && BigBoss.Levels.Level[p.x, p.y].HasObject())
                 {
-                    List<WorldObject> list = LevelManager.Level[p.x, p.y].GetBlockingObjects();
+                    List<WorldObject> list = BigBoss.Levels.Level[p.x, p.y].GetBlockingObjects();
                     NPC n = (NPC)list.Find(w => w is NPC);
                     if (n != null && n.IsNotAFreaking<Player>())
                     {
                         Value2D<GridSpace> playerLoc = BigBoss.Player.gridSpace;
-                        IEnumerable<Value2D<GridSpace>> grids = LevelManager.Level.getSurroundingSpaces(p.x, p.y);
+                        IEnumerable<Value2D<GridSpace>> grids = BigBoss.Levels.Level.getSurroundingSpaces(p.x, p.y);
                         if (grids.Single(g => g.x == playerLoc.x && g.y == playerLoc.y) != null)
                         {
                             BigBoss.Player.attack(n);
