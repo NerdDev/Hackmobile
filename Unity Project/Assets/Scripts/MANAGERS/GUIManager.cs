@@ -28,11 +28,21 @@ public class GUIManager : MonoBehaviour, IManager
     //Panels:
     private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
 
-    //Inventory Grid
+    //Publicly populated variables from scene
+    //Clip panels
+    public UIPanel inventoryClip;
+    public UIPanel itemInfoClip;
+    
+    //grids
     public UIGrid inventoryGrid;
+    public UIGrid itemInfoGrid;
+    public UIGrid itemActionsGrid;
     public GameObject InvItemPrefab;
-    public UIDraggablePanel invClipPanel;
-    public UIScrollBar scrollBar;
+
+    //Clip panels
+    public UIDraggablePanel inventoryClipDrag;
+    public UIDraggablePanel itemInfoClipDrag;
+    public UIFont font;
 
     //Sprites:
     private UISprite inventoryFrameSprite;
@@ -44,13 +54,14 @@ public class GUIManager : MonoBehaviour, IManager
     //public UISprite[] inventoryIconArray;
 
     public bool categoryDisplay = false;
+    public bool displayItem = false;
     public string category = "";
     #endregion
 
     void Start()
     {
         StartCoroutine(Display());
-        StartCoroutine(DisplayInventory());
+        //StartCoroutine(DisplayInventory());
     }
 
     public void Initialize()
@@ -298,30 +309,15 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    IEnumerator DisplayInventory()
-    {
-        while (true)
-        {
-            UpdateInventory();
-            yield return new WaitForSeconds(.25f);
-        }
-    }
-
-    void UpdateInventory()
-    {
-        inventoryGrid.Reposition();
-    }
-
     internal void RegenInventoryGUI()
     {
-        this.invClipPanel.ResetPosition();
-        ClearPriorGrid();
-        this.invClipPanel.ResetPosition();
+        ClearPriorGrid(inventoryGrid);
+        this.inventoryGrid.sorted = false;
         if (!categoryDisplay)
         {
             foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
             {
-                CreateCategoryButton(ic);
+                CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
             }
         }
         else
@@ -329,71 +325,116 @@ public class GUIManager : MonoBehaviour, IManager
             InventoryCategory ic = BigBoss.Player.inventory[category];
             foreach (ItemList itemList in ic.Values)
             {
-                CreateItemButton(itemList);
+                CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
             }
-            CreateBackLabel();
+            CreateBackLabel(inventoryGrid, inventoryClipDrag);
         }
+        this.inventoryClipDrag.ResetPosition();
+        inventoryClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+        inventoryClip.clipRange = new Vector4(100, -400, 200, 797);
         this.inventoryGrid.Reposition();
-        this.invClipPanel.ResetPosition();
-        this.scrollBar.onChange(scrollBar);
-        this.scrollBar.ForceUpdate();
-        this.scrollBar.onChange(scrollBar);
     }
 
-    internal void ClearPriorGrid()
+    internal void RegenItemInfoGUI(Item item)
     {
-        foreach (Transform child in inventoryGrid.transform)
+        ClearPriorGrid(itemInfoGrid);
+        this.itemInfoGrid.sorted = false;
+        if (displayItem)
+        {
+            foreach (KeyValuePair<string, Field> kvp in item.map)
+            {
+                CreateTextButton(kvp.Key + ": " + kvp.Value.ToString(), itemInfoGrid, itemInfoClipDrag);
+            }
+            CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
+            this.itemInfoClipDrag.ResetPosition();
+            itemInfoClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+            itemInfoClip.clipRange = new Vector4(400, -400, 400, 800);
+            this.itemInfoGrid.Reposition();
+        }
+        else
+        {
+            RegenInventoryGUI();
+            ClearPriorGrid(itemInfoGrid);
+        }
+    }
+
+    internal void ClearPriorGrid(UIGrid grid)
+    {
+        foreach (Transform child in grid.transform)
         {
             Destroy(child.gameObject);
         }
     }
 
-    void CreateBackLabel()
+    void CreateBackLabel(UIGrid grid, UIDraggablePanel panel)
     {
         GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = inventoryGrid.transform;
+        go.transform.parent = grid.transform;
         go.name = "BackButton";
         GUIBackLabel guiBackLabel = go.AddComponent<GUIBackLabel>();
-        UILabel itemLabel = go.GetComponentInChildren(typeof(UILabel)) as UILabel;
-        itemLabel.text = "Back";
+        guiBackLabel.label = NGUITools.AddWidget<UILabel>(go);
+        guiBackLabel.label.text = "Back";
+        guiBackLabel.label.font = font;
+        //guiBackLabel.label.depth = 4;
+        guiBackLabel.label.MakePixelPerfect();
         UIDragPanelContents uiDragBackLabel = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDragBackLabel.draggablePanel = invClipPanel;
+        uiDragBackLabel.draggablePanel = panel;
         go.transform.localScale = new Vector3(1f, 1f, 1f);
         go.transform.localPosition = new Vector3(0f, 0f, 0f);
-        //itemLabel.MakePixelPerfect();
-        //itemLabel.MakePositionPerfect();
     }
 
-    void CreateItemButton(ItemList itemList)
+    void CreateTextButton(string s, UIGrid grid, UIDraggablePanel panel)
     {
         GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = inventoryGrid.transform;
+        go.transform.parent = grid.transform;
+        go.name = s;
+        GUILabel guiItem = go.AddComponent<GUILabel>();
+        guiItem.text = s;
+        guiItem.label = NGUITools.AddWidget<UILabel>(go);
+        guiItem.label.text = s;
+        guiItem.label.font = font;
+        //guiItem.label.depth = 4;
+        guiItem.label.MakePixelPerfect();
+        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
+        uiDrag.draggablePanel = panel;
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
+        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    void CreateItemButton(ItemList itemList, UIGrid grid, UIDraggablePanel panel)
+    {
+        GameObject go = Instantiate(InvItemPrefab) as GameObject;
+        go.transform.parent = grid.transform;
         go.name = itemList.id;
         GUIItem guiItem = go.AddComponent<GUIItem>();
         guiItem.item = itemList;
-        UILabel itemLabel = go.GetComponentInChildren(typeof(UILabel)) as UILabel;
-        itemLabel.text = itemList.id;
+        guiItem.label = NGUITools.AddWidget<UILabel>(go);
+        guiItem.label.text = itemList.id;
+        guiItem.label.font = font;
+        //guiItem.label.depth = 4;
+        guiItem.label.MakePixelPerfect();
         UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = invClipPanel;
+        uiDrag.draggablePanel = panel;
         go.transform.localScale = new Vector3(1f, 1f, 1f);
         go.transform.localPosition = new Vector3(0f, 0f, 0f);
-        //itemLabel.MarkAsChanged();
     }
 
-    void CreateCategoryButton(InventoryCategory ic)
+    void CreateCategoryButton(InventoryCategory ic, UIGrid grid, UIDraggablePanel panel)
     {
         GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = inventoryGrid.transform;
+        go.transform.parent = grid.transform;
         go.name = ic.id;
         GUIInventoryCategory guiIC = go.AddComponent<GUIInventoryCategory>();
         guiIC.category = ic;
-        UILabel itemLabel = go.GetComponentInChildren(typeof(UILabel)) as UILabel;
-        itemLabel.text = ic.id;
+        guiIC.label = NGUITools.AddWidget<UILabel>(go);
+        guiIC.label.text = ic.id;
+        guiIC.label.font = font;
+        //guiIC.label.depth = 4;
+        guiIC.label.MakePixelPerfect();
         UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = invClipPanel;
+        uiDrag.draggablePanel = panel;
         go.transform.localScale = new Vector3(1f, 1f, 1f);
         go.transform.localPosition = new Vector3(0f, 0f, 0f);
-        //itemLabel.MarkAsChanged();
     }
 
     internal class TextPop

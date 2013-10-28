@@ -279,6 +279,7 @@
      <Compile Include="Assets\Scripts\GUI\GUIBackLabel.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIInventoryCategory.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIItem.cs" />
+     <Compile Include="Assets\Scripts\GUI\GUILabel.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemStorage.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\GridArray.cs" />

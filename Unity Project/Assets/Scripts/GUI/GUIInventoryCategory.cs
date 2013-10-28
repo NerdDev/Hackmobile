@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class GUIInventoryCategory : MonoBehaviour
+public class GUIInventoryCategory : GUILabel
 {
     public InventoryCategory category;
 
