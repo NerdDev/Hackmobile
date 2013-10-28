@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,7 +114,7 @@ public class PathTree
 
     public void pointsToNodes(PathNode origin)
     {
-        foreach (Value2D<GridSpace> p in LevelManager.Level.getSurroundingSpaces(origin.loc.x, origin.loc.y))
+        foreach (Value2D<GridSpace> p in BigBoss.Levels.Level.getSurroundingSpaces(origin.loc.x, origin.loc.y))
         {
             if (isValidSpace(p))
             {

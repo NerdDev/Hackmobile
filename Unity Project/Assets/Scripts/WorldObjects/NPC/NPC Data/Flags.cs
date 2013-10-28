@@ -8,9 +8,9 @@ public enum NPCFlags
     //  while the NPC properties stores variables like levitation
     //  which are properties of the NPC itself
     NONE,
-    LEAVES_CORPSE,
+    NO_CORPSE, // Doesn't leave a corpse on death
     COVETOUS,
     NOPOLY, //player can't turn into one of these
     GREEDY,
-    //etc
+    NO_RANDOM_SPAWN, // Won't be picked if a random NPC should be spawned
 }

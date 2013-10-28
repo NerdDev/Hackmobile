@@ -7,6 +7,7 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
 {
     GenericFlags<T> flags = new GenericFlags<T>();
     HashSet<string> strings = new HashSet<string>();
+    public bool Empty { get { return strings.Count == 0 && flags.Empty; } }
 
     public ESFlags()
     {

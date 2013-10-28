@@ -20,7 +20,7 @@ public class WorldObjectManager : MonoBehaviour, IManager {
 
     public void Initialize()
     {
-        BigBoss.Debug.w(DebugManager.Logs.Main, "Starting World Object Manager");
+        BigBoss.Debug.w(Logs.Main, "Starting World Object Manager");
         //Initialize Data Manager
         DataManager dm = BigBoss.Data;
         initializeNullData();

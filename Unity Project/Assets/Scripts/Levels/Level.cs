@@ -111,7 +111,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     }
     #endregion
 
-    public void ToLog(DebugManager.Logs log, params string[] customContent)
+    public void ToLog(Logs log, params string[] customContent)
     {
         if (BigBoss.Debug.logging(log))
         {

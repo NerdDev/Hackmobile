@@ -8,6 +8,15 @@ public class GridSpace
     public GameObject Block { get; set; }
     public int X { get { return (int)Block.transform.position.x; } }
     public int Y { get { return (int)Block.transform.position.y; } }
+    public WorldObject RandomContainedObj { 
+        get 
+        {
+            List<WorldObject> tmp = new List<WorldObject>();
+            tmp.AddRange(_freeObjects);
+            tmp.AddRange(_blockingObjects);
+            return tmp.Random(Probability.Rand);
+        } 
+    }
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }

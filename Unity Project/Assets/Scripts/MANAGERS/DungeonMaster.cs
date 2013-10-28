@@ -93,14 +93,21 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return ret;
     }
 
-    public Value2D<GridSpace> PickStartLocation(Level l)
+    public Value2D<GridSpace> PickSpawnableLocation(Level l)
     {
         MultiMap<GridSpace> room = Spawnable(l.GetRooms().Random(Probability.SpawnRand));
         return room.RandomValue(Probability.SpawnRand);
     }
 
-    public void SpawnCreature(Point p, NPC n)
+    public Value2D<GridSpace> PickSpawnableLocation()
     {
+        return PickSpawnableLocation(BigBoss.Levels.Level);
+    }
+
+    public NPC SpawnNPC(Point p, NPC n)
+    {
+        if (p == null)
+            p = PickSpawnableLocation();
         try
         {
             GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
@@ -108,37 +115,34 @@ public class DungeonMaster : MonoBehaviour, IManager {
             newNPC.setData(n);
             newNPC.IsActive = true;
             newNPC.init();
+            return newNPC;
         }
-        catch (ArgumentException arg)
+
+        catch (ArgumentException)
         {
-            //continue
+            throw new ArgumentException("The prefab is null: '" + n.Prefab + "' on NPC " + n.ToString());
         }
     }
 
-    public void SpawnCreature(Point p, string npc)
+    public NPC SpawnNPC(Point p, string npc)
     {
-        SpawnCreature(p, BigBoss.WorldObject.getNPC(npc));
+        return SpawnNPC(p, BigBoss.WorldObject.getNPC(npc));
     }
 
-    public void SpawnRandomLeveledCreature(Point p)
-    {
-
-    }
-
-    public void SpawnCreature(Point p, Percent variety, params Keywords[] keywords)
+    public NPC SpawnNPC(Point p, Percent variety, params Keywords[] keywords)
     {
         if (Probability.SpawnRand.Percent(variety))
-            SpawnRandomLeveledCreature(p);
+            return SpawnNPC(p);
         else
-            SpawnCreature(p, keywords);
+            return SpawnNPC(p, keywords);
     }
 
-    public void SpawnCreature(Point p, params Keywords[] keywords)
+    public NPC SpawnNPC(Point p, params Keywords[] keywords)
     {
-        SpawnCreature(p, (ESFlags<Keywords>) keywords);
+        return SpawnNPC(p, (ESFlags<Keywords>) keywords);
     }
 
-    public void SpawnCreature(Point p, ESFlags<Keywords> keywords)
+    public NPC SpawnNPC(Point p, ESFlags<Keywords> keywords)
     {
         LeveledPool<NPC> pool = GetPool(keywords);
         NPC n = pool.Get();
@@ -146,19 +150,21 @@ public class DungeonMaster : MonoBehaviour, IManager {
         {
             throw new ArgumentException("NPC Pool was empty for keywords: " + keywords);
         }
-        SpawnCreature(p, n);
+        return SpawnNPC(p, n);
     }
 
     protected LeveledPool<NPC> GetPool(ESFlags<Keywords> keywords)
     {
         LeveledPool<NPC> pool;
+        bool empty = keywords.Empty;
         if (!npcPools.TryGetValue(keywords, out pool))
         {
             pool = new LeveledPool<NPC>(DefaultLevelCurve);
             npcPools.Add(keywords, pool);
             foreach (NPC n in BigBoss.WorldObject.getNPCs().Values)
             {
-                if (n.keywords.Contains(keywords))
+                if (!empty && n.keywords.Contains(keywords) // NPC has keywords
+                    || (empty && !n.flags[NPCFlags.NO_RANDOM_SPAWN])) // If keywords empty
                 {
                     pool.Add(n);
                 }

@@ -8,16 +8,16 @@ public class HiddenRoomMod : RoomModifier {
         Room room = spec.Room;
         int secretRoomSize = 2;
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, "Hidden Room Mod");
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Hidden Room Mod");
         }
         #endregion
             GridMap potentialDoors = room.GetPotentialExternalDoors();
             #region DEBUG
-            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                potentialDoors.ToLog(DebugManager.Logs.LevelGen, "After Removing Invalid Locations");
+                potentialDoors.ToLog(Logs.LevelGen, "After Removing Invalid Locations");
             }
             #endregion
             Value2D<GridType> doorSpace = potentialDoors.RandomValue(spec.Random);
@@ -29,17 +29,17 @@ public class HiddenRoomMod : RoomModifier {
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
                 }
             #region DEBUG
-            if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+            if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                room.ToLog(DebugManager.Logs.LevelGen, "Final Room After placing doors");
-                BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+                room.ToLog(Logs.LevelGen, "Final Room After placing doors");
+                BigBoss.Debug.printFooter(Logs.LevelGen);
             }
             #endregion
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            //layout.ToLog(DebugManager.Logs.LevelGen);
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            //layout.ToLog(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
         return true;

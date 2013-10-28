@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using XML;
 
@@ -8,7 +8,7 @@ public class FieldContainerClass : FieldContainer, Field
 
     public void parseXML(XMLNode x, string name)
     {
-        map = new FieldMap(XMLNifty.select(x, name));
+        map = new FieldMap(x.select(name));
         this.SetParams();
     }
 

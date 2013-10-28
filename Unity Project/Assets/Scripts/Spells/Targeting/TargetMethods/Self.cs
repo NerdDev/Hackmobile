@@ -1,12 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class SELF : TargetMethod
+public class Self : ITargeter
 {
-    public override List<WorldObject> getTargets(int x, int y)
+    public TargetingStyle Style { get { return TargetingStyle.Self; } }
+    public byte MaxTargets { get { return 0; } set { } }
+    public List<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
-        return new List<WorldObject>();
+        List<IAffectable> ret = new List<IAffectable>();
+        ret.Add(castInfo.Caster);
+        return ret;
     }
 }

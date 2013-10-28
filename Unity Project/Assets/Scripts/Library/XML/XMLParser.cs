@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 namespace XML
 {
@@ -166,7 +166,7 @@ namespace XML
                             {
                                 if (attValue.Length > 0)
                                 {
-                                    if (currentNode.select(attName) == null)
+                                    if (currentNode.Select(attName) == null)
                                     {
                                         XMLNode att = new XMLNode(attName);
                                         currentNode.add(att);
@@ -174,12 +174,12 @@ namespace XML
                                     }
                                     else
                                     {
-                                        currentNode.select(attName).setText(attValue);
+                                        currentNode.Select(attName).setText(attValue);
                                     }
                                 }
                                 else
                                 {
-                                    if (currentNode.select(attName) == null)
+                                    if (currentNode.Select(attName) == null)
                                     {
                                         XMLNode att = new XMLNode(attName);
                                         currentNode.add(att);
@@ -187,7 +187,7 @@ namespace XML
                                     }
                                     else
                                     {
-                                        currentNode.select(attName).setText("#t");
+                                        currentNode.Select(attName).setText("#t");
                                     }
                                 }
                             }
@@ -204,7 +204,7 @@ namespace XML
                             collectAttributeValue = false;
                             if (attName.Length > 0)
                             {
-                                if (currentNode.select(attName) == null)
+                                if (currentNode.Select(attName) == null)
                                 {
                                     XMLNode att = new XMLNode(attName);
                                     currentNode.add(att);
@@ -212,7 +212,7 @@ namespace XML
                                 }
                                 else
                                 {
-                                    currentNode.select(attName).setText(attValue);
+                                    currentNode.Select(attName).setText(attValue);
                                 }
                             }
                             attName = "";
@@ -239,7 +239,7 @@ namespace XML
                                     if (quoted)
                                     {
                                         collectAttributeValue = false;
-                                        if (currentNode.select(attName) == null)
+                                        if (currentNode.Select(attName) == null)
                                         {
                                             XMLNode att = new XMLNode(attName);
                                             currentNode.add(att);
@@ -247,7 +247,7 @@ namespace XML
                                         }
                                         else
                                         {
-                                            currentNode.select(attName).setText(attValue);
+                                            currentNode.Select(attName).setText(attValue);
                                         }
 
                                         attValue = "";

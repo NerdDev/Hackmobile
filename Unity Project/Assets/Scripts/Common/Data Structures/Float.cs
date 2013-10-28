@@ -22,6 +22,6 @@ public struct Float : Field
 
     public void parseXML(XMLNode x, string name)
     {
-        f = XMLNifty.SelectFloat(x, name);
+        f = x.SelectFloat(name);
     }
 }

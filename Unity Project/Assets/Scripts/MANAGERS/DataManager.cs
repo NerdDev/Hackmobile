@@ -23,7 +23,7 @@ public class DataManager : MonoBehaviour, IManager
 
     public void Initialize()
     {
-        BigBoss.Debug.w(DebugManager.Logs.Main, "Starting Data Manager");
+        BigBoss.Debug.w(Logs.Main, "Starting Data Manager");
         //Parsing functions here
         parsing.Add("items", parseItems);
         parsing.Add("npcs", parseNPCs);
@@ -100,7 +100,7 @@ public class DataManager : MonoBehaviour, IManager
     {
         foreach (XMLNode m in x.get())
         {
-            string npcName = XMLNifty.SelectString(m, "name");
+            string npcName = m.SelectString("name");
             GameObject go = new GameObject(npcName);
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;

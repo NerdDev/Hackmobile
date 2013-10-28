@@ -23,6 +23,17 @@ using System.Text;
 public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, IConvertible
 {
     public BitArray ba;
+    public bool Empty
+    {
+        get
+        {
+            foreach (bool b in ba)
+            {
+                if (b) return false;
+            }
+            return true;
+        }
+    }
 
     public GenericFlags()
     {
@@ -89,7 +100,7 @@ public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, ICo
 
     public bool Contains(GenericFlags<T> rhs)
     {
-		return ba.Contains(rhs.ba);
+        return ba.Contains(rhs.ba);
     }
 
     public void set(bool val, params T[] index)

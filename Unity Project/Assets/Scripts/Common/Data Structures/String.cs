@@ -27,6 +27,6 @@ public class String : Field
 
     public void parseXML(XMLNode x, string name)
     {
-        s = XMLNifty.SelectString(x, name);
+        s = x.SelectString(name);
     }
 }

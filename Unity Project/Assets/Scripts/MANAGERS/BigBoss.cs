@@ -71,16 +71,16 @@ public class BigBoss : MonoBehaviour
     }
     public static Player Player { get { return PlayerInfo; } }
     public static WorldObjectManager Enemy { get { return WorldObject; } }
-    private static CameraManager camera;
+    private static CameraManager camera_;
     public static CameraManager Camera
     {
         get
         {
-            if (camera == null)
+            if (camera_ == null)
             {
-                BBoss.Instantiate<CameraManager>(out camera);
+                BBoss.Instantiate<CameraManager>(out camera_);
             }
-            return camera;
+            return camera_;
         }
     }
     private static PreGameManager preGame;
@@ -117,6 +117,18 @@ public class BigBoss : MonoBehaviour
                 BBoss.Instantiate<WorldObjectManager>(out worldObject);
             }
             return worldObject;
+        }
+    }
+    private static TypeManager types;
+    public static TypeManager Types
+    {
+        get
+        {
+            if (types == null)
+            {
+                BBoss.Instantiate<TypeManager>(out types);
+            }
+            return types;
         }
     }
     private static DebugManager debug;

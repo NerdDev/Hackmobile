@@ -6,23 +6,23 @@ public class CircleRoom : RoomModifier {
     public override bool Modify(RoomSpec spec)
     {
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printHeader(DebugManager.Logs.LevelGen, ToString());
+            BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
         int radius = Probability.LevelRand.Next(LevelGenerator.minRadiusSize, LevelGenerator.maxRadiusSize);
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.w(DebugManager.Logs.LevelGen, "Radius: " + radius);
+            BigBoss.Debug.w(Logs.LevelGen, "Radius: " + radius);
         }
         #endregion
         spec.Room.CircularStrokeAndFill(GridType.Wall, GridType.Floor, radius);
         #region DEBUG
-        if (BigBoss.Debug.logging(DebugManager.Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(DebugManager.Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
         return true;

@@ -34,7 +34,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
         }
     }
 
-    public void Add(T item)
+    public override void Add(T item)
     {
         if (item is ProbabilityLevItem)
         {
@@ -81,13 +81,6 @@ public class LeveledPool<T> : ProbabilityPool<T>
     {
         SetFor(level);
         return currentPool.Get(out item);
-    }
-
-    public T Get(int level)
-    {
-        T item;
-        Get(out item, level);
-        return item;
     }
 
     public List<T> Get(int amount, int level)
@@ -144,7 +137,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
         throw new NotImplementedException();
     }
 
-    public override void ToLog(DebugManager.Logs log)
+    public override void ToLog(Logs log)
     {
         throw new NotImplementedException();
     }
