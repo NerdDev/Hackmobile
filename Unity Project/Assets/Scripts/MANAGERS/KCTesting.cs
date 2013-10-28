@@ -12,10 +12,10 @@ public class KCTesting : MonoBehaviour
 
     private void KurtisMethod()
     {
-        /*
-         * Initializes some test spawns and places the Player object.
-         */
+        //Places the player close to some stairs instead of the random position
         BigBoss.Player.transform.position = new Vector3(83f, -.5f, 58f);
+
+        //adds some items to the Player to test with
         Item ii = BigBoss.WorldObject.CreateItem("sword1");
         BigBoss.Player.addToInventory(ii);
         BigBoss.Player.equipItem(ii);
@@ -25,48 +25,5 @@ public class KCTesting : MonoBehaviour
 
         Item potion = BigBoss.WorldObject.CreateItem("health potion");
         BigBoss.Player.addToInventory(potion, 3);
-
-        /*
-        Value2D<GridSpace> loc;
-        for (int i = 0; i < 4; i++)
-        {
-            loc = BigBoss.DungeonMaster.PickStartLocation(LevelManager.Level);
-            BigBoss.DungeonMaster.SpawnCreature(new Point(loc.x, loc.y), "skeleton_knight");
-        }
-        for (int i = 0; i < 4; i++)
-        {
-            loc = BigBoss.DungeonMaster.PickStartLocation(LevelManager.Level);
-            BigBoss.DungeonMaster.SpawnCreature(new Point(loc.x, loc.y), "giant_spider");
-        }
-        */
-
-        Debug.Log("Running GUI initialize.");
-        BigBoss.Gooey.RegenInventoryGUI();
-        #region Miscellaneous assignations
-        /*
-         * Assigns the main camera position.
-         *
-        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
-        maxCamera mc = camera.AddComponent<maxCamera>();
-        mc.maxDistance = 10;
-        mc.minDistance = 2;
-        mc.yMaxLimit = 75;
-        mc.yMinLimit = 25;
-        mc.target = BigBoss.PlayerInfo.transform;
-
-        /*
-         * Assigns FOW information.
-         *
-        GameObject FOW = new GameObject();
-        FOWSystem fowsys = FOW.AddComponent<FOWSystem>();
-        fowsys.blurIterations = 0;
-        fowsys.heightRange = new Vector2(-2f, 10f);
-
-        FOWEffect foweff = camera.AddComponent<FOWEffect>();
-        foweff.exploredColor = Color.black;
-        foweff.unexploredColor = Color.black;
-        foweff.shader = Shader.Find("FOW");
-        */
-        #endregion
     }
 }

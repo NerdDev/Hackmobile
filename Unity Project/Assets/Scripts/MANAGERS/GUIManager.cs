@@ -16,17 +16,17 @@ public class GUIManager : MonoBehaviour, IManager
     */
 
     //SAFETIES WHICH ANY SCRIPT CAN CHECK THROUGH BIGBOSS:
-    public bool confirmationWindowOpen;
-    public bool tooltipOpen;
+    //public bool confirmationWindowOpen;
+    //public bool tooltipOpen;
 
     public GameObject debugText;
     private Queue<TextPop> textPopList = new Queue<TextPop>();
     public GameObject textPopPrefab;
 
     #region Clean Inventory Variables
-    public bool isInventoryOpen = false;
+    //public bool isInventoryOpen = false;
     //Panels:
-    private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
+    //private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
 
     //Publicly populated variables from scene
     //Clip panels
@@ -53,9 +53,10 @@ public class GUIManager : MonoBehaviour, IManager
     private ItemStorage inventoryStorageScript;
     //public UISprite[] inventoryIconArray;
 
-    public bool categoryDisplay = false;
-    public bool displayItem = false;
-    public string category = "";
+    internal bool categoryDisplay = false;
+    internal bool displayItem = false;
+    internal string category = "";
+    public bool displayGUI;
     #endregion
 
     void Start()
@@ -141,7 +142,7 @@ public class GUIManager : MonoBehaviour, IManager
         //Debug.Log(inventoryIconArray.Length);
          */
     }
-
+    /*
     public void ToggleInventoryPanel()
     {
         if (isInventoryOpen)
@@ -156,7 +157,6 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    /*
     public void OpenInventoryUI()
     {
         //Calling tween pos script on panel object
@@ -311,50 +311,56 @@ public class GUIManager : MonoBehaviour, IManager
 
     internal void RegenInventoryGUI()
     {
-        ClearPriorGrid(inventoryGrid);
-        this.inventoryGrid.sorted = false;
-        if (!categoryDisplay)
+        if (displayGUI)
         {
-            foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
+            ClearPriorGrid(inventoryGrid);
+            this.inventoryGrid.sorted = false;
+            if (!categoryDisplay)
             {
-                CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
+                foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
+                {
+                    CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
+                }
             }
-        }
-        else
-        {
-            InventoryCategory ic = BigBoss.Player.inventory[category];
-            foreach (ItemList itemList in ic.Values)
+            else
             {
-                CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
+                InventoryCategory ic = BigBoss.Player.inventory[category];
+                foreach (ItemList itemList in ic.Values)
+                {
+                    CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
+                }
+                CreateBackLabel(inventoryGrid, inventoryClipDrag);
             }
-            CreateBackLabel(inventoryGrid, inventoryClipDrag);
+            this.inventoryClipDrag.ResetPosition();
+            inventoryClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+            inventoryClip.clipRange = new Vector4(100, -400, 200, 797);
+            this.inventoryGrid.Reposition();
         }
-        this.inventoryClipDrag.ResetPosition();
-        inventoryClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-        inventoryClip.clipRange = new Vector4(100, -400, 200, 797);
-        this.inventoryGrid.Reposition();
     }
 
     internal void RegenItemInfoGUI(Item item)
     {
-        ClearPriorGrid(itemInfoGrid);
-        this.itemInfoGrid.sorted = false;
-        if (displayItem)
+        if (displayGUI)
         {
-            foreach (KeyValuePair<string, Field> kvp in item.map)
-            {
-                CreateTextButton(kvp.Key + ": " + kvp.Value.ToString(), itemInfoGrid, itemInfoClipDrag);
-            }
-            CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
-            this.itemInfoClipDrag.ResetPosition();
-            itemInfoClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-            itemInfoClip.clipRange = new Vector4(400, -400, 400, 800);
-            this.itemInfoGrid.Reposition();
-        }
-        else
-        {
-            RegenInventoryGUI();
             ClearPriorGrid(itemInfoGrid);
+            this.itemInfoGrid.sorted = false;
+            if (displayItem)
+            {
+                foreach (KeyValuePair<string, Field> kvp in item.map)
+                {
+                    CreateTextButton(kvp.Key + ": " + kvp.Value.ToString(), itemInfoGrid, itemInfoClipDrag);
+                }
+                CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
+                this.itemInfoClipDrag.ResetPosition();
+                itemInfoClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+                itemInfoClip.clipRange = new Vector4(400, -400, 400, 800);
+                this.itemInfoGrid.Reposition();
+            }
+            else
+            {
+                RegenInventoryGUI();
+                ClearPriorGrid(itemInfoGrid);
+            }
         }
     }
 
@@ -460,9 +466,9 @@ public class GUIManager : MonoBehaviour, IManager
     }
     #endregion
 
-    public void PlayerTouched()
-    {
-        ToggleInventoryPanel();
-        ClearAllInventorySprites();
-    }
+    //public void PlayerTouched()
+    //{
+    //    ToggleInventoryPanel();
+    //    ClearAllInventorySprites();
+    //}
 }
