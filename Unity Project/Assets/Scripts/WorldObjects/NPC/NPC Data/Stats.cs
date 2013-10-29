@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using XML;
 
-public class Stats : FieldContainerClass
+public class Stats : IXmlParsable
 {
     public int MaxHealth { get; set; }
     public int CurrentHealth { get; set; }
@@ -22,12 +22,11 @@ public class Stats : FieldContainerClass
     {
     }
 
-    public override void SetParams()
+    public void ParseXML(XMLNode x)
     {
-        base.SetParams();
-        MaxHealth = map.Add<Integer>("maxhealth");
-        MaxPower = map.Add<Integer>("maxpower");
-        Level = map.Add<Integer>("level");
+        MaxHealth = x.SelectInt("maxhealth");
+        MaxPower = x.SelectInt("maxpower");
+        Level = x.SelectInt("level");
         initialize();
     }
 

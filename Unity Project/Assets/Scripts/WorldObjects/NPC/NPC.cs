@@ -120,6 +120,14 @@ public class NPC : Affectable
 
     public NPC()
     {
+        this.equipment = new Equipment(this.bodyparts);
+        stats.MaxEncumbrance = getMaxInventoryWeight();
+        stats.Encumbrance = getCurrentInventoryWeight();
+        stats.CurrentHealth = stats.MaxHealth;
+        stats.CurrentPower = stats.MaxPower;
+        stats.XPToNextLevel = calcXPForNextLevel();
+        stats.CurrentXP = 0;
+        stats.hungerRate = 1;
     }
 
     void Start()
@@ -664,44 +672,17 @@ public class NPC : Affectable
     #endregion
 
     #region NPC Data Management for Instances
-    public void setData(string npcName)
+    public override void ParseXML(XMLNode x)
     {
-        this.setData(BigBoss.WorldObject.getNPC(npcName));
+        base.ParseXML(x);
+        race = x.SelectEnum<Race>("race");
+        role = x.SelectEnum<Role>("role");
+        attributes = x.Select<AttributesData>("attributes");
+        bodyparts = x.Select<BodyParts>("bodyparts");
+        stats = x.Select<Stats>("stats");
+        flags = x.Select<ESFlags<NPCFlags>>("flags");
+        keywords = x.Select<ESFlags<Keywords>>("keywords");
     }
-
-    public void setData(NPC npc)
-    {
-        //Anything performing the conversion from base NPC -> instance of NPC goes here.
-        base.setData(npc);
-
-        //Set equipment/etc here
-        this.equipment = new Equipment(this.bodyparts);
-        //run AI routines for equipment
-
-        //basic stat data that is reset based on the NPC
-        stats.MaxEncumbrance = getMaxInventoryWeight();
-        stats.Encumbrance = getCurrentInventoryWeight();
-        stats.CurrentHealth = stats.MaxHealth;
-        stats.CurrentPower = stats.MaxPower;
-        stats.XPToNextLevel = calcXPForNextLevel();
-        stats.CurrentXP = 0;
-        stats.hungerRate = 1;
-    }
-
-    public override void SetParams()
-    {
-        base.SetParams();
-        map.Add("inventory", inventory);
-
-        race = (Race)map.Add<EnumField<Race>>("race");
-        role = (Role)map.Add<EnumField<Role>>("role");
-        attributes = map.Add<AttributesData>("attributes");
-        bodyparts = map.Add<BodyParts>("bodyparts");
-        stats = map.Add<Stats>("stats");
-        flags = map.Add<ESFlags<NPCFlags>>("flags");
-        keywords = map.Add<ESFlags<Keywords>>("keywords");
-    }
-
     #endregion
 
     #region Turn Management

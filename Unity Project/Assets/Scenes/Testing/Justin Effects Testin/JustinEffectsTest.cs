@@ -8,7 +8,7 @@ public class JustinEffectsTest : MonoBehaviour {
     {
         BigBoss.Levels.SetCurLevel(0);
         NPC n = BigBoss.DungeonMaster.SpawnNPC(BigBoss.DungeonMaster.PickSpawnableLocation());
-        AddHealth effect = new AddHealth();
+        AddHealth effect = new AddHealth() { Strength = 15 };
         n.ApplyEffect(effect);
 	}
 	

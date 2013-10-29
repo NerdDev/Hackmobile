@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using XML;
 
-public class AppliedEffects : SortedDictionary<string, EffectInstance>, Field, IAffectable
+public class AppliedEffects : SortedDictionary<string, EffectInstance>, IXmlParsable, IAffectable
 {
     IAffectable owner;
     WorldObject IAffectable.Self { get { return owner.Self; } }
@@ -12,21 +12,21 @@ public class AppliedEffects : SortedDictionary<string, EffectInstance>, Field, I
         this.owner = owner;
     }
 
-    public void ParseXML(XMLNode x, string name)
+    public void ParseXML(XMLNode x)
     {
     }
 
     public virtual void ApplyEffect(EffectInstance effect)
     {
-        if (effect.turnsToProcess != 0)
+        if (effect.TurnsToProcess != 0)
         {
-            if (ContainsKey(effect.effect))
+            if (ContainsKey(effect.Name))
             {
-                this[effect.effect] = this[effect.effect].Merge(effect);
+                this[effect.Name] = this[effect.Name].Merge(effect);
             }
             else
             {
-                this.Add(effect.effect, effect.ActivateOnObject(owner));
+                this.Add(effect.Name, effect.ActivateOnObject(owner));
             }
         }
         else
@@ -95,9 +95,5 @@ public class AppliedEffects : SortedDictionary<string, EffectInstance>, Field, I
         {
             return false;
         }
-    }
-
-    public void SetDefault()
-    {
     }
 }

@@ -4,7 +4,7 @@ using System.Collections;
 using XML;
 using System.Collections.Generic;
 
-public class Item : Affectable, PassesTurns, FieldContainer
+public class Item : Affectable, PassesTurns, IXmlParsable
 {
     #region BIGBOSSMANAGEMENT
     //consider some abtract/virtual methods and variables here for cleanliness
@@ -128,25 +128,16 @@ public class Item : Affectable, PassesTurns, FieldContainer
     #endregion
 
     #region Data Management for Item Instances
-
-    public void setData(string itemName)
+    public override void ParseXML(XMLNode x)
     {
-        this.setData(BigBoss.WorldObject.getItem(itemName));
-    }
-
-    public override void SetParams()
-    {
-        base.SetParams();
-        //this is slightly jury-rigged as the Type is stored in the XML key, not a separate node
-        map.Add("type", new String(map.node.Key));
-        type = map.Add<String>("type");
-        //rest of it is normal
-        props = map.Add<ItemProperties>("properties");
-        onEquip = map.Add<Spell>("OnEquipEffect");
-        onUse = map.Add<Spell>("OnUseEffect");
-        onEaten = map.Add<Spell>("OnEatenEffect");
-        stats = map.Add<ItemStats>("stats");
-        Icon = map.Add<String>("icon");
+        base.ParseXML(x);
+        type = x.Key;
+        props = x.Select<ItemProperties>("properties");
+        onEquip = x.Select<Spell>("OnEquipEffect");
+        onUse = x.Select<Spell>("OnUseEffect");
+        onEaten = x.Select<Spell>("OnEatenEffect");
+        stats = x.Select<ItemStats>("stats");
+        Icon = x.SelectString("icon");
     }
     #endregion
 

@@ -8,7 +8,7 @@ public class CurePoison : EffectInstance
         n.RemoveAnEffect<PoisonEffect>();
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XMLNode x)
     {
     }
 }

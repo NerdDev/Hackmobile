@@ -5,13 +5,11 @@ using System.Reflection;
 using System.Text;
 using XML;
 
-public abstract class EffectInstance : PassesTurns
+public abstract class EffectInstance : PassesTurns, IXmlParsable
 {
-    public Integer turnsToProcess;
-    public IAffectable obj;
-    public XMLNode x;
-    public string effect;
-    private SortedDictionary<string, Field> map = new SortedDictionary<string, Field>();
+    public int TurnsToProcess { get; protected set; }
+    protected IAffectable target;
+    public string Name { get; protected set; }
     private GenericFlags<EffectIntendedTarget> targetTypes = new GenericFlags<EffectIntendedTarget>();
 
     public EffectInstance()
@@ -49,37 +47,23 @@ public abstract class EffectInstance : PassesTurns
         return ret;
     }
 
-    public abstract void SetParams();
-
-    public T Add<T>(string name) where T : Field, new()
-    {
-        Field item;
-        if (!map.TryGetValue(name, out item))
-        {
-            T param = new T();
-            param.ParseXML(x, name);
-            map.Add(name, param);
-            return param;
-        }
-        return (T)item;
-    }
-
     //This initialize is called upon parsing the XML
-    public void parseXML(XMLNode x)
+    public void ParseXML(XMLNode x)
     {
-        this.x = x;
+        // Call this once at parsing
         InitTargetTypes();
-        //This is required - if the turns entry doesn't exist, it returns 0 and treats as an instant effect.
-        turnsToProcess = Add<Integer>("turns");
-        this.SetParams();
+        TurnsToProcess = x.SelectInt("turns");
         this.IsActive = false;
+        ParseParams(x);
     }
+
+    protected abstract void ParseParams(XMLNode x);
 
     //This initialize is called when activating the effect
     public void initialize()
     {
         this.Init();
-        if (this.turnsToProcess == 0)
+        if (this.TurnsToProcess == 0)
         {
             this.Apply();
             this.Remove();
@@ -90,16 +74,11 @@ public abstract class EffectInstance : PassesTurns
         }
     }
 
-    public EffectInstance NewInstance(IAffectable obj = null)
+    public EffectInstance NewInstance(IAffectable target = null)
     {
-        EffectInstance instance = (EffectInstance)Activator.CreateInstance(GetType());
-        instance.x = this.x;
-        instance.effect = this.effect;
-        instance.map = this.map;
-        instance.turnsToProcess = this.turnsToProcess;
-        instance.SetParams();
+        EffectInstance instance = this.Copy<EffectInstance>();
         instance.IsActive = true;
-        instance.obj = obj;
+        instance.target = target;
         instance.initialize();
         return instance;
     }
@@ -115,18 +94,18 @@ public abstract class EffectInstance : PassesTurns
      */
     private void Init()
     {
-        Init(obj);
-        if (obj is NPC)
+        Init(target);
+        if (target is NPC)
         {
-            Init((NPC)obj);
+            Init((NPC)target);
         }
-        else if (obj is Item)
+        else if (target is Item)
         {
-            Init((Item)obj);
+            Init((Item)target);
         }
     }
 
-    public virtual void Init(IAffectable obj)
+    public virtual void Init(IAffectable target)
     {
     }
 
@@ -140,18 +119,18 @@ public abstract class EffectInstance : PassesTurns
 
     private void Apply()
     {
-        Apply(obj);
-        if (obj is NPC)
+        Apply(target);
+        if (target is NPC)
         {
-            Apply((NPC)obj);
+            Apply((NPC)target);
         }
-        else if (obj is Item)
+        else if (target is Item)
         {
-            Apply((Item)obj);
+            Apply((Item)target);
         }
     }
 
-    public virtual void Apply(IAffectable obj)
+    public virtual void Apply(IAffectable target)
     {
     }
 
@@ -165,14 +144,14 @@ public abstract class EffectInstance : PassesTurns
 
     private void Remove()
     {
-        Remove(obj);
-        if (obj is NPC)
+        Remove(target);
+        if (target is NPC)
         {
-            Remove((NPC)obj);
+            Remove((NPC)target);
         }
-        else if (obj is Item)
+        else if (target is Item)
         {
-            Remove((Item)obj);
+            Remove((Item)target);
         }
     }
 
@@ -205,15 +184,15 @@ public abstract class EffectInstance : PassesTurns
 
     private bool checkTurns()
     {
-        if (turnsToProcess > 0)
+        if (TurnsToProcess > 0)
         {
-            turnsToProcess -= 1;
+            TurnsToProcess -= 1;
             return true;
         }
-        else if (turnsToProcess == 0)
+        else if (TurnsToProcess == 0)
         {
             this.Remove();
-            obj.RemoveEffect(effect);
+            target.RemoveEffect(Name);
             this.IsActive = false;
             return false;
         }

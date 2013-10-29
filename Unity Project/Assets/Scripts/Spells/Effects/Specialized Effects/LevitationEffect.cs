@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Levitation : EffectInstance
 {
-    Float strength;
+    float strength;
 
     public override void Init(NPC n)
     {
@@ -18,8 +18,8 @@ public class Levitation : EffectInstance
         n.verticalMove(-strength);
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XML.XMLNode x)
     {
-        strength = Add<Float>("strength");
+        strength = x.SelectFloat("strength");
     }
 }

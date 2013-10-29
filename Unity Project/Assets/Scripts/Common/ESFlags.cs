@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using XML;
 
-public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, IConvertible
+public class ESFlags<T> : IXmlParsable where T : struct, IComparable, IConvertible
 {
     GenericFlags<T> flags = new GenericFlags<T>();
     HashSet<string> strings = new HashSet<string>();
@@ -152,13 +152,9 @@ public class ESFlags<T> : FieldContainerClass where T : struct, IComparable, ICo
         return ret;
     }
 
-    public override void SetParams()
+    public void ParseXML(XMLNode x)
     {
-        foreach (XMLNode node in map.node)
+        foreach (XMLNode node in x.SelectList())
             this[node.Name] = true;
-    }
-
-    public override void SetDefault()
-    {
     }
 }

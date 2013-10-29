@@ -3,15 +3,15 @@ using XML;
 
 public class AddHealth : EffectInstance
 {
-    Float strength;
+    public float Strength;
 
     public override void Apply(NPC n)
     {
-        n.AdjustHealth(Convert.ToInt32(strength));
+        n.AdjustHealth(Convert.ToInt32(Strength));
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XMLNode node)
     {
-        strength = Add<Float>("strength");
+        Strength = node.SelectFloat("strength");
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using XML;
 
-public class ItemStats : FieldContainerClass
+public class ItemStats : IXmlParsable
 {
     private int cost;
     public int Cost
@@ -28,11 +28,11 @@ public class ItemStats : FieldContainerClass
         set { this.size = value; }
     }
 
-    public override void SetParams()
+    public void ParseXML(XMLNode x)
     {
-        Weight = map.Add<Integer>("weight");
-        Cost = map.Add<Integer>("cost");
-        Nutrition = map.Add<Integer>("nutrition");
-        Size = map.Add<EnumField<Size>>("equipsize");
+        Weight = x.SelectInt("weight");
+        Cost = x.SelectInt("cost");
+        Nutrition = x.SelectInt("nutrition");
+        Size = x.SelectEnum<Size>("equipsize");
     }
 }

@@ -4,8 +4,8 @@ using XML;
 
 public class PoisonSlowEffect : PoisonEffect
 {
-    Integer strength;
-    Float slowPercentage;
+    int strength;
+    float slowPercentage;
 
     public override void Apply(NPC n)
     {
@@ -26,9 +26,9 @@ public class PoisonSlowEffect : PoisonEffect
         base.Remove(n);
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XMLNode x)
     {
-        strength = Add<Integer>("strength");
-        slowPercentage = Add<Float>("slow");
+        strength = x.SelectInt("strength");
+        slowPercentage = x.SelectFloat("slow");
     }
 }

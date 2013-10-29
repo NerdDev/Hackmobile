@@ -164,31 +164,31 @@ namespace XML
             return this.Find(p => key.Equals(p.Key));
         }
 
-        public int SelectInt(string toParse)
+        public int SelectInt(string toParse, int defaultVal = 0)
         {
             XMLNode x = this.Select(toParse);
             if (x != null && !string.IsNullOrEmpty(x.Content))
                 return x.Content.ToInt();
-            return 0;
+            return defaultVal;
         }
 
-        public double SelectDouble(string toParse)
+        public double SelectDouble(string toParse, double defaultVal = 0)
         {
             XMLNode x = this.Select(toParse);
             if (x != null && !string.IsNullOrEmpty(x.Content))
                 return x.Content.ToDouble();
-            return 0;
+            return defaultVal;
         }
 
-        public float SelectFloat(string toParse)
+        public float SelectFloat(string toParse, float defaultVal = 0)
         {
             XMLNode x = this.Select(toParse);
             if (x != null && !string.IsNullOrEmpty(x.Content))
                 return x.Content.ToFloat();
-            return 0;
+            return defaultVal;
         }
 
-        public T SelectEnum<T>(string toParse)
+        public T SelectEnum<T>(string toParse, T defaultVal = default(T))
         {
             XMLNode x = this.Select(toParse);
             if (x != null && !string.IsNullOrEmpty(x.Content))
@@ -201,23 +201,32 @@ namespace XML
                 {
                 }
             }
-            return default(T);
+            return defaultVal;
         }
 
-        public string SelectString(string node)
+        public string SelectString(string node, string defaultVal = "")
         {
             XMLNode x = this.Select(node);
             if (x != null)
                 return x.Content;
-            return "";
+            return defaultVal;
         }
 
-        public bool SelectBool(string toParse)
+        public bool SelectBool(string toParse, bool defaultVal = false)
         {
             XMLNode x = this.Select(toParse);
             if (x != null && !string.IsNullOrEmpty(x.Content))
                 return x.Content.ToBool();
-            return false;
+            return defaultVal;
+        }
+
+        public T Select<T>(string nodeName) where T : IXmlParsable, new()
+        {
+            XMLNode node = Select(nodeName);
+            T t = new T();
+            if (node != null)
+                t.ParseXML(node);
+            return t;
         }
         #endregion
 
@@ -238,6 +247,11 @@ namespace XML
                 return node.Key.Equals(key);
             }
             ).ToList<XMLNode>();
+        }
+
+        public List<XMLNode> SelectList()
+        {
+            return this.ToList();
         }
 
         public override string ToString()

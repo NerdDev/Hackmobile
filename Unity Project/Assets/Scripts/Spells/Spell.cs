@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using XML;
 
-public class Spell : Field
+public class Spell : IXmlParsable
 {
     SpellCastInfo info;
     protected SpellCastInfo CastInfo
@@ -43,7 +43,7 @@ public class Spell : Field
         return new SpellCastInfo(caster, CastInfo);
     }
 
-    public void ParseXML(XMLNode spell, string name)
+    public void ParseXML(XMLNode spell)
     {
         // If no targeter specified, assume self
         AddAspect(new Self(), GetEffects(spell.SelectList("effect")));
@@ -72,18 +72,12 @@ public class Spell : Field
             EffectInstance instance;
             if (BigBoss.Types.TryInstantiate(type, out instance))
             {
-                instance.effect = type;
-                instance.parseXML(effect);
+                instance.ParseXML(effect);
                 ret.Add(instance);
             }
             else if (BigBoss.Debug.logging(Logs.XML))
                 BigBoss.Debug.log(Logs.XML, "Effect didn't exist: " + type + " on node " + effect);
         }
         return ret;
-    }
-
-
-    public void SetDefault()
-    {
     }
 }

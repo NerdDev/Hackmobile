@@ -4,7 +4,7 @@ using XML;
 
 public class PoisonDamageEffect : PoisonEffect
 {
-    Integer strength;
+    int strength;
 
     public override void Apply(NPC n)
     {
@@ -26,8 +26,8 @@ public class PoisonDamageEffect : PoisonEffect
         base.Remove(n);
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XMLNode x)
     {
-        strength = Add<Integer>("strength");
+        strength = x.SelectInt("strength");
     }
 }

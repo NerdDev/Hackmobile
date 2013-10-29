@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class Equipment : FieldContainerClass
+public class Equipment : IXmlParsable
 {
     List<EquipSlot>[] equipSlots = new List<EquipSlot>[(int)EquipTypes.LAST];
 
@@ -267,5 +267,9 @@ public class Equipment : FieldContainerClass
                 equipSlots[i] = null;
             }
         }
+    }
+
+    public void ParseXML(XML.XMLNode x)
+    {
     }
 }

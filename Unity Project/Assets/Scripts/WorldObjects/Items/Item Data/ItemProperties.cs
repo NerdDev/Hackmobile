@@ -1,7 +1,7 @@
 using System;
 using XML;
 
-public class ItemProperties : FieldContainerClass
+public class ItemProperties : IXmlParsable
 {
     //Properties
     private BUC buc;
@@ -60,11 +60,11 @@ public class ItemProperties : FieldContainerClass
         set { this.equipType = value; }
     }
 
-    public override void SetParams()
+    public void ParseXML(XMLNode x)
     {
-        damage = map.Add<String>("damage");
-        mat = map.Add<String>("material");
-        if (this.mat.Equals("")) { this.weight = map.Add<Integer>("weight"); }
-        EquipType = map.Add<EnumField<EquipTypes>>("equiptype");
+        damage = x.SelectString("damage");
+        mat = x.SelectString("material");
+        if (this.mat.Equals("")) { this.weight = x.SelectInt("weight"); }
+        EquipType = x.SelectEnum<EquipTypes>("equiptype");
     }
 }

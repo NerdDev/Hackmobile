@@ -19,7 +19,7 @@ public class Telepathy : EffectInstance
         //reverse init()
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XML.XMLNode x)
     {
     }
 }

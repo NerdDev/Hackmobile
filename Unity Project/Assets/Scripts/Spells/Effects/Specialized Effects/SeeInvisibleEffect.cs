@@ -22,7 +22,7 @@ public class SeeInvisible : EffectInstance
         //disable targeting for invisible objects in AI functions
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XML.XMLNode x)
     {
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class Inventory : Dictionary<string, InventoryCategory>, Field
+public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
 {
     public void Add(Item i)
     {
@@ -75,11 +75,7 @@ public class Inventory : Dictionary<string, InventoryCategory>, Field
         return false;
     }
 
-    public void ParseXML(XMLNode x, string name)
-    {
-    }
-
-    public void SetDefault()
+    public void ParseXML(XMLNode x)
     {
     }
 }

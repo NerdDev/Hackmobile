@@ -1,7 +1,7 @@
 using System;
 using XML;
 
-public class AttributesData : FieldContainerClass
+public class AttributesData : IXmlParsable
 {
     //store stat data here
     private int strength;
@@ -99,16 +99,16 @@ public class AttributesData : FieldContainerClass
         return false;
     }
 
-    public override void SetParams()
+    public void ParseXML(XMLNode x)
     {
-        this.Strength = map.Add<Integer>("strength");
-        this.Charisma = map.Add<Integer>("charisma");
-        this.Intelligence = map.Add<Integer>("intelligence");
-        this.Wisdom = map.Add<Integer>("wisdom");
-        this.Dexterity = map.Add<Integer>("dexterity");
-        this.Constitution = map.Add<Integer>("constitution");
-        this.Difficulty = map.Add<Integer>("difficulty");
-        this.Size = map.Add<EnumField<Size>>("size");
+        Strength = x.SelectInt("strength");
+        Charisma = x.SelectInt("charisma");
+        Intelligence = x.SelectInt("intelligence");
+        Wisdom = x.SelectInt("wisdom");
+        Dexterity = x.SelectInt("dexterity");
+        Constitution = x.SelectInt("constitution");
+        Difficulty = x.SelectInt("difficulty");
+        Size = x.SelectEnum<Size>("size");
     }
 }
 

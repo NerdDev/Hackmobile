@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Blindness : EffectInstance
 {
-    public override void SetParams()
+    protected override void ParseParams(XML.XMLNode x)
     {
     }
 }

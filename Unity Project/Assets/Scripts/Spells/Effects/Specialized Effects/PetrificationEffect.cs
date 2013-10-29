@@ -35,7 +35,7 @@ public class Petrification : EffectInstance
         timer--;
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XML.XMLNode x)
     {
     }
 }

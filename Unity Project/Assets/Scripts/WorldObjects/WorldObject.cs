@@ -4,11 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using XML;
 
-public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
+public class WorldObject : MonoBehaviour, PassesTurns, IXmlParsable
 {
     #region Generic Object Properties (graphical info, names, etc).
-
-    public FieldMap map;
     public string Model { get; set; }
     public string ModelTexture { get; set; }
     public string Name { get; set; }
@@ -27,33 +25,17 @@ public class WorldObject : MonoBehaviour, PassesTurns, FieldContainer
     }
 
     #region Data Management for Instances
-    public virtual void setData(WorldObject wo)
-    {
-        if (map == null)
-        {
-            map = new FieldMap(wo.map.node);
-        }
-        this.SetParams();
-    }
-
-    public void parseXML(XMLNode x)
-    {
-        map = new FieldMap(x);
-        this.SetParams();
-    }
-
     public virtual void setNull()
     {
-        this.parseXML(new XMLNode(null));
         IsActive = false;
     }
 
-    public virtual void SetParams()
+    public virtual void ParseXML(XMLNode x)
     {
-        Name = map.Add<String>("name");
-        Model = map.Add<String>("model");
-        ModelTexture = map.Add<String>("modeltexture");
-        Prefab = map.Add<String>("prefab");
+        Name = x.SelectString("name", "NONAME!");
+        Model = x.SelectString("model");
+        ModelTexture = x.SelectString("modeltexture");
+        Prefab = x.SelectString("prefab");
     }
     #endregion
 

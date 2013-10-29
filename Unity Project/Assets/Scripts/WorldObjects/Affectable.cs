@@ -13,12 +13,6 @@ public class Affectable : WorldObject, IAffectable
         effects = new AppliedEffects(this);
     }
 
-    public override void SetParams()
-    {
-        base.SetParams();
-        map.Add("effects", effects);
-    }
-
     #region IAffectable
     public void ApplyEffect(EffectInstance effect)
     {

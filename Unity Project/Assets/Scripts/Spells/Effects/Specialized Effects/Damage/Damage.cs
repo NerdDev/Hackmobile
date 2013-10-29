@@ -6,8 +6,8 @@ public abstract class DamageEffect : EffectInstance
 {
     protected int strength;
 
-    public override void SetParams()
+    protected override void ParseParams(XMLNode node)
     {
-        strength = Add<Integer>("strength");
+        strength = node.SelectInt("strength");
     }
 }

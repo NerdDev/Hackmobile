@@ -5,15 +5,15 @@ using System.Text;
 
 public class NutritionEffect : EffectInstance
 {
-    Integer strength;
+    int strength;
 
     public override void Apply(NPC n)
     {
         n.AdjustHunger(strength);
     }
 
-    public override void SetParams()
+    protected override void ParseParams(XML.XMLNode x)
     {
-        strength = Add<Integer>("strength");
+        strength = x.SelectInt("strength");
     }
 }

@@ -248,15 +248,7 @@
     <Compile Include="Assets\Scripts\Common\Bounding.cs" />
     <Compile Include="Assets\Scripts\Common\Comparator.cs" />
     <Compile Include="Assets\Scripts\Common\Container2D.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\Double.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\EnumField.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\Field.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\FieldContainer.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\FieldContainerClass.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\FieldMap.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\Float.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\Integer.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\String.cs" />
+    <Compile Include="Assets\Scripts\Common\Data Structures\IXmlParsable.cs" />
     <Compile Include="Assets\Scripts\Common\Dice.cs" />
     <Compile Include="Assets\Scripts\Common\ESFlags.cs" />
     <Compile Include="Assets\Scripts\Common\Exceptions\InfiniteLoopException.cs" />
@@ -328,7 +320,6 @@
     <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
     <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
     <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />
-    <Compile Include="Assets\Scripts\Library\XML\XMLNodeList.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\AudioManager.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\BigBoss.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\CameraManager.cs" />

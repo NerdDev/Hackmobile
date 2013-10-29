@@ -92,7 +92,7 @@ public class Player : NPC, IManager
         BigBoss.PlayerInput.allowMouseInput = true;
         BigBoss.PlayerInput.allowPlayerInput = true;
         
-        this.setData(BigBoss.WorldObject.getNPC("player"));
+        //this.setData(BigBoss.WorldObject.getNPC("player"));
         stats.Hunger = 900;
         IsActive = true;
         calcStats();

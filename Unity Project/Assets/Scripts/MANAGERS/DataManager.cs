@@ -96,7 +96,7 @@ public class DataManager : MonoBehaviour, IManager
         Item i = go.AddComponent<Item>();
         i.Type = itemNode.Key;
         i.Name = itemName;
-        i.parseXML(itemNode);
+        i.ParseXML(itemNode);
         return i;
     }
 
@@ -119,7 +119,7 @@ public class DataManager : MonoBehaviour, IManager
             GameObject go = new GameObject(npcName);
             NPC n = go.AddComponent<NPC>();
             n.Name = npcName;
-            n.parseXML(npcNode);
+            n.ParseXML(npcNode);
             if (!npcs.ContainsKey(n.Name))
             {
                 npcs.Add(n.Name, n);
