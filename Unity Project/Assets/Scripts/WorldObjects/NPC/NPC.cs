@@ -794,7 +794,7 @@ public class NPC : Affectable
     {
         if (subtractPoints(BigBoss.TimeKeeper.attackCost))
         {
-            attack(BigBoss.PlayerInfo);
+            attack(BigBoss.Player);
         }
     }
 
@@ -830,7 +830,7 @@ public class NPC : Affectable
             GameObject go = gesture.pickObject;
             if (GO == go)
             {
-                NPC n = go.GetComponent<WOInstance<NPC>>();
+                NPC n = go.GetWorldObject<NPC>();
                 if (this.IsNotAFreaking<Player>() && this == n)
                 {
                     PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace.x, BigBoss.Player.gridSpace.y);

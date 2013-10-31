@@ -4,21 +4,22 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class WOInstance<W> : MonoBehaviour where W : WorldObject, new()
+public class WOInstance : MonoBehaviour
 {
-    public W WO { get; set; }
+    public WorldObject WO { get; set; }
 
     public WOInstance()
     {
     }
 
-    public void SetTo(W item)
+    public W SetTo<W>(W item) where W : WorldObject
     {
         WO = item.Copy();
         WO.GO = this.gameObject;
+        return (W)WO;
     }
 
-    public static implicit operator W(WOInstance<W> inst)
+    public static implicit operator WorldObject (WOInstance inst)
     {
         return inst.WO;
     }

@@ -30,4 +30,10 @@ public static class GameObjectExt
         var mObjs = gObj.GetComponentsInChildren<MonoBehaviour>();
         return (from a in mObjs where a.GetType().GetInterfaces().Any(k => k == typeof(T)) select (T)(object)a).ToArray();
     }
+
+    public static W GetWorldObject<W>(this GameObject gObj) where W : WorldObject
+    {
+        WOInstance instance = gObj.GetComponent<WOInstance>();
+        return (W)instance.WO;
+    }
 }

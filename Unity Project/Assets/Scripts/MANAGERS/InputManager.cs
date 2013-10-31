@@ -98,7 +98,7 @@ public class InputManager : MonoBehaviour, IManager
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            BigBoss.PlayerInfo.transform.position = BigBoss.PlayerInfo.WO.avatarStartLocation;
+            BigBoss.PlayerInfo.transform.position = BigBoss.Player.avatarStartLocation;
         }
         if (Input.GetKeyDown(KeyCode.F1))
         {
@@ -108,19 +108,19 @@ public class InputManager : MonoBehaviour, IManager
         if (Input.GetKeyDown(KeyCode.B))
         {
             Item food = null;
-            food = BigBoss.PlayerInfo.WO.inventory.Get("food", "spoiled bread")[0];
+            food = BigBoss.Player.inventory.Get("food", "spoiled bread")[0];
             if (food != null)
             {
-                BigBoss.PlayerInfo.WO.eatItem(food);
+                BigBoss.Player.eatItem(food);
             }
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
             Item food = null;
-            food = BigBoss.PlayerInfo.WO.inventory.Get("consumable", "health potion")[0];
+            food = BigBoss.Player.inventory.Get("consumable", "health potion")[0];
             if (food != null)
             {
-                BigBoss.PlayerInfo.WO.eatItem(food);
+                BigBoss.Player.eatItem(food);
             }
         }
     }
@@ -142,7 +142,7 @@ public class InputManager : MonoBehaviour, IManager
             Debug.DrawRay(BigBoss.PlayerInfo.transform.position,
                 playerConvertedTranslationVector,
                 Color.magenta);
-            BigBoss.PlayerInfo.WO.MovePlayer(playerConvertedTranslationVector);
+            BigBoss.Player.MovePlayer(playerConvertedTranslationVector);
 
         }
         if (Input.GetMouseButtonDown(0)) //hold left click

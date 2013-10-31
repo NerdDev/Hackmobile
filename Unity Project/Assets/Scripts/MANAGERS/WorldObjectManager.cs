@@ -140,9 +140,9 @@ public class WorldObjectManager : MonoBehaviour, IManager {
     public Item CreateItem(string itemName)
     {
         GameObject item = new GameObject();
-        WOInstance<Item> i = item.AddComponent<WOInstance<Item>>();
-        i.SetTo(BigBoss.WorldObject.getItem(itemName));
-        i.WO.IsActive = true;
+        WOInstance instance = item.AddComponent<WOInstance>();
+        Item i = instance.SetTo(BigBoss.WorldObject.getItem(itemName));
+        i.IsActive = true;
         return i;
     }
 
