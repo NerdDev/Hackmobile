@@ -8,9 +8,6 @@ public class WorldObjectManager : MonoBehaviour, IManager {
     //This may be changed depending on how we utilize objects in the game world
     //globally accessible list of types for iteration:
     public List<Item> TotalItemsInExistence = new List<Item>();
-    MaterialType nullMaterial { get; set; }
-    Item nullItem { get; set; }
-    NPC nullNPC { get; set; }
 
     Dictionary<string, NPC> baseNPCs = new Dictionary<string, NPC>();
     Dictionary<string, Item> baseItems = new Dictionary<string, Item>();
@@ -20,30 +17,12 @@ public class WorldObjectManager : MonoBehaviour, IManager {
     public void Initialize()
     {
         BigBoss.Debug.w(Logs.Main, "Starting World Object Manager");
-        //Initialize Data Manager
+        //Initialize Data Manager by asking for it
         DataManager dm = BigBoss.Data;
-        initializeNullData();
     }
 
     void Start()
     {
-    }
-
-    private void initializeNullData()
-    {
-        // Wut four?
-        //GameObject nullGONPC = new GameObject("nullNPC");
-        //nullNPC = nullGONPC.AddComponent<NPC>();
-        //nullNPC.setNull();
-
-        ////Null material
-        //nullMaterial = new MaterialType();
-        //nullMaterial.setNull();
-
-        ////Null item
-        //GameObject nullGOItem = new GameObject("nullItem");
-        //nullItem = nullGOItem.AddComponent<Item>();
-        //nullItem.setNull();
     }
 
 	public List<NPC> totalNumberOfNPCs = new List<NPC>();
@@ -60,13 +39,14 @@ public class WorldObjectManager : MonoBehaviour, IManager {
 
     public NPC getNPC(string npcName)
     {
-        if (getNPCs().ContainsKey(npcName))
+        NPC n;
+        if (getNPCs().TryGetValue(npcName, out n))
         {
-            return getNPCs()[npcName];
+            return n;
         }
         else
         {
-            return nullNPC;
+            return new NPC();
         }
     }
 
@@ -100,25 +80,27 @@ public class WorldObjectManager : MonoBehaviour, IManager {
 
     public Item getItem(string itemName)
     {
-        if (getItems().ContainsKey(itemName))
+        Item i;
+        if (getItems().TryGetValue(itemName, out i))
         {
-            return getItems()[itemName];
+            return i;
         }
         else
         {
-            return nullItem;
+            return new Item();
         }
     }
 
     public MaterialType getMaterial(string mat)
     {
-        if (getMaterials().ContainsKey(mat))
+        MaterialType m;
+        if (getMaterials().TryGetValue(mat, out m))
         {
-            return getMaterials()[mat];
+            return m;
         }
         else
         {
-            return nullMaterial;
+            return new MaterialType();
         }
     }
 

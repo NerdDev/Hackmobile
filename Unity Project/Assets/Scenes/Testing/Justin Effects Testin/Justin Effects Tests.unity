@@ -402,7 +402,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a481f2cbcee4164e8575888c6e5e653, type: 3}
   m_Name: 
-  Theme: {fileID: 11400000, guid: 3e1c6de415ab1424fbdde348a9208fad, type: 2}
+  Theme: {fileID: 11400000, guid: 190358207bedb01488dc7d4be001c31a, type: 2}
   Builder: {fileID: 11400000, guid: ed42e612c387bca4bac91cf44cf1fb33, type: 2}
   Seed: 10
 --- !u!1 &1676629302
