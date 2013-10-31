@@ -26,7 +26,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
 	{
 		BigBoss.WorldObject.RemoveItemFromMasterList(this);//removing existence with singleton
         BigBoss.Time.RemoveFromUpdateList(this);
-        Destroy(this.gameObject);
+        BigBoss.Destroy(GO);
     }
     #endregion
 

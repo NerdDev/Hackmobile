@@ -60,9 +60,10 @@ public class DungeonMaster : MonoBehaviour, IManager {
         try
         {
             GameObject gameObject = Instantiate(Resources.Load(n.Prefab), new Vector3(p.x, -.5f, p.y), Quaternion.identity) as GameObject;
-            NPC newNPC = gameObject.AddComponent<NPC>();
-            newNPC.IsActive = true;
-            newNPC.init();
+            WOInstance<NPC> newNPC = gameObject.AddComponent<WOInstance<NPC>>();
+            newNPC.SetTo(n);
+            newNPC.WO.IsActive = true;
+            newNPC.WO.init();
             return newNPC;
         }
         catch (ArgumentException)

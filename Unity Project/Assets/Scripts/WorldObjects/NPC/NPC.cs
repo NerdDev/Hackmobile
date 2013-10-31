@@ -30,7 +30,7 @@ public class NPC : Affectable
     {
         BigBoss.WorldObject.RemoveNPCFromMasterList(this);
         BigBoss.Time.RemoveFromUpdateList(this);
-        Destroy(this.gameObject);
+        BigBoss.Destroy(GO);
     }
 
     /**
@@ -132,7 +132,7 @@ public class NPC : Affectable
 
     void Start()
     {
-        animator = this.GetComponent<Animator>() as Animator;
+        animator = GO.GetComponent<Animator>() as Animator;
     }
 
     void Update()
@@ -169,7 +169,7 @@ public class NPC : Affectable
         }
         if (animator == null)
         {
-            animator = this.GetComponent<Animator>() as Animator;
+            animator = GO.GetComponent<Animator>() as Animator;
         }
         else
         {
@@ -227,7 +227,7 @@ public class NPC : Affectable
         {
             stats.CurrentHealth = stats.CurrentHealth - amount;
             //Debug.Log(this.Name + " was damaged for " + amount + "!");
-            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, "Damaged for " + amount + "!", Color.red);
+            BigBoss.Gooey.CreateTextPop(GO.transform.position, "Damaged for " + amount + "!", Color.red);
             return false;
         }
         else
@@ -317,7 +317,7 @@ public class NPC : Affectable
 
     protected void UpdateHungerLevel(Color guiCol)
     {
-        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
+        BigBoss.Gooey.CreateTextPop(GO.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
     }
 
     public float getXPfromNPC()
@@ -330,30 +330,30 @@ public class NPC : Affectable
     #region Movement
     private void movement()
     {
-        if (!checkPosition(this.gameObject.transform.position, targetGridCoords))
+        if (!checkPosition(GO.transform.position, targetGridCoords))
         {
             MoveNPCStepwise(targetGridCoords);
         }
         else
         {
             moving = false;
-            this.gameObject.transform.position = targetGridCoords;
+            GO.transform.position = targetGridCoords;
             UpdateCurrentTileVectors();
         }
     }
 
     protected void verticalMovement()
     {
-        if (!checkVerticalPosition(this.gameObject.transform.position, targetVerticalCoords))
+        if (!checkVerticalPosition(GO.transform.position, targetVerticalCoords))
         {
             MoveNPCStepwiseUp();
         }
         else
         {
             verticalMoving = false;
-            Vector3 pos = this.gameObject.transform.position;
+            Vector3 pos = GO.transform.position;
             pos.y = targetVerticalCoords.y;
-            this.gameObject.transform.position = pos;
+            GO.transform.position = pos;
         }
     }
 
@@ -361,7 +361,7 @@ public class NPC : Affectable
     {
         moving = true;
         targetGridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x - x, -.5f, CurrentOccupiedGridCenterWorldPoint.z - y);
-        heading = targetGridCoords - this.gameObject.transform.position;
+        heading = targetGridCoords - GO.transform.position;
     }
 
     public void verticalMove(float z)
@@ -384,21 +384,21 @@ public class NPC : Affectable
 
     void MoveNPCStepwise(Vector3 gridCoords)
     {
-        heading = gridCoords - this.gameObject.transform.position;
-        gameObject.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
+        heading = gridCoords - GO.transform.position;
+        GO.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         Quaternion toRot = Quaternion.LookRotation(heading);
-        this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, toRot, NPCRotationSpeed);
+        GO.transform.rotation = Quaternion.Slerp(GO.transform.rotation, toRot, NPCRotationSpeed);
     }
 
     void MoveNPCStepwiseUp()
     {
         if (movingUp)
         {
-            gameObject.transform.Translate(Vector3.up * NPCSpeed * Time.deltaTime, Space.Self);
+            GO.transform.Translate(Vector3.up * NPCSpeed * Time.deltaTime, Space.Self);
         }
         else
         {
-            gameObject.transform.Translate(Vector3.down * NPCSpeed * Time.deltaTime, Space.Self);
+            GO.transform.Translate(Vector3.down * NPCSpeed * Time.deltaTime, Space.Self);
         }
     }
 
@@ -428,7 +428,7 @@ public class NPC : Affectable
         {
             gridSpace.val.Remove(this);
         }
-        GridCoordinate = new Vector2(this.gameObject.transform.position.x.Round(), this.gameObject.transform.position.z.Round());
+        GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
         gridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
         Level level = BigBoss.Levels.Level;
         gridSpace.val = level[gridSpace.x, gridSpace.y];
@@ -556,7 +556,7 @@ public class NPC : Affectable
 
         if (this.IsNotAFreaking<Player>())
         {
-            BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position, name + " is dead!", Color.red);
+            BigBoss.Gooey.CreateTextPop(GO.transform.position, Name + " is dead!", Color.red);
             Debug.Log(this.Name + " was killed!");
             DestroyThisItem();
         }
@@ -766,7 +766,7 @@ public class NPC : Affectable
     bool IsNextToPlayer()
     {
         Surrounding<GridSpace> s = BigBoss.Levels.Level.Surrounding;
-        s.Load(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
+        s.Load(BigBoss.Player.gridSpace.x, BigBoss.Player.gridSpace.y);
         foreach (Value2D<GridSpace> grid in s)
         {
             if (grid.x == gridSpace.x && grid.y == gridSpace.y)
@@ -800,7 +800,7 @@ public class NPC : Affectable
 
     private void AIMove()
     {
-        PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
+        PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace.x, BigBoss.Player.gridSpace.y);
         if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
@@ -828,16 +828,16 @@ public class NPC : Affectable
         if (gesture.pickObject != null)
         {
             GameObject go = gesture.pickObject;
-            if (this.gameObject == go)
+            if (GO == go)
             {
-                NPC n = go.GetComponent<NPC>();
+                NPC n = go.GetComponent<WOInstance<NPC>>();
                 if (this.IsNotAFreaking<Player>() && this == n)
                 {
-                    PathTree pathToPlayer = getPathTree(BigBoss.PlayerInfo.gridSpace.x, BigBoss.PlayerInfo.gridSpace.y);
+                    PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace.x, BigBoss.Player.gridSpace.y);
                     List<PathNode> nodes = pathToPlayer.getPath();
                     if (nodes.Count == 2)
                     {
-                        BigBoss.PlayerInfo.attack(this);
+                        BigBoss.Player.attack(this);
                     }
                 }
             }

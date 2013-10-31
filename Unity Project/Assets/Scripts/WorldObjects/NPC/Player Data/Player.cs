@@ -6,7 +6,7 @@ using System;
 /*   
  * As long as this isn't an MMO, this Player class should be able to hold most if not all of player information.
  */
-public class Player : NPC, IManager
+public class Player : NPC
 {
     #region General Player Info:
 
@@ -15,9 +15,6 @@ public class Player : NPC, IManager
 
     private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
     public string PlayerTitle { get { return playerTitle; } set { playerTitle = value; } }
-
-    public GameObject playerAvatar;
-    public GameObject PlayerAvatar { get { return playerAvatar; } }//read only global reference to the hero gameobject
 
     public int level = 10; // Just for testing.  'Prolly change this to 1 later.
     public int Level { get { return level; } }
@@ -86,8 +83,6 @@ public class Player : NPC, IManager
 
     public void Initialize()
     {
-        //use the internal assignation reference for clarity
-        this.playerAvatar = this.gameObject;
         BigBoss.PlayerInput.allowKeyboardInput = true;
         BigBoss.PlayerInput.allowMouseInput = true;
         BigBoss.PlayerInput.allowPlayerInput = true;
@@ -96,9 +91,9 @@ public class Player : NPC, IManager
         stats.Hunger = 900;
         IsActive = true;
         calcStats();
-        this.PlayerTitle = BigBoss.Data.playerProfessions.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
-        anim = playerAvatar.GetComponent<Animator>() as Animator;
-        this.Name = "Kurtis";
+        this.PlayerTitle = BigBoss.Data.playerProfessions.getTitle(BigBoss.Player.PlayerChosenProfession, BigBoss.Player.stats.Level);
+        anim = GO.GetComponent<Animator>() as Animator;
+        Name = "Kurtis";
 
         //Relocate this to a test script in your scene, rather than player itself
         //Item i = BigBoss.WorldObject.CreateItem("sword1");
@@ -166,8 +161,8 @@ public class Player : NPC, IManager
 
     private void movement()
     {
-        Vector3 lookVectorToOccupiedTile = CurrentOccupiedGridCenterWorldPoint - playerAvatar.transform.position;
-        Debug.DrawLine(playerAvatar.transform.position + Vector3.up, CurrentOccupiedGridCenterWorldPoint, Color.green);
+        Vector3 lookVectorToOccupiedTile = CurrentOccupiedGridCenterWorldPoint - GO.transform.position;
+        Debug.DrawLine(GO.transform.position + Vector3.up, CurrentOccupiedGridCenterWorldPoint, Color.green);
 
         //If distance is greater than 1.3 (var), pass turn
         if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
@@ -195,7 +190,7 @@ public class Player : NPC, IManager
             }
             if (UnityEngine.Time.time > timePassed)
             {
-                if (!checkPosition(playerAvatar.transform.position, CurrentOccupiedGridCenterWorldPoint))
+                if (!checkPosition(GO.transform.position, CurrentOccupiedGridCenterWorldPoint))
                 {
                     MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime, .75f, .25f);
                     isMoving = true;
@@ -220,7 +215,7 @@ public class Player : NPC, IManager
 
     private void resetPosition()
     {
-        this.playerAvatar.transform.position = CurrentOccupiedGridCenterWorldPoint;
+        GO.transform.position = CurrentOccupiedGridCenterWorldPoint;
     }
 
     public void MovePlayer(Vector3 heading)
@@ -230,7 +225,7 @@ public class Player : NPC, IManager
 
     protected override bool UpdateCurrentTileVectors()
     {
-        GridCoordinate = new Vector2(this.gameObject.transform.position.x.Round(), this.gameObject.transform.position.z.Round());
+        GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
         newGridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
         GridSpace newGrid = BigBoss.Levels.Level[newGridSpace.x, newGridSpace.y];
         if (!newGrid.IsBlocked())
@@ -253,9 +248,9 @@ public class Player : NPC, IManager
 
     private void MovePlayer(Vector3 heading, float playerSpeed, float playerRotationSpeed)
     {
-        gameObject.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
+        GO.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
         Quaternion toRot = Quaternion.LookRotation(heading);
-        playerAvatar.transform.rotation = Quaternion.Slerp(playerAvatar.transform.rotation, toRot, playerRotationSpeed);
+        GO.transform.rotation = Quaternion.Slerp(GO.transform.rotation, toRot, playerRotationSpeed);
     }
 
     //BRAD WHAT DOES THIS DO?!

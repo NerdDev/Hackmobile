@@ -31,18 +31,19 @@ public class WorldObjectManager : MonoBehaviour, IManager {
 
     private void initializeNullData()
     {
-        GameObject nullGONPC = new GameObject("nullNPC");
-        nullNPC = nullGONPC.AddComponent<NPC>();
-        nullNPC.setNull();
+        // Wut four?
+        //GameObject nullGONPC = new GameObject("nullNPC");
+        //nullNPC = nullGONPC.AddComponent<NPC>();
+        //nullNPC.setNull();
 
-        //Null material
-        nullMaterial = new MaterialType();
-        nullMaterial.setNull();
+        ////Null material
+        //nullMaterial = new MaterialType();
+        //nullMaterial.setNull();
 
-        //Null item
-        GameObject nullGOItem = new GameObject("nullItem");
-        nullItem = nullGOItem.AddComponent<Item>();
-        nullItem.setNull();
+        ////Null item
+        //GameObject nullGOItem = new GameObject("nullItem");
+        //nullItem = nullGOItem.AddComponent<Item>();
+        //nullItem.setNull();
     }
 
 	public List<NPC> totalNumberOfNPCs = new List<NPC>();
@@ -139,9 +140,9 @@ public class WorldObjectManager : MonoBehaviour, IManager {
     public Item CreateItem(string itemName)
     {
         GameObject item = new GameObject();
-        Item i = item.AddComponent<Item>();
-        Item baseI = BigBoss.WorldObject.getItem(itemName);
-        i.IsActive = true;
+        WOInstance<Item> i = item.AddComponent<WOInstance<Item>>();
+        i.SetTo(BigBoss.WorldObject.getItem(itemName));
+        i.WO.IsActive = true;
         return i;
     }
 

@@ -53,14 +53,15 @@ public class BigBoss : MonoBehaviour
         }
     }
     public static TimeManager TimeKeeper { get { return Time; } }
-    private static Player playerInfo;
-    public static Player PlayerInfo
+    private static PlayerInstance playerInfo;
+    public static PlayerInstance PlayerInfo
     {
         get
         {
             if (playerInfo == null)
             {
-                BBoss.Instantiate<Player>(out playerInfo);
+                BBoss.Instantiate<PlayerInstance>(out playerInfo);
+                playerInfo.SetTo(new Player());
             }
             return playerInfo;
         }

@@ -18,7 +18,7 @@ public class PoisonDamageEffect : PoisonEffect
     public override void Init(NPC n)
     {
         base.Init(n);
-        BigBoss.Gooey.CreateTextPop(n.gameObject.transform.position, "Poisoned!", UnityEngine.Color.green);
+        BigBoss.Gooey.CreateTextPop(n.GO.transform.position, "Poisoned!", UnityEngine.Color.green);
     }
 
     public override void Remove(NPC n)

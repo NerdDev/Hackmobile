@@ -226,7 +226,7 @@ public class GUIManager : MonoBehaviour, IManager {
 		foreach (Item item in invList) 
 		{
 			//Debugging:
-			Debug.Log(item.name);
+			Debug.Log(item.Name);
 			string iconToSetString = item.ModelTexture.ToString();
 			
 			//inventoryStorageScript.items.Add(item);

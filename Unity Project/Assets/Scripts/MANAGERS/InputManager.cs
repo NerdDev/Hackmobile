@@ -98,7 +98,7 @@ public class InputManager : MonoBehaviour, IManager
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            BigBoss.PlayerInfo.playerAvatar.transform.position = BigBoss.PlayerInfo.avatarStartLocation;
+            BigBoss.PlayerInfo.transform.position = BigBoss.PlayerInfo.WO.avatarStartLocation;
         }
         if (Input.GetKeyDown(KeyCode.F1))
         {
@@ -108,19 +108,19 @@ public class InputManager : MonoBehaviour, IManager
         if (Input.GetKeyDown(KeyCode.B))
         {
             Item food = null;
-            food = BigBoss.PlayerInfo.inventory.Get("food", "spoiled bread")[0];
+            food = BigBoss.PlayerInfo.WO.inventory.Get("food", "spoiled bread")[0];
             if (food != null)
             {
-                BigBoss.PlayerInfo.eatItem(food);
+                BigBoss.PlayerInfo.WO.eatItem(food);
             }
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
             Item food = null;
-            food = BigBoss.PlayerInfo.inventory.Get("consumable", "health potion")[0];
+            food = BigBoss.PlayerInfo.WO.inventory.Get("consumable", "health potion")[0];
             if (food != null)
             {
-                BigBoss.PlayerInfo.eatItem(food);
+                BigBoss.PlayerInfo.WO.eatItem(food);
             }
         }
     }
@@ -139,10 +139,10 @@ public class InputManager : MonoBehaviour, IManager
         {
             Vector2 centerScreenPointToMousePosLookVector = (Vector2)Input.mousePosition - centerPointInScreenSpace;
             Vector3 playerConvertedTranslationVector = new Vector3(centerScreenPointToMousePosLookVector.x, 0, centerScreenPointToMousePosLookVector.y);
-            Debug.DrawRay(BigBoss.PlayerInfo.PlayerAvatar.transform.position,
+            Debug.DrawRay(BigBoss.PlayerInfo.transform.position,
                 playerConvertedTranslationVector,
                 Color.magenta);
-            BigBoss.PlayerInfo.MovePlayer(playerConvertedTranslationVector);
+            BigBoss.PlayerInfo.WO.MovePlayer(playerConvertedTranslationVector);
 
         }
         if (Input.GetMouseButtonDown(0)) //hold left click

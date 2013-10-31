@@ -4,9 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using XML;
 
-public class WorldObject : MonoBehaviour, PassesTurns, IXmlParsable
+public class WorldObject : PassesTurns, IXmlParsable
 {
     #region Generic Object Properties (graphical info, names, etc).
+    private GameObject _go; // Private member to allow for one-set-only logic
+    public GameObject GO { get { return _go; } set { if (_go == null) _go = value; } }
     public string Model { get; set; }
     public string ModelTexture { get; set; }
     public string Name { get; set; }

@@ -17,7 +17,7 @@ public class PoisonSlowEffect : PoisonEffect
         base.Init(n);
         //adjust NPC speed here
         //adjust NPC health here
-        BigBoss.Gooey.CreateTextPop(n.gameObject.transform.position, "Poisoned!", UnityEngine.Color.green);
+        BigBoss.Gooey.CreateTextPop(n.GO.transform.position, "Poisoned!", UnityEngine.Color.green);
     }
 
     public override void Remove(NPC n)

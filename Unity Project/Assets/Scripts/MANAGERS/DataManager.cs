@@ -92,8 +92,7 @@ public class DataManager : MonoBehaviour, IManager
     private Item parseItem(XMLNode itemNode)
     {
         string itemName = itemNode.SelectString("name");
-        GameObject go = new GameObject(itemName);
-        Item i = go.AddComponent<Item>();
+        Item i = new Item();
         i.Type = itemNode.Key;
         i.Name = itemName;
         i.ParseXML(itemNode);
@@ -116,8 +115,7 @@ public class DataManager : MonoBehaviour, IManager
         foreach (XMLNode npcNode in npcsNode)
         {
             string npcName = npcNode.Name;
-            GameObject go = new GameObject(npcName);
-            NPC n = go.AddComponent<NPC>();
+            NPC n = new NPC();
             n.Name = npcName;
             n.ParseXML(npcNode);
             if (!npcs.ContainsKey(n.Name))
