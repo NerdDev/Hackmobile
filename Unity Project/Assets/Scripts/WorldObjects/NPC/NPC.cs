@@ -37,7 +37,7 @@ public class NPC : Affectable
      * This method should be phased out down the line, it is used for temporary
      * data that needs initialized while other information is not known.
      */
-    public void init()
+    public override void Init()
     {
         calcStats();
         bodyparts.Arms = 2;

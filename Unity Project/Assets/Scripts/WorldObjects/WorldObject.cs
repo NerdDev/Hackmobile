@@ -26,12 +26,31 @@ public class WorldObject : PassesTurns, IXmlParsable
     {
     }
 
-    #region Data Management for Instances
-    public virtual void setNull()
+    public virtual void Init()
     {
-        IsActive = false;
+        IsActive = true;
+        Register();
     }
 
+    protected virtual void Register()
+    {
+        BigBoss.WorldObject.RemoveNPCFromMasterList(this);
+        BigBoss.Time.RemoveFromUpdateList(this);
+    }
+
+    public virtual void Destroy()
+    {
+        Unregister();
+        BigBoss.Destroy(GO);
+    }
+
+    protected virtual void Unregister()
+    {
+        BigBoss.WorldObject.RemoveNPCFromMasterList(this);
+        BigBoss.Time.RemoveFromUpdateList(this);
+    }
+
+    #region Data Management for Instances
     public virtual void ParseXML(XMLNode x)
     {
         Name = x.SelectString("name", "NONAME!");

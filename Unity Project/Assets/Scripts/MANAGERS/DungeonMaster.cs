@@ -63,7 +63,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
             WOInstance instance = gameObject.AddComponent<WOInstance>();
             NPC newNPC = instance.SetTo(n);
             newNPC.IsActive = true;
-            newNPC.init();
+            newNPC.Init();
             return newNPC;
         }
         catch (ArgumentException)
