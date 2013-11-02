@@ -4,5 +4,6 @@ using XML;
 public interface Field
 {
     void parseXML(XMLNode x, string name);
+    string ToString();
     //Field Copy();
 }

@@ -647,7 +647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100082
 GameObject:
   m_ObjectHideFlags: 1
@@ -1811,7 +1811,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0346603394, y: .193202972, z: -.0899047852}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -1857,7 +1857,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 111.467384, y: -35.5474243, z: 67.3307953}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -2686,8 +2686,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100142}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -414, z: 0}
-  m_LocalScale: {x: 22, y: 306, z: 1}
+  m_LocalPosition: {x: 0, y: -360, z: 0}
+  m_LocalScale: {x: 22, y: 360, z: 1}
   m_Children: []
   m_Father: {fileID: 400166}
 --- !u!4 &400144
@@ -2811,7 +2811,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100164}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 680, y: 0, z: 0}
+  m_LocalPosition: {x: 1000, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400120}
@@ -2982,7 +2982,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -533.331299, y: 400, z: 0}
+  m_LocalPosition: {x: -533.333374, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400106}
@@ -3167,7 +3167,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100226}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .5, y: .5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -3572,12 +3572,14 @@ MonoBehaviour:
   textPopPrefab: {fileID: 100226}
   inventoryClip: {fileID: 11400072}
   itemInfoClip: {fileID: 11400052}
+  itemActionClip: {fileID: 11400034}
   inventoryGrid: {fileID: 11400078}
   itemInfoGrid: {fileID: 11400036}
   itemActionsGrid: {fileID: 11400054}
   InvItemPrefab: {fileID: 100002}
   inventoryClipDrag: {fileID: 11400068}
   itemInfoClipDrag: {fileID: 11400050}
+  itemActionsClipDrag: {fileID: 11400032}
   font: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
   displayGUI: 1
 --- !u!114 &11400004
@@ -3851,7 +3853,7 @@ MonoBehaviour:
   mAlpha: 1
   mDebugInfo: 1
   mClipping: 3
-  mClipRange: {x: 800, y: -400, z: 400, w: 800}
+  mClipRange: {x: 1000, y: -400, z: 400, w: 800}
   mClipSoftness: {x: 10, y: 10}
 --- !u!114 &11400036
 MonoBehaviour:
@@ -3996,7 +3998,7 @@ MonoBehaviour:
   mAlpha: 1
   mDebugInfo: 1
   mClipping: 3
-  mClipRange: {x: 400, y: -400, z: 400, w: 800}
+  mClipRange: {x: 500, y: -400, z: 600, w: 800}
   mClipSoftness: {x: 10, y: 10}
 --- !u!114 &11400054
 MonoBehaviour:
@@ -4041,7 +4043,7 @@ MonoBehaviour:
   mDir: 1
   mInverted: 0
   mScroll: 1
-  mSize: .425000012
+  mSize: .5
 --- !u!114 &11400060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4207,7 +4209,7 @@ MonoBehaviour:
   mAlpha: 1
   mDebugInfo: 1
   mClipping: 3
-  mClipRange: {x: 103, y: -400, z: 200, w: 797}
+  mClipRange: {x: 100, y: -400, z: 200, w: 800}
   mClipSoftness: {x: 10, y: 10}
 --- !u!114 &11400074
 MonoBehaviour:

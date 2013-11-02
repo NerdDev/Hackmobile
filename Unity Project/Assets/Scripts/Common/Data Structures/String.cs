@@ -32,4 +32,9 @@ public class String : Field
         else
             s = "";
     }
+
+    public new string ToString()
+    {
+        return s;
+    }
 }

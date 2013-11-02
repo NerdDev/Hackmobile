@@ -27,4 +27,9 @@ public struct Integer : Field
         else
             i = 0;
     }
+
+    public new string ToString()
+    {
+        return i.ToString();
+    }
 }

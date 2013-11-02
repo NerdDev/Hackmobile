@@ -32,7 +32,8 @@ public class GUIManager : MonoBehaviour, IManager
     //Clip panels
     public UIPanel inventoryClip;
     public UIPanel itemInfoClip;
-    
+    public UIPanel itemActionClip;
+
     //grids
     public UIGrid inventoryGrid;
     public UIGrid itemInfoGrid;
@@ -42,6 +43,7 @@ public class GUIManager : MonoBehaviour, IManager
     //Clip panels
     public UIDraggablePanel inventoryClipDrag;
     public UIDraggablePanel itemInfoClipDrag;
+    public UIDraggablePanel itemActionsClipDrag;
     public UIFont font;
 
     //Sprites:
@@ -179,7 +181,7 @@ public class GUIManager : MonoBehaviour, IManager
         isInventoryOpen = false;
     }
     */
-    
+
     public void ClearAllInventorySprites()
     {
         foreach (ItemSlot sl in inventoryStorageScript.InventorySlots)
@@ -338,7 +340,7 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    internal void RegenItemInfoGUI(Item item)
+    internal void RegenItemInfoGUI(ItemList item)
     {
         if (displayGUI)
         {
@@ -346,15 +348,8 @@ public class GUIManager : MonoBehaviour, IManager
             this.itemInfoGrid.sorted = false;
             if (displayItem)
             {
-                foreach (KeyValuePair<string, Field> kvp in item.map)
-                {
-                    CreateTextButton(kvp.Key + ": " + kvp.Value.ToString(), itemInfoGrid, itemInfoClipDrag);
-                }
-                CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
-                this.itemInfoClipDrag.ResetPosition();
-                itemInfoClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-                itemInfoClip.clipRange = new Vector4(400, -400, 400, 800);
-                this.itemInfoGrid.Reposition();
+                GenerateItemInfo(item);
+                GenerateItemActions(item);
             }
             else
             {
@@ -415,7 +410,7 @@ public class GUIManager : MonoBehaviour, IManager
         GUIItem guiItem = go.AddComponent<GUIItem>();
         guiItem.item = itemList;
         guiItem.label = NGUITools.AddWidget<UILabel>(go);
-        guiItem.label.text = itemList.id;
+        guiItem.label.text = itemList.id + " (" + itemList.Count + ")"; //string builder maybe?
         guiItem.label.font = font;
         //guiItem.label.depth = 4;
         guiItem.label.MakePixelPerfect();
@@ -439,6 +434,99 @@ public class GUIManager : MonoBehaviour, IManager
         guiIC.label.MakePixelPerfect();
         UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
         uiDrag.draggablePanel = panel;
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
+        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    void GenerateItemInfo(ItemList item)
+    {
+        foreach (KeyValuePair<string, Field> kvp in item[0].map)
+        {
+            CreateTextButton(kvp.Key + ": " + kvp.Value.ToString(), itemInfoGrid, itemInfoClipDrag);
+        }
+        CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
+        this.itemInfoClipDrag.ResetPosition();
+        itemInfoClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+        itemInfoClip.clipRange = new Vector4(400, -400, 400, 800);
+        this.itemInfoGrid.Reposition();
+    }
+
+    void GenerateItemActions(ItemList item)
+    {
+        CreateEquipButton(item);
+        CreateUseButton(item);
+        CreateDropButton(item);
+        CreateEatButton(item);
+        this.itemActionsClipDrag.ResetPosition();
+        itemActionClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+        itemActionClip.clipRange = new Vector4(1000, -400, 400, 800);
+        this.itemActionsGrid.Reposition();
+    }
+
+    void CreateEquipButton(ItemList item)
+    {
+        GameObject go = Instantiate(InvItemPrefab) as GameObject;
+        go.transform.parent = itemActionsGrid.transform;
+        go.name = item[0].Name;
+        GUIEquipItem guiItem = go.AddComponent<GUIEquipItem>();
+        guiItem.item = item;
+        guiItem.label = NGUITools.AddWidget<UILabel>(go);
+        guiItem.label.text = "Equip Item";
+        guiItem.label.font = font;
+        guiItem.label.MakePixelPerfect();
+        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
+        uiDrag.draggablePanel = inventoryClipDrag;
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
+        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    void CreateUseButton(ItemList item)
+    {
+        GameObject go = Instantiate(InvItemPrefab) as GameObject;
+        go.transform.parent = itemActionsGrid.transform;
+        go.name = item[0].Name;
+        GUIUseItem guiItem = go.AddComponent<GUIUseItem>();
+        guiItem.item = item;
+        guiItem.label = NGUITools.AddWidget<UILabel>(go);
+        guiItem.label.text = "Use Item";
+        guiItem.label.font = font;
+        guiItem.label.MakePixelPerfect();
+        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
+        uiDrag.draggablePanel = inventoryClipDrag;
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
+        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    void CreateDropButton(ItemList item)
+    {
+        GameObject go = Instantiate(InvItemPrefab) as GameObject;
+        go.transform.parent = itemActionsGrid.transform;
+        go.name = item[0].Name;
+        GUIDropItem guiItem = go.AddComponent<GUIDropItem>();
+        guiItem.item = item;
+        guiItem.label = NGUITools.AddWidget<UILabel>(go);
+        guiItem.label.text = "Drop Item";
+        guiItem.label.font = font;
+        guiItem.label.MakePixelPerfect();
+        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
+        uiDrag.draggablePanel = inventoryClipDrag;
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
+        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    void CreateEatButton(ItemList item)
+    {
+        GameObject go = Instantiate(InvItemPrefab) as GameObject;
+        go.transform.parent = itemActionsGrid.transform;
+        go.name = item[0].Name;
+        GUIEatItem guiItem = go.AddComponent<GUIEatItem>();
+        guiItem.item = item;
+        guiItem.label = NGUITools.AddWidget<UILabel>(go);
+        guiItem.label.text = "Eat Item";
+        guiItem.label.font = font;
+        guiItem.label.MakePixelPerfect();
+        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
+        uiDrag.draggablePanel = inventoryClipDrag;
         go.transform.localScale = new Vector3(1f, 1f, 1f);
         go.transform.localPosition = new Vector3(0f, 0f, 0f);
     }

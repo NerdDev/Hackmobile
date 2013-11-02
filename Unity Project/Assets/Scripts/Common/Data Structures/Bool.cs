@@ -27,4 +27,10 @@ public struct BoolValue : Field
         else
             b = false;
     }
+
+
+    public new string ToString()
+    {
+        return b.ToString();
+    }
 }

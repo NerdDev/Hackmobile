@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class GUIItem : GUILabel
+public class GUIEatItem : GUILabel
 {
     public ItemList item;
 
@@ -9,7 +9,7 @@ public class GUIItem : GUILabel
     {
         if (item.Count > 0)
         {
-            BigBoss.Gooey.displayItem = true;
+            BigBoss.Player.eatItem(item[item.Count - 1]);
             BigBoss.Gooey.RegenItemInfoGUI(item);
         }
     }

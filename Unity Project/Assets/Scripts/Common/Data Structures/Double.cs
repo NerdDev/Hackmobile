@@ -27,4 +27,9 @@ public struct DoubleValue : Field
         else
             this.d = 0;
     }
+
+    public new string ToString()
+    {
+        return d.ToString();
+    }
 }

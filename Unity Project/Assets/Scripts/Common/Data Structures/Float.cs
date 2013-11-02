@@ -27,4 +27,9 @@ public struct Float : Field
         else
             f = 0f;
     }
+
+    public new string ToString()
+    {
+        return f.ToString();
+    }
 }

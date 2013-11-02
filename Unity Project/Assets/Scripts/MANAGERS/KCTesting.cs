@@ -13,7 +13,7 @@ public class KCTesting : MonoBehaviour
     private void KurtisMethod()
     {
         //Places the player close to some stairs instead of the random position
-        BigBoss.Player.transform.position = new Vector3(83f, -.5f, 58f);
+        //BigBoss.Player.transform.position = new Vector3(83f, -.5f, 58f);
 
         //adds some items to the Player to test with
         Item ii = BigBoss.WorldObject.CreateItem("sword1");

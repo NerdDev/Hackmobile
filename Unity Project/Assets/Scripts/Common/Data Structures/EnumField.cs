@@ -27,4 +27,9 @@ public struct EnumField<T> : Field where T : IComparable, IConvertible
         else
             e = default(T);
     }
+
+    public new string ToString()
+    {
+        return e.ToString();
+    }
 }
