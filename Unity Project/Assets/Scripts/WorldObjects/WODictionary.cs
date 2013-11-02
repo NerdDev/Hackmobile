@@ -4,32 +4,15 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class WODictionary<W> where W : WorldObject
+public class WODictionary<W> : ObjectDictionary<W> where W : WorldObject, new()
 {
-    Dictionary<string, W> prototypes = new Dictionary<string, W>();
     List<W> instantiated = new List<W>();
     DataManager spawner;
-    public IEnumerable<W> Prototypes { get { return prototypes.Values; } }
     public IEnumerable<W> Existing { get { return instantiated; } }
 
     public WODictionary()
     {
         spawner = BigBoss.Data;
-    }
-
-    public bool Add(W obj)
-    {
-        if (!prototypes.ContainsKey(obj.Name))
-        {
-            prototypes.Add(obj.Name, obj);
-            return true;
-        }
-        return false;
-    }
-
-    public W GetPrototype(string str)
-    {
-        return prototypes[str];
     }
 
     public W Instantiate(string str, GridSpace g)

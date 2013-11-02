@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using XML;
 
-public class WorldObject : PassesTurns, IXmlParsable
+public class WorldObject : PassesTurns, IXmlParsable, INamed
 {
     #region Generic Object Properties (graphical info, names, etc).
     private WOInstance _instance; // Private member to allow for one-set-only logic

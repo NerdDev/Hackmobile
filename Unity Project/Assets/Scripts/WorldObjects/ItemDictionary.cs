@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using XML;
 
 public class ItemDictionary : WODictionary<Item>
 {
@@ -22,5 +23,21 @@ public class ItemDictionary : WODictionary<Item>
             return true;
         }
         return false;
+    }
+
+    public override void Parse(XMLNode itemsNode)
+    {
+        foreach (XMLNode categoryNode in itemsNode)
+        {
+            foreach (XMLNode itemNode in categoryNode)
+            {
+                Item i = new Item();
+                i.ParseXML(itemNode);
+                if (!Add(i, categoryNode.Key) && BigBoss.Debug.logging(Logs.XML))
+                {
+                    BigBoss.Debug.w(Logs.XML, "Item already existed with name: " + i.Name + " under node " + itemNode);
+                }
+            }
+        }
     }
 }

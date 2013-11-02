@@ -91,7 +91,7 @@ public class Player : NPC
         stats.Hunger = 900;
         IsActive = true;
         calcStats();
-        this.PlayerTitle = BigBoss.Data.playerProfessions.getTitle(BigBoss.Player.PlayerChosenProfession, BigBoss.Player.stats.Level);
+        this.PlayerTitle = BigBoss.Data.PlayerProfessions.getTitle(BigBoss.Player.PlayerChosenProfession, BigBoss.Player.stats.Level);
         anim = GO.GetComponent<Animator>() as Animator;
         Name = "Kurtis";
 
@@ -377,7 +377,7 @@ public class Player : NPC
     private string getPlayerTitle()
     {
         //Change this to a generic chosen profession later
-        playerTitle = BigBoss.Data.playerProfessions.getTitle(PlayerProfessions.Archaeologist, this.stats.Level);
+        playerTitle = BigBoss.Data.PlayerProfessions.getTitle(PlayerProfessions.Archaeologist, this.stats.Level);
         string finalTitle = playerChosenName + ", " + playerTitle;// + " of " + playerTitleCombatArea;
         return finalTitle;
     }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using XML;
 
-public class MaterialType
+public class MaterialType : IXmlParsable, INamed
 {
     public string Name { get; set; }
     public bool Oxidizes { get; set; }
@@ -13,11 +13,7 @@ public class MaterialType
     private float[] density = new float[3];
     public float Density { get; set; }
 
-    public void setNull()
-    {
-    }
-
-    public void parseXML(XMLNode x)
+    public void ParseXML(XMLNode x)
     {
         this.Name = x.SelectString("name");
         this.Hardness = x.SelectInt("hardness");

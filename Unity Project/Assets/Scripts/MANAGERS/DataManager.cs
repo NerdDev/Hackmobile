@@ -7,44 +7,29 @@ using System.IO;
 
 public class DataManager : MonoBehaviour, IManager
 {
-    #region XML properties
-    string XMLPath = "Assets/Scripts/XML/";
-    Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
-    #endregion
-    #region Storage
+    const string XMLPath = "Assets/Scripts/XML/";
     public WODictionary<NPC> NPCs { get; protected set; }
     public ItemDictionary Items { get; protected set; }
     public Dictionary<string, string> strings = new Dictionary<string, string>();
-    public ProfessionTitles playerProfessions = new ProfessionTitles();
-    public Dictionary<string, MaterialType> Materials = new Dictionary<string, MaterialType>();
-    #endregion
+    public ProfessionTitles PlayerProfessions = new ProfessionTitles();
+    public ObjectDictionary<MaterialType> Materials { get; protected set; }
 
     public DataManager()
     {
-        NPCs = new WODictionary<NPC>();
-        Items = new ItemDictionary();
     }
 
     public void Initialize()
     {
         BigBoss.Debug.w(Logs.Main, "Starting Data Manager");
-        //Parsing functions here
-        parsing.Add("items", ParseItems);
-        parsing.Add("npcs", parseNPCs);
-        parsing.Add("materials", parseMaterials);
-        parsing.Add("strings", parseStrings);
-        parsing.Add("titles", parseTitles);
+        NPCs = new WODictionary<NPC>();
+        Items = new ItemDictionary();
+        Materials = new ObjectDictionary<MaterialType>();
 
         string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
         foreach (string file in files)
         {
             BuildXML(file);
         }
-    }
-
-    public GameObject Instantiate(WorldObject obj, int x, int y)
-    {
-        return Instantiate(Resources.Load(obj.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
     }
 
     #region XML
@@ -62,67 +47,34 @@ public class DataManager : MonoBehaviour, IManager
         ParseXML(root);
     }
 
-    void ParseXML(XMLNode root)
+    public void ParseXML(XMLNode root)
     {
-        if (parsing.ContainsKey(root.Key))
+        string type = root.Key.ToUpper();
+        switch (type)
         {
-            parsing[root.Key](root);
-        }
-        else if (BigBoss.Debug.logging(Logs.XML))
-            BigBoss.Debug.w(Logs.XML, "Basenode key " + root.Key + " did not exist as an option to parse.  Node: " + root);
-    }
-
-    void ParseItems(XMLNode itemsNode)
-    {
-        foreach (XMLNode categoryNode in itemsNode)
-        {
-            ItemDictionary items = BigBoss.Data.Items;
-            foreach (XMLNode itemNode in categoryNode)
-            {
-                Item i = parseItem(itemNode);
-                if (!items.Add(i, categoryNode.Key) && BigBoss.Debug.logging(Logs.XML))
-                {
-                    BigBoss.Debug.w(Logs.XML, "Item already existed with name: " + i.Name + " under node " + itemNode);
-                }
-            }
-        }
-    }
-
-    private Item parseItem(XMLNode itemNode)
-    {
-        string itemName = itemNode.SelectString("name");
-        Item i = new Item();
-        i.Type = itemNode.Key;
-        i.Name = itemName;
-        i.ParseXML(itemNode);
-        return i;
-    }
-
-    void parseMaterials(XMLNode materialsNode)
-    {
-        foreach (XMLNode materialNode in materialsNode)
-        {
-            MaterialType mat = new MaterialType();
-            mat.parseXML(materialNode);
-            Materials.Add(mat.Name, mat);
+            case "ITEMS":
+                Items.Parse(root);
+                break;
+            case "NPCS":
+                NPCs.Parse(root);
+                break;
+            case "MATERIALS":
+                Materials.Parse(root);
+                break;
+            case "STRINGS":
+                ParseStrings(root);
+                break;
+            case "TITLES":
+                PlayerProfessions.ParseXML(root);
+                break;
+            default:
+                if (BigBoss.Debug.logging(Logs.XML))
+                    BigBoss.Debug.w(Logs.XML, "Basenode key " + root.Key + " did not exist as an option to parse.  Node: " + root);
+                break;
         }
     }
 
-    void parseNPCs(XMLNode npcsNode)
-    {
-        WODictionary<NPC> npcs = BigBoss.Data.NPCs;
-        foreach (XMLNode npcNode in npcsNode)
-        {
-            NPC n = new NPC();
-            n.ParseXML(npcNode);
-            if (!npcs.Add(n) && BigBoss.Debug.logging(Logs.XML))
-            {
-                BigBoss.Debug.w(Logs.XML, "NPC already existed with name: " + n.Name + " under node " + npcNode);
-            }
-        }
-    }
-
-    void parseStrings(XMLNode stringsNode)
+    void ParseStrings(XMLNode stringsNode)
     {
         foreach (XMLNode stringNode in stringsNode)
         {
@@ -133,10 +85,11 @@ public class DataManager : MonoBehaviour, IManager
             }
         }
     }
-
-    void parseTitles(XMLNode x)
-    {
-        playerProfessions.parseXML(x);
-    }
     #endregion
+
+    // Used by WODictionaries to instantiate their WorldObjects, since they cannot
+    public GameObject Instantiate(WorldObject obj, int x, int y)
+    {
+        return Instantiate(Resources.Load(obj.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
+    }
 }

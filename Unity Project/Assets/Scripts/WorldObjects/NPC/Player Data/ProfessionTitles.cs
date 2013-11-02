@@ -2,22 +2,19 @@ using System;
 using System.Collections.Generic;
 using XML;
 
-public class ProfessionTitles
+public class ProfessionTitles : IXmlParsable
 {
     Titles[] titles = new Titles[EnumExt.Length<PlayerProfessions>()];
     public bool isParsed = false;
 
-    public void parseXML(XMLNode x)
+    public void ParseXML(XMLNode x)
     {
-        if (x != null)
+        foreach (XMLNode xnode in x)
         {
-            foreach (XMLNode xnode in x)
-            {
-                PlayerProfessions prof = xnode.SelectEnum<PlayerProfessions>("name");
-                titles[(int)prof] = new Titles();
-                Titles t = titles[(int)prof];
-                t.parseXML(xnode);
-            }
+            PlayerProfessions prof = xnode.SelectEnum<PlayerProfessions>("name");
+            titles[(int)prof] = new Titles();
+            Titles t = titles[(int)prof];
+            t.parseXML(xnode);
         }
     }
 
@@ -38,8 +35,9 @@ public class ProfessionTitles
             }
             titles.Reverse();
         }
-        
-        public string getTitle(int level) {
+
+        public string getTitle(int level)
+        {
             foreach (Title t in titles)
             {
                 if (t.levelReq < level)
