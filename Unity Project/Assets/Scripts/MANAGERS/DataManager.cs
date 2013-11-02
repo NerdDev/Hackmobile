@@ -10,8 +10,8 @@ public class DataManager : MonoBehaviour, IManager
     const string XMLPath = "Assets/Scripts/XML/";
     public WODictionary<NPC> NPCs { get; protected set; }
     public ItemDictionary Items { get; protected set; }
-    public Dictionary<string, string> strings = new Dictionary<string, string>();
-    public ProfessionTitles PlayerProfessions = new ProfessionTitles();
+    public Dictionary<string, string> Strings { get; protected set; }
+    public ProfessionTitles PlayerProfessions { get; protected set; }
     public ObjectDictionary<MaterialType> Materials { get; protected set; }
 
     public DataManager()
@@ -24,16 +24,18 @@ public class DataManager : MonoBehaviour, IManager
         NPCs = new WODictionary<NPC>();
         Items = new ItemDictionary();
         Materials = new ObjectDictionary<MaterialType>();
+        PlayerProfessions = new ProfessionTitles();
+        Strings = new Dictionary<string, string>();
 
         string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
         foreach (string file in files)
         {
-            BuildXML(file);
+            ParseXML(file);
         }
     }
 
-    #region XML
-    private void BuildXML(string file)
+    #region Parsing
+    private void ParseXML(string file)
     {
         if (BigBoss.Debug.logging(Logs.XML))
             BigBoss.Debug.w(Logs.XML, "Parsing " + file);
@@ -79,9 +81,9 @@ public class DataManager : MonoBehaviour, IManager
         foreach (XMLNode stringNode in stringsNode)
         {
             string key = stringNode.SelectString("key");
-            if (!strings.ContainsKey(key))
+            if (!Strings.ContainsKey(key))
             {
-                strings.Add(key, stringNode.SelectString("text"));
+                Strings.Add(key, stringNode.SelectString("text"));
             }
         }
     }
