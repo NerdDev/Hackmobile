@@ -67,7 +67,6 @@ public class BigBoss : MonoBehaviour
         }
     }
     public static Player Player { get { return (Player) PlayerInfo.WO; } }
-    public static WorldObjectManager Enemy { get { return WorldObject; } }
     private static CameraManager camera_;
     public static CameraManager Camera
     {
@@ -102,18 +101,6 @@ public class BigBoss : MonoBehaviour
                 BBoss.Instantiate<DungeonMaster>(out dungeonMaster);
             }
             return dungeonMaster;
-        }
-    }
-    private static WorldObjectManager worldObject;
-    public static WorldObjectManager WorldObject
-    {
-        get
-        {
-            if (worldObject == null)
-            {
-                BBoss.Instantiate<WorldObjectManager>(out worldObject);
-            }
-            return worldObject;
         }
     }
     private static TypeManager types;

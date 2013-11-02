@@ -310,7 +310,6 @@
      <Compile Include="Assets\Scripts\MANAGERS\TestManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\TimeManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\TypeManager.cs" />
-     <Compile Include="Assets\Scripts\MANAGERS\WorldObjectManager.cs" />
      <Compile Include="Assets\Scripts\Spawning\SpawnModifier.cs" />
      <Compile Include="Assets\Scripts\Spawning\SpawnModifiers\SpawnNPCs.cs" />
      <Compile Include="Assets\Scripts\Spawning\SpawnSpec.cs" />

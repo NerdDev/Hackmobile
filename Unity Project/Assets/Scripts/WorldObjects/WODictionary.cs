@@ -8,13 +8,13 @@ public class WODictionary<W> where W : WorldObject
 {
     Dictionary<string, W> prototypes = new Dictionary<string, W>();
     List<W> instantiated = new List<W>();
-    WorldObjectManager spawner;
+    DataManager spawner;
     public IEnumerable<W> Prototypes { get { return prototypes.Values; } }
     public IEnumerable<W> Existing { get { return instantiated; } }
 
     public WODictionary()
     {
-        spawner = BigBoss.WorldObject;
+        spawner = BigBoss.Data;
     }
 
     public bool Add(W obj)

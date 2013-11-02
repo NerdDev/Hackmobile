@@ -7,11 +7,23 @@ using System.IO;
 
 public class DataManager : MonoBehaviour, IManager
 {
+    #region XML properties
     string XMLPath = "Assets/Scripts/XML/";
     Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
+    #endregion
+    #region Storage
+    public WODictionary<NPC> NPCs { get; protected set; }
+    public ItemDictionary Items { get; protected set; }
     public Dictionary<string, string> strings = new Dictionary<string, string>();
     public ProfessionTitles playerProfessions = new ProfessionTitles();
     public Dictionary<string, MaterialType> Materials = new Dictionary<string, MaterialType>();
+    #endregion
+
+    public DataManager()
+    {
+        NPCs = new WODictionary<NPC>();
+        Items = new ItemDictionary();
+    }
 
     public void Initialize()
     {
@@ -30,6 +42,12 @@ public class DataManager : MonoBehaviour, IManager
         }
     }
 
+    public GameObject Instantiate(WorldObject obj, int x, int y)
+    {
+        return Instantiate(Resources.Load(obj.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
+    }
+
+    #region XML
     private void BuildXML(string file)
     {
         if (BigBoss.Debug.logging(Logs.XML))
@@ -43,8 +61,6 @@ public class DataManager : MonoBehaviour, IManager
 
         ParseXML(root);
     }
-
-    #region XML Parsing methods.
 
     void ParseXML(XMLNode root)
     {
@@ -60,7 +76,7 @@ public class DataManager : MonoBehaviour, IManager
     {
         foreach (XMLNode categoryNode in itemsNode)
         {
-            ItemDictionary items = BigBoss.WorldObject.Items;
+            ItemDictionary items = BigBoss.Data.Items;
             foreach (XMLNode itemNode in categoryNode)
             {
                 Item i = parseItem(itemNode);
@@ -94,7 +110,7 @@ public class DataManager : MonoBehaviour, IManager
 
     void parseNPCs(XMLNode npcsNode)
     {
-        WODictionary<NPC> npcs = BigBoss.WorldObject.NPCs;
+        WODictionary<NPC> npcs = BigBoss.Data.NPCs;
         foreach (XMLNode npcNode in npcsNode)
         {
             NPC n = new NPC();
