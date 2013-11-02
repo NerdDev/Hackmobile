@@ -6,32 +6,7 @@ using System.Collections.Generic;
 
 public class Item : Affectable, PassesTurns, IXmlParsable
 {
-    #region BIGBOSSMANAGEMENT
-    //consider some abtract/virtual methods and variables here for cleanliness
-	//ex:  register my existence and key information to the item master singleton so i'm not lost in the game world
-	
-	// Use this for initialization
-	void Start () 
-	{
-		RegisterItemToSingleton();
-	}
-	
-	public virtual void RegisterItemToSingleton() //if we decide to make Item.cs structural only, then switch these to abstract
-	{
-		BigBoss.WorldObject.AddItemToMasterList(this);//registering existence with singleton
-        BigBoss.Time.RegisterToUpdateList(this);
-	}
-	
-	public virtual void DestroyThisItem()
-	{
-		BigBoss.WorldObject.RemoveItemFromMasterList(this);//removing existence with singleton
-        BigBoss.Time.RemoveFromUpdateList(this);
-        BigBoss.Destroy(GO);
-    }
-    #endregion
-
     #region Properties of Items
-
     //Properties
     private string type;
     public string Type
@@ -57,7 +32,6 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     protected Spell onEaten = new Spell();
     protected Spell onEquip = new Spell();
     protected Spell onUse = new Spell();
-
     #endregion
 
     public Item()

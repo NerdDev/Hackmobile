@@ -14,18 +14,18 @@ public static class TestManager
         /*
          * Initializes some test spawns and places the Player object.
          */
-        Value2D<GridSpace> loc = BigBoss.DungeonMaster.PickSpawnableLocation(BigBoss.Levels.Level);
-        BigBoss.PlayerInfo.transform.position = new Vector3(loc.x, -.5f, loc.y);
+        GridSpace loc = BigBoss.DungeonMaster.PickSpawnableLocation(BigBoss.Levels.Level);
+        BigBoss.PlayerInfo.transform.position = new Vector3(loc.X, -.5f, loc.Y);
 
         for (int i = 0; i < 4; i++)
         {
             loc = BigBoss.DungeonMaster.PickSpawnableLocation(BigBoss.Levels.Level);
-            BigBoss.DungeonMaster.SpawnNPC(new Point(loc.x, loc.y), "skeleton_knight");
+            BigBoss.DungeonMaster.SpawnNPC(loc, "skeleton_knight");
         }
         for (int i = 0; i < 4; i++)
         {
             loc = BigBoss.DungeonMaster.PickSpawnableLocation(BigBoss.Levels.Level);
-            BigBoss.DungeonMaster.SpawnNPC(new Point(loc.x, loc.y), "giant_spider");
+            BigBoss.DungeonMaster.SpawnNPC(loc, "giant_spider");
         }
 
         #region Miscellaneous assignations

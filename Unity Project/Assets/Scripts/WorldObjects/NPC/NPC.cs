@@ -8,32 +8,6 @@ using XML;
 public class NPC : Affectable
 {
     /**
-     * Initialization Methods
-     */
-    #region BIGBOSSMANAGEMENT
-    // Use this for initialization
-    void Awake()
-    {
-        if (this.IsNotAFreaking<Player>())
-        {
-            RegisterNPCToSingleton();
-        }
-        BigBoss.Time.RegisterToUpdateList(this);
-    }
-
-    public virtual void RegisterNPCToSingleton()
-    {
-        BigBoss.WorldObject.AddNPCToMasterList(this);
-    }
-
-    public virtual void DestroyThisItem()
-    {
-        BigBoss.WorldObject.RemoveNPCFromMasterList(this);
-        BigBoss.Time.RemoveFromUpdateList(this);
-        BigBoss.Destroy(GO);
-    }
-
-    /**
      * This method should be phased out down the line, it is used for temporary
      * data that needs initialized while other information is not known.
      */
@@ -49,7 +23,6 @@ public class NPC : Affectable
             UpdateCurrentTileVectors();
         }
     }
-    #endregion
 
     /**
      * All the properties of the NPC should be contained here.
@@ -558,7 +531,7 @@ public class NPC : Affectable
         {
             BigBoss.Gooey.CreateTextPop(GO.transform.position, Name + " is dead!", Color.red);
             Debug.Log(this.Name + " was killed!");
-            DestroyThisItem();
+            Destroy();
         }
         else
         {

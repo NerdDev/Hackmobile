@@ -7,14 +7,15 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
     <NoStdLib>true</NoStdLib>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <MonoProfile>unity</MonoProfile>
-    <UnityPath>C:\Program Files (x86)\Unity\Editor</UnityPath>
+    <UnityPath>C:\UnityPro\Editor</UnityPath>
     <MonoPath>$(UnityPath)\Data\Mono</MonoPath>
     <LibraryAssembly>Assembly-CSharp.dll</LibraryAssembly>
     <TargetFrameworkDirectory>$(MonoPath)\lib\mono\$(MonoProfile)</TargetFrameworkDirectory>
@@ -25,7 +26,7 @@
     <OutputPath>Temp\bin\Debug\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +34,7 @@
     <OutputPath>Temp\bin\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
+    <DefineConstants>TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib">
@@ -380,6 +381,7 @@
     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedObject.cs" />
     <Compile Include="Assets\Scripts\TimedDestruction.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Affectable.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\ItemDictionary.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\BUC.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemFlags.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemProperties.cs" />

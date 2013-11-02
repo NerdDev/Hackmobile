@@ -7,13 +7,15 @@ using XML;
 public class WorldObject : PassesTurns, IXmlParsable
 {
     #region Generic Object Properties (graphical info, names, etc).
-    private GameObject _go; // Private member to allow for one-set-only logic
-    public GameObject GO { get { return _go; } set { if (_go == null) _go = value; } }
+    private WOInstance _instance; // Private member to allow for one-set-only logic
+    public WOInstance Instance { get { return _instance; } set { if (_instance == null) _instance = value; } }
+    public GameObject GO { get { return _instance.gameObject; } }
     public string Model { get; set; }
     public string ModelTexture { get; set; }
     public string Name { get; set; }
     public string Prefab { get; set; }
     public GridSpace Location { get; set; }  // Placeholder. Needs to actually be implemented and updated.
+    public event Action<WorldObject> OnDestroy;
 
     public override string ToString()
     {
@@ -29,12 +31,6 @@ public class WorldObject : PassesTurns, IXmlParsable
     public virtual void Init()
     {
         IsActive = true;
-        Register();
-    }
-
-    protected virtual void Register()
-    {
-        BigBoss.WorldObject.RemoveNPCFromMasterList(this);
         BigBoss.Time.RemoveFromUpdateList(this);
     }
 
@@ -42,11 +38,12 @@ public class WorldObject : PassesTurns, IXmlParsable
     {
         Unregister();
         BigBoss.Destroy(GO);
+        if (OnDestroy != null)
+            OnDestroy(this);
     }
 
     protected virtual void Unregister()
     {
-        BigBoss.WorldObject.RemoveNPCFromMasterList(this);
         BigBoss.Time.RemoveFromUpdateList(this);
     }
 

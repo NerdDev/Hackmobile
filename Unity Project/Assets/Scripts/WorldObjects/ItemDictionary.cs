@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+public class ItemDictionary : WODictionary<Item>
+{
+    public Dictionary<string, List<Item>> Categories { get; protected set; }
+
+    public ItemDictionary()
+        : base()
+    {
+        Categories = new Dictionary<string, List<Item>>();
+    }
+
+    public bool Add(Item obj, string category)
+    {
+        if (Add(obj))
+        {
+            List<Item> cateList = Categories.GetCreate(category);
+            cateList.Add(obj);
+            return true;
+        }
+        return false;
+    }
+}

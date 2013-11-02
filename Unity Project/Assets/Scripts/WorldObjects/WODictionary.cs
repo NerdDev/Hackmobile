@@ -6,24 +6,40 @@ using UnityEngine;
 
 public class WODictionary<W> where W : WorldObject
 {
-    public Dictionary<string, W> Prototypes { get; set; }
-    Dictionary<string, List<W>> instantiated = new Dictionary<string, List<W>>();
+    Dictionary<string, W> prototypes = new Dictionary<string, W>();
+    List<W> instantiated = new List<W>();
     WorldObjectManager spawner;
+    public IEnumerable<W> Prototypes { get { return prototypes.Values; } }
+    public IEnumerable<W> Existing { get { return instantiated; } }
 
     public WODictionary()
     {
-        Prototypes = new Dictionary<string, W>();
         spawner = BigBoss.WorldObject;
+    }
+
+    public bool Add(W obj)
+    {
+        if (!prototypes.ContainsKey(obj.Name))
+        {
+            prototypes.Add(obj.Name, obj);
+            return true;
+        }
+        return false;
+    }
+
+    public W GetPrototype(string str)
+    {
+        return prototypes[str];
     }
 
     public W Instantiate(string str, GridSpace g)
     {
-        return Instantiate(Prototypes[str], g);
+        return Instantiate(GetPrototype(str), g);
     }
 
     public W Instantiate(string str, GridSpace g, out WOInstance wrapper)
     {
-        return Instantiate(Prototypes[str], g, out wrapper);
+        return Instantiate(GetPrototype(str), g, out wrapper);
     }
 
     public W Instantiate(W proto, GridSpace g)
@@ -40,7 +56,7 @@ public class WODictionary<W> where W : WorldObject
 
     public W InstantiateRandom(GridSpace g, out WOInstance wrapper)
     {
-        return Instantiate(Prototypes.Values.Randomize(Probability.Rand).First(), g, out wrapper);
+        return Instantiate(prototypes.Values.Randomize(Probability.Rand).First(), g, out wrapper);
     }
 
     public W Instantiate(W proto, GridSpace g, out WOInstance wrapper)
@@ -48,7 +64,14 @@ public class WODictionary<W> where W : WorldObject
         GameObject gameObject = spawner.Instantiate(proto, g.X, g.Y);
         wrapper = gameObject.AddComponent<WOInstance>();
         W newWorldObject = wrapper.SetTo(proto);
+        newWorldObject.OnDestroy += Unregister;
+        instantiated.Add(newWorldObject);
         newWorldObject.Init();
         return newWorldObject;
+    }
+
+    protected void Unregister(WorldObject obj)
+    {
+        instantiated.Remove((W)obj);
     }
 }

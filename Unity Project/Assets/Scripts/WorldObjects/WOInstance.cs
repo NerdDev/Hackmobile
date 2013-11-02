@@ -15,7 +15,7 @@ public class WOInstance : MonoBehaviour
     public W SetTo<W>(W item) where W : WorldObject
     {
         WO = item.Copy();
-        WO.GO = this.gameObject;
+        WO.Instance = this;
         return (W)WO;
     }
 

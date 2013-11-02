@@ -7,25 +7,17 @@ using System.IO;
 
 public class DataManager : MonoBehaviour, IManager
 {
-    #region XML Paths.
     string XMLPath = "Assets/Scripts/XML/";
-
     Dictionary<string, Action<XMLNode>> parsing = new Dictionary<string, Action<XMLNode>>();
-    #endregion
-
-    #region Strings
     public Dictionary<string, string> strings = new Dictionary<string, string>();
-    #endregion
-
-    #region Titles
     public ProfessionTitles playerProfessions = new ProfessionTitles();
-    #endregion
+    public Dictionary<string, MaterialType> Materials = new Dictionary<string, MaterialType>();
 
     public void Initialize()
     {
         BigBoss.Debug.w(Logs.Main, "Starting Data Manager");
         //Parsing functions here
-        parsing.Add("items", parseItems);
+        parsing.Add("items", ParseItems);
         parsing.Add("npcs", parseNPCs);
         parsing.Add("materials", parseMaterials);
         parsing.Add("strings", parseStrings);
@@ -34,15 +26,11 @@ public class DataManager : MonoBehaviour, IManager
         string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
         foreach (string file in files)
         {
-            buildXML(file);
+            BuildXML(file);
         }
     }
 
-    void Start()
-    {
-    }
-
-    private void buildXML(string file)
+    private void BuildXML(string file)
     {
         if (BigBoss.Debug.logging(Logs.XML))
             BigBoss.Debug.w(Logs.XML, "Parsing " + file);
@@ -53,12 +41,12 @@ public class DataManager : MonoBehaviour, IManager
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.XML_Print) && BigBoss.Debug.logging(Logs.XML))
             BigBoss.Debug.w(Logs.XML, root.Print());
 
-        parseXML(root);
+        ParseXML(root);
     }
 
     #region XML Parsing methods.
 
-    void parseXML(XMLNode root)
+    void ParseXML(XMLNode root)
     {
         if (parsing.ContainsKey(root.Key))
         {
@@ -68,24 +56,19 @@ public class DataManager : MonoBehaviour, IManager
             BigBoss.Debug.w(Logs.XML, "Basenode key " + root.Key + " did not exist as an option to parse.  Node: " + root);
     }
 
-    void parseItems(XMLNode itemsNode)
+    void ParseItems(XMLNode itemsNode)
     {
         foreach (XMLNode categoryNode in itemsNode)
         {
-            List<Item> addedItems = new List<Item>();
-            Dictionary<string, Item> items = BigBoss.WorldObject.getItems();
+            ItemDictionary items = BigBoss.WorldObject.Items;
             foreach (XMLNode itemNode in categoryNode)
             {
                 Item i = parseItem(itemNode);
-                if (!items.ContainsKey(i.Name))
+                if (!items.Add(i, categoryNode.Key) && BigBoss.Debug.logging(Logs.XML))
                 {
-                    addedItems.Add(i);
-                    BigBoss.WorldObject.getItems().Add(i.Name, i);
-                }
-                else if (BigBoss.Debug.logging(Logs.XML))
                     BigBoss.Debug.w(Logs.XML, "Item already existed with name: " + i.Name + " under node " + itemNode);
+                }
             }
-            BigBoss.WorldObject.getCategories().Add(categoryNode.Key, addedItems);
         }
     }
 
@@ -105,26 +88,21 @@ public class DataManager : MonoBehaviour, IManager
         {
             MaterialType mat = new MaterialType();
             mat.parseXML(materialNode);
-            BigBoss.WorldObject.getMaterials().Add(mat.Name, mat);
+            Materials.Add(mat.Name, mat);
         }
     }
 
     void parseNPCs(XMLNode npcsNode)
     {
-        Dictionary<string, NPC> npcs = BigBoss.WorldObject.getNPCs();
+        WODictionary<NPC> npcs = BigBoss.WorldObject.NPCs;
         foreach (XMLNode npcNode in npcsNode)
         {
-            string npcName = npcNode.Name;
             NPC n = new NPC();
-            n.Name = npcName;
             n.ParseXML(npcNode);
-            if (!npcs.ContainsKey(n.Name))
+            if (!npcs.Add(n) && BigBoss.Debug.logging(Logs.XML))
             {
-                npcs.Add(n.Name, n);
-            }
-            else if (BigBoss.Debug.logging(Logs.XML))
                 BigBoss.Debug.w(Logs.XML, "NPC already existed with name: " + n.Name + " under node " + npcNode);
-            n.IsActive = false;
+            }
         }
     }
 
