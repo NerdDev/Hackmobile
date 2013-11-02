@@ -5,7 +5,7 @@ using XML;
 using System.IO;
 
 
-public class DataManager : MonoBehaviour, IManager
+public class ObjectManager : MonoBehaviour, IManager
 {
     const string XMLPath = "Assets/Scripts/XML/";
     public WODictionary<NPC> NPCs { get; protected set; }
@@ -14,7 +14,7 @@ public class DataManager : MonoBehaviour, IManager
     public ProfessionTitles PlayerProfessions { get; protected set; }
     public ObjectDictionary<MaterialType> Materials { get; protected set; }
 
-    public DataManager()
+    public ObjectManager()
     {
     }
 

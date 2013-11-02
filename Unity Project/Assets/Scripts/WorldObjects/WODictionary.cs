@@ -7,12 +7,12 @@ using UnityEngine;
 public class WODictionary<W> : ObjectDictionary<W> where W : WorldObject, new()
 {
     List<W> instantiated = new List<W>();
-    DataManager spawner;
+    ObjectManager spawner;
     public IEnumerable<W> Existing { get { return instantiated; } }
 
     public WODictionary()
     {
-        spawner = BigBoss.Data;
+        spawner = BigBoss.Objects;
     }
 
     public W Instantiate(string str, GridSpace g)
@@ -49,6 +49,8 @@ public class WODictionary<W> : ObjectDictionary<W> where W : WorldObject, new()
         W newWorldObject = wrapper.SetTo(proto);
         newWorldObject.OnDestroy += Unregister;
         instantiated.Add(newWorldObject);
+        if (newWorldObject is PassesTurns)
+            BigBoss.Time.updateList.Add((PassesTurns) newWorldObject);
         newWorldObject.Init();
         return newWorldObject;
     }
@@ -56,5 +58,7 @@ public class WODictionary<W> : ObjectDictionary<W> where W : WorldObject, new()
     protected void Unregister(WorldObject obj)
     {
         instantiated.Remove((W)obj);
+        if (obj is PassesTurns)
+            BigBoss.Time.updateList.Add((PassesTurns)obj);
     }
 }

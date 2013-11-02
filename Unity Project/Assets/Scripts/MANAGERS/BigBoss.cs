@@ -127,16 +127,16 @@ public class BigBoss : MonoBehaviour
             return debug;
         }
     }
-    private static DataManager data;
-    public static DataManager Data
+    private static ObjectManager objects;
+    public static ObjectManager Objects
     {
         get
         {
-            if (data == null)
+            if (objects == null)
             {
-                BBoss.Instantiate<DataManager>(out data);
+                BBoss.Instantiate<ObjectManager>(out objects);
             }
-            return data;
+            return objects;
         }
     }
 

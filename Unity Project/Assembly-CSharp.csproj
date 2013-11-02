@@ -298,7 +298,6 @@
      <Compile Include="Assets\Scripts\MANAGERS\AudioManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\BigBoss.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\CameraManager.cs" />
-     <Compile Include="Assets\Scripts\MANAGERS\DataManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\DebugManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\DungeonMaster.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\GUIManager.cs" />
@@ -306,6 +305,7 @@
      <Compile Include="Assets\Scripts\MANAGERS\InputManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\LevelLoadManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\LevelManager.cs" />
+     <Compile Include="Assets\Scripts\MANAGERS\ObjectManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\PreGameManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\TestManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\TimeManager.cs" />

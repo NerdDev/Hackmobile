@@ -59,7 +59,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
             g = PickSpawnableLocation();
         try
         {
-            return BigBoss.Data.NPCs.Instantiate(n, g);
+            return BigBoss.Objects.NPCs.Instantiate(n, g);
         }
         catch (ArgumentException)
         {
@@ -69,7 +69,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
 
     public NPC SpawnNPC(GridSpace g, string npc)
     {
-        return SpawnNPC(g, BigBoss.Data.NPCs.GetPrototype(npc));
+        return SpawnNPC(g, BigBoss.Objects.NPCs.GetPrototype(npc));
     }
 
     public NPC SpawnNPC(GridSpace g, Percent variety, params Keywords[] keywords)
@@ -104,7 +104,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
         {
             pool = new LeveledPool<NPC>(DefaultLevelCurve);
             npcPools.Add(keywords, pool);
-            foreach (NPC n in BigBoss.Data.NPCs.Prototypes)
+            foreach (NPC n in BigBoss.Objects.NPCs.Prototypes)
             {
                 if (!empty && n.keywords.Contains(keywords) // NPC has keywords
                     || (empty && !n.flags[NPCFlags.NO_RANDOM_SPAWN])) // If keywords empty
