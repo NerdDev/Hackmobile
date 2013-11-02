@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class GUIManager : MonoBehaviour, IManager {
+public class GUIManager : MonoBehaviour, IManager
+{
+    // Disable unassigned warnings
+    #pragma warning disable 414, 219
 
-	/*
+    /*
 	 * The role of GUIManager is to centralize the use of methods that can be overloaded in order
 	to create reusable, yet easily customizable screen graphics.  These should all return the GUIText
 	object and allow for parameterization of text, fly-through style, delay til destruction, etc.
@@ -298,7 +301,8 @@ public class GUIManager : MonoBehaviour, IManager {
 	{
 		ToggleInventoryPanel();
 		ClearAllInventorySprites();
-		
-	}
 
+    }
+
+    #pragma warning restore 414, 219
 }

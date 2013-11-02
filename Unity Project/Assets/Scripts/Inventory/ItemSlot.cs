@@ -24,7 +24,7 @@ public class ItemSlot : MonoBehaviour
 	public AudioClip errorSound;
 
 	Item mItem;
-	string mText = "";
+    //string mText = "";
 
 	static Item mDraggedItem;
 

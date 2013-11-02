@@ -8,7 +8,6 @@ public class PathTree
 {
     static PathNode[,] Arr = new PathNode[200, 200];
     protected List<PathNode> closed = new List<PathNode>();
-    System.Random rand = new System.Random();
     Value2D<GridSpace> start, dest;
     SortedDictionary<PathNode, PathNode> openNodes = new SortedDictionary<PathNode, PathNode>();
 

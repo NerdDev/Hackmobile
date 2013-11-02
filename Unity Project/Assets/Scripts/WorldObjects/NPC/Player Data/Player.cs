@@ -8,6 +8,8 @@ using System;
  */
 public class Player : NPC
 {
+    // Disable unassigned warnings
+    #pragma warning disable 414, 219
     #region General Player Info:
 
     private string playerChosenName = "Andrew";
@@ -438,4 +440,6 @@ public class Player : NPC
     }
 
     #endregion
+
+    #pragma warning restore 414, 219
 }

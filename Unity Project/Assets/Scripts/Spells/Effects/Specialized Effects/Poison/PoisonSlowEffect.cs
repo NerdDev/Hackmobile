@@ -4,6 +4,7 @@ using XML;
 
 public class PoisonSlowEffect : PoisonEffect
 {
+#pragma warning disable 414 
     int strength;
     float slowPercentage;
 
@@ -31,4 +32,5 @@ public class PoisonSlowEffect : PoisonEffect
         strength = x.SelectInt("strength");
         slowPercentage = x.SelectFloat("slow");
     }
+#pragma warning restore 414
 }

@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public static class Probability
 {
     private static RandomGen _rand = new RandomGen();
-    public static RandomGen Rand { get { return _rand; } set { _rand = value; } }
+    public static RandomGen Rand { get { return _rand; } }
     private static RandomGen _levelRand = new RandomGen();
-    public static RandomGen LevelRand { get { return _levelRand; } set { _levelRand = value; } }
+    public static RandomGen LevelRand { get { return _levelRand; } }
     private static RandomGen _spawnRand = new RandomGen();
-    public static RandomGen SpawnRand { get { return _levelRand; } set { _levelRand = value; } }
+    public static RandomGen SpawnRand { get { return _spawnRand; } }
 
     public static int getRandomInt() 
     {
