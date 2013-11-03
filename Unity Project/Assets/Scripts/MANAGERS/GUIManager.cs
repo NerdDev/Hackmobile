@@ -5,8 +5,6 @@ using System;
 
 public class GUIManager : MonoBehaviour, IManager
 {
-    // Disable unassigned warnings
-    #pragma warning disable 414, 219
 
     /*
      * The role of GUIManager is to centralize the use of methods that can be overloaded in order
@@ -546,7 +544,6 @@ public class GUIManager : MonoBehaviour, IManager
             this.col = col;
         }
 
-    }
         public void Display()
         {
             GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, Camera.mainCamera.WorldToViewportPoint(pos), Quaternion.identity) as GameObject;

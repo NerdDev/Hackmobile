@@ -24,8 +24,8 @@ public class DungeonMaster : MonoBehaviour, IManager {
 
         //Place stairs
         ClearPriorLevel();
-        Value2D<GridSpace> stairsDown = CreateStairs(l, "StairsDown", PrimitiveType.Sphere);
-        Value2D<GridSpace> stairsUp = CreateStairs(l, "StairsUp", PrimitiveType.Cylinder);
+        GridSpace stairsDown = CreateStairs(l, "StairsDown", PrimitiveType.Sphere);
+        GridSpace stairsUp = CreateStairs(l, "StairsUp", PrimitiveType.Cylinder);
 
         //Place Player
         if (up)
@@ -50,25 +50,24 @@ public class DungeonMaster : MonoBehaviour, IManager {
         BigBoss.WorldObject.ClearNPCs();
     }
 
-    public Value2D<GridSpace> CreateStairs(Level l, string name, PrimitiveType prim)
+    public GridSpace CreateStairs(Level l, string name, PrimitiveType prim)
     {
-        Value2D<GridSpace> locStairs = BigBoss.DungeonMaster.PickSpawnableLocation(l);
+        GridSpace locStairs = BigBoss.DungeonMaster.PickSpawnableLocation(l);
         GameObject stairs = GameObject.CreatePrimitive(prim);
         stairs.name = name;
-        stairs.transform.position = new Vector3(locStairs.x, 0f, locStairs.y);
-        locStairs.val.Block.layer = 13;
-        locStairs.val.Block.collider.isTrigger = false;
-        locStairs.val.Block.name = name;
+        stairs.transform.position = new Vector3(locStairs.X, 0f, locStairs.Y);
+        locStairs.Block.layer = 13;
+        locStairs.Block.collider.isTrigger = false;
+        locStairs.Block.name = name;
         this.stairs.Add(stairs);
         return locStairs;
     }
 
-    public void PlacePlayer(Level l, Value2D<GridSpace> stairsUp)
+    public void PlacePlayer(Level l, GridSpace stairsUp)
     {
-        IEnumerable<Value2D<GridSpace>> grids = l.getSurroundingSpaces(stairsUp.x, stairsUp.y);
-        //List<Value2D<GridSpace>> gridList = grids.ToList();
-        Value2D<GridSpace> grid = grids.First(g => g.val.Type == GridType.Floor);
-        BigBoss.PlayerInfo.transform.position = new Vector3(grid.x, -.5f, grid.y);
+        IEnumerable<GridSpace> grids = l.getSurroundingSpaces(stairsUp.X, stairsUp.Y);
+        GridSpace grid = grids.First(g => g.Type == GridType.Floor);
+        BigBoss.PlayerInfo.transform.position = new Vector3(grid.X, -.5f, grid.Y);
     }
 
     void ForcePopulateLevel(Level l)

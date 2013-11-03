@@ -186,12 +186,12 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return this.GetEnumerator();
     }
 
-    public IEnumerable<Value2D<GridSpace>> getSurroundingSpaces(int x, int y)
+    public IEnumerable<GridSpace> getSurroundingSpaces(int x, int y)
     {
         Surrounding.Load(x, y);
         foreach (Value2D<GridSpace> val in Surrounding)
         {
-            yield return val;
+            yield return val.val;
         }
     }
 }
