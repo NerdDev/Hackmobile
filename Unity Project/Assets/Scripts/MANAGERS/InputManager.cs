@@ -64,9 +64,9 @@ public class InputManager : MonoBehaviour, IManager
                     NPC n = (NPC)list.Find(w => w is NPC);
                     if (n != null && n.IsNotAFreaking<Player>())
                     {
-                        Value2D<GridSpace> playerLoc = BigBoss.Player.gridSpace;
-                        IEnumerable<Value2D<GridSpace>> grids = BigBoss.Levels.Level.getSurroundingSpaces(p.x, p.y);
-                        if (grids.Single(g => g.x == playerLoc.x && g.y == playerLoc.y) != null)
+                        GridSpace playerLoc = BigBoss.Player.gridSpace;
+                        IEnumerable<GridSpace> grids = BigBoss.Levels.Level.getSurroundingSpaces(p.x, p.y);
+                        if (grids.Single(g => g.X == playerLoc.X && g.Y == playerLoc.Y) != null)
                         {
                             BigBoss.Player.attack(n);
                         }
@@ -149,9 +149,9 @@ public class InputManager : MonoBehaviour, IManager
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log(BigBoss.PlayerInfo.inventory.Dump());
+            Debug.Log(BigBoss.Player.inventory.Dump());
             Item food = null;
-            food = BigBoss.PlayerInfo.inventory.Get("potion", "health potion")[0];
+            food = BigBoss.Player.inventory.Get("potion", "health potion")[0];
             if (food != null)
             {
                 BigBoss.Player.eatItem(food);

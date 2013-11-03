@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class RoomMap : MultiMap<GridSpace> {
+public class RoomMap : MultiMap<GridSpace>, IEnumerable  {
 
     public RoomMap(Room room, GridSpace[,] arr)
     {

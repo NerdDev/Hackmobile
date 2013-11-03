@@ -248,7 +248,6 @@
     <Compile Include="Assets\Scripts\Common\Bounding.cs" />
     <Compile Include="Assets\Scripts\Common\Comparator.cs" />
     <Compile Include="Assets\Scripts\Common\Container2D.cs" />
-    <Compile Include="Assets\Scripts\Common\Data Structures\Bool.cs" />
     <Compile Include="Assets\Scripts\Common\Data Structures\IXmlParsable.cs" />
     <Compile Include="Assets\Scripts\Common\Dice.cs" />
     <Compile Include="Assets\Scripts\Common\ESFlags.cs" />
@@ -327,6 +326,7 @@
     <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
+    <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
     <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
     <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\AudioManager.cs" />
@@ -420,8 +420,8 @@
     <Compile Include="Assets\Scripts\WorldObjects\ObjectDictionary.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Size.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\WODictionary.cs" />
-    <Compile Include="Assets\Scripts\WorldObjects\WOInstance.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\WorldObject.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\WOWrapper.cs" />
     <None Include="Assets\AudioToolkit\Readme.txt" />
     <None Include="Assets\EasyTouch\Readme_first.txt" />
     <None Include="Assets\Fog of War\FoW\FOW.shader" />

@@ -85,8 +85,8 @@ public class Player : NPC
         stats.Hunger = 900;
         IsActive = true;
         calcStats();
-        this.PlayerTitle = BigBoss.Data.playerProfessions.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
-        anim = playerAvatar.GetComponent<Animator>() as Animator;
+        this.PlayerTitle = BigBoss.Objects.PlayerProfessions.getTitle(BigBoss.Player.PlayerChosenProfession, BigBoss.Player.stats.Level);
+        anim = GO.GetComponent<Animator>() as Animator;
         this.Name = "Kurtis";
     }
 
@@ -207,17 +207,15 @@ public class Player : NPC
     protected override bool UpdateCurrentTileVectors()
     {
         GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
-        newGridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
-        GridSpace newGrid = BigBoss.Levels.Level[newGridSpace.x, newGridSpace.y];
-        if (!newGrid.IsBlocked())
+        newGridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
+        if (!newGridSpace.IsBlocked())
         {
-            if (gridSpace != null && gridSpace.val != null)
+            if (gridSpace != null && gridSpace != null)
             {
-                gridSpace.val.Remove(this);
+                gridSpace.Remove(this);
             }
-            newGrid.Put(this);
+            newGridSpace.Put(this);
             CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
-            newGridSpace.val = newGrid;
             gridSpace = newGridSpace;
             return true;
         }
@@ -242,9 +240,9 @@ public class Player : NPC
         {
             try
             {
-                anim = playerAvatar.GetComponent<Animator>() as Animator;
+                anim = GO.GetComponent<Animator>() as Animator;
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
             return;

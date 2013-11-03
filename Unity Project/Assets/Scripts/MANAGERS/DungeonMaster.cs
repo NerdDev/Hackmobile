@@ -47,7 +47,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
                 Destroy(go);
             }
         }
-        BigBoss.WorldObject.ClearNPCs();
+        BigBoss.Objects.NPCs.DestroyWrappers();
     }
 
     public GridSpace CreateStairs(Level l, string name, PrimitiveType prim)
@@ -109,7 +109,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
             g = PickSpawnableLocation();
         try
         {
-            return BigBoss.Objects.NPCs.Instantiate(n, g);
+            return BigBoss.Objects.NPCs.InstantiateAndWrap(n, g);
         }
 
         catch (ArgumentException)

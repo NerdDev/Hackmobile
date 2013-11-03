@@ -33,7 +33,7 @@ public static class GameObjectExt
 
     public static W GetWorldObject<W>(this GameObject gObj) where W : WorldObject
     {
-        WOInstance instance = gObj.GetComponent<WOInstance>();
+        WOWrapper instance = gObj.GetComponent<WOWrapper>();
         return (W)instance.WO;
     }
 }

@@ -56,8 +56,8 @@ public class NPC : Affectable
     //X,Y coordinate for other scripts to grab:
     public Vector2 GridCoordinate { get; set; }
     //X, Y in integers, GridSpace ref
-    public Value2D<GridSpace> gridSpace;
-    public Value2D<GridSpace> newGridSpace;
+    public GridSpace gridSpace;
+    public GridSpace newGridSpace;
 
     bool moving; //stores moving condition
     protected bool verticalMoving;
@@ -133,12 +133,12 @@ public class NPC : Affectable
 
     public void CreateTextPop(string str)
     {
-        BigBoss.Gooey.CreateTextPop(this.transform.position, str);
+        BigBoss.Gooey.CreateTextPop(GO.transform.position, str);
     }
 
     public void CreateTextPop(string str, Color col)
     {
-        BigBoss.Gooey.CreateTextPop(this.transform.position, str, col);
+        BigBoss.Gooey.CreateTextPop(GO.transform.position, str, col);
     }
 
     #region Stats
@@ -361,22 +361,20 @@ public class NPC : Affectable
 
     protected virtual bool UpdateCurrentTileVectors()
     {
-        if (gridSpace != null && gridSpace.val != null)
+        if (gridSpace != null && gridSpace != null)
         {
-            gridSpace.val.Remove(this);
+            gridSpace.Remove(this);
         }
         GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
-        gridSpace = new Value2D<GridSpace>(GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt());
-        Level level = BigBoss.Levels.Level;
-        gridSpace.val = level[gridSpace.x, gridSpace.y];
-        gridSpace.val.Put(this);
+        gridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
+        gridSpace.Put(this);
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
         return true;
     }
 
-    public PathTree getPathTree(int x, int y)
+    public PathTree getPathTree(GridSpace dest)
     {
-        PathTree path = new PathTree(gridSpace, new Value2D<GridSpace>(x, y));
+        PathTree path = new PathTree(gridSpace, dest);
         return path;
     }
     #endregion
@@ -460,16 +458,16 @@ public class NPC : Affectable
         }
     }
 
-    public void MoveNPC(Value2D<GridSpace> node)
+    public void MoveNPC(GridSpace node)
     {
-        GridSpace grid = BigBoss.Levels.Level[node.x, node.y];
+        GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
         if (!grid.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
         {
-            int xmove = gridSpace.x - node.x;
-            int ymove = gridSpace.y - node.y;
-            gridSpace.val.Remove(this);
-            gridSpace = new Value2D<GridSpace>(node.x, node.y, grid);
-            gridSpace.val.Put(this);
+            int xmove = gridSpace.X - node.X;
+            int ymove = gridSpace.Y - node.Y;
+            gridSpace.Remove(this);
+            gridSpace = BigBoss.Levels.Level[node.X, node.Y];
+            gridSpace.Put(this);
             MoveNPC(xmove, ymove);
         }
     }
@@ -695,10 +693,10 @@ public class NPC : Affectable
     bool IsNextToPlayer()
     {
         Surrounding<GridSpace> s = BigBoss.Levels.Level.Surrounding;
-        s.Load(BigBoss.Player.gridSpace.x, BigBoss.Player.gridSpace.y);
+        s.Load(BigBoss.Player.gridSpace.X, BigBoss.Player.gridSpace.Y);
         foreach (Value2D<GridSpace> grid in s)
         {
-            if (grid.x == gridSpace.x && grid.y == gridSpace.y)
+            if (grid.x == gridSpace.X && grid.y == gridSpace.Y)
             {
                 //NPC is next to player
                 return true;
@@ -729,13 +727,13 @@ public class NPC : Affectable
 
     private void AIMove()
     {
-        PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace.x, BigBoss.Player.gridSpace.y);
+        PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace);
         if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
             if (nodes.Count > 2)
             {
-                Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
+                GridSpace nodeToMove = nodes[nodes.Count - 2].loc;
                 MoveNPC(nodeToMove);
             }
             UpdateCurrentTileVectors();
@@ -765,7 +763,7 @@ public class NPC : Affectable
                 NPC n = go.GetWorldObject<NPC>();
                 if (this.IsNotAFreaking<Player>() && this == n)
                 {
-                    PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace.x, BigBoss.Player.gridSpace.y);
+                    PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace);
                     List<PathNode> nodes = pathToPlayer.getPath();
                     if (nodes.Count == 2)
                     {

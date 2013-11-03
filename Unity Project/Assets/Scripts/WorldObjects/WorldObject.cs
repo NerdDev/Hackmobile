@@ -7,8 +7,8 @@ using XML;
 public class WorldObject : PassesTurns, IXmlParsable, INamed
 {
     #region Generic Object Properties (graphical info, names, etc).
-    private WOInstance _instance; // Private member to allow for one-set-only logic
-    public WOInstance Instance { get { return _instance; } set { if (_instance == null) _instance = value; } }
+    private WOWrapper _instance; // Private member to allow for one-set-only logic
+    public WOWrapper Instance { get { return _instance; } set { if (_instance == null) _instance = value; } }
     public GameObject GO { get { return _instance.gameObject; } }
     public string Model { get; set; }
     public string ModelTexture { get; set; }
@@ -37,9 +37,14 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     public virtual void Destroy()
     {
         Unregister();
-        BigBoss.Destroy(GO);
+        Unwrap();
         if (OnDestroy != null)
             OnDestroy(this);
+    }
+
+    public void Unwrap()
+    {
+        Instance.Destroy();
     }
 
     protected virtual void Unregister()
@@ -56,12 +61,6 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
         Prefab = x.SelectString("prefab");
     }
     #endregion
-
-    public virtual void DestroySelf()
-    {
-        BigBoss.Time.RemoveFromUpdateList(this);
-        Destroy(this.gameObject);
-    }
 
     #region Time Management
     int turnPoints = 0;

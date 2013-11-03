@@ -6,58 +6,100 @@ using UnityEngine;
 
 public class WODictionary<W> : ObjectDictionary<W> where W : WorldObject, new()
 {
-    List<W> instantiated = new List<W>();
+    List<W> existing = new List<W>();
+    List<W> wrapped = new List<W>();
     ObjectManager spawner;
-    public IEnumerable<W> Existing { get { return instantiated; } }
+    public IEnumerable<W> Existing { get { return existing; } }
+    public IEnumerable<W> Wrapped { get { return wrapped; } }
 
     public WODictionary()
     {
         spawner = BigBoss.Objects;
     }
 
-    public W Instantiate(string str, GridSpace g)
+    public W Instantiate(string str)
     {
-        return Instantiate(GetPrototype(str), g);
+        return Instantiate(GetPrototype(str));
     }
 
-    public W Instantiate(string str, GridSpace g, out WOInstance wrapper)
+    public W InstantiateAndWrap(string str, GridSpace g, out WOWrapper wrapper)
     {
-        return Instantiate(GetPrototype(str), g, out wrapper);
+        return InstantiateAndWrap(GetPrototype(str), g, out wrapper);
     }
 
-    public W Instantiate(W proto, GridSpace g)
+    public W InstantiateAndWrap(string str, GridSpace g)
     {
-        WOInstance wrapper;
-        return Instantiate(proto, g, out wrapper);
+        WOWrapper wrapper;
+        return InstantiateAndWrap(GetPrototype(str), g, out wrapper);
     }
 
-    public W InstantiateRandom(GridSpace g)
+    public W InstantiateRandom()
     {
-        WOInstance wrapper;
-        return InstantiateRandom(g, out wrapper);
+        return Instantiate(prototypes.Values.Randomize(Probability.Rand).First());
     }
 
-    public W InstantiateRandom(GridSpace g, out WOInstance wrapper)
+    public W InstantiateAndWrapRandom(GridSpace g)
     {
-        return Instantiate(prototypes.Values.Randomize(Probability.Rand).First(), g, out wrapper);
+        WOWrapper wrapper;
+        return InstantiateAndWrapRandom(g, out wrapper);
     }
 
-    public W Instantiate(W proto, GridSpace g, out WOInstance wrapper)
+    public W InstantiateAndWrapRandom(GridSpace g, out WOWrapper wrapper)
     {
-        GameObject gameObject = spawner.Instantiate(proto, g.X, g.Y);
-        wrapper = gameObject.AddComponent<WOInstance>();
-        W newWorldObject = wrapper.SetTo(proto);
+        W obj = InstantiateRandom();
+        wrapper = Wrap(obj, g);
+        return obj;
+    }
+
+    public W InstantiateAndWrap(W proto, GridSpace g, out WOWrapper wrapper)
+    {
+        W obj = Instantiate(proto);
+        wrapper = Wrap(obj, g);
+        return obj;
+    }
+
+    public W InstantiateAndWrap(W proto, GridSpace g)
+    {
+        WOWrapper wrapper;
+        return InstantiateAndWrap(proto, g, out wrapper);
+    }
+
+    public W Instantiate(W proto)
+    {
+        W newWorldObject = proto.Copy();
         newWorldObject.OnDestroy += Unregister;
-        instantiated.Add(newWorldObject);
+        existing.Add(newWorldObject);
         if (newWorldObject is PassesTurns)
-            BigBoss.Time.updateList.Add((PassesTurns) newWorldObject);
+            BigBoss.Time.updateList.Add((PassesTurns)newWorldObject);
         newWorldObject.Init();
         return newWorldObject;
     }
 
+    public WOWrapper Wrap(W obj, GridSpace g)
+    {
+        GameObject gameObject = spawner.Instantiate(obj, g.X, g.Y);
+        WOWrapper wrapper = gameObject.AddComponent<WOWrapper>();
+        wrapper.SetTo(obj);
+        return wrapper;
+    }
+
+    public void DestroyWrappers()
+    {
+        foreach (W w in wrapped)
+            w.Unwrap();
+        wrapped.Clear();
+    }
+
+    public void DestroyExisting()
+    {
+        foreach (W w in existing)
+            w.Destroy();
+        existing.Clear();
+    }
+
     protected void Unregister(WorldObject obj)
     {
-        instantiated.Remove((W)obj);
+        existing.Remove((W)obj);
         if (obj is PassesTurns)
             BigBoss.Time.updateList.Add((PassesTurns)obj);
     }

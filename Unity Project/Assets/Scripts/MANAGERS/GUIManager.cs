@@ -211,7 +211,7 @@ public class GUIManager : MonoBehaviour, IManager
         foreach (Item item in invList)
         {
             //Debugging:
-            Debug.Log(item.name);
+            Debug.Log(item.Name);
             string iconToSetString = item.ModelTexture.ToString();
 
             //inventoryStorageScript.items.Add(item);
@@ -440,9 +440,9 @@ public class GUIManager : MonoBehaviour, IManager
 
     void GenerateItemInfo(ItemList item)
     {
-        foreach (KeyValuePair<string, Field> kvp in item[0].map)
+        foreach (KeyValuePair<string, string> kvp in item[0].GetGUIDisplays())
         {
-            CreateTextButton(kvp.Key + ": " + kvp.Value.ToString(), itemInfoGrid, itemInfoClipDrag);
+            CreateTextButton(kvp.Key + ": " + kvp.Value, itemInfoGrid, itemInfoClipDrag);
         }
         CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
         this.itemInfoClipDrag.ResetPosition();

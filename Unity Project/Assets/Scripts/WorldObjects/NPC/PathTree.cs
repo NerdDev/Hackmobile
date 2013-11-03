@@ -9,12 +9,12 @@ public class PathTree
     static PathNode[,] Arr = new PathNode[200, 200];
     int terminateDistance;
     protected List<PathNode> closed = new List<PathNode>();
-    Value2D<GridSpace> start, dest;
+    GridSpace start, dest;
     SortedDictionary<PathNode, PathNode> openNodes = new SortedDictionary<PathNode, PathNode>();
 
     bool pathComplete;
 
-    public PathTree(Value2D<GridSpace> start, Value2D<GridSpace> dest)
+    public PathTree(GridSpace start, GridSpace dest)
     {
         this.start = start;
         this.dest = dest;
@@ -30,7 +30,7 @@ public class PathTree
         PathNode startNode = new PathNode(start, dest, null);
         startNode.g = 0;
         this.terminateDistance = terminateDistance;
-        Arr[start.x, start.y] = startNode;
+        Arr[start.X, start.Y] = startNode;
         getNextNodes(startNode);
         while (!pathComplete && openNodes.Count > 0)
         {
@@ -39,15 +39,15 @@ public class PathTree
         ///*
         foreach (PathNode pn in closed)
         {
-            Arr[pn.loc.x, pn.loc.y] = null;
+            Arr[pn.loc.X, pn.loc.Y] = null;
         }
         foreach (PathNode pn in openNodes.Keys)
         {
-            Arr[pn.loc.x, pn.loc.y] = null;
+            Arr[pn.loc.X, pn.loc.Y] = null;
         }
         foreach (PathNode pn in listONodes)
         {
-            Arr[pn.loc.x, pn.loc.y] = null;
+            Arr[pn.loc.X, pn.loc.Y] = null;
         }
         //*/
         return listONodes;
@@ -56,9 +56,9 @@ public class PathTree
     public void getNextNodes(PathNode origin)
     {
         origin.isOpen = false;
-        if (Arr[origin.loc.x, origin.loc.y] == null)
+        if (Arr[origin.loc.X, origin.loc.Y] == null)
         {
-            Arr[origin.loc.x, origin.loc.y] = origin;
+            Arr[origin.loc.X, origin.loc.Y] = origin;
         }
         openNodes.Remove(origin);
         closed.Add(origin);
@@ -70,11 +70,11 @@ public class PathTree
         PathNode choice = optimalNode(openNodes);
         if (choice != null)
         {
-            if (Arr[choice.loc.x, choice.loc.y] == null)
+            if (Arr[choice.loc.X, choice.loc.Y] == null)
             {
-                Arr[choice.loc.x, choice.loc.y] = choice;
+                Arr[choice.loc.X, choice.loc.Y] = choice;
             }
-            if ((choice.loc.x == dest.x && choice.loc.y == dest.y) || choice.g > terminateDistance)
+            if ((choice.loc.X == dest.X && choice.loc.Y == dest.Y) || choice.g > terminateDistance)
             {
                 pathComplete = true;
                 listONodes.Add(choice);
@@ -88,17 +88,17 @@ public class PathTree
         }
     }
 
-    public bool isValidSpace(Value2D<GridSpace> p)
+    public bool isValidSpace(GridSpace p)
     {
-        if (p.x > -1 && p.y > -1)
+        if (p.X > -1 && p.Y > -1)
         {
             try
             {
-                if (p.x == dest.x && p.y == dest.y)
+                if (p.X == dest.X && p.Y == dest.Y)
                 {
                     return true;
                 }
-                if ((p.val.Type == GridType.Floor || p.val.Type == GridType.Door))
+                if ((p.Type == GridType.Floor || p.Type == GridType.Door))
                 {
                     return true;
                 }
@@ -113,19 +113,19 @@ public class PathTree
 
     public void pointsToNodes(PathNode origin)
     {
-        foreach (Value2D<GridSpace> p in BigBoss.Levels.Level.getSurroundingSpaces(origin.loc.x, origin.loc.y))
+        foreach (GridSpace p in BigBoss.Levels.Level.getSurroundingSpaces(origin.loc.X, origin.loc.Y))
         {
             if (isValidSpace(p))
             {
-                if (Arr[p.x, p.y] == null)
+                if (Arr[p.X, p.Y] == null)
                 {
                     PathNode asnode = new PathNode(p, dest, origin);
-                    Arr[p.x, p.y] = asnode;
+                    Arr[p.X, p.Y] = asnode;
                     openNodes.Add(asnode, asnode);
                 }
                 else
                 {
-                    PathNode asnode = Arr[p.x, p.y];
+                    PathNode asnode = Arr[p.X, p.Y];
                     if (asnode.isOpen)
                     {
                         int curG = asnode.g;
@@ -186,11 +186,11 @@ public class PathNode : IComparable, IEquatable<PathNode>, IEqualityComparer<Pat
 
     public bool isOpen = true;
 
-    public Value2D<GridSpace> loc;
+    public GridSpace loc;
     public PathNode parent;
     public bool diagonalFromParent;
 
-    public PathNode(Value2D<GridSpace> origin, Value2D<GridSpace> destination, PathNode parent)
+    public PathNode(GridSpace origin, GridSpace destination, PathNode parent)
     {
         loc = origin;
         h = getManhattan(origin, destination);
@@ -217,10 +217,10 @@ public class PathNode : IComparable, IEquatable<PathNode>, IEqualityComparer<Pat
         f = g + h;
     }
 
-    private int getManhattan(Value2D<GridSpace> start, Value2D<GridSpace> dest)
+    private int getManhattan(GridSpace start, GridSpace dest)
     {
-        int x = Math.Abs(start.x - dest.x);
-        int y = Math.Abs(start.y - dest.y);
+        int x = Math.Abs(start.X - dest.X);
+        int y = Math.Abs(start.Y - dest.Y);
         if (x > y)
         {
             return 14 * y + 10 * (x - y);
@@ -233,12 +233,12 @@ public class PathNode : IComparable, IEquatable<PathNode>, IEqualityComparer<Pat
 
     protected bool getDiagonal()
     {
-        if (Math.Abs(this.loc.x - parent.loc.x) == 1 && Math.Abs(this.loc.y - parent.loc.y) == 1)
+        if (Math.Abs(this.loc.X - parent.loc.X) == 1 && Math.Abs(this.loc.Y - parent.loc.Y) == 1)
         {
             return true;
         }
-        else if ((Math.Abs(this.loc.x - parent.loc.x) == 1 && this.loc.y == parent.loc.y)
-            || (Math.Abs(this.loc.y - parent.loc.y) == 1 && this.loc.x == parent.loc.x))
+        else if ((Math.Abs(this.loc.X - parent.loc.X) == 1 && this.loc.Y == parent.loc.Y)
+            || (Math.Abs(this.loc.Y - parent.loc.Y) == 1 && this.loc.X == parent.loc.X))
         {
             return false;
         }
@@ -247,7 +247,7 @@ public class PathNode : IComparable, IEquatable<PathNode>, IEqualityComparer<Pat
 
     public bool getDiagonal(PathNode parent)
     {
-        if (Math.Abs(this.loc.x - parent.loc.x) == 1 && Math.Abs(this.loc.y - parent.loc.y) == 1)
+        if (Math.Abs(this.loc.X - parent.loc.X) == 1 && Math.Abs(this.loc.Y - parent.loc.Y) == 1)
         {
             return true;
         }
@@ -312,8 +312,8 @@ public class PathNode : IComparable, IEquatable<PathNode>, IEqualityComparer<Pat
                 }
                 else if (this.h == o.h)
                 {
-                    if (this.loc.x == o.loc.x
-                        && this.loc.y == o.loc.y)
+                    if (this.loc.X == o.loc.X
+                        && this.loc.Y == o.loc.Y)
                     {
                         return 0;
                     }
@@ -374,11 +374,11 @@ public class PathNode : IComparable, IEquatable<PathNode>, IEqualityComparer<Pat
         {
             return false;
         }
-        if (this.loc.x != node.loc.x)
+        if (this.loc.X != node.loc.X)
         {
             return false;
         }
-        if (this.loc.y != node.loc.y)
+        if (this.loc.Y != node.loc.Y)
         {
             return false;
         }

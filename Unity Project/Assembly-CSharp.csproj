@@ -301,6 +301,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
      <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\AudioManager.cs" />
@@ -394,7 +395,7 @@
      <Compile Include="Assets\Scripts\WorldObjects\ObjectDictionary.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Size.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\WODictionary.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\WOInstance.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\WOWrapper.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\WorldObject.cs" />
      <Compile Include="Assets\iTweenEditor\Example\CallbackExample.cs" />
      <Compile Include="Assets\iTweenEditor\Helper Classes\EventParamMappings.cs" />

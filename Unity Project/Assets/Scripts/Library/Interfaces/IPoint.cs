@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class PlayerInstance : WOWrapper, IManager
+public interface IPoint
 {
-    public void Initialize()
-    {
-    }
+    int X { get; set; }
+    int Y { get; set; }
 }

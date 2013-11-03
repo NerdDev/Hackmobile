@@ -40,6 +40,11 @@ namespace System
         {
             return ObjDump.Dump(element, indentSize, filter);
         }
+
+        public static IEnumerable<KeyValuePair<string, string>> GetGUIDisplays(this Object o)
+        { // Not implemented
+            return new List<KeyValuePair<string, string>>();
+        }
     }
 
     public class ObjDump

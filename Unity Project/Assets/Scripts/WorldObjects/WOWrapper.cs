@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class WOInstance : MonoBehaviour
+public class WOWrapper : MonoBehaviour
 {
     public WorldObject WO { get; set; }
 
-    public WOInstance()
+    public WOWrapper()
     {
     }
 
@@ -19,7 +19,13 @@ public class WOInstance : MonoBehaviour
         return (W)WO;
     }
 
-    public static implicit operator WorldObject (WOInstance inst)
+    public void Destroy()
+    {
+        Destroy(this.gameObject);
+        WO = null;
+    }
+
+    public static implicit operator WorldObject (WOWrapper inst)
     {
         return inst.WO;
     }
