@@ -18,10 +18,10 @@ public class Player : NPC
     private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
     public string PlayerTitle { get { return playerTitle; } set { playerTitle = value; } }
 
+    public PlayerProfessions PlayerChosenProfession;
+
     public int level = 10; // Just for testing.  'Prolly change this to 1 later.
     public int Level { get { return level; } }
-
-    public PlayerProfessions PlayerChosenProfession;
 
     #endregion
 
@@ -36,28 +36,20 @@ public class Player : NPC
     #region INVENTORY
     public override void addToInventory(Item item, int count)
     {
-        if (inventory.Has(item))
-        {
-            //inventory[item] += count;
-            //GUI Stuff:
+        base.addToInventory(item, count);
+        BigBoss.Gooey.RegenInventoryGUI();
+    }
 
-        }
-        else
-        {
-            inventory.Add(item);
-            for (int i = 0; i < count - 1; i++)
-            {
-                inventory.Add(item.Copy());
-            }
-            //GUI Stuff:
-            //BigBoss.Gooey.AddItemToGUIInventory(item, count);
-        }
-        stats.Encumbrance += item.props.Weight * count;
+    public override void removeFromInventory(Item item, int count)
+    {
+        base.removeFromInventory(item, count);
+        BigBoss.Gooey.RegenInventoryGUI();
     }
     #endregion
 
     #region Physics
     int lastCollisionTime = 0; //unused atm
+
     void OnCollisionEnter(Collision collision)
     {
         //yes, it's the gspot
@@ -88,26 +80,14 @@ public class Player : NPC
         BigBoss.PlayerInput.allowKeyboardInput = true;
         BigBoss.PlayerInput.allowMouseInput = true;
         BigBoss.PlayerInput.allowPlayerInput = true;
-        
+
         //this.setData(BigBoss.WorldObject.getNPC("player"));
         stats.Hunger = 900;
         IsActive = true;
         calcStats();
-        this.PlayerTitle = BigBoss.Objects.PlayerProfessions.getTitle(BigBoss.Player.PlayerChosenProfession, BigBoss.Player.stats.Level);
-        anim = GO.GetComponent<Animator>() as Animator;
-        Name = "Kurtis";
-
-        //Relocate this to a test script in your scene, rather than player itself
-        //Item i = BigBoss.WorldObject.CreateItem("sword1");
-        ////this.addToInventory(i);
-        ////this.equipItem(i);
-
-        //Item food = BigBoss.WorldObject.CreateItem("spoiled bread");
-        //this.addToInventory(food, 5);
-
-        //Item potion = BigBoss.WorldObject.CreateItem("health potion");
-        ////this.addToInventory(potion, 3);
-
+        this.PlayerTitle = BigBoss.Data.playerProfessions.getTitle(BigBoss.PlayerInfo.PlayerChosenProfession, BigBoss.PlayerInfo.stats.Level);
+        anim = playerAvatar.GetComponent<Animator>() as Animator;
+        this.Name = "Kurtis";
     }
 
     // Update is called once per frame
@@ -152,7 +132,6 @@ public class Player : NPC
     Vector3 currentGridLoc;
     Vector3 currentGridCenterPointWithoffset;
 
-    public Vector3 avatarStartLocation;
     public float tileMovementTolerance = .85f;  //radius
 
     float timePassed = 0;
@@ -259,9 +238,17 @@ public class Player : NPC
     float v;
     void FixedUpdate()
     {
-        //float h = Input.GetAxis("Horizontal");				// setup h variable as our horizontal input axis
-        //float v = Input.GetAxis("Vertical");				// setup v variables as our vertical input axis
-        //if (Input.GetMouseButton(1))
+        if (anim == null)
+        {
+            try
+            {
+                anim = playerAvatar.GetComponent<Animator>() as Animator;
+            }
+            catch (Exception e)
+            {
+            }
+            return;
+        }
         if (isMoving)
         {
             if (v < playerSpeed)
@@ -277,16 +264,8 @@ public class Player : NPC
         {
             v = 0;
         }
-
-        if (anim == null)
-            return; // Why u give null errorz?!
-
-        //Debug.Log("V: " + v);
-        anim.SetFloat("runSpeed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis				
-        //anim.SetFloat("Direction", h); 						// set our animator's float parameter 'Direction' equal to the horizontal input axis		
-        //anim.speed = animSpeed;								// set the speed of our animator to the public variable 'animSpeed'
+        anim.SetFloat("runSpeed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis
         currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
-
         //		if(anim.layerCount ==2)		
         //			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation
 

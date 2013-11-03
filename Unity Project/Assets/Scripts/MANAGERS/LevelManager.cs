@@ -16,6 +16,8 @@ public class LevelManager : MonoBehaviour, IManager {
     public Level Level { get; private set; }
     public int CurLevelDepth { get; private set; }
 
+    public int CurLevel;
+
     public void Initialize()
     {
         Builder.Theme = Theme;
@@ -24,6 +26,8 @@ public class LevelManager : MonoBehaviour, IManager {
     
     void Start()
     {
+        SetCurLevel(0);
+        BigBoss.DungeonMaster.PopulateLevel(Level, false);
     }
 
     public void SetCurLevel(int num)
@@ -32,6 +36,26 @@ public class LevelManager : MonoBehaviour, IManager {
         Level = GetLevel(num);
         CurLevelDepth = num;
         Deploy(Level);
+    }
+
+    public void SetCurLevel(bool up)
+    {
+        if (up && CurLevelDepth > 0)
+        {
+            SetCurLevel(CurLevelDepth - 1);
+        }
+        else if (up)
+        {
+            //do nothing, these stairs do not go anywhere
+            CurLevel = CurLevelDepth;
+            return;
+        }
+        else
+        {
+            SetCurLevel(CurLevelDepth + 1);
+        }
+        CurLevel = CurLevelDepth;
+        BigBoss.DungeonMaster.PopulateLevel(Level, up);
     }
 
     public Level GetLevel(int num)

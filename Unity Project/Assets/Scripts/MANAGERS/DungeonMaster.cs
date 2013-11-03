@@ -2,22 +2,73 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class DungeonMaster : MonoBehaviour, IManager {
 
     Dictionary<ESFlags<Keywords>, LeveledPool<NPC>> npcPools = new Dictionary<ESFlags<Keywords>, LeveledPool<NPC>>();
+
+    public List<GameObject> stairs = new List<GameObject>();
 
     public void Initialize()
     {
         SpawnModifier.RegisterModifiers();
     }
 
-    public void PopulateLevel(Level l)
+    public void PopulateLevel(Level l, bool up)
     {
         if (!l.Populated)
         {
-            ForcePopulateLevel(l);
+            //ForcePopulateLevel(l);
         }
+
+        //Place stairs
+        ClearPriorLevel();
+        Value2D<GridSpace> stairsDown = CreateStairs(l, "StairsDown", PrimitiveType.Sphere);
+        Value2D<GridSpace> stairsUp = CreateStairs(l, "StairsUp", PrimitiveType.Cylinder);
+
+        //Place Player
+        if (up)
+        {
+            PlacePlayer(l, stairsDown);
+        }
+        else
+        {
+            PlacePlayer(l, stairsUp);
+        }
+    }
+
+    private void ClearPriorLevel()
+    {
+        if (stairs.Count > 0)
+        {
+            foreach (GameObject go in stairs)
+            {
+                Destroy(go);
+            }
+        }
+        BigBoss.WorldObject.ClearNPCs();
+    }
+
+    public Value2D<GridSpace> CreateStairs(Level l, string name, PrimitiveType prim)
+    {
+        Value2D<GridSpace> locStairs = BigBoss.DungeonMaster.PickSpawnableLocation(l);
+        GameObject stairs = GameObject.CreatePrimitive(prim);
+        stairs.name = name;
+        stairs.transform.position = new Vector3(locStairs.x, 0f, locStairs.y);
+        locStairs.val.Block.layer = 13;
+        locStairs.val.Block.collider.isTrigger = false;
+        locStairs.val.Block.name = name;
+        this.stairs.Add(stairs);
+        return locStairs;
+    }
+
+    public void PlacePlayer(Level l, Value2D<GridSpace> stairsUp)
+    {
+        IEnumerable<Value2D<GridSpace>> grids = l.getSurroundingSpaces(stairsUp.x, stairsUp.y);
+        //List<Value2D<GridSpace>> gridList = grids.ToList();
+        Value2D<GridSpace> grid = grids.First(g => g.val.Type == GridType.Floor);
+        BigBoss.PlayerInfo.transform.position = new Vector3(grid.x, -.5f, grid.y);
     }
 
     void ForcePopulateLevel(Level l)
@@ -61,6 +112,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
         {
             return BigBoss.Objects.NPCs.Instantiate(n, g);
         }
+
         catch (ArgumentException)
         {
             throw new ArgumentException("The prefab is null: '" + n.Prefab + "' on NPC " + n.ToString());

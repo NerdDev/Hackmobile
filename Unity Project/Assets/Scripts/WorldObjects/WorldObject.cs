@@ -57,11 +57,16 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     }
     #endregion
 
-    #region Time Management
+    public virtual void DestroySelf()
+    {
+        BigBoss.Time.RemoveFromUpdateList(this);
+        Destroy(this.gameObject);
+    }
 
+    #region Time Management
     int turnPoints = 0;
     int basePoints = 60;
-    protected bool isActive = false;
+    public bool isActive = false;
 
     public virtual void UpdateTurn()
     {

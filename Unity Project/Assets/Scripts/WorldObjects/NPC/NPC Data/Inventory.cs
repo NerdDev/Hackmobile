@@ -16,13 +16,13 @@ public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
             }
             else
             {
-                this[i.Type] = new InventoryCategory();
+                this[i.Type] = new InventoryCategory(i.Type);
                 this[i.Type].Add(i);
             }
         }
         else
         {
-            this.Add(i.Type, new InventoryCategory());
+            this.Add(i.Type, new InventoryCategory(i.Type));
             this[i.Type].Add(i);
         }
     }
@@ -40,7 +40,7 @@ public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
     {
         if (this.ContainsKey(category))
         {
-            this[category].Get(item);
+            return this[category].Get(item);
         }
         return null; //item isn't there
     }

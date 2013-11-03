@@ -1,5 +1,8 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class InputManager : MonoBehaviour, IManager
 {
@@ -33,18 +36,58 @@ public class InputManager : MonoBehaviour, IManager
         centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
         //Debug.Log("Camera Screen space center point calculated: " + centerPointInScreenSpace);
 
-        SubscribeToEasyTouchMethods();  //feel free to relocate this
+        //SubscribeToEasyTouchMethods();  //feel free to relocate this
     }
 
-    public void SubscribeToEasyTouchMethods()
+    #region Touch Input
+    void OnEnable()
     {
-        EasyTouch.On_TouchStart += OnTouchStart;
+        EasyTouch.On_SimpleTap += On_SimpleTap;
     }
 
-    public void UnSubscribeToEasyTouchMethods()
+    void OnDisable()
     {
-        EasyTouch.On_TouchStart -= OnTouchStart;
+        EasyTouch.On_SimpleTap -= On_SimpleTap;
     }
+
+    void On_SimpleTap(Gesture gesture)
+    {
+        if (gesture.pickObject != null)
+        {
+            GameObject go = gesture.pickObject;
+            if (go.layer == 12)
+            {
+                Point p = new Point(go.transform.position.x, go.transform.position.z);
+                if (this is InputManager && BigBoss.Levels.Level[p.x, p.y].HasObject())
+                {
+                    List<WorldObject> list = BigBoss.Levels.Level[p.x, p.y].GetBlockingObjects();
+                    NPC n = (NPC)list.Find(w => w is NPC);
+                    if (n != null && n.IsNotAFreaking<Player>())
+                    {
+                        Value2D<GridSpace> playerLoc = BigBoss.Player.gridSpace;
+                        IEnumerable<Value2D<GridSpace>> grids = BigBoss.Levels.Level.getSurroundingSpaces(p.x, p.y);
+                        if (grids.Single(g => g.x == playerLoc.x && g.y == playerLoc.y) != null)
+                        {
+                            BigBoss.Player.attack(n);
+                        }
+                    }
+                }
+            }
+            else if (go.layer == 13)
+            {
+                //stairs
+                if (go.name.Equals("StairsDown"))
+                {
+                    BigBoss.Levels.SetCurLevel(false);
+                }
+                else if (go.name.Equals("StairsUp"))
+                {
+                    BigBoss.Levels.SetCurLevel(true);
+                }
+            }
+        }
+    }
+    #endregion
 
     void Update()
     {
@@ -67,6 +110,7 @@ public class InputManager : MonoBehaviour, IManager
         }
     }
 
+    /*
     public void OnTouchStart(Gesture gesture)
     {
         //Debug Block:
@@ -83,9 +127,8 @@ public class InputManager : MonoBehaviour, IManager
         {
             Debug.Log("Event sent, but no pick object: Exception: " + ex.Message);
         }
-
-
     }
+    */
 
     #region KEYBOARD
 
@@ -94,16 +137,6 @@ public class InputManager : MonoBehaviour, IManager
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             BigBoss.Time.TogglePause();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            BigBoss.PlayerInfo.transform.position = BigBoss.Player.avatarStartLocation;
-        }
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            //Item theItem = BigBoss.WorldObjectManager.CreateRandomItem(new Vector3 (0,0,0));
-            //Testing out an NGUI texture swap:
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -116,8 +149,9 @@ public class InputManager : MonoBehaviour, IManager
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
+            Debug.Log(BigBoss.PlayerInfo.inventory.Dump());
             Item food = null;
-            food = BigBoss.Player.inventory.Get("consumable", "health potion")[0];
+            food = BigBoss.PlayerInfo.inventory.Get("potion", "health potion")[0];
             if (food != null)
             {
                 BigBoss.Player.eatItem(food);

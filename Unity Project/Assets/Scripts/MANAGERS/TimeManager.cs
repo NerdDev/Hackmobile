@@ -46,47 +46,11 @@ public class TimeManager : MonoBehaviour, IManager
     public int turnsPassed = 0;
     public int numTilesCrossed = 0;
     #endregion
-    /*
-    #region Expose Property In Inspector Example
-    //This is our inspector property example:   Copy this example for use within this TimeManager class.  To expose properties in other classes, make a new script copied from TimeManagerEditor.cs
-    [HideInInspector]
-    [SerializeField]
-    int myTestIntprivate;
-    [ExposeProperty]
-    public int MyTestInt
-    {
-        get
-        {
-            return myTestIntprivate;
-        }
-        set
-        {
-            myTestIntprivate = value;
-        }
-    }
-    [HideInInspector]
-    [SerializeField]
-    string myTeststringprivate;
-    [ExposeProperty]
-    public string MyTestString
-    {
-        get
-        {
-            return myTeststringprivate;
-        }
-        set
-        {
-            myTeststringprivate = value;
-        }
-    }
-    #endregion
-    */
     #region Action Costs
     public int diagonalMoveCost = 84;
     public int regularMoveCost = 60;
     public int attackCost = 60;
     public int eatItemCost = 60;
-    
     #endregion
 
     public void Initialize()
@@ -134,7 +98,7 @@ public class TimeManager : MonoBehaviour, IManager
     public void PassTurn(int turnPoints)
     {
         turnsPassed++;
-        //Justin's hot:
+        //Justin's hot: // Thx brah
         runGroupUpdate(turnPoints);
     }
 

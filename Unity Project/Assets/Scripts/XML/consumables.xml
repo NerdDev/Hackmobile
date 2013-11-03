@@ -17,6 +17,11 @@
 					<type>NutritionEffect</type>
 					<strength>50</strength>
 				</effect>
+				<effect>
+					<type>Levitation</type>
+					<strength>.2</type>
+					<turns>10</turns>
+				</effect>
 			</OnEatenEffect>
 		</food>
 		<potion name="health potion">

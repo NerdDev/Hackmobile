@@ -14,9 +14,6 @@ public class NPC : Affectable
     public override void Init()
     {
         calcStats();
-        bodyparts.Arms = 2;
-        bodyparts.Legs = 2;
-        bodyparts.Heads = 1;
         equipment = new Equipment(this.bodyparts);
         if (IsActive)
         {
@@ -53,30 +50,14 @@ public class NPC : Affectable
     public float rotationSpeed = .5f;  //temporarily hard-coded
     public float NPCRotationSpeed { get { return rotationSpeed; } }
 
-    private Vector3 currentOccupiedGridCenterWorldPoint;
-    public Vector3 CurrentOccupiedGridCenterWorldPoint
-    {
-        get { return currentOccupiedGridCenterWorldPoint; }
-        set { currentOccupiedGridCenterWorldPoint = value; }
-    }
-
-    private Vector3 lastOccupiedGridCenterWorldPoint;
-    public Vector3 LastOccupiedGridCenterWorldPoint
-    {
-        get { return lastOccupiedGridCenterWorldPoint; }
-        set { lastOccupiedGridCenterWorldPoint = value; }
-    }
+    public Vector3 CurrentOccupiedGridCenterWorldPoint { get; set; }
+    public Vector3 LastOccupiedGridCenterWorldPoint { get; set; }
 
     //X,Y coordinate for other scripts to grab:
-    private Vector2 gridCoordinate;
-    public Vector2 GridCoordinate
-    {
-        get { return gridCoordinate; }
-        set { gridCoordinate = value; }
-    }
+    public Vector2 GridCoordinate { get; set; }
     //X, Y in integers, GridSpace ref
-    protected Value2D<GridSpace> gridSpace;
-    protected Value2D<GridSpace> newGridSpace;
+    public Value2D<GridSpace> gridSpace;
+    public Value2D<GridSpace> newGridSpace;
 
     bool moving; //stores moving condition
     protected bool verticalMoving;
@@ -87,7 +68,7 @@ public class NPC : Affectable
     Vector3 heading; //this is the heading of target minus current location
 
     Animator animator;
-    float vel;
+    float velocity;
 
     #endregion
 
@@ -127,18 +108,18 @@ public class NPC : Affectable
     {
         if (moving)
         {
-            if (vel < NPCSpeed)
+            if (velocity < NPCSpeed)
             {
-                vel += .01f;
+                velocity += .01f;
             }
             else
             {
-                vel = NPCSpeed;
+                velocity = NPCSpeed;
             }
         }
         else
         {
-            vel = 0;
+            velocity = 0;
         }
         if (animator == null)
         {
@@ -146,8 +127,18 @@ public class NPC : Affectable
         }
         else
         {
-            animator.SetFloat("runSpeed", vel);
+            animator.SetFloat("runSpeed", velocity);
         }
+    }
+
+    public void CreateTextPop(string str)
+    {
+        BigBoss.Gooey.CreateTextPop(this.transform.position, str);
+    }
+
+    public void CreateTextPop(string str, Color col)
+    {
+        BigBoss.Gooey.CreateTextPop(this.transform.position, str, col);
     }
 
     #region Stats
@@ -249,48 +240,21 @@ public class NPC : Affectable
     protected void getHungerLevel(float hunger)
     {
         HungerLevel prior = stats.HungerLevel;
-        Color col = Color.white;
-
+        // These numbers don't make sense.
         if (hunger < 50)
-        {
             stats.HungerLevel = HungerLevel.Faint;
-            col = Color.red;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
         else if (hunger < 130)
-        {
             stats.HungerLevel = HungerLevel.Starving;
-            col = Color.yellow;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
         else if (hunger < 500)
-        {
             stats.HungerLevel = HungerLevel.Hungry;
-            col = Color.yellow;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
         else if (hunger < 800)
-        {
             stats.HungerLevel = HungerLevel.Satiated;
-            col = Color.blue;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
         else if (hunger < 1000)
-        {
             stats.HungerLevel = HungerLevel.Stuffed;
-            col = Color.yellow;
-            BigBoss.Gooey.UpdateHungerText(col);
-        }
-
         if (prior != stats.HungerLevel)
         {
-            UpdateHungerLevel(col);
+            BigBoss.Gooey.UpdateHungerLevel(stats.HungerLevel);
         }
-    }
-
-    protected void UpdateHungerLevel(Color guiCol)
-    {
-        BigBoss.Gooey.CreateTextPop(GO.transform.position + Vector3.up * .75f, stats.HungerLevel.ToString() + "!", guiCol);
     }
 
     public float getXPfromNPC()
@@ -550,7 +514,10 @@ public class NPC : Affectable
     {
         if (inventory.Has(item))
         {
-            //do nothing
+            for (int i = 0; i < count - 1; i++)
+            {
+                inventory.Add(item.Copy());
+            }
         }
         else
         {
@@ -561,7 +528,6 @@ public class NPC : Affectable
             }
         }
         stats.Encumbrance += item.props.Weight * count;
-        Debug.Log("Item " + item.Name + " with count " + count + " added to inventory.");
     }
 
     public void removeFromInventory(Item item)
@@ -570,21 +536,11 @@ public class NPC : Affectable
 
     }
 
-    public void removeFromInventory(Item item, int count)
+    public virtual void removeFromInventory(Item item, int count)
     {
         if (inventory.Has(item))
         {
             inventory.Remove(item);
-            //if (inventory[item] <= count)
-            //{
-            //    inventory.Remove(item);
-            //}
-            //else
-            //{
-            //    inventory[item] -= count;
-            //}
-            stats.Encumbrance -= item.props.Weight;
-            Debug.Log("Item " + item.Name + " with count " + count + " removed from inventory.");
         }
         else
         {
@@ -777,8 +733,11 @@ public class NPC : Affectable
         if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
-            Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
-            MoveNPC(nodeToMove);
+            if (nodes.Count > 2)
+            {
+                Value2D<GridSpace> nodeToMove = nodes[nodes.Count - 2].loc;
+                MoveNPC(nodeToMove);
+            }
             UpdateCurrentTileVectors();
         }
     }

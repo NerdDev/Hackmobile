@@ -26,6 +26,14 @@ public class GridSpace
         this.Type = type;
     }
 
+    public void ColliderTrigger(bool on)
+    {
+        if (Block != null && Block.collider != null)
+        {
+            Block.collider.isTrigger = on;
+        }
+    }
+
     #region Accessors
     public void Put(WorldObject obj)
     {
@@ -33,6 +41,10 @@ public class GridSpace
         if (obj is NPC)
         {
             PutBlocking(obj);
+            if (obj.IsNotAFreaking<Player>())
+            {
+                ColliderTrigger(false);
+            }
         }
         else
         {
@@ -62,6 +74,10 @@ public class GridSpace
     {
         RemoveFree(obj);
         RemoveBlocked(obj);
+        if (_blockingObjects.Count == 0)
+        {
+            ColliderTrigger(true);
+        }
     }
 
     protected void RemoveFree(WorldObject obj)

@@ -3,12 +3,7 @@
 		<oxidizes>false</oxidizes>
 		<hardness>150</hardness>
 		<burns>false</burns>
-		<!--This way is parsed exactly the same as the second.
-		<density min="7.75" max="8.05"></density> -->
-		<density>
-			<min>7.75</min>
-			<max>8.05</max>
-		</density>
+		<density>7.8</density>
 		<meltingpoint>1370</meltingpoint>
 	</material>
 </materials>

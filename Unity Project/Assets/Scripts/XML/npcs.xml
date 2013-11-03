@@ -2,6 +2,7 @@
 	<npc name="skeleton_knight">
 		<model> </model>
 		<modeltexture> </modeltexture>
+		<prefab>Prefabs_Meshes/NPCs/Skeleton_Knight</prefab>
 		<role>Mage</role>
 		<race>Undead</race>
     <prefab>Prefabs_Meshes/NPCs/Skeleton_Knight</prefab>
