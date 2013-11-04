@@ -8,18 +8,9 @@ public class Item : Affectable, PassesTurns, IXmlParsable
 {
     #region Properties of Items
     //Properties
-    private string type;
-    public string Type
-    {
-        get { return type; }
-        set { this.type = value; }
-    }
-    private string icon;
-    public string Icon
-    {
-        get { return icon; }
-        set { this.icon = value; }
-    }
+    public override string Prefab { get { return Prefab; } set { base.Prefab = value + "Items/"; } }
+    public string Type { get; set; }
+    public string Icon { get; set; }
     public ItemProperties props = new ItemProperties();
 
     //flags
@@ -105,7 +96,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     public override void ParseXML(XMLNode x)
     {
         base.ParseXML(x);
-        type = x.Key;
+        Type = x.Key;
         props = x.Select<ItemProperties>("properties");
         onEquip = x.Select<Spell>("OnEquipEffect");
         onUse = x.Select<Spell>("OnUseEffect");

@@ -2,10 +2,9 @@
 	<npc name="skeleton_knight">
 		<model> </model>
 		<modeltexture> </modeltexture>
-		<prefab>Prefabs_Meshes/NPCs/Skeleton_Knight</prefab>
+		<prefab>Skeleton_Knight</prefab>
 		<role>Mage</role>
 		<race>Undead</race>
-    <prefab>Prefabs_Meshes/NPCs/Skeleton_Knight</prefab>
 		<flags>
 			<flag name="nopoly" />
 		</flags>
@@ -47,7 +46,7 @@
 	<npc name="giant_spider">
 		<model> </model>
 		<modeltexture> </modeltexture>
-		<prefab>Prefabs_Meshes/NPCs/Giant_Spider</prefab>
+		<prefab>Giant_Spider</prefab>
 		<role>Mage</role>
 		<race>Undead</race>
 		<flags>

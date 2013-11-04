@@ -19,7 +19,7 @@
 				</effect>
 				<effect>
 					<type>Levitation</type>
-					<strength>.2</type>
+					<strength>.2</strength>
 					<turns>10</turns>
 				</effect>
 			</OnEatenEffect>

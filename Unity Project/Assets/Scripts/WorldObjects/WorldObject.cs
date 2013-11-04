@@ -13,7 +13,8 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     public string Model { get; set; }
     public string ModelTexture { get; set; }
     public string Name { get; set; }
-    public string Prefab { get; set; }
+    private string _prefab;
+    public virtual string Prefab { get { return _prefab; } set { _prefab = "Prefabs/" + value; } }
     public GridSpace Location { get; set; }  // Placeholder. Needs to actually be implemented and updated.
     public event Action<WorldObject> OnDestroy;
 

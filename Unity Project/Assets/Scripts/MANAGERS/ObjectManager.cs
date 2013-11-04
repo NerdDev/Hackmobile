@@ -7,7 +7,7 @@ using System.IO;
 
 public class ObjectManager : MonoBehaviour, IManager
 {
-    const string XMLPath = "Assets/Scripts/XML/";
+    const string XMLPath = "Assets/XML/";
     public WODictionary<NPC> NPCs { get; protected set; }
     public ItemDictionary Items { get; protected set; }
     public Dictionary<string, string> Strings { get; protected set; }

@@ -7,6 +7,7 @@ using XML;
 
 public class NPC : Affectable
 {
+    public override string Prefab { get { return base.Prefab; } set { base.Prefab = "NPCs/" + value; } }
     /**
      * This method should be phased out down the line, it is used for temporary
      * data that needs initialized while other information is not known.

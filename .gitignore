@@ -2,7 +2,15 @@
 #   NerdDev Ignore
 ######################
 
-Unity Project/Assets/Resources/
+Unity Project/Assets/Resources/Animation/
+Unity Project/Assets/Resources/Audio/
+Unity Project/Assets/Resources/FX/
+Unity Project/Assets/Resources/GUI/
+Unity Project/Assets/Resources/Materials/
+Unity Project/Assets/Resources/Meshes/
+Unity Project/Assets/Resources/Textures/
+Unity Project/Assets/Resources/Tools/
+Unity Project/Assets/Resources/XML/
 Unity Project/Assembly-UnityScript-vs.unityproj
 Unity Project/Assembly-UnityScript.unityproj
 Unity Project/Debug Logs/
