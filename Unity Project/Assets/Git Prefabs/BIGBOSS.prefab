@@ -1804,6 +1804,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100228
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400228}
+  - 114: {fileID: 11400088}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -2982,7 +2998,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -533.333374, y: 400, z: 0}
+  m_LocalPosition: {x: -1025.51929, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400106}
@@ -3078,6 +3094,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400008}
+  - {fileID: 400228}
   - {fileID: 400200}
   - {fileID: 400026}
   - {fileID: 400084}
@@ -3171,6 +3188,17 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
+--- !u!4 &400228
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100228}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 22.0895634, y: 1.67791939, z: 25.1079521}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400210}
 --- !u!20 &2000000
 Camera:
   m_ObjectHideFlags: 1
@@ -4363,6 +4391,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf7eddea705ebc4e87ee3d35e961737, type: 3}
   m_Name: 
   delayTilDeath: 3
+--- !u!114 &11400088
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c9945366dd4e343a288fafc656379c, type: 3}
+  m_Name: 
+  allowPlayerInput: 1
+  allowKeyboardInput: 1
+  allowMouseInput: 1
+  isMovementKeyPressed: 0
+  horizontalMouseSensitivity: 0
+  horizontalMouseAxis: 0
+  verticalMouseSensitivity: 0
+  verticalMouseAxis: 0
+  centerPointInScreenSpace: {x: 0, y: 0}
 --- !u!132 &13200000
 GUIText:
   m_ObjectHideFlags: 1
