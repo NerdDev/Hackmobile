@@ -7,7 +7,7 @@ public class GridSpace
     public GridType Type { get; private set; }
     public GameObject Block { get; set; }
     public int X { get { return (int)Block.transform.position.x; } }
-    public int Y { get { return (int)Block.transform.position.y; } }
+    public int Y { get { return (int)Block.transform.position.z; } }
     public WorldObject RandomContainedObj { 
         get 
         {

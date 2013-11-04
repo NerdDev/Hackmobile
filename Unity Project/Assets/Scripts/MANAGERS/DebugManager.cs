@@ -30,7 +30,7 @@ public class DebugManager : MonoBehaviour, IManager
     const string breaker2 = @"|/////////////////////////////////////////////////|";
     #endregion
 
-    public enum DebugFlag 
+    public enum DebugFlag
     {
         GlobalLogging,
         LineNumbers,
@@ -46,7 +46,7 @@ public class DebugManager : MonoBehaviour, IManager
     // Log storage
     static Log[] logs;
 
-	public void Initialize()
+    public void Initialize()
     {
         // Create arrays with size = enum length
         logs = new Log[Enum.GetNames(typeof(Logs)).Length];
@@ -55,11 +55,11 @@ public class DebugManager : MonoBehaviour, IManager
         Nifty.DeleteContainedFiles(debugFolder, true);
 
         // Load Debug log defaults
-		int enumLength = Enum.GetNames(typeof(Logs)).Length;
-		logNames = new string[enumLength];
-		logPaths = new string[enumLength];
-		logOn = new bool[enumLength];
-		putName(Logs.Main, "=== Main ===");
+        int enumLength = Enum.GetNames(typeof(Logs)).Length;
+        logNames = new string[enumLength];
+        logPaths = new string[enumLength];
+        logOn = new bool[enumLength];
+        putName(Logs.Main, "=== Main ===");
         putPath(Logs.LevelGen, "LevelGen/");
         putName(Logs.LevelGen, "LevelGenTmp");
         putPath(Logs.LevelGenMain, "LevelGen/");
@@ -80,18 +80,18 @@ public class DebugManager : MonoBehaviour, IManager
         if (logging(Logs.Main))
         {
             w(Logs.Main, "Debug Manager Started.");
-			if (logging(Logs.LevelGen))
-			{
-            	w(Logs.Main, "Level Gen Debugging On.");
-			}
+            if (logging(Logs.LevelGen))
+            {
+                w(Logs.Main, "Level Gen Debugging On.");
+            }
         }
-	}
+    }
 
     void OnDestroy()
     {
         close();
     }
-	
+
     #region Accessors
     public bool Flag(DebugFlag flag)
     {
@@ -103,13 +103,13 @@ public class DebugManager : MonoBehaviour, IManager
         flags[flag] = on;
     }
 
-	public void nl(Logs e)
-	{
+    public void nl(Logs e)
+    {
         if (logging(e))
         {
-			w (e, "");	
+            w(e, "");
         }
-	}
+    }
 
     public void w(Logs e, string line)
     {
@@ -160,55 +160,55 @@ public class DebugManager : MonoBehaviour, IManager
             Get(e).printBreakers(num);
         }
     }
-	
-	public void logException(Logs e)
-	{
-		
-	}
-	
-	public void incrementDepth(Logs e)
-	{
+
+    public void logException(Logs e)
+    {
+
+    }
+
+    public void incrementDepth(Logs e)
+    {
         if (logging(e))
         {
             Get(e).incrementDepth();
         }
-	}
-	
-	public void decrementDepth(Logs e)
-	{
+    }
+
+    public void decrementDepth(Logs e)
+    {
         if (logging(e))
         {
             Get(e).decrementDepth();
         }
-	}
-	
-	public void resetDepth(Logs e)
-	{
+    }
+
+    public void resetDepth(Logs e)
+    {
         if (logging(e))
         {
             Get(e).resetDepth();
         }
-	}
+    }
 
     string getName(Logs e)
     {
-        return logNames[(int) e];
+        return logNames[(int)e];
     }
-	
-	void putName(Logs e, string name)
-	{
-		logNames[(int) e] = name;	
-	}
+
+    void putName(Logs e, string name)
+    {
+        logNames[(int)e] = name;
+    }
 
     string getPath(Logs e)
     {
-        return logPaths[(int) e];
+        return logPaths[(int)e];
     }
-	
-	void putPath(Logs e, string path)
-	{
-		logPaths[(int) e] = path;	
-	}
+
+    void putPath(Logs e, string path)
+    {
+        logPaths[(int)e] = path;
+    }
 
     Log Get(Logs e)
     {
@@ -221,14 +221,14 @@ public class DebugManager : MonoBehaviour, IManager
 
     public void CreateNewLog(Logs e, string logName)
     {
-		Log prev = logs[(int)e];
+        Log prev = logs[(int)e];
         // Create actual path
         logName = debugFolder + getPath(e) + logName + ".txt";
         // Create necessary directories
         string dir = System.IO.Path.GetDirectoryName(logName);
         Directory.CreateDirectory(dir);
         // Create new log
-		Log newLog = new Log(logName, this);
+        Log newLog = new Log(logName, this);
         logs[(int)e] = newLog;
         if (prev != null)
         { // Close previous log
@@ -238,13 +238,10 @@ public class DebugManager : MonoBehaviour, IManager
 
     public void close()
     {
-        foreach (Log l in logs)
-        {
-            if (l != null)
-            {
-                l.close();
-            }
-        }
+        if (logs != null)
+            foreach (Log l in logs)
+                if (l != null)
+                    l.close();
     }
 
     public bool logging()
@@ -264,7 +261,7 @@ public class DebugManager : MonoBehaviour, IManager
 
     public void logging(Logs e, bool logging)
     {
-        logOn[(int) e] = logging;
+        logOn[(int)e] = logging;
     }
     #endregion
 
@@ -299,18 +296,18 @@ public class DebugManager : MonoBehaviour, IManager
             w(headerStrMid + line + headerStrMid2);
             incrementDepth();
         }
-		
-		public void printBreakers(int num)
-		{
+
+        public void printBreakers(int num)
+        {
             w("");
             for (int i = 0; i < num; i++)
             {
                 w(breaker);
                 w(breaker2);
             }
-            w("");	
-		}
-		
+            w("");
+        }
+
         public void printFooter()
         {
             decrementDepth();
@@ -362,11 +359,11 @@ public class DebugManager : MonoBehaviour, IManager
         {
             depth = depthStr + depth;
         }
-		
-		public void resetDepth()
-		{
-			depth = "";	
-		}
+
+        public void resetDepth()
+        {
+            depth = "";
+        }
 
         public void close()
         {

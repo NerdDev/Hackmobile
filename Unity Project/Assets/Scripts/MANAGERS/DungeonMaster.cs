@@ -95,7 +95,8 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public GridSpace PickSpawnableLocation(Level l)
     {
         MultiMap<GridSpace> room = Spawnable(l.GetRooms().Random(Probability.SpawnRand));
-        return room.RandomValue(Probability.SpawnRand).val;
+        Value2D<GridSpace> pick = room.RandomValue(Probability.SpawnRand);
+        return pick.val;
     }
 
     public GridSpace PickSpawnableLocation()

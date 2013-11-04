@@ -7,5 +7,6 @@ public class PlayerInstance : WOWrapper, IManager
 {
     public void Initialize()
     {
+        WO = new Player();
     }
 }

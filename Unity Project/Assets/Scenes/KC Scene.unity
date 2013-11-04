@@ -585,7 +585,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a8e122e8b0def44f9497a4dd4bd576b, type: 3}
   m_Name: 
-  LevelGen: 0
+  Logging: 1
+  ActiveLogs: 
+  ActiveFlags: 
 --- !u!1 &132977053
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,6 +1238,10 @@ Prefab:
     - target: {fileID: 400058, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400194, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -897.508911
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
@@ -2192,17 +2198,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a25a38057c69d8f4b97023724bf4c658, type: 3}
   m_Name: 
-  isActive: 0
-  race: 3
-  role: 3
-  speed: 1.20000005
-  rotationSpeed: .150000006
-  playerAvatar: {fileID: 817220786}
-  PlayerChosenProfession: 0
-  level: 10
-  playerSpeed: 1.20000005
-  playerRotationSpeed: .150000006
-  tileMovementTolerance: .850000024
 --- !u!111 &817220793
 Animation:
   m_ObjectHideFlags: 0
@@ -4686,7 +4681,7 @@ Transform:
   m_PrefabInternal: {fileID: 389703620}
   m_GameObject: {fileID: 1961604088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -533.333374, y: 400, z: 0}
+  m_LocalPosition: {x: -897.508911, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 974323334}
