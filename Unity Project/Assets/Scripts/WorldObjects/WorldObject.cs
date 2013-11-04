@@ -24,7 +24,15 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     #endregion
 
     // Use this for initialization
-    void Start()
+    public virtual void Start()
+    {
+    }
+
+    public virtual void Update()
+    {
+    }
+
+    public virtual void FixedUpdate()
     {
     }
 

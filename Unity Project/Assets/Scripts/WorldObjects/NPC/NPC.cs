@@ -89,7 +89,7 @@ public class NPC : Affectable
         animator = GO.GetComponent<Animator>() as Animator;
     }
 
-    void Update()
+    public override void Update()
     {
         if (IsActive)
         {
@@ -104,7 +104,7 @@ public class NPC : Affectable
         }
     }
 
-    void FixedUpdate()
+    public override void FixedUpdate()
     {
         if (moving)
         {
@@ -519,9 +519,9 @@ public class NPC : Affectable
         }
         else
         {
+            inventory.Add(item);
             for (int i = 0; i < count - 1; i++)
             {
-                inventory.Add(item);
                 inventory.Add(item.Copy());
             }
         }

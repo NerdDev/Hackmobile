@@ -91,7 +91,7 @@ public class Player : NPC
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
         movement();
         if (verticalMoving)
@@ -234,7 +234,7 @@ public class Player : NPC
 
     //BRAD WHAT DOES THIS DO?!
     float v;
-    void FixedUpdate()
+    public override void FixedUpdate()
     {
         if (anim == null)
         {
