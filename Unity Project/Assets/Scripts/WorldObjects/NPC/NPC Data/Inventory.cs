@@ -4,78 +4,84 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
+public class Inventory : IEnumerable<InventoryCategory>, IXmlParsable
 {
+    Dictionary<string, InventoryCategory> dict = new Dictionary<string, InventoryCategory>();
+
     public void Add(Item i)
     {
-        if (this.ContainsKey(i.Type))
-        {
-            if (this[i.Type] != null)
-            {
-                this[i.Type].Add(i);
-            }
-            else
-            {
-                this[i.Type] = new InventoryCategory(i.Type);
-                this[i.Type].Add(i);
-            }
-        }
-        else
-        {
-            this.Add(i.Type, new InventoryCategory(i.Type));
-            this[i.Type].Add(i);
-        }
+        dict.GetCreate(i.Type).Add(i);
     }
 
     public bool Remove(Item i)
     {
-        if (this.ContainsKey(i.Type))
-        {
-            return this[i.Type].Remove(i);
-        }
+        InventoryCategory cate;
+        if (dict.TryGetValue(i.Type, out cate))
+            return cate.Remove(i);
         return false;
     }
 
-    public ItemList Get(string category, string item)
+    public bool TryGet(string name, out InventoryCategory category)
     {
-        if (this.ContainsKey(category))
-        {
-            return this[category].Get(item);
-        }
-        return null; //item isn't there
+        return dict.TryGetValue(name, out category);
     }
 
-    public bool Has(string category, string item)
+    public bool TryGet(string category, string item, out ItemList list)
     {
-        if (this.ContainsKey(category))
-        {
-            return this[category].Has(item);
-        }
+        InventoryCategory cate;
+        if (dict.TryGetValue(category, out cate))
+            return cate.TryGet(item, out list);
+        list = null;
         return false;
     }
 
-    public bool Has(string item)
+    public bool TryGetFirst(string category, string itemName, out Item item)
     {
-        foreach (InventoryCategory ic in this.Values)
-        {
-            if (ic.Has(item))
-            {
+        ItemList list;
+        if (TryGet(category, itemName, out list))
+        { // list has count > 0
+            item = list[0];
+            return true;
+        }
+        item = null;
+        return false;
+    }
+
+    public bool Contains(string category, string item)
+    {
+        InventoryCategory cate;
+        if (dict.TryGetValue(category, out cate))
+            return cate.Contains(item);
+        return false;
+    }
+
+    public bool Contains(string item)
+    {
+        foreach (InventoryCategory ic in dict.Values)
+            if (ic.Contains(item))
                 return true;
-            }
-        }
         return false;
     }
 
-    public bool Has(Item i)
+    public bool Contains(Item i)
     {
-        if (this.ContainsKey(i.Type))
-        {
-            return this[i.Type].Has(i);
-        }
+        InventoryCategory cata;
+        if (dict.TryGetValue(i.Type, out cata))
+            return cata.Contains(i);
         return false;
     }
 
     public void ParseXML(XMLNode x)
     {
+    }
+
+    public IEnumerator<InventoryCategory> GetEnumerator()
+    {
+        return dict.Values.GetEnumerator();
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
 }

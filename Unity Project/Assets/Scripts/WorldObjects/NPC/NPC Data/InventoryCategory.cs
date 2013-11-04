@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class InventoryCategory : Dictionary<string, ItemList>
+public class InventoryCategory : IEnumerable<ItemList>
 {
     public string id;
+    Dictionary<string, ItemList> dict = new Dictionary<string, ItemList>();
 
     public InventoryCategory(string id)
     {
@@ -14,64 +15,45 @@ public class InventoryCategory : Dictionary<string, ItemList>
 
     public void Add(Item i)
     {
-        if (this.ContainsKey(i.Name))
-        {
-            if (this[i.Name] != null)
-            {
-                this[i.Name].Add(i);
-            }
-            else
-            {
-                this[i.Name] = new ItemList(i.Name);
-                this[i.Name].Add(i);
-            }
-        }
-        else
-        {
-            this.Add(i.Name, new ItemList(i.Name));
-            this[i.Name].Add(i);
-        }
+        dict.GetCreate(i.Name).Add(i);
     }
 
     public bool Remove(Item i)
     {
-        if (this.ContainsKey(i.Name))
-        {
-            return this[i.Name].Remove(i);
-        }
+        ItemList list;
+        if (dict.TryGetValue(i.Name, out list))
+            return list.Remove(i);
         return false;
     }
 
-    public ItemList Get(string item)
+    public bool TryGet(string item, out ItemList list)
     {
-        if (this.ContainsKey(item))
-        {
-            if (this[item] != null && this[item].Count > 0)
-            {
-                return this[item];
-            }
-        }
-        return null; //item isn't there
+        return dict.TryGetValue(item, out list);
     }
 
-    public bool Has(string item)
+    public bool Contains(string item)
     {
-        if (this.ContainsKey(item))
-        {
-            if (this[item].Count > 0)
-            {
-                return true;
-            }
-        }
+        ItemList list;
+        if (dict.TryGetValue(item, out list))
+            return list.Count > 0;
         return false;
     }
 
-    public bool Has(Item i)
+    public bool Contains(Item i)
     {
-        if (this.ContainsKey(i.Name))
-        {
-            return this[i.Name].Contains(i);
-        }
+        ItemList list;
+        if (dict.TryGetValue(i.Name, out list))
+            return list.Contains(i);
         return false;
+    }
+
+    public IEnumerator<ItemList> GetEnumerator()
+    {
+        return dict.Values.GetEnumerator();
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
 }

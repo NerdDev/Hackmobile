@@ -319,19 +319,22 @@ public class GUIManager : MonoBehaviour, IManager
             this.inventoryGrid.sorted = false;
             if (!categoryDisplay)
             {
-                foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
+                foreach (InventoryCategory ic in BigBoss.Player.inventory)
                 {
                     CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
                 }
             }
             else
             {
-                InventoryCategory ic = BigBoss.Player.inventory[category];
-                foreach (ItemList itemList in ic.Values)
+                InventoryCategory ic;
+                if (BigBoss.Player.inventory.TryGet(category, out ic))
                 {
-                    CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
+                    foreach (ItemList itemList in ic)
+                    {
+                        CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
+                    }
+                    CreateBackLabel(inventoryGrid, inventoryClipDrag);
                 }
-                CreateBackLabel(inventoryGrid, inventoryClipDrag);
             }
             this.inventoryClipDrag.ResetPosition();
             inventoryClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);

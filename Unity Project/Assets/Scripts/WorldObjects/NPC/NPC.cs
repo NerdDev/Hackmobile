@@ -386,7 +386,7 @@ public class NPC : Affectable
     {
         Debug.Log("Eating item");
         //enforces it being in inventory, if that should change we'll rewrite later
-        if (inventory.Has(i))
+        if (inventory.Contains(i))
         {
             //item was just eaten, take it outta that list
             if (i.itemFlags[ItemFlags.IS_EQUIPPED])
@@ -511,7 +511,7 @@ public class NPC : Affectable
 
     public virtual void addToInventory(Item item, int count)
     {
-        if (inventory.Has(item))
+        if (inventory.Contains(item))
         {
             for (int i = 0; i < count - 1; i++)
             {
@@ -537,7 +537,7 @@ public class NPC : Affectable
 
     public virtual void removeFromInventory(Item item, int count)
     {
-        if (inventory.Has(item))
+        if (inventory.Contains(item))
         {
             inventory.Remove(item);
         }

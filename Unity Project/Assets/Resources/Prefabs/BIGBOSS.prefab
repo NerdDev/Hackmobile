@@ -632,22 +632,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &100080
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400080}
-  - 114: {fileID: 11400020}
-  m_Layer: 0
-  m_Name: KCTest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &100082
 GameObject:
   m_ObjectHideFlags: 1
@@ -2166,7 +2150,6 @@ Transform:
   m_Children:
   - {fileID: 400168}
   - {fileID: 400198}
-  - {fileID: 400080}
   - {fileID: 400060}
   - {fileID: 400210}
   - {fileID: 400160}
@@ -2282,17 +2265,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400084}
---- !u!4 &400080
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100080}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40.1374893, y: 16.4488506, z: 8.71345329}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400058}
 --- !u!4 &400082
 Transform:
   m_ObjectHideFlags: 1
@@ -2998,7 +2970,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1025.51929, y: 400, z: 0}
+  m_LocalPosition: {x: -946.666626, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400106}
@@ -3733,16 +3705,6 @@ MonoBehaviour:
   zoomRate: 40
   panSpeed: .300000012
   zoomDampening: 5
---- !u!114 &11400020
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b779dcddad2e84aa4cf85818a9447f, type: 3}
-  m_Name: 
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1
