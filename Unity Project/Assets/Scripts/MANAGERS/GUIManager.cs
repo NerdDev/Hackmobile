@@ -319,7 +319,7 @@ public class GUIManager : MonoBehaviour, IManager
             this.inventoryGrid.sorted = false;
             if (!categoryDisplay)
             {
-                foreach (InventoryCategory ic in BigBoss.Player.inventory)
+                foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
                 {
                     CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
                 }
@@ -327,9 +327,9 @@ public class GUIManager : MonoBehaviour, IManager
             else
             {
                 InventoryCategory ic;
-                if (BigBoss.Player.inventory.TryGet(category, out ic))
+                if (BigBoss.Player.inventory.TryGetValue(category, out ic))
                 {
-                    foreach (ItemList itemList in ic)
+                    foreach (ItemList itemList in ic.Values)
                     {
                         CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
                     }

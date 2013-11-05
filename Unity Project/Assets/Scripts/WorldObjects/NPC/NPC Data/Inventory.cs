@@ -4,33 +4,26 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class Inventory : IEnumerable<InventoryCategory>, IXmlParsable
+public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
 {
-    Dictionary<string, InventoryCategory> dict = new Dictionary<string, InventoryCategory>();
-
     public void Add(Item i)
     {
-        dict.GetCreate(i.Type).Add(i);
+        this.GetCreate(i.Type, i.Type).Add(i);
     }
 
     public bool Remove(Item i)
     {
         InventoryCategory cate;
-        if (dict.TryGetValue(i.Type, out cate))
+        if (TryGetValue(i.Type, out cate))
             return cate.Remove(i);
         return false;
     }
 
-    public bool TryGet(string name, out InventoryCategory category)
-    {
-        return dict.TryGetValue(name, out category);
-    }
-
-    public bool TryGet(string category, string item, out ItemList list)
+    public bool TryGetValue(string category, string item, out ItemList list)
     {
         InventoryCategory cate;
-        if (dict.TryGetValue(category, out cate))
-            return cate.TryGet(item, out list);
+        if (TryGetValue(category, out cate))
+            return cate.TryGetValue(item, out list);
         list = null;
         return false;
     }
@@ -38,7 +31,7 @@ public class Inventory : IEnumerable<InventoryCategory>, IXmlParsable
     public bool TryGetFirst(string category, string itemName, out Item item)
     {
         ItemList list;
-        if (TryGet(category, itemName, out list))
+        if (TryGetValue(category, itemName, out list))
         { // list has count > 0
             item = list[0];
             return true;
@@ -50,14 +43,14 @@ public class Inventory : IEnumerable<InventoryCategory>, IXmlParsable
     public bool Contains(string category, string item)
     {
         InventoryCategory cate;
-        if (dict.TryGetValue(category, out cate))
+        if (TryGetValue(category, out cate))
             return cate.Contains(item);
         return false;
     }
 
     public bool Contains(string item)
     {
-        foreach (InventoryCategory ic in dict.Values)
+        foreach (InventoryCategory ic in Values)
             if (ic.Contains(item))
                 return true;
         return false;
@@ -66,22 +59,13 @@ public class Inventory : IEnumerable<InventoryCategory>, IXmlParsable
     public bool Contains(Item i)
     {
         InventoryCategory cata;
-        if (dict.TryGetValue(i.Type, out cata))
+        string t = i.Type;
+        if (TryGetValue(i.Type, out cata))
             return cata.Contains(i);
         return false;
     }
 
     public void ParseXML(XMLNode x)
     {
-    }
-
-    public IEnumerator<InventoryCategory> GetEnumerator()
-    {
-        return dict.Values.GetEnumerator();
-    }
-
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
     }
 }

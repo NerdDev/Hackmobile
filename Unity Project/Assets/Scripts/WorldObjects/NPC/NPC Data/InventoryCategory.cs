@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class InventoryCategory : IEnumerable<ItemList>
+public class InventoryCategory : Dictionary<string, ItemList>
 {
     public string id;
-    Dictionary<string, ItemList> dict = new Dictionary<string, ItemList>();
 
     public InventoryCategory(string id)
     {
@@ -15,26 +14,21 @@ public class InventoryCategory : IEnumerable<ItemList>
 
     public void Add(Item i)
     {
-        dict.GetCreate(i.Name).Add(i);
+        this.GetCreate(i.Name, i.Name).Add(i);
     }
 
     public bool Remove(Item i)
     {
         ItemList list;
-        if (dict.TryGetValue(i.Name, out list))
+        if (TryGetValue(i.Name, out list))
             return list.Remove(i);
         return false;
-    }
-
-    public bool TryGet(string item, out ItemList list)
-    {
-        return dict.TryGetValue(item, out list);
     }
 
     public bool Contains(string item)
     {
         ItemList list;
-        if (dict.TryGetValue(item, out list))
+        if (TryGetValue(item, out list))
             return list.Count > 0;
         return false;
     }
@@ -42,18 +36,8 @@ public class InventoryCategory : IEnumerable<ItemList>
     public bool Contains(Item i)
     {
         ItemList list;
-        if (dict.TryGetValue(i.Name, out list))
+        if (TryGetValue(i.Name, out list))
             return list.Contains(i);
         return false;
-    }
-
-    public IEnumerator<ItemList> GetEnumerator()
-    {
-        return dict.Values.GetEnumerator();
-    }
-
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
     }
 }

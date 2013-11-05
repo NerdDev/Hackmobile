@@ -27,7 +27,7 @@ public class ItemProperties : IXmlParsable
     {
         get
         {
-            if (!Material.Name.Equals("") && Size != 0) {
+            if (Material != null && Size != 0) {
                 return (Size * Material.Density) / 1000;
             } else {
                 return weight;

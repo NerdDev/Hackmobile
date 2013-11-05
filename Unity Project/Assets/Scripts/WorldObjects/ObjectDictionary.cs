@@ -21,7 +21,10 @@ public class ObjectDictionary<O>  where O : IXmlParsable, INamed, new()
 
     public O GetPrototype(string str)
     {
-        return prototypes[str];
+        O o;
+        if (prototypes.TryGetValue(str, out o))
+            return o;
+        return default(O);
     }
 
     public virtual void Parse(XMLNode baseNode)

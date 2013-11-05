@@ -5,12 +5,12 @@ using System.Text;
 
 public static class DictionaryExt
 {
-    public static V GetCreate<K, V>(this Dictionary<K, V> dict, K key)
+    public static V GetCreate<K, V>(this Dictionary<K, V> dict, K key, params Object[] customparams)
     {
         V v;
         if (!dict.TryGetValue(key, out v))
         {
-            v = (V) Activator.CreateInstance(typeof(V));
+            v = (V) Activator.CreateInstance(typeof(V), customparams);
             dict.Add(key, v);
         }
         return v;
