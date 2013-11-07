@@ -5,7 +5,7 @@ using System.Text;
 
 public class AOESelf : AOETargeted
 {
-    public override List<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
         // Confirm target is caster
         castInfo.TargetObject = castInfo.Caster;

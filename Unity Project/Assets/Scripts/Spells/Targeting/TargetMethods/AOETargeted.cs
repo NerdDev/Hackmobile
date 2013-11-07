@@ -5,7 +5,7 @@ using System.Text;
 
 public class AOETargeted : AOELocation
 {
-    public override List<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
         // Force spaces to be derived
         castInfo.TargetSpaces = null;

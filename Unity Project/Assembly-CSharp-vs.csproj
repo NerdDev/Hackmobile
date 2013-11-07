@@ -292,6 +292,7 @@
      <Compile Include="Assets\Scripts\Levels\Searching\BFSSearcher.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\DFSSearcher.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\ArrayDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />

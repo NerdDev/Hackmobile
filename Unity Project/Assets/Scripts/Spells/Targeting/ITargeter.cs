@@ -7,5 +7,5 @@ public interface ITargeter
 {
     TargetingStyle Style { get; }
     byte MaxTargets { get; set; }
-    List<IAffectable> GetTargets(SpellCastInfo castInfo);
+    HashSet<IAffectable> GetTargets(SpellCastInfo castInfo);
 }

@@ -185,4 +185,16 @@ public class GridSpace
     {
         return new Point(space.X, space.Y);
     }
+
+    public override bool Equals(object obj)
+    {
+        GridSpace rhs = obj as GridSpace;
+        if (rhs == null) return false;
+        return (X == rhs.X) && (Y == rhs.Y);
+    }
+
+    public override int GetHashCode()
+    {
+        return X.GetHashCode() ^ Y.GetHashCode();
+    }
 }

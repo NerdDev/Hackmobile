@@ -7,9 +7,9 @@ public class Self : ITargeter
 {
     public TargetingStyle Style { get { return TargetingStyle.Self; } }
     public byte MaxTargets { get { return 0; } set { } }
-    public List<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
-        List<IAffectable> ret = new List<IAffectable>();
+        HashSet<IAffectable> ret = new HashSet<IAffectable>();
         ret.Add(castInfo.Caster);
         return ret;
     }

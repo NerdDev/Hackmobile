@@ -7,8 +7,8 @@ public class TargetedObject : ITargeter
 {
     public TargetingStyle Style { get { return TargetingStyle.TargetObject; } }
     public byte MaxTargets { get; set; }
-    public List<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
-        return castInfo.TargetObjects.ToList();
+        return new HashSet<IAffectable>(castInfo.TargetObjects);
     }
 }

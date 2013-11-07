@@ -5,9 +5,11 @@ using System.Text;
 
 public class AOELocation : AOE
 {
-    public override List<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
-        // Logic to get AOE locations in a circle
+        HashSet<GridSpace> targetSpaces = new HashSet<GridSpace>();
+        GridSpace centerSpace = castInfo.TargetSpace;
+
         return base.GetTargets(castInfo);
     }
 }

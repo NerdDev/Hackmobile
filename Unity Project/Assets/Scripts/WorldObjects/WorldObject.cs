@@ -9,6 +9,8 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     #region Generic Object Properties (graphical info, names, etc).
     private WOWrapper _instance; // Private member to allow for one-set-only logic
     public WOWrapper Instance { get { return _instance; } set { if (_instance == null) _instance = value; } }
+    protected static uint nextID = 0;
+    public uint ID { get; protected set; }
     public GameObject GO { get { return _instance.gameObject; } }
     public string Model { get; set; }
     public string ModelTexture { get; set; }
@@ -23,6 +25,11 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
         return Name;
     }
     #endregion
+
+    public WorldObject()
+    {
+        ID = nextID++;
+    }
 
     // Use this for initialization
     void Start()

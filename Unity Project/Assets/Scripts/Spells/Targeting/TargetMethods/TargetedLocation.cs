@@ -7,9 +7,9 @@ public class TargetedLocation : ITargeter
 {
     public TargetingStyle Style { get { return TargetingStyle.TargetLocation; } }
     public byte MaxTargets { get; set; }
-    public virtual List<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public virtual HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
-        List<IAffectable> ret = new List<IAffectable>();
+        HashSet<IAffectable> ret = new HashSet<IAffectable>();
         foreach (GridSpace space in castInfo.TargetSpaces)
             foreach (WorldObject obj in space.GetContained())
                 if (obj is IAffectable)
