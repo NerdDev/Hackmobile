@@ -134,37 +134,97 @@ public class LayoutObjectLeaf : LayoutObject {
         int centerY = grids.getHeight() / 2;
         CircularStrokeAndFill(stroke, fill, centerX, centerY, radius);
     }
-    public void CircularStrokeAndFill(GridType stroke, GridType fill, int x0, int y0, int radius)
+
+    public void CircularStrokeAndFill(GridType stroke, GridType fill, int centerX, int centerY, int radius)
     {
-        int x = radius, y = 0;
-        int radiusError = 1 - x;
+        int radiusError = 1 - radius;
+        int maxRadius = radius;
 
-        while (x >= y)
+        for (int y = 0; y < radius; y++)
         {
-            put(stroke, x + x0, y + y0);
-            put(stroke, y + x0, x + y0);
-            put(stroke, -x + x0, y + y0);
-            put(stroke, -y + x0, x + y0);
-            put(stroke, -x + x0, -y + y0);
-            put(stroke, -y + x0, -x + y0);
-            put(stroke, x + x0, -y + y0);
-            put(stroke, y + x0, -x + y0);
-
-            putRow(fill, x0 - x, x0 + x, y + y0);
-            putRow(fill, x0 - x, x0 + x, y0 - y);
-            putCol(fill, y0 - x, y0 + x, y + x0);
-            putCol(fill, y0 - x, y0 + x, x0 - y);
-
-            y++;
-
-            if (radiusError < 0) radiusError += 2 * y + 1;
-            else
-            {
-                x--;
-                radiusError += 2 * (y - x + 1);
-            }
+            putRow(fill, centerX - radius, centerX + radius, y + centerY);
+            putRow(fill, centerX - radius, centerX + radius, centerY - y);
+            ToLog(Logs.LevelGenMain);
         }
+        ToLog(Logs.LevelGenMain);
+
+        //while (maxRadius >= y)
+        //{
+        //    //if (x >= y)
+        //    //{
+        //    //    put(stroke, x + centerX, y + centerY);
+        //    //    put(stroke, y + centerX, x + centerY);
+        //    //    put(stroke, -x + centerX, y + centerY);
+        //    //    put(stroke, -y + centerX, x + centerY);
+        //    //    put(stroke, -x + centerX, -y + centerY);
+        //    //    put(stroke, -y + centerX, -x + centerY);
+        //    //    put(stroke, x + centerX, -y + centerY);
+        //    //    put(stroke, y + centerX, -x + centerY);
+        //    //}
+
+        //    putRow(fill, centerX - x, centerX + x, y + centerY);
+        //    putRow(fill, centerX - x, centerX + x, centerY - y);
+        //    //putCol(fill, centerY - x, centerY + y, y + centerX);
+        //    //putCol(fill, centerY - x, centerY + x, centerX - y);
+
+        //    y++;
+
+        //    if (radiusError < 0)
+        //    {
+        //        radiusError += 2 * y + 1;
+        //    }
+        //    else
+        //    {
+        //        x--;
+        //        radiusError += 2 * (y - x + 1);
+        //    }
+        //    ToLog(Logs.LevelGenMain);
+        //}
+        //ToLog(Logs.LevelGenMain);
     }
+    //public void CircularStrokeAndFill(GridType stroke, GridType fill, int centerX, int centerY, int radius)
+    //{
+    //    radius = 20;
+    //    int x = radius, y = 0;
+    //    int radiusError = 1 - x;
+    //    int maxRadius = radius;
+    //    if (radius % 2 > 0)
+    //        maxRadius += 1;
+
+    //    while (maxRadius >= y)
+    //    {
+    //        if (x >= y)
+    //        {
+    //            put(stroke, x + centerX, y + centerY);
+    //            put(stroke, y + centerX, x + centerY);
+    //            put(stroke, -x + centerX, y + centerY);
+    //            put(stroke, -y + centerX, x + centerY);
+    //            put(stroke, -x + centerX, -y + centerY);
+    //            put(stroke, -y + centerX, -x + centerY);
+    //            put(stroke, x + centerX, -y + centerY);
+    //            put(stroke, y + centerX, -x + centerY);
+    //        }
+
+    //        putRow(fill, centerX - x, centerX + x, y + centerY);
+    //        putRow(fill, centerX - x, centerX + x, centerY - y);
+    //        putCol(fill, centerY - x, centerY + y, y + centerX);
+    //        putCol(fill, centerY - x, centerY + x, centerX - y);
+
+    //        y++;
+
+    //        if (radiusError < 0)
+    //        {
+    //            radiusError += 2 * y + 1;
+    //        }
+    //        else
+    //        {
+    //            x--;
+    //            radiusError += 2 * (y - x + 1);
+    //        }
+    //        ToLog(Logs.LevelGenMain);
+    //    }
+    //    ToLog(Logs.LevelGenMain);
+    //}
     #endregion FillMethods
 
     public override bool ContainsPoint(Value2D<GridType> val)

@@ -27,7 +27,7 @@ RenderSettings:
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-GameManager:
+LevelGameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8e122e8b0def44f9497a4dd4bd576b, type: 3}
   m_Name: 
   Logging: 1
-  ActiveLogs: 
+  ActiveLogs: 02000000
   ActiveFlags: 
 --- !u!1 &132977053
 GameObject:
@@ -3866,6 +3866,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400004, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
+      propertyPath: ActiveLogs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400058, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3893,6 +3897,14 @@ Prefab:
     - target: {fileID: 400058, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400194, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -1025.51929
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
+      propertyPath: ActiveLogs.Array.data[0]
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
@@ -4722,7 +4734,7 @@ Transform:
   m_PrefabInternal: {fileID: 1663289916}
   m_GameObject: {fileID: 1961604088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -946.666626, y: 400, z: 0}
+  m_LocalPosition: {x: -1025.51929, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 974323334}
