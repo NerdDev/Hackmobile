@@ -5,70 +5,114 @@ using System.Text;
 
 public static class ArrayDrawExt
 {
-    public static void DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, Action<int, int> fillAction, Action<int, int> strokeAction)
+    /*
+     * Uses Bressenham's Midpoint Algo
+     */
+    public static void DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, Action<T[,], int, int> fillAction, Action<T[,], int, int> strokeAction)
     {
-        int x = radius, y = 0;
-        int radiusError = 1 - x;
+        int radiusError = 3 - (2 * radius);
+        int x = 0;
+        int y = radius;
+        int lastYWidth = 0;
 
-        while (x + 2 >= y)
+        while (x <= y)
         {
-            if (x >= y)
+            // Draw rows from center extending up/down
+
+            strokeAction(arr, centerX - y, centerY + x);
+            strokeAction(arr, centerX - y, centerY - x);
+            strokeAction(arr, centerX + y, centerY + x);
+            strokeAction(arr, centerX + y, centerY - x);
+            strokeAction(arr, centerX - x, centerY + y);
+            strokeAction(arr, centerX - x, centerY - y);
+            strokeAction(arr, centerX + x, centerY + y);
+            strokeAction(arr, centerX + x, centerY - y);
+            arr.DrawRow(centerX - y + 1, centerX + y - 1, centerY + x, fillAction);
+            arr.DrawRow(centerX - y + 1, centerX + y - 1, centerY - x, fillAction);
+            if (radiusError < 0)
             {
-                strokeAction(x + centerX, y + centerY);
-                strokeAction(y + centerX, x + centerY);
-                strokeAction(-x + centerX, y + centerY);
-                strokeAction(-y + centerX, x + centerY);
-                strokeAction(-x + centerX, -y + centerY);
-                strokeAction(-y + centerX, -x + centerY);
-                strokeAction(x + centerX, -y + centerY);
-                strokeAction(y + centerX, -x + centerY);
+                radiusError += (4 * x) + 6;
             }
-
-            arr.DrawCol(centerY - x + 1, centerY + x - 1, y + centerX, fillAction);
-            arr.DrawCol(centerY - x + 1, centerY + x - 1, centerX - y, fillAction);
-
-            y++;
-
-            if (radiusError < 0) radiusError += 2 * y + 1;
             else
             {
-                x--;
-                radiusError += 2 * (y - x + 1);
+                radiusError += 4 * (x - y) + 10;
+                // Draw rows from top/bottom only when y is about to change.
+                if (y != radius)
+                {
+                    arr.DrawRow(centerX - lastYWidth, centerX + lastYWidth, centerY + y, fillAction);
+                    arr.DrawRow(centerX - lastYWidth, centerX + lastYWidth, centerY - y, fillAction);
+                }
+                y--;
+                lastYWidth = x;
             }
+            x++;
         }
     }
 
-    public static void DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, Action<int, int> fillAction)
+    public static void DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, Action<T[,], int, int> fillAction)
     {
-        int x = radius, y = 0;
-        int radiusError = 1 - x;
-        while (x >= y)
+        int radiusError = 3 - (2 * radius);
+        int x = 0;
+        int y = radius;
+
+        while (x <= y)
         {
-            arr.DrawCol(centerY - x, centerY + x, y + centerX, fillAction);
-            arr.DrawCol(centerY - x, centerY + x, centerX - y, fillAction);
-
-            y++;
-
-            if (radiusError < 0) radiusError += 2 * y + 1;
+            // Draw rows from center extending up/down
+            arr.DrawRow(centerX - y, centerX + y, centerY + x, fillAction);
+            arr.DrawRow(centerX - y, centerX + y, centerY - x, fillAction);
+            if (radiusError < 0)
+            {
+                radiusError += (4 * x) + 6;
+            }
             else
             {
-                x--;
-                radiusError += 2 * (y - x + 1);
+                radiusError += 4 * (x - y) + 10;
+                // Draw rows from top/bottom only when y is about to change.
+                arr.DrawRow(centerX - x, centerX + x, centerY + y, fillAction);
+                arr.DrawRow(centerX - x, centerX + x, centerY - y, fillAction);
+                y--;
             }
+            x++;
         }
-        arr.DrawCol(centerY - x, centerY + x, y + centerX, fillAction);
-        arr.DrawCol(centerY - x, centerY + x, y + centerX, fillAction);
     }
 
-    public static void DrawCol<T>(this T[,] arr, int y1, int y2, int x, Action<int, int> action)
+    public static void DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, T setTo)
+    {
+        DrawCircle(arr, centerX, centerY, radius, SetTo(setTo));
+    }
+
+    public static void DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, T setFill, T setStroke)
+    {
+        DrawCircle(arr, centerX, centerY, radius, SetTo(setFill), SetTo(setStroke));
+    }
+
+    public static void DrawCol<T>(this T[,] arr, int y1, int y2, int x, T setTo)
+    {
+        DrawCol(arr, y1, y2, x, SetTo(setTo));
+    }
+
+    public static void DrawCol<T>(this T[,] arr, int y1, int y2, int x, Action<T[,], int, int> action)
     {
         for (; y1 <= y2; y1++)
-            action(x, y1);
+            action(arr, x, y1);
     }
 
-    public static void DrawRow<T>(this T[,] arr, int xl, int xr, int y, Action<int, int> action)
+    public static void DrawRow<T>(this T[,] arr, int xl, int xr, int y, T setTo)
+    {
+        DrawRow(arr, xl, xr, y, SetTo(setTo));
+    }
+
+    public static void DrawRow<T>(this T[,] arr, int xl, int xr, int y, Action<T[,], int, int> action)
     {
         for (; xl <= xr; xl++)
-            action(xl, y);
+            action(arr, xl, y);
+    }
+
+    public static Action<T[,], int, int> SetTo<T>(T to)
+    {
+        return new Action<T[,], int, int>((arr, x, y) =>
+        {
+            arr[y, x] = to;
+        });
     }
 }

@@ -114,7 +114,7 @@ public class GridArray : Array2D<GridType>
             string rowStr = "";
             for (int x = bounds.XMin; x <= bounds.XMax; x += 1)
             {
-                rowStr += LayoutObject.getAscii(array[y, x]);
+                rowStr += GridTypeEnum.CharConverter(array[y, x]);
             }
             ret.Add(rowStr);
         }

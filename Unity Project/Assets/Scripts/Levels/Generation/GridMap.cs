@@ -13,7 +13,7 @@ public class GridMap : MultiMap<GridType> {
             string rowStr = "";
             for (int x = 0; x < array.GetLength(1); x += 1)
             {
-                rowStr += LayoutObject.getAscii(array[y, x]);
+                rowStr += GridTypeEnum.CharConverter(array[y, x]);
             }
             ret.Add(rowStr);
         }

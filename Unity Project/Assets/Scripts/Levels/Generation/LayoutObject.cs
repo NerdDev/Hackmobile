@@ -537,53 +537,9 @@ abstract public class LayoutObject
     protected virtual List<string> ToRowStrings(Bounding bounds)
     {
         GridType[,] array = GetMinimizedArray(GetPrintArray());
-        List<string> ret = new List<string>();
-        for (int y = array.GetLength(0) - 1; y >= 0; y -= 1)
-        {
-            string rowStr = "";
-            for (int x = 0; x < array.GetLength(1); x += 1)
-            {
-                rowStr += getAscii(array[y, x]);
-            }
-            ret.Add(rowStr);
-        }
+        List<string> ret = array.ToRowStrings(GridTypeEnum.CharConverter);
         ret = Nifty.AddRuler(ret, bounds);
         return ret;
-    }
-
-    public static char getAscii(GridType type)
-    {
-        switch (type)
-        {
-            case GridType.Floor:
-                return '.';
-            case GridType.TrapDoor:
-                return 'T';
-            case GridType.Door:
-                return '|';
-            case GridType.Wall:
-                return '#';
-            case GridType.NULL:
-                return ' ';
-            case GridType.INTERNAL_RESERVED_BLOCKED:
-                return '*';
-            case GridType.INTERNAL_RESERVED_CUR:
-                return '%';
-            case GridType.Path_Horiz:
-                return (char)205;
-            case GridType.Path_Vert:
-                return (char)186;
-            case GridType.Path_LT:
-                return (char)188;
-            case GridType.Path_LB:
-                return (char)187;
-            case GridType.Path_RT:
-                return (char)200;
-            case GridType.Path_RB:
-                return (char)201;
-            default:
-                return '?';
-        }
     }
 
     public virtual void ToLog(Logs log, params String[] customContent)

@@ -227,6 +227,13 @@ public class LevelGenerator
                 }
                 #endregion
                 mod.Modify(spec);
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    spec.Room.ToLog(Logs.LevelGen);
+                }
+                #endregion
+
             }
             room.Bake(false);
             #region DEBUG
