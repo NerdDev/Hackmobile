@@ -72,4 +72,9 @@ public static class ArrayExt {
     {
         ToLog(array, log, null, customContent);
     }
+
+    public static Point Center<T>(this T[,] array)
+    {
+        return new Point(array.GetLength(0) / 2, array.GetLength(1) / 2);
+    }
 }

@@ -18,7 +18,7 @@ public class SquareRoom : RoomModifier {
             BigBoss.Debug.w(Logs.LevelGen, "Side: " + side);
         }
         #endregion
-        spec.Room.BoxStrokeAndFill(GridType.Wall, GridType.Floor, side, side);
+        spec.Room.Array.DrawSquare(side, side, GridType.Floor, GridType.Wall);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

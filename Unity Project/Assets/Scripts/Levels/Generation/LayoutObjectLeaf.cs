@@ -41,16 +41,6 @@ public class LayoutObjectLeaf : LayoutObject {
         }
     }
 
-    public void putRow(GridType t, int xl, int xr, int y)
-    {
-        grids.PutRow(t, xl, xr, y);
-    }
-
-    public void putCol(GridType t, int y1, int y2, int x)
-    {
-        grids.PutCol(t, y1, y2, x);
-    }
-
     public override GridArray GetArray()
     {
         return grids;
@@ -76,60 +66,6 @@ public class LayoutObjectLeaf : LayoutObject {
         bakedBounds = grids.GetBoundingInternal();
         finalized = true;
     }
-
-    #region FillMethods
-    public void BoxStroke(GridType t, int width, int height)
-    {
-        int centerX = grids.getWidth() / 2;
-        int centerY = grids.getHeight() / 2;
-        BoxStroke(t, centerX - width / 2, centerX + width / 2 - 1,
-            centerY - height / 2, centerY + height / 2 - 1);
-    }
-
-    public void BoxStroke(GridType t, int xl, int xr, int yb, int yt)
-    {
-        putRow(t, xl, xr, yb);
-        putRow(t, xl, xr, yt);
-        yb++;
-        yt--;
-        putCol(t, yb, yt, xl);
-        putCol(t, yb, yt, xr);
-    }
-
-    public void BoxStrokeAndFill(GridType stroke, GridType fill, int width, int height)
-    {
-        int centerX = grids.getWidth() / 2;
-        int centerY = grids.getHeight() / 2;
-        BoxStrokeAndFill(stroke, fill, centerX - width / 2, centerX + width / 2 - 1,
-            centerY - height / 2, centerY + height / 2 - 1);
-    }
-
-    public void BoxStrokeAndFill(GridType stroke, GridType fill, int xl, int xr, int yb, int yt)
-    {
-        grids.PutRow(stroke, xl, xr, yb);
-        grids.PutRow(stroke, xl, xr, yt);
-        yb++;
-        yt--;
-        grids.PutCol(stroke, yb, yt, xl);
-        grids.PutCol(stroke, yb, yt, xr);
-        xl++;
-        xr--;
-        grids.putSquare(fill, xl, xr, yb, yt);
-    }
-
-    public void BoxFill(GridType t, int width, int height)
-    {
-        int centerX = grids.getWidth() / 2;
-        int centerY = grids.getHeight() / 2;
-        BoxFill(t, centerX - width / 2, centerX + width / 2 - 1,
-            centerY - height / 2, centerY + height / 2 - 1);
-    }
-
-    public void BoxFill(GridType t, int xl, int xr, int yb, int yt)
-    {
-        grids.putSquare(t, xl, xr, yb, yt);
-    }
-    #endregion FillMethods
 
     public override bool ContainsPoint(Value2D<GridType> val)
     {

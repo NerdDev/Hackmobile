@@ -23,9 +23,10 @@ public class HiddenRoomMod : RoomModifier {
             Value2D<GridType> doorSpace = potentialDoors.RandomValue(spec.Random);
                 if (doorSpace != null)
                 {
-                    room.BoxStrokeAndFill(GridType.Wall, GridType.Floor,
+                    room.Array.DrawSquare(
                         (doorSpace.x-secretRoomSize),(doorSpace.x+secretRoomSize),
-                        (doorSpace.y-secretRoomSize),(doorSpace.y+secretRoomSize));
+                        (doorSpace.y-secretRoomSize),(doorSpace.y+secretRoomSize),
+                        GridType.Floor, GridType.Wall);
                     room.put(GridType.Door, doorSpace.x, doorSpace.y);
                 }
             #region DEBUG

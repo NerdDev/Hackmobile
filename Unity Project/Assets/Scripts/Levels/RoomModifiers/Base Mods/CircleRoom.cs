@@ -7,6 +7,12 @@ public class CircleRoom : RoomModifier {
     {
         int radius = Probability.LevelRand.Next(LevelGenerator.minRadiusSize, LevelGenerator.maxRadiusSize);
         int center = spec.Room.Width / 2;
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Radius: " + radius);
+        }
+        #endregion
         spec.Room.Array.DrawCircle(center, center, radius, GridType.Floor, GridType.Wall);
         return true;
     }
