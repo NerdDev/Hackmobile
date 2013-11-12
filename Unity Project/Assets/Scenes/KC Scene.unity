@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8e122e8b0def44f9497a4dd4bd576b, type: 3}
   m_Name: 
   Logging: 1
-  ActiveLogs: 02000000
+  ActiveLogs: 000000000200000001000000
   ActiveFlags: 
 --- !u!1 &132977053
 GameObject:
@@ -2008,7 +2008,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 802794506}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58b779dcddad2e84aa4cf85818a9447f, type: 3}
   m_Name: 
@@ -3868,7 +3868,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11400004, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
       propertyPath: ActiveLogs.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400058, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
       propertyPath: m_LocalPosition.x
@@ -3904,7 +3904,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
       propertyPath: ActiveLogs.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
+      propertyPath: ActiveLogs.Array.data[1]
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
+      propertyPath: ActiveLogs.Array.data[2]
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}

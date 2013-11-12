@@ -64,4 +64,27 @@ abstract public class RoomModifier : ProbabilityItem {
     {
         return false;
     }
+
+    #region Set Funcs
+    protected static Func<GridType[,], int, int, bool> SetTo(GridType g)
+    {
+        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        {
+            arr[y, x] = g;
+            return true;
+        }
+        );
+    }
+
+    protected static Func<GridType[,], int, int, bool> SetToIfNull(GridType g)
+    {
+        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        {
+            if (arr[y,x] == GridType.NULL)
+                arr[y, x] = g;
+            return true;
+        }
+        );
+    }
+    #endregion
 }
