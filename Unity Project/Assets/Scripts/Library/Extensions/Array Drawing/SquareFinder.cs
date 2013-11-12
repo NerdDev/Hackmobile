@@ -8,7 +8,7 @@ public class SquareFinder<T>
     T[,] _arr;
     int _width;
     int _height;
-    DrawTest<T> _tester;
+    SquareTest<T> _tester;
     int _x = 0;
     int _y = 0;
     bool _tryFlipped;
@@ -18,7 +18,7 @@ public class SquareFinder<T>
     Func<T[,], int, int, bool> strokeTest = null;
     public bool Single { get; set; }
 
-    public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, DrawTest<T> tester, Bounding scope = null)
+    public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, SquareTest<T> tester, Bounding scope = null)
     {
         _arr = arr;
         _width = width;
@@ -64,10 +64,11 @@ public class SquareFinder<T>
                 // Try to draw a square that passes the user's test
                 if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, fillTest, strokeTest))
                 { // Found a square
-                    if (_tester.FinalTest == null || _tester.FinalTest(_arr))
+                    Bounding b = new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 };
+                    if (_tester.FinalTest == null || _tester.FinalTest(_arr, b))
                     {
-                        ret.Add(new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 });
-                        if (Single)
+                        ret.Add(b);
+                        if (Single) // Just want one, so return.
                             return ret;
                     }
                     // Move over one

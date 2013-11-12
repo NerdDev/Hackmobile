@@ -5,15 +5,20 @@ using System;
 
 public class GiantPillarMod : RoomModifier
 {
-
     public override bool Modify(RoomSpec spec)
     {
-        int size = spec.Random.Next(2, 5);
-        List<Bounding> locations = spec.Room.Array.GetSquares(size, size, false, new DrawTest<GridType>()
+        // Add an extra 2 for stroke width for analysis
+        int size = spec.Random.Next(2, 5) + 2;
+        List<Bounding> locations = spec.Room.Array.GetSquares(size, size, false, new SquareTest<GridType>()
             {
                 UnitTest = new Func<GridType[,], int, int, bool>((arr, x, y) =>
                     {
                         return arr[y, x] == GridType.Floor;
+                    }
+                ),
+                StrokeTest = new Func<GridType[,], int, int, bool>((arr, x, y) =>
+                    {
+                        return GridTypeEnum.Walkable(arr[y, x]);
                     }
                 )
             });
@@ -25,13 +30,14 @@ public class GiantPillarMod : RoomModifier
             {
                 BigBoss.Debug.w(Logs.LevelGen, "Options: ");
                 GridArray copy = new GridArray(spec.Room.GetArray());
-                copy.GetArr().DrawSquare(r.XMin, r.XMax, r.YMin, r.YMax, GridType.Path_Vert);
+                copy.GetArr().DrawSquare(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, GridType.Path_Vert);
                 copy.ToLog(Logs.LevelGen);
             }
         }
         #endregion
         Bounding l = locations.Random(Probability.LevelRand);
-        spec.Room.Array.DrawSquare(l.XMin, l.XMax, l.YMin, l.YMax, GridType.Wall);
+        // Draw inner square without stroke (stroke was just used to analyze surroundings)
+        spec.Room.Array.DrawSquare(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, GridType.Wall);
         return true;
     }
 
