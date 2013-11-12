@@ -214,7 +214,7 @@ public static class ArrayDrawExt
     #endregion
     #endregion
     #region Find
-    public static List<Rectangle> GetSquares<T>(this T[,] arr, int width, int height, bool tryFlipped, DrawTest<T> tester, Rectangle scope = null)
+    public static List<Bounding> GetSquares<T>(this T[,] arr, int width, int height, bool tryFlipped, DrawTest<T> tester, Bounding scope = null)
     {
         SquareFinder<T> finder = new SquareFinder<T>(arr, width, height, tryFlipped, tester, scope);
         return finder.Find();

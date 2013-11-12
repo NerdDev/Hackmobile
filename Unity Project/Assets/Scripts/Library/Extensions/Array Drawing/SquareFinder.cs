@@ -13,12 +13,12 @@ public class SquareFinder<T>
     int _y = 0;
     bool _tryFlipped;
     int _lowestFail = int.MaxValue;
-    Rectangle _scope;
+    Bounding _scope;
     Func<T[,], int, int, bool> fillTest = null;
     Func<T[,], int, int, bool> strokeTest = null;
     public bool Single { get; set; }
 
-    public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, DrawTest<T> tester, Rectangle scope = null)
+    public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, DrawTest<T> tester, Bounding scope = null)
     {
         _arr = arr;
         _width = width;
@@ -28,8 +28,8 @@ public class SquareFinder<T>
         _scope = scope;
         if (scope != null)
         {
-            _x = scope.Left;
-            _y = scope.Bottom;
+            _x = scope.XMin;
+            _y = scope.YMin;
         }
         fillTest = GetTest(tester.UnitTest);
         if (tester.StrokeTest != null)
@@ -52,12 +52,12 @@ public class SquareFinder<T>
             );
     }
 
-    public List<Rectangle> Find()
+    public List<Bounding> Find()
     {
-        List<Rectangle> ret = new List<Rectangle>();
+        List<Bounding> ret = new List<Bounding>();
         if (_width >= _arr.GetLength(1) || _height >= _arr.GetLength(0)) return ret;
 
-        while (_y + _height <= _arr.GetLength(0) && (_scope == null || _y + _height <= _scope.Right))
+        while (_y + _height <= _arr.GetLength(0) && (_scope == null || _y + _height <= _scope.XMax))
         { // In range vertically
             if (_tester.InitialTest == null || _tester.InitialTest(_arr))
             { // Passed initial test
@@ -66,7 +66,7 @@ public class SquareFinder<T>
                 { // Found a square
                     if (_tester.FinalTest == null || _tester.FinalTest(_arr))
                     {
-                        ret.Add(new Rectangle() { Left = _x, Bottom = _y, Right = _x + _width - 1, Top = _y + _height - 1 });
+                        ret.Add(new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 });
                         if (Single)
                             return ret;
                     }
@@ -76,7 +76,7 @@ public class SquareFinder<T>
             }
 
             // Test to see if next is out of range horizontally
-            if (_x + _width > _arr.GetLength(1) && (_scope == null || _x + _width <= _scope.Left))
+            if (_x + _width > _arr.GetLength(1) && (_scope == null || _x + _width <= _scope.XMin))
             { // it is, so reset to left of array and move up
                 _x = 0;
                 _lowestFail++;

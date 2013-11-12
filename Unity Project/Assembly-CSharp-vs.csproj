@@ -241,7 +241,6 @@
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityList.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityPool.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\RandomGen.cs" />
-     <Compile Include="Assets\Scripts\Common\Rectangle.cs" />
      <Compile Include="Assets\Scripts\Common\StringStream.cs" />
      <Compile Include="Assets\Scripts\Common\Surrounding.cs" />
      <Compile Include="Assets\Scripts\Common\SurroundingInt.cs" />
@@ -294,7 +293,6 @@
      <Compile Include="Assets\Scripts\Levels\Searching\DFSSearcher.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\ArrayDrawExt.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawStrokeTest.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawTest.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\SquareFinder.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
