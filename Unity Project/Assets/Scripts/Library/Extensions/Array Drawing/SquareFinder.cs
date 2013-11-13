@@ -57,7 +57,7 @@ public class SquareFinder<T>
         List<Bounding> ret = new List<Bounding>();
         if (_width >= _arr.GetLength(1) || _height >= _arr.GetLength(0)) return ret;
 
-        while (_y + _height <= _arr.GetLength(0) && (_scope == null || _y + _height <= _scope.XMax))
+        while (_y + _height <= _arr.GetLength(0) && (_scope == null || _y + _height <= _scope.YMax))
         { // In range vertically
             if (_tester.InitialTest == null || _tester.InitialTest(_arr))
             { // Passed initial test
@@ -77,9 +77,9 @@ public class SquareFinder<T>
             }
 
             // Test to see if next is out of range horizontally
-            if (_x + _width > _arr.GetLength(1) && (_scope == null || _x + _width <= _scope.XMin))
+            if (_x + _width > _arr.GetLength(1) || (_scope == null || _x + _width > _scope.XMax))
             { // it is, so reset to left of array and move up
-                _x = 0;
+                _x = _scope == null ? 0 : _scope.XMin;
                 _lowestFail++;
                 _y = _lowestFail;
             }

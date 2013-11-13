@@ -60,7 +60,7 @@ abstract public class LayoutObject
             BigBoss.Debug.printHeader(Logs.LevelGen, "Shift Outside " + ToString());
             BigBoss.Debug.w(Logs.LevelGen, "Shifting outside of " + rhs.ToString());
             BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
-            BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + GetBounding() + "  RHS bounds: " + rhs.GetBounding());
+            BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + GetBounding(true) + "  RHS bounds: " + rhs.GetBounding(true));
         }
         #endregion
         while (this.IntersectsSmart(rhs))
@@ -91,10 +91,11 @@ abstract public class LayoutObject
     #endregion Shifts
 
     #region Bounds
-    public Bounding GetBounding()
+    public Bounding GetBounding(bool shifted)
     {
         Bounding bound = new Bounding(GetBoundingUnshifted());
-        adjustBounding(bound, true);
+        if (shifted)
+            adjustBounding(bound, true);
         return bound;
     }
 
@@ -271,7 +272,7 @@ abstract public class LayoutObject
 
     public virtual void Bake(bool shiftCompensate)
     {
-        bakedBounds = GetBounding();
+        bakedBounds = GetBounding(true);
         finalized = true;
     }
 
@@ -358,7 +359,7 @@ abstract public class LayoutObject
         list.Add(this);
         if (bounds != null)
         {
-            bounds.absorb(GetBounding());
+            bounds.absorb(GetBounding(true));
         }
         foreach (var connected in _connectedTo)
         {
@@ -452,8 +453,8 @@ abstract public class LayoutObject
         GridType[,] rhsArr = rhs.GetArray().GetArr();
 
         // Get Limits
-        Bounding bounds = GetBounding();
-        Bounding rhsBounds = rhs.GetBounding();
+        Bounding bounds = GetBounding(true);
+        Bounding rhsBounds = rhs.GetBounding(true);
         Bounding intersect = bounds.IntersectBounds(rhsBounds);
 
         for (int y = intersect.YMin; y < intersect.YMax; y++)
@@ -484,11 +485,11 @@ abstract public class LayoutObject
 
     public bool IntersectsBounds(LayoutObject rhs, int buffer)
     {
-        Bounding rhsBound = rhs.GetBounding();
+        Bounding rhsBound = rhs.GetBounding(true);
         if (rhsBound.IsValid())
         {
             rhsBound.expand(buffer);
-            return GetBounding().Intersects(rhsBound);
+            return GetBounding(true).Intersects(rhsBound);
         }
         return false;
     }
@@ -531,7 +532,7 @@ abstract public class LayoutObject
 
     protected virtual List<string> ToRowStrings()
     {
-        return ToRowStrings(GetBounding());
+        return ToRowStrings(GetBounding(true));
     }
 
     protected virtual List<string> ToRowStrings(Bounding bounds)
@@ -555,7 +556,7 @@ abstract public class LayoutObject
             {
                 BigBoss.Debug.w(log, s);
             }
-            Bounding bounds = GetBounding();
+            Bounding bounds = GetBounding(true);
             BigBoss.Debug.w(log, "Bounds Shifted: " + bounds.ToString());
             bounds.Shift(ShiftP.Invert());
             BigBoss.Debug.w(log, "Bounds: " + bounds.ToString());

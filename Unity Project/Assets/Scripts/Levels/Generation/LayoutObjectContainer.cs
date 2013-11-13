@@ -9,7 +9,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     {
         Objects.Add(obj);
         /// Shift so nothing is in the negative 
-        Bounding bounds = obj.GetBounding();
+        Bounding bounds = obj.GetBounding(true);
         Point shift = bounds.GetShiftNonNeg(buffer);
         if (!shift.isZero())
         {
@@ -62,7 +62,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     public override GridArray GetArray()
     {
-        GridArray ret = new GridArray(GetBounding(), false);
+        GridArray ret = new GridArray(GetBounding(true), false);
         foreach (LayoutObject obj in this)
         {
             ret.PutAll(obj);
@@ -72,7 +72,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     public override GridArray GetPrintArray()
     {
-        GridArray ret = new GridArray(GetBounding(), false);
+        GridArray ret = new GridArray(GetBounding(true), false);
         foreach (LayoutObject obj in this)
         {
             ret.PutAll(obj.GetPrintArray(), obj.GetShift());
@@ -82,7 +82,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 
     public GridArray GetArray(int buffer)
     {
-        var bounds = GetBounding();
+        var bounds = GetBounding(true);
         bounds.expand(buffer);
         return GetArray(bounds, false);
     }
@@ -101,7 +101,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 	{
 		Bounding bound = new Bounding();
 		foreach (LayoutObject obj in this){
-			Bounding objBound = obj.GetBounding();
+			Bounding objBound = obj.GetBounding(true);
 			if (objBound.IsValid())
 			{
 				bound.absorb(objBound);

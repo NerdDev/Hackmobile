@@ -8,7 +8,7 @@ public class SplitterMod : RoomModifier
     {
         Room room = spec.Room;
         RandomGen rand = spec.Random;
-        Bounding bounds = room.GetBounding();
+        Bounding bounds = room.GetBounding(true);
         int x = rand.Next(bounds.XMin + 3, bounds.XMax - 3);
         int y = rand.Next(bounds.YMin + 3, bounds.YMax - 3);
 

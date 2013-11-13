@@ -170,7 +170,7 @@ public class Path : LayoutObjectLeaf
             BigBoss.Debug.printHeader(Logs.LevelGen, "Prune");
         }
         #endregion
-        Bounding bounds = GetBounding();
+        Bounding bounds = GetBounding(true);
         Array2D<int> indexes = new Array2D<int>(bounds, false);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
         SurroundingInt surround = new SurroundingInt(indexes.GetArr());

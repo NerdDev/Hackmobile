@@ -8,7 +8,7 @@ class TreasureRoomMod : RoomModifier
     public override bool Modify(RoomSpec spec)
     {
         Room room = spec.Room;
-        Bounding bounds = room.GetBounding();
+        Bounding bounds = room.GetBounding(true);
         int centerX = (bounds.XMin + bounds.XMax) / 2;
         int centerY = (bounds.YMin + bounds.YMax) / 2;
         for (int y = centerY - 2; y <= centerY + 2; y++)

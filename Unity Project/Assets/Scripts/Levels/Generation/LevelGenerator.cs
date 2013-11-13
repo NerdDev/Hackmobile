@@ -403,7 +403,7 @@ public class LevelGenerator
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    BigBoss.Debug.w(Logs.LevelGen, "This layout led to an overlap: " + room.GetBounding());
+                    BigBoss.Debug.w(Logs.LevelGen, "This layout led to an overlap: " + room.GetBounding(true));
                     layout.ToLog(Logs.LevelGen);
                 }
                 #endregion
@@ -415,7 +415,7 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(Logs.LevelGen, "Layout after placing room at: " + room.GetBounding());
+                BigBoss.Debug.w(Logs.LevelGen, "Layout after placing room at: " + room.GetBounding(true));
                 layout.ToLog(Logs.LevelGen);
                 BigBoss.Debug.printBreakers(Logs.LevelGen, 4);
             }

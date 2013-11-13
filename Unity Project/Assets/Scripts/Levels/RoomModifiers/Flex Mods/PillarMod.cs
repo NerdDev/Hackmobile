@@ -5,7 +5,7 @@ public class PillarMod : RoomModifier {
 
     public override bool Modify(RoomSpec spec)
     {
-        Bounding bounds = spec.Room.GetBounding();
+        Bounding bounds = spec.Room.GetBounding(true);
         for (int x = bounds.XMin; x < bounds.XMax; x = x + 3)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + 3)
