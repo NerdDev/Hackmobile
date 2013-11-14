@@ -25,11 +25,15 @@ public class Percent
         {
             return ((int)Math.Round(Float * 100));
         }
+        set
+        {
+            Float = ((float) value) / 100;
+        }
     }
 
     public Percent(int num)
     {
-        Float = num;
+        Int = num;
     }
 
     public Percent(float f)

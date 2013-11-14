@@ -5,7 +5,6 @@ using System;
 
 public class GiantPillarMod : RoomModifier
 {
-    const bool _debug = false;
     public override bool Modify(RoomSpec spec)
     {
         // Add an extra 2 for stroke width for analysis
@@ -26,7 +25,7 @@ public class GiantPillarMod : RoomModifier
             spec.Room.GetBounding(false));
         if (locations.Count == 0) return false;
         #region Debug
-        if (_debug)
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.w(Logs.LevelGen, "Options: ");
             foreach (Bounding r in locations)

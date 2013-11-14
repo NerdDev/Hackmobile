@@ -253,10 +253,13 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public Value2D<T> GetNeighbor(GridDirection d, HashSet<T> ofType)
     {
-        List<Value2D<T>> neighbors = GetNeighbors(d, ofType);
-        if (neighbors.Count > 0)
+        IEnumerator<Value2D<T>> en = GetEnumerator(d);
+        while (en.MoveNext())
         {
-            return neighbors[0];
+            if (ofType.Count == 0 || ofType.Contains(en.Current.val))
+            {
+                return en.Current;
+            }
         }
         return null;
     }
@@ -295,11 +298,11 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
 
     public List<Value2D<T>> GetNeighbors(GridDirection d, HashSet<T> ofType)
     {
-        var ret = new List<Value2D<T>>();
+        var ret = new List<Value2D<T>>(3);
         IEnumerator<Value2D<T>> en = GetEnumerator(d);
         while (en.MoveNext())
         {
-            if (ofType.Contains(en.Current.val))
+            if (ofType.Count == 0 || ofType.Contains(en.Current.val))
             {
                 ret.Add(en.Current);
             }
@@ -319,6 +322,17 @@ public class Surrounding<T> : IEnumerable<Value2D<T>>
             return options[rand.Next(options.Count)];
         }
         return null;
+    }
+
+    public bool Alternates(Func<T, bool> evaluator)
+    {
+        List<Value2D<T>> vert = GetNeighbors(GridDirection.VERT);
+        List<Value2D<T>> horiz = GetNeighbors(GridDirection.HORIZ);
+        if (vert.Count != 2 || horiz.Count != 2) return false;
+        bool result = evaluator(vert[0].val);
+        return result == evaluator(vert[1].val)
+            && result != evaluator(horiz[0].val)
+            && result != evaluator(horiz[1].val);
     }
 
     private int CountInternal()

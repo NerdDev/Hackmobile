@@ -69,8 +69,6 @@ public class LevelGenerator
             {
                 BigBoss.Debug.printHeader(Logs.LevelGenMain, "Generating Level: " + levelDepth);
                 BigBoss.Debug.w(Logs.LevelGenMain, "Random seed int: " + seed);
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Generate Rooms");
-                BigBoss.Debug.printHeader(Logs.LevelGen, "Generating level: " + levelDepth);
             }
             stepTime = Time.realtimeSinceStartup;
             startTime = stepTime;
@@ -203,21 +201,16 @@ public class LevelGenerator
 
     void ModRooms(IEnumerable<Room> rooms)
     {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Mod Rooms");
-        }
-        #endregion
         foreach (Room room in rooms)
         {
-            RoomSpec spec = new RoomSpec(room, levelDepth, theme, Probability.LevelRand);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + 0 + " - Generate Room " + room.Id);
                 BigBoss.Debug.printHeader(Logs.LevelGen, "Modding " + room);
             }
             #endregion
+            RoomSpec spec = new RoomSpec(room, levelDepth, theme, Probability.LevelRand);
             foreach (RoomModifier mod in PickMods())
             {
                 #region DEBUG
