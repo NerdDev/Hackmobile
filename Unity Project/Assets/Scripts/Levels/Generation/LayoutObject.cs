@@ -196,7 +196,7 @@ abstract public class LayoutObject
         GridMap targets = getType(grids, target);
         foreach (Value2D<GridType> val in targets)
         {
-            surround.Load(val);
+            surround.Focus(val);
             Value2D<GridType> nullDir = surround.GetDirWithVal(true, GridType.NULL);
             if (nullDir != null)
             {
@@ -246,7 +246,7 @@ abstract public class LayoutObject
             // If space part of room
             if (val.val)
             {
-                surround.Load(val);
+                surround.Focus(val);
                 // If space is an edge (next to a false)
                 if (surround.GetDirWithVal(true, false) != null)
                 {

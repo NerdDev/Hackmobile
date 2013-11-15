@@ -58,7 +58,7 @@ public class LevelGenerator
     {
         if (seed == -1)
         {
-            return GenerateLayout(levelDepth);
+            return GenerateLayout(Probability.Rand.Next());
         }
         #region DEBUG
         int debugNum = 1;
@@ -505,7 +505,7 @@ public class LevelGenerator
         foreach (var door in doors)
         {
             // Block nearby floor from being found
-            surround.Load(door);
+            surround.Focus(door);
             Value2D<GridType> floor = surround.GetDirWithVal(true, GridType.Floor);
             if (floor != null)
             {
@@ -623,7 +623,7 @@ public class LevelGenerator
         {
             if (val.val == GridType.Floor)
             {
-                surround.Load(val);
+                surround.Focus(val);
                 foreach (Value2D<GridType> neighbor in surround)
                 {
                     if (neighbor.val == GridType.NULL)

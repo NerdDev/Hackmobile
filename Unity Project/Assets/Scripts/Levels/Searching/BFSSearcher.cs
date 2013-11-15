@@ -42,7 +42,7 @@ public class BFSSearcher : GridSearcher {
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
-            options.Load(curPoint.x, curPoint.y);
+            options.Focus(curPoint.x, curPoint.y);
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {

@@ -177,7 +177,7 @@ public class Path : LayoutObjectLeaf
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
-            surround.Load(val.x, val.y);
+            surround.Focus(val.x, val.y);
             Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))

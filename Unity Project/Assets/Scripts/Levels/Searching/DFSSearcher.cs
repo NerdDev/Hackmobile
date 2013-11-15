@@ -72,7 +72,7 @@ public class DFSSearcher : GridSearcher
             #endregion
 
             // Get surrounding points
-            options.Load(startPoint.x, startPoint.y);
+            options.Focus(startPoint.x, startPoint.y);
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {

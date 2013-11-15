@@ -188,7 +188,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
 
     public IEnumerable<GridSpace> getSurroundingSpaces(int x, int y)
     {
-        Surrounding.Load(x, y);
+        Surrounding.Focus(x, y);
         foreach (Value2D<GridSpace> val in Surrounding)
         {
             yield return val.val;

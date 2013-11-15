@@ -291,6 +291,16 @@ public class Bounding
         return IntersectBounds(arr.GetBounds());
     }
 
+    public int GetMin(bool horiz)
+    {
+        return horiz ? XMin : YMin;
+    }
+
+    public int GetMax(bool horiz)
+    {
+        return horiz ? XMax : YMax;
+    }
+
     #region Printing
     public override string ToString()
     {

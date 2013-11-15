@@ -6,6 +6,19 @@ using System.Text;
 public static class ArrayDrawExt
 {
     #region Basics
+    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, Func<T[,], int, int, bool> action)
+    {
+        if (horizontal)
+            return DrawRow(arr, from, to, on, action);
+        else
+            return DrawCol(arr, from, to, on, action);
+    }
+
+    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, T setTo)
+    {
+        return arr.DrawLine(from, to, on, horizontal, SetTo(setTo));
+    }
+
     public static bool DrawCol<T>(this T[,] arr, int y1, int y2, int x, T setTo)
     {
         return DrawCol(arr, y1, y2, x, SetTo(setTo));

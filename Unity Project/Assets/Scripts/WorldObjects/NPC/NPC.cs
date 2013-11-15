@@ -694,7 +694,7 @@ public class NPC : Affectable
     bool IsNextToPlayer()
     {
         Surrounding<GridSpace> s = BigBoss.Levels.Level.Surrounding;
-        s.Load(BigBoss.Player.gridSpace.X, BigBoss.Player.gridSpace.Y);
+        s.Focus(BigBoss.Player.gridSpace.X, BigBoss.Player.gridSpace.Y);
         foreach (Value2D<GridSpace> grid in s)
         {
             if (grid.x == gridSpace.X && grid.y == gridSpace.Y)

@@ -3,7 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class RoomModifier : ProbabilityItem {
+abstract public class RoomModifier : ProbabilityItem
+{
 
     static ProbabilityPool<RoomModifier>[] mods = new ProbabilityPool<RoomModifier>[Enum.GetNames(typeof(RoomModType)).Length];
     static bool initialized = false;
@@ -66,24 +67,54 @@ abstract public class RoomModifier : ProbabilityItem {
     }
 
     #region Set Funcs
-    protected static Func<GridType[,], int, int, bool> SetTo(GridType g)
+    public static Func<GridType[,], int, int, bool> SetTo(GridType g, Func<GridType[,], int, int, bool> additionalFunc = null)
     {
         return new Func<GridType[,], int, int, bool>((arr, x, y) =>
         {
             arr[y, x] = g;
+            if (additionalFunc != null)
+                return additionalFunc(arr, x, y);
             return true;
         }
         );
     }
 
-    protected static Func<GridType[,], int, int, bool> SetToIfNull(GridType g)
+    public static Func<GridType[,], int, int, bool> SetToIfNull(GridType g, Func<GridType[,], int, int, bool> additionalFunc = null)
     {
         return new Func<GridType[,], int, int, bool>((arr, x, y) =>
         {
-            if (arr[y,x] == GridType.NULL)
+            if (arr[y, x] == GridType.NULL)
                 arr[y, x] = g;
+            if (additionalFunc != null)
+                return additionalFunc(arr, x, y);
             return true;
         }
+        );
+    }
+
+    public static Func<GridType[,], int, int, bool> SetToIfNotNull(GridType g, Func<GridType[,], int, int, bool> additionalFunc = null)
+    {
+        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        {
+            if (arr[y, x] != GridType.NULL)
+                arr[y, x] = g;
+            if (additionalFunc != null)
+                return additionalFunc(arr, x, y);
+            return true;
+        }
+        );
+    }
+
+    public static Func<GridType[,], int, int, bool> LoadDoorOptions(List<Point> list, Func<GridType[,], int, int, bool> additionalFunc = null)
+    {
+        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        {
+                if (arr.CanDrawDoor(x, y))
+                    list.Add(new Point(x, y));
+                if (additionalFunc != null)
+                    return additionalFunc(arr, x, y);
+                return true;
+            }
         );
     }
     #endregion

@@ -1,72 +1,75 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
-public class SplitterMod : RoomModifier
+public class HorizSplitterMod : RoomModifier
 {
+    Surrounding<GridType> surr = new Surrounding<GridType>();
+
+    protected Func<GridType[,], int, int, bool> OptionsFunc()
+    {
+        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+            {
+                surr.Focus(x, y);
+                return !surr.Alternates(GridTypeEnum.Walkable) && surr.GetDirWithVal(true, GridType.Door) == null;
+            }
+            );
+    }
 
     public override bool Modify(RoomSpec spec)
     {
-        Room room = spec.Room;
-        RandomGen rand = spec.Random;
-        Bounding bounds = room.GetBounding(true);
-        int x = rand.Next(bounds.XMin + 3, bounds.XMax - 3);
-        int y = rand.Next(bounds.YMin + 3, bounds.YMax - 3);
+        Bounding bounds = spec.Room.GetBounding(false);
+        List<int> options = new List<int>();
+        surr.Array = spec.Room.Array;
+        bool horizontal = Probability.LevelRand.NextBool();
+        int from = bounds.GetMin(horizontal);
+        int to = bounds.GetMax(horizontal);
+        int fromAlt = bounds.GetMin(!horizontal);
+        int toAlt = bounds.GetMax(!horizontal);
+        for (int i = fromAlt; i < toAlt; i++)
+        {
+            if (spec.Room.Array.DrawLine(from, to, i, horizontal, OptionsFunc()))
+                options.Add(i);
+        }
+        if (options.Count == 0) return false;
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            foreach (int i in options)
+            {
+                GridArray copy = new GridArray(spec.Room.GetArray());
+                copy.GetArr().DrawLine(from, to, i, horizontal, SetToIfNotNull(GridType.Wall));
+                copy.ToLog(Logs.LevelGen);
+            }
+        }
+        #endregion
 
-        for (int i = bounds.XMin; i < bounds.XMax; i++)
-        {
-            if (room.get(i, y) == GridType.Floor || room.get(i, y) == GridType.Trap) room.put(GridType.Wall, i, y);
-        }
-        for (int i = bounds.YMin; i < bounds.YMax; i++)
-        {
-            if (room.get(x, i) == GridType.Floor || room.get(x, i) == GridType.Trap) room.put(GridType.Wall, x, i);
-        }
+        int picked = options.Random(spec.Random);
 
-        int ctr = 0;
+        spec.Room.Array.DrawLine(from, to, picked, horizontal, SetToIfNotNull(GridType.Wall));
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Picked splitter:");
+            spec.Room.ToLog(Logs.LevelGen);
+        }
+        #endregion
 
-        while (ctr < x - bounds.XMin - 1)
+        // Draw at least one door
+        List<Point> doorOptions = new List<Point>();
+        spec.Room.Array.DrawLine(from, to, picked, horizontal, LoadDoorOptions(doorOptions));
+
+        int numDoors = Probability.LevelRand.Next(1, 4);
+        while (doorOptions.Count > 0 && numDoors > 0)
         {
-            int r = rand.Next(bounds.XMin, x - 1);
-            if (room.get(r, y - 1) != GridType.Wall && room.get(r, y + 1) != GridType.Wall)
+            Point p = doorOptions.RandomTake(Probability.LevelRand);
+            if (spec.Room.Array.CanDrawDoor(p.x, p.y))
             {
-                room.put(GridType.Door, r, y);
-                break;
+                spec.Room.Array[p.y, p.x] = GridType.Door;
+                numDoors--;
             }
-            else ctr++;
         }
-        ctr = 0;
-        while (ctr < bounds.XMax - x + 1)
-        {
-            int r = rand.Next(x + 1, bounds.XMax);
-            if (room.get(r, y - 1) != GridType.Wall && room.get(r, y + 1) != GridType.Wall)
-            {
-                room.put(GridType.Door, r, y);
-                break;
-            }
-            else ctr++;
-        }
-        ctr = 0;
-        while (ctr < y - bounds.YMin - 1)
-        {
-            int r = rand.Next(bounds.YMin, y - 1);
-            if (room.get(x - 1, r) != GridType.Wall && room.get(x + 1, r) != GridType.Wall)
-            {
-                room.put(GridType.Door, x, r);
-                break;
-            }
-            else ctr++;
-        }
-        ctr = 0;
-        while (ctr < bounds.YMax - y + 1)
-        {
-            int r = rand.Next(y + 1, bounds.YMax);
-            if (room.get(x - 1, r) != GridType.Wall && room.get(x + 1, r) != GridType.Wall)
-            {
-                room.put(GridType.Door, x, r);
-                break;
-            }
-            else ctr++;
-        }
-        ctr = 0;
         return true;
     }
 
