@@ -18,7 +18,7 @@ public class GiantPillarMod : RoomModifier
                 ),
                 StrokeTest = new Func<GridType[,], int, int, bool>((arr, x, y) =>
                     {
-                        return GridTypeEnum.Walkable(arr[y, x]);
+                        return GridTypeEnum.HallwaySpace(arr[y, x]);
                     }
                 )
             },

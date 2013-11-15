@@ -24,10 +24,10 @@ public class PillarMod : RoomModifier {
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)
             {
-                if (GridTypeEnum.Walkable(arr[y, x]))
+                if (GridTypeEnum.HallwaySpace(arr[y, x]))
                 {
                     surround.Focus(x, y);
-                    if (!surround.Alternates(GridTypeEnum.Walkable))
+                    if (!surround.Alternates(GridTypeEnum.HallwaySpace))
                     { // If not blocking a path
                         arr[y, x] = GridType.Wall;
                     }

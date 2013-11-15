@@ -7,12 +7,13 @@ public class HorizSplitterMod : RoomModifier
 {
     Surrounding<GridType> surr = new Surrounding<GridType>();
 
-    protected Func<GridType[,], int, int, bool> OptionsFunc()
+    protected Func<GridType[,], int, int, bool> ViableSplitter()
     {
         return new Func<GridType[,], int, int, bool>((arr, x, y) =>
             {
                 surr.Focus(x, y);
-                return !surr.Alternates(GridTypeEnum.Walkable) && surr.GetDirWithVal(true, GridType.Door) == null;
+                // Not a hallway, and no doors nearby
+                return !surr.Alternates(GridTypeEnum.HallwaySpace) && surr.GetDirWithVal(true, GridType.Door) == null;
             }
             );
     }
@@ -27,9 +28,11 @@ public class HorizSplitterMod : RoomModifier
         int to = bounds.GetMax(horizontal);
         int fromAlt = bounds.GetMin(!horizontal);
         int toAlt = bounds.GetMax(!horizontal);
+
+        // Iterate and find all viable options
         for (int i = fromAlt; i < toAlt; i++)
         {
-            if (spec.Room.Array.DrawLine(from, to, i, horizontal, OptionsFunc()))
+            if (spec.Room.Array.DrawLine(from, to, i, horizontal, ViableSplitter()))
                 options.Add(i);
         }
         if (options.Count == 0) return false;
@@ -45,8 +48,8 @@ public class HorizSplitterMod : RoomModifier
         }
         #endregion
 
+        // Draw selected splitter
         int picked = options.Random(spec.Random);
-
         spec.Room.Array.DrawLine(from, to, picked, horizontal, SetToIfNotNull(GridType.Wall));
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))

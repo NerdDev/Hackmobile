@@ -12,7 +12,7 @@ public static class GridTypeDrawExt
             return false;
         Surrounding<GridType> surr = new Surrounding<GridType>(arr);
         surr.Focus(x, y);
-        return (surr.Alternates(GridTypeEnum.Walkable));
+        return (surr.Alternates(GridTypeEnum.HallwaySpace));
     }
 
     public static bool DrawDoor(this GridType[,] arr, int x, int y)

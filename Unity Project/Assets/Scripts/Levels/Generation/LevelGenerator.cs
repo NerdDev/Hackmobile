@@ -89,7 +89,8 @@ public class LevelGenerator
             }
         }
         #endregion
-        ClusterRooms(rooms);
+        // Not complete
+        //ClusterRooms(rooms);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
