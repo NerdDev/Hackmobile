@@ -8,7 +8,7 @@ public class SquareFinder<T>
     T[,] _arr;
     int _width;
     int _height;
-    SquareTest<T> _tester;
+    DrawTest<T> _tester;
     int _x = 0;
     int _y = 0;
     bool _tryFlipped;
@@ -18,7 +18,7 @@ public class SquareFinder<T>
     Func<T[,], int, int, bool> strokeTest = null;
     public bool Single { get; set; }
 
-    public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, SquareTest<T> tester, Bounding scope = null)
+    public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, DrawTest<T> tester, Bounding scope = null)
     {
         _arr = arr;
         _width = width;
@@ -31,17 +31,19 @@ public class SquareFinder<T>
             _x = scope.XMin;
             _y = scope.YMin;
         }
-        fillTest = GetTest(tester.UnitTest);
+        if (tester.UnitTest != null)
+            fillTest = GetTest(tester, false);
         if (tester.StrokeTest != null)
-            strokeTest = GetTest(tester.StrokeTest);
+            strokeTest = GetTest(tester, true);
         Single = false;
     }
 
-    protected Func<T[,], int, int, bool> GetTest(Func<T[,], int, int, bool> userTest)
+    protected Func<T[,], int, int, bool> GetTest(DrawTest<T> drawTest, bool stroke)
     {
         return new Func<T[,], int, int, bool>((af, xf, yf) =>
                     { // For each in test square, run user's test
-                        if (!userTest(af, xf, yf))
+                        if ((!stroke && !drawTest.UnitTest(af, xf, yf)) 
+                            || (stroke && !drawTest.StrokeTest(af, xf, yf)))
                         { // If desired test fails, stop and record position
                             _lowestFail = Math.Min(_y, _lowestFail);
                             _x = xf + 1; // Move our next test square right of failure.

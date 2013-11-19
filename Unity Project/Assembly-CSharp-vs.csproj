@@ -294,9 +294,9 @@
      <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\ArrayDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawTest.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawTestChained.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\GridDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\SquareFinder.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\SquareTest.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />

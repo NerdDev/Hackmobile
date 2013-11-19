@@ -9,7 +9,7 @@ public class GiantPillarMod : RoomModifier
     {
         // Add an extra 2 for stroke width for analysis
         int size = spec.Random.Next(2, 5) + 2;
-        List<Bounding> locations = spec.Room.Array.GetSquares(size, size, false, new SquareTest<GridType>()
+        List<Bounding> locations = spec.Room.Array.GetSquares(size, size, false, new DrawTest<GridType>()
             {
                 UnitTest = new Func<GridType[,], int, int, bool>((arr, x, y) =>
                     {
