@@ -5,8 +5,8 @@ using System.Text;
 
 public static class ArrayDrawExt
 {
-    #region Basics
-    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, Func<T[,], int, int, bool> action)
+    #region Lines
+    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, DrawAction<T> action)
     {
         if (horizontal)
             return DrawRow(arr, from, to, on, action);
@@ -227,7 +227,7 @@ public static class ArrayDrawExt
     #endregion
     #endregion
     #region Find
-    public static List<Bounding> GetSquares<T>(this T[,] arr, int width, int height, bool tryFlipped, DrawTest<T> tester, Bounding scope = null)
+    public static List<Bounding> GetSquares<T>(this T[,] arr, int width, int height, bool tryFlipped, DrawAction<T> tester, Bounding scope = null)
     {
         SquareFinder<T> finder = new SquareFinder<T>(arr, width, height, tryFlipped, tester, scope);
         return finder.Find();

@@ -7,7 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
@@ -318,8 +319,8 @@
     <Compile Include="Assets\Scripts\Levels\Searching\DFSSearcher.cs" />
     <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\ArrayDrawExt.cs" />
-    <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawTest.cs" />
-    <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawTestChained.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawAction.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawActionChained.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\GridDrawExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\SquareFinder.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />

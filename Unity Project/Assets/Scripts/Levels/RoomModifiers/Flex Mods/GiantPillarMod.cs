@@ -9,14 +9,14 @@ public class GiantPillarMod : RoomModifier
     {
         // Add an extra 2 for stroke width for analysis
         int size = spec.Random.Next(2, 5) + 2;
-        List<Bounding> locations = spec.Room.Array.GetSquares(size, size, false, new DrawTest<GridType>()
+        List<Bounding> locations = spec.Room.Array.GetSquares(size, size, false, new DrawAction<GridType>()
             {
-                UnitTest = new Func<GridType[,], int, int, bool>((arr, x, y) =>
+                UnitAction = new Func<GridType[,], int, int, bool>((arr, x, y) =>
                     {
                         return arr[y, x] == GridType.Floor;
                     }
                 ),
-                StrokeTest = new Func<GridType[,], int, int, bool>((arr, x, y) =>
+                StrokeAction = new Func<GridType[,], int, int, bool>((arr, x, y) =>
                     {
                         return GridTypeEnum.HallwaySpace(arr[y, x]);
                     }

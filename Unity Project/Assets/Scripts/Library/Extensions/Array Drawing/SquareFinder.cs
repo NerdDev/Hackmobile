@@ -8,7 +8,7 @@ public class SquareFinder<T>
     T[,] _arr;
     int _width;
     int _height;
-    DrawTest<T> _tester;
+    DrawAction<T> _tester;
     int _x = 0;
     int _y = 0;
     bool _tryFlipped;
@@ -18,7 +18,7 @@ public class SquareFinder<T>
     Func<T[,], int, int, bool> strokeTest = null;
     public bool Single { get; set; }
 
-    public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, DrawTest<T> tester, Bounding scope = null)
+    public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, DrawAction<T> tester, Bounding scope = null)
     {
         _arr = arr;
         _width = width;
@@ -31,19 +31,19 @@ public class SquareFinder<T>
             _x = scope.XMin;
             _y = scope.YMin;
         }
-        if (tester.UnitTest != null)
+        if (tester.UnitAction != null)
             fillTest = GetTest(tester, false);
-        if (tester.StrokeTest != null)
+        if (tester.StrokeAction != null)
             strokeTest = GetTest(tester, true);
         Single = false;
     }
 
-    protected Func<T[,], int, int, bool> GetTest(DrawTest<T> drawTest, bool stroke)
+    protected Func<T[,], int, int, bool> GetTest(DrawAction<T> drawTest, bool stroke)
     {
         return new Func<T[,], int, int, bool>((af, xf, yf) =>
                     { // For each in test square, run user's test
-                        if ((!stroke && !drawTest.UnitTest(af, xf, yf)) 
-                            || (stroke && !drawTest.StrokeTest(af, xf, yf)))
+                        if ((!stroke && !drawTest.UnitAction(af, xf, yf)) 
+                            || (stroke && !drawTest.StrokeAction(af, xf, yf)))
                         { // If desired test fails, stop and record position
                             _lowestFail = Math.Min(_y, _lowestFail);
                             _x = xf + 1; // Move our next test square right of failure.
@@ -61,13 +61,13 @@ public class SquareFinder<T>
 
         while (_y + _height <= _arr.GetLength(0) && (_scope == null || _y + _height <= _scope.YMax))
         { // In range vertically
-            if (_tester.InitialTest == null || _tester.InitialTest(_arr))
+            if (_tester.InitialAction == null || _tester.InitialAction(_arr))
             { // Passed initial test
                 // Try to draw a square that passes the user's test
                 if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, fillTest, strokeTest))
                 { // Found a square
                     Bounding b = new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 };
-                    if (_tester.FinalTest == null || _tester.FinalTest(_arr, b))
+                    if (_tester.FinalAction == null || _tester.FinalAction(_arr, b))
                     {
                         ret.Add(b);
                         if (Single) // Just want one, so return.
