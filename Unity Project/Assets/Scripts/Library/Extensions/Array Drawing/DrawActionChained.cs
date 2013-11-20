@@ -66,5 +66,9 @@ public class DrawActionChained<T> : DrawAction<T>
     DrawActionChained(DrawAction<T> chain)
     {
         Chain = chain;
+        InitialAction = Chain.InitialAction;
+        StrokeAction = Chain.StrokeAction;
+        UnitAction = Chain.UnitAction;
+        FinalAction = Chain.FinalAction;
     }
 }

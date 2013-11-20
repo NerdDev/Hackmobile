@@ -14,6 +14,29 @@ public class DrawAction<T>
     {
     }
 
+    public bool RunInitialAction(T[,] arr)
+    {
+        if (InitialAction != null)
+            return InitialAction(arr);
+        return true;
+    }
+
+    public bool RunFinalAction(T[,] arr, Bounding bounds)
+    {
+        if (FinalAction != null)
+            return FinalAction(arr, bounds);
+        return true;
+    }
+
+    public DrawAction<T> OnlyIncremental()
+    {
+        return new DrawAction<T>()
+        {
+            UnitAction = this.UnitAction,
+            StrokeAction = this.StrokeAction
+        };
+    }
+
     public static implicit operator DrawAction<T>(Func<T[,], int, int, bool> normalFunc)
     {
         return new DrawAction<T>() { UnitAction = normalFunc };

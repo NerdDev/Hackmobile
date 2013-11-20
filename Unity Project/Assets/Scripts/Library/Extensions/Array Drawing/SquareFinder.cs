@@ -14,8 +14,7 @@ public class SquareFinder<T>
     bool _tryFlipped;
     int _lowestFail = int.MaxValue;
     Bounding _scope;
-    Func<T[,], int, int, bool> fillTest = null;
-    Func<T[,], int, int, bool> strokeTest = null;
+    DrawAction<T> incremental = new DrawAction<T>();
     public bool Single { get; set; }
 
     public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, DrawAction<T> tester, Bounding scope = null)
@@ -32,9 +31,9 @@ public class SquareFinder<T>
             _y = scope.YMin;
         }
         if (tester.UnitAction != null)
-            fillTest = GetTest(tester, false);
+            incremental.UnitAction = GetTest(tester, false);
         if (tester.StrokeAction != null)
-            strokeTest = GetTest(tester, true);
+            incremental.StrokeAction = GetTest(tester, true);
         Single = false;
     }
 
@@ -64,7 +63,7 @@ public class SquareFinder<T>
             if (_tester.InitialAction == null || _tester.InitialAction(_arr))
             { // Passed initial test
                 // Try to draw a square that passes the user's test
-                if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, fillTest, strokeTest))
+                if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, incremental))
                 { // Found a square
                     Bounding b = new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 };
                     if (_tester.FinalAction == null || _tester.FinalAction(_arr, b))
@@ -91,8 +90,8 @@ public class SquareFinder<T>
         { // Flip and try again
             _tryFlipped = false;
             int tmp = _width;
-            _height = _width;
             _width = _height;
+            _height = tmp; 
             return Find();
         }
         return ret;
