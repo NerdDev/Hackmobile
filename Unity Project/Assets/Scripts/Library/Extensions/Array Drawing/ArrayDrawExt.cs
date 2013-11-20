@@ -6,7 +6,7 @@ using System.Text;
 public static class ArrayDrawExt
 {
     #region Lines
-    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, DrawAction<T> action)
+    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, DrawActions<T> action)
     {
         if (horizontal)
             return DrawRow(arr, from, to, on, action);
@@ -24,15 +24,10 @@ public static class ArrayDrawExt
         return DrawCol(arr, y1, y2, x, SetTo(setTo));
     }
 
-    public static bool DrawCol<T>(this T[,] arr, int y1, int y2, int x, DrawAction<T> action)
+    public static bool DrawCol<T>(this T[,] arr, int y1, int y2, int x, DrawActions<T> action)
     {
-        if (!action.RunInitialAction(arr)) return false;
         for (; y1 <= y2; y1++)
             if (!action.UnitAction(arr, x, y1)) return false;
-        if (action.FinalAction != null)
-        {
-            return action.FinalAction(arr, new Bounding(x, x, y1, y2));
-        }
         return true;
     }
 
@@ -41,15 +36,10 @@ public static class ArrayDrawExt
         return DrawRow(arr, xl, xr, y, SetTo(setTo));
     }
 
-    public static bool DrawRow<T>(this T[,] arr, int xl, int xr, int y, DrawAction<T> action)
+    public static bool DrawRow<T>(this T[,] arr, int xl, int xr, int y, DrawActions<T> action)
     {
-        if (!action.RunInitialAction(arr)) return false;
         for (; xl <= xr; xl++)
             if (!action.UnitAction(arr, xl, y)) return false;
-        if (action.FinalAction != null)
-        {
-            return action.FinalAction(arr, new Bounding(xl, xr, y, y));
-        }
         return true;
     }
 
@@ -66,19 +56,16 @@ public static class ArrayDrawExt
     /*
      * Uses Bressenham's Midpoint Algo
      */
-    public static bool DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, DrawAction<T> action)
+    public static bool DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, DrawActions<T> action)
     {
         var stroke = action.StrokeAction;
         if (stroke == null)
             return DrawCircleHelper.DrawCircleNoStroke(arr, centerX, centerY, radius, action);
 
-        if (!action.RunInitialAction(arr)) return false;
-
         int radiusError = 3 - (2 * radius);
         int x = 0;
         int y = radius;
         int lastYWidth = 0;
-        DrawAction<T> incrementalAction = action.OnlyIncremental();
 
         while (x <= y)
         {
@@ -92,8 +79,8 @@ public static class ArrayDrawExt
             if (!stroke(arr, centerX - x, centerY - y)) return false;
             if (!stroke(arr, centerX + x, centerY + y)) return false;
             if (!stroke(arr, centerX + x, centerY - y)) return false;
-            if (!arr.DrawRow(centerX - y + 1, centerX + y - 1, centerY + x, incrementalAction)) return false;
-            if (!arr.DrawRow(centerX - y + 1, centerX + y - 1, centerY - x, incrementalAction)) return false;
+            if (!arr.DrawRow(centerX - y + 1, centerX + y - 1, centerY + x, action)) return false;
+            if (!arr.DrawRow(centerX - y + 1, centerX + y - 1, centerY - x, action)) return false;
             if (radiusError < 0)
             {
                 radiusError += (4 * x) + 6;
@@ -104,17 +91,13 @@ public static class ArrayDrawExt
                 // Draw rows from top/bottom only when y is about to change.
                 if (y != radius)
                 {
-                    if (!arr.DrawRow(centerX - lastYWidth, centerX + lastYWidth, centerY + y, incrementalAction)) return false;
-                    if (!arr.DrawRow(centerX - lastYWidth, centerX + lastYWidth, centerY - y, incrementalAction)) return false;
+                    if (!arr.DrawRow(centerX - lastYWidth, centerX + lastYWidth, centerY + y, action)) return false;
+                    if (!arr.DrawRow(centerX - lastYWidth, centerX + lastYWidth, centerY - y, action)) return false;
                 }
                 y--;
                 lastYWidth = x;
             }
             x++;
-        }
-        if (action.FinalAction != null)
-        {
-            return action.FinalAction(arr, new Bounding(centerX - radius, centerX + radius, centerY - radius, centerY + radius)); 
         }
         return true;
     }
@@ -127,7 +110,7 @@ public static class ArrayDrawExt
 
     public static bool DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, T setFill, T setStroke)
     {
-        return DrawCircle(arr, centerX, centerY, radius, new DrawAction<T>()
+        return DrawCircle(arr, centerX, centerY, radius, new DrawActions<T>()
             {
                 UnitAction = SetTo(setFill),
                 StrokeAction = SetTo(setStroke)
@@ -152,7 +135,7 @@ public static class ArrayDrawExt
         return arr.DrawCircle(center.x, center.y, radius, action);
     }
 
-    public static bool DrawCircle<T>(this T[,] arr, int radius, DrawAction<T> action)
+    public static bool DrawCircle<T>(this T[,] arr, int radius, DrawActions<T> action)
     {
         Point center = arr.Center();
         return arr.DrawCircle(center.x, center.y, radius, action);
@@ -160,15 +143,13 @@ public static class ArrayDrawExt
     #endregion
     #endregion
     #region Squares
-    public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, DrawAction<T> action)
+    public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, DrawActions<T> action)
     {
         if (action.StrokeAction == null)
             return DrawSquareHelper.DrawSquare(arr, xl, xr, yb, yt, action);
 
-        if (!action.RunInitialAction(arr)) return false;
-
-        DrawAction<T> stroke = new DrawAction<T>() { UnitAction = action.StrokeAction };
-        DrawAction<T> fill = new DrawAction<T>() { UnitAction = action.UnitAction };
+        DrawActions<T> stroke = new DrawActions<T>() { UnitAction = action.StrokeAction };
+        DrawActions<T> fill = new DrawActions<T>() { UnitAction = action.UnitAction };
 
         if (!arr.DrawRow(xl, xr, yb, stroke)) return false;
         if (!arr.DrawRow(xl, xr, yt, stroke)) return false;
@@ -191,7 +172,7 @@ public static class ArrayDrawExt
 
     public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, T fillTo, T strokeTo)
     {
-        return arr.DrawSquare(xl, xr, yb, yt, new DrawAction<T>() 
+        return arr.DrawSquare(xl, xr, yb, yt, new DrawActions<T>() 
         {
             UnitAction = SetTo(fillTo),
             StrokeAction = SetTo(strokeTo)
@@ -224,7 +205,7 @@ public static class ArrayDrawExt
     #endregion
     #endregion
     #region Find
-    public static List<Bounding> GetSquares<T>(this T[,] arr, int width, int height, bool tryFlipped, DrawAction<T> tester, Bounding scope = null)
+    public static List<Bounding> GetSquares<T>(this T[,] arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
     {
         SquareFinder<T> finder = new SquareFinder<T>(arr, width, height, tryFlipped, tester, scope);
         return finder.Find();
@@ -234,20 +215,17 @@ public static class ArrayDrawExt
 
 public class DrawCircleHelper
 {
-    public static bool DrawCircleNoStroke<T>(T[,] arr, int centerX, int centerY, int radius, DrawAction<T> action)
+    public static bool DrawCircleNoStroke<T>(T[,] arr, int centerX, int centerY, int radius, DrawActions<T> action)
     {
-        if (!action.RunInitialAction(arr)) return false;
-
         int radiusError = 3 - (2 * radius);
         int x = 0;
         int y = radius;
-        DrawAction<T> incrementalAction = action.OnlyIncremental();
 
         while (x <= y)
         {
             // Draw rows from center extending up/down
-            if (!arr.DrawRow(centerX - y, centerX + y, centerY + x, incrementalAction)) return false;
-            if (!arr.DrawRow(centerX - y, centerX + y, centerY - x, incrementalAction)) return false;
+            if (!arr.DrawRow(centerX - y, centerX + y, centerY + x, action)) return false;
+            if (!arr.DrawRow(centerX - y, centerX + y, centerY - x, action)) return false;
             if (radiusError < 0)
             {
                 radiusError += (4 * x) + 6;
@@ -256,15 +234,11 @@ public class DrawCircleHelper
             {
                 radiusError += 4 * (x - y) + 10;
                 // Draw rows from top/bottom only when y is about to change.
-                if (!arr.DrawRow(centerX - x, centerX + x, centerY + y, incrementalAction)) return false;
-                if (!arr.DrawRow(centerX - x, centerX + x, centerY - y, incrementalAction)) return false;
+                if (!arr.DrawRow(centerX - x, centerX + x, centerY + y, action)) return false;
+                if (!arr.DrawRow(centerX - x, centerX + x, centerY - y, action)) return false;
                 y--;
             }
             x++;
-        }
-        if (action.FinalAction != null)
-        {
-            return action.FinalAction(arr, new Bounding(centerX - radius, centerX + radius, centerY - radius, centerY + radius));
         }
         return true;
     }
@@ -272,16 +246,10 @@ public class DrawCircleHelper
 
 public class DrawSquareHelper
 {
-    public static bool DrawSquare<T>(T[,] arr, int xl, int xr, int yb, int yt, DrawAction<T> action)
+    public static bool DrawSquare<T>(T[,] arr, int xl, int xr, int yb, int yt, DrawActions<T> action)
     {
-        if (!action.RunInitialAction(arr)) return false;
-        DrawAction<T> incremental = action.OnlyIncremental();
         for (; yb <= yt; yb++)
-            if (!arr.DrawRow(xl, xr, yb, incremental)) return false;
-        if (action.FinalAction != null)
-        {
-            return action.FinalAction(arr, new Bounding(xl, xr, yb, yt));
-        }
+            if (!arr.DrawRow(xl, xr, yb, action)) return false;
         return true;
     }
 }
