@@ -121,10 +121,10 @@ public static class ArrayDrawExt
         return ret;
     }
 
-    public static Value2D<T> GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester)
+    public static bool GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester, out Value2D<T> val)
     {
         Value2D<T> ret = null;
-        arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
+        if (arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
             {
@@ -132,21 +132,31 @@ public static class ArrayDrawExt
                 return false;
             }
             return true;
-        }));
-        return ret;
+        })))
+        {
+            val = ret;
+            return false;
+        }
+        val = ret;
+        return true;
     }
 
-    public static T GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawEval<T> tester)
+    public static bool GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawEval<T> tester, out T val)
     {
         T ret = default(T);
-        arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
+        if (arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
             ret = arr2[y2, x2];
             if (tester(ret))
                 return false;
             return true;
-        }));
-        return ret;
+        })))
+        {
+            val = ret;
+            return false;
+        }
+        val = ret;
+        return true;
     }
 
     public static List<Value2D<T>> GetAllDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester)
@@ -174,10 +184,10 @@ public static class ArrayDrawExt
         return ret;
     }
 
-    public static Value2D<T> GetDir<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester)
+    public static bool GetDir<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester, out Value2D<T> val)
     {
         Value2D<T> ret = null;
-        arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
+        if (arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
             {
@@ -185,21 +195,31 @@ public static class ArrayDrawExt
                 return false;
             }
             return true;
-        }));
-        return ret;
+        })))
+        {
+            val = ret;
+            return false;
+        }
+        val = ret;
+        return true;
     }
 
-    public static T GetDir<T>(this T[,] arr, int x, int y, GridDirection dir, DrawEval<T> tester)
+    public static bool GetDir<T>(this T[,] arr, int x, int y, GridDirection dir, DrawEval<T> tester, out T val)
     {
         T ret = default(T);
-        arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
+        if (arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
         {
             ret = arr2[y2, x2];
             if (tester(ret))
                 return false;
             return true;
-        }));
-        return ret;
+        })))
+        {
+            val = ret;
+            return false;
+        }
+        val = ret;
+        return true;
     }
 
     public static bool Alternates<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator)

@@ -192,16 +192,13 @@ abstract public class LayoutObject
     {
         GridMap ret = new GridMap();
         GridArray grids = GetArray();
-        Surrounding<GridType> surround = new Surrounding<GridType>(grids);
+        GridType[,] arr = grids.GetArr();
         GridMap targets = getType(grids, target);
         foreach (Value2D<GridType> val in targets)
         {
-            surround.Focus(val);
-            Value2D<GridType> nullDir = surround.GetDirWithVal(true, GridType.NULL);
-            if (nullDir != null)
-            {
+            Value2D<GridType> nullDir;
+            if (arr.GetAround(val.x, val.y, false, RoomModifier.EqualTo(GridType.NULL), out nullDir))
                 ret[val] = val.val;
-            }
         }
         return ret;
     }

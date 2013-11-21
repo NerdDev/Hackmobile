@@ -694,10 +694,11 @@ public class NPC : Affectable
     bool IsNextToPlayer()
     {
         GridSpace playerSpace = BigBoss.Player.gridSpace;
+        Value2D<GridSpace> space;
         return BigBoss.Levels.Level.Array.GetAround(gridSpace.X, gridSpace.Y, true, (arr, x, y) =>
-            {
-                return playerSpace.X == x && playerSpace.Y == y;
-            }) != null;
+        {
+            return playerSpace.X == x && playerSpace.Y == y;
+        }, out space);
     }
 
     void DecideWhatToDo()

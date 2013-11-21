@@ -65,10 +65,11 @@ public class DungeonMaster : MonoBehaviour, IManager {
 
     public void PlacePlayer(Level l, GridSpace stairsUp)
     {
-        Value2D<GridSpace> grid = l.Array.GetAround(stairsUp.X, stairsUp.Y, false, (arr, x, y) =>
+        Value2D<GridSpace> grid;
+        l.Array.GetAround(stairsUp.X, stairsUp.Y, false, (arr, x, y) =>
             {
                 return arr[y, x].Type == GridType.Floor;
-            });
+            }, out grid);
         BigBoss.PlayerInfo.transform.position = new Vector3(grid.x, -.5f, grid.y);
     }
 
