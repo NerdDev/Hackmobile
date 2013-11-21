@@ -10,9 +10,7 @@ public static class GridTypeDrawExt
         GridType t = arr[y, x];
         if (t != GridType.Wall)
             return false;
-        Surrounding<GridType> surr = new Surrounding<GridType>(arr);
-        surr.Focus(x, y);
-        return (surr.Alternates(GridTypeEnum.HallwaySpace));
+        return (arr.Alternates(x, y, GridTypeEnum.HallwaySpace));
     }
 
     public static bool DrawDoor(this GridType[,] arr, int x, int y)

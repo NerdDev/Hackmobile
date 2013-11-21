@@ -17,6 +17,11 @@ public class DrawActions<T>
         return new DrawActions<T>() { UnitAction = normalFunc };
     }
 
+    public static implicit operator DrawAction<T>(DrawActions<T> actions)
+    {
+        return actions.UnitAction;
+    }
+
     public static DrawActionChained<T> operator +(DrawActions<T> c1, DrawActions<T> c2)
     {
         return new DrawActionChained<T>(c1)

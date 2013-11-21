@@ -495,7 +495,7 @@ public class LevelGenerator
         #endregion
         var grids = layout.GetArray(layoutMargin);
         GridMap doors = layout.getTypes(grids, GridType.Door);
-        Surrounding<GridType> surround = new Surrounding<GridType>(grids);
+        GridType[,] arr = grids.GetArr();
         #region DEBUG
         GridArray debugArr = null;
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -506,12 +506,9 @@ public class LevelGenerator
         foreach (var door in doors)
         {
             // Block nearby floor from being found
-            surround.Focus(door);
-            Value2D<GridType> floor = surround.GetDirWithVal(true, GridType.Floor);
-            if (floor != null)
-            {
+            Value2D<GridType> floor;
+            if (arr.GetAround(door.x, door.y, false, RoomModifier.EqualTo(GridType.Floor), out floor))
                 grids[floor] = GridType.INTERNAL_RESERVED_BLOCKED;
-            }
 
             var path = new Path(door, grids);
             #region DEBUG
@@ -567,7 +564,7 @@ public class LevelGenerator
             BigBoss.Debug.w(Logs.LevelGen, "Connecting List:");
             foreach (var layoutobj in layout.GetRooms())
             {
-                BigBoss.Debug.w(Logs.LevelGen, 1, layoutobj.ToString());       
+                BigBoss.Debug.w(Logs.LevelGen, 1, layoutobj.ToString());
             }
         }
         #endregion
@@ -608,8 +605,9 @@ public class LevelGenerator
 
     private static void ConfirmEdges(LevelLayout layout)
     {
-        layout.ShiftAll(1,1);
-        GridArray arr = layout.GetArray(1);
+        layout.ShiftAll(1, 1);
+        GridArray ga = layout.GetArray(1);
+        GridType[,] arr = ga.GetArr();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -617,21 +615,18 @@ public class LevelGenerator
             layout.ToLog(Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
-        Surrounding<GridType> surround = new Surrounding<GridType>(arr, true);
-        LayoutObjectLeaf leaf = new LayoutObjectLeaf(arr.getWidth(), arr.getHeight());
+        LayoutObjectLeaf leaf = new LayoutObjectLeaf(ga.getWidth(), ga.getHeight());
         layout.AddObject(leaf);
-        foreach (Value2D<GridType> val in arr)
+        foreach (Value2D<GridType> val in ga)
         {
             if (val.val == GridType.Floor)
             {
-                surround.Focus(val);
-                foreach (Value2D<GridType> neighbor in surround)
-                {
-                    if (neighbor.val == GridType.NULL)
+                arr.DrawAround(val.x, val.y, true, (arr2, x, y) =>
                     {
-                        leaf.put(GridType.Wall, neighbor.x, neighbor.y);
-                    }
-                }
+                        if (arr2[y,x] == GridType.NULL)
+                            leaf.put(GridType.Wall, x, y);
+                        return true;
+                    });
             }
         }
         #region DEBUG

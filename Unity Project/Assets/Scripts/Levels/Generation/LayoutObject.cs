@@ -237,18 +237,16 @@ abstract public class LayoutObject
         Array2D<bool> bfs = searcher.SearchFill(new Value2D<GridType>(), grids, GridType.NULL);
         // Invert to be room
         Array2D<bool>.invert(bfs);
-        Surrounding<bool> surround = new Surrounding<bool>(bfs.GetArr());
+        bool[,] arr = bfs.GetArr();
         foreach (Value2D<bool> val in bfs)
         {
             // If space part of room
             if (val.val)
             {
-                surround.Focus(val);
                 // If space is an edge (next to a false)
-                if (surround.GetDirWithVal(true, false) != null)
-                {
+                Value2D<bool> b;
+                if (arr.GetAround(val.x, val.y, false, RoomModifier.EqualTo(true), out b))
                     ret[val.x, val.y] = grids[val.x, val.y];
-                }
             }
         }
         return ret;

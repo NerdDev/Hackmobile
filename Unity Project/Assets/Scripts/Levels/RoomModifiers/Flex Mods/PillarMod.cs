@@ -19,15 +19,13 @@ public class PillarMod : RoomModifier {
         int spacingX = spacingOptions.Get();
         int spacingY = Probability.LevelRand.Percent(differingSpacingChance) ? spacingOptions.Get() : spacingX;
         GridType[,] arr = spec.Room.Array;
-        Surrounding<GridType> surround = new Surrounding<GridType>(arr);
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)
             {
                 if (GridTypeEnum.HallwaySpace(arr[y, x]))
                 {
-                    surround.Focus(x, y);
-                    if (!surround.Alternates(GridTypeEnum.HallwaySpace))
+                    if (!arr.Alternates(x, y, GridTypeEnum.HallwaySpace))
                     { // If not blocking a path
                         arr[y, x] = GridType.Wall;
                     }
