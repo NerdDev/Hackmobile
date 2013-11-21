@@ -3,8 +3,223 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+public delegate bool DrawAction<T>(T[,] arr, int x, int y);
+public delegate bool DrawEval<T>(T t);
+
 public static class ArrayDrawExt
 {
+    #region Point
+    public static IEnumerable<T> DrawAround<T>(this T[,] arr, int x, int y, bool cornered)
+    {
+        yield return arr[y + 1, x];
+        yield return arr[y - 1, x];
+        yield return arr[y, x + 1];
+        yield return arr[y, x - 1];
+        if (cornered)
+        {
+            yield return arr[y + 1, x + 1];
+            yield return arr[y - 1, x + 1];
+            yield return arr[y + 1, x - 1];
+            yield return arr[y - 1, x - 1];
+        }
+    }
+
+    public static bool DrawAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> action)
+    {
+        if (!action(arr, x, y + 1)) return false;
+        if (!action(arr, x, y - 1)) return false;
+        if (!action(arr, x + 1, y)) return false;
+        if (!action(arr, x - 1, y)) return false;
+        if (cornered)
+        {
+            if (!action(arr, x + 1, y + 1)) return false;
+            if (!action(arr, x + 1, y - 1)) return false;
+            if (!action(arr, x - 1, y + 1)) return false;
+            if (!action(arr, x - 1, y - 1)) return false;
+        }
+        return true;
+    }
+
+    public static bool DrawDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> action)
+    {
+        switch (dir)
+        {
+            case GridDirection.HORIZ:
+                if (!action(arr, x - 1, y)) return false;
+                if (!action(arr, x + 1, y)) return false;
+                break;
+            case GridDirection.VERT:
+                if (!action(arr, x, y + 1)) return false;
+                if (!action(arr, x, y - 1)) return false;
+                break;
+            case GridDirection.DIAGTLBR:
+                if (!action(arr, x - 1, y + 1)) return false;
+                if (!action(arr, x + 1, y - 1)) return false;
+                break;
+            case GridDirection.DIAGBLTR:
+                if (!action(arr, x - 1, y - 1)) return false;
+                if (!action(arr, x + 1, y + 1)) return false;
+                break;
+        }
+        return true;
+    }
+
+    public static bool DrawLocation<T>(this T[,] arr, int x, int y, GridLocation loc, DrawAction<T> action)
+    {
+        switch (loc)
+        {
+            case GridLocation.BOTTOMLEFT:
+                if (!action(arr, x - 1, y - 1)) return false;
+                break;
+            case GridLocation.BOTTOMRIGHT:
+                if (!action(arr, x + 1, y - 1)) return false;
+                break;
+            case GridLocation.DOWN:
+                if (!action(arr, x, y - 1)) return false;
+                break;
+            case GridLocation.LEFT:
+                if (!action(arr, x - 1, y)) return false;
+                break;
+            case GridLocation.RIGHT:
+                if (!action(arr, x + 1, y)) return false;
+                break;
+            case GridLocation.TOPLEFT:
+                if (!action(arr, x - 1, y + 1)) return false;
+                break;
+            case GridLocation.TOPRIGHT:
+                if (!action(arr, x + 1, y + 1)) return false;
+                break;
+            case GridLocation.UP:
+                if (!action(arr, x, y + 1)) return false;
+                break;
+        }
+        return true;
+    }
+
+    public static List<Value2D<T>> GetAllAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
+        {
+            if (tester(arr2, x2, y2))
+                ret.Add(new Value2D<T>(x2, y2, arr[y2, x2]));
+            return true;
+        }));
+        return ret;
+    }
+
+    public static List<T> GetAllAround<T>(this T[,] arr, int x, int y, bool cornered, DrawEval<T> tester)
+    {
+        List<T> ret = new List<T>();
+        arr.DrawAround(x, y, cornered, (arr2, x2, y2) =>
+        {
+            T t = arr2[y2, x2];
+            if (tester(t))
+                ret.Add(t);
+            return true;
+        });
+        return ret;
+    }
+
+    public static Value2D<T> GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester)
+    {
+        Value2D<T> ret = null;
+        arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
+        {
+            if (tester(arr2, x2, y2))
+            {
+                ret = new Value2D<T>(x2, y2, arr[y2, x2]);
+                return false;
+            }
+            return true;
+        }));
+        return ret;
+    }
+
+    public static T GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawEval<T> tester)
+    {
+        T ret = default(T);
+        arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
+        {
+            ret = arr2[y2, x2];
+            if (tester(ret))
+                return false;
+            return true;
+        }));
+        return ret;
+    }
+
+    public static List<Value2D<T>> GetAllDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester)
+    {
+        List<Value2D<T>> ret = new List<Value2D<T>>();
+        arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
+        {
+            if (tester(arr2, x2, y2))
+                ret.Add(new Value2D<T>(x2, y2, arr[y2, x2]));
+            return true;
+        }));
+        return ret;
+    }
+
+    public static List<T> GetAllDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawEval<T> tester)
+    {
+        List<T> ret = new List<T>();
+        arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
+        {
+            T t = arr2[y2, x2];
+            if (tester(t))
+                ret.Add(t);
+            return true;
+        }));
+        return ret;
+    }
+
+    public static Value2D<T> GetDir<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester)
+    {
+        Value2D<T> ret = null;
+        arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
+        {
+            if (tester(arr2, x2, y2))
+            {
+                ret = new Value2D<T>(x2, y2, arr[y2, x2]);
+                return false;
+            }
+            return true;
+        }));
+        return ret;
+    }
+
+    public static T GetDir<T>(this T[,] arr, int x, int y, GridDirection dir, DrawEval<T> tester)
+    {
+        T ret = default(T);
+        arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
+        {
+            ret = arr2[y2, x2];
+            if (tester(ret))
+                return false;
+            return true;
+        }));
+        return ret;
+    }
+
+    public static bool Alternates<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator)
+    {
+        bool pass = evaluator(arr[y, x - 1]);
+        if (pass != evaluator(arr[y, x + 1])) return false;
+        if (pass == evaluator(arr[y + 1, x])) return false;
+        if (pass == evaluator(arr[y - 1, x])) return false;
+        return true;
+    }
+
+    public static bool Cornered<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator)
+    {
+        bool pass = evaluator(arr[y, x - 1]);
+        if (pass == evaluator(arr[y, x + 1])) return false;
+        pass = evaluator(arr[y - 1, x]);
+        if (pass == evaluator(arr[y + 1, x])) return false;
+        return true;
+    }
+    #endregion
     #region Lines
     public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, DrawActions<T> action)
     {
@@ -43,9 +258,9 @@ public static class ArrayDrawExt
         return true;
     }
 
-    public static Func<T[,], int, int, bool> SetTo<T>(T to)
+    public static DrawAction<T> SetTo<T>(T to)
     {
-        return new Func<T[,], int, int, bool>((arr, x, y) =>
+        return new DrawAction<T>((arr, x, y) =>
         {
             arr[y, x] = to;
             return true;
@@ -129,7 +344,7 @@ public static class ArrayDrawExt
         return arr.DrawCircle(center.x, center.y, radius, setFill, strokeFill);
     }
 
-    public static bool DrawCircle<T>(this T[,] arr, int radius, Func<T[,], int, int, bool> action)
+    public static bool DrawCircle<T>(this T[,] arr, int radius, DrawAction<T> action)
     {
         Point center = arr.Center();
         return arr.DrawCircle(center.x, center.y, radius, action);
@@ -172,7 +387,7 @@ public static class ArrayDrawExt
 
     public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, T fillTo, T strokeTo)
     {
-        return arr.DrawSquare(xl, xr, yb, yt, new DrawActions<T>() 
+        return arr.DrawSquare(xl, xr, yb, yt, new DrawActions<T>()
         {
             UnitAction = SetTo(fillTo),
             StrokeAction = SetTo(strokeTo)
@@ -204,12 +419,27 @@ public static class ArrayDrawExt
     }
     #endregion
     #endregion
-    #region Find
+    #region Find Options
     public static List<Bounding> GetSquares<T>(this T[,] arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
     {
         SquareFinder<T> finder = new SquareFinder<T>(arr, width, height, tryFlipped, tester, scope);
         return finder.Find();
     }
+    #endregion
+    #region Searches
+    public static Stack<Value2D<T>> DepthFirstSearch<T>(this T[,] arr, int x, int y, DrawAction<T> tester)
+    {
+        #region DEBUG
+        //if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+        //{
+        //    BigBoss.Debug.printHeader(Logs.LevelGen, "Depth First Search");
+        //    arr.ToLog(Logs.LevelGen, "Starting:");
+        //}
+        #endregion
+        Array2D<bool> blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
+        return null;
+    }
+
     #endregion
 }
 

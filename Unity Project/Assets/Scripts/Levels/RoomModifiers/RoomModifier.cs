@@ -66,10 +66,18 @@ abstract public class RoomModifier : ProbabilityItem
         return false;
     }
 
-    #region Set Funcs
-    public static Func<GridType[,], int, int, bool> SetTo(GridType g, Func<GridType[,], int, int, bool> additionalFunc = null)
+    #region Preset Funcs
+    public static DrawAction<T> EqualTo<T>(T t)
     {
-        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return t.Equals(arr[y,x]);
+        });
+    }
+
+    public static DrawAction<GridType> SetTo(GridType g, DrawAction<GridType> additionalFunc = null)
+    {
+        return new DrawAction<GridType>((arr, x, y) =>
         {
             arr[y, x] = g;
             if (additionalFunc != null)
@@ -79,9 +87,9 @@ abstract public class RoomModifier : ProbabilityItem
         );
     }
 
-    public static Func<GridType[,], int, int, bool> SetToIfNull(GridType g, Func<GridType[,], int, int, bool> additionalFunc = null)
+    public static DrawAction<GridType> SetToIfNull(GridType g, DrawAction<GridType> additionalFunc = null)
     {
-        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        return new DrawAction<GridType>((arr, x, y) =>
         {
             if (arr[y, x] == GridType.NULL)
                 arr[y, x] = g;
@@ -92,9 +100,9 @@ abstract public class RoomModifier : ProbabilityItem
         );
     }
 
-    public static Func<GridType[,], int, int, bool> SetToIfNotNull(GridType g, Func<GridType[,], int, int, bool> additionalFunc = null)
+    public static DrawAction<GridType> SetToIfNotNull(GridType g, DrawAction<GridType> additionalFunc = null)
     {
-        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        return new DrawAction<GridType>((arr, x, y) =>
         {
             if (arr[y, x] != GridType.NULL)
                 arr[y, x] = g;
@@ -105,9 +113,9 @@ abstract public class RoomModifier : ProbabilityItem
         );
     }
 
-    public static Func<GridType[,], int, int, bool> LoadDoorOptions(List<Point> list, Func<GridType[,], int, int, bool> additionalFunc = null)
+    public static DrawAction<GridType> LoadDoorOptions(List<Point> list, DrawAction<GridType> additionalFunc = null)
     {
-        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        return new DrawAction<GridType>((arr, x, y) =>
         {
                 if (arr.CanDrawDoor(x, y))
                     list.Add(new Point(x, y));

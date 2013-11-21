@@ -113,7 +113,7 @@ public class PathTree
 
     public void pointsToNodes(PathNode origin)
     {
-        foreach (GridSpace p in BigBoss.Levels.Level.getSurroundingSpaces(origin.loc.X, origin.loc.Y))
+        foreach (GridSpace p in BigBoss.Levels.Level.Array.DrawAround(origin.loc.X, origin.loc.Y, true))
         {
             if (isValidSpace(p))
             {

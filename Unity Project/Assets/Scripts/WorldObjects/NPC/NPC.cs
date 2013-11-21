@@ -693,17 +693,11 @@ public class NPC : Affectable
 
     bool IsNextToPlayer()
     {
-        Surrounding<GridSpace> s = BigBoss.Levels.Level.Surrounding;
-        s.Focus(BigBoss.Player.gridSpace.X, BigBoss.Player.gridSpace.Y);
-        foreach (Value2D<GridSpace> grid in s)
-        {
-            if (grid.x == gridSpace.X && grid.y == gridSpace.Y)
+        GridSpace playerSpace = BigBoss.Player.gridSpace;
+        return BigBoss.Levels.Level.Array.GetAround(gridSpace.X, gridSpace.Y, true, (arr, x, y) =>
             {
-                //NPC is next to player
-                return true;
-            }
-        }
-        return false;
+                return playerSpace.X == x && playerSpace.Y == y;
+            }) != null;
     }
 
     void DecideWhatToDo()

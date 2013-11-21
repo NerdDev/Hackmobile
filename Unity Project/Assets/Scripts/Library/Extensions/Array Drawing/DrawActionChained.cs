@@ -6,8 +6,8 @@ using System.Text;
 public class DrawActionChained<T> : DrawActions<T>
 {
     public DrawActions<T> Chain { get; protected set; }
-    private Func<T[,], int, int, bool> _unit;
-    public override Func<T[,], int, int, bool> UnitAction
+    private DrawAction<T> _unit;
+    public override DrawAction<T> UnitAction
     {
         get { return _unit; }
         set
@@ -19,7 +19,7 @@ public class DrawActionChained<T> : DrawActions<T>
             }
             else
             {
-                _unit = new Func<T[,], int, int, bool>((arr, x, y) =>
+                _unit = new DrawAction<T>((arr, x, y) =>
                 {
                     if (!value(arr, x, y)) return false;
                     if (!Chain.UnitAction(arr, x, y)) return false;
@@ -28,8 +28,8 @@ public class DrawActionChained<T> : DrawActions<T>
             }
         }
     }
-    private Func<T[,], int, int, bool> _stroke;
-    public override Func<T[,], int, int, bool> StrokeAction
+    private DrawAction<T> _stroke;
+    public override DrawAction<T> StrokeAction
     {
         get { return _stroke; }
         set
@@ -41,7 +41,7 @@ public class DrawActionChained<T> : DrawActions<T>
             }
             else
             {
-                _stroke = new Func<T[,], int, int, bool>((arr, x, y) =>
+                _stroke = new DrawAction<T>((arr, x, y) =>
                 {
                     if (!value(arr, x, y)) return false;
                     if (!Chain.StrokeAction(arr, x, y)) return false;

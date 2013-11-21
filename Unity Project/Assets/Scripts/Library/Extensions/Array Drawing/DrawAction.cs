@@ -5,14 +5,14 @@ using System.Text;
 
 public class DrawActions<T>
 {
-    public virtual Func<T[,], int, int, bool> UnitAction { get; set; }
-    public virtual Func<T[,], int, int, bool> StrokeAction { get; set; }
+    public virtual DrawAction<T> UnitAction { get; set; }
+    public virtual DrawAction<T> StrokeAction { get; set; }
 
     public DrawActions()
     {
     }
 
-    public static implicit operator DrawActions<T>(Func<T[,], int, int, bool> normalFunc)
+    public static implicit operator DrawActions<T>(DrawAction<T> normalFunc)
     {
         return new DrawActions<T>() { UnitAction = normalFunc };
     }

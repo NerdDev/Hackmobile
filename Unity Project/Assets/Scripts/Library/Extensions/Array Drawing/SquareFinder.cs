@@ -37,9 +37,9 @@ public class SquareFinder<T>
         Single = false;
     }
 
-    protected Func<T[,], int, int, bool> GetTest(DrawActions<T> drawTest, bool stroke)
+    protected DrawAction<T> GetTest(DrawActions<T> drawTest, bool stroke)
     {
-        return new Func<T[,], int, int, bool>((af, xf, yf) =>
+        return new DrawAction<T>((af, xf, yf) =>
                     { // For each in test square, run user's test
                         if ((!stroke && !drawTest.UnitAction(af, xf, yf)) 
                             || (stroke && !drawTest.StrokeAction(af, xf, yf)))

@@ -5,15 +5,12 @@ using System;
 
 public class HorizSplitterMod : RoomModifier
 {
-    Surrounding<GridType> surr = new Surrounding<GridType>();
-
-    protected Func<GridType[,], int, int, bool> ViableSplitter()
+    protected DrawAction<GridType> ViableSplitter()
     {
-        return new Func<GridType[,], int, int, bool>((arr, x, y) =>
+        return new DrawAction<GridType>((arr, x, y) =>
             {
-                surr.Focus(x, y);
                 // Not a hallway, and no doors nearby
-                return !surr.Alternates(GridTypeEnum.HallwaySpace) && surr.GetDirWithVal(true, GridType.Door) == null;
+                return !arr.Alternates(x, y, GridTypeEnum.HallwaySpace) && !arr.DrawAround(x, y, false, EqualTo(GridType.Door));
             }
             );
     }
@@ -22,7 +19,6 @@ public class HorizSplitterMod : RoomModifier
     {
         Bounding bounds = spec.Room.GetBounding(false);
         List<int> options = new List<int>();
-        surr.Array = spec.Room.Array;
         bool horizontal = Probability.LevelRand.NextBool();
         int from = bounds.GetMin(horizontal);
         int to = bounds.GetMax(horizontal);

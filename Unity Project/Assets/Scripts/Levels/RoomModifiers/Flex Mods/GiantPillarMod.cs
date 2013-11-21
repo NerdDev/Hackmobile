@@ -11,16 +11,15 @@ public class GiantPillarMod : RoomModifier
         int size = spec.Random.Next(2, 5) + 2;
         List<Bounding> locations = spec.Room.Array.GetSquares(size, size, false, new OptionTests<GridType>()
             {
-                UnitAction = new Func<GridType[,], int, int, bool>((arr, x, y) =>
+                UnitAction = (arr, x, y) =>
                     {
                         return arr[y, x] == GridType.Floor;
                     }
-                ),
-                StrokeAction = new Func<GridType[,], int, int, bool>((arr, x, y) =>
+                ,
+                StrokeAction = (arr, x, y) =>
                     {
                         return GridTypeEnum.HallwaySpace(arr[y, x]);
                     }
-                )
             },
             spec.Room.GetBounding(false));
         if (locations.Count == 0) return false;

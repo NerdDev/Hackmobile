@@ -65,8 +65,14 @@ public class InputManager : MonoBehaviour, IManager
                     if (n != null && n.IsNotAFreaking<Player>())
                     {
                         GridSpace playerLoc = BigBoss.Player.gridSpace;
-                        IEnumerable<GridSpace> grids = BigBoss.Levels.Level.getSurroundingSpaces(p.x, p.y);
-                        if (grids.Single(g => g.X == playerLoc.X && g.Y == playerLoc.Y) != null)
+                        Value2D<GridSpace> grid = BigBoss.Levels.Level.Array.GetAround(p.x, p.y, true,
+                            (arr, x, y) =>
+                            {
+                                GridSpace g = arr[y, x];
+                                return g.X == playerLoc.X && g.Y == playerLoc.Y;
+                            }
+                                );
+                        if (grid != null)
                         {
                             BigBoss.Player.attack(n);
                         }
