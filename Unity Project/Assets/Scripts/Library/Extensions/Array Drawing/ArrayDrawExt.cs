@@ -121,6 +121,16 @@ public static class ArrayDrawExt
         return ret;
     }
 
+    public static bool HasAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester)
+    {
+        return !arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
+        {
+            if (tester(arr2, x2, y2))
+                return false; // stop drawing around
+            return true; // keep drawing around
+        }));
+    }
+
     public static bool GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester, out Value2D<T> val)
     {
         Value2D<T> ret = null;
@@ -129,9 +139,9 @@ public static class ArrayDrawExt
             if (tester(arr2, x2, y2))
             {
                 ret = new Value2D<T>(x2, y2, arr[y2, x2]);
-                return false;
+                return false; // stop drawing around
             }
-            return true;
+            return true; // keep drawing around
         })))
         {
             val = ret;
@@ -378,6 +388,14 @@ public static class ArrayDrawExt
     #endregion
     #endregion
     #region Squares
+    public static bool DrawSquare<T>(this T[,] arr, bool includeEdges, DrawActions<T> action)
+    {
+        if (includeEdges)
+            return DrawSquare(arr, 0, arr.GetLength(1) - 1, 0, arr.GetLength(0) - 1, action);
+        else
+            return DrawSquare(arr, 1, arr.GetLength(1) - 2, 1, arr.GetLength(0) - 2, action);
+    }
+
     public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, DrawActions<T> action)
     {
         if (action.StrokeAction == null)

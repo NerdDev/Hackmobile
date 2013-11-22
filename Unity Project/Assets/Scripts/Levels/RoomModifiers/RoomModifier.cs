@@ -125,5 +125,18 @@ abstract public class RoomModifier : ProbabilityItem
             }
         );
     }
+
+    public static DrawAction<GridType> NotEdgeOfArray()
+    {
+        return new DrawAction<GridType>((arr, x, y) =>
+            {
+                if (x <= 0 
+                    || y <= 0
+                    || y >= arr.GetLength(0) - 1
+                    || x >= arr.GetLength(1) - 1) return false;
+                return true;
+            }
+        );
+    }
     #endregion
 }

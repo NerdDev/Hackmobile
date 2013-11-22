@@ -3,8 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class BFSSearcher : GridSearcher {
-    
+public class BFSSearcher : GridSearcher
+{
+
     public BFSSearcher()
         : base()
     {
@@ -20,7 +21,7 @@ public class BFSSearcher : GridSearcher {
         return SearchFill(startPoint, grids, null, targets);
     }
 
-    public Array2D<bool> SearchFill(Value2D<GridType> startPoint, GridArray grids, Func<Value2D<GridType>,bool> pass, GridSet targets)
+    public Array2D<bool> SearchFill(Value2D<GridType> startPoint, GridArray grids, DrawEval<GridType> pass, GridSet targets)
     {
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -35,27 +36,30 @@ public class BFSSearcher : GridSearcher {
         queue.Enqueue(startPoint);
         GridType[,] targetArr = grids.GetArr();
         Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
-        Surrounding<GridType> options = new Surrounding<GridType>(targetArr);
-        options.Filter = pass;
         outGridArr[startPoint.x, startPoint.y] = true;
         Value2D<GridType> curPoint;
+        DrawActions<GridType> test = RoomModifier.NotEdgeOfArray() 
+            + new DrawActions<GridType>()
+            {
+                UnitAction = (arr, x, y) =>
+                    {
+                        return targets.Contains(arr[y, x]) && !outGridArr[x, y];
+                    }
+            }
+            + (DrawActions<GridType>)pass;
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
-            options.Focus(curPoint.x, curPoint.y);
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
-                outGridArr.ToLog(Logs.LevelGen, "Current Map with " + options.Count + " options. Evaluating " + curPoint);
+                outGridArr.ToLog(Logs.LevelGen, "Current Map. Evaluating " + curPoint);
             }
             #endregion
-            foreach (Value2D<GridType> option in options)
+            foreach (Value2D<GridType> option in targetArr.GetAllAround(curPoint.x, curPoint.y, false, test))
             {
-                if (targets.Contains(option.val) && !outGridArr[option.x, option.y])
-                {
-                    queue.Enqueue(option);
-                    outGridArr[option.x, option.y] = true;
-                }
+                queue.Enqueue(option);
+                outGridArr[option.x, option.y] = true;
             }
         }
         #region DEBUG

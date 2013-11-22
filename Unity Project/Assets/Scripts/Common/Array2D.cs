@@ -187,6 +187,18 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     #endregion
 
     #region Iteration
+    public IEnumerable<Value2D<T>> IterateNoEdges()
+    {
+        for (int y = 1; y < arr.GetLength(0) - 1; y++)
+        {
+            for (int x = 1; x < arr.GetLength(1) - 1; x++)
+            {
+                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]);
+                yield return val;
+            }
+        }
+    }
+
     public virtual IEnumerator<Value2D<T>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)

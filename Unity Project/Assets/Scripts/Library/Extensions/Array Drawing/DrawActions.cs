@@ -12,8 +12,21 @@ public class DrawActions<T>
     {
     }
 
+    public static implicit operator DrawActions<T>(DrawEval<T> normalFunc)
+    {
+        if (normalFunc == null) return null;
+        return new DrawActions<T>()
+        {
+            UnitAction = (arr, x, y) =>
+                {
+                    return normalFunc(arr[y, x]);
+                }
+        };
+    }
+
     public static implicit operator DrawActions<T>(DrawAction<T> normalFunc)
     {
+        if (normalFunc == null) return null;
         return new DrawActions<T>() { UnitAction = normalFunc };
     }
 
@@ -22,8 +35,9 @@ public class DrawActions<T>
         return actions.UnitAction;
     }
 
-    public static DrawActionChained<T> operator +(DrawActions<T> c1, DrawActions<T> c2)
+    public static DrawActions<T> operator +(DrawActions<T> c1, DrawActions<T> c2)
     {
+        if (c2 == null) return c1;
         return new DrawActionChained<T>(c1)
             {
                 UnitAction = c2.UnitAction,
