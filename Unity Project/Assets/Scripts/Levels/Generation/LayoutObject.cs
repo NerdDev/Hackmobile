@@ -197,7 +197,7 @@ abstract public class LayoutObject
         foreach (Value2D<GridType> val in targets)
         {
             Value2D<GridType> nullDir;
-            if (arr.GetAround(val.x, val.y, false, RoomModifier.EqualTo(GridType.NULL), out nullDir))
+            if (arr.GetAround(val.x, val.y, false, DrawPresets.EqualTo(GridType.NULL), out nullDir))
                 ret[val] = val.val;
         }
         return ret;
@@ -243,7 +243,7 @@ abstract public class LayoutObject
                 if (arr[y, x])
                 { // If space part of room
                     // If space is an edge (next to a false)
-                    if (arr.HasAround(x, y, false, RoomModifier.EqualTo(true)))
+                    if (arr.HasAround(x, y, false, DrawPresets.EqualTo(true)))
                         ret[x, y] = grids[x, y];
                 }
                 return true;

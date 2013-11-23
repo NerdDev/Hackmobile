@@ -267,8 +267,6 @@
     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityPool.cs" />
     <Compile Include="Assets\Scripts\Common\Probability\RandomGen.cs" />
     <Compile Include="Assets\Scripts\Common\StringStream.cs" />
-    <Compile Include="Assets\Scripts\Common\Surrounding.cs" />
-    <Compile Include="Assets\Scripts\Common\SurroundingInt.cs" />
     <Compile Include="Assets\Scripts\Common\Value2D.cs" />
     <Compile Include="Assets\Scripts\ExposePropertyAttribute.cs" />
     <Compile Include="Assets\Scripts\GUI\GUIBackLabel.cs" />
@@ -320,6 +318,7 @@
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\ArrayDrawExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawActions.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawActionsChained.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawPresets.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\GridDrawExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\OptionTests.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\SquareFinder.cs" />

@@ -22,9 +22,9 @@ public class Path : LayoutObjectLeaf
 
     public Path(IEnumerable<Value2D<GridType>> stack)
         : base()
-	{
+    {
         _list = new List<Value2D<GridType>>(stack);
-	}
+    }
 
     public static GridSet PathTypes()
     {
@@ -171,14 +171,27 @@ public class Path : LayoutObjectLeaf
         }
         #endregion
         Bounding bounds = GetBounding(true);
+        bounds.expand(1);
         Array2D<int> indexes = new Array2D<int>(bounds, false);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
-        SurroundingInt surround = new SurroundingInt(indexes.GetArr());
+        int[,] arr = indexes.GetArr();
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
-            surround.Focus(val.x, val.y);
-            Value2D<int> neighbor = surround.GetDirWithValDiffLarger(index, 1);
+            int lastDiff = 0;
+            Value2D<int> neighbor = null;
+            arr.DrawAround(val.x, val.y, false, (arr2, x, y) =>
+            { // Find neighboring point on path with the largest distance from current
+                if (arr2[y,x] == 0) return true;
+                int valDiff = Mathf.Abs(index - arr2[y,x]);
+                if (valDiff > 1 // Diff meets requirements
+                    && (neighbor == null || lastDiff < valDiff)) // Larger than last found diff
+                {
+                    lastDiff = valDiff;
+                    neighbor = new Value2D<int>(x, y, arr2[y,x]);
+                }
+                return true;
+            });
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
             {

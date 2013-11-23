@@ -67,76 +67,38 @@ abstract public class RoomModifier : ProbabilityItem
     }
 
     #region Preset Funcs
-    public static DrawAction<T> EqualTo<T>(T t)
-    {
-        return new DrawAction<T>((arr, x, y) =>
-        {
-            return t.Equals(arr[y,x]);
-        });
-    }
-
-    public static DrawAction<GridType> SetTo(GridType g, DrawAction<GridType> additionalFunc = null)
-    {
-        return new DrawAction<GridType>((arr, x, y) =>
-        {
-            arr[y, x] = g;
-            if (additionalFunc != null)
-                return additionalFunc(arr, x, y);
-            return true;
-        }
-        );
-    }
-
-    public static DrawAction<GridType> SetToIfNull(GridType g, DrawAction<GridType> additionalFunc = null)
+    public static DrawAction<GridType> SetToIfNull(GridType g)
     {
         return new DrawAction<GridType>((arr, x, y) =>
         {
             if (arr[y, x] == GridType.NULL)
                 arr[y, x] = g;
-            if (additionalFunc != null)
-                return additionalFunc(arr, x, y);
             return true;
         }
         );
     }
 
-    public static DrawAction<GridType> SetToIfNotNull(GridType g, DrawAction<GridType> additionalFunc = null)
+    public static DrawAction<GridType> SetToIfNotNull(GridType g)
     {
         return new DrawAction<GridType>((arr, x, y) =>
         {
             if (arr[y, x] != GridType.NULL)
                 arr[y, x] = g;
-            if (additionalFunc != null)
-                return additionalFunc(arr, x, y);
             return true;
         }
         );
     }
 
-    public static DrawAction<GridType> LoadDoorOptions(List<Point> list, DrawAction<GridType> additionalFunc = null)
+    public static DrawAction<GridType> LoadDoorOptions(List<Point> list)
     {
         return new DrawAction<GridType>((arr, x, y) =>
         {
                 if (arr.CanDrawDoor(x, y))
                     list.Add(new Point(x, y));
-                if (additionalFunc != null)
-                    return additionalFunc(arr, x, y);
                 return true;
             }
         );
     }
 
-    public static DrawAction<GridType> NotEdgeOfArray()
-    {
-        return new DrawAction<GridType>((arr, x, y) =>
-            {
-                if (x <= 0 
-                    || y <= 0
-                    || y >= arr.GetLength(0) - 1
-                    || x >= arr.GetLength(1) - 1) return false;
-                return true;
-            }
-        );
-    }
     #endregion
 }

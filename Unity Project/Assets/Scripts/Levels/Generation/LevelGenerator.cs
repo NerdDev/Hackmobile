@@ -507,7 +507,7 @@ public class LevelGenerator
         {
             // Block nearby floor from being found
             Value2D<GridType> floor;
-            if (arr.GetAround(door.x, door.y, false, RoomModifier.EqualTo(GridType.Floor), out floor))
+            if (arr.GetAround(door.x, door.y, false, DrawPresets.EqualTo(GridType.Floor), out floor))
                 grids[floor] = GridType.INTERNAL_RESERVED_BLOCKED;
 
             var path = new Path(door, grids);

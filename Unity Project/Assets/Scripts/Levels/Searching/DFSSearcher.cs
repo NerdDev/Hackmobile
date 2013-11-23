@@ -47,7 +47,7 @@ public class DFSSearcher : GridSearcher
             {
                 return !blockedPoints[x, y] && validSpaces.Contains(arr2[y,x]);
             }
-        } + RoomModifier.NotEdgeOfArray();
+        } + DrawPresets.NotEdgeOfArray<GridType>();
         DrawActions<GridType> foundTarget = new DrawActions<GridType>()
         {
             UnitAction = (arr2, x, y) =>
@@ -55,7 +55,7 @@ public class DFSSearcher : GridSearcher
                 GridType t = arr2[y, x];
                 return !blockedPoints[x, y] && targets.Contains(t);
             }
-        } + RoomModifier.NotEdgeOfArray();
+        } + DrawPresets.NotEdgeOfArray<GridType>();
         #region DEBUG
         GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
         #endregion

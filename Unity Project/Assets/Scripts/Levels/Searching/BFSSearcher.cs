@@ -38,7 +38,7 @@ public class BFSSearcher : GridSearcher
         Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
         outGridArr[startPoint.x, startPoint.y] = true;
         Value2D<GridType> curPoint;
-        DrawActions<GridType> test = RoomModifier.NotEdgeOfArray() 
+        DrawActions<GridType> test = DrawPresets.NotEdgeOfArray<GridType>() 
             + new DrawActions<GridType>()
             {
                 UnitAction = (arr, x, y) =>
