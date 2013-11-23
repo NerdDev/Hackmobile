@@ -221,7 +221,6 @@
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
      <Compile Include="Assets\Scripts\Common\Array2Dcoord.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
-     <Compile Include="Assets\Scripts\Common\Comparator.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\IXmlParsable.cs" />
      <Compile Include="Assets\Scripts\Common\Dice.cs" />
@@ -257,7 +256,6 @@
      <Compile Include="Assets\Scripts\Levels\Generation\GridArray.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\GridMap.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\GridSet.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\GridTypeComparator.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutCluster.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />

@@ -3,16 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
+public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>>
+{
 
     protected T[,] arr;
 
     #region Ctors
-    protected Array2D() : base()
+    protected Array2D()
+        : base()
     {
     }
 
-    public Array2D(int width, int height) : base()
+    public Array2D(int width, int height)
+        : base()
     {
         arr = new T[height, width];
     }
@@ -35,10 +38,11 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         PutAll(rhs, xShift, yShift);
     }
 
-	public Array2D(Bounding bound, bool minimize) : this()
+    public Array2D(Bounding bound, bool minimize)
+        : this()
     {
         arr = BoundedArr(bound, minimize);
-	}
+    }
     #endregion
 
     protected static T[,] BoundedArr(Bounding bound, bool minimize)
@@ -58,7 +62,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
                 height = bound.YMax + 1;
             }
         }
-        return new T[height,width];
+        return new T[height, width];
     }
 
     #region GetSet
@@ -103,14 +107,9 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     public override void Put(T val, int x, int y)
     {
         if (InRange(x, y))
-        {
-            if (comparator == null || 1 == comparator.compare(val, arr[y, x]))
-            {
-                arr[y, x] = val;
-            }
-        }
+            arr[y, x] = val;
     }
-	
+
     // Unsafe put that does no checking or expanding
     protected override void PutInternal(T val, int x, int y)
     {
@@ -140,7 +139,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
             for (int x = 0; x < rhs.GetLength(1); x++)
             {
                 Put(rhs[y, x], x + additionalXshift, y + additionalYshift);
-			}
+            }
         }
     }
 
@@ -205,7 +204,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]); 
+                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]);
                 yield return val;
             }
         }

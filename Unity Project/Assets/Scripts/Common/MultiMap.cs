@@ -88,12 +88,8 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     void Put(SortedDictionary<int, T> row, T val, int x)
     {
-        if (!row.ContainsKey(x)    // If value doesn't already exist
-            || comparator == null  // Or comparator is null
-            || 1 == comparator.compare(val, row[x])) // Or if new value is greater
-        {
+        if (!row.ContainsKey(x))
             row[x] = val;
-        }
     }
 
     public void Remove(int x, int y)

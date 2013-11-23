@@ -8,7 +8,8 @@ using System.Collections.Generic;
 // (0,0) is stored at total width / 2 and total height / 2, respectively.
 // Multidimensional array is indexed [y,x].
 // Array automatically expands if a value is put outside its range.
-public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
+public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>>
+{
 
     static int growth = 10;
     protected T[,] arr;
@@ -16,13 +17,15 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     int yShift;
 
     #region Ctors
-    protected Array2Dcoord() : base()
+    protected Array2Dcoord()
+        : base()
     {
     }
 
     // Creates an array with width/height in both directions
     // away from the origin (0,0)
-    public Array2Dcoord(int width, int height) : base()
+    public Array2Dcoord(int width, int height)
+        : base()
     {
         arr = new T[height * 2 + 1, width * 2 + 1];
         xShift = width;
@@ -52,7 +55,8 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     // Creates an array with width/height in both directions from the origin.
     // Uses the max width/height of the bounds in both directions, respectively.
-	public Array2Dcoord(Bounding bound) : this()
+    public Array2Dcoord(Bounding bound)
+        : this()
     {
         int width = 0;
         int height = 0;
@@ -64,7 +68,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         arr = new T[height * 2 + 1, width * 2 + 1];
         xShift = width;
         yShift = height;
-	}
+    }
     #endregion
 
     #region GetSet
@@ -122,7 +126,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
         return arr.GetLength(0) - yShift - 1;
     }
-	
+
     // Puts value into the array
     // If outside the range, a new larger array is
     // made to store the value.
@@ -130,12 +134,9 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     {
         if (InRange(x, y))
         {
-			x += xShift;
-			y += yShift;
-            if (comparator == null || 1 == comparator.compare(val, arr[y, x]))
-            {
-                arr[y, x] = val;
-            }
+            x += xShift;
+            y += yShift;
+            arr[y, x] = val;
         }
         else
         {
@@ -149,16 +150,18 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     public void expandToFit(int x, int y)
     {
         // Determine largest of parameter values vs existing values
-		int maxWidth = Math.Max(Math.Abs(x), getWidth ());
-		int maxHeight = Math.Max (Math.Abs (y), getHeight());
+        int maxWidth = Math.Max(Math.Abs(x), getWidth());
+        int maxHeight = Math.Max(Math.Abs(y), getHeight());
 
         // If dimension needs to be grown, add growth buffer
-		if (maxWidth != getWidth()) {
-			maxWidth += growth;	
-		}
-		if (maxHeight != getHeight()) {
-			maxHeight += growth;	
-		}
+        if (maxWidth != getWidth())
+        {
+            maxWidth += growth;
+        }
+        if (maxHeight != getHeight())
+        {
+            maxHeight += growth;
+        }
 
         // Make new larger arrray and copy data
         Array2Dcoord<T> tmp = new Array2Dcoord<T>(maxWidth, maxHeight, this);
@@ -168,12 +171,12 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         xShift = tmp.xShift;
         yShift = tmp.yShift;
     }
-	
+
     // Unsafe put that does no checking or expanding
     protected override void PutInternal(T val, int x, int y)
     {
-		x += xShift;
-		x += yShift;
+        x += xShift;
+        x += yShift;
         arr[y, x] = val;
     }
 
@@ -198,7 +201,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
                 // Have to shift x/y to "public" realm to call public put function
                 // Also apply additional desired shifts
                 Put(rhs.arr[y, x], x - rhs.xShift + additionalXshift, y - rhs.yShift + additionalYshift);
-			}
+            }
         }
     }
 
@@ -259,7 +262,7 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                Value2D<T> val = new Value2D<T>(x - xShift, y - yShift, arr[y, x]); 
+                Value2D<T> val = new Value2D<T>(x - xShift, y - yShift, arr[y, x]);
                 yield return val;
             }
         }

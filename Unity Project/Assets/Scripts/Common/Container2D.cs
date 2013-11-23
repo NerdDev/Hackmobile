@@ -5,16 +5,9 @@ using System.Collections.Generic;
 
 abstract public class Container2D<T> {
 
-    protected Comparator<T> comparator;
-	
     protected Container2D()
     {
-		comparator = getDefaultComparator();
     }
-	protected virtual Comparator<T> getDefaultComparator()
-	{	
-		return null;
-	}
     public T this[int x, int y]
     {
         get
@@ -56,12 +49,8 @@ abstract public class Container2D<T> {
     public abstract bool InRange(int x, int y);
     public virtual void Put(T val, int x, int y)
     {
-        if (
-			InRange(x, y)
-			&& (comparator == null
-            || 1 == comparator.compare(val, Get(x,y)))) {
+        if (InRange(x, y))
             PutInternal(val, x, y);
-        }
     }
     public virtual void Put(Value2D<T> val)
     {
