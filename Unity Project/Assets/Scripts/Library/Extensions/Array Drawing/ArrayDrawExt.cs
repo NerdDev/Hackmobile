@@ -489,22 +489,106 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Searches
-    public static Stack<Value2D<T>> DepthFirstSearch<T>(this T[,] arr, int x, int y, DrawAction<T> tester)
+    public static Stack<Value2D<T>> DepthFirstSearch<T>(
+        this T[,] arr, 
+        int x, 
+        int y, 
+        DrawAction<T> allowedSpace,
+        DrawAction<T> target, 
+        System.Random rand, 
+        bool edgeSafe = false)
     {
         #region DEBUG
-        //if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-        //{
-        //    BigBoss.Debug.printHeader(Logs.LevelGen, "Depth First Search");
-        //    arr.ToLog(Logs.LevelGen, "Starting:");
-        //}
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen) && typeof(T) == typeof(GridType))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Depth First Search");
+            GridType[,] tmpArr = new GridType[arr.GetLength(0), arr.GetLength(1)];
+            for (int y1 = 0; y1 < arr.GetLength(0); y1++)
+                for (int x1 = 0; x1 < arr.GetLength(1); x1++)
+                    tmpArr[y1, x1] = (GridType)(object)arr[y1, x1];
+            GridArray tmp = new GridArray(tmpArr);
+            tmp[x, y] = GridType.INTERNAL_RESERVED_CUR;
+            tmp.ToLog(Logs.LevelGen, "Starting Map:");
+        }
         #endregion
-        Array2D<bool> blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
-        return null;
+        var blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
+        var pathTaken = new Stack<Value2D<T>>();
+        var filter = new DrawActions<T>()
+        {
+            UnitAction = (arr2, x2, y2) =>
+            {
+                return !blockedPoints[x2, y2] && allowedSpace(arr2, x2, y2);
+            }
+        };
+        var foundTarget = new DrawActions<T>()
+        {
+            UnitAction = (arr2, x2, y2) =>
+            {
+                return !blockedPoints[x2, y2] && target(arr2, x2, y2);
+            }
+        };
+        if (edgeSafe)
+        {
+            filter += DrawPresets.NotEdgeOfArray<T>();
+            foundTarget += DrawPresets.NotEdgeOfArray<T>();
+        }
+        Value2D<T> curPoint;
+        Value2D<T> targetDir;
+
+        // Push start point onto path
+        pathTaken.Push(new Value2D<T>(x, y));
+        while (pathTaken.Count > 0)
+        {
+            curPoint = pathTaken.Peek();
+            // Don't want to visit the same point on a different route later
+            blockedPoints[curPoint] = true;
+
+            // If found target, return path we took
+            if (arr.GetAround(curPoint.x, curPoint.y, false, foundTarget, out targetDir))
+            {
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + curPoint);
+                    BigBoss.Debug.printFooter(Logs.LevelGen);
+                }
+                #endregion
+                pathTaken.Push(targetDir);
+                return pathTaken;
+            }
+
+            // Didn't find target, pick random direction
+            if (arr.GetRandomAround<T>(curPoint.x, curPoint.y, false, rand, filter, out targetDir))
+            {
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + targetDir);
+                }
+                #endregion
+                curPoint = targetDir;
+                pathTaken.Push(curPoint);
+            }
+            else
+            { // If all directions are bad, back up
+                pathTaken.Pop();
+            }
+        }
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printFooter(Logs.LevelGen);
+        }
+        #endregion
+        return pathTaken;
     }
 
     #endregion
 }
 
+#region Helpers
+// These functions should be protected functions, but static classes cannot have non-public members.
+// Moving them outside serves to "hide" these functions
 public class DrawCircleHelper
 {
     public static bool DrawCircleNoStroke<T>(T[,] arr, int centerX, int centerY, int radius, DrawActions<T> action)
@@ -545,3 +629,4 @@ public class DrawSquareHelper
         return true;
     }
 }
+#endregion

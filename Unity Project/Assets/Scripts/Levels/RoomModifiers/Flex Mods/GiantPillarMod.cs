@@ -18,7 +18,7 @@ public class GiantPillarMod : RoomModifier
                 ,
                 StrokeAction = (arr, x, y) =>
                     {
-                        return GridTypeEnum.HallwaySpace(arr[y, x]);
+                        return GridTypeEnum.Walkable(arr[y, x]);
                     }
             },
             spec.Room.GetBounding(false));

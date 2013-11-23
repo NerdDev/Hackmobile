@@ -16,8 +16,16 @@ public class Path : LayoutObjectLeaf
     public Path(Value2D<GridType> startPoint, GridArray grids)
         : base()
     {
-        DFSSearcher searcher = new DFSSearcher(Probability.LevelRand);
-        _list = new List<Value2D<GridType>>(searcher.Search(startPoint, grids, GridType.NULL, typesSet));
+        _list = new List<Value2D<GridType>>(grids.GetArr().DepthFirstSearch(
+            startPoint.x,
+            startPoint.y,
+            DrawPresets.EqualTo(GridType.NULL),
+            (arr, x, y) => {
+                GridType t = arr[y, x];
+                return typesSet.Contains(t); 
+            },
+            Probability.LevelRand,
+            true));
     }
 
     public Path(IEnumerable<Value2D<GridType>> stack)

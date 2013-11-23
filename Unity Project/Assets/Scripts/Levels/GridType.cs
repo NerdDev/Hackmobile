@@ -64,7 +64,7 @@ public class GridTypeEnum
         }
     });
 
-    public static bool HallwaySpace(GridType t)
+    public static bool Walkable(GridType t)
     {
         switch (t)
         {
