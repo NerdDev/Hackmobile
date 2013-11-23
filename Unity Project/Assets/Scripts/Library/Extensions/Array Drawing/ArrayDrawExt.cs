@@ -181,6 +181,18 @@ public static class ArrayDrawExt
         return false;
     }
 
+    public static bool GetRandomAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawAction<T> tester, out Value2D<T> val)
+    {
+        List<Value2D<T>> options = GetAllAround(arr, x, y, cornered, tester);
+        if (options.Count > 0)
+        {
+            val = options.Random(rand);
+            return true;
+        }
+        val = null;
+        return false;
+    }
+
     public static List<Value2D<T>> GetAllDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>(4);

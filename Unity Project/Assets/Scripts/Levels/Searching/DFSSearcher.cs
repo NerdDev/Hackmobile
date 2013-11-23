@@ -41,8 +41,21 @@ public class DFSSearcher : GridSearcher
         this.targets = targets;
         blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
-        Surrounding<GridType> options = new Surrounding<GridType>(arr);
-        options.Filter = Filter;
+        DrawActions<GridType> filter = new DrawActions<GridType>()
+        {
+            UnitAction = (arr2, x, y) =>
+            {
+                return !blockedPoints[x, y] && validSpaces.Contains(arr2[y,x]);
+            }
+        } + RoomModifier.NotEdgeOfArray();
+        DrawActions<GridType> foundTarget = new DrawActions<GridType>()
+        {
+            UnitAction = (arr2, x, y) =>
+            {
+                GridType t = arr2[y, x];
+                return !blockedPoints[x, y] && targets.Contains(t);
+            }
+        } + RoomModifier.NotEdgeOfArray();
         #region DEBUG
         GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
         #endregion
@@ -71,18 +84,9 @@ public class DFSSearcher : GridSearcher
             }
             #endregion
 
-            // Get surrounding points
-            options.Focus(startPoint.x, startPoint.y);
-            #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                debugGrid.ToLog(Logs.LevelGen, "Current Map with " + options.Count + " options.");
-            }
-            #endregion
-
             // If found target, return path we took
-            Value2D<GridType> targetDir = options.GetDirWithVal(true, targets);
-            if (targetDir != null)
+            Value2D<GridType> targetDir;
+            if (arr.GetAround(startPoint.x, startPoint.y, false, foundTarget, out targetDir))
             {
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -96,12 +100,7 @@ public class DFSSearcher : GridSearcher
             }
 
             // Didn't find target, pick random direction
-            targetDir = options.GetRandom(_rand);
-            if (targetDir == null)
-            { // If all directions are bad, back up
-                pathTaken.Pop();
-            }
-            else
+            if (arr.GetRandomAround<GridType>(startPoint.x, startPoint.y, false, _rand, filter, out targetDir))
             {
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -111,6 +110,10 @@ public class DFSSearcher : GridSearcher
                 #endregion
                 startPoint = targetDir;
                 pathTaken.Push(startPoint);
+            }
+            else
+            { // If all directions are bad, back up
+                pathTaken.Pop();
             }
         }
         #region DEBUG
