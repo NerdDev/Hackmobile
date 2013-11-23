@@ -66,7 +66,7 @@ public class InputManager : MonoBehaviour, IManager
                     {
                         GridSpace playerLoc = BigBoss.Player.gridSpace;
                         Value2D<GridSpace> grid;
-                        if (BigBoss.Levels.Level.Array.GetAround(p.x, p.y, true, (arr, x, y) =>
+                        if (BigBoss.Levels.Level.Array.GetPointAround(p.x, p.y, true, (arr, x, y) =>
                             {
                                 GridSpace g = arr[y, x];
                                 return g.X == playerLoc.X && g.Y == playerLoc.Y;

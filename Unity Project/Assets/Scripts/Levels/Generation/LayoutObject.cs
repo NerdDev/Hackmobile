@@ -197,7 +197,7 @@ abstract public class LayoutObject
         foreach (Value2D<GridType> val in targets)
         {
             Value2D<GridType> nullDir;
-            if (arr.GetAround(val.x, val.y, false, DrawPresets.EqualTo(GridType.NULL), out nullDir))
+            if (arr.GetPointAround(val.x, val.y, false, DrawPresets.EqualTo(GridType.NULL), out nullDir))
                 ret[val] = val.val;
         }
         return ret;

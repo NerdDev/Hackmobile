@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public delegate bool DrawAction<T>(T[,] arr, int x, int y);
-public delegate bool DrawEval<T>(T t);
-
 public static class ArrayDrawExt
 {
     #region Point
+    #region Draws
     public static IEnumerable<T> DrawAround<T>(this T[,] arr, int x, int y, bool cornered)
     {
         yield return arr[y + 1, x];
@@ -24,7 +22,7 @@ public static class ArrayDrawExt
         }
     }
 
-    public static bool DrawAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> action)
+    public static bool DrawAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> action)
     {
         if (!action(arr, x, y + 1)) return false;
         if (!action(arr, x, y - 1)) return false;
@@ -40,7 +38,7 @@ public static class ArrayDrawExt
         return true;
     }
 
-    public static bool DrawDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> action)
+    public static bool DrawDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> action)
     {
         switch (dir)
         {
@@ -64,7 +62,7 @@ public static class ArrayDrawExt
         return true;
     }
 
-    public static bool DrawLocation<T>(this T[,] arr, int x, int y, GridLocation loc, DrawAction<T> action)
+    public static bool DrawLocation<T>(this T[,] arr, int x, int y, GridLocation loc, DrawActionCall<T> action)
     {
         switch (loc)
         {
@@ -95,8 +93,9 @@ public static class ArrayDrawExt
         }
         return true;
     }
-
-    public static List<Value2D<T>> GetAllAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester)
+    #endregion
+    #region Around
+    public static List<Value2D<T>> GetPointsAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>(cornered ? 9 : 4);
         arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
@@ -108,20 +107,19 @@ public static class ArrayDrawExt
         return ret;
     }
 
-    public static List<T> GetAllAround<T>(this T[,] arr, int x, int y, bool cornered, DrawEval<T> tester)
+    public static List<T> GetValuesAllAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester)
     {
         List<T> ret = new List<T>(cornered ? 9 : 4);
         arr.DrawAround(x, y, cornered, (arr2, x2, y2) =>
         {
-            T t = arr2[y2, x2];
-            if (tester(t))
-                ret.Add(t);
+            if (tester(arr2, x2, y2))
+                ret.Add(arr2[y, x]);
             return true;
         });
         return ret;
     }
 
-    public static bool HasAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester)
+    public static bool HasAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester)
     {
         return !arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
@@ -131,7 +129,7 @@ public static class ArrayDrawExt
         }));
     }
 
-    public static bool GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester, out Value2D<T> val)
+    public static bool GetPointAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester, out Value2D<T> val)
     {
         Value2D<T> ret = null;
         if (arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
@@ -151,16 +149,16 @@ public static class ArrayDrawExt
         return true;
     }
 
-    public static bool GetAround<T>(this T[,] arr, int x, int y, bool cornered, DrawEval<T> tester, out T val)
+    public static bool GetValueAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester, out T val)
     {
         T ret = default(T);
-        if (arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
+        if (arr.DrawAround(x, y, cornered, (arr2, x2, y2) =>
         {
             ret = arr2[y2, x2];
-            if (tester(ret))
+            if (tester(arr2, x2, y2))
                 return false;
             return true;
-        })))
+        }))
         {
             val = ret;
             return false;
@@ -169,9 +167,9 @@ public static class ArrayDrawExt
         return true;
     }
 
-    public static bool GetRandomAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawEval<T> tester, out T val)
+    public static bool GetRandomValueAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawActionCall<T> tester, out T val)
     {
-        List<T> options = GetAllAround(arr, x, y, cornered, tester);
+        List<T> options = GetValuesAllAround(arr, x, y, cornered, tester);
         if (options.Count > 0)
         {
             val = options.Random(rand);
@@ -181,9 +179,9 @@ public static class ArrayDrawExt
         return false;
     }
 
-    public static bool GetRandomAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawAction<T> tester, out Value2D<T> val)
+    public static bool GetRandomPointAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawActionCall<T> tester, out Value2D<T> val)
     {
-        List<Value2D<T>> options = GetAllAround(arr, x, y, cornered, tester);
+        List<Value2D<T>> options = GetPointsAround(arr, x, y, cornered, tester);
         if (options.Count > 0)
         {
             val = options.Random(rand);
@@ -192,8 +190,9 @@ public static class ArrayDrawExt
         val = null;
         return false;
     }
-
-    public static List<Value2D<T>> GetAllDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester)
+    #endregion
+    #region Get Direction
+    public static List<Value2D<T>> GetPointsOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>(4);
         arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
@@ -205,20 +204,20 @@ public static class ArrayDrawExt
         return ret;
     }
 
-    public static List<T> GetAllDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawEval<T> tester)
+    public static List<T> GetValuesOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester)
     {
         List<T> ret = new List<T>(4);
-        arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
+        arr.DrawDirs(x, y, dir, (arr2, x2, y2) =>
         {
             T t = arr2[y2, x2];
-            if (tester(t))
+            if (tester(arr2,x2,y2))
                 ret.Add(t);
             return true;
-        }));
+        });
         return ret;
     }
 
-    public static bool GetDir<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester, out Value2D<T> val)
+    public static bool GetPointOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester, out Value2D<T> val)
     {
         Value2D<T> ret = null;
         if (arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
@@ -238,16 +237,16 @@ public static class ArrayDrawExt
         return true;
     }
 
-    public static bool GetDir<T>(this T[,] arr, int x, int y, GridDirection dir, DrawEval<T> tester, out T val)
+    public static bool GetValueOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester, out T val)
     {
         T ret = default(T);
-        if (arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
+        if (arr.DrawDirs(x, y, dir, (arr2, x2, y2) =>
         {
             ret = arr2[y2, x2];
-            if (tester(ret))
+            if (tester(arr2,x2,y2))
                 return false;
             return true;
-        })))
+        }))
         {
             val = ret;
             return false;
@@ -255,7 +254,8 @@ public static class ArrayDrawExt
         val = ret;
         return true;
     }
-
+    #endregion
+    #region Utility
     public static bool Alternates<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator)
     {
         bool pass = evaluator(arr[y, x - 1]);
@@ -274,8 +274,9 @@ public static class ArrayDrawExt
         return true;
     }
     #endregion
+    #endregion
     #region Lines
-    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, DrawActions<T> action)
+    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, StrokedAction<T> action)
     {
         if (horizontal)
             return DrawRow(arr, from, to, on, action);
@@ -293,7 +294,7 @@ public static class ArrayDrawExt
         return DrawCol(arr, y1, y2, x, SetTo(setTo));
     }
 
-    public static bool DrawCol<T>(this T[,] arr, int y1, int y2, int x, DrawActions<T> action)
+    public static bool DrawCol<T>(this T[,] arr, int y1, int y2, int x, StrokedAction<T> action)
     {
         for (; y1 <= y2; y1++)
             if (!action.UnitAction(arr, x, y1)) return false;
@@ -305,7 +306,7 @@ public static class ArrayDrawExt
         return DrawRow(arr, xl, xr, y, SetTo(setTo));
     }
 
-    public static bool DrawRow<T>(this T[,] arr, int xl, int xr, int y, DrawActions<T> action)
+    public static bool DrawRow<T>(this T[,] arr, int xl, int xr, int y, StrokedAction<T> action)
     {
         for (; xl <= xr; xl++)
             if (!action.UnitAction(arr, xl, y)) return false;
@@ -325,7 +326,7 @@ public static class ArrayDrawExt
     /*
      * Uses Bressenham's Midpoint Algo
      */
-    public static bool DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, DrawActions<T> action)
+    public static bool DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, StrokedAction<T> action)
     {
         var stroke = action.StrokeAction;
         if (stroke == null)
@@ -379,7 +380,7 @@ public static class ArrayDrawExt
 
     public static bool DrawCircle<T>(this T[,] arr, int centerX, int centerY, int radius, T setFill, T setStroke)
     {
-        return DrawCircle(arr, centerX, centerY, radius, new DrawActions<T>()
+        return DrawCircle(arr, centerX, centerY, radius, new StrokedAction<T>()
             {
                 UnitAction = SetTo(setFill),
                 StrokeAction = SetTo(setStroke)
@@ -404,7 +405,7 @@ public static class ArrayDrawExt
         return arr.DrawCircle(center.x, center.y, radius, action);
     }
 
-    public static bool DrawCircle<T>(this T[,] arr, int radius, DrawActions<T> action)
+    public static bool DrawCircle<T>(this T[,] arr, int radius, StrokedAction<T> action)
     {
         Point center = arr.Center();
         return arr.DrawCircle(center.x, center.y, radius, action);
@@ -412,7 +413,7 @@ public static class ArrayDrawExt
     #endregion
     #endregion
     #region Squares
-    public static bool DrawSquare<T>(this T[,] arr, bool includeEdges, DrawActions<T> action)
+    public static bool DrawSquare<T>(this T[,] arr, bool includeEdges, StrokedAction<T> action)
     {
         if (includeEdges)
             return DrawSquare(arr, 0, arr.GetLength(1) - 1, 0, arr.GetLength(0) - 1, action);
@@ -420,13 +421,13 @@ public static class ArrayDrawExt
             return DrawSquare(arr, 1, arr.GetLength(1) - 2, 1, arr.GetLength(0) - 2, action);
     }
 
-    public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, DrawActions<T> action)
+    public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, StrokedAction<T> action)
     {
         if (action.StrokeAction == null)
             return DrawSquareHelper.DrawSquare(arr, xl, xr, yb, yt, action);
 
-        DrawActions<T> stroke = new DrawActions<T>() { UnitAction = action.StrokeAction };
-        DrawActions<T> fill = new DrawActions<T>() { UnitAction = action.UnitAction };
+        StrokedAction<T> stroke = new StrokedAction<T>() { UnitAction = action.StrokeAction };
+        StrokedAction<T> fill = new StrokedAction<T>() { UnitAction = action.UnitAction };
 
         if (!arr.DrawRow(xl, xr, yb, stroke)) return false;
         if (!arr.DrawRow(xl, xr, yt, stroke)) return false;
@@ -449,7 +450,7 @@ public static class ArrayDrawExt
 
     public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, T fillTo, T strokeTo)
     {
-        return arr.DrawSquare(xl, xr, yb, yt, new DrawActions<T>()
+        return arr.DrawSquare(xl, xr, yb, yt, new StrokedAction<T>()
         {
             UnitAction = SetTo(fillTo),
             StrokeAction = SetTo(strokeTo)
@@ -490,12 +491,12 @@ public static class ArrayDrawExt
     #endregion
     #region Searches
     public static Stack<Value2D<T>> DepthFirstSearch<T>(
-        this T[,] arr, 
-        int x, 
-        int y, 
-        DrawAction<T> allowedSpace,
-        DrawAction<T> target, 
-        System.Random rand, 
+        this T[,] arr,
+        int x,
+        int y,
+        DrawActionCall<T> allowedSpace,
+        DrawActionCall<T> target,
+        System.Random rand,
         bool edgeSafe = false)
     {
         #region DEBUG
@@ -513,24 +514,18 @@ public static class ArrayDrawExt
         #endregion
         var blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
         var pathTaken = new Stack<Value2D<T>>();
-        var filter = new DrawActions<T>()
+        DrawAction<T> filter = new DrawActionCall<T>((arr2, x2, y2) =>
         {
-            UnitAction = (arr2, x2, y2) =>
-            {
-                return !blockedPoints[x2, y2] && allowedSpace(arr2, x2, y2);
-            }
-        };
-        var foundTarget = new DrawActions<T>()
+            return !blockedPoints[x2, y2] && allowedSpace(arr2, x2, y2);
+        });
+        DrawAction<T> foundTarget = new DrawActionCall<T>((arr2, x2, y2) =>
         {
-            UnitAction = (arr2, x2, y2) =>
-            {
-                return !blockedPoints[x2, y2] && target(arr2, x2, y2);
-            }
-        };
+            return !blockedPoints[x2, y2] && target(arr2, x2, y2);
+        });
         if (edgeSafe)
         {
-            filter += DrawPresets.NotEdgeOfArray<T>();
-            foundTarget += DrawPresets.NotEdgeOfArray<T>();
+            filter = filter.Then(DrawPresets.NotEdgeOfArray<T>());
+            foundTarget = foundTarget.Then(DrawPresets.NotEdgeOfArray<T>());
         }
         Value2D<T> curPoint;
         Value2D<T> targetDir;
@@ -544,7 +539,7 @@ public static class ArrayDrawExt
             blockedPoints[curPoint] = true;
 
             // If found target, return path we took
-            if (arr.GetAround(curPoint.x, curPoint.y, false, foundTarget, out targetDir))
+            if (arr.GetPointAround(curPoint.x, curPoint.y, false, foundTarget, out targetDir))
             {
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -558,7 +553,7 @@ public static class ArrayDrawExt
             }
 
             // Didn't find target, pick random direction
-            if (arr.GetRandomAround<T>(curPoint.x, curPoint.y, false, rand, filter, out targetDir))
+            if (arr.GetRandomPointAround<T>(curPoint.x, curPoint.y, false, rand, filter, out targetDir))
             {
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -591,7 +586,7 @@ public static class ArrayDrawExt
 // Moving them outside serves to "hide" these functions
 public class DrawCircleHelper
 {
-    public static bool DrawCircleNoStroke<T>(T[,] arr, int centerX, int centerY, int radius, DrawActions<T> action)
+    public static bool DrawCircleNoStroke<T>(T[,] arr, int centerX, int centerY, int radius, StrokedAction<T> action)
     {
         int radiusError = 3 - (2 * radius);
         int x = 0;
@@ -622,7 +617,7 @@ public class DrawCircleHelper
 
 public class DrawSquareHelper
 {
-    public static bool DrawSquare<T>(T[,] arr, int xl, int xr, int yb, int yt, DrawActions<T> action)
+    public static bool DrawSquare<T>(T[,] arr, int xl, int xr, int yb, int yt, StrokedAction<T> action)
     {
         for (; yb <= yt; yb++)
             if (!arr.DrawRow(xl, xr, yb, action)) return false;

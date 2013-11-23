@@ -41,21 +41,19 @@ public class DFSSearcher : GridSearcher
         this.targets = targets;
         blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
         Stack<Value2D<GridType>> pathTaken = new Stack<Value2D<GridType>>();
-        DrawActions<GridType> filter = new DrawActions<GridType>()
-        {
-            UnitAction = (arr2, x, y) =>
+        DrawAction<GridType> filter = new DrawAction<GridType>(
+            (arr2, x, y) =>
             {
                 return !blockedPoints[x, y] && validSpaces.Contains(arr2[y,x]);
-            }
-        } + DrawPresets.NotEdgeOfArray<GridType>();
-        DrawActions<GridType> foundTarget = new DrawActions<GridType>()
-        {
-            UnitAction = (arr2, x, y) =>
+            }, 
+            DrawPresets.NotEdgeOfArray<GridType>());
+        DrawAction<GridType> foundTarget = new DrawAction<GridType>(
+            (arr2, x, y) =>
             {
                 GridType t = arr2[y, x];
                 return !blockedPoints[x, y] && targets.Contains(t);
-            }
-        } + DrawPresets.NotEdgeOfArray<GridType>();
+            },
+            DrawPresets.NotEdgeOfArray<GridType>());
         #region DEBUG
         GridArray debugGrid = new GridArray(0, 0); // Will be reassigned later
         #endregion
@@ -86,7 +84,7 @@ public class DFSSearcher : GridSearcher
 
             // If found target, return path we took
             Value2D<GridType> targetDir;
-            if (arr.GetAround(startPoint.x, startPoint.y, false, foundTarget, out targetDir))
+            if (arr.GetPointAround(startPoint.x, startPoint.y, false, foundTarget, out targetDir))
             {
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -100,7 +98,7 @@ public class DFSSearcher : GridSearcher
             }
 
             // Didn't find target, pick random direction
-            if (arr.GetRandomAround<GridType>(startPoint.x, startPoint.y, false, _rand, filter, out targetDir))
+            if (arr.GetRandomPointAround<GridType>(startPoint.x, startPoint.y, false, _rand, filter, out targetDir))
             {
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))

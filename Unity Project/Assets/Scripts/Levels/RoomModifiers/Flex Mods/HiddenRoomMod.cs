@@ -26,7 +26,7 @@ public class HiddenRoomMod : RoomModifier {
                     room.Array.DrawSquare(
                         (doorSpace.x-secretRoomSize),(doorSpace.x+secretRoomSize),
                         (doorSpace.y-secretRoomSize),(doorSpace.y+secretRoomSize),
-                        new DrawActions<GridType>()
+                        new StrokedAction<GridType>()
                         {
                             UnitAction = SetToIfNull(GridType.Floor),
                             StrokeAction = SetToIfNull(GridType.Wall)

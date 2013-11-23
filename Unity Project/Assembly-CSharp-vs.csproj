@@ -289,12 +289,12 @@
      <Compile Include="Assets\Scripts\Levels\Searching\DFSSearcher.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\ArrayDrawExt.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawActions.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawActionsChained.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawPresets.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\GridDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\OptionTests.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\SquareFinder.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\StrokedAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />

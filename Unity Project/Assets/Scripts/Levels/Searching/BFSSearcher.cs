@@ -21,7 +21,7 @@ public class BFSSearcher : GridSearcher
         return SearchFill(startPoint, grids, null, targets);
     }
 
-    public Array2D<bool> SearchFill(Value2D<GridType> startPoint, GridArray grids, DrawEval<GridType> pass, GridSet targets)
+    public Array2D<bool> SearchFill(Value2D<GridType> startPoint, GridArray grids, DrawActionCall<GridType> pass, GridSet targets)
     {
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -38,15 +38,13 @@ public class BFSSearcher : GridSearcher
         Array2D<bool> outGridArr = new Array2D<bool>(grids.GetBoundingInternal(), false);
         outGridArr[startPoint.x, startPoint.y] = true;
         Value2D<GridType> curPoint;
-        DrawActions<GridType> test = DrawPresets.NotEdgeOfArray<GridType>() 
-            + new DrawActions<GridType>()
+        DrawAction<GridType> test = 
+            DrawPresets.NotEdgeOfArray<GridType>()
+            .Then((arr, x, y) =>
             {
-                UnitAction = (arr, x, y) =>
-                    {
-                        return targets.Contains(arr[y, x]) && !outGridArr[x, y];
-                    }
-            }
-            + (DrawActions<GridType>)pass;
+                return targets.Contains(arr[y, x]) && !outGridArr[x, y];
+            })
+            .Then(pass);
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
@@ -56,7 +54,7 @@ public class BFSSearcher : GridSearcher
                 outGridArr.ToLog(Logs.LevelGen, "Current Map. Evaluating " + curPoint);
             }
             #endregion
-            foreach (Value2D<GridType> option in targetArr.GetAllAround(curPoint.x, curPoint.y, false, test))
+            foreach (Value2D<GridType> option in targetArr.GetPointsAround(curPoint.x, curPoint.y, false, test))
             {
                 queue.Enqueue(option);
                 outGridArr[option.x, option.y] = true;

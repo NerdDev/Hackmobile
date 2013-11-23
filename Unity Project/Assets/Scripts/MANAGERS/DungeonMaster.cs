@@ -66,7 +66,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public void PlacePlayer(Level l, GridSpace stairsUp)
     {
         Value2D<GridSpace> grid;
-        l.Array.GetAround(stairsUp.X, stairsUp.Y, false, (arr, x, y) =>
+        l.Array.GetPointAround(stairsUp.X, stairsUp.Y, false, (arr, x, y) =>
             {
                 return arr[y, x].Type == GridType.Floor;
             }, out grid);

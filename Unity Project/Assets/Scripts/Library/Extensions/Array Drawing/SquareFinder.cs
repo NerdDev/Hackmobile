@@ -14,7 +14,7 @@ public class SquareFinder<T>
     bool _tryFlipped;
     int _lowestFail = int.MaxValue;
     Bounding _scope;
-    DrawActions<T> incremental = new DrawActions<T>();
+    StrokedAction<T> incremental = new StrokedAction<T>();
     public bool Single { get; set; }
 
     public SquareFinder(T[,] arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
@@ -37,7 +37,7 @@ public class SquareFinder<T>
         Single = false;
     }
 
-    protected DrawAction<T> GetTest(DrawActions<T> drawTest, bool stroke)
+    protected DrawAction<T> GetTest(StrokedAction<T> drawTest, bool stroke)
     {
         return new DrawAction<T>((af, xf, yf) =>
                     { // For each in test square, run user's test

@@ -665,7 +665,7 @@ public class LevelGenerator
         }
         #endregion
         DFSSearcher searcher = new DFSSearcher(Probability.LevelRand);
-        var startPtStack = searcher.Search(new Value2D<GridType>(), smallest, GridType.NULL, Path.PathTypes());
+        var startPtStack = searcher.Search(new Value2D<GridType>(1,1), smallest, GridType.NULL, Path.PathTypes());
         if (startPtStack.Count > 0)
         {
             layoutArr.PutAll(largest);
