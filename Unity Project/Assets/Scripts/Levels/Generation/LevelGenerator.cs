@@ -505,10 +505,16 @@ public class LevelGenerator
         #endregion
         foreach (var door in doors)
         {
-            // Block nearby floor from being found
-            Value2D<GridType> floor;
-            if (arr.GetAround(door.x, door.y, false, DrawPresets.EqualTo(GridType.Floor), out floor))
-                grids[floor] = GridType.INTERNAL_RESERVED_BLOCKED;
+            // Block nearby floors
+            arr.DrawAround(door.x, door.y, false, (arr2, x, y) =>
+                {
+                    if (arr2[y, x] == GridType.Floor)
+                        arr2[y, x] = GridType.INTERNAL_RESERVED_BLOCKED;
+                    return true;
+                });
+        }
+        foreach (var door in doors)
+        {
 
             var path = new Path(door, grids);
             #region DEBUG
