@@ -664,8 +664,12 @@ public class LevelGenerator
             largest.ToLog(Logs.LevelGen, "Largest");
         }
         #endregion
-        DFSSearcher searcher = new DFSSearcher(Probability.LevelRand);
-        var startPtStack = searcher.Search(new Value2D<GridType>(1,1), smallest, GridType.NULL, Path.PathTypes());
+        var startPtStack = smallest.GetArr().DepthFirstSearch(
+            1, 1,
+            DrawPresets.EqualTo(GridType.NULL),
+            DrawPresets.ContainedIn(Path.PathTypes()),
+            Probability.LevelRand,
+            true);
         if (startPtStack.Count > 0)
         {
             layoutArr.PutAll(largest);

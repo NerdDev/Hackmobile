@@ -221,7 +221,6 @@
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
      <Compile Include="Assets\Scripts\Common\Array2Dcoord.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
-     <Compile Include="Assets\Scripts\Common\Comparator.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\IXmlParsable.cs" />
      <Compile Include="Assets\Scripts\Common\Dice.cs" />
@@ -257,7 +256,6 @@
      <Compile Include="Assets\Scripts\Levels\Generation\GridArray.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\GridMap.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\GridSet.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\GridTypeComparator.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutCluster.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
@@ -288,15 +286,14 @@
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModifier.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomSpec.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\BFSSearcher.cs" />
-     <Compile Include="Assets\Scripts\Levels\Searching\DFSSearcher.cs" />
      <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\ArrayDrawExt.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawActions.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawActionsChained.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawPresets.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\GridDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\OptionTests.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\SquareFinder.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\StrokedAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />

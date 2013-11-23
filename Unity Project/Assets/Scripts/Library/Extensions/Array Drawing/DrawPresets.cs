@@ -13,6 +13,14 @@ public class DrawPresets
         });
     }
 
+    public static DrawAction<T> ContainedIn<T>(ICollection<T> col)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return col.Contains(arr[y, x]);
+        });
+    }
+
     public static DrawAction<T> SetTo<T>(T g)
     {
         return new DrawAction<T>((arr, x, y) =>
