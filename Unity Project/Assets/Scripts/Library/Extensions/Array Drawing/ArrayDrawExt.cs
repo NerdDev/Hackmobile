@@ -98,7 +98,7 @@ public static class ArrayDrawExt
 
     public static List<Value2D<T>> GetAllAround<T>(this T[,] arr, int x, int y, bool cornered, DrawAction<T> tester)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
+        List<Value2D<T>> ret = new List<Value2D<T>>(cornered ? 9 : 4);
         arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
@@ -110,7 +110,7 @@ public static class ArrayDrawExt
 
     public static List<T> GetAllAround<T>(this T[,] arr, int x, int y, bool cornered, DrawEval<T> tester)
     {
-        List<T> ret = new List<T>();
+        List<T> ret = new List<T>(cornered ? 9 : 4);
         arr.DrawAround(x, y, cornered, (arr2, x2, y2) =>
         {
             T t = arr2[y2, x2];
@@ -169,9 +169,21 @@ public static class ArrayDrawExt
         return true;
     }
 
+    public static bool GetRandomAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawEval<T> tester, out T val)
+    {
+        List<T> options = GetAllAround(arr, x, y, cornered, tester);
+        if (options.Count > 0)
+        {
+            val = options.Random(rand);
+            return true;
+        }
+        val = default(T);
+        return false;
+    }
+
     public static List<Value2D<T>> GetAllDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawAction<T> tester)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>();
+        List<Value2D<T>> ret = new List<Value2D<T>>(4);
         arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
@@ -183,7 +195,7 @@ public static class ArrayDrawExt
 
     public static List<T> GetAllDirs<T>(this T[,] arr, int x, int y, GridDirection dir, DrawEval<T> tester)
     {
-        List<T> ret = new List<T>();
+        List<T> ret = new List<T>(4);
         arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
         {
             T t = arr2[y2, x2];
