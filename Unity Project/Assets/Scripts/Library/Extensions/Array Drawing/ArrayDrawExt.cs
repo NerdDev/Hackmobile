@@ -490,10 +490,7 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Searches
-    public static Stack<Value2D<T>> DepthFirstSearch<T>(
-        this T[,] arr,
-        int x,
-        int y,
+    public static Stack<Value2D<T>> DepthFirstSearch<T>(this T[,] arr, int x, int y,
         DrawActionCall<T> allowedSpace,
         DrawActionCall<T> target,
         System.Random rand,
@@ -578,6 +575,61 @@ public static class ArrayDrawExt
         return pathTaken;
     }
 
+    public static void BreadthFirstFill<T>(this T[,] arr, int x, int y,
+        bool cornered,
+        DrawActionCall<T> run,
+        bool edgeSafe = false)
+    {
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
+        }
+        #endregion
+        Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
+        queue.Enqueue(new Value2D<T>(x,y));
+        bool[,] visited = new bool[arr.GetLength(0), arr.GetLength(1)];
+        visited[y, x] = true;
+        Point curPoint;
+        DrawAction<T> test = new DrawAction<T>((arr2, x2, y2) =>
+            {
+                return !visited[y2, x2];
+            });
+        if (edgeSafe)
+            test = test.Then(DrawPresets.NotEdgeOfArray<T>());
+        test = test.Then(run);
+        while (queue.Count > 0)
+        {
+            curPoint = queue.Dequeue();
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                visited.ToLog(Logs.LevelGen, "Current Map. Evaluating " + curPoint);
+            }
+            #endregion
+            arr.DrawAround(curPoint.x, curPoint.y, true, (arr2, x2, y2) =>
+            {
+                if (test.Call(arr2, x2, y2))
+                {
+                    #region DEBUG
+                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        BigBoss.Debug.w(Logs.LevelGen, "Queuing " + x2 + " " + y2);
+                    }
+                    #endregion
+                    queue.Enqueue(new Value2D<T>(x2, y2, arr2[y2, x2]));
+                }
+                visited[y2, x2] = true;
+                return true;
+            });
+        }
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printFooter(Logs.LevelGen);
+        }
+        #endregion
+    }
     #endregion
 }
 

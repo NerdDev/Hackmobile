@@ -285,8 +285,6 @@
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModType.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModifier.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomSpec.cs" />
-     <Compile Include="Assets\Scripts\Levels\Searching\BFSSearcher.cs" />
-     <Compile Include="Assets\Scripts\Levels\Searching\Searcher.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\ArrayDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawPresets.cs" />

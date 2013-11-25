@@ -233,21 +233,12 @@ abstract public class LayoutObject
         GridArray grids = GetArray();
         GridMap ret = new GridMap();
         // Get null spaces surrounding room
-        BFSSearcher searcher = new BFSSearcher(Probability.LevelRand);
-        Array2D<bool> bfs = searcher.SearchFill(new Value2D<GridType>(1, 1), grids, GridType.NULL);
-        // Invert to be room
-        Array2D<bool>.invert(bfs);
-        bool[,] arr = bfs.GetArr();
-        bfs.GetArr().DrawSquare(false, new DrawAction<bool>((arr2, x, y) =>
+        grids.GetArr().BreadthFirstFill(1, 1, true, (arr, x, y) =>
             {
-                if (arr[y, x])
-                { // If space part of room
-                    // If space is an edge (next to a false)
-                    if (arr.HasAround(x, y, false, DrawPresets.EqualTo(true)))
-                        ret[x, y] = grids[x, y];
-                }
-                return true;
-            }));
+                if (arr[y, x] == GridType.NULL) return true; // Valid space to continue from
+                ret[x, y] = arr[y, x];
+                return false; // We aren't on null, so don't continue using this space
+            }, true);
         return ret;
     }
 
