@@ -84,4 +84,9 @@ public class GridTypeEnum
                 return false;
         }
     }
+
+    public static bool WalkableOrNull(GridType t)
+    {
+        return Walkable(t) || t == GridType.NULL;
+    }
 }

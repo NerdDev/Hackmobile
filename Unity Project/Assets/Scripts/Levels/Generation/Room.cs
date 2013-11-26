@@ -53,9 +53,20 @@ public class Room : LayoutObjectLeaf {
 
     public GridMap GetPotentialExternalDoors()
     {
-        GridMap potentialDoors = GetPerimeter();
-        RemoveBadDoorWalls(potentialDoors);
-        potentialDoors.RemoveAllBut(GridType.Wall);
+        GridMap potentialDoors = new GridMap();
+        GetArray().GetArr().DrawPerimeter((arr, x, y) =>
+        {
+            return arr[y, x] != GridType.NULL;
+        },
+            new StrokedAction<GridType>()
+            {
+                StrokeAction = (arr, x, y) =>
+                {
+                    if (GridType.Wall == arr[y, x] && arr.Alternates(x, y, GridTypeEnum.WalkableOrNull))
+                        potentialDoors[x, y] = arr[y, x];
+                    return true;
+                }
+            });
         return potentialDoors;
     }
 
@@ -93,6 +104,11 @@ public class Room : LayoutObjectLeaf {
                 }
             });
         return map;
+    }
+
+    public void DrawPerimeter(DrawActionCall<GridType> evaluator, StrokedAction<GridType> action)
+    {
+        GetArray().GetArr().DrawPerimeter(evaluator, action);
     }
 
     public override string GetTypeString()
