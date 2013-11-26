@@ -16,7 +16,7 @@ public class Path : LayoutObjectLeaf
     public Path(Value2D<GridType> startPoint, GridArray grids)
         : base()
     {
-        _list = new List<Value2D<GridType>>(grids.GetArr().DepthFirstSearch(
+        _list = new List<Value2D<GridType>>(grids.GetArr().DrawDepthFirstSearch(
             startPoint.x,
             startPoint.y,
             DrawPresets.EqualTo(GridType.NULL),

@@ -228,20 +228,6 @@ abstract public class LayoutObject
         return ret;
     }
 
-    public GridMap GetBfsPerimeter()
-    {
-        GridArray grids = GetArray();
-        GridMap ret = new GridMap();
-        // Get null spaces surrounding room
-        grids.GetArr().BreadthFirstFill(1, 1, true, (arr, x, y) =>
-            {
-                if (arr[y, x] == GridType.NULL) return true; // Valid space to continue from
-                ret[x, y] = arr[y, x];
-                return false; // We aren't on null, so don't continue using this space
-            }, true);
-        return ret;
-    }
-
     public Value2D<GridType> ScanForFirst(GridType type)
     {
         foreach (Value2D<GridType> val in GetArray())

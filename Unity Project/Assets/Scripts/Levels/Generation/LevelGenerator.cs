@@ -664,7 +664,7 @@ public class LevelGenerator
             largest.ToLog(Logs.LevelGen, "Largest");
         }
         #endregion
-        var startPtStack = smallest.GetArr().DepthFirstSearch(
+        var startPtStack = smallest.GetArr().DrawDepthFirstSearch(
             1, 1,
             DrawPresets.EqualTo(GridType.NULL),
             DrawPresets.ContainedIn(Path.PathTypes()),

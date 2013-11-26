@@ -79,7 +79,20 @@ public class Room : LayoutObjectLeaf {
 
     public GridMap GetPerimeter()
     {
-        return GetBfsPerimeter();
+        GridMap map = new GridMap();
+        GetArray().GetArr().DrawPerimeter((arr, x, y) =>
+            {
+                return arr[y, x] != GridType.NULL;
+            },
+            new StrokedAction<GridType>()
+            {
+                StrokeAction = (arr, x, y) =>
+                {
+                    map[x, y] = arr[y, x];
+                    return true;
+                }
+            });
+        return map;
     }
 
     public override string GetTypeString()

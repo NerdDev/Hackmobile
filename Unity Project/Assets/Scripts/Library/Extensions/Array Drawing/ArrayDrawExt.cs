@@ -210,7 +210,7 @@ public static class ArrayDrawExt
         arr.DrawDirs(x, y, dir, (arr2, x2, y2) =>
         {
             T t = arr2[y2, x2];
-            if (tester(arr2,x2,y2))
+            if (tester(arr2, x2, y2))
                 ret.Add(t);
             return true;
         });
@@ -243,7 +243,7 @@ public static class ArrayDrawExt
         if (arr.DrawDirs(x, y, dir, (arr2, x2, y2) =>
         {
             ret = arr2[y2, x2];
-            if (tester(arr2,x2,y2))
+            if (tester(arr2, x2, y2))
                 return false;
             return true;
         }))
@@ -490,7 +490,7 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Searches
-    public static Stack<Value2D<T>> DepthFirstSearch<T>(this T[,] arr, int x, int y,
+    public static Stack<Value2D<T>> DrawDepthFirstSearch<T>(this T[,] arr, int x, int y,
         DrawActionCall<T> allowedSpace,
         DrawActionCall<T> target,
         System.Random rand,
@@ -575,7 +575,7 @@ public static class ArrayDrawExt
         return pathTaken;
     }
 
-    public static void BreadthFirstFill<T>(this T[,] arr, int x, int y,
+    public static void DrawBreadthFirstFill<T>(this T[,] arr, int x, int y,
         bool cornered,
         DrawActionCall<T> run,
         bool edgeSafe = false)
@@ -587,17 +587,10 @@ public static class ArrayDrawExt
         }
         #endregion
         Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
-        queue.Enqueue(new Value2D<T>(x,y));
+        queue.Enqueue(new Value2D<T>(x, y));
         bool[,] visited = new bool[arr.GetLength(0), arr.GetLength(1)];
         visited[y, x] = true;
         Point curPoint;
-        DrawAction<T> test = new DrawAction<T>((arr2, x2, y2) =>
-            {
-                return !visited[y2, x2];
-            });
-        if (edgeSafe)
-            test = test.Then(DrawPresets.NotEdgeOfArray<T>());
-        test = test.Then(run);
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
@@ -609,17 +602,20 @@ public static class ArrayDrawExt
             #endregion
             arr.DrawAround(curPoint.x, curPoint.y, true, (arr2, x2, y2) =>
             {
-                if (test.Call(arr2, x2, y2))
+                if (!edgeSafe || arr.InRange(x2, y2))
                 {
-                    #region DEBUG
-                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                    if (!visited[y2, x2] && run(arr2, x2, y2))
                     {
-                        BigBoss.Debug.w(Logs.LevelGen, "Queuing " + x2 + " " + y2);
+                        #region DEBUG
+                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                        {
+                            BigBoss.Debug.w(Logs.LevelGen, "Queuing " + x2 + " " + y2);
+                        }
+                        #endregion
+                        queue.Enqueue(new Value2D<T>(x2, y2, arr2[y2, x2]));
                     }
-                    #endregion
-                    queue.Enqueue(new Value2D<T>(x2, y2, arr2[y2, x2]));
+                    visited[y2, x2] = true;
                 }
-                visited[y2, x2] = true;
                 return true;
             });
         }
@@ -629,6 +625,33 @@ public static class ArrayDrawExt
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
+    }
+
+    public static void DrawPerimeter<T>(this T[,] arr, DrawActionCall<T> evaluator, StrokedAction<T> action)
+    {
+        DrawActionCall<T> unit = action.UnitAction;
+        DrawActionCall<T> stroke = action.StrokeAction;
+        bool hasFill = unit != null;
+        bool[,] fillArr = null;
+        if (hasFill)
+            fillArr = new bool[arr.GetLength(0), arr.GetLength(1)];
+        // Get null spaces surrounding room
+        arr.DrawBreadthFirstFill(0, 0, true, (arr2, x, y) =>
+        {
+            if (hasFill)
+                fillArr[y, x] = true;
+            if (!evaluator(arr, x, y)) return true; // Valid space to continue from
+            if (stroke != null)
+                stroke(arr2, x, y);
+            else
+                unit(arr, x, y);
+            return false; // We aren't on null, so don't continue using this space
+        }, true);
+        if (hasFill)
+            for (int y = 0; y < arr.GetLength(0); y++)
+                for (int x = 0; x < arr.GetLength(1); x++)
+                    if (!fillArr[y, x])
+                        unit(arr, x, y);
     }
     #endregion
 }

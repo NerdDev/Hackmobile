@@ -77,4 +77,9 @@ public static class ArrayExt {
     {
         return new Point(array.GetLength(0) / 2, array.GetLength(1) / 2);
     }
+
+    public static bool InRange<T>(this T[,] array, int x, int y)
+    {
+        return x >= 0 && y >= 0 && y < array.GetLength(0) && x < array.GetLength(1);
+    }
 }
