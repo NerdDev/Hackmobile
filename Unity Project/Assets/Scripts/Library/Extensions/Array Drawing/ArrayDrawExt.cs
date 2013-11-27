@@ -413,7 +413,7 @@ public static class ArrayDrawExt
     #endregion
     #endregion
     #region Squares
-    public static bool DrawSquare<T>(this T[,] arr, bool includeEdges, StrokedAction<T> action)
+    public static bool DrawSquare<T>(this T[,] arr, StrokedAction<T> action, bool includeEdges = true)
     {
         if (includeEdges)
             return DrawSquare(arr, 0, arr.GetLength(1) - 1, 0, arr.GetLength(0) - 1, action);
@@ -521,8 +521,8 @@ public static class ArrayDrawExt
         });
         if (edgeSafe)
         {
-            filter = filter.Then(DrawPresets.NotEdgeOfArray<T>());
-            foundTarget = foundTarget.Then(DrawPresets.NotEdgeOfArray<T>());
+            filter = filter.Then(Draw.NotEdgeOfArray<T>());
+            foundTarget = foundTarget.Then(Draw.NotEdgeOfArray<T>());
         }
         Value2D<T> curPoint;
         Value2D<T> targetDir;

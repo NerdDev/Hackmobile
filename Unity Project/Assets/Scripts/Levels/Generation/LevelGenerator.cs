@@ -436,7 +436,8 @@ public class LevelGenerator
                 BigBoss.Debug.printHeader(Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
-            GridMap potentialDoors = room.GetPotentialExternalDoors();
+            var potentialDoors = new GridMap();
+            room.Array.DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
             int numDoors = Probability.LevelRand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -445,25 +446,14 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
-            for (int i = 0; i < numDoors; i++)
+            foreach (Value2D<GridType> doorSpace in potentialDoors.GetRandomApart(numDoors, minDoorSpacing))
             {
-                Value2D<GridType> doorSpace = potentialDoors.RandomValue(Probability.LevelRand);
-                if (doorSpace != null)
-                {
-                    room.put(GridType.Door, doorSpace.x, doorSpace.y);
-                    potentialDoors.Remove(doorSpace.x, doorSpace.y, minDoorSpacing - 1);
-                    #region DEBUG
-                    if (BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        room.ToLog(Logs.LevelGen, "Generated door at: " + doorSpace);
-                        potentialDoors.ToLog(Logs.LevelGen, "Remaining options");
-                    }
-                    #endregion
-                }
+                room.put(GridType.Door, doorSpace.x, doorSpace.y);
                 #region DEBUG
-                else if (BigBoss.Debug.logging(Logs.LevelGen))
+                if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    BigBoss.Debug.w(Logs.LevelGen, "No door options remain.");
+                    room.ToLog(Logs.LevelGen, "Generated door at: " + doorSpace);
+                    potentialDoors.ToLog(Logs.LevelGen, "Remaining options");
                 }
                 #endregion
             }
@@ -629,7 +619,7 @@ public class LevelGenerator
             {
                 arr.DrawAround(val.x, val.y, true, (arr2, x, y) =>
                     {
-                        if (arr2[y,x] == GridType.NULL)
+                        if (arr2[y, x] == GridType.NULL)
                             leaf.put(GridType.Wall, x, y);
                         return true;
                     });
@@ -666,8 +656,8 @@ public class LevelGenerator
         #endregion
         var startPtStack = smallest.GetArr().DrawDepthFirstSearch(
             1, 1,
-            DrawPresets.EqualTo(GridType.NULL),
-            DrawPresets.ContainedIn(Path.PathTypes()),
+            Draw.EqualTo(GridType.NULL),
+            Draw.ContainedIn(Path.PathTypes()),
             Probability.LevelRand,
             true);
         if (startPtStack.Count > 0)

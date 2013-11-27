@@ -19,7 +19,7 @@ public class Path : LayoutObjectLeaf
         _list = new List<Value2D<GridType>>(grids.GetArr().DrawDepthFirstSearch(
             startPoint.x,
             startPoint.y,
-            DrawPresets.EqualTo(GridType.NULL),
+            Draw.EqualTo(GridType.NULL),
             (arr, x, y) => {
                 GridType t = arr[y, x];
                 return typesSet.Contains(t); 

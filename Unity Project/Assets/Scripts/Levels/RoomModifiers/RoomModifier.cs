@@ -65,40 +65,4 @@ abstract public class RoomModifier : ProbabilityItem
     {
         return false;
     }
-
-    #region Preset Funcs
-    public static DrawAction<GridType> SetToIfNull(GridType g)
-    {
-        return new DrawAction<GridType>((arr, x, y) =>
-        {
-            if (arr[y, x] == GridType.NULL)
-                arr[y, x] = g;
-            return true;
-        }
-        );
-    }
-
-    public static DrawAction<GridType> SetToIfNotNull(GridType g)
-    {
-        return new DrawAction<GridType>((arr, x, y) =>
-        {
-            if (arr[y, x] != GridType.NULL)
-                arr[y, x] = g;
-            return true;
-        }
-        );
-    }
-
-    public static DrawAction<GridType> LoadDoorOptions(List<Point> list)
-    {
-        return new DrawAction<GridType>((arr, x, y) =>
-        {
-                if (arr.CanDrawDoor(x, y))
-                    list.Add(new Point(x, y));
-                return true;
-            }
-        );
-    }
-
-    #endregion
 }

@@ -273,6 +273,19 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     }
     #endregion
 
+    public List<Value2D<T>> GetRandomApart(int number, int apart = 1)
+    {
+        List<Value2D<T>> list = new List<Value2D<T>>();
+        for (int i = 0; i < number; i++)
+        {
+            Value2D<T> g = RandomValue(Probability.LevelRand);
+            if (g == null) return list;
+            Remove(g.x, g.y, apart - 1);
+            list.Add(g);
+        }
+        return list;
+    }
+
     #region Iteration
     public IEnumerator<Value2D<T>> GetEnumerator()
     {

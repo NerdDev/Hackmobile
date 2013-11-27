@@ -51,64 +51,9 @@ public class Room : LayoutObjectLeaf {
         return getType(GridType.Door);
     }
 
-    public GridMap GetPotentialExternalDoors()
-    {
-        GridMap potentialDoors = new GridMap();
-        GetArray().GetArr().DrawPerimeter((arr, x, y) =>
-        {
-            return arr[y, x] != GridType.NULL;
-        },
-            new StrokedAction<GridType>()
-            {
-                StrokeAction = (arr, x, y) =>
-                {
-                    if (GridType.Wall == arr[y, x] && arr.Alternates(x, y, GridTypeEnum.WalkableOrNull))
-                        potentialDoors[x, y] = arr[y, x];
-                    return true;
-                }
-            });
-        return potentialDoors;
-    }
-
-    public GridMap GetPotentialDoors()
-    {
-        GridMap potentialDoors = GetWalls();
-        RemoveBadDoorWalls(potentialDoors);
-        return potentialDoors;
-    }
-
     public int CountGridType(GridType type)
     {
         return getTypes(type).Count();
-    }
-
-    void RemoveBadDoorWalls(GridMap potentialDoors)
-    {
-        GridMap corneredAreas = GetCorneredBy(GridType.Wall, GridType.Wall);
-        potentialDoors.RemoveAll(corneredAreas);
-    }
-
-    public GridMap GetPerimeter()
-    {
-        GridMap map = new GridMap();
-        GetArray().GetArr().DrawPerimeter((arr, x, y) =>
-            {
-                return arr[y, x] != GridType.NULL;
-            },
-            new StrokedAction<GridType>()
-            {
-                StrokeAction = (arr, x, y) =>
-                {
-                    map[x, y] = arr[y, x];
-                    return true;
-                }
-            });
-        return map;
-    }
-
-    public void DrawPerimeter(DrawActionCall<GridType> evaluator, StrokedAction<GridType> action)
-    {
-        GetArray().GetArr().DrawPerimeter(evaluator, action);
     }
 
     public override string GetTypeString()

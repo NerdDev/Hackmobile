@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 abstract public class LayoutObject
 {
-
     protected bool finalized = false;
     protected Bounding bakedBounds = new Bounding();
     protected Point ShiftP = new Point();
@@ -197,7 +196,7 @@ abstract public class LayoutObject
         foreach (Value2D<GridType> val in targets)
         {
             Value2D<GridType> nullDir;
-            if (arr.GetPointAround(val.x, val.y, false, DrawPresets.EqualTo(GridType.NULL), out nullDir))
+            if (arr.GetPointAround(val.x, val.y, false, Draw.EqualTo(GridType.NULL), out nullDir))
                 ret[val] = val.val;
         }
         return ret;

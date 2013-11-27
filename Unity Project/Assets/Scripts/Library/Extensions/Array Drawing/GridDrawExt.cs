@@ -5,21 +5,55 @@ using System.Text;
 
 public static class GridTypeDrawExt
 {
-    public static bool CanDrawDoor(this GridType[,] arr, int x, int y)
+    public static void DrawPotentialDoors(this GridType[,] arr, DrawActionCall<GridType> action)
     {
-        GridType t = arr[y, x];
-        if (t != GridType.Wall)
-            return false;
-        return (arr.Alternates(x, y, GridTypeEnum.Walkable));
+        DrawActionCall<GridType> check = Draw.CanDrawDoor();
+        arr.DrawSquare(new DrawActionCall<GridType>((arr2, x, y) =>
+            {
+                if (check(arr2, x, y))
+                    action(arr2, x, y);
+                return true;
+            }));
     }
 
-    public static bool DrawDoor(this GridType[,] arr, int x, int y)
+    public static void DrawPotentialDoors(this GridType[,] arr, StrokedAction<GridType> action)
     {
-        if (CanDrawDoor(arr, x, y))
+        DrawActionCall<GridType> check = Draw.CanDrawDoor();
+        StrokedAction<GridType> findDoors = new StrokedAction<GridType>();
+        if (action.StrokeAction != null)
         {
-            arr[y, x] = GridType.Door;
-            return true;
+            findDoors.StrokeAction = (arr2, x, y) =>
+                {
+                    if (check(arr2, x, y))
+                        action.StrokeAction(arr2, x, y);
+                    return true;
+                };
         }
-        return false;
+        if (action.UnitAction != null)
+        {
+            findDoors.UnitAction = (arr2, x, y) =>
+                {
+                    if (check(arr2, x, y))
+                        action.UnitAction(arr2, x, y);
+                    return true;
+                };
+        }
+
+        arr.DrawPerimeter((arr2, x, y) =>
+            {
+                return arr2[y, x] != GridType.NULL;
+            },
+            findDoors
+            );
+    }
+
+    public static void DrawPotentialExternalDoors(this GridType[,] arr, DrawActionCall<GridType> action)
+    {
+        DrawPotentialDoors(arr, new StrokedAction<GridType>() { StrokeAction = action });
+    }
+
+    public static void DrawPotentialInternalDoors(this GridType[,] arr, DrawActionCall<GridType> action)
+    {
+        DrawPotentialDoors(arr, new StrokedAction<GridType>() { UnitAction = action });
     }
 }
