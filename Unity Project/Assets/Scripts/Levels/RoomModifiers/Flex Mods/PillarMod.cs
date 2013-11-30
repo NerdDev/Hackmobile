@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class PillarMod : RoomModifier {
-
+public class PillarMod : RoomModifier
+{
+    public override bool Unique { get { return true; } }
     static ProbabilityList<int> spacingOptions = new ProbabilityList<int>(Probability.LevelRand);
     static PillarMod()
     {
@@ -44,10 +45,5 @@ public class PillarMod : RoomModifier {
     public override string GetName()
     {
         return "Pillars";
-    }
-
-    public override bool IsUnique()
-    {
-        return true;
     }
 }

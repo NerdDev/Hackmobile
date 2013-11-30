@@ -6,7 +6,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 {
     protected int maxNum = 0;
     protected int tmpMax = 0;
-    protected float largestDiv = -1;
+    protected double largestDiv = -1;
     protected List<ProbContainer> itemList = new List<ProbContainer>();
     protected int Max { 
         get { 
@@ -61,7 +61,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             EvaluateProbNums();
     }
 
-    public override void Add(T item, float probDiv, bool unique)
+    public override void Add(T item, double probDiv, bool unique)
     {
         if (probDiv > maxProbDiv)
             return;
@@ -189,10 +189,10 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         public T item;
         public int num { get; protected set; }
         public bool skip { get; set; }
-        public float probDiv { get; set; }
+        public double probDiv { get; set; }
         public bool unique { get; set; }
 
-        public ProbContainer(T item, float probDiv, bool unique)
+        public ProbContainer(T item, double probDiv, bool unique)
         {
             this.item = item;
             this.probDiv = probDiv;
@@ -208,7 +208,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             this.unique = rhs.unique;
         }
 
-        public void SetNum(float maxDivider)
+        public void SetNum(double maxDivider)
         {
             num = (int)(maxDivider / probDiv);
         }

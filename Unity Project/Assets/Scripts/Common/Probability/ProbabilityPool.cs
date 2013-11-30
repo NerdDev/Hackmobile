@@ -33,14 +33,14 @@ public abstract class ProbabilityPool<T>  {
         this.rand = rhs.rand;
     }
 
-    public abstract void Add(T item, float probDiv, bool unique);
+    public abstract void Add(T item, double probDiv, bool unique);
 
     public virtual void Add(T item)
     {
         if (item is ProbabilityItem)
         {
             ProbabilityItem p = (ProbabilityItem)item;
-            Add(item, p.ProbabilityDiv(), p.IsUnique());
+            Add(item, p.Divider, p.Unique);
         }
         else
         {

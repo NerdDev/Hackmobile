@@ -5,6 +5,8 @@ using System.Text;
 
 class TreasureRoomMod : RoomModifier
 {
+    public override bool Unique { get { return true; } }
+
     public override bool Modify(RoomSpec spec)
     {
         Room room = spec.Room;
@@ -45,10 +47,5 @@ class TreasureRoomMod : RoomModifier
     public override string GetName()
     {
         return "Treasure Room";
-    }
-
-    public override bool IsUnique()
-    {
-        return true;
     }
 }

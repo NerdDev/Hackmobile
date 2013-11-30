@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 abstract public class RoomModifier : ProbabilityItem
 {
+    public virtual double Divider { get { return 1; } }
+    public virtual bool Unique { get { return false; } }
 
     static ProbabilityPool<RoomModifier>[] mods = new ProbabilityPool<RoomModifier>[Enum.GetNames(typeof(RoomModType)).Length];
     static bool initialized = false;
@@ -55,14 +57,4 @@ abstract public class RoomModifier : ProbabilityItem
     public new abstract RoomModType GetType();
 
     public abstract string GetName();
-
-    public virtual int ProbabilityDiv()
-    {
-        return 1;
-    }
-
-    public virtual bool IsUnique()
-    {
-        return false;
-    }
 }

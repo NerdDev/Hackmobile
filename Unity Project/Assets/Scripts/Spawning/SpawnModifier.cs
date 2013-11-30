@@ -1,7 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public abstract class SpawnModifier : ProbabilityItem {
+public abstract class SpawnModifier : ProbabilityItem
+{
+    public virtual double Divider { get { return 1; } }
+    public virtual bool Unique { get { return false; } }
 
     static ProbabilityPool<SpawnModifier> mods = new ProbabilityList<SpawnModifier>();
 
@@ -18,16 +21,6 @@ public abstract class SpawnModifier : ProbabilityItem {
     private static void AddMod(SpawnModifier mod)
     {
         mods.Add(mod);
-    }
-
-    public int ProbabilityDiv()
-    {
-        return 1;
-    }
-
-    public bool IsUnique()
-    {
-        return false;
     }
 
     public override string ToString()

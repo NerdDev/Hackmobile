@@ -20,7 +20,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
     }
 
     #region Add
-    public void Add(T item, float probDiv, bool unique, int level)
+    public void Add(T item, double probDiv, bool unique, int level)
     {
         Add(new ProbContainer(item, probDiv, unique, level));
     }
@@ -39,12 +39,12 @@ public class LeveledPool<T> : ProbabilityPool<T>
         if (item is ProbabilityLevItem)
         {
             ProbabilityLevItem p = (ProbabilityLevItem)item;
-            Add(item, p.ProbabilityDiv(), p.IsUnique(), p.GetLevel());
+            Add(item, p.Divider, p.Unique, p.Level);
         }
         base.Add(item);
     }
 
-    public override void Add(T item, float probDiv, bool unique)
+    public override void Add(T item, double probDiv, bool unique)
     {
         Add(item, probDiv, unique, 1);
     }
@@ -146,11 +146,11 @@ public class LeveledPool<T> : ProbabilityPool<T>
     protected class ProbContainer
     {
         public T Item;
-        public float ProbDiv;
+        public double ProbDiv;
         public bool Unique;
         public int Level;
 
-        public ProbContainer(T item, float probDiv, bool unique, int level)
+        public ProbContainer(T item, double probDiv, bool unique, int level)
         {
             this.Item = item;
             this.ProbDiv = probDiv;

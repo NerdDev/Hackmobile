@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public interface ProbabilityItem {
-
-    int ProbabilityDiv();
-    bool IsUnique();
+public interface ProbabilityItem 
+{
+    double Divider { get; }
+    bool Unique { get; }
 }
