@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class SpawnModifier : ProbabilityItem
 {
-    public virtual double Divider { get { return 1; } }
+    public virtual double Multiplier { get { return 1; } }
     public virtual bool Unique { get { return false; } }
 
     static ProbabilityPool<SpawnModifier> mods = new ProbabilityList<SpawnModifier>();

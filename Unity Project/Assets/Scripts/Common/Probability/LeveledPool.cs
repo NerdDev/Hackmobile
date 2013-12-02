@@ -39,14 +39,14 @@ public class LeveledPool<T> : ProbabilityPool<T>
         if (item is ProbabilityLevItem)
         {
             ProbabilityLevItem p = (ProbabilityLevItem)item;
-            Add(item, p.Divider, p.Unique, p.Level);
+            Add(item, p.Multiplier, p.Unique, p.Level);
         }
         base.Add(item);
     }
 
-    public override void Add(T item, double probDiv, bool unique)
+    public override void Add(T item, double multiplier, bool unique)
     {
-        Add(item, probDiv, unique, 1);
+        Add(item, multiplier, unique, 1);
     }
 
     protected void Add(ProbContainer cont)

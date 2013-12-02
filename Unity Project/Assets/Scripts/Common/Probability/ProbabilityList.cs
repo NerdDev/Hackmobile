@@ -1,20 +1,23 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class ProbabilityList<T> : ProbabilityPool<T>
 {
-    protected int maxNum = 0;
-    protected int tmpMax = 0;
-    protected double largestDiv = -1;
     protected List<ProbContainer> itemList = new List<ProbContainer>();
-    protected int Max { 
-        get { 
-            return tmpMax; 
-        } 
-        set {
-            maxNum = value;
-            tmpMax = value;
+    protected double max;
+    protected double uniqueTmpMax;
+    protected double Max
+    {
+        get
+        {
+            return uniqueTmpMax;
+        }
+        set
+        {
+            uniqueTmpMax = value;
+            max = value;
         }
     }
 
@@ -23,76 +26,45 @@ public class ProbabilityList<T> : ProbabilityPool<T>
     {
     }
 
-    public ProbabilityList () : this(Probability.Rand)
+    public ProbabilityList()
+        : this(Probability.Rand)
     {
     }
 
-    public ProbabilityList (ProbabilityList<T> rhs)
+    public ProbabilityList(ProbabilityList<T> rhs)
         : base(rhs)
     {
-        this.maxNum = rhs.maxNum;
-        this.tmpMax = rhs.maxNum;
-        this.largestDiv = rhs.largestDiv;
+        this.Max = rhs.Max;
         foreach (ProbContainer cont in rhs.itemList)
         {
             itemList.Add(new ProbContainer(cont));
         }
     }
 
-    protected bool AddInternal(ProbContainer cont)
-    {
-        itemList.Add(cont);
-        if (cont.probDiv > largestDiv)
-        { // If div is largest, recalc
-            largestDiv = cont.probDiv;
-            return true;
-        }
-        return false;
-    }
-
     protected void Add(IEnumerable<ProbContainer> conts)
     {
-        bool changed = false;
         foreach (ProbContainer cont in conts)
-        {
-            changed = changed || AddInternal(cont);
-        }
-        if (changed)
-            EvaluateProbNums();
+            Add(cont);
     }
 
-    public override void Add(T item, double probDiv, bool unique)
+    public override void Add(T item, double multiplier, bool unique)
     {
-        if (probDiv > maxProbDiv)
-            return;
-        ProbContainer cont = new ProbContainer(item, probDiv, unique);
-        if (AddInternal(cont))
-        { // Recalc all probnums since we have new largest div
-            EvaluateProbNums();
-        }
-        else
-        { // Scale number to largest div
-            cont.SetNum(largestDiv);
-            Max += cont.num;
-        }
+        Add(new ProbContainer(item, multiplier, unique));
+    }
+
+    protected void Add(ProbContainer cont)
+    {
+        if (cont.multiplier < 0)
+            throw new ArgumentException("Multiplier cannot be less than zero: " + cont.multiplier);
+        itemList.Add(cont);
+        Max += cont.multiplier;
     }
 
     public override void ClearUnique()
     {
         foreach (ProbContainer cont in itemList)
             cont.skip = false;
-        tmpMax = maxNum;
-    }
-
-    void EvaluateProbNums()
-    {
-        maxNum = 0;
-        foreach (ProbContainer cont in itemList)
-        {
-            cont.SetNum(largestDiv);
-            maxNum += cont.num;
-        }
-        Max = maxNum;
+        uniqueTmpMax = max;
     }
 
     public override void ToLog(Logs log)
@@ -100,10 +72,10 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         if (BigBoss.Debug.logging(log) && BigBoss.Debug.Flag(DebugManager.DebugFlag.Probability))
         {
             BigBoss.Debug.printHeader(log, "Probability List - State");
-            BigBoss.Debug.w(log, "Largest Div: " + largestDiv + ", Max Num: " + maxNum);
+            BigBoss.Debug.w(log, "Max Num: " + max + ", Current Max: " + uniqueTmpMax);
             foreach (ProbContainer cont in itemList)
             {
-                BigBoss.Debug.w(log, cont.num + " - " + cont.item);
+                BigBoss.Debug.w(log, cont.multiplier + " - " + cont.item);
             }
             BigBoss.Debug.printFooter(log);
         }
@@ -111,12 +83,13 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public bool Get(out T item, out int resultIndex)
     {
-        int picked = rand.Next(Max);
+        double picked = rand.NextDouble();
+        picked = picked.Modulo(Max);
         resultIndex = 0;
-        int curNum = 0;
+        double curNum = 0;
         foreach (ProbContainer cont in itemList)
         {
-            curNum += cont.num;
+            curNum += cont.multiplier;
             if (picked < curNum)
             {
                 if (!cont.skip)
@@ -127,7 +100,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
                 }
                 else
                 {
-                    picked += cont.num;
+                    picked += cont.multiplier;
                 }
             }
             resultIndex++;
@@ -141,7 +114,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         if (cont.unique)
         {
             cont.skip = true;
-            tmpMax -= cont.num;
+            uniqueTmpMax -= cont.multiplier;
             Fresh = false;
         }
         return true;
@@ -171,7 +144,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         itemList[index].skip = true;
         return ret;
     }
-    
+
     public override ProbabilityPool<T> Filter(System.Func<T, bool> filter)
     {
         ProbabilityList<T> ret = new ProbabilityList<T>(rand);
@@ -185,32 +158,26 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         return ret;
     }
 
-    protected class ProbContainer {
+    protected class ProbContainer
+    {
         public T item;
-        public int num { get; protected set; }
         public bool skip { get; set; }
-        public double probDiv { get; set; }
+        public double multiplier { get; set; }
         public bool unique { get; set; }
 
-        public ProbContainer(T item, double probDiv, bool unique)
+        public ProbContainer(T item, double multiplier, bool unique)
         {
             this.item = item;
-            this.probDiv = probDiv;
+            this.multiplier = multiplier;
             this.unique = unique;
         }
 
         public ProbContainer(ProbContainer rhs)
         {
             this.item = rhs.item;
-            this.num = rhs.num;
             this.skip = rhs.skip;
-            this.probDiv = rhs.probDiv;
+            this.multiplier = rhs.multiplier;
             this.unique = rhs.unique;
-        }
-
-        public void SetNum(double maxDivider)
-        {
-            num = (int)(maxDivider / probDiv);
         }
     }
 }

@@ -3,6 +3,6 @@ using System.Collections;
 
 public interface ProbabilityItem 
 {
-    double Divider { get; }
+    double Multiplier { get; }
     bool Unique { get; }
 }
