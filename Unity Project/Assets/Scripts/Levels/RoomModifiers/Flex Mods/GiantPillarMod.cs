@@ -24,7 +24,7 @@ public class GiantPillarMod : RoomModifier
             spec.Room.GetBounding(false));
         if (locations.Count == 0) return false;
         #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps))
         {
             BigBoss.Debug.w(Logs.LevelGen, "Options: ");
             foreach (Bounding r in locations)

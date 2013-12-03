@@ -13,6 +13,13 @@ abstract public class RoomModifier : ProbabilityItem
 
     public static void RegisterModifiers()
     {
+        #region Debug
+        double time = 0;
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            time = Time.realtimeSinceStartup;
+        }
+        #endregion
         List<RoomModifier> modPrototypes = BigBoss.Types.GetInstantiations<RoomModifier>();
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
@@ -23,6 +30,12 @@ abstract public class RoomModifier : ProbabilityItem
             mods[(int)mod.GetType()].Add(mod);
         }
         initialized = true;
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Registering Room Modifiers took " + (Time.realtimeSinceStartup - time));
+        }
+        #endregion
     }
 
     public static RoomModifier GetBase()

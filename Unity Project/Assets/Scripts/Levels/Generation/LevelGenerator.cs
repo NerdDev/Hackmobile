@@ -205,10 +205,12 @@ public class LevelGenerator
         foreach (Room room in rooms)
         {
             #region DEBUG
+            double stepTime = 0, time = 0;
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + 0 + " - Generate Room " + room.Id);
                 BigBoss.Debug.printHeader(Logs.LevelGen, "Modding " + room);
+                time = Time.realtimeSinceStartup;
             }
             #endregion
             RoomSpec spec = new RoomSpec(room, levelDepth, theme, Probability.LevelRand);
@@ -217,6 +219,7 @@ public class LevelGenerator
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
+                    stepTime = Time.realtimeSinceStartup;
                     BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
                 }
                 #endregion
@@ -225,6 +228,7 @@ public class LevelGenerator
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     spec.Room.ToLog(Logs.LevelGen);
+                    BigBoss.Debug.w(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.  Total time: " + (Time.realtimeSinceStartup - time));
                 }
                 #endregion
 
@@ -233,7 +237,8 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                room.ToLog(Logs.LevelGen);
+                room.ToLog(Logs.LevelGen); 
+                BigBoss.Debug.w(Logs.LevelGen, "Modding " + room + " took " + (Time.realtimeSinceStartup - time) + " seconds.");
                 BigBoss.Debug.printFooter(Logs.LevelGen);
             }
             #endregion
@@ -248,21 +253,9 @@ public class LevelGenerator
 
     static List<RoomModifier> PickMods()
     {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Pick Mods");
-        }
-        #endregion
         List<RoomModifier> mods = new List<RoomModifier>();
         RoomModifier baseMod = RoomModifier.GetBase();
         mods.Add(baseMod);
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Picked Base Mod: " + baseMod);
-        }
-        #endregion
         int numFlex = Probability.LevelRand.Next(1, maxFlexMod);
         List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex);
         mods.AddRange(flexMods);
@@ -287,12 +280,6 @@ public class LevelGenerator
             }
             #endregion
         }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
-        }
-        #endregion
         return mods;
     }
 
