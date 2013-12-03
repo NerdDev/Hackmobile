@@ -34,7 +34,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         GlobalLogging,
         LineNumbers,
-        SearchSteps,
+        LevelGenFineSteps,
         Probability,
         LevelGen_Path_Simplify_Prune,
         LevelGen_Connected_To,
