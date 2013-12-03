@@ -75,7 +75,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             BigBoss.Debug.w(log, "Max Num: " + max + ", Current Max: " + uniqueTmpMax);
             foreach (ProbContainer cont in itemList)
             {
-                BigBoss.Debug.w(log, cont.multiplier + " - " + cont.item);
+                BigBoss.Debug.w(log, (cont.multiplier / uniqueTmpMax) + " - " + cont.multiplier + " - " + cont.item);
             }
             BigBoss.Debug.printFooter(log);
         }
@@ -83,8 +83,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public bool Get(out T item, out int resultIndex)
     {
-        double picked = rand.NextDouble();
-        picked = picked.Modulo(Max);
+        double picked = rand.NextDouble() * Max;
         resultIndex = 0;
         double curNum = 0;
         foreach (ProbContainer cont in itemList)
