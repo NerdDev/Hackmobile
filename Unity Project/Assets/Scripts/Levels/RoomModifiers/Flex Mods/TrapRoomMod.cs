@@ -3,6 +3,15 @@ using System.Collections;
 
 public class TrapRoomMod : RoomModifier
 {
+    protected static ProbabilityList<int> treasureSizeList = new ProbabilityList<int>();
+    static TrapRoomMod()
+    {
+        treasureSizeList.Add(0, .25, false);
+        treasureSizeList.Add(1, .5, false);
+        treasureSizeList.Add(2, .15, false);
+        treasureSizeList.Add(3, .10, false);
+        treasureSizeList.ToLog(Logs.Main);
+    }
 
     public override bool Modify(RoomSpec spec)
     {
@@ -14,16 +23,11 @@ public class TrapRoomMod : RoomModifier
             BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
-        int treasurePercent = rand.Next(0, 100);
-        int treasureInRoom;
-        if (treasurePercent <= 20) treasureInRoom = 0;
-        else if (treasurePercent <= 75) treasureInRoom = 1;
-        else if (treasurePercent <= 90) treasureInRoom = 2;
-        else treasureInRoom = 3;
+        int treasureInRoom = treasureSizeList.Get();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Treasure Percent: " + treasurePercent + " Treasure In Room: " + treasureInRoom);
+            BigBoss.Debug.w(Logs.LevelGen, "Treasure In Room: " + treasureInRoom);
         }
         #endregion
         int floorSpace = room.CountGridType(GridType.Floor);

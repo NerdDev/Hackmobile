@@ -47,7 +47,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             Add(cont);
     }
 
-    public override void Add(T item, double multiplier, bool unique)
+    public override void Add(T item, double multiplier, bool unique = false)
     {
         Add(new ProbContainer(item, multiplier, unique));
     }
@@ -73,9 +73,10 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         {
             BigBoss.Debug.printHeader(log, "Probability List - State");
             BigBoss.Debug.w(log, "Max Num: " + max + ", Current Max: " + uniqueTmpMax);
+            BigBoss.Debug.w(log, "Percent - Alotted - Item");
             foreach (ProbContainer cont in itemList)
             {
-                BigBoss.Debug.w(log, (cont.multiplier / uniqueTmpMax) + " - " + cont.multiplier + " - " + cont.item);
+                BigBoss.Debug.w(log, (cont.multiplier / uniqueTmpMax * 100) + "% - " + cont.multiplier + " - " + cont.item);
             }
             BigBoss.Debug.printFooter(log);
         }
