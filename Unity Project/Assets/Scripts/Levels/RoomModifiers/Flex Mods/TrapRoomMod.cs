@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TrapRoomMod : RoomModifier
 {
@@ -10,7 +11,6 @@ public class TrapRoomMod : RoomModifier
         treasureSizeList.Add(1, .5, false);
         treasureSizeList.Add(2, .15, false);
         treasureSizeList.Add(3, .10, false);
-        treasureSizeList.ToLog(Logs.Main);
     }
 
     public override bool Modify(RoomSpec spec)
@@ -23,46 +23,31 @@ public class TrapRoomMod : RoomModifier
             BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
-        int treasureInRoom = treasureSizeList.Get();
+        int floorSpace = room.CountGridType(GridType.Floor);
         #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
+        if (floorSpace < 15)
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Treasure In Room: " + treasureInRoom);
+            BigBoss.Debug.w(Logs.LevelGen, "Room was too small: " + floorSpace);
+            return false;
         }
         #endregion
-        int floorSpace = room.CountGridType(GridType.Floor);
+        int treasureInRoom = treasureSizeList.Get();
         int trapsInRoom = (floorSpace - treasureInRoom) / 8;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
+            BigBoss.Debug.w(Logs.LevelGen, "Treasure In Room: " + treasureInRoom);
             BigBoss.Debug.w(Logs.LevelGen, "Floor Space: " + floorSpace + " Traps In Room: " + trapsInRoom);
         }
         #endregion
         GridMap grid = room.GetFloors();
-        Stack stk = new Stack();
-        while (treasureInRoom > 0)
-        {
-            int x = rand.Next(floorSpace-1);
-            if (x < 0) break;
-            if (!stk.Contains(x))
-            {
-                room.put(GridType.Chest, grid.GetNth(x).x, grid.GetNth(x).y);
-                stk.Push(x);
-                treasureInRoom--;
-            }
-        }
+        List<Value2D<GridType>> treasureList = grid.GetRandomRemove(treasureInRoom);
+        foreach (Value2D<GridType> val in treasureList)
+            room.Array[val.y, val.x] = GridType.Chest;
 
-        while (trapsInRoom > 0)
-        {
-            int x = rand.Next(floorSpace - 1);
-            if (x < 0) break;
-            if (!stk.Contains(x))
-            {
-                room.put(GridType.Trap, grid.GetNth(x).x, grid.GetNth(x).y);
-                stk.Push(x);
-                trapsInRoom--;
-            }
-        }
+        List<Value2D<GridType>> trapList = grid.GetRandomRemove(treasureInRoom);
+        foreach (Value2D<GridType> val in trapList)
+            room.Array[val.y, val.x] = GridType.Trap;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

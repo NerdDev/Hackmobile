@@ -273,7 +273,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     }
     #endregion
 
-    public List<Value2D<T>> GetRandomApart(int number, int apart = 1)
+    public List<Value2D<T>> GetRandomRemove(int number, int apart = 0)
     {
         List<Value2D<T>> list = new List<Value2D<T>>();
         for (int i = 0; i < number; i++)
