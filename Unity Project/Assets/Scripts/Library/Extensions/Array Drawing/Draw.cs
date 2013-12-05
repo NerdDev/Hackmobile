@@ -98,7 +98,7 @@ public class Draw
 
     public class RandomPicker<T>
     {
-        List<Point> options = new List<Point>();
+        MultiMap<T> options = new MultiMap<T>();
         System.Random rand;
         int radius;
 
@@ -110,7 +110,7 @@ public class Draw
 
         public bool DrawingAction(T[,] arr, int x, int y)
         {
-            options.Add(new Point(x, y));
+            options.Put(arr[y, x], x, y);
             return true;
         }
 
