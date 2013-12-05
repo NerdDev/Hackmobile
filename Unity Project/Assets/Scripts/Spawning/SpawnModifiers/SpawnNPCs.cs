@@ -6,7 +6,7 @@ public class SpawnNPCs : SpawnModifier {
     public override bool Modify(SpawnSpec spec)
     {
         MultiMap<GridSpace> spawnable = spec.Room.Spawnable();
-        Value2D<GridSpace> space = spawnable.RandomValue(spec.Random);
+        Point<GridSpace> space = spawnable.RandomValue(spec.Random);
         BigBoss.DungeonMaster.SpawnNPC(space.val, spec.Theme.Keywords);
         return true;
     }

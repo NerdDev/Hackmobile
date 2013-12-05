@@ -38,9 +38,9 @@ abstract public class LayoutObject
         ShiftP.y = rhs.ShiftP.y + (centerRhs.y - center.y);
     }
 
-    public Value2D<GridType> ShiftValue(Value2D<GridType> val)
+    public Point<GridType> ShiftValue(Point<GridType> val)
     {
-        return new Value2D<GridType>(val.x + ShiftP.x, val.y + ShiftP.y, val.val);
+        return new Point<GridType>(val.x + ShiftP.x, val.y + ShiftP.y, val.val);
     }
 
     public Point GetShift()
@@ -193,9 +193,9 @@ abstract public class LayoutObject
         GridArray grids = GetArray();
         GridType[,] arr = grids.GetArr();
         GridMap targets = getType(grids, target);
-        foreach (Value2D<GridType> val in targets)
+        foreach (Point<GridType> val in targets)
         {
-            Value2D<GridType> nullDir;
+            Point<GridType> nullDir;
             if (arr.GetPointAround(val.x, val.y, false, Draw.EqualTo(GridType.NULL), out nullDir))
                 ret[val] = val.val;
         }
@@ -213,7 +213,7 @@ abstract public class LayoutObject
         GridArray grids = GetArray();
         GridMap targets = getType(grids, target);
         GridMap cornerOptions = getTypes(grids, by);
-        foreach (Value2D<GridType> tval in targets)
+        foreach (Point<GridType> tval in targets)
         {
             bool corneredHoriz = cornerOptions.Contains(tval.x + 1, tval.y)
                 || cornerOptions.Contains(tval.x - 1, tval.y);
@@ -227,9 +227,9 @@ abstract public class LayoutObject
         return ret;
     }
 
-    public Value2D<GridType> ScanForFirst(GridType type)
+    public Point<GridType> ScanForFirst(GridType type)
     {
-        foreach (Value2D<GridType> val in GetArray())
+        foreach (Point<GridType> val in GetArray())
         {
             if (val.val == type)
             {
@@ -292,12 +292,12 @@ abstract public class LayoutObject
         }
     }
 
-    public void Connect(LayoutObjectContainer layout, Value2D<GridType> pt)
+    public void Connect(LayoutObjectContainer layout, Point<GridType> pt)
     {
         Connect(layout.GetObjAt(pt));
     }
 
-    abstract public bool ContainsPoint(Value2D<GridType> val);
+    abstract public bool ContainsPoint(Point<GridType> val);
 
     public void ConnectedToAll(out List<LayoutObject> connected, out Bounding bounds)
     {

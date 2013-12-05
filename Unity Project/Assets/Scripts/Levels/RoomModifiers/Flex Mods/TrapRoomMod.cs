@@ -41,12 +41,12 @@ public class TrapRoomMod : RoomModifier
         }
         #endregion
         GridMap grid = room.GetFloors();
-        List<Value2D<GridType>> treasureList = grid.GetRandomRemove(treasureInRoom);
-        foreach (Value2D<GridType> val in treasureList)
+        List<Point<GridType>> treasureList = grid.GetRandomRemove(treasureInRoom);
+        foreach (Point<GridType> val in treasureList)
             room.Array[val.y, val.x] = GridType.Chest;
 
-        List<Value2D<GridType>> trapList = grid.GetRandomRemove(treasureInRoom);
-        foreach (Value2D<GridType> val in trapList)
+        List<Point<GridType>> trapList = grid.GetRandomRemove(treasureInRoom);
+        foreach (Point<GridType> val in trapList)
             room.Array[val.y, val.x] = GridType.Trap;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

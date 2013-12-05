@@ -7,7 +7,7 @@ public class LevelBuilder : MonoBehaviour
 
     public Theme Theme { get; set; }
 
-    public GameObject Build(Value2D<GridSpace> val)
+    public GameObject Build(Point<GridSpace> val)
     {
         return Build(val.val, val.x, val.y);
     }

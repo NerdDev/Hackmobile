@@ -433,7 +433,7 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
-            foreach (Value2D<GridType> doorSpace in potentialDoors.GetRandomRemove(numDoors, minDoorSpacing))
+            foreach (Point<GridType> doorSpace in potentialDoors.GetRandomRemove(numDoors, minDoorSpacing))
             {
                 room.put(GridType.Door, doorSpace.x, doorSpace.y);
                 #region DEBUG
@@ -600,7 +600,7 @@ public class LevelGenerator
         #endregion
         LayoutObjectLeaf leaf = new LayoutObjectLeaf(ga.getWidth(), ga.getHeight());
         layout.AddObject(leaf);
-        foreach (Value2D<GridType> val in ga)
+        foreach (Point<GridType> val in ga)
         {
             if (val.val == GridType.Floor)
             {
@@ -650,7 +650,7 @@ public class LevelGenerator
         if (startPtStack.Count > 0)
         {
             layoutArr.PutAll(largest);
-            Value2D<GridType> startPoint = startPtStack.Pop();
+            Point<GridType> startPoint = startPtStack.Pop();
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {

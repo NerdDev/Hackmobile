@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // (0,0) is stored at total width / 2 and total height / 2, respectively.
 // Multidimensional array is indexed [y,x].
 // Array automatically expands if a value is put outside its range.
-public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>>
+public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Point<T>>
 {
 
     static int growth = 10;
@@ -256,13 +256,13 @@ public class Array2Dcoord<T> : Container2D<T>, IEnumerable<Value2D<T>>
     #endregion
 
     #region Iteration
-    public IEnumerator<Value2D<T>> GetEnumerator()
+    public IEnumerator<Point<T>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                Value2D<T> val = new Value2D<T>(x - xShift, y - yShift, arr[y, x]);
+                Point<T> val = new Point<T>(x - xShift, y - yShift, arr[y, x]);
                 yield return val;
             }
         }

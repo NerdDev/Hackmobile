@@ -78,7 +78,7 @@ public class LevelManager : MonoBehaviour, IManager {
 
     void Deploy(Level level)
     {
-        foreach(Value2D<GridSpace> space in level)
+        foreach(Point<GridSpace> space in level)
         {
             if (space != null)
             {

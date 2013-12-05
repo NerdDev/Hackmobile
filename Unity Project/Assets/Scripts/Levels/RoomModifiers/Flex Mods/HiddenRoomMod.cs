@@ -22,7 +22,7 @@ public class HiddenRoomMod : RoomModifier
             potentialDoors.ToLog(Logs.LevelGen, "After Removing Invalid Locations");
         }
         #endregion
-        Value2D<GridType> doorSpace = potentialDoors.RandomValue(Probability.LevelRand);
+        Point<GridType> doorSpace = potentialDoors.RandomValue(Probability.LevelRand);
         if (doorSpace != null)
         {
             room.Array.DrawSquare(

@@ -11,12 +11,12 @@ public class Path : LayoutObjectLeaf
             GridType.Door
         };
     private static GridSet typesSet = new GridSet(searchTypes);
-    List<Value2D<GridType>> _list;
+    List<Point<GridType>> _list;
 
-    public Path(Value2D<GridType> startPoint, GridArray grids)
+    public Path(Point<GridType> startPoint, GridArray grids)
         : base()
     {
-        _list = new List<Value2D<GridType>>(grids.GetArr().DrawDepthFirstSearch(
+        _list = new List<Point<GridType>>(grids.GetArr().DrawDepthFirstSearch(
             startPoint.x,
             startPoint.y,
             Draw.EqualTo(GridType.NULL),
@@ -28,10 +28,10 @@ public class Path : LayoutObjectLeaf
             true));
     }
 
-    public Path(IEnumerable<Value2D<GridType>> stack)
+    public Path(IEnumerable<Point<GridType>> stack)
         : base()
     {
-        _list = new List<Value2D<GridType>>(stack);
+        _list = new List<Point<GridType>>(stack);
     }
 
     public static GridSet PathTypes()
@@ -46,7 +46,7 @@ public class Path : LayoutObjectLeaf
             return base.GetBoundingUnshifted();
         }
         Bounding ret = new Bounding();
-        foreach (Value2D<GridType> val in _list)
+        foreach (Point<GridType> val in _list)
         {
             ret.absorb(val);
         }
@@ -89,10 +89,10 @@ public class Path : LayoutObjectLeaf
         {
             if (print)
             {
-                Value2D<GridType> backward = null;
-                Value2D<GridType> cur = null;
-                Value2D<GridType> forward = null;
-                foreach (Value2D<GridType> val in _list)
+                Point<GridType> backward = null;
+                Point<GridType> cur = null;
+                Point<GridType> forward = null;
+                foreach (Point<GridType> val in _list)
                 {
                     forward = val;
                     if (print)
@@ -151,9 +151,9 @@ public class Path : LayoutObjectLeaf
             }
             else
             {
-                Value2D<GridType> first = _list[0];
-                Value2D<GridType> last = null;
-                foreach (Value2D<GridType> val in _list)
+                Point<GridType> first = _list[0];
+                Point<GridType> last = null;
+                foreach (Point<GridType> val in _list)
                 {
                     last = val;
                     ret[val] = GridType.Floor;
@@ -181,13 +181,13 @@ public class Path : LayoutObjectLeaf
         Bounding bounds = GetBounding(true);
         bounds.expand(1);
         Array2D<int> indexes = new Array2D<int>(bounds, false);
-        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
+        List<Point<GridType>> tmp = new List<Point<GridType>>(_list);
         int[,] arr = indexes.GetArr();
         int index = 0;
-        foreach (Value2D<GridType> val in tmp)
+        foreach (Point<GridType> val in tmp)
         { // For each point on the path
             int lastDiff = 0;
-            Value2D<int> neighbor = null;
+            Point<int> neighbor = null;
             arr.DrawAround(val.x, val.y, false, (arr2, x, y) =>
             { // Find neighboring point on path with the largest distance from current
                 if (arr2[y,x] == 0) return true;
@@ -196,7 +196,7 @@ public class Path : LayoutObjectLeaf
                     && (neighbor == null || lastDiff < valDiff)) // Larger than last found diff
                 {
                     lastDiff = valDiff;
-                    neighbor = new Value2D<int>(x, y, arr2[y,x]);
+                    neighbor = new Point<int>(x, y, arr2[y,x]);
                 }
                 return true;
             });
@@ -215,8 +215,8 @@ public class Path : LayoutObjectLeaf
                 int fromIndex = neighbor.val + 1;
                 int count = index - neighbor.val - 1;
                 // Set indices to 0
-                List<Value2D<GridType>> toRemove = _list.GetRange(fromIndex, count);
-                foreach (Value2D<GridType> r in toRemove)
+                List<Point<GridType>> toRemove = _list.GetRange(fromIndex, count);
+                foreach (Point<GridType> r in toRemove)
                 {
                     indexes[r.x, r.y] = 0;
                 }

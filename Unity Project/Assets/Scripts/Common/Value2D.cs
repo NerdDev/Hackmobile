@@ -2,22 +2,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
-public class Value2D<T> {
+public class Point<T> {
 
     public int x { get; set; }
     public int y { get; set; }
     public T val { get; set; }
 
-    public Value2D()
+    public Point()
     {
     }
 
-    public Value2D(int x_, int y_) : this()
+    public Point(int x_, int y_) : this()
     {
         SetPoint(x_, y_);
     }
 
-    public Value2D(int x_, int y_, T val_) : this(x_, y_)
+    public Point(int x_, int y_, T val_) : this(x_, y_)
     {
         val = val_;
     }
@@ -28,22 +28,22 @@ public class Value2D<T> {
         y = y_;
     }
 
-    public Value2D<T> Shift(Point shift)
+    public Point<T> Shift(Point shift)
     {
         return Shift(shift.x, shift.y);
     }
 
-    public Value2D<T> Unshift(Point shift)
+    public Point<T> Unshift(Point shift)
     {
         return Unshift(shift.x, shift.y);
     }
 
-    public Value2D<T> Shift(int shiftx, int shifty)
+    public Point<T> Shift(int shiftx, int shifty)
     {
-        return new Value2D<T>(x + shiftx, y + shifty, val);
+        return new Point<T>(x + shiftx, y + shifty, val);
     }
 
-    public Value2D<T> Unshift(int shiftx, int shifty)
+    public Point<T> Unshift(int shiftx, int shifty)
     {
         return Shift(-shiftx, -shifty);
     }
@@ -53,7 +53,7 @@ public class Value2D<T> {
         return "Value2D (" + x + "," + y + ", " + val + ")";
     }
 
-    protected bool Equals(Value2D<T> other)
+    protected bool Equals(Point<T> other)
     {
         return x == other.x && y == other.y && EqualityComparer<T>.Default.Equals(val, other.val);
     }
@@ -63,7 +63,7 @@ public class Value2D<T> {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((Value2D<T>) obj);
+        return Equals((Point<T>) obj);
     }
 
     public override int GetHashCode()
@@ -77,17 +77,17 @@ public class Value2D<T> {
         }
     }
 
-    public static bool operator ==(Value2D<T> left, Value2D<T> right)
+    public static bool operator ==(Point<T> left, Point<T> right)
     {
         return Equals(left, right);
     }
 
-    public static bool operator !=(Value2D<T> left, Value2D<T> right)
+    public static bool operator !=(Point<T> left, Point<T> right)
     {
         return !Equals(left, right);
     }
 
-    public static implicit operator Point(Value2D<T> val)
+    public static implicit operator Point(Point<T> val)
     {
         return new Point(val.x, val.y);
     }

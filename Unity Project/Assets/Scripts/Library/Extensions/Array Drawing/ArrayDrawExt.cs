@@ -95,13 +95,13 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Around
-    public static List<Value2D<T>> GetPointsAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester)
+    public static List<Point<T>> GetPointsAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>(cornered ? 9 : 4);
+        List<Point<T>> ret = new List<Point<T>>(cornered ? 9 : 4);
         arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
-                ret.Add(new Value2D<T>(x2, y2, arr[y2, x2]));
+                ret.Add(new Point<T>(x2, y2, arr[y2, x2]));
             return true;
         }));
         return ret;
@@ -129,14 +129,14 @@ public static class ArrayDrawExt
         }));
     }
 
-    public static bool GetPointAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester, out Value2D<T> val)
+    public static bool GetPointAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester, out Point<T> val)
     {
-        Value2D<T> ret = null;
+        Point<T> ret = null;
         if (arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
             {
-                ret = new Value2D<T>(x2, y2, arr[y2, x2]);
+                ret = new Point<T>(x2, y2, arr[y2, x2]);
                 return false; // stop drawing around
             }
             return true; // keep drawing around
@@ -179,9 +179,9 @@ public static class ArrayDrawExt
         return false;
     }
 
-    public static bool GetRandomPointAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawActionCall<T> tester, out Value2D<T> val)
+    public static bool GetRandomPointAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawActionCall<T> tester, out Point<T> val)
     {
-        List<Value2D<T>> options = GetPointsAround(arr, x, y, cornered, tester);
+        List<Point<T>> options = GetPointsAround(arr, x, y, cornered, tester);
         if (options.Count > 0)
         {
             val = options.Random(rand);
@@ -192,13 +192,13 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Get Direction
-    public static List<Value2D<T>> GetPointsOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester)
+    public static List<Point<T>> GetPointsOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester)
     {
-        List<Value2D<T>> ret = new List<Value2D<T>>(4);
+        List<Point<T>> ret = new List<Point<T>>(4);
         arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
-                ret.Add(new Value2D<T>(x2, y2, arr[y2, x2]));
+                ret.Add(new Point<T>(x2, y2, arr[y2, x2]));
             return true;
         }));
         return ret;
@@ -217,14 +217,14 @@ public static class ArrayDrawExt
         return ret;
     }
 
-    public static bool GetPointOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester, out Value2D<T> val)
+    public static bool GetPointOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester, out Point<T> val)
     {
-        Value2D<T> ret = null;
+        Point<T> ret = null;
         if (arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
             {
-                ret = new Value2D<T>(x2, y2, arr[y2, x2]);
+                ret = new Point<T>(x2, y2, arr[y2, x2]);
                 return false;
             }
             return true;
@@ -490,7 +490,7 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Searches
-    public static Stack<Value2D<T>> DrawDepthFirstSearch<T>(this T[,] arr, int x, int y,
+    public static Stack<Point<T>> DrawDepthFirstSearch<T>(this T[,] arr, int x, int y,
         DrawActionCall<T> allowedSpace,
         DrawActionCall<T> target,
         System.Random rand,
@@ -510,7 +510,7 @@ public static class ArrayDrawExt
         }
         #endregion
         var blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
-        var pathTaken = new Stack<Value2D<T>>();
+        var pathTaken = new Stack<Point<T>>();
         DrawAction<T> filter = new DrawActionCall<T>((arr2, x2, y2) =>
         {
             return !blockedPoints[x2, y2] && allowedSpace(arr2, x2, y2);
@@ -524,11 +524,11 @@ public static class ArrayDrawExt
             filter = filter.Then(Draw.NotEdgeOfArray<T>());
             foundTarget = foundTarget.Then(Draw.NotEdgeOfArray<T>());
         }
-        Value2D<T> curPoint;
-        Value2D<T> targetDir;
+        Point<T> curPoint;
+        Point<T> targetDir;
 
         // Push start point onto path
-        pathTaken.Push(new Value2D<T>(x, y));
+        pathTaken.Push(new Point<T>(x, y));
         while (pathTaken.Count > 0)
         {
             curPoint = pathTaken.Peek();
@@ -586,8 +586,8 @@ public static class ArrayDrawExt
             BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
         }
         #endregion
-        Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
-        queue.Enqueue(new Value2D<T>(x, y));
+        Queue<Point<T>> queue = new Queue<Point<T>>();
+        queue.Enqueue(new Point<T>(x, y));
         bool[,] visited = new bool[arr.GetLength(0), arr.GetLength(1)];
         visited[y, x] = true;
         Point curPoint;
@@ -612,7 +612,7 @@ public static class ArrayDrawExt
                             BigBoss.Debug.w(Logs.LevelGen, "Queuing " + x2 + " " + y2);
                         }
                         #endregion
-                        queue.Enqueue(new Value2D<T>(x2, y2, arr2[y2, x2]));
+                        queue.Enqueue(new Point<T>(x2, y2, arr2[y2, x2]));
                     }
                     visited[y2, x2] = true;
                 }

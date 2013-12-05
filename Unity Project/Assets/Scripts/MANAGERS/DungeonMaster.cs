@@ -65,7 +65,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
 
     public void PlacePlayer(Level l, GridSpace stairsUp)
     {
-        Value2D<GridSpace> grid;
+        Point<GridSpace> grid;
         l.Array.GetPointAround(stairsUp.X, stairsUp.Y, false, (arr, x, y) =>
             {
                 return arr[y, x].Type == GridType.Floor;
@@ -87,7 +87,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public static MultiMap<GridSpace> Spawnable(MultiMap<GridSpace> map)
     {
         MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
-        foreach (Value2D<GridSpace> space in map)
+        foreach (Point<GridSpace> space in map)
         {
             if (space.val.Spawnable)
                 ret.Put(space);
@@ -98,7 +98,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public GridSpace PickSpawnableLocation(Level l)
     {
         MultiMap<GridSpace> room = Spawnable(l.GetRooms().Random(Probability.SpawnRand));
-        Value2D<GridSpace> pick = room.RandomValue(Probability.SpawnRand);
+        Point<GridSpace> pick = room.RandomValue(Probability.SpawnRand);
         return pick.val;
     }
 

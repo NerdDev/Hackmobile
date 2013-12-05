@@ -19,7 +19,7 @@ abstract public class Container2D<T> {
             Put(value, x, y);
         }
     }
-    public T this[Value2D<T> val]
+    public T this[Point<T> val]
     {
         get
         {
@@ -42,7 +42,7 @@ abstract public class Container2D<T> {
         }
     }
     protected abstract T Get(int x, int y);
-    public bool ContainsPoint(Value2D<T> val)
+    public bool ContainsPoint(Point<T> val)
     {
         return !Get(val.x, val.y).Equals(default(T));
     }
@@ -52,7 +52,7 @@ abstract public class Container2D<T> {
         if (InRange(x, y))
             PutInternal(val, x, y);
     }
-    public virtual void Put(Value2D<T> val)
+    public virtual void Put(Point<T> val)
     {
         this[val] = val.val;
     }
