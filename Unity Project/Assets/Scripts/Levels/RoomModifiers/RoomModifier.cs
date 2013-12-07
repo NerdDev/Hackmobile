@@ -8,32 +8,38 @@ abstract public class RoomModifier : ProbabilityItem
     public virtual double Multiplier { get { return 1; } }
     public virtual bool Unique { get { return false; } }
 
-    static ProbabilityPool<RoomModifier>[] mods = new ProbabilityPool<RoomModifier>[Enum.GetNames(typeof(RoomModType)).Length];
+    public static ProbabilityPool<RoomModifier>[] Mods = new ProbabilityPool<RoomModifier>[Enum.GetNames(typeof(RoomModType)).Length];
     static bool initialized = false;
 
     public static void RegisterModifiers()
     {
         #region Debug
         double time = 0;
-        if (BigBoss.Debug.logging(Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
             time = Time.realtimeSinceStartup;
+            BigBoss.Debug.printHeader(Logs.LevelGenMain, "Registering Room Mods");
         }
         #endregion
         List<RoomModifier> modPrototypes = BigBoss.Types.GetInstantiations<RoomModifier>();
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
-            mods[(int)e] = ProbabilityPool<RoomModifier>.Create(Probability.LevelRand);
+            Mods[(int)e] = ProbabilityPool<RoomModifier>.Create(Probability.LevelRand);
         }
         foreach (RoomModifier mod in modPrototypes)
         {
-            mods[(int)mod.GetType()].Add(mod);
+            Mods[(int)mod.GetType()].Add(mod);
         }
         initialized = true;
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Registering Room Modifiers took " + (Time.realtimeSinceStartup - time));
+            foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
+            {
+                Mods[(int)e].ToLog(Logs.LevelGenMain);
+            }
+            BigBoss.Debug.w(Logs.LevelGenMain, "Registering Room Modifiers took " + (Time.realtimeSinceStartup - time));
+            BigBoss.Debug.printFooter(Logs.LevelGenMain);
         }
         #endregion
     }
@@ -42,21 +48,24 @@ abstract public class RoomModifier : ProbabilityItem
     {
         if (!initialized)
             RegisterModifiers();
-        return mods[(int)RoomModType.Base].Get();
+        Mods[(int)RoomModType.Base].ClearSkipped();
+        return Mods[(int)RoomModType.Base].Get();
     }
 
     public static List<RoomModifier> GetFlexible(int num)
     {
         if (!initialized)
             RegisterModifiers();
-        return mods[(int)RoomModType.Flexible].Get(num);
+        Mods[(int)RoomModType.Flexible].ClearSkipped();
+        return Mods[(int)RoomModType.Flexible].Get(num);
     }
 
     public static RoomModifier GetFinal()
     {
         if (!initialized)
             RegisterModifiers();
-        return mods[(int)RoomModType.Final].Get();
+        Mods[(int)RoomModType.Final].ClearSkipped();
+        return Mods[(int)RoomModType.Final].Get();
     }
 
     public override string ToString()
@@ -70,4 +79,16 @@ abstract public class RoomModifier : ProbabilityItem
     public new abstract RoomModType GetType();
 
     public abstract string GetName();
+
+    public override bool Equals(object obj)
+    {
+        RoomModifier rhs = obj as RoomModifier;
+        if (rhs == null) return false;
+        return GetName().Equals(rhs.GetName());
+    }
+
+    public override int GetHashCode()
+    {
+        return GetName().GetHashCode();
+    }
 }

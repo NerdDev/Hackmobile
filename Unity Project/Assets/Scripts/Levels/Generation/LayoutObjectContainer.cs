@@ -111,17 +111,17 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 	}
 
 
-    public override bool ContainsPoint(Point<GridType> val)
+    public override bool ContainsPoint(Value2D<GridType> val)
     {
         return GetObjAt(val) != null;
     }
 
-    public void FindAndConnect(LayoutObject obj1, Point<GridType> connectPt)
+    public void FindAndConnect(LayoutObject obj1, Value2D<GridType> connectPt)
     {
         obj1.Connect(GetObjAt(obj1.ShiftValue(connectPt)));
     }
 
-    public LayoutObject GetObjAt(Point<GridType> val)
+    public LayoutObject GetObjAt(Value2D<GridType> val)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

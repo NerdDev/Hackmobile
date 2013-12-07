@@ -69,24 +69,10 @@ public abstract class ProbabilityPool<T>  {
         return picks;
     }
 
-    public abstract bool GetUnique(out T item);
-
-    public List<T> GetUnique(int amount)
-    {
-        T item;
-        List<T> ret = new List<T>();
-        for (int i = 0; i < amount; i++)
-        {
-            if (GetUnique(out item))
-                ret.Add(item);
-        }
-        return ret;
-    }
-
     public abstract ProbabilityPool<T> Filter(Func<T, bool> filter);
 
-    public abstract void ClearUnique();
+    public abstract void ClearSkipped();
 
-    public abstract void ToLog(Logs log);
+    public abstract void ToLog(Logs log, string name = "");
 
 }

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
+public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     protected SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
     public SortedDictionary<int, SortedDictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
@@ -101,7 +101,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
         }
     }
 
-    public void Remove(Point<T> val)
+    public void Remove(Value2D<T> val)
     {
         Remove(val.x, val.y);
     }
@@ -119,7 +119,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
 
     public void PutAll(MultiMap<T> rhs)
     {
-        foreach (Point<T> val in rhs)
+        foreach (Value2D<T> val in rhs)
         {
             this[val] = val.val;
         }
@@ -132,7 +132,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
 
     public void PutAll(MultiMap<T> rhs, int xShift, int yShift)
     {
-        foreach (Point<T> val in rhs)
+        foreach (Value2D<T> val in rhs)
         {
             Put(val.val, val.x + xShift, val.y + yShift);
         }
@@ -149,7 +149,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
 
     public void RemoveAll(MultiMap<T> rhs)
     {
-        foreach (Point<T> val in rhs)
+        foreach (Value2D<T> val in rhs)
         {
             Remove(val);
         }
@@ -162,8 +162,8 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
 
     public void RemoveAllBut(HashSet<T> types)
     {
-        List<Point<T>> vals = new List<Point<T>>(this);
-        foreach (Point<T> val in vals)
+        List<Value2D<T>> vals = new List<Value2D<T>>(this);
+        foreach (Value2D<T> val in vals)
         {
             if (!types.Contains(val.val))
             {
@@ -244,7 +244,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
         return Count() == 0;
     }
 
-    public Point<T> RandomValue(System.Random rand)
+    public Value2D<T> RandomValue(System.Random rand)
     {
         int count = Count();
         if (count != 0)
@@ -255,12 +255,12 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
         return null;
     }
 
-    public Point<T> GetNth(int n)
+    public Value2D<T> GetNth(int n)
     {
         if (n >= 0)
         {
             int count = 0;
-            foreach (Point<T> val in this)
+            foreach (Value2D<T> val in this)
             {
                 if (count == n)
                 {
@@ -273,12 +273,12 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
     }
     #endregion
 
-    public List<Point<T>> GetRandomRemove(int number, int apart = 0)
+    public List<Value2D<T>> GetRandomRemove(int number, int apart = 0)
     {
-        List<Point<T>> list = new List<Point<T>>();
+        List<Value2D<T>> list = new List<Value2D<T>>();
         for (int i = 0; i < number; i++)
         {
-            Point<T> g = RandomValue(Probability.LevelRand);
+            Value2D<T> g = RandomValue(Probability.LevelRand);
             if (g == null) return list;
             Remove(g.x, g.y, apart - 1);
             list.Add(g);
@@ -287,13 +287,13 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Point<T>> {
     }
 
     #region Iteration
-    public IEnumerator<Point<T>> GetEnumerator()
+    public IEnumerator<Value2D<T>> GetEnumerator()
     {
         foreach (KeyValuePair<int, SortedDictionary<int, T>> row in multimap)
         {
             foreach (KeyValuePair<int, T> val in row.Value)
             {
-                Point<T> ret = new Point<T>(val.Key, row.Key, val.Value);
+                Value2D<T> ret = new Value2D<T>(val.Key, row.Key, val.Value);
                 yield return ret;
             }
         }

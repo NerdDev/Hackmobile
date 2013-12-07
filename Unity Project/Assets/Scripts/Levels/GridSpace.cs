@@ -157,7 +157,7 @@ public class GridSpace
     public static GridSpace[,] Convert(GridArray arr)
     {
         GridSpace[,] arrOut = new GridSpace[arr.getHeight(), arr.getWidth()];
-        foreach (Point<GridType> val in arr)
+        foreach (Value2D<GridType> val in arr)
         {
             if (val == null) continue;
             switch (val.val)

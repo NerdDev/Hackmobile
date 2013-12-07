@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Level : IEnumerable<Point<GridSpace>>
+public class Level : IEnumerable<Value2D<GridSpace>>
 {
     protected LevelLayout Layout { get; private set; }
     public bool Populated { get; set; }
@@ -25,7 +25,7 @@ public class Level : IEnumerable<Point<GridSpace>>
         {
             RoomMap roomMap = new RoomMap(room, Array);
             roomMaps.Add(roomMap);
-            foreach (Point<GridSpace> floor in roomMap)
+            foreach (Value2D<GridSpace> floor in roomMap)
             {
                 roomMapping[floor.x, floor.y] = roomMap;
             }
@@ -166,7 +166,7 @@ public class Level : IEnumerable<Point<GridSpace>>
         return roomMaps;
     }
 
-    public IEnumerator<Point<GridSpace>> GetEnumerator()
+    public IEnumerator<Value2D<GridSpace>> GetEnumerator()
     {
         for (int y = 0; y < Array.GetLength(0); y++)
         {
@@ -174,7 +174,7 @@ public class Level : IEnumerable<Point<GridSpace>>
             {
                 GridSpace space = Array[y, x];
                 if (space != null)
-                    yield return new Point<GridSpace>(x, y, Array[y, x]);
+                    yield return new Value2D<GridSpace>(x, y, Array[y, x]);
             }
         }
     }

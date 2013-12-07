@@ -95,13 +95,13 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Around
-    public static List<Point<T>> GetPointsAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester)
+    public static List<Value2D<T>> GetPointsAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester)
     {
-        List<Point<T>> ret = new List<Point<T>>(cornered ? 9 : 4);
+        List<Value2D<T>> ret = new List<Value2D<T>>(cornered ? 9 : 4);
         arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
-                ret.Add(new Point<T>(x2, y2, arr[y2, x2]));
+                ret.Add(new Value2D<T>(x2, y2, arr[y2, x2]));
             return true;
         }));
         return ret;
@@ -129,14 +129,14 @@ public static class ArrayDrawExt
         }));
     }
 
-    public static bool GetPointAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester, out Point<T> val)
+    public static bool GetPointAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> tester, out Value2D<T> val)
     {
-        Point<T> ret = null;
+        Value2D<T> ret = null;
         if (arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
             {
-                ret = new Point<T>(x2, y2, arr[y2, x2]);
+                ret = new Value2D<T>(x2, y2, arr[y2, x2]);
                 return false; // stop drawing around
             }
             return true; // keep drawing around
@@ -179,9 +179,9 @@ public static class ArrayDrawExt
         return false;
     }
 
-    public static bool GetRandomPointAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawActionCall<T> tester, out Point<T> val)
+    public static bool GetRandomPointAround<T>(this T[,] arr, int x, int y, bool cornered, Random rand, DrawActionCall<T> tester, out Value2D<T> val)
     {
-        List<Point<T>> options = GetPointsAround(arr, x, y, cornered, tester);
+        List<Value2D<T>> options = GetPointsAround(arr, x, y, cornered, tester);
         if (options.Count > 0)
         {
             val = options.Random(rand);
@@ -192,13 +192,13 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Get Direction
-    public static List<Point<T>> GetPointsOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester)
+    public static List<Value2D<T>> GetPointsOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester)
     {
-        List<Point<T>> ret = new List<Point<T>>(4);
+        List<Value2D<T>> ret = new List<Value2D<T>>(4);
         arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
-                ret.Add(new Point<T>(x2, y2, arr[y2, x2]));
+                ret.Add(new Value2D<T>(x2, y2, arr[y2, x2]));
             return true;
         }));
         return ret;
@@ -217,14 +217,14 @@ public static class ArrayDrawExt
         return ret;
     }
 
-    public static bool GetPointOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester, out Point<T> val)
+    public static bool GetPointOn<T>(this T[,] arr, int x, int y, GridDirection dir, DrawActionCall<T> tester, out Value2D<T> val)
     {
-        Point<T> ret = null;
+        Value2D<T> ret = null;
         if (arr.DrawDirs(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
         {
             if (tester(arr2, x2, y2))
             {
-                ret = new Point<T>(x2, y2, arr[y2, x2]);
+                ret = new Value2D<T>(x2, y2, arr[y2, x2]);
                 return false;
             }
             return true;
@@ -426,6 +426,9 @@ public static class ArrayDrawExt
         if (action.StrokeAction == null)
             return DrawSquareHelper.DrawSquare(arr, xl, xr, yb, yt, action);
 
+        if (xl == xr && yb == yt)
+            return action.StrokeAction(arr, xl, yb);
+
         StrokedAction<T> stroke = new StrokedAction<T>() { UnitAction = action.StrokeAction };
         StrokedAction<T> fill = new StrokedAction<T>() { UnitAction = action.UnitAction };
 
@@ -442,22 +445,12 @@ public static class ArrayDrawExt
         return true;
     }
 
-    #region Alternates
-    public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, T setTo)
+    public static bool DrawSquare<T>(this T[,] arr, int x, int y, int radius, StrokedAction<T> action)
     {
-        return arr.DrawSquare(xl, xr, yb, yt, SetTo(setTo));
+        return arr.DrawSquare<T>(x - radius, x + radius, y - radius, y + radius, action);
     }
 
-    public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, T fillTo, T strokeTo)
-    {
-        return arr.DrawSquare(xl, xr, yb, yt, new StrokedAction<T>()
-        {
-            UnitAction = SetTo(fillTo),
-            StrokeAction = SetTo(strokeTo)
-        });
-    }
-
-    public static bool DrawSquare<T>(this T[,] arr, int width, int height, T setTo)
+    public static bool DrawSquare<T>(this T[,] arr, int width, int height, StrokedAction<T> stroke)
     {
         Point center = arr.Center();
         int left = center.x - width / 2;
@@ -466,21 +459,8 @@ public static class ArrayDrawExt
         int bottom = center.y - height / 2;
         int top = center.y + height / 2;
         if (height % 2 == 0) top--;
-        return arr.DrawSquare(left, right, bottom, top, setTo);
+        return arr.DrawSquare(left, right, bottom, top, stroke);
     }
-
-    public static bool DrawSquare<T>(this T[,] arr, int width, int height, T setFill, T setStroke)
-    {
-        Point center = arr.Center();
-        int left = center.x - width / 2;
-        int right = center.x + width / 2;
-        if (width % 2 == 0) right--;
-        int bottom = center.y - height / 2;
-        int top = center.y + height / 2;
-        if (height % 2 == 0) top--;
-        return arr.DrawSquare(left, right, bottom, top, setFill, setStroke);
-    }
-    #endregion
     #endregion
     #region Find Options
     public static List<Bounding> GetSquares<T>(this T[,] arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
@@ -490,7 +470,7 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Searches
-    public static Stack<Point<T>> DrawDepthFirstSearch<T>(this T[,] arr, int x, int y,
+    public static Stack<Value2D<T>> DrawDepthFirstSearch<T>(this T[,] arr, int x, int y,
         DrawActionCall<T> allowedSpace,
         DrawActionCall<T> target,
         System.Random rand,
@@ -510,7 +490,7 @@ public static class ArrayDrawExt
         }
         #endregion
         var blockedPoints = new Array2D<bool>(arr.GetLength(1), arr.GetLength(0));
-        var pathTaken = new Stack<Point<T>>();
+        var pathTaken = new Stack<Value2D<T>>();
         DrawAction<T> filter = new DrawActionCall<T>((arr2, x2, y2) =>
         {
             return !blockedPoints[x2, y2] && allowedSpace(arr2, x2, y2);
@@ -524,11 +504,11 @@ public static class ArrayDrawExt
             filter = filter.Then(Draw.NotEdgeOfArray<T>());
             foundTarget = foundTarget.Then(Draw.NotEdgeOfArray<T>());
         }
-        Point<T> curPoint;
-        Point<T> targetDir;
+        Value2D<T> curPoint;
+        Value2D<T> targetDir;
 
         // Push start point onto path
-        pathTaken.Push(new Point<T>(x, y));
+        pathTaken.Push(new Value2D<T>(x, y));
         while (pathTaken.Count > 0)
         {
             curPoint = pathTaken.Peek();
@@ -586,8 +566,8 @@ public static class ArrayDrawExt
             BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
         }
         #endregion
-        Queue<Point<T>> queue = new Queue<Point<T>>();
-        queue.Enqueue(new Point<T>(x, y));
+        Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
+        queue.Enqueue(new Value2D<T>(x, y));
         bool[,] visited = new bool[arr.GetLength(0), arr.GetLength(1)];
         visited[y, x] = true;
         Point curPoint;
@@ -612,7 +592,7 @@ public static class ArrayDrawExt
                             BigBoss.Debug.w(Logs.LevelGen, "Queuing " + x2 + " " + y2);
                         }
                         #endregion
-                        queue.Enqueue(new Point<T>(x2, y2, arr2[y2, x2]));
+                        queue.Enqueue(new Value2D<T>(x2, y2, arr2[y2, x2]));
                     }
                     visited[y2, x2] = true;
                 }
@@ -694,6 +674,9 @@ public class DrawSquareHelper
 {
     public static bool DrawSquare<T>(T[,] arr, int xl, int xr, int yb, int yt, StrokedAction<T> action)
     {
+        if (xl == xr && yb == yt)
+            return action.UnitAction(arr, xl, yb);
+
         for (; yb <= yt; yb++)
             if (!arr.DrawRow(xl, xr, yb, action)) return false;
         return true;

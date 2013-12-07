@@ -40,13 +40,18 @@ public class TrapRoomMod : RoomModifier
             BigBoss.Debug.w(Logs.LevelGen, "Floor Space: " + floorSpace + " Traps In Room: " + trapsInRoom);
         }
         #endregion
+        RandomPicker<GridType> picker;
+        room.Array.DrawSquare(Draw.IfThen<GridType>(
+            Draw.EqualTo(GridType.Floor),
+            Draw.PickRandom(room.Array, out picker)));
+
         GridMap grid = room.GetFloors();
-        List<Point<GridType>> treasureList = grid.GetRandomRemove(treasureInRoom);
-        foreach (Point<GridType> val in treasureList)
+        List<Value2D<GridType>> treasureList = picker.Pick(Probability.LevelRand, treasureInRoom, 0, true);
+        foreach (Value2D<GridType> val in treasureList)
             room.Array[val.y, val.x] = GridType.Chest;
 
-        List<Point<GridType>> trapList = grid.GetRandomRemove(treasureInRoom);
-        foreach (Point<GridType> val in trapList)
+        List<Value2D<GridType>> trapList = grid.GetRandomRemove(treasureInRoom);
+        foreach (Value2D<GridType> val in trapList)
             room.Array[val.y, val.x] = GridType.Trap;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

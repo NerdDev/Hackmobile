@@ -30,14 +30,14 @@ public class GiantPillarMod : RoomModifier
             foreach (Bounding r in locations)
             {
                 GridArray copy = new GridArray(spec.Room.GetArray());
-                copy.GetArr().DrawSquare(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, GridType.Path_Vert);
+                copy.GetArr().DrawSquare(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, Draw.SetTo(GridType.Path_Vert));
                 copy.ToLog(Logs.LevelGen);
             }
         }
         #endregion
         Bounding l = locations.Random(Probability.LevelRand);
         // Draw inner square without stroke (stroke was just used to analyze surroundings)
-        spec.Room.Array.DrawSquare(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, GridType.Wall);
+        spec.Room.Array.DrawSquare(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(GridType.Wall));
         return true;
     }
 

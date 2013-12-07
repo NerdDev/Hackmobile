@@ -5,7 +5,7 @@ public class RoomMap : MultiMap<GridSpace>, IEnumerable  {
 
     public RoomMap(Room room, GridSpace[,] arr)
     {
-        foreach (Point<GridType> floor in room.GetFloors())
+        foreach (Value2D<GridType> floor in room.GetFloors())
         {
             this.Put(arr[floor.y, floor.x], floor.x, floor.y);
         }

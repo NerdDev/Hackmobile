@@ -95,30 +95,6 @@ public class LeveledPool<T> : ProbabilityPool<T>
         }
         return picks;
     }
-
-    public override bool GetUnique(out T item)
-    {
-        return GetUnique(out item, BigBoss.Player.Level);
-    }
-
-    public List<T> GetUnique(int amount, int level)
-    {
-        SetFor(level);
-        T item;
-        List<T> ret = new List<T>();
-        for (int i = 0; i < amount; i++)
-        {
-            if (currentPool.GetUnique(out item))
-                ret.Add(item);
-        }
-        return ret;
-    }
-
-    public bool GetUnique(out T item, int level)
-    {
-        SetFor(level);
-        return currentPool.GetUnique(out item);
-    }
     #endregion
 
     public override ProbabilityPool<T> Filter(Func<T, bool> filter)
@@ -132,12 +108,12 @@ public class LeveledPool<T> : ProbabilityPool<T>
         return ret;
     }
 
-    public override void ClearUnique()
+    public override void ClearSkipped()
     {
         throw new NotImplementedException();
     }
 
-    public override void ToLog(Logs log)
+    public override void ToLog(Logs log, string name = "")
     {
         throw new NotImplementedException();
     }

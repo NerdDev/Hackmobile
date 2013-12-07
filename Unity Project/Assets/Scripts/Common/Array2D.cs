@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Array2D<T> : Container2D<T>, IEnumerable<Point<T>>
+public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>>
 {
 
     protected T[,] arr;
@@ -186,25 +186,25 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Point<T>>
     #endregion
 
     #region Iteration
-    public IEnumerable<Point<T>> IterateNoEdges()
+    public IEnumerable<Value2D<T>> IterateNoEdges()
     {
         for (int y = 1; y < arr.GetLength(0) - 1; y++)
         {
             for (int x = 1; x < arr.GetLength(1) - 1; x++)
             {
-                Point<T> val = new Point<T>(x, y, arr[y, x]);
+                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]);
                 yield return val;
             }
         }
     }
 
-    public virtual IEnumerator<Point<T>> GetEnumerator()
+    public virtual IEnumerator<Value2D<T>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                Point<T> val = new Point<T>(x, y, arr[y, x]);
+                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]);
                 yield return val;
             }
         }
@@ -218,7 +218,7 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Point<T>>
 
     public static void invert(Array2D<bool> arr)
     {
-        foreach (Point<bool> val in arr)
+        foreach (Value2D<bool> val in arr)
         {
             arr.Put(!val.val, val.x, val.y);
         }

@@ -71,7 +71,7 @@ public class Bounding
         absorbY(y);
     }
 
-    public void absorb<T>(Point<T> val)
+    public void absorb<T>(Value2D<T> val)
     {
         absorb(val.x, val.y);
     }

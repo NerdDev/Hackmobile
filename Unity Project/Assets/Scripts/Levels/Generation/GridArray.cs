@@ -65,7 +65,7 @@ public class GridArray : Array2D<GridType>
 
     public void PutAs(GridArray rhs, GridType type)
     {
-        foreach (Point<GridType> val in rhs)
+        foreach (Value2D<GridType> val in rhs)
         {
             Put(type, val.x, val.y);
         }
@@ -151,7 +151,7 @@ public class GridArray : Array2D<GridType>
         return src.arr;
     }
 
-    public override IEnumerator<Point<GridType>> GetEnumerator()
+    public override IEnumerator<Value2D<GridType>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
@@ -159,7 +159,7 @@ public class GridArray : Array2D<GridType>
             {
                 if (arr[y, x] != GridType.NULL)
                 {
-                    Point<GridType> val = new Point<GridType>(x, y, arr[y, x]);
+                    Value2D<GridType> val = new Value2D<GridType>(x, y, arr[y, x]);
                     yield return val;
                 }
             }

@@ -18,7 +18,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_1_5;UNITY_4_1;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_1_5;UNITY_4_1;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -292,6 +292,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\GridDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\OptionTests.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\RandomPicker.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\SquareFinder.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\StrokedAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
@@ -304,6 +305,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ListExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\RandomExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />

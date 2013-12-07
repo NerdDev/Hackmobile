@@ -54,29 +54,30 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     protected void Add(ProbContainer cont)
     {
-        if (cont.multiplier < 0)
-            throw new ArgumentException("Multiplier cannot be less than zero: " + cont.multiplier);
+        if (cont.Multiplier < 0)
+            throw new ArgumentException("Multiplier cannot be less than zero: " + cont.Multiplier);
         itemList.Add(cont);
-        Max += cont.multiplier;
+        Max += cont.Multiplier;
     }
 
-    public override void ClearUnique()
+    public override void ClearSkipped()
     {
         foreach (ProbContainer cont in itemList)
-            cont.skip = false;
+            cont.Skip = false;
         uniqueTmpMax = max;
+        Fresh = true;
     }
 
-    public override void ToLog(Logs log)
+    public override void ToLog(Logs log, string name = "")
     {
         if (BigBoss.Debug.logging(log) && BigBoss.Debug.Flag(DebugManager.DebugFlag.Probability))
         {
-            BigBoss.Debug.printHeader(log, "Probability List - State");
+            BigBoss.Debug.printHeader(log, "Probability List - " + name);
             BigBoss.Debug.w(log, "Max Num: " + max + ", Current Max: " + uniqueTmpMax);
             BigBoss.Debug.w(log, "Percent - Alotted - Item");
             foreach (ProbContainer cont in itemList)
             {
-                BigBoss.Debug.w(log, (cont.multiplier / uniqueTmpMax * 100) + "% - " + cont.multiplier + " - " + cont.item);
+                BigBoss.Debug.w(log, (cont.Multiplier / max * 100) + "% - " + cont.Multiplier + " - " + cont.Multiplier + " - " + cont.Item);
             }
             BigBoss.Debug.printFooter(log);
         }
@@ -89,19 +90,14 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         double curNum = 0;
         foreach (ProbContainer cont in itemList)
         {
-            curNum += cont.multiplier;
+            if (cont.Skip) continue;
+            curNum += cont.Multiplier;
             if (picked < curNum)
             {
-                if (!cont.skip)
-                {
-                    HandleUnique(cont);
-                    item = cont.item;
-                    return true;
-                }
-                else
-                {
-                    picked += cont.multiplier;
-                }
+                if (cont.Unique)
+                    SetToSkip(cont);
+                item = cont.Item;
+                return true;
             }
             resultIndex++;
         }
@@ -109,15 +105,11 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         return false;
     }
 
-    protected bool HandleUnique(ProbContainer cont)
+    protected void SetToSkip(ProbContainer cont)
     {
-        if (cont.unique)
-        {
-            cont.skip = true;
-            uniqueTmpMax -= cont.multiplier;
-            Fresh = false;
-        }
-        return true;
+        cont.Skip = true;
+        uniqueTmpMax -= cont.Multiplier;
+        Fresh = false;
     }
 
     public override bool Get(out T item)
@@ -137,21 +129,13 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         return false;
     }
 
-    public override bool GetUnique(out T item)
-    {
-        int index;
-        bool ret = Get(out item, out index);
-        itemList[index].skip = true;
-        return ret;
-    }
-
     public override ProbabilityPool<T> Filter(System.Func<T, bool> filter)
     {
         ProbabilityList<T> ret = new ProbabilityList<T>(rand);
         List<ProbContainer> filtered = new List<ProbContainer>();
         foreach (ProbContainer cont in itemList)
         {
-            if (filter(cont.item))
+            if (filter(cont.Item))
                 filtered.Add(cont);
         }
         ret.Add(filtered);
@@ -160,24 +144,24 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     protected class ProbContainer
     {
-        public T item;
-        public bool skip { get; set; }
-        public double multiplier { get; set; }
-        public bool unique { get; set; }
+        public T Item;
+        public bool Skip;
+        public double Multiplier;
+        public bool Unique;
 
         public ProbContainer(T item, double multiplier, bool unique)
         {
-            this.item = item;
-            this.multiplier = multiplier;
-            this.unique = unique;
+            this.Item = item;
+            this.Multiplier = multiplier;
+            this.Unique = unique;
         }
 
         public ProbContainer(ProbContainer rhs)
         {
-            this.item = rhs.item;
-            this.skip = rhs.skip;
-            this.multiplier = rhs.multiplier;
-            this.unique = rhs.unique;
+            this.Item = rhs.Item;
+            this.Skip = rhs.Skip;
+            this.Multiplier = rhs.Multiplier;
+            this.Unique = rhs.Unique;
         }
     }
 }

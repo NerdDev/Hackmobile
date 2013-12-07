@@ -206,6 +206,10 @@ public class LevelGenerator
         {
             #region DEBUG
             double stepTime = 0, time = 0;
+            if (BigBoss.Debug.logging(Logs.LevelGenMain))
+            {
+                BigBoss.Debug.w(Logs.LevelGenMain, "Mods for " + room);
+            }
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + 0 + " - Generate Room " + room.Id);
@@ -217,6 +221,10 @@ public class LevelGenerator
             foreach (RoomModifier mod in PickMods())
             {
                 #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGenMain))
+                {
+                    BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
+                }
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     stepTime = Time.realtimeSinceStartup;
@@ -433,7 +441,7 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
-            foreach (Point<GridType> doorSpace in potentialDoors.GetRandomRemove(numDoors, minDoorSpacing))
+            foreach (Value2D<GridType> doorSpace in potentialDoors.GetRandomRemove(numDoors, minDoorSpacing))
             {
                 room.put(GridType.Door, doorSpace.x, doorSpace.y);
                 #region DEBUG
@@ -600,7 +608,7 @@ public class LevelGenerator
         #endregion
         LayoutObjectLeaf leaf = new LayoutObjectLeaf(ga.getWidth(), ga.getHeight());
         layout.AddObject(leaf);
-        foreach (Point<GridType> val in ga)
+        foreach (Value2D<GridType> val in ga)
         {
             if (val.val == GridType.Floor)
             {
@@ -650,7 +658,7 @@ public class LevelGenerator
         if (startPtStack.Count > 0)
         {
             layoutArr.PutAll(largest);
-            Point<GridType> startPoint = startPtStack.Pop();
+            Value2D<GridType> startPoint = startPtStack.Pop();
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {

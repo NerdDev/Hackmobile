@@ -13,6 +13,16 @@ public class Draw
         });
     }
 
+    public static DrawAction<T> IfThen<T>(DrawActionCall<T> ifCall, DrawActionCall<T> then)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            if (ifCall(arr, x, y))
+                return then(arr, x, y);
+            return true;
+        });
+    }
+
     public static DrawAction<T> ContainedIn<T>(ICollection<T> col)
     {
         return new DrawAction<T>((arr, x, y) =>
@@ -51,11 +61,11 @@ public class Draw
             });
     }
 
-    public static DrawAction<T> AddTo<T>(ICollection<Point<T>> t)
+    public static DrawAction<T> AddTo<T>(ICollection<Value2D<T>> t)
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            t.Add(new Point<T>(x, y, arr[y, x]));
+            t.Add(new Value2D<T>(x, y, arr[y, x]));
             return true;
         });
     }
@@ -89,54 +99,11 @@ public class Draw
         });
     }
 
-    public static DrawAction<T> PickRandom<T>(System.Random rand, out RandomPicker<T> picker, int radiusApart = 0)
+    public static DrawAction<T> PickRandom<T>(T[,] arr, out RandomPicker<T> picker, int radiusApart = 0)
     {
-        picker = new RandomPicker<T>(rand, radiusApart);
+        picker = new RandomPicker<T>(arr);
         DrawActionCall<T> f = picker.DrawingAction;
         return f;
-    }
-
-    public class RandomPicker<T>
-    {
-        MultiMap<T> options = new MultiMap<T>();
-        System.Random rand;
-        int radius;
-
-        public RandomPicker(System.Random rand, int radiusApart)
-        {
-            this.rand = rand;
-            this.radius = radiusApart;
-        }
-
-        public bool DrawingAction(T[,] arr, int x, int y)
-        {
-            options.Put(arr[y, x], x, y);
-            return true;
-        }
-
-        public List<Point> Pick(int amount)
-        {
-            List<Point> ret = new List<Point>();
-            if (radius == 0)
-            {
-                while (options.Count > 0)
-                    ret.Add(options.RandomTake(rand));
-            }
-            else
-            {
-                HashSet<Point> blocked = new HashSet<Point>();
-                while (amount > 0 && options.Count > 0)
-                {
-                    Point p = options.RandomTake(rand);
-                    if (radius > 0)
-                    {
-
-                    }
-                    ret.Add(p);
-                }
-            }
-            return ret;
-        }
     }
 
     #region GridType

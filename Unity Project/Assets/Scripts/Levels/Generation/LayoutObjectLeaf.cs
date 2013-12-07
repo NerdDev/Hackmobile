@@ -35,7 +35,7 @@ public class LayoutObjectLeaf : LayoutObject {
 
     public void putAll(GridMap map)
     {
-        foreach (Point<GridType> vals in map)
+        foreach (Value2D<GridType> vals in map)
         {
             put(vals.val, vals.x, vals.y);
         }
@@ -67,7 +67,7 @@ public class LayoutObjectLeaf : LayoutObject {
         finalized = true;
     }
 
-    public override bool ContainsPoint(Point<GridType> val)
+    public override bool ContainsPoint(Value2D<GridType> val)
     {
         return grids.ContainsPoint(val);
     }
