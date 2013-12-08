@@ -33,7 +33,7 @@ public class HorizSplitterMod : RoomModifier
         }
         if (options.Count == 0) return false;
         #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             foreach (int i in options)
             {

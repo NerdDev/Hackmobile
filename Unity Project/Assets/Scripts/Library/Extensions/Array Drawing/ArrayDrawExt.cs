@@ -477,7 +477,7 @@ public static class ArrayDrawExt
         bool edgeSafe = false)
     {
         #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps) && BigBoss.Debug.logging(Logs.LevelGen) && typeof(T) == typeof(GridType))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen) && typeof(T) == typeof(GridType))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Depth First Search");
             GridType[,] tmpArr = new GridType[arr.GetLength(0), arr.GetLength(1)];
@@ -519,7 +519,7 @@ public static class ArrayDrawExt
             if (arr.GetPointAround(curPoint.x, curPoint.y, false, foundTarget, out targetDir))
             {
                 #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + curPoint);
                     BigBoss.Debug.printFooter(Logs.LevelGen);
@@ -533,7 +533,7 @@ public static class ArrayDrawExt
             if (arr.GetRandomPointAround<T>(curPoint.x, curPoint.y, false, rand, filter, out targetDir))
             {
                 #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + targetDir);
                 }
@@ -547,7 +547,7 @@ public static class ArrayDrawExt
             }
         }
         #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
@@ -561,7 +561,7 @@ public static class ArrayDrawExt
         bool edgeSafe = false)
     {
         #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
         }
@@ -575,7 +575,7 @@ public static class ArrayDrawExt
         {
             curPoint = queue.Dequeue();
             #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
                 visited.ToLog(Logs.LevelGen, "Current Map. Evaluating " + curPoint);
             }
@@ -587,7 +587,7 @@ public static class ArrayDrawExt
                     if (!visited[y2, x2] && run(arr2, x2, y2))
                     {
                         #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                         {
                             BigBoss.Debug.w(Logs.LevelGen, "Queuing " + x2 + " " + y2);
                         }
@@ -600,7 +600,7 @@ public static class ArrayDrawExt
             });
         }
         #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGenFineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }

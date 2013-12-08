@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 public class TrapRoomMod : RoomModifier
 {
+    public override bool Unique { get { return true; } }
     protected static ProbabilityList<int> treasureSizeList = new ProbabilityList<int>();
     static TrapRoomMod()
     {
-        treasureSizeList.Add(0, .25, false);
+        //treasureSizeList.Add(0, .25, false);
         treasureSizeList.Add(1, .5, false);
         treasureSizeList.Add(2, .15, false);
         treasureSizeList.Add(3, .10, false);
@@ -50,7 +51,7 @@ public class TrapRoomMod : RoomModifier
         foreach (Value2D<GridType> val in treasureList)
             room.Array[val.y, val.x] = GridType.Chest;
 
-        List<Value2D<GridType>> trapList = grid.GetRandomRemove(treasureInRoom);
+        List<Value2D<GridType>> trapList = picker.Pick(Probability.LevelRand, trapsInRoom, 0, true);
         foreach (Value2D<GridType> val in trapList)
             room.Array[val.y, val.x] = GridType.Trap;
         #region DEBUG

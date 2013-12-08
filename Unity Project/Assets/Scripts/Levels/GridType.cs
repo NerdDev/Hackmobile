@@ -37,8 +37,14 @@ public class GridTypeEnum
                 return '.';
             case GridType.TrapDoor:
                 return 'T';
+            case GridType.Trap:
+                return 'X';
             case GridType.Door:
                 return '|';
+            case GridType.SmallLoot:
+                return '$';
+            case GridType.Chest:
+                return '=';
             case GridType.Wall:
                 return '#';
             case GridType.NULL:
