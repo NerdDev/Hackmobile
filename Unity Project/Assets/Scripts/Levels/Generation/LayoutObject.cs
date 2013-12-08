@@ -508,7 +508,7 @@ abstract public class LayoutObject
     protected virtual List<string> ToRowStrings(Bounding bounds)
     {
         GridType[,] array = GetMinimizedArray(GetPrintArray());
-        List<string> ret = array.ToRowStrings(GridTypeEnum.CharConverter);
+        List<string> ret = array.ToRowStrings();
         ret = Nifty.AddRuler(ret, bounds);
         return ret;
     }

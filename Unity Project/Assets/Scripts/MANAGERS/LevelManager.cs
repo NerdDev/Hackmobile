@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour, IManager {
     {
         Builder.Theme = Theme;
         Levels = new Level[MaxLevels];
+        ArrayExt.Converters.Add(typeof(GridType), (b) => { return GridTypeEnum.Convert((GridType)b); });
     }
     
     void Start()

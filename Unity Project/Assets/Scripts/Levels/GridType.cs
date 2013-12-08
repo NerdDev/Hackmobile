@@ -31,6 +31,10 @@ public class GridTypeEnum
 {
     public static Func<GridType, char> CharConverter = new Func<GridType, char>((g) =>
     {
+        return Convert(g);
+    });
+    public static char Convert(GridType g)
+    {
         switch (g)
         {
             case GridType.Floor:
@@ -67,8 +71,8 @@ public class GridTypeEnum
                 return (char)201;
             default:
                 return '?';
-        }
-    });
+        };
+    }
 
     public static bool Walkable(GridType t)
     {

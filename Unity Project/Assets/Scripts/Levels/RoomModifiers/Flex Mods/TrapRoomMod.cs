@@ -9,8 +9,8 @@ public class TrapRoomMod : RoomModifier
     static TrapRoomMod()
     {
         //treasureSizeList.Add(0, .25, false);
-        treasureSizeList.Add(1, .5, false);
-        treasureSizeList.Add(2, .15, false);
+        //treasureSizeList.Add(1, .5, false);
+        //treasureSizeList.Add(2, .15, false);
         treasureSizeList.Add(3, .10, false);
     }
 
@@ -47,9 +47,16 @@ public class TrapRoomMod : RoomModifier
             Draw.PickRandom(room.Array, out picker)));
 
         GridMap grid = room.GetFloors();
-        List<Value2D<GridType>> treasureList = picker.Pick(Probability.LevelRand, treasureInRoom, 0, true);
+        List<Value2D<GridType>> treasureList = picker.Pick(Probability.LevelRand, treasureInRoom, 2, true);
         foreach (Value2D<GridType> val in treasureList)
             room.Array[val.y, val.x] = GridType.Chest;
+
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            room.ToLog(Logs.LevelGen, "After picking treasure");
+        }
+        #endregion
 
         List<Value2D<GridType>> trapList = picker.Pick(Probability.LevelRand, trapsInRoom, 0, true);
         foreach (Value2D<GridType> val in trapList)

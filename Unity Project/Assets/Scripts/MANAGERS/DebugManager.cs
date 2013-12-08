@@ -6,6 +6,7 @@ using System.IO;
 
 public class DebugManager : MonoBehaviour, IManager
 {
+    Log lastLog;
 
     #region LogTypes
     string[] logPaths;
@@ -119,11 +120,27 @@ public class DebugManager : MonoBehaviour, IManager
         }
     }
 
+    public void w(string line)
+    {
+        if (lastLog != null)
+        {
+            lastLog.w(line);
+        }
+    }
+
     public void w(Logs e, int depthModifier, string line)
     {
         if (logging(e))
         {
             Get(e).w(depthModifier, line);
+        }
+    }
+
+    public void w(int depthModifier, string line)
+    {
+        if (lastLog != null)
+        {
+            lastLog.w(depthModifier, line);
         }
     }
 
@@ -145,6 +162,12 @@ public class DebugManager : MonoBehaviour, IManager
         }
     }
 
+    public void printHeader(string line)
+    {
+        if (lastLog != null)
+            lastLog.printHeader(line);
+    }
+
     public void printFooter(Logs e)
     {
         if (logging(e))
@@ -153,12 +176,24 @@ public class DebugManager : MonoBehaviour, IManager
         }
     }
 
+    public void printFooter()
+    {
+        if (lastLog != null)
+            lastLog.printFooter();
+    }
+
     public void printBreakers(Logs e, int num)
     {
         if (logging(e))
         {
             Get(e).printBreakers(num);
         }
+    }
+
+    public void printBreakers(int num)
+    {
+        if (lastLog != null)
+            lastLog.printBreakers(num);
     }
 
     public void logException(Logs e)
@@ -216,7 +251,8 @@ public class DebugManager : MonoBehaviour, IManager
         {
             CreateNewLog(e, getName(e));
         }
-        return logs[(int)e];
+        lastLog = logs[(int)e];
+        return lastLog;
     }
 
     public void CreateNewLog(Logs e, string logName)

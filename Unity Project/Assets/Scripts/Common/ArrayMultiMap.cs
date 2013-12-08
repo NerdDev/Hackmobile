@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#pragma warning disable 162
 public class ArrayMultiMap<T> : Container2D<T>
 {
+    const bool _debug = true;
     int _count = 0;
     public int Count { get { return _count; } }
     bool[,] _present;
@@ -80,6 +82,13 @@ public class ArrayMultiMap<T> : Container2D<T>
             amount = Count;
         List<int> pickedList = random.PickSeveral(amount, Count);
         if (pickedList.Count == 0) return ret;
+        #region DEBUG
+        if (_debug)
+        {
+            BigBoss.Debug.printHeader("Array Multimap Random amount");
+            availableArr.ToLog("Available options");
+        }
+        #endregion
 
         // Set up by sorting list from biggest to smallest
         pickedList.Sort();
@@ -97,7 +106,8 @@ public class ArrayMultiMap<T> : Container2D<T>
                 { // Valid space to analyze
                     if (pickedList[listIndex] == numPassed)
                     { // One we picked
-                        ret.Add(new Value2D<T>(x, y, _arr[y, x]));
+                        Value2D<T> pickedVal = new Value2D<T>(x, y, _arr[y, x]);
+                        ret.Add(pickedVal);
                         if (take)
                             Remove(x, y);
                         if (distance > 0)
@@ -115,16 +125,38 @@ public class ArrayMultiMap<T> : Container2D<T>
                                     }
                             });
                         }
+                        else
+                        { // Just mark taken spot
+                            availableArr[pickedVal.y, pickedVal.x] = false;
+                        }
                         listIndex--;
                         if (listIndex < 0)
                         { // Done picking.  Break
+                            #region DEBUG
+                            if (_debug)
+                            {
+                                BigBoss.Debug.printFooter();
+                            }
+                            #endregion
                             return ret;
                         }
+                        #region DEBUG
+                        if (_debug)
+                        {
+                            availableArr.ToLog("Available after picking " + pickedVal);
+                        }
+                        #endregion
                     }
                     numPassed++;
                 }
             }
         }
+        #region DEBUG
+        if (_debug)
+        {
+            BigBoss.Debug.printFooter();
+        }
+        #endregion
         return ret;
     }
 
@@ -149,3 +181,4 @@ public class ArrayMultiMap<T> : Container2D<T>
         return default(T);
     }
 }
+#pragma warning restore 162
