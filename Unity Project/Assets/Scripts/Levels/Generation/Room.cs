@@ -53,7 +53,7 @@ public class Room : LayoutObjectLeaf {
 
     public int CountGridType(GridType type)
     {
-        return getTypes(type).Count();
+        return getTypes(type).Count;
     }
 
     public override string GetTypeString()

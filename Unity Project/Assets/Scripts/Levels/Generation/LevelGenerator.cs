@@ -441,7 +441,7 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
-            foreach (Value2D<GridType> doorSpace in potentialDoors.GetRandomRemove(numDoors, minDoorSpacing))
+            foreach (Value2D<GridType> doorSpace in potentialDoors.Random(Probability.LevelRand, numDoors, minDoorSpacing))
             {
                 room.put(GridType.Door, doorSpace.x, doorSpace.y);
                 #region DEBUG

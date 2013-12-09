@@ -99,7 +99,7 @@ public class Draw
         });
     }
 
-    public static DrawAction<T> PickRandom<T>(T[,] arr, out RandomPicker<T> picker, int radiusApart = 0)
+    public static DrawAction<T> PickRandom<T>(T[,] arr, out RandomPicker<T> picker)
     {
         picker = new RandomPicker<T>(arr);
         DrawActionCall<T> f = picker.DrawingAction;

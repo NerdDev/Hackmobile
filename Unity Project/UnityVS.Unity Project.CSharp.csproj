@@ -238,6 +238,7 @@
     <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
     <Compile Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApplySubstance.cs" />
+    <Compile Include="Assets\Scenes\Testing\ArrayMultiMapTesting.cs" />
     <Compile Include="Assets\Scenes\Testing\Justin Effects Testin\JustinEffectsTest.cs" />
     <Compile Include="Assets\Scenes\Testing\ProbabilityTesting.cs" />
     <Compile Include="Assets\Scripts\AtlasGenerator.cs" />

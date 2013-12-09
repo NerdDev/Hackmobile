@@ -3,35 +3,37 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
+public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>>
+{
 
-    protected SortedDictionary<int, SortedDictionary<int, T>> multimap = new SortedDictionary<int, SortedDictionary<int, T>>();
-    public SortedDictionary<int, SortedDictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
-    public SortedDictionary<int, SortedDictionary<int, T>>.ValueCollection Values { get { return multimap.Values; } }
+    int _count = 0;
+    public int Count { get { return _count; } }
+    public bool IsEmpty { get { return Count == 0; } }
+    protected Dictionary<int, Dictionary<int, T>> multimap = new Dictionary<int, Dictionary<int, T>>();
+    public Dictionary<int, Dictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
+    public Dictionary<int, Dictionary<int, T>>.ValueCollection Values { get { return multimap.Values; } }
 
     #region Ctors
     public MultiMap()
     {
-        setComparator();
     }
 
-    public MultiMap(MultiMap<T> rhs) : this()
+    public MultiMap(MultiMap<T> rhs)
+        : this()
     {
         PutAll(rhs);
     }
 
-    public MultiMap(MultiMap<T> rhs, Point shift) : this()
+    public MultiMap(MultiMap<T> rhs, Point shift)
+        : this()
     {
         PutAll(rhs, shift);
     }
 
-    public MultiMap(MultiMap<T> rhs, int xShift, int yShift) : this()
+    public MultiMap(MultiMap<T> rhs, int xShift, int yShift)
+        : this()
     {
         PutAll(rhs, xShift, yShift);
-    }
-
-    protected virtual void setComparator() 
-    {
     }
     #endregion
 
@@ -45,7 +47,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public bool Contains(int x, int y)
     {
-        SortedDictionary<int, T> row;
+        Dictionary<int, T> row;
         if (GetRow(y, out row))
         {
             return row.ContainsKey(x);
@@ -53,7 +55,7 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return false;
     }
 
-    public bool GetRow(int y, out SortedDictionary<int, T> val)
+    public bool GetRow(int y, out Dictionary<int, T> val)
     {
         bool ret = multimap.TryGetValue(y, out val);
         return ret;
@@ -64,12 +66,12 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         return true;
     }
 
-    SortedDictionary<int, T> GetRowCreate(int y)
+    Dictionary<int, T> GetRowCreate(int y)
     {
-        SortedDictionary<int, T> row;
+        Dictionary<int, T> row;
         if (!multimap.TryGetValue(y, out row))
         {
-            row = new SortedDictionary<int, T>();
+            row = new Dictionary<int, T>();
             multimap[y] = row;
         }
         return row;
@@ -82,22 +84,24 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     protected override void PutInternal(T val, int x, int y)
     {
-        SortedDictionary<int, T> row = GetRowCreate(y);
+        Dictionary<int, T> row = GetRowCreate(y);
         Put(row, val, x);
     }
 
-    void Put(SortedDictionary<int, T> row, T val, int x)
+    void Put(Dictionary<int, T> row, T val, int x)
     {
         if (!row.ContainsKey(x))
-            row[x] = val;
+            _count++;
+        row[x] = val;
     }
 
     public void Remove(int x, int y)
     {
-        SortedDictionary<int, T> row;
+        Dictionary<int, T> row;
         if (GetRow(y, out row))
         {
-            row.Remove(x);
+            if (row.Remove(x))
+                _count--;
         }
     }
 
@@ -140,12 +144,12 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public void PutRow(T t, int xl, int xr, int y)
     {
-        SortedDictionary<int, T> row = GetRowCreate(y);
+        Dictionary<int, T> row = GetRowCreate(y);
         for (; xl <= xr; xl++)
         {
             row[xl] = t;
         }
-	}
+    }
 
     public void RemoveAll(MultiMap<T> rhs)
     {
@@ -180,17 +184,9 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
         }
     }
 
-    public void PutSquare(T t, int xl, int xr, int yb, int yt)
-    {
-        for (; yb <= yt; yb++)
-        {
-            PutRow(t, xl, xr, yb);
-        }
-    }
-
     public bool TryGetValue(int x, int y, out T val)
     {
-        SortedDictionary<int, T> row;
+        Dictionary<int, T> row;
         if (multimap.TryGetValue(y, out row))
         {
             if (row.TryGetValue(x, out val))
@@ -204,52 +200,36 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
 
     public override Bounding GetBounding()
     {
-		Bounding bounds = new Bounding();
-        foreach (KeyValuePair<int, SortedDictionary<int, T>> row in multimap)
+        Bounding bounds = new Bounding();
+        foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
         {
             foreach (KeyValuePair<int, T> val in row.Value)
             {
                 bounds.absorb(val.Key, row.Key);
             }
         }
-		return bounds;
+        return bounds;
     }
 
     public override T[,] GetArr()
     {
         Bounding bounds = GetBounding();
         T[,] arr = new T[bounds.Height + 1, bounds.Width + 1];
-        foreach (KeyValuePair<int, SortedDictionary<int, T>> row in multimap)
+        foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
         {
             foreach (KeyValuePair<int, T> val in row.Value)
             {
                 arr[row.Key - bounds.YMin, val.Key - bounds.XMin] = val.Value;
             }
         }
-		return arr;
-    }
-
-    public int Count()
-    {
-        int ret = 0;
-        foreach (SortedDictionary<int, T> row in multimap.Values)
-        {
-            ret += row.Count;
-        }
-        return ret;
-    }
-
-    public bool isEmpty()
-    {
-        return Count() == 0;
+        return arr;
     }
 
     public Value2D<T> RandomValue(System.Random rand)
     {
-        int count = Count();
-        if (count != 0)
+        if (Count != 0)
         {
-            int pick = rand.Next(count);
+            int pick = rand.Next(Count);
             return GetNth(pick);
         }
         return null;
@@ -273,23 +253,42 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>> {
     }
     #endregion
 
-    public List<Value2D<T>> GetRandomRemove(int number, int apart = 0)
+    public override List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
     {
+        MultiMap<T> removed = new MultiMap<T>();
         List<Value2D<T>> list = new List<Value2D<T>>();
-        for (int i = 0; i < number; i++)
+        if (distance < 0) distance = 0;
+        for (int i = 0; i < amount; i++)
         {
-            Value2D<T> g = RandomValue(Probability.LevelRand);
+            Value2D<T> g = RandomValue(random);
             if (g == null) return list;
-            Remove(g.x, g.y, apart - 1);
+            if (distance > 0)
+            {
+                for (int yCur = g.y - distance; yCur <= g.y + distance; yCur++)
+                {
+                    for (int xCur = g.x - distance; xCur <= g.x + distance; xCur++)
+                    {
+                        removed.Put(g);
+                        Remove(xCur, yCur);
+                    }
+                }
+            }
+            Remove(g.x, g.y, distance - 1);
             list.Add(g);
         }
+        if (take)
+        {
+            foreach (Value2D<T> val in list)
+                removed.Remove(val);
+        }
+        this.PutAll(removed);
         return list;
     }
 
     #region Iteration
     public IEnumerator<Value2D<T>> GetEnumerator()
     {
-        foreach (KeyValuePair<int, SortedDictionary<int, T>> row in multimap)
+        foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
         {
             foreach (KeyValuePair<int, T> val in row.Value)
             {

@@ -424,7 +424,7 @@ public static class ArrayDrawExt
     public static bool DrawSquare<T>(this T[,] arr, int xl, int xr, int yb, int yt, StrokedAction<T> action)
     {
         if (action.StrokeAction == null)
-            return DrawSquareHelper.DrawSquare(arr, xl, xr, yb, yt, action);
+            return DrawSquareHelper.DrawSquareNoStroke(arr, xl, xr, yb, yt, action);
 
         if (xl == xr && yb == yt)
             return action.StrokeAction(arr, xl, yb);
@@ -441,7 +441,7 @@ public static class ArrayDrawExt
         xl++;
         xr--;
         if (fill != null)
-            if (!DrawSquareHelper.DrawSquare(arr, xl, xr, yb, yt, fill)) return false;
+            if (!DrawSquareHelper.DrawSquareNoStroke(arr, xl, xr, yb, yt, fill)) return false;
         return true;
     }
 
@@ -672,7 +672,7 @@ public class DrawCircleHelper
 
 public class DrawSquareHelper
 {
-    public static bool DrawSquare<T>(T[,] arr, int xl, int xr, int yb, int yt, StrokedAction<T> action)
+    public static bool DrawSquareNoStroke<T>(T[,] arr, int xl, int xr, int yb, int yt, StrokedAction<T> action)
     {
         if (xl == xr && yb == yt)
             return action.UnitAction(arr, xl, yb);

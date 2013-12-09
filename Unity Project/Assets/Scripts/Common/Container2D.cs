@@ -124,4 +124,9 @@ abstract public class Container2D<T> {
         smallest = obj2;
         largest = obj1;
     }
+
+    public virtual List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
+    {
+        throw new NotImplementedException();
+    }
 }

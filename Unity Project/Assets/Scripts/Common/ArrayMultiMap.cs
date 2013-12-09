@@ -6,7 +6,7 @@ using System.Text;
 #pragma warning disable 162
 public class ArrayMultiMap<T> : Container2D<T>
 {
-    const bool _debug = true;
+    const bool _debug = false;
     int _count = 0;
     public int Count { get { return _count; } }
     bool[,] _present;
@@ -73,7 +73,7 @@ public class ArrayMultiMap<T> : Container2D<T>
         return _arr;
     }
 
-    public List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
+    public override List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>();
         bool[,] availableArr = new bool[Height, Width];
@@ -82,6 +82,9 @@ public class ArrayMultiMap<T> : Container2D<T>
             amount = Count;
         List<int> pickedList = random.PickSeveral(amount, Count);
         if (pickedList.Count == 0) return ret;
+        // Set up by sorting list from biggest to smallest
+        pickedList.Sort();
+        pickedList.Reverse();
         #region DEBUG
         if (_debug)
         {
@@ -89,13 +92,34 @@ public class ArrayMultiMap<T> : Container2D<T>
             availableArr.ToLog("Available options");
         }
         #endregion
+        int internalCount = Count;
+        int run = 1;
+        while (pickedList.Count > 0 && internalCount > 0)
+        { // Pick until options are gone, or we have enough
+            internalCount = PickRandom(pickedList, availableArr, take, distance, internalCount, ret);
+            #region DEBUG
+            if (_debug)
+            {
+                availableArr.ToLog("Available options after run " + run++);
+            }
+            #endregion
+            // Pick new random numbers
+            pickedList = random.PickSeveral(pickedList.Count, internalCount);
+        }
+        #region DEBUG
+        if (_debug)
+        {
+            BigBoss.Debug.printFooter();
+        }
+        #endregion
+        return ret;
+    }
 
-        // Set up by sorting list from biggest to smallest
-        pickedList.Sort();
-        pickedList.Reverse();
+    protected int PickRandom(List<int> pickedList, bool[,] availableArr, bool take, int distance, int count, List<Value2D<T>> ret)
+    {
         int numPassed = 0;
         int listIndex = pickedList.Count - 1;
-        int internalCount = Count;
+        int internalCount = count;
 
         // Walk array and grab picked
         for (int y = 0; y < Height; y++)
@@ -115,20 +139,21 @@ public class ArrayMultiMap<T> : Container2D<T>
                             availableArr.DrawSquare(x, y, distance, new StrokedAction<bool>()
                             {
                                 UnitAction = (arr2, x2, y2) =>
+                                {
+                                    if (arr2.InRange(x2, y2) && availableArr[y2, x2])
                                     {
-                                        if (availableArr[y2, x2])
-                                        {
-                                            availableArr[y2, x2] = false;
-                                            internalCount--;
-                                        }
-                                        return true;
+                                        availableArr[y2, x2] = false;
+                                        internalCount--;
                                     }
+                                    return true;
+                                }
                             });
                         }
                         else
                         { // Just mark taken spot
                             availableArr[pickedVal.y, pickedVal.x] = false;
                         }
+                        pickedList.RemoveAt(listIndex);
                         listIndex--;
                         if (listIndex < 0)
                         { // Done picking.  Break
@@ -138,7 +163,7 @@ public class ArrayMultiMap<T> : Container2D<T>
                                 BigBoss.Debug.printFooter();
                             }
                             #endregion
-                            return ret;
+                            return internalCount;
                         }
                         #region DEBUG
                         if (_debug)
@@ -151,13 +176,7 @@ public class ArrayMultiMap<T> : Container2D<T>
                 }
             }
         }
-        #region DEBUG
-        if (_debug)
-        {
-            BigBoss.Debug.printFooter();
-        }
-        #endregion
-        return ret;
+        return internalCount;
     }
 
     public T Random(System.Random random, bool take = false)
