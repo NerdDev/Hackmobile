@@ -25,7 +25,7 @@ public class RandomPicker<T>
         return true;
     }
 
-    public List<Value2D<T>> Pick(System.Random rand, int amount, int radius = 0, bool take = false, bool restore = true)
+    public List<Value2D<T>> Pick(System.Random rand, int amount, int radius = 0, bool take = false)
     {
         return options.Random(rand, amount, radius, take);
     }

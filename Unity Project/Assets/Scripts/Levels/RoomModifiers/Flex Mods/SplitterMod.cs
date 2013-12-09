@@ -56,12 +56,12 @@ public class HorizSplitterMod : RoomModifier
         #endregion
 
         // Draw at least one door
-        GridMap doorOptions = new GridMap();
+        RandomPicker<GridType> picker;
         spec.Room.Array.DrawLine(from, to, picked, horizontal, 
-            Draw.CanDrawDoor().Then(Draw.AddTo(doorOptions)));
+            Draw.IfThen<GridType>(Draw.CanDrawDoor(), Draw.PickRandom(spec.Room.Array, out picker)));
         
         int numDoors = Probability.LevelRand.Next(1, 4);
-        List<Value2D<GridType>> doors = doorOptions.Random(Probability.LevelRand, numDoors, LevelGenerator.minDoorSpacing);
+        List<Value2D<GridType>> doors = picker.Pick(Probability.LevelRand, numDoors, 1, false);
         foreach (Value2D<GridType> door in doors)
             spec.Room.Array[door.y, door.x] = GridType.Door;
         return true;

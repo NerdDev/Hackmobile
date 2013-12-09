@@ -289,6 +289,7 @@
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModifier.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomSpec.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\ArrayDrawExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\Counter.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\Draw.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\DrawAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Array Drawing\GridDrawExt.cs" />
