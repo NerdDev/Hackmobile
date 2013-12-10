@@ -17,10 +17,10 @@ public class DungeonMaster : MonoBehaviour, IManager {
 
     public void PopulateLevel(Level l, bool up)
     {
-        if (!l.Populated)
-        {
-            //ForcePopulateLevel(l);
-        }
+        //if (!l.Populated)
+        //{
+            ForcePopulateLevel(l);
+        //}
 
         //Place stairs
         ClearPriorLevel();

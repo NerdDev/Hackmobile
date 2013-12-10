@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/NGUI/Examples/Scenes/Example X - Character.unity
   - enabled: 1
     path: Assets/Scenes/KC Scene.unity
+  - enabled: 0
+    path: Assets/NGUI/Examples/Scenes/Example X - Character.unity

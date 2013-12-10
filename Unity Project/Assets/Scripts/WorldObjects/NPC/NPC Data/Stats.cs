@@ -30,7 +30,7 @@ public class Stats : IXmlParsable
         initialize();
     }
 
-    private void initialize()
+    internal void initialize()
     {
         this.CurrentHealth = this.MaxHealth;
         this.CurrentPower = this.MaxPower;

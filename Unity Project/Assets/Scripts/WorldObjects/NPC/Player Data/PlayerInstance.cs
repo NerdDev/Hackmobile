@@ -7,6 +7,8 @@ public class PlayerInstance : NPCInstance, IManager
 {
     public void Initialize()
     {
-        WO = new Player();
+        //WO = new Player();
+        //this.SetTo(WO);
+        //WO.Init();
     }
 }

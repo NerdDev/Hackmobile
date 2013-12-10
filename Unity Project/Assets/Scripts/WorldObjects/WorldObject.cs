@@ -14,7 +14,11 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     public string ModelTexture { get; set; }
     public string Name { get; set; }
     public string Prefab { get; set; }
-    public GridSpace Location { get; set; }  // Placeholder. Needs to actually be implemented and updated.
+    public GridSpace Location { get { return _grid; } set { _grid = value; } } // Placeholder. Needs to actually be implemented and updated.
+    //X,Y coordinate for other scripts to grab:
+    public Vector2 GridCoordinate { get; set; }
+    //X, Y in integers, GridSpace ref
+    private GridSpace _grid;
     public event Action<WorldObject> OnDestroy;
 
     public override string ToString()
@@ -36,16 +40,21 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     {
     }
 
+    public virtual void OnClick()
+    {
+    }
+
     public virtual void Init()
     {
         IsActive = true;
-        BigBoss.Time.RemoveFromUpdateList(this);
+        BigBoss.Time.RegisterToUpdateList(this);
     }
 
     public virtual void Destroy()
     {
         Unregister();
         Unwrap();
+        Location.Remove(this);
         if (OnDestroy != null)
             OnDestroy(this);
     }

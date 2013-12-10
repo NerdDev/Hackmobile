@@ -14,7 +14,7 @@ public class WOWrapper : MonoBehaviour
 
     public W SetTo<W>(W item) where W : WorldObject
     {
-        WO = item.Copy();
+        WO = item;
         WO.Instance = this;
         return (W)WO;
     }

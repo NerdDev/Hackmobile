@@ -24,28 +24,28 @@ public class SpellCastInfo
         numLoc -= numObj;
         if (numLoc < 0)
             numLoc = 0;
-        targetSpaces = new GridSpace[numLoc];
-        targetObjects = new IAffectable[numObj];
+        _targetSpaces = new GridSpace[numLoc];
+        _targetObjects = new IAffectable[numObj];
     }
     public SpellCastInfo(IAffectable caster, SpellCastInfo rhs)
     {
         Caster = caster;
-        targetSpaces = new GridSpace[rhs.TargetSpaces.Length];
-        targetObjects = new IAffectable[rhs.TargetObjects.Length];
+        _targetSpaces = new GridSpace[rhs.TargetSpaces.Length];
+        _targetObjects = new IAffectable[rhs.TargetObjects.Length];
     }
     public IAffectable Caster { get; protected set; }
-    private GridSpace[] targetSpaces;
+    private GridSpace[] _targetSpaces;
     public GridSpace[] TargetSpaces
     {
         get
         {
-            if (targetSpaces == null)
+            if (_targetSpaces == null)
             { // If spaces not set
                 GridSpace[] derivedSpaces;
-                if (targetObjects != null)
+                if (_targetObjects != null)
                 { // If we have target Objects, use their locations
                     HashSet<GridSpace> spaceSet = new HashSet<GridSpace>();
-                    foreach (IAffectable obj in targetObjects)
+                    foreach (IAffectable obj in _targetObjects)
                     {
                         spaceSet.Add(obj.Self.Location);
                     }
@@ -54,31 +54,31 @@ public class SpellCastInfo
                 else
                 { // If no objects set either, use caster himself
                     derivedSpaces = new GridSpace[] { Caster.Self.Location };
-                    targetObjects = new IAffectable[] { Caster };
+                    _targetObjects = new IAffectable[] { Caster };
                 }
-                targetSpaces = derivedSpaces;
+                _targetSpaces = derivedSpaces;
             }
-            return targetSpaces;
+            return _targetSpaces;
         }
-        set { targetSpaces = value; }
+        set { _targetSpaces = value; }
     }
     public GridSpace TargetSpace
     {
         get { return TargetSpaces.Random(Probability.Rand); }
-        set { targetSpaces = new GridSpace[] { value }; }
+        set { _targetSpaces = new GridSpace[] { value }; }
     }
-    private IAffectable[] targetObjects;
+    private IAffectable[] _targetObjects;
     public IAffectable[] TargetObjects
     {
         get
         {
-            if (targetObjects == null)
+            if (_targetObjects == null)
             { // If spaces not set
                 IAffectable[] derivedObjects;
-                if (targetSpaces != null)
+                if (_targetSpaces != null)
                 { // If we have target spaces, use their objects
                     HashSet<IAffectable> objSet = new HashSet<IAffectable>();
-                    foreach (GridSpace space in targetSpaces)
+                    foreach (GridSpace space in _targetSpaces)
                     {
                         objSet.Union(space.GetContained().OfType<IAffectable>());
                     }
@@ -87,17 +87,17 @@ public class SpellCastInfo
                 else
                 { // If no spaces set either, use caster himself
                     derivedObjects = new IAffectable[] { Caster };
-                    targetSpaces = new GridSpace[] { Caster.Self.Location };
+                    _targetSpaces = new GridSpace[] { Caster.Self.Location };
                 }
-                targetObjects = derivedObjects;
+                _targetObjects = derivedObjects;
             }
-            return targetObjects;
+            return _targetObjects;
         }
-        set { TargetObjects = value; }
+        set { _targetObjects = value; }
     }
     public IAffectable TargetObject
     {
         get { return TargetObjects.Random(Probability.Rand); }
-        set { targetObjects = new IAffectable[] { value }; }
+        set { _targetObjects = new IAffectable[] { value }; }
     }
 }

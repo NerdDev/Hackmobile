@@ -31,20 +31,31 @@ public class GUIManager : MonoBehaviour, IManager
     //Publicly populated variables from scene
     //Clip panels
     public UIPanel inventoryClip;
+    public UIPanel groundClip;
     public UIPanel itemInfoClip;
     public UIPanel itemActionClip;
 
     //grids
-    public UIGrid inventoryGrid;
-    public UIGrid itemInfoGrid;
-    public UIGrid itemActionsGrid;
+    public KGrid inventoryGrid;
+    public KGrid groundGrid;
+    public KGrid itemInfoGrid;
+    public KGrid itemActionsGrid;
+
+    //Prefabs
     public GameObject InvItemPrefab;
+    public GameObject ButtonPrefab;
+    public GameObject ChestPrefab;
 
     //Clip panels
     public UIDraggablePanel inventoryClipDrag;
+    public UIDraggablePanel groundClipDrag;
     public UIDraggablePanel itemInfoClipDrag;
     public UIDraggablePanel itemActionsClipDrag;
     public UIFont font;
+
+    //Misc
+    public GameObject InventoryLabel;
+    public GameObject GroundLabel;
 
     //Sprites:
     private UISprite inventoryFrameSprite;
@@ -54,6 +65,8 @@ public class GUIManager : MonoBehaviour, IManager
     //Misc NGUI Integration:
     private ItemStorage inventoryStorageScript;
     //public UISprite[] inventoryIconArray;
+
+    private ItemChest currentChest;
 
     internal bool categoryDisplay = false;
     internal bool displayItem = false;
@@ -182,6 +195,10 @@ public class GUIManager : MonoBehaviour, IManager
     }
     */
 
+    #endregion
+
+    #region KCInventory
+
     public void ClearAllInventorySprites()
     {
         foreach (ItemSlot sl in inventoryStorageScript.InventorySlots)
@@ -219,10 +236,6 @@ public class GUIManager : MonoBehaviour, IManager
         }
         Debug.Log("Seed Inventory end - " + inventoryStorageScript.items.Count + " items in player's UIStorage.");
     }
-    #endregion
-
-    #region KCInventory
-
     #endregion
 
     #region UPDATING OF VARIOUS NGUI ELEMENTS - GENERALLY DRIVEN FROM CODE ELSEWHERE IN THE PROJECT
@@ -315,12 +328,16 @@ public class GUIManager : MonoBehaviour, IManager
     {
         if (displayGUI)
         {
-            ClearPriorGrid(inventoryGrid);
-            this.inventoryGrid.sorted = false;
+            InventoryLabel.SetActive(true);
+            inventoryClip.gameObject.SetActive(true);
+            itemInfoClip.gameObject.SetActive(true);
+            itemActionClip.gameObject.SetActive(true);
+            inventoryGrid.Clear();
             if (!categoryDisplay)
             {
                 foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
                 {
+
                     CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
                 }
             }
@@ -329,23 +346,83 @@ public class GUIManager : MonoBehaviour, IManager
                 InventoryCategory ic = BigBoss.Player.inventory[category];
                 foreach (ItemList itemList in ic.Values)
                 {
-                    CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
+                    if (itemList.Count > 0)
+                    {
+                        CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
+                    }
                 }
                 CreateBackLabel(inventoryGrid, inventoryClipDrag);
             }
             this.inventoryClipDrag.ResetPosition();
             inventoryClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-            inventoryClip.clipRange = new Vector4(100, -400, 200, 797);
+            inventoryClip.clipRange = new Vector4(100, -210, 200, 325);
             this.inventoryGrid.Reposition();
         }
+        else
+        {
+            InventoryLabel.SetActive(false);
+            inventoryGrid.Clear();
+            itemInfoGrid.Clear();
+            itemActionsGrid.Clear();
+            inventoryClip.gameObject.SetActive(false);
+            itemInfoClip.gameObject.SetActive(false);
+            itemActionClip.gameObject.SetActive(false);
+        }
+    }
+
+    internal void GenerateGroundItems(ItemChest chest)
+    {
+        if (displayGUI && chest != null)
+        {
+            currentChest = chest;
+            List<Item> items = chest.items;
+            GroundLabel.SetActive(true);
+            groundClip.gameObject.SetActive(true);
+            itemInfoClip.gameObject.SetActive(true);
+            itemActionClip.gameObject.SetActive(true);
+            groundGrid.Clear();
+            foreach (Item item in items)
+            {
+                CreateItemButton(item, groundGrid, groundClipDrag);
+            }
+            CreateCloseLabel(groundGrid, groundClipDrag);
+            this.groundClipDrag.ResetPosition();
+            groundClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+            groundClip.clipRange = new Vector4(100, -610, 190, 375);
+            this.groundGrid.Reposition();
+        }
+        else
+        {
+            GroundLabel.SetActive(false);
+            groundGrid.Clear();
+            itemInfoGrid.Clear();
+            itemActionsGrid.Clear();
+            groundClip.gameObject.SetActive(false);
+            itemInfoClip.gameObject.SetActive(false);
+            itemActionClip.gameObject.SetActive(false);
+        }
+    }
+
+    private void CreateCloseLabel(KGrid grid, UIDraggablePanel panel)
+    {
+        GUIButton button = CreateButton(grid, "CloseButton", "Close");
+        button.OnSingleClick = new Action(() =>
+        {
+            BigBoss.Gooey.category = "";
+            BigBoss.Gooey.categoryDisplay = false;
+            BigBoss.Gooey.GenerateGroundItems(null);
+            BigBoss.Gooey.displayItem = false;
+            BigBoss.Gooey.RegenItemInfoGUI(null);
+        });
+        button.UIDragPanel.draggablePanel = panel;
     }
 
     internal void RegenItemInfoGUI(ItemList item)
     {
         if (displayGUI)
         {
-            ClearPriorGrid(itemInfoGrid);
-            this.itemInfoGrid.sorted = false;
+            itemInfoGrid.Clear();
+            itemActionsGrid.Clear();
             if (displayItem)
             {
                 GenerateItemInfo(item);
@@ -354,181 +431,244 @@ public class GUIManager : MonoBehaviour, IManager
             else
             {
                 RegenInventoryGUI();
-                ClearPriorGrid(itemInfoGrid);
+                itemInfoGrid.Clear();
+                itemActionsGrid.Clear();
             }
         }
     }
 
-    internal void ClearPriorGrid(UIGrid grid)
+    GUIButton CreateButton(string buttonName = "Button")
     {
-        foreach (Transform child in grid.transform)
+        GameObject button = Instantiate(ButtonPrefab) as GameObject;
+        button.name = buttonName;
+        return button.GetComponent<GUIButton>();
+    }
+
+    GUIButton CreateButton(KGrid parent, string buttonName = "Button", string buttonText = null)
+    {
+        if (buttonText == null) buttonText = buttonName;
+        GUIButton button = CreateButton(buttonName);
+        button.Text = buttonText;
+        parent.AddButton(button);
+        FixButton(button);
+        return button.GetComponent<GUIButton>();
+    }
+
+    GUIButton CreateObjectButton(System.Object o, KGrid parent, string buttonName = "Button", string buttonText = null)
+    {
+        GUIButton button = CreateButton(parent, buttonName, buttonText);
+        button.refObject = o;
+        return button;
+    }
+
+    void FixButton(GUIButton button)
+    {
+        button.label.MakePixelPerfect();
+        button.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        button.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    void CreateBackLabel(KGrid grid, UIDraggablePanel panel)
+    {
+        GUIButton button = CreateButton(grid, "BackButton", "Back");
+        button.OnSingleClick = new Action(() =>
         {
-            Destroy(child.gameObject);
-        }
+            BigBoss.Gooey.category = "";
+            BigBoss.Gooey.categoryDisplay = false;
+            BigBoss.Gooey.RegenInventoryGUI();
+            BigBoss.Gooey.displayItem = false;
+            BigBoss.Gooey.RegenItemInfoGUI(null);
+        });
+        button.UIDragPanel.draggablePanel = panel;
     }
 
-    void CreateBackLabel(UIGrid grid, UIDraggablePanel panel)
-    {
-        GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = grid.transform;
-        go.name = "BackButton";
-        GUIBackLabel guiBackLabel = go.AddComponent<GUIBackLabel>();
-        guiBackLabel.label = NGUITools.AddWidget<UILabel>(go);
-        guiBackLabel.label.text = "Back";
-        guiBackLabel.label.font = font;
-        //guiBackLabel.label.depth = 4;
-        guiBackLabel.label.MakePixelPerfect();
-        UIDragPanelContents uiDragBackLabel = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDragBackLabel.draggablePanel = panel;
-        go.transform.localScale = new Vector3(1f, 1f, 1f);
-        go.transform.localPosition = new Vector3(0f, 0f, 0f);
-    }
-
-    void CreateTextButton(string s, UIGrid grid, UIDraggablePanel panel)
+    void CreateTextButton(string s, KGrid grid, UIDraggablePanel panel)
     {
         GameObject go = Instantiate(InvItemPrefab) as GameObject;
         go.transform.parent = grid.transform;
         go.name = s;
-        GUILabel guiItem = go.AddComponent<GUILabel>();
-        guiItem.text = s;
-        guiItem.label = NGUITools.AddWidget<UILabel>(go);
-        guiItem.label.text = s;
-        guiItem.label.font = font;
-        //guiItem.label.depth = 4;
-        guiItem.label.MakePixelPerfect();
         UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
         uiDrag.draggablePanel = panel;
         go.transform.localScale = new Vector3(1f, 1f, 1f);
         go.transform.localPosition = new Vector3(0f, 0f, 0f);
     }
 
-    void CreateItemButton(ItemList itemList, UIGrid grid, UIDraggablePanel panel)
+    void CreateItemButton(ItemList itemList, KGrid grid, UIDraggablePanel panel)
     {
-        GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = grid.transform;
-        go.name = itemList.id;
-        GUIItem guiItem = go.AddComponent<GUIItem>();
-        guiItem.item = itemList;
-        guiItem.label = NGUITools.AddWidget<UILabel>(go);
-        guiItem.label.text = itemList.id + " (" + itemList.Count + ")"; //string builder maybe?
-        guiItem.label.font = font;
-        //guiItem.label.depth = 4;
-        guiItem.label.MakePixelPerfect();
-        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = panel;
-        go.transform.localScale = new Vector3(1f, 1f, 1f);
-        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        string buttonText;
+        if (itemList.Count > 1)
+        {
+            buttonText = itemList.id + " (" + itemList.Count + ")";
+        }
+        else { buttonText = itemList.id; }
+        GUIButton itemButton = CreateObjectButton(itemList, grid, itemList.id, buttonText);
+        itemButton.OnSingleClick = new Action(() =>
+        {
+            if ((itemButton.refObject as ItemList).Count > 0)
+            {
+                BigBoss.Gooey.displayItem = true;
+                BigBoss.Gooey.RegenItemInfoGUI(itemButton.refObject as ItemList);
+            }
+        });
+        itemButton.UIDragPanel.draggablePanel = panel;
     }
 
-    void CreateCategoryButton(InventoryCategory ic, UIGrid grid, UIDraggablePanel panel)
+    void CreateItemButton(Item item, KGrid grid, UIDraggablePanel panel)
     {
-        GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = grid.transform;
-        go.name = ic.id;
-        GUIInventoryCategory guiIC = go.AddComponent<GUIInventoryCategory>();
-        guiIC.category = ic;
-        guiIC.label = NGUITools.AddWidget<UILabel>(go);
-        guiIC.label.text = ic.id;
-        guiIC.label.font = font;
-        //guiIC.label.depth = 4;
-        guiIC.label.MakePixelPerfect();
-        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = panel;
-        go.transform.localScale = new Vector3(1f, 1f, 1f);
-        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        ItemList itemList = new ItemList(item.Name);
+        if (grid == groundGrid) { itemList.onGround = true; }
+        else if (grid == inventoryGrid) { itemList.onGround = false; }
+        itemList.Add(item);
+        CreateItemButton(itemList, grid, panel);
+    }
+
+    void CreateCategoryButton(InventoryCategory ic, KGrid grid, UIDraggablePanel panel)
+    {
+        GUIButton categoryButton = CreateObjectButton(ic, grid, ic.id);
+        categoryButton.OnSingleClick = new Action(() =>
+        {
+            BigBoss.Gooey.categoryDisplay = true;
+            BigBoss.Gooey.category = (categoryButton.refObject as InventoryCategory).id;
+            BigBoss.Gooey.RegenInventoryGUI();
+        });
+        categoryButton.UIDragPanel.draggablePanel = panel;
     }
 
     void GenerateItemInfo(ItemList item)
     {
-        foreach (KeyValuePair<string, string> kvp in item[0].GetGUIDisplays())
+        if (item.Count > 0)
         {
-            CreateTextButton(kvp.Key + ": " + kvp.Value, itemInfoGrid, itemInfoClipDrag);
+            foreach (KeyValuePair<string, string> kvp in item[0].GetGUIDisplays())
+            {
+                CreateTextButton(kvp.Key + ": " + kvp.Value, itemInfoGrid, itemInfoClipDrag);
+            }
+            CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
+            this.itemInfoClipDrag.ResetPosition();
+            itemInfoClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+            itemInfoClip.clipRange = new Vector4(300, -400, 200, 800);
+            this.itemInfoGrid.Reposition();
         }
-        CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
-        this.itemInfoClipDrag.ResetPosition();
-        itemInfoClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-        itemInfoClip.clipRange = new Vector4(400, -400, 400, 800);
-        this.itemInfoGrid.Reposition();
     }
 
     void GenerateItemActions(ItemList item)
     {
-        CreateEquipButton(item);
-        CreateUseButton(item);
-        CreateDropButton(item);
-        CreateEatButton(item);
-        this.itemActionsClipDrag.ResetPosition();
-        itemActionClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-        itemActionClip.clipRange = new Vector4(1000, -400, 400, 800);
-        this.itemActionsGrid.Reposition();
+        if (item.Count > 0)
+        {
+            CreateEquipButton(item);
+            CreateUseButton(item);
+            CreateEatButton(item);
+            if (item.onGround)
+            {
+                CreatePickUpButton(item);
+            }
+            else
+            {
+                CreateDropButton(item);
+            }
+            this.itemActionsClipDrag.ResetPosition();
+            itemActionClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+            itemActionClip.clipRange = new Vector4(500, -400, 200, 800);
+            this.itemActionsGrid.Reposition();
+        }
     }
 
     void CreateEquipButton(ItemList item)
     {
-        GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = itemActionsGrid.transform;
-        go.name = item[0].Name;
-        GUIEquipItem guiItem = go.AddComponent<GUIEquipItem>();
-        guiItem.item = item;
-        guiItem.label = NGUITools.AddWidget<UILabel>(go);
-        guiItem.label.text = "Equip Item";
-        guiItem.label.font = font;
-        guiItem.label.MakePixelPerfect();
-        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = inventoryClipDrag;
-        go.transform.localScale = new Vector3(1f, 1f, 1f);
-        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Equip Item");
+        itemButton.OnSingleClick = new Action(() =>
+        {
+            ItemList itemList = itemButton.refObject as ItemList;
+            if (itemList.Count > 0)
+            {
+                Item itemAlreadyEquipped = BigBoss.Player.getEquippedItems().Find(i => i.Name.Equals(itemList[0].Name));
+                if (itemAlreadyEquipped != null)
+                {
+                    BigBoss.Player.unequipItem(itemAlreadyEquipped);
+                    BigBoss.Gooey.RegenItemInfoGUI(itemList);
+                }
+                else
+                {
+                    if (itemList.onGround == true)
+                    {
+                        BigBoss.Player.inventory.Add(itemList[itemList.Count - 1]);
+                        BigBoss.Player.Location.Remove(itemList[itemList.Count - 1]);
+                        BigBoss.Gooey.GenerateGroundItems(currentChest);
+                    }
+                    BigBoss.Player.equipItem(itemList[itemList.Count - 1]);
+                    BigBoss.Gooey.RegenItemInfoGUI(itemList);
+                }
+            }
+        });
+        itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
 
     void CreateUseButton(ItemList item)
     {
-        GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = itemActionsGrid.transform;
-        go.name = item[0].Name;
-        GUIUseItem guiItem = go.AddComponent<GUIUseItem>();
-        guiItem.item = item;
-        guiItem.label = NGUITools.AddWidget<UILabel>(go);
-        guiItem.label.text = "Use Item";
-        guiItem.label.font = font;
-        guiItem.label.MakePixelPerfect();
-        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = inventoryClipDrag;
-        go.transform.localScale = new Vector3(1f, 1f, 1f);
-        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Use Item");
+        itemButton.OnSingleClick = new Action(() =>
+        {
+            ItemList itemList = itemButton.refObject as ItemList;
+            if (itemList.Count > 0)
+            {
+                BigBoss.Player.useItem(itemList[itemList.Count - 1]);
+                BigBoss.Gooey.RegenItemInfoGUI(itemList);
+            }
+        });
+        itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
 
     void CreateDropButton(ItemList item)
     {
-        GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = itemActionsGrid.transform;
-        go.name = item[0].Name;
-        GUIDropItem guiItem = go.AddComponent<GUIDropItem>();
-        guiItem.item = item;
-        guiItem.label = NGUITools.AddWidget<UILabel>(go);
-        guiItem.label.text = "Drop Item";
-        guiItem.label.font = font;
-        guiItem.label.MakePixelPerfect();
-        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = inventoryClipDrag;
-        go.transform.localScale = new Vector3(1f, 1f, 1f);
-        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Drop Item");
+        itemButton.OnSingleClick = new Action(() =>
+        {
+            ItemList itemList = itemButton.refObject as ItemList;
+            if (itemList.Count > 0)
+            {
+                Item dropped = itemList[itemList.Count - 1];
+                BigBoss.Player.inventory.Remove(dropped);
+                BigBoss.Player.Location.Put(dropped);
+                BigBoss.Gooey.RegenInventoryGUI();
+            }
+        });
+        itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
+    }
+
+    void CreatePickUpButton(ItemList item)
+    {
+        GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Pick Up Item");
+        itemButton.OnSingleClick = new Action(() =>
+        {
+            ItemList itemList = itemButton.refObject as ItemList;
+            if (itemList.Count > 0)
+            {
+                Item picked = itemList[itemList.Count - 1];
+                BigBoss.Player.inventory.Add(picked);
+                BigBoss.Player.Location.Remove(picked);
+                BigBoss.Gooey.GenerateGroundItems(currentChest);
+            }
+        });
+        itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
 
     void CreateEatButton(ItemList item)
     {
-        GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = itemActionsGrid.transform;
-        go.name = item[0].Name;
-        GUIEatItem guiItem = go.AddComponent<GUIEatItem>();
-        guiItem.item = item;
-        guiItem.label = NGUITools.AddWidget<UILabel>(go);
-        guiItem.label.text = "Eat Item";
-        guiItem.label.font = font;
-        guiItem.label.MakePixelPerfect();
-        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = inventoryClipDrag;
-        go.transform.localScale = new Vector3(1f, 1f, 1f);
-        go.transform.localPosition = new Vector3(0f, 0f, 0f);
+        GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Eat Item");
+        itemButton.OnSingleClick = new Action(() =>
+        {
+            ItemList itemList = itemButton.refObject as ItemList;
+            if (itemList.Count > 0)
+            {
+                if (itemList.onGround == true)
+                {
+                    BigBoss.Player.Location.Remove(itemList[itemList.Count - 1]);
+                    BigBoss.Gooey.GenerateGroundItems(currentChest);
+                }
+                BigBoss.Player.eatItem(itemList[itemList.Count - 1]);
+                BigBoss.Gooey.RegenItemInfoGUI(itemList);
+            }
+        });
+        itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
 
     internal class TextPop
@@ -553,10 +693,4 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
     #endregion
-
-    //public void PlayerTouched()
-    //{
-    //    ToggleInventoryPanel();
-    //    ClearAllInventorySprites();
-    //}
 }

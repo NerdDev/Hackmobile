@@ -1,4 +1,4 @@
-//----------------------------------------------
+﻿//----------------------------------------------
 //            NGUI: Next-Gen UI kit
 // Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Grid")]
-public class UIGrid : MonoBehaviour
+public class KGrid : MonoBehaviour
 {
     public enum Arrangement
     {
@@ -68,57 +68,38 @@ public class UIGrid : MonoBehaviour
         int x = 0;
         int y = 0;
 
-        if (sorted)
+        foreach (Transform t in gridObjects)
         {
-            List<Transform> list = new List<Transform>();
+            if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
 
-            for (int i = 0; i < myTrans.childCount; ++i)
+            float depth = t.localPosition.z;
+            t.localPosition = (arrangement == Arrangement.Horizontal) ?
+                new Vector3(cellWidth * x, -cellHeight * y, depth) :
+                new Vector3(cellWidth * y, -cellHeight * x, depth);
+
+            if (++x >= maxPerLine && maxPerLine > 0)
             {
-                Transform t = myTrans.GetChild(i);
-                if (t && (!hideInactive || NGUITools.GetActive(t.gameObject))) list.Add(t);
-            }
-            list.Sort(SortByName);
-
-            for (int i = 0, imax = list.Count; i < imax; ++i)
-            {
-                Transform t = list[i];
-
-                if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
-
-                float depth = t.localPosition.z;
-                t.localPosition = (arrangement == Arrangement.Horizontal) ?
-                    new Vector3(cellWidth * x, -cellHeight * y, depth) :
-                    new Vector3(cellWidth * y, -cellHeight * x, depth);
-
-                if (++x >= maxPerLine && maxPerLine > 0)
-                {
-                    x = 0;
-                    ++y;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < myTrans.childCount; ++i)
-            {
-                Transform t = myTrans.GetChild(i);
-
-                if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
-
-                float depth = t.localPosition.z;
-                t.localPosition = (arrangement == Arrangement.Horizontal) ?
-                    new Vector3(cellWidth * x, -cellHeight * y, depth) :
-                    new Vector3(cellWidth * y, -cellHeight * x, depth);
-
-                if (++x >= maxPerLine && maxPerLine > 0)
-                {
-                    x = 0;
-                    ++y;
-                }
+                x = 0;
+                ++y;
             }
         }
 
         UIDraggablePanel drag = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
         if (drag != null) drag.UpdateScrollbars(true);
+    }
+
+    public void AddButton(GUIButton button)
+    {
+        gridObjects.Add(button.transform);
+        button.transform.parent = this.transform;
+    }
+
+    public void Clear()
+    {
+        foreach (Transform t in gridObjects)
+        {
+            Destroy(t.gameObject);
+        }
+        gridObjects.Clear();
     }
 }

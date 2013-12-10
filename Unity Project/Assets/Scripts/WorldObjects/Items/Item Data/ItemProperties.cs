@@ -27,7 +27,7 @@ public class ItemProperties : IXmlParsable
     {
         get
         {
-            if (!Material.Name.Equals("") && Size != 0) {
+            if (!mat.Equals("") && Size != 0) {
                 return (Size * Material.Density) / 1000;
             } else {
                 return weight;
@@ -45,7 +45,8 @@ public class ItemProperties : IXmlParsable
     private string mat = "";
     public MaterialType Material
     {
-        get { return BigBoss.Objects.Materials.GetPrototype(mat); }
+        get {
+            return BigBoss.Objects.Materials.GetPrototype(mat); }
         set
         {
             if (value != null) { this.mat = value.Name; }

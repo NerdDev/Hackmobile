@@ -31,6 +31,7 @@ public class InventoryCategory : SortedDictionary<string, ItemList>
             this.Add(i.Name, new ItemList(i.Name));
             this[i.Name].Add(i);
         }
+        this[i.Name].onGround = false;
     }
 
     public bool Remove(Item i)

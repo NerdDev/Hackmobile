@@ -15,6 +15,7 @@ public class NPC : Affectable
     {
         calcStats();
         equipment = new Equipment(this.bodyparts);
+        //IsActive = true;
         if (IsActive)
         {
             UpdateCurrentTileVectors();
@@ -36,7 +37,7 @@ public class NPC : Affectable
     //public List<Item> inventory = new List<Item>();
     public Inventory inventory = new Inventory();
     protected List<Item> equippedItems = new List<Item>();
-    protected Equipment equipment = null;
+    public Equipment equipment = null;
     #endregion
 
     /**
@@ -52,12 +53,6 @@ public class NPC : Affectable
 
     public Vector3 CurrentOccupiedGridCenterWorldPoint { get; set; }
     public Vector3 LastOccupiedGridCenterWorldPoint { get; set; }
-
-    //X,Y coordinate for other scripts to grab:
-    public Vector2 GridCoordinate { get; set; }
-    //X, Y in integers, GridSpace ref
-    public GridSpace gridSpace;
-    public GridSpace newGridSpace;
 
     bool moving; //stores moving condition
     protected bool verticalMoving;
@@ -155,7 +150,7 @@ public class NPC : Affectable
     public virtual float AdjustHunger(float amount)
     {
         stats.Hunger += amount;
-        Debug.Log("Gained " + amount + " of nutrition.");
+        CreateTextPop("Gained " + amount + " of nutrition.");
         getHungerLevel(stats.Hunger);
         return stats.Hunger;
     }
@@ -176,12 +171,12 @@ public class NPC : Affectable
         else if (stats.CurrentHealth + amount > stats.MaxHealth)
         {
             stats.CurrentHealth = stats.MaxHealth;
-            Debug.Log(this.Name + " gained " + amount + " in health.");
+            CreateTextPop(this.Name + " gained " + amount + " in health.");
         }
         else
         {
             stats.CurrentHealth = stats.CurrentHealth + amount;
-            Debug.Log(this.Name + " gained " + amount + " in health.");
+            CreateTextPop(this.Name + " gained " + amount + " in health.");
         }
     }
 
@@ -191,7 +186,7 @@ public class NPC : Affectable
         {
             stats.CurrentHealth = stats.CurrentHealth - amount;
             //Debug.Log(this.Name + " was damaged for " + amount + "!");
-            BigBoss.Gooey.CreateTextPop(GO.transform.position, "Damaged for " + amount + "!", Color.red);
+            CreateTextPop("Damaged for " + amount + "!", Color.red);
             return false;
         }
         else
@@ -361,20 +356,20 @@ public class NPC : Affectable
 
     protected virtual bool UpdateCurrentTileVectors()
     {
-        if (gridSpace != null && gridSpace != null)
+        if (Location != null)
         {
-            gridSpace.Remove(this);
+            Location.Remove(this);
         }
         GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
-        gridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
-        gridSpace.Put(this);
+        Location = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
+        Location.Put(this);
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
         return true;
     }
 
     public PathTree getPathTree(GridSpace dest)
     {
-        PathTree path = new PathTree(gridSpace, dest);
+        PathTree path = new PathTree(Location, dest);
         return path;
     }
     #endregion
@@ -383,7 +378,6 @@ public class NPC : Affectable
 
     public virtual void eatItem(Item i)
     {
-        Debug.Log("Eating item");
         //enforces it being in inventory, if that should change we'll rewrite later
         if (inventory.Has(i))
         {
@@ -422,7 +416,7 @@ public class NPC : Affectable
             {
                 foreach (Item i in weapons)
                 {
-                    Debug.Log("The " + this.Name + " swings with his " + i.Name + "!");
+                    CreateTextPop("The " + this.Name + " swings with his " + i.Name + "!");
                     if (!n.damage(i.getDamage()))
                     {
                     }
@@ -434,7 +428,7 @@ public class NPC : Affectable
             }
             else
             {
-                Debug.Log("The " + this.Name + " swings with his bare hands!");
+                CreateTextPop("The " + this.Name + " swings with his bare hands!");
                 if (!n.damage(calcHandDamage()))
                 {
                 }
@@ -446,7 +440,7 @@ public class NPC : Affectable
         }
         else
         {
-            Debug.Log("The " + this.Name + " swings with his bare hands!");
+            CreateTextPop("The " + this.Name + " swings with his bare hands!");
             //attacking with bare hands
             if (!n.damage(calcHandDamage()))
             {
@@ -463,11 +457,11 @@ public class NPC : Affectable
         GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
         if (!grid.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
         {
-            int xmove = gridSpace.X - node.X;
-            int ymove = gridSpace.Y - node.Y;
-            gridSpace.Remove(this);
-            gridSpace = BigBoss.Levels.Level[node.X, node.Y];
-            gridSpace.Put(this);
+            int xmove = Location.X - node.X;
+            int ymove = Location.Y - node.Y;
+            Location.Remove(this);
+            Location = BigBoss.Levels.Level[node.X, node.Y];
+            Location.Put(this);
             MoveNPC(xmove, ymove);
         }
     }
@@ -491,7 +485,7 @@ public class NPC : Affectable
 
         if (this.IsNotAFreaking<Player>())
         {
-            BigBoss.Gooey.CreateTextPop(GO.transform.position, Name + " is dead!", Color.red);
+            CreateTextPop(Name + " is dead!", Color.red);
             Debug.Log(this.Name + " was killed!");
             Destroy();
         }
@@ -565,19 +559,18 @@ public class NPC : Affectable
         return invWeightMax;
     }
 
-    public bool equipItem(Item i)
+    public virtual bool equipItem(Item i)
     {
         if (equipment.equipItem(i))
         {
             i.onEquipEvent(this);
             equippedItems.Add(i);
-            Debug.Log("Item " + i.Name + " equipped.");
             return true;
         }
         return false;
     }
 
-    public bool unequipItem(Item i)
+    public virtual bool unequipItem(Item i)
     {
         if (i.isUnEquippable() && equipment.removeItem(i))
         {
@@ -586,7 +579,6 @@ public class NPC : Affectable
             {
                 equippedItems.Remove(i);
             }
-            Debug.Log("Item " + i.Name + " uneqipped.");
             return true;
         }
         return false;
@@ -693,10 +685,10 @@ public class NPC : Affectable
     bool IsNextToPlayer()
     {
         Surrounding<GridSpace> s = BigBoss.Levels.Level.Surrounding;
-        s.Load(BigBoss.Player.gridSpace.X, BigBoss.Player.gridSpace.Y);
+        s.Load(BigBoss.Player.Location.X, BigBoss.Player.Location.Y);
         foreach (Value2D<GridSpace> grid in s)
         {
-            if (grid.x == gridSpace.X && grid.y == gridSpace.Y)
+            if (grid.x == Location.X && grid.y == Location.Y)
             {
                 //NPC is next to player
                 return true;
@@ -727,7 +719,7 @@ public class NPC : Affectable
 
     private void AIMove()
     {
-        PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace);
+        PathTree pathToPlayer = getPathTree(BigBoss.Player.Location);
         if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
@@ -743,33 +735,15 @@ public class NPC : Affectable
     #endregion
 
     #region Touch Input
-    void OnEnable()
+    public override void OnClick()
     {
-        EasyTouch.On_SimpleTap += On_SimpleTap;
-    }
-
-    void OnDisable()
-    {
-        EasyTouch.On_SimpleTap -= On_SimpleTap;
-    }
-
-    void On_SimpleTap(Gesture gesture)
-    {
-        if (gesture.pickObject != null)
+        if (this.IsNotAFreaking<Player>())
         {
-            GameObject go = gesture.pickObject;
-            if (GO == go)
+            PathTree pathToPlayer = getPathTree(BigBoss.Player.Location);
+            List<PathNode> nodes = pathToPlayer.getPath();
+            if (nodes.Count == 2)
             {
-                NPC n = go.GetWorldObject<NPC>();
-                if (this.IsNotAFreaking<Player>() && this == n)
-                {
-                    PathTree pathToPlayer = getPathTree(BigBoss.Player.gridSpace);
-                    List<PathNode> nodes = pathToPlayer.getPath();
-                    if (nodes.Count == 2)
-                    {
-                        BigBoss.Player.attack(this);
-                    }
-                }
+                BigBoss.Player.attack(this);
             }
         }
     }

@@ -72,6 +72,16 @@ public class LevelManager : MonoBehaviour, IManager {
         if (level == null) return;
         foreach (GridSpace space in level.Iterate())
         {
+            foreach (WorldObject wo in space.GetBlockingObjects())
+            {
+                if (wo.IsNotAFreaking<Player>())
+                    wo.Destroy();
+            }
+            foreach (WorldObject wo in space.GetFreeObjects())
+            {
+                if (wo.IsNotAFreaking<Player>())
+                    wo.Destroy();
+            }
             space.SetActive(false);
         }
     }

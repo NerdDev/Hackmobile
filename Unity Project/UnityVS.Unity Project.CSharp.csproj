@@ -7,8 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
@@ -272,14 +271,8 @@
     <Compile Include="Assets\Scripts\Common\SurroundingInt.cs" />
     <Compile Include="Assets\Scripts\Common\Value2D.cs" />
     <Compile Include="Assets\Scripts\ExposePropertyAttribute.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIBackLabel.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIDropItem.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIEatItem.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIEquipItem.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIInventoryCategory.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIItem.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUILabel.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIUseItem.cs" />
+    <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
+    <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemStorage.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\GridArray.cs" />
@@ -389,7 +382,6 @@
     <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedObject.cs" />
     <Compile Include="Assets\Scripts\TimedDestruction.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Affectable.cs" />
-    <Compile Include="Assets\Scripts\WorldObjects\NPCDictionary.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\INamed.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\ItemDictionary.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\BUC.cs" />
@@ -397,6 +389,7 @@
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemProperties.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemStats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\Items\ItemChest.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
@@ -414,12 +407,14 @@
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Roles.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Stats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\NPC\NPCInstance.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\PathTree.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\Player.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\PlayerInstance.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\Professions.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\ProfessionTitles.cs" />
-    <Compile Include="Assets\Scripts\WorldObjects\NPC\NPCInstance.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\NPCDictionary.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\ObjectDictionary.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Size.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\WODictionary.cs" />

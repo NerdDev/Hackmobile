@@ -9,20 +9,14 @@ using System;
 public class Player : NPC
 {
     // Disable unassigned warnings
-    #pragma warning disable 414, 219
+#pragma warning disable 414, 219
     #region General Player Info:
-
-    private string playerChosenName = "Andrew";
-    public string PlayerChosenName { get { return playerChosenName; } }  //read only - set at char creation
-
     private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
     public string PlayerTitle { get { return playerTitle; } set { playerTitle = value; } }
-
     public PlayerProfessions PlayerChosenProfession;
-
-    public int level = 10; // Just for testing.  'Prolly change this to 1 later.
-    public int Level { get { return level; } }
-
+    //Stored in the stats class
+    //public int level = 10; // Just for testing.  'Prolly change this to 1 later.
+    public int Level { get { return stats.Level; } }
     #endregion
 
     #region Player Stats (For all the Player-only statistics)
@@ -73,21 +67,18 @@ public class Player : NPC
                 break;
         }
     }
+
+    public override void OnClick()
+    {
+        BigBoss.Gooey.displayGUI = !BigBoss.Gooey.displayGUI;
+        BigBoss.Gooey.RegenInventoryGUI();
+    }
     #endregion
 
-    public void Initialize()
+    public override void Init()
     {
-        BigBoss.PlayerInput.allowKeyboardInput = true;
-        BigBoss.PlayerInput.allowMouseInput = true;
-        BigBoss.PlayerInput.allowPlayerInput = true;
-
-        //this.setData(BigBoss.WorldObject.getNPC("player"));
-        stats.Hunger = 900;
-        IsActive = true;
+        PlayerStats.Load(this, Role.ARCHAELOGIST, Race.HUMAN);
         calcStats();
-        this.PlayerTitle = BigBoss.Objects.PlayerProfessions.getTitle(BigBoss.Player.PlayerChosenProfession, BigBoss.Player.stats.Level);
-        anim = GO.GetComponent<Animator>() as Animator;
-        this.Name = "Kurtis";
     }
 
     // Update is called once per frame
@@ -111,13 +102,36 @@ public class Player : NPC
     public override void eatItem(Item i)
     {
         base.eatItem(i);
+        CreateTextPop(this.Name + " eats the " + i.Name + ".");
         BigBoss.Time.PassTurn(60);
     }
 
     public override void useItem(Item i)
     {
         base.useItem(i);
+        CreateTextPop(this.Name + " uses the " + i.Name + ".");
         BigBoss.Time.PassTurn(60);
+    }
+
+    public override bool equipItem(Item i)
+    {
+        if (base.equipItem(i))
+        {
+            CreateTextPop("Item " + i.Name + " equipped.");
+            return true;
+        }
+        CreateTextPop("Item not equipped.");
+        return false;
+    }
+
+    public override bool unequipItem(Item i)
+    {
+        if (base.unequipItem(i))
+        {
+            CreateTextPop("Item " + i.Name + " uneqipped.");
+            return true;
+        }
+        return false;
     }
     #endregion
 
@@ -162,7 +176,7 @@ public class Player : NPC
 
     private void resetToGrid(Vector3 lookVectorToOccupiedTile)
     {
-        if (BigBoss.PlayerInput.isMovementKeyPressed == false && Input.GetMouseButton(1) == false)
+        if (!BigBoss.PlayerInput.mouseMovement && !BigBoss.PlayerInput.touchMovement)
         {
             if (!timeSet)
             {
@@ -207,16 +221,16 @@ public class Player : NPC
     protected override bool UpdateCurrentTileVectors()
     {
         GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
-        newGridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
+        GridSpace newGridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
         if (!newGridSpace.IsBlocked())
         {
-            if (gridSpace != null && gridSpace != null)
+            if (Location != null && Location != null)
             {
-                gridSpace.Remove(this);
+                Location.Remove(this);
             }
             newGridSpace.Put(this);
             CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
-            gridSpace = newGridSpace;
+            Location = newGridSpace;
             return true;
         }
         else
@@ -357,7 +371,7 @@ public class Player : NPC
     {
         //Change this to a generic chosen profession later
         playerTitle = BigBoss.Objects.PlayerProfessions.getTitle(PlayerProfessions.Archaeologist, this.stats.Level);
-        string finalTitle = playerChosenName + ", " + playerTitle;// + " of " + playerTitleCombatArea;
+        string finalTitle = Name + ", " + playerTitle;// + " of " + playerTitleCombatArea;
         return finalTitle;
     }
 
@@ -418,5 +432,5 @@ public class Player : NPC
 
     #endregion
 
-    #pragma warning restore 414, 219
+#pragma warning restore 414, 219
 }

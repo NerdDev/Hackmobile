@@ -71,7 +71,7 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         existing.Add(newWorldObject);
         if (newWorldObject is PassesTurns)
             BigBoss.Time.updateList.Add((PassesTurns)newWorldObject);
-        newWorldObject.Init();
+        newWorldObject.IsActive = true;
         return newWorldObject;
     }
 
@@ -80,6 +80,7 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         GameObject gameObject = spawner.Instantiate(obj, g.X, g.Y);
         T wrapper = gameObject.AddComponent<T>();
         wrapper.SetTo(obj);
+        obj.Init();
         return wrapper;
     }
 
@@ -101,6 +102,6 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
     {
         existing.Remove((W)obj);
         if (obj is PassesTurns)
-            BigBoss.Time.updateList.Add((PassesTurns)obj);
+            BigBoss.Time.RemoveFromUpdateList((PassesTurns)obj);
     }
 }

@@ -50,7 +50,7 @@ public class BigBoss : MonoBehaviour
                 //lock (time)
                 //{
                 //    if (time == null)
-                        BBoss.Instantiate<TimeManager>(out time);
+                BBoss.Instantiate<TimeManager>(out time);
                 //}
             }
             return time;
@@ -65,12 +65,20 @@ public class BigBoss : MonoBehaviour
             if (playerInfo == null)
             {
                 BBoss.Instantiate<PlayerInstance>(out playerInfo);
+                //playerInfo.SetTo(BigBoss.Objects.NPCs.GetPrototype("player"));
                 playerInfo.SetTo(new Player());
+                playerInfo.WO.Init();
             }
             return playerInfo;
         }
     }
-    public static Player Player { get { return (Player) PlayerInfo.WO; } }
+    public static Player Player
+    {
+        get
+        {
+            return (Player)PlayerInfo.WO;
+        }
+    }
     private static CameraManager camera_;
     public static CameraManager Camera
     {
