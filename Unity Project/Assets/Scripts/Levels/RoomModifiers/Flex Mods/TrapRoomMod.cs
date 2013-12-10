@@ -24,7 +24,8 @@ public class TrapRoomMod : RoomModifier
             BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
-        int floorSpace = room.CountGridType(GridType.Floor);
+        Counter floorSpace;
+        room.Array.DrawSquare(Draw.EqualThen(GridType.Floor, Draw.Count(out flor
         #region DEBUG
         if (floorSpace < 15)
         {

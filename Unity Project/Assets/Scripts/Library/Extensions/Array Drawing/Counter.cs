@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +11,7 @@ public class Counter
     {
         return new DrawAction<T>((arr2, x, y) =>
         {
-            if (!arr2[y, x].Equals(item))
-                _count++;
+            _count++;
             return true;
         });
     }

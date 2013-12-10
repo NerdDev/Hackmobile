@@ -23,6 +23,16 @@ public class Draw
         });
     }
 
+    public static DrawAction<T> EqualThen<T>(T item, DrawActionCall<T> then, bool not = false)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            if (then.Equals(arr[y, x]) != not)
+                return then(arr, x, y);
+            return true;
+        });
+    }
+
     public static DrawAction<T> ContainedIn<T>(ICollection<T> col)
     {
         return new DrawAction<T>((arr, x, y) =>
