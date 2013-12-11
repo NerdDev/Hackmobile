@@ -7,7 +7,7 @@ public class Counter
 {
     private int _count;
     public int Count { get { return _count; } }
-    public DrawAction<T> Action<T>(T item)
+    public DrawAction<T> Action<T>()
     {
         return new DrawAction<T>((arr2, x, y) =>
         {

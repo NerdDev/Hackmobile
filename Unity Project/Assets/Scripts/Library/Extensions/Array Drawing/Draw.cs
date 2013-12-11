@@ -116,10 +116,10 @@ public class Draw
         return f;
     }
 
-    public static DrawAction<T> Count<T>(T item, out Counter counter)
+    public static DrawAction<T> Count<T>(out Counter counter)
     {
         counter = new Counter();
-        return counter.Action(item);
+        return counter.Action<T>();
     }
 
     #region GridType

@@ -25,7 +25,7 @@ public class TrapRoomMod : RoomModifier
         }
         #endregion
         Counter floorSpace;
-        room.Array.DrawSquare(Draw.EqualThen(GridType.Floor, Draw.Count(out flor
+        room.Array.DrawSquare(Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out floorSpace)));
         #region DEBUG
         if (floorSpace < 15)
         {

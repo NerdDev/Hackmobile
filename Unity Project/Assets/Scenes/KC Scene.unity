@@ -3941,7 +3941,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400194, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -995.845703
+      value: -533.333374
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
       propertyPath: ActiveLogs.Array.data[0]
@@ -3971,6 +3971,11 @@ Prefab:
       propertyPath: ActiveFlags.Array.data[1]
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 11400076, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
+      propertyPath: Builder
+      value: 
+      objectReference: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d18addcb4375b2e43bfc58a521e350b8, type: 2}
   m_RootGameObject: {fileID: 494564653}
@@ -4836,7 +4841,7 @@ Transform:
   m_PrefabInternal: {fileID: 1663289916}
   m_GameObject: {fileID: 1961604088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -995.845703, y: 400, z: 0}
+  m_LocalPosition: {x: -533.333374, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 974323334}
@@ -5033,7 +5038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a481f2cbcee4164e8575888c6e5e653, type: 3}
   m_Name: 
   Theme: {fileID: 11400000, guid: 190358207bedb01488dc7d4be001c31a, type: 2}
-  Builder: {fileID: 11400000, guid: ed42e612c387bca4bac91cf44cf1fb33, type: 2}
+  Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
   Seed: 1725694428
   CurLevel: 0
 --- !u!1 &2011013913
