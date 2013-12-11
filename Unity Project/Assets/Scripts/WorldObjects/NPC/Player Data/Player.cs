@@ -231,6 +231,7 @@ public class Player : NPC
             newGridSpace.Put(this);
             CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
             Location = newGridSpace;
+            BigBoss.Gooey.CheckChestDistance();
             return true;
         }
         else

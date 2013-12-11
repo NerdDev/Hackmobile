@@ -15,11 +15,25 @@ class ItemChest : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (CheckDistance())
+        {
+            BigBoss.Gooey.GenerateGroundItems(this);
+        }
+    }
+
+    internal bool CheckDistance()
+    {
         PathTree path = new PathTree(Location, BigBoss.Player.Location);
         List<PathNode> nodes = path.getPath();
         if (nodes.Count == 2)
         {
-            BigBoss.Gooey.GenerateGroundItems(this);
+            return true;
         }
+        return false;
+    }
+
+    public bool Remove(Item item)
+    {
+        return Location.RemoveFromChest(item);
     }
 }

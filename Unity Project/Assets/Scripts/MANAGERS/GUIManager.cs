@@ -66,7 +66,7 @@ public class GUIManager : MonoBehaviour, IManager
     private ItemStorage inventoryStorageScript;
     //public UISprite[] inventoryIconArray;
 
-    private ItemChest currentChest;
+    internal ItemChest currentChest;
 
     internal bool categoryDisplay = false;
     internal bool displayItem = false;
@@ -629,6 +629,7 @@ public class GUIManager : MonoBehaviour, IManager
                 BigBoss.Player.inventory.Remove(dropped);
                 BigBoss.Player.Location.Put(dropped);
                 BigBoss.Gooey.RegenInventoryGUI();
+                BigBoss.Gooey.GenerateGroundItems(currentChest);
             }
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
@@ -644,8 +645,12 @@ public class GUIManager : MonoBehaviour, IManager
             {
                 Item picked = itemList[itemList.Count - 1];
                 BigBoss.Player.inventory.Add(picked);
-                BigBoss.Player.Location.Remove(picked);
+                if (BigBoss.Gooey.currentChest.Remove(picked))
+                {
+                    currentChest = null;
+                }
                 BigBoss.Gooey.GenerateGroundItems(currentChest);
+                BigBoss.Gooey.RegenInventoryGUI();
             }
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
@@ -669,6 +674,18 @@ public class GUIManager : MonoBehaviour, IManager
             }
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
+    }
+
+    internal void CheckChestDistance()
+    {
+        if (currentChest != null)
+        {
+            if (!BigBoss.Gooey.currentChest.CheckDistance())
+            {
+                BigBoss.Gooey.currentChest = null;
+                BigBoss.Gooey.GenerateGroundItems(null);
+            }
+        }
     }
 
     internal class TextPop

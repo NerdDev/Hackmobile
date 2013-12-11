@@ -57,7 +57,7 @@ public class GridSpace
         }
     }
 
-    void PutInChest(Item i)
+    public void PutInChest(Item i)
     {
         if (_chest == null)
         {
@@ -68,17 +68,19 @@ public class GridSpace
         _chest.items.Add(i);
     }
 
-    void RemoveFromChest(Item i)
+    public bool RemoveFromChest(Item i)
     {
         if (_chest != null)
         {
             _chest.items.Remove(i);
             if (_chest.items.Count == 0)
             {
-                GameObject.Destroy(_chest);
+                GameObject.Destroy(_chest.gameObject);
                 _chest = null;
+                return true;
             }
         }
+        return false;
     }
 
     protected void PutFree(WorldObject obj)
