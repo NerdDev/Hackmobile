@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour, IManager
     public bool allowPlayerInput;
     public bool allowKeyboardInput;
     public bool allowMouseInput;
+    public bool allowTouchInput;
     public bool isMovementKeyPressed;//mainly for debugging, will convert this bool when the input class is implemented for mobile
     #endregion
 
@@ -40,14 +41,18 @@ public class InputManager : MonoBehaviour, IManager
     }
 
     #region Touch Input
+
+    public EasyJoystick joystickLeft;
+    public EasyJoystick joystickRight;
+
     void OnEnable()
     {
-        EasyTouch.On_SimpleTap += On_SimpleTap;
+        //EasyTouch.On_SimpleTap += On_SimpleTap;
     }
 
     void OnDisable()
     {
-        EasyTouch.On_SimpleTap -= On_SimpleTap;
+        //EasyTouch.On_SimpleTap -= On_SimpleTap;
     }
 
     void On_SimpleTap(Gesture gesture)
@@ -64,7 +69,7 @@ public class InputManager : MonoBehaviour, IManager
                     NPC n = (NPC)list.Find(w => w is NPC);
                     if (n != null && n.IsNotAFreaking<Player>())
                     {
-                        GridSpace playerLoc = BigBoss.Player.gridSpace;
+                        GridSpace playerLoc = BigBoss.Player.Location;
                         Value2D<GridSpace> grid;
                         if (BigBoss.Levels.Level.Array.GetPointAround(p.x, p.y, true, (arr, x, y) =>
                             {
@@ -95,7 +100,8 @@ public class InputManager : MonoBehaviour, IManager
 
     void Update()
     {
-
+        CheckForMouseMovement();
+        CheckForTouchMovement();
         if (allowPlayerInput)
         {
             //Toggle Debug Mode:
@@ -109,30 +115,52 @@ public class InputManager : MonoBehaviour, IManager
             }
             if (allowMouseInput)
             {
+                CheckForMouseMovement();
                 CheckForMouseInput();
             }
-        }
-    }
-
-    /*
-    public void OnTouchStart(Gesture gesture)
-    {
-        //Debug Block:
-
-        try
-        {
-            Debug.Log("Object Picked: " + gesture.pickObject.name);
-            if (gesture.pickObject == (GameObject)GameObject.Find("PlayerA"))//COME BACK AND OPTIMIZE THIS CHECK - NEED A STATIC REF TO PLAYER OBJECT
+            if (allowTouchInput)
             {
-                BigBoss.Gooey.PlayerTouched();
+                CheckForTouchMovement();
+                CheckForTouchInput();
             }
         }
-        catch (System.Exception ex)
+    }
+
+    #region TOUCH
+
+    public bool touchMovement;
+
+    public void CheckForTouchInput()
+    {
+        if (EasyTouch.GetTouchCount() >= 5)
         {
-            Debug.Log("Event sent, but no pick object: Exception: " + ex.Message);
+            Application.LoadLevel(Application.loadedLevelName);
+        }
+        if (touchMovement)//meshes perfectly with smoothing/inertia on the joysticks
+        {
+            touchMove();
+        }
+        if (joystickRight.JoystickValue.x != 0 || joystickRight.JoystickValue.y != 0)
+        {
+            //MoveCamera();
+            //Write camera movement script
         }
     }
-    */
+
+    public void touchMove()
+    {
+        float forwardTransVector = Vector2.Distance(joystickLeft.JoystickAxis, Vector2.zero) * Time.deltaTime;
+        Vector3 tar = new Vector3(joystickLeft.JoystickAxis.x, 0, joystickLeft.JoystickAxis.y); //making a fake "target" vec3 using vec2 inputs - y and z swaps intended
+        Vector3 lookVectorPreAdjusted = tar - Vector3.zero; //works, but as soon as camera rotates the direction wont compensate
+        BigBoss.Player.MovePlayer(new Vector3(0, 0, forwardTransVector));
+        Quaternion lookRotFinal = Quaternion.LookRotation(lookVectorPreAdjusted); //calc'ing our look vector
+        if (lookRotFinal != Quaternion.identity)
+        {
+            BigBoss.PlayerInfo.transform.localRotation = lookRotFinal;
+        }
+    }
+
+    #endregion
 
     #region KEYBOARD
 
@@ -161,27 +189,50 @@ public class InputManager : MonoBehaviour, IManager
 
     #region MOUSE
 
+    public bool mouseMovement;
+
     void CheckForMouseInput()
     {
         horizontalMouseAxis = Input.GetAxis("Mouse X");
         verticalMouseAxis = Input.GetAxis("Mouse Y");
-        //mouseLocation = Input.mousePosition;
 
         if (Input.GetMouseButton(1)) //hold right click
         {
+            isMovementKeyPressed = true;
             Vector2 centerScreenPointToMousePosLookVector = (Vector2)Input.mousePosition - centerPointInScreenSpace;
             Vector3 playerConvertedTranslationVector = new Vector3(centerScreenPointToMousePosLookVector.x, 0, centerScreenPointToMousePosLookVector.y);
             Debug.DrawRay(BigBoss.PlayerInfo.transform.position,
                 playerConvertedTranslationVector,
                 Color.magenta);
             BigBoss.Player.MovePlayer(playerConvertedTranslationVector);
-
-        }
-        if (Input.GetMouseButtonDown(0)) //hold left click
-        {
-
         }
     }
 
+    #endregion
+
+    #region Movement checks
+    void CheckForTouchMovement()
+    {
+        if (joystickLeft.JoystickValue.x != 0 || joystickLeft.JoystickValue.y != 0)
+        {
+            touchMovement = true;
+        }
+        else
+        {
+            touchMovement = false;
+        }
+    }
+
+    void CheckForMouseMovement()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            mouseMovement = true;
+        }
+        else
+        {
+            mouseMovement = false;
+        }
+    }
     #endregion
 }

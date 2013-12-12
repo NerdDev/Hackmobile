@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class InventoryCategory : Dictionary<string, ItemList>
+public class InventoryCategory : SortedDictionary<string, ItemList>
 {
     public string id;
 
@@ -15,6 +15,7 @@ public class InventoryCategory : Dictionary<string, ItemList>
     public void Add(Item i)
     {
         this.GetCreate(i.Name, i.Name).Add(i);
+        this[i.Name].onGround = false;
     }
 
     public bool Remove(Item i)

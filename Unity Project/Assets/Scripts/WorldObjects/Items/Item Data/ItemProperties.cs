@@ -45,7 +45,8 @@ public class ItemProperties : IXmlParsable
     private string mat = "";
     public MaterialType Material
     {
-        get { return BigBoss.Objects.Materials.GetPrototype(mat); }
+        get {
+            return BigBoss.Objects.Materials.GetPrototype(mat); }
         set
         {
             if (value != null) { this.mat = value.Name; }

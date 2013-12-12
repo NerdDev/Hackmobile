@@ -4,7 +4,7 @@
 		<race>Human</race>
 		<flags>
 			<entry name="nopoly" />
-      <entry name="no_random_spawn" />
+			<entry name="no_random_spawn" />
 		</flags>
 		<properties>
 		</properties>

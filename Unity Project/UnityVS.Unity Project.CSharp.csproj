@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_1_5;UNITY_4_1;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_0_0;UNITY_4_0;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DefineConstants>TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_1_5;UNITY_4_1;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
+    <DefineConstants>TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_0_0;UNITY_4_0;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib">
@@ -271,14 +273,8 @@
     <Compile Include="Assets\Scripts\Common\StringStream.cs" />
     <Compile Include="Assets\Scripts\Common\Value2D.cs" />
     <Compile Include="Assets\Scripts\ExposePropertyAttribute.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIBackLabel.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIDropItem.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIEatItem.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIEquipItem.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIInventoryCategory.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIItem.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUILabel.cs" />
-    <Compile Include="Assets\Scripts\GUI\GUIUseItem.cs" />
+    <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
+    <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemStorage.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\GridArray.cs" />
@@ -403,6 +399,7 @@
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemProperties.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemStats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\Items\ItemChest.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
@@ -420,11 +417,14 @@
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Roles.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Stats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\NPC\NPCInstance.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\PathTree.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\Player.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\PlayerInstance.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\Professions.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\Player Data\ProfessionTitles.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\NPCDictionary.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\ObjectDictionary.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Size.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\WODictionary.cs" />
@@ -466,7 +466,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
     <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
-    <None Include="Assets\Resources\XML\items.xml" />
     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />

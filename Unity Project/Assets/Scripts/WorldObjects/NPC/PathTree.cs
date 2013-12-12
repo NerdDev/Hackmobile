@@ -90,7 +90,7 @@ public class PathTree
 
     public bool isValidSpace(GridSpace p)
     {
-        if (p.X > -1 && p.Y > -1)
+        if (p != null && p.X > -1 && p.Y > -1)
         {
             try
             {

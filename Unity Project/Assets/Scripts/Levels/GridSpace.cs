@@ -19,6 +19,7 @@ public class GridSpace
     }
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
+    private ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
 
     public GridSpace(GridType type)
@@ -46,10 +47,40 @@ public class GridSpace
                 ColliderTrigger(false);
             }
         }
+        else if (obj is Item)
+        {
+            PutInChest(obj as Item);
+        }
         else
         {
             PutFree(obj);
         }
+    }
+
+    public void PutInChest(Item i)
+    {
+        if (_chest == null)
+        {
+            _chest = (GameObject.Instantiate(BigBoss.Gooey.ChestPrefab) as GameObject).GetComponent<ItemChest>();
+            _chest.Location = this;
+            _chest.init();
+        }
+        _chest.items.Add(i);
+    }
+
+    public bool RemoveFromChest(Item i)
+    {
+        if (_chest != null)
+        {
+            _chest.items.Remove(i);
+            if (_chest.items.Count == 0)
+            {
+                GameObject.Destroy(_chest.gameObject);
+                _chest = null;
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void PutFree(WorldObject obj)
@@ -74,6 +105,7 @@ public class GridSpace
     {
         RemoveFree(obj);
         RemoveBlocked(obj);
+        if (obj is Item) { RemoveFromChest(obj as Item); }
         if (_blockingObjects.Count == 0)
         {
             ColliderTrigger(true);

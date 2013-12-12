@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class ItemDictionary : WODictionary<Item>
+public class ItemDictionary : WODictionary<Item, WOWrapper>
 {
     public Dictionary<string, List<Item>> Categories { get; protected set; }
 

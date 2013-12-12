@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
+public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsable
 {
     public void Add(Item i)
     {

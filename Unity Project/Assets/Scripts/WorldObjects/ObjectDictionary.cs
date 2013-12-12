@@ -27,6 +27,11 @@ public class ObjectDictionary<O>  where O : IXmlParsable, INamed, new()
         return default(O);
     }
 
+    public O this[string str]
+    {
+        get { return prototypes[str]; }
+    }
+
     public virtual void Parse(XMLNode baseNode)
     {
         foreach (XMLNode node in baseNode)

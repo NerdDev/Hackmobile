@@ -8,7 +8,7 @@ using System.IO;
 public class ObjectManager : MonoBehaviour, IManager
 {
     const string XMLPath = "Assets/XML/";
-    public WODictionary<NPC> NPCs { get; protected set; }
+    public NPCDictionary<NPC, NPCInstance> NPCs { get; protected set; }
     public ItemDictionary Items { get; protected set; }
     public Dictionary<string, string> Strings { get; protected set; }
     public ProfessionTitles PlayerProfessions { get; protected set; }
@@ -21,7 +21,7 @@ public class ObjectManager : MonoBehaviour, IManager
     public void Initialize()
     {
         BigBoss.Debug.w(Logs.Main, "Starting Data Manager");
-        NPCs = new WODictionary<NPC>();
+        NPCs = new NPCDictionary<NPC, NPCInstance>();
         Items = new ItemDictionary();
         Materials = new ObjectDictionary<MaterialType>();
         PlayerProfessions = new ProfessionTitles();
