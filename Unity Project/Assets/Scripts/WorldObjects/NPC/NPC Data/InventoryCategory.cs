@@ -14,7 +14,13 @@ public class InventoryCategory : SortedDictionary<string, ItemList>
 
     public void Add(Item i)
     {
-        this.GetCreate(i.Name, i.Name).Add(i);
+        ItemList list;
+        if (!this.TryGetValue(i.Name, out list))
+        {
+            list = new ItemList(i.Name);
+            this.Add(i.Name, list);
+        }
+        list.Add(i);
         this[i.Name].onGround = false;
     }
 

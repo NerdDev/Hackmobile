@@ -29,7 +29,12 @@ public class TypeManager : MonoBehaviour, IManager
         Type type = typeof(T);
         BigBoss.Debug.w(Logs.TypeHarvest, "Harvesting " + type.Name);
         List<Type> types = type.GetSubclassesOf();
-        Dictionary<string, Type> dict = codexOfAllLife.GetCreate(type);
+        Dictionary<string, Type> dict;
+        if (!codexOfAllLife.TryGetValue(type, out dict))
+        {
+            dict = new Dictionary<string, Type>();
+            codexOfAllLife.Add(type, dict);
+        }
         foreach (Type t in types)
         {
             BigBoss.Debug.w(Logs.TypeHarvest, "  " + t.Name);

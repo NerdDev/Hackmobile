@@ -224,13 +224,13 @@ public class Player : NPC
         GridSpace newGridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
         if (!newGridSpace.IsBlocked())
         {
-            if (Location != null && Location != null)
+            if (GridSpace != null && GridSpace != null)
             {
-                Location.Remove(this);
+                GridSpace.Remove(this);
             }
             newGridSpace.Put(this);
             CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
-            Location = newGridSpace;
+            GridSpace = newGridSpace;
             BigBoss.Gooey.CheckChestDistance();
             return true;
         }

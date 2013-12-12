@@ -116,7 +116,7 @@ public class GUIManager : MonoBehaviour, IManager
                 string line4CurrentGameState = "\nCurrent Game State: " + BigBoss.GameStateManager.State;
                 string line5currentTime = "\n" + BigBoss.TimeKeeper.RealComputerTimeNeat;
                 string line6totalTimePlayed = "\n" + BigBoss.TimeKeeper.TotalTimePlayedNeat;
-                //string line7MouseInfo = "\nMouse Stats:    X Location: " + BigBoss.PlayerInput.mouseLocation.x + "  -  Y Location: " +  BigBoss.PlayerInput.mouseLocation.y + "  -  X Axis: " + BigBoss.PlayerInput.horizontalMouseAxis + "  - Y Axis: " + BigBoss.PlayerInput.verticalMouseAxis;
+                //string line7MouseInfo = "\nMouse Stats:    X GridSpace: " + BigBoss.PlayerInput.mouseLocation.x + "  -  Y GridSpace: " +  BigBoss.PlayerInput.mouseLocation.y + "  -  X Axis: " + BigBoss.PlayerInput.horizontalMouseAxis + "  - Y Axis: " + BigBoss.PlayerInput.verticalMouseAxis;
                 string line7MouseInfo = "Center Screen Space Point: " + BigBoss.PlayerInput.centerPointInScreenSpace + ", Current Mouse Screen Position: " + ((Vector2)Input.mousePosition);
                 //string line8audioInfo;
 				
@@ -594,7 +594,7 @@ public class GUIManager : MonoBehaviour, IManager
                     if (itemList.onGround == true)
                     {
                         BigBoss.Player.inventory.Add(itemList[itemList.Count - 1]);
-                        BigBoss.Player.Location.Remove(itemList[itemList.Count - 1]);
+                        BigBoss.Player.GridSpace.Remove(itemList[itemList.Count - 1]);
                         BigBoss.Gooey.GenerateGroundItems(currentChest);
                     }
                     BigBoss.Player.equipItem(itemList[itemList.Count - 1]);
@@ -630,7 +630,7 @@ public class GUIManager : MonoBehaviour, IManager
             {
                 Item dropped = itemList[itemList.Count - 1];
                 BigBoss.Player.inventory.Remove(dropped);
-                BigBoss.Player.Location.Put(dropped);
+                BigBoss.Player.GridSpace.Put(dropped);
                 BigBoss.Gooey.RegenInventoryGUI();
                 BigBoss.Gooey.GenerateGroundItems(currentChest);
             }
@@ -669,7 +669,7 @@ public class GUIManager : MonoBehaviour, IManager
             {
                 if (itemList.onGround == true)
                 {
-                    BigBoss.Player.Location.Remove(itemList[itemList.Count - 1]);
+                    BigBoss.Player.GridSpace.Remove(itemList[itemList.Count - 1]);
                     BigBoss.Gooey.GenerateGroundItems(currentChest);
                 }
                 BigBoss.Player.eatItem(itemList[itemList.Count - 1]);

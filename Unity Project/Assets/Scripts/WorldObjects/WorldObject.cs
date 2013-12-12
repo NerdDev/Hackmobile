@@ -17,7 +17,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     public string Name { get; set; }
     private string _prefab;
     public virtual string Prefab { get { return _prefab; } set { _prefab = "Prefabs/" + value; } }
-    public GridSpace Location { get { return _grid; } set { _grid = value; } } // Placeholder. Needs to actually be implemented and updated.
+    public GridSpace GridSpace { get { return _grid; } set { _grid = value; } } // Placeholder. Needs to actually be implemented and updated.
     //X,Y coordinate for other scripts to grab:
     public Vector2 GridCoordinate { get; set; }
     //X, Y in integers, GridSpace ref
@@ -62,7 +62,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     {
         Unregister();
         Unwrap();
-        Location.Remove(this);
+        GridSpace.Remove(this);
         if (OnDestroy != null)
             OnDestroy(this);
     }

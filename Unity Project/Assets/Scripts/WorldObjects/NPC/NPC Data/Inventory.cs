@@ -8,7 +8,13 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
 {
     public void Add(Item i)
     {
-        this.GetCreate(i.Type, i.Type).Add(i);
+        InventoryCategory ic;
+        if (TryGetValue(i.Type, out ic))
+        {
+            ic = new InventoryCategory(i.Type);
+            Add(i.Type, ic);
+        }
+        ic.Add(i);
     }
 
     public bool Remove(Item i)

@@ -357,20 +357,20 @@ public class NPC : Affectable
 
     protected virtual bool UpdateCurrentTileVectors()
     {
-        if (Location != null)
+        if (GridSpace != null)
         {
-            Location.Remove(this);
+            GridSpace.Remove(this);
         }
         GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
-        Location = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
-        Location.Put(this);
+        GridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
+        GridSpace.Put(this);
         CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
         return true;
     }
 
     public PathTree getPathTree(GridSpace dest)
     {
-        PathTree path = new PathTree(Location, dest);
+        PathTree path = new PathTree(GridSpace, dest);
         return path;
     }
     #endregion
@@ -458,11 +458,11 @@ public class NPC : Affectable
         GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
         if (!grid.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
         {
-            int xmove = Location.X - node.X;
-            int ymove = Location.Y - node.Y;
-            Location.Remove(this);
-            Location = BigBoss.Levels.Level[node.X, node.Y];
-            Location.Put(this);
+            int xmove = GridSpace.X - node.X;
+            int ymove = GridSpace.Y - node.Y;
+            GridSpace.Remove(this);
+            GridSpace = BigBoss.Levels.Level[node.X, node.Y];
+            GridSpace.Put(this);
             MoveNPC(xmove, ymove);
         }
     }
@@ -685,9 +685,9 @@ public class NPC : Affectable
 
     bool IsNextToPlayer()
     {
-        GridSpace playerSpace = BigBoss.Player.gridSpace;
+        GridSpace playerSpace = BigBoss.Player.GridSpace;
         Value2D<GridSpace> space;
-        return BigBoss.Levels.Level.Array.GetPointAround(gridSpace.X, gridSpace.Y, true, (arr, x, y) =>
+        return BigBoss.Levels.Level.Array.GetPointAround(playerSpace.X, playerSpace.Y, true, (arr, x, y) =>
         {
             return playerSpace.X == x && playerSpace.Y == y;
         }, out space);
@@ -715,7 +715,7 @@ public class NPC : Affectable
 
     private void AIMove()
     {
-        PathTree pathToPlayer = getPathTree(BigBoss.Player.Location);
+        PathTree pathToPlayer = getPathTree(BigBoss.Player.GridSpace);
         if (pathToPlayer != null)
         {
             List<PathNode> nodes = pathToPlayer.getPath();
@@ -735,7 +735,7 @@ public class NPC : Affectable
     {
         if (this.IsNotAFreaking<Player>())
         {
-            PathTree pathToPlayer = getPathTree(BigBoss.Player.Location);
+            PathTree pathToPlayer = getPathTree(BigBoss.Player.GridSpace);
             List<PathNode> nodes = pathToPlayer.getPath();
             if (nodes.Count == 2)
             {

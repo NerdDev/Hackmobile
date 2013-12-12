@@ -23,7 +23,7 @@ class ItemChest : MonoBehaviour
 
     internal bool CheckDistance()
     {
-        PathTree path = new PathTree(Location, BigBoss.Player.Location);
+        PathTree path = new PathTree(Location, BigBoss.Player.GridSpace);
         List<PathNode> nodes = path.getPath();
         if (nodes.Count == 2)
         {

@@ -20,7 +20,7 @@ public class SpellCastInfo
                 if (aspect.Targeter.Style == TargetingStyle.TargetObject)
                     numObj = Math.Max(numObj, aspect.Targeter.MaxTargets);
             });
-        // Location targets overlap with objects
+        // GridSpace targets overlap with objects
         numLoc -= numObj;
         if (numLoc < 0)
             numLoc = 0;
@@ -47,13 +47,13 @@ public class SpellCastInfo
                     HashSet<GridSpace> spaceSet = new HashSet<GridSpace>();
                     foreach (IAffectable obj in _targetObjects)
                     {
-                        spaceSet.Add(obj.Self.Location);
+                        spaceSet.Add(obj.Self.GridSpace);
                     }
                     derivedSpaces = spaceSet.ToArray();
                 }
                 else
                 { // If no objects set either, use caster himself
-                    derivedSpaces = new GridSpace[] { Caster.Self.Location };
+                    derivedSpaces = new GridSpace[] { Caster.Self.GridSpace };
                     _targetObjects = new IAffectable[] { Caster };
                 }
                 _targetSpaces = derivedSpaces;
@@ -87,7 +87,7 @@ public class SpellCastInfo
                 else
                 { // If no spaces set either, use caster himself
                     derivedObjects = new IAffectable[] { Caster };
-                    _targetSpaces = new GridSpace[] { Caster.Self.Location };
+                    _targetSpaces = new GridSpace[] { Caster.Self.GridSpace };
                 }
                 _targetObjects = derivedObjects;
             }

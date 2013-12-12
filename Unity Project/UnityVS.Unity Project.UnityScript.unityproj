@@ -25,7 +25,7 @@
     <OutputPath>Temp\bin\Debug\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_0_0;UNITY_4_0;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_1_5;UNITY_4_1;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +33,7 @@
     <OutputPath>Temp\bin\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_0_0;UNITY_4_0;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
+    <DefineConstants>TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_1_5;UNITY_4_1;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;Sprite_InventoryFrame</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib">
@@ -102,17 +102,18 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
     <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
+    <None Include="Assets\Resources\XML\items.xml" />
     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
-    <None Include="Assets\Scripts\XML\consumables.xml" />
-    <None Include="Assets\Scripts\XML\materials.xml" />
-    <None Include="Assets\Scripts\XML\npcs.xml" />
-    <None Include="Assets\Scripts\XML\player.xml" />
-    <None Include="Assets\Scripts\XML\strings.xml" />
-    <None Include="Assets\Scripts\XML\titles.xml" />
-    <None Include="Assets\Scripts\XML\weapons.xml" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+    <None Include="Assets\XML\consumables.xml" />
+    <None Include="Assets\XML\materials.xml" />
+    <None Include="Assets\XML\npcs.xml" />
+    <None Include="Assets\XML\player.xml" />
+    <None Include="Assets\XML\strings.xml" />
+    <None Include="Assets\XML\titles.xml" />
+    <None Include="Assets\XML\weapons.xml" />
     <None Include="Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll" />
     <None Include="Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll" />
   </ItemGroup>
@@ -153,14 +154,15 @@
     <Folder Include="Assets\Resources\Tools\Cruncher" />
     <Folder Include="Assets\Resources\Tools\Cruncher\Documentation" />
     <Folder Include="Assets\Resources\Tools\Cruncher\Scripts" />
+    <Folder Include="Assets\Resources\XML" />
     <Folder Include="Assets\Scripts" />
     <Folder Include="Assets\Scripts\Library" />
     <Folder Include="Assets\Scripts\Library\XML" />
-    <Folder Include="Assets\Scripts\XML" />
     <Folder Include="Assets\Standard Assets" />
     <Folder Include="Assets\Standard Assets\Projectors" />
     <Folder Include="Assets\Standard Assets\Projectors\Sources" />
     <Folder Include="Assets\Standard Assets\Projectors\Sources\Shaders" />
+    <Folder Include="Assets\XML" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2012\UnityVS.UnityScript.targets" />
 </Project>

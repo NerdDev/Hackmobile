@@ -18,7 +18,12 @@ public class ItemDictionary : WODictionary<Item, WOWrapper>
     {
         if (Add(obj))
         {
-            List<Item> cateList = Categories.GetCreate(category);
+            List<Item> cateList;
+            if (!Categories.TryGetValue(category, out cateList))
+            {
+                cateList = new List<Item>();
+                Categories.Add(category, cateList);
+            }
             cateList.Add(obj);
             return true;
         }

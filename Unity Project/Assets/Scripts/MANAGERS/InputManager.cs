@@ -69,7 +69,7 @@ public class InputManager : MonoBehaviour, IManager
                     NPC n = (NPC)list.Find(w => w is NPC);
                     if (n != null && n.IsNotAFreaking<Player>())
                     {
-                        GridSpace playerLoc = BigBoss.Player.Location;
+                        GridSpace playerLoc = BigBoss.Player.GridSpace;
                         Value2D<GridSpace> grid;
                         if (BigBoss.Levels.Level.Array.GetPointAround(p.x, p.y, true, (arr, x, y) =>
                             {
