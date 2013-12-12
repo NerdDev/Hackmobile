@@ -2689,7 +2689,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8dbfb821551f25408b927bdd480a6b9, type: 3}
   m_Name: 
-  active: 0
+  Active: 0
 --- !u!111 &817220793
 Animation:
   m_ObjectHideFlags: 0

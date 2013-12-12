@@ -16,7 +16,7 @@ public class Player : NPC
     public PlayerProfessions PlayerChosenProfession;
     //Stored in the stats class
     //public int level = 10; // Just for testing.  'Prolly change this to 1 later.
-    public int Level { get { return stats.Level; } }
+    public int Level { get { return Stats.Level; } }
     #endregion
 
     #region Player Stats (For all the Player-only statistics)
@@ -371,7 +371,7 @@ public class Player : NPC
     private string getPlayerTitle()
     {
         //Change this to a generic chosen profession later
-        playerTitle = BigBoss.Objects.PlayerProfessions.getTitle(PlayerProfessions.Archaeologist, this.stats.Level);
+        playerTitle = BigBoss.Objects.PlayerProfessions.getTitle(PlayerProfessions.Archaeologist, this.Stats.Level);
         string finalTitle = Name + ", " + playerTitle;// + " of " + playerTitleCombatArea;
         return finalTitle;
     }
@@ -382,7 +382,7 @@ public class Player : NPC
 
         //Update GUI here
 
-        return stats.Hunger;
+        return Stats.Hunger;
     }
 
     public override void AddLevel()

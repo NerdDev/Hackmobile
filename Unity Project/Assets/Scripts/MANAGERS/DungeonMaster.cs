@@ -161,8 +161,8 @@ public class DungeonMaster : MonoBehaviour, IManager {
             npcPools.Add(keywords, pool);
             foreach (NPC n in BigBoss.Objects.NPCs.Prototypes)
             {
-                if (!empty && n.keywords.Contains(keywords) // NPC has keywords
-                    || (empty && !n.flags[NPCFlags.NO_RANDOM_SPAWN])) // If keywords empty
+                if (!empty && n.Keywords.Contains(keywords) // NPC has keywords
+                    || (empty && !n.Flags[NPCFlags.NO_RANDOM_SPAWN])) // If keywords empty
                 {
                     pool.Add(n);
                 }

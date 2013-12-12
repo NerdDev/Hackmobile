@@ -335,7 +335,7 @@ public class GUIManager : MonoBehaviour, IManager
             inventoryGrid.Clear();
             if (!categoryDisplay)
             {
-                foreach (InventoryCategory ic in BigBoss.Player.inventory.Values)
+                foreach (InventoryCategory ic in BigBoss.Player.Inventory.Values)
                 {
 
                     CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
@@ -344,7 +344,7 @@ public class GUIManager : MonoBehaviour, IManager
             else
             {
                 InventoryCategory ic;
-                if (BigBoss.Player.inventory.TryGetValue(category, out ic))
+                if (BigBoss.Player.Inventory.TryGetValue(category, out ic))
                 {
                     foreach (ItemList itemList in ic.Values)
                     {
@@ -593,7 +593,7 @@ public class GUIManager : MonoBehaviour, IManager
                 {
                     if (itemList.onGround == true)
                     {
-                        BigBoss.Player.inventory.Add(itemList[itemList.Count - 1]);
+                        BigBoss.Player.Inventory.Add(itemList[itemList.Count - 1]);
                         BigBoss.Player.GridSpace.Remove(itemList[itemList.Count - 1]);
                         BigBoss.Gooey.GenerateGroundItems(currentChest);
                     }
@@ -629,7 +629,7 @@ public class GUIManager : MonoBehaviour, IManager
             if (itemList.Count > 0)
             {
                 Item dropped = itemList[itemList.Count - 1];
-                BigBoss.Player.inventory.Remove(dropped);
+                BigBoss.Player.Inventory.Remove(dropped);
                 BigBoss.Player.GridSpace.Put(dropped);
                 BigBoss.Gooey.RegenInventoryGUI();
                 BigBoss.Gooey.GenerateGroundItems(currentChest);
@@ -647,7 +647,7 @@ public class GUIManager : MonoBehaviour, IManager
             if (itemList.Count > 0)
             {
                 Item picked = itemList[itemList.Count - 1];
-                BigBoss.Player.inventory.Add(picked);
+                BigBoss.Player.Inventory.Add(picked);
                 if (BigBoss.Gooey.currentChest.Remove(picked))
                 {
                     currentChest = null;

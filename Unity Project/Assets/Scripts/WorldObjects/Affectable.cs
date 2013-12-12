@@ -5,43 +5,43 @@ using System.Text;
 
 public class Affectable : WorldObject, IAffectable
 {
-    protected AppliedEffects effects;
+    protected AppliedEffects Effects;
     public WorldObject Self { get { return this; } }
 
     public Affectable()
     {
-        effects = new AppliedEffects(this);
+        Effects = new AppliedEffects(this);
     }
 
     #region IAffectable
     public void ApplyEffect(EffectInstance effect)
     {
-        effects.ApplyEffect(effect);
+        Effects.ApplyEffect(effect);
     }
 
     public void RemoveEffect(string effect)
     {
-        effects.RemoveEffect(effect);
+        Effects.RemoveEffect(effect);
     }
 
     public void RemoveEffect<T>() where T : EffectInstance
     {
-        effects.RemoveEffect<T>();
+        Effects.RemoveEffect<T>();
     }
 
     public bool RemoveAnEffect<T>() where T : EffectInstance
     {
-        return effects.RemoveAnEffect<T>();
+        return Effects.RemoveAnEffect<T>();
     }
 
     public bool HasEffect<T>() where T : EffectInstance
     {
-        return effects.HasEffect<T>();
+        return Effects.HasEffect<T>();
     }
 
     public bool HasEffect(string key)
     {
-        return effects.HasEffect(key);
+        return Effects.HasEffect(key);
     }
     #endregion
 }

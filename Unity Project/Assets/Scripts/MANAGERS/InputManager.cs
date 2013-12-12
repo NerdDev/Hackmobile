@@ -173,14 +173,14 @@ public class InputManager : MonoBehaviour, IManager
         if (Input.GetKeyDown(KeyCode.B))
         {
             Item food;
-            if (BigBoss.Player.inventory.TryGetFirst("food", "spoiled bread", out food))
+            if (BigBoss.Player.Inventory.TryGetFirst("food", "spoiled bread", out food))
                 BigBoss.Player.eatItem(food);
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log(BigBoss.Player.inventory.Dump());
+            Debug.Log(BigBoss.Player.Inventory.Dump());
             Item food;
-            if (BigBoss.Player.inventory.TryGetFirst("potion", "health potion", out food))
+            if (BigBoss.Player.Inventory.TryGetFirst("potion", "health potion", out food))
                 BigBoss.Player.eatItem(food);
         }
     }

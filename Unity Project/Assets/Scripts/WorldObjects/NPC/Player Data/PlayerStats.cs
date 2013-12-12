@@ -6,8 +6,8 @@ public class PlayerStats
 
     public static void Load(Player player, Role role, Race race)
     {
-        player.role = role;
-        player.race = race;
+        player.Role = role;
+        player.Race = race;
         LoadBasicStats(player);
         LoadStatModRole(player, role);
         LoadStatModRace(player, race);
@@ -34,7 +34,7 @@ public class PlayerStats
         attr.Strength = 16;
         attr.Difficulty = 1;
         attr.Size = Size.MEDIUM;
-        player.attributes = attr;
+        player.Attributes = attr;
 
         Stats stats = new Stats();
         stats.MaxHealth = 100;
@@ -42,22 +42,22 @@ public class PlayerStats
         stats.Level = 1;
         stats.initialize();
         stats.Hunger = 900;
-        player.stats = stats;
+        player.Stats = stats;
 
         ESFlags<NPCFlags> flags = new ESFlags<NPCFlags>();
         flags.Set(true, NPCFlags.NOPOLY);
         flags.Set(true, NPCFlags.NO_RANDOM_SPAWN);
-        player.flags = flags;
+        player.Flags = flags;
 
         BodyParts bp = new BodyParts();
         bp.Arms = 2;
         bp.Legs = 2;
         bp.Heads = 1;
-        player.bodyparts = bp;
+        player.Bodyparts = bp;
 
-        player.PlayerTitle = BigBoss.Objects.PlayerProfessions.getTitle(player.PlayerChosenProfession, player.stats.Level);
+        player.PlayerTitle = BigBoss.Objects.PlayerProfessions.getTitle(player.PlayerChosenProfession, player.Stats.Level);
         player.IsActive = true;
-        player.equipment = new Equipment(player.bodyparts);
+        player.Equipment = new Equipment(player.Bodyparts);
         player.Name = "Kurtis";
     }
 }

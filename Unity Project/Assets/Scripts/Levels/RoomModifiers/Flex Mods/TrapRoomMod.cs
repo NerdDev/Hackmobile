@@ -16,7 +16,6 @@ public class TrapRoomMod : RoomModifier
 
     public override bool Modify(RoomSpec spec)
     {
-        RandomGen rand = spec.Random;
         Room room = spec.Room;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

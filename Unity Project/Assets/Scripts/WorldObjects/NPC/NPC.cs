@@ -15,7 +15,7 @@ public class NPC : Affectable
     public override void Init()
     {
         calcStats();
-        equipment = new Equipment(this.bodyparts);
+        Equipment = new Equipment(this.Bodyparts);
         //IsActive = true;
         if (IsActive)
         {
@@ -27,18 +27,18 @@ public class NPC : Affectable
      * All the properties of the NPC should be contained here.
      */
     #region NPC Properties
-    public ESFlags<NPCFlags> flags = new ESFlags<NPCFlags>();
-    public ESFlags<Keywords> keywords = new ESFlags<Keywords>();
-    public Race race;
-    public Role role;
-    public AttributesData attributes = new AttributesData();
-    public BodyParts bodyparts = new BodyParts();
-    public Stats stats = new Stats();
+    public ESFlags<NPCFlags> Flags = new ESFlags<NPCFlags>();
+    public ESFlags<Keywords> Keywords = new ESFlags<Keywords>();
+    public Race Race;
+    public Role Role;
+    public AttributesData Attributes = new AttributesData();
+    public BodyParts Bodyparts = new BodyParts();
+    public Stats Stats = new Stats();
 
     //public List<Item> inventory = new List<Item>();
-    public Inventory inventory = new Inventory();
-    protected List<Item> equippedItems = new List<Item>();
-    public Equipment equipment = null;
+    public Inventory Inventory = new Inventory();
+    protected List<Item> EquippedItems = new List<Item>();
+    public Equipment Equipment = null;
     #endregion
 
     /**
@@ -46,11 +46,11 @@ public class NPC : Affectable
      */
     #region NPC Movement Properties
 
-    public float speed = 1.5f;  //temporarily hard-coded
-    public float NPCSpeed { get { return speed; } }
+    public float Speed = 1.5f;  //temporarily hard-coded
+    public float NPCSpeed { get { return Speed; } }
 
-    public float rotationSpeed = .5f;  //temporarily hard-coded
-    public float NPCRotationSpeed { get { return rotationSpeed; } }
+    private float _rotationSpeed = .5f;  //temporarily hard-coded
+    public float NPCRotationSpeed { get { return _rotationSpeed; } }
 
     public Vector3 CurrentOccupiedGridCenterWorldPoint { get; set; }
     public Vector3 LastOccupiedGridCenterWorldPoint { get; set; }
@@ -70,17 +70,17 @@ public class NPC : Affectable
 
     public NPC()
     {
-        this.equipment = new Equipment(this.bodyparts);
-        stats.MaxEncumbrance = getMaxInventoryWeight();
-        stats.Encumbrance = getCurrentInventoryWeight();
-        stats.CurrentHealth = stats.MaxHealth;
-        stats.CurrentPower = stats.MaxPower;
-        stats.XPToNextLevel = calcXPForNextLevel();
-        stats.CurrentXP = 0;
-        stats.hungerRate = 1;
+        Equipment = new Equipment(Bodyparts);
+        Stats.MaxEncumbrance = getMaxInventoryWeight();
+        Stats.Encumbrance = getCurrentInventoryWeight();
+        Stats.CurrentHealth = Stats.MaxHealth;
+        Stats.CurrentPower = Stats.MaxPower;
+        Stats.XPToNextLevel = calcXPForNextLevel();
+        Stats.CurrentXP = 0;
+        Stats.hungerRate = 1;
     }
 
-    void Start()
+    public override void Start()
     {
         animator = GO.GetComponent<Animator>() as Animator;
     }
@@ -140,25 +140,25 @@ public class NPC : Affectable
     #region Stats
     public bool get(NPCFlags fl)
     {
-        return flags[fl];
+        return Flags[fl];
     }
 
     public void set(NPCFlags fl, bool on)
     {
-        flags[fl] = on;
+        Flags[fl] = on;
     }
 
     public virtual float AdjustHunger(float amount)
     {
-        stats.Hunger += amount;
+        Stats.Hunger += amount;
         CreateTextPop("Gained " + amount + " of nutrition.");
-        getHungerLevel(stats.Hunger);
-        return stats.Hunger;
+        getHungerLevel(Stats.Hunger);
+        return Stats.Hunger;
     }
 
     public virtual void AddLevel()
     {
-        stats.Level++;
+        Stats.Level++;
         //do level up stuff here
         calcStats();
     }
@@ -169,23 +169,23 @@ public class NPC : Affectable
         {
             damage(-amount);
         }
-        else if (stats.CurrentHealth + amount > stats.MaxHealth)
+        else if (Stats.CurrentHealth + amount > Stats.MaxHealth)
         {
-            stats.CurrentHealth = stats.MaxHealth;
+            Stats.CurrentHealth = Stats.MaxHealth;
             CreateTextPop(this.Name + " gained " + amount + " in health.");
         }
         else
         {
-            stats.CurrentHealth = stats.CurrentHealth + amount;
+            Stats.CurrentHealth = Stats.CurrentHealth + amount;
             CreateTextPop(this.Name + " gained " + amount + " in health.");
         }
     }
 
     public virtual bool damage(int amount)
     {
-        if (stats.CurrentHealth - amount > 0)
+        if (Stats.CurrentHealth - amount > 0)
         {
-            stats.CurrentHealth = stats.CurrentHealth - amount;
+            Stats.CurrentHealth = Stats.CurrentHealth - amount;
             //Debug.Log(this.Name + " was damaged for " + amount + "!");
             CreateTextPop("Damaged for " + amount + "!", Color.red);
             return false;
@@ -199,13 +199,13 @@ public class NPC : Affectable
 
     public virtual void AdjustMaxHealth(int amount)
     {
-        stats.MaxHealth += amount;
+        Stats.MaxHealth += amount;
     }
 
     public virtual void AdjustXP(float amount)
     {
-        stats.CurrentXP += amount;
-        if (stats.CurrentXP > stats.XPToNextLevel)
+        Stats.CurrentXP += amount;
+        if (Stats.CurrentXP > Stats.XPToNextLevel)
         {
             AddLevel();
         }
@@ -213,7 +213,7 @@ public class NPC : Affectable
 
     public virtual void AdjustAttribute(Attributes attr, int amount)
     {
-        attributes.set(attr, attributes.get(attr) + amount);
+        Attributes.set(attr, Attributes.get(attr) + amount);
         calcStats();
     }
     #endregion
@@ -222,34 +222,34 @@ public class NPC : Affectable
     //Use this for a re-calc on level up or any attribute changes.
     protected void calcStats()
     {
-        stats.Encumbrance = getCurrentInventoryWeight();
-        stats.MaxEncumbrance = getMaxInventoryWeight();
-        stats.XPToNextLevel = calcXPForNextLevel();
+        Stats.Encumbrance = getCurrentInventoryWeight();
+        Stats.MaxEncumbrance = getMaxInventoryWeight();
+        Stats.XPToNextLevel = calcXPForNextLevel();
     }
 
     protected float calcXPForNextLevel()
     {
         //do calc here
-        return (100 + ((Mathf.Pow(stats.Level, 3f) / 2)));
+        return (100 + ((Mathf.Pow(Stats.Level, 3f) / 2)));
     }
 
     protected void getHungerLevel(float hunger)
     {
-        HungerLevel prior = stats.HungerLevel;
+        HungerLevel prior = Stats.HungerLevel;
         // These numbers don't make sense.
         if (hunger < 50)
-            stats.HungerLevel = HungerLevel.Faint;
+            Stats.HungerLevel = HungerLevel.Faint;
         else if (hunger < 130)
-            stats.HungerLevel = HungerLevel.Starving;
+            Stats.HungerLevel = HungerLevel.Starving;
         else if (hunger < 500)
-            stats.HungerLevel = HungerLevel.Hungry;
+            Stats.HungerLevel = HungerLevel.Hungry;
         else if (hunger < 800)
-            stats.HungerLevel = HungerLevel.Satiated;
+            Stats.HungerLevel = HungerLevel.Satiated;
         else if (hunger < 1000)
-            stats.HungerLevel = HungerLevel.Stuffed;
-        if (prior != stats.HungerLevel)
+            Stats.HungerLevel = HungerLevel.Stuffed;
+        if (prior != Stats.HungerLevel)
         {
-            BigBoss.Gooey.UpdateHungerLevel(stats.HungerLevel);
+            BigBoss.Gooey.UpdateHungerLevel(Stats.HungerLevel);
         }
     }
 
@@ -380,7 +380,7 @@ public class NPC : Affectable
     public virtual void eatItem(Item i)
     {
         //enforces it being in inventory, if that should change we'll rewrite later
-        if (inventory.Contains(i))
+        if (Inventory.Contains(i))
         {
             //item was just eaten, take it outta that list
             if (i.itemFlags[ItemFlags.IS_EQUIPPED])
@@ -410,9 +410,9 @@ public class NPC : Affectable
 
     public virtual void attack(NPC n)
     {
-        if (equipment.getItems(EquipTypes.HAND) != null)
+        if (Equipment.getItems(EquipTypes.HAND) != null)
         {
-            List<Item> weapons = equipment.getItems(EquipTypes.HAND);
+            List<Item> weapons = Equipment.getItems(EquipTypes.HAND);
             if (weapons.Count > 0)
             {
                 foreach (Item i in weapons)
@@ -475,7 +475,7 @@ public class NPC : Affectable
 
     protected int calcHandDamage()
     {
-        return (new System.Random()).Next(0, attributes.Strength);
+        return (new System.Random()).Next(0, Attributes.Strength);
     }
 
     private void killThisNPC()
@@ -505,22 +505,22 @@ public class NPC : Affectable
 
     public virtual void addToInventory(Item item, int count)
     {
-        if (inventory.Contains(item))
+        if (Inventory.Contains(item))
         {
             for (int i = 0; i < count - 1; i++)
             {
-                inventory.Add(item.Copy());
+                Inventory.Add(item.Copy());
             }
         }
         else
         {
-            inventory.Add(item);
+            Inventory.Add(item);
             for (int i = 0; i < count - 1; i++)
             {
-                inventory.Add(item.Copy());
+                Inventory.Add(item.Copy());
             }
         }
-        stats.Encumbrance += item.props.Weight * count;
+        Stats.Encumbrance += item.props.Weight * count;
     }
 
     public void removeFromInventory(Item item)
@@ -531,9 +531,9 @@ public class NPC : Affectable
 
     public virtual void removeFromInventory(Item item, int count)
     {
-        if (inventory.Contains(item))
+        if (Inventory.Contains(item))
         {
-            inventory.Remove(item);
+            Inventory.Remove(item);
         }
         else
         {
@@ -556,16 +556,16 @@ public class NPC : Affectable
     {
         float invWeightMax;
         //Add formula here
-        invWeightMax = (25 * (attributes.Strength + attributes.Constitution) + 50);
+        invWeightMax = (25 * (Attributes.Strength + Attributes.Constitution) + 50);
         return invWeightMax;
     }
 
     public virtual bool equipItem(Item i)
     {
-        if (equipment.equipItem(i))
+        if (Equipment.equipItem(i))
         {
             i.onEquipEvent(this);
-            equippedItems.Add(i);
+            EquippedItems.Add(i);
             return true;
         }
         return false;
@@ -573,12 +573,12 @@ public class NPC : Affectable
 
     public virtual bool unequipItem(Item i)
     {
-        if (i.isUnEquippable() && equipment.removeItem(i))
+        if (i.isUnEquippable() && Equipment.removeItem(i))
         {
             i.onUnEquipEvent(this);
-            if (equippedItems.Contains(i))
+            if (EquippedItems.Contains(i))
             {
-                equippedItems.Remove(i);
+                EquippedItems.Remove(i);
             }
             return true;
         }
@@ -587,7 +587,7 @@ public class NPC : Affectable
 
     public List<Item> getEquippedItems()
     {
-        return equippedItems;
+        return EquippedItems;
     }
     #endregion
 
@@ -595,13 +595,13 @@ public class NPC : Affectable
     public override void ParseXML(XMLNode x)
     {
         base.ParseXML(x);
-        race = x.SelectEnum<Race>("race");
-        role = x.SelectEnum<Role>("role");
-        attributes = x.Select<AttributesData>("attributes");
-        bodyparts = x.Select<BodyParts>("bodyparts");
-        stats = x.Select<Stats>("stats");
-        flags = x.Select<ESFlags<NPCFlags>>("flags");
-        keywords = x.Select<ESFlags<Keywords>>("keywords");
+        Race = x.SelectEnum<Race>("race");
+        Role = x.SelectEnum<Role>("role");
+        Attributes = x.Select<AttributesData>("attributes");
+        Bodyparts = x.Select<BodyParts>("bodyparts");
+        Stats = x.Select<Stats>("stats");
+        Flags = x.Select<ESFlags<NPCFlags>>("flags");
+        Keywords = x.Select<ESFlags<Keywords>>("keywords");
     }
     #endregion
 

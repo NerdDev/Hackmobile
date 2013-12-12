@@ -5,14 +5,12 @@ using System.Text;
 
 public class NPCInstance : WOWrapper
 {
-    public bool active;
+    public bool Active;
     void Update()
     {
-        if (WO != null)
-        {
-            this.WO.Update();
-            active = WO.IsActive;
-        }
+        if (WO == null) return;
+        WO.Update();
+        Active = WO.IsActive;
     }
 
     void FixedUpdate()
