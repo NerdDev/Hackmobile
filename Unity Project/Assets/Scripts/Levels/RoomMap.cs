@@ -1,14 +1,19 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class RoomMap : MultiMap<GridSpace>, IEnumerable  {
 
     public RoomMap(Room room, GridSpace[,] arr)
     {
-        foreach (Value2D<GridType> floor in room.GetFloors())
-        {
-            this.Put(arr[floor.y, floor.x], floor.x, floor.y);
-        }
+        int shiftX = room.GetShift().x;
+        int shiftY = room.GetShift().y;
+		room.Array.DrawSquare(Draw.EqualThen(GridType.Floor,
+			(arr2, x, y) =>
+		{
+            this.Put(arr[y + shiftY, x + shiftX], y + shiftY, x + shiftX);	
+			return true;
+		}));
     }
 
     public MultiMap<GridSpace> Spawnable()

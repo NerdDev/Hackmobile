@@ -27,7 +27,7 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            if (then.Equals(arr[y, x]) != not)
+            if (item.Equals(arr[y, x]) != not)
                 return then(arr, x, y);
             return true;
         });

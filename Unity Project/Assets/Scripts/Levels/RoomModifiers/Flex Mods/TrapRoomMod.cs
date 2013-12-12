@@ -8,9 +8,9 @@ public class TrapRoomMod : RoomModifier
     protected static ProbabilityList<int> treasureSizeList = new ProbabilityList<int>();
     static TrapRoomMod()
     {
-        //treasureSizeList.Add(0, .25, false);
-        //treasureSizeList.Add(1, .5, false);
-        //treasureSizeList.Add(2, .15, false);
+        treasureSizeList.Add(0, .25, false);
+        treasureSizeList.Add(1, .5, false);
+        treasureSizeList.Add(2, .15, false);
         treasureSizeList.Add(3, .10, false);
     }
 
@@ -47,7 +47,6 @@ public class TrapRoomMod : RoomModifier
             Draw.EqualTo(GridType.Floor),
             Draw.PickRandom(room.Array, out picker)));
 
-        GridMap grid = room.GetFloors();
         List<Value2D<GridType>> treasureList = picker.Pick(Probability.LevelRand, treasureInRoom, 2, true);
         foreach (Value2D<GridType> val in treasureList)
             room.Array[val.y, val.x] = GridType.Chest;
