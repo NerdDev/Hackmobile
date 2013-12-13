@@ -6,7 +6,7 @@ public class HiddenRoomMod : RoomModifier
 {
     public override bool Modify(RoomSpec spec)
     {
-        Room room = spec.Room;
+        LayoutObjectLeaf room = spec.Room;
         int secretRoomSize = 2;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -15,7 +15,7 @@ public class HiddenRoomMod : RoomModifier
         }
         #endregion
         GridMap potentialDoors = new GridMap();
-        room.Array.DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
+        room.GetArray().GetArr().DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -25,7 +25,7 @@ public class HiddenRoomMod : RoomModifier
         Value2D<GridType> doorSpace = potentialDoors.RandomValue(Probability.LevelRand);
         if (doorSpace != null)
         {
-            room.Array.DrawSquare(
+            room.GetArray().GetArr().DrawSquare(
                 (doorSpace.x - secretRoomSize), (doorSpace.x + secretRoomSize),
                 (doorSpace.y - secretRoomSize), (doorSpace.y + secretRoomSize),
                 new StrokedAction<GridType>()

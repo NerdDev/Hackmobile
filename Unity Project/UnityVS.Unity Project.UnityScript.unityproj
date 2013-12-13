@@ -102,7 +102,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
     <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
-    <None Include="Assets\Resources\XML\items.xml" />
     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
@@ -154,7 +153,6 @@
     <Folder Include="Assets\Resources\Tools\Cruncher" />
     <Folder Include="Assets\Resources\Tools\Cruncher\Documentation" />
     <Folder Include="Assets\Resources\Tools\Cruncher\Scripts" />
-    <Folder Include="Assets\Resources\XML" />
     <Folder Include="Assets\Scripts" />
     <Folder Include="Assets\Scripts\Library" />
     <Folder Include="Assets\Scripts\Library\XML" />

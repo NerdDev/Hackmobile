@@ -4,26 +4,26 @@ using System;
 
 public class LevelLayout : LayoutObjectContainer {
 
-    List<Room> rooms = new List<Room>();
+    List<LayoutObjectLeaf> rooms = new List<LayoutObjectLeaf>();
 	List<Path> paths = new List<Path>();
 
-    public void AddRoom(Room r)
+    public void AddRoom(LayoutObjectLeaf r)
     {
         rooms.Add(r);
         AddObject(r);
     }
 
-    public void AddRooms(List<Room> rs)
+    public void AddRooms(List<LayoutObjectLeaf> rs)
     {
         rooms.AddRange(rs);
     }
-	
-	public List<Room> GetRooms()
+
+    public List<LayoutObjectLeaf> GetRooms()
 	{
-		return new List<Room>(rooms);
+        return new List<LayoutObjectLeaf>(rooms);
 	}
 
-    public Room GetRandomRoom()
+    public LayoutObjectLeaf GetRandomRoom()
     {
         return rooms[Probability.LevelRand.Next(rooms.Count)];
     }

@@ -286,7 +286,6 @@
     <Compile Include="Assets\Scripts\Levels\Generation\LevelGenerator.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\LevelLayout.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\Path.cs" />
-    <Compile Include="Assets\Scripts\Levels\Generation\Room.cs" />
     <Compile Include="Assets\Scripts\Levels\GridDirection.cs" />
     <Compile Include="Assets\Scripts\Levels\GridLocation.cs" />
     <Compile Include="Assets\Scripts\Levels\GridSpace.cs" />
@@ -464,7 +463,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
     <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
-    <None Include="Assets\Resources\XML\items.xml" />
     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />

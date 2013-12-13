@@ -28,7 +28,7 @@ public class HorizSplitterMod : RoomModifier
         // Iterate and find all viable options
         for (int i = fromAlt; i < toAlt; i++)
         {
-            if (spec.Room.Array.DrawLine(from, to, i, horizontal, ViableSplitter()))
+            if (spec.Room.GetArray().GetArr().DrawLine(from, to, i, horizontal, ViableSplitter()))
                 options.Add(i);
         }
         if (options.Count == 0) return false;
@@ -46,7 +46,7 @@ public class HorizSplitterMod : RoomModifier
 
         // Draw selected splitter
         int picked = options.Random(spec.Random);
-        spec.Room.Array.DrawLine(from, to, picked, horizontal, Draw.SetToIfNotEqual(GridType.NULL, GridType.Wall));
+        spec.Room.GetArray().GetArr().DrawLine(from, to, picked, horizontal, Draw.SetToIfNotEqual(GridType.NULL, GridType.Wall));
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -57,13 +57,13 @@ public class HorizSplitterMod : RoomModifier
 
         // Draw at least one door
         RandomPicker<GridType> picker;
-        spec.Room.Array.DrawLine(from, to, picked, horizontal, 
-            Draw.IfThen<GridType>(Draw.CanDrawDoor(), Draw.PickRandom(spec.Room.Array, out picker)));
+        spec.Room.GetArray().GetArr().DrawLine(from, to, picked, horizontal, 
+            Draw.IfThen<GridType>(Draw.CanDrawDoor(), Draw.PickRandom(spec.Room.GetArray().GetArr(), out picker)));
         
         int numDoors = Probability.LevelRand.Next(1, 4);
         List<Value2D<GridType>> doors = picker.Pick(Probability.LevelRand, numDoors, 1, false);
         foreach (Value2D<GridType> door in doors)
-            spec.Room.Array[door.y, door.x] = GridType.Door;
+            spec.Room.GetArray().GetArr()[door.y, door.x] = GridType.Door;
         return true;
     }
 

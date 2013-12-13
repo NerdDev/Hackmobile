@@ -93,7 +93,6 @@
      <None Include="Assets\AudioToolkit\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
      <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
-     <None Include="Assets\Resources\XML\items.xml" />
      <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />

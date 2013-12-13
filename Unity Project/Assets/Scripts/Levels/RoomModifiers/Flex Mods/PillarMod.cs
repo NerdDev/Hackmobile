@@ -19,7 +19,7 @@ public class PillarMod : RoomModifier
         Bounding bounds = spec.Room.GetBounding(false);
         int spacingX = spacingOptions.Get();
         int spacingY = Probability.LevelRand.Percent(differingSpacingChance) ? spacingOptions.Get() : spacingX;
-        GridType[,] arr = spec.Room.Array;
+        GridType[,] arr = spec.Room.GetArray().GetArr();
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)

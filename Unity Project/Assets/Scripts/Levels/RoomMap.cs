@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class RoomMap : MultiMap<GridSpace>, IEnumerable  {
 
-    public RoomMap(Room room, GridSpace[,] arr)
+    public RoomMap(LayoutObjectLeaf room, GridSpace[,] arr)
     {
         int shiftX = room.GetShift().x;
         int shiftY = room.GetShift().y;
-		room.Array.DrawSquare(Draw.EqualThen(GridType.Floor,
+		room.GetArray().GetArr().DrawSquare(Draw.EqualThen(GridType.Floor,
 			(arr2, x, y) =>
 		{
             this.Put(arr[y + shiftY, x + shiftX], y + shiftY, x + shiftX);	

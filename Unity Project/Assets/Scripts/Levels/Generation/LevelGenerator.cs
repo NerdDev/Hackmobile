@@ -76,7 +76,7 @@ public class LevelGenerator
         #endregion
         Probability.LevelRand.SetSeed(seed);
         LevelLayout layout = new LevelLayout();
-        List<Room> rooms = GenerateRoomShells();
+        List<LayoutObjectLeaf> rooms = GenerateRoomShells();
         ModRooms(rooms);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
@@ -170,7 +170,7 @@ public class LevelGenerator
         return layout;
     }
 
-    List<Room> GenerateRoomShells()
+    List<LayoutObjectLeaf> GenerateRoomShells()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -178,7 +178,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Generate Rooms");
         }
         #endregion
-        List<Room> rooms = new List<Room>();
+        List<LayoutObjectLeaf> rooms = new List<LayoutObjectLeaf>();
         int numRooms = Probability.LevelRand.Next(minRooms, maxRooms);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -188,7 +188,7 @@ public class LevelGenerator
         #endregion
         for (int i = 1; i <= numRooms; i++)
         {
-            Room room = new Room();
+            LayoutObjectLeaf room = new LayoutObjectLeaf(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2);
             rooms.Add(room);
         }
         #region DEBUG
@@ -200,9 +200,9 @@ public class LevelGenerator
         return rooms;
     }
 
-    void ModRooms(IEnumerable<Room> rooms)
+    void ModRooms(IEnumerable<LayoutObjectLeaf> rooms)
     {
-        foreach (Room room in rooms)
+        foreach (LayoutObjectLeaf room in rooms)
         {
             #region DEBUG
             double stepTime = 0, time = 0;
@@ -291,7 +291,7 @@ public class LevelGenerator
         return mods;
     }
 
-    static List<LayoutObject> ClusterRooms(List<Room> rooms)
+    static List<LayoutObject> ClusterRooms(List<LayoutObjectLeaf> rooms)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -330,7 +330,7 @@ public class LevelGenerator
         }
         #endregion
         // For remaining rooms, put into random clusters
-        foreach (Room r in rooms)
+        foreach (LayoutObjectLeaf r in rooms)
         {
             if (Probability.LevelRand.Percent(clusterProbability))
             {
@@ -357,7 +357,7 @@ public class LevelGenerator
         return ret;
     }
 
-    static void PlaceRooms(List<Room> rooms, LevelLayout layout)
+    static void PlaceRooms(List<LayoutObjectLeaf> rooms, LevelLayout layout)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -366,10 +366,10 @@ public class LevelGenerator
         }
         #endregion
         List<LayoutObject> placedRooms = new List<LayoutObject>();
-        Room seedRoom = new Room();
+        LayoutObjectLeaf seedRoom = new LayoutObjectLeaf(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2);
         layout.AddObject(seedRoom);
         placedRooms.Add(seedRoom); // Seed empty center room to start positioning from.
-        foreach (Room room in rooms)
+        foreach (LayoutObjectLeaf room in rooms)
         {
             // Find room it will start from
             int roomNum = Probability.LevelRand.Next(placedRooms.Count);
@@ -423,7 +423,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Doors");
         }
         #endregion
-        foreach (Room room in layout.GetRooms())
+        foreach (LayoutObjectLeaf room in layout.GetRooms())
         {
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -432,7 +432,7 @@ public class LevelGenerator
             }
             #endregion
             var potentialDoors = new GridMap();
-            room.Array.DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
+            room.GetArray().GetArr().DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
             int numDoors = Probability.LevelRand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
