@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>>
+public class Array2D<T> : Container2D<T>
 {
-
     protected T[,] arr;
 
     #region Ctors
@@ -192,27 +191,22 @@ public class Array2D<T> : Container2D<T>, IEnumerable<Value2D<T>>
         {
             for (int x = 1; x < arr.GetLength(1) - 1; x++)
             {
-                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]);
+                var val = new Value2D<T>(x, y, arr[y, x]);
                 yield return val;
             }
         }
     }
 
-    public virtual IEnumerator<Value2D<T>> GetEnumerator()
+    public override IEnumerator<Value2D<T>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                Value2D<T> val = new Value2D<T>(x, y, arr[y, x]);
+                var val = new Value2D<T>(x, y, arr[y, x]);
                 yield return val;
             }
         }
-    }
-
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
     }
     #endregion
 

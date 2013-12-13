@@ -7,10 +7,9 @@ using System.Text;
 public class ArrayMultiMap<T> : Container2D<T>
 {
     const bool _debug = false;
-    int _count = 0;
-    public int Count { get { return _count; } }
-    bool[,] _present;
-    T[,] _arr;
+    public int Count { get; private set; }
+    readonly bool[,] _present;
+    readonly T[,] _arr;
     bool _accurateBounding = false;
     Bounding bound;
     public int Width { get { return _arr.GetLength(1); } }
@@ -18,6 +17,7 @@ public class ArrayMultiMap<T> : Container2D<T>
 
     public ArrayMultiMap(int width, int height)
     {
+        Count = 0;
         _arr = new T[height, width];
         _present = new bool[height, width];
     }
@@ -44,7 +44,7 @@ public class ArrayMultiMap<T> : Container2D<T>
         _arr[y, x] = val;
         _present[y, x] = true;
         _accurateBounding = false;
-        _count++;
+        Count++;
     }
 
     public void Remove(int x, int y)
@@ -52,7 +52,7 @@ public class ArrayMultiMap<T> : Container2D<T>
         _arr[y, x] = default(T);
         _present[y, x] = false;
         _accurateBounding = false;
-        _count++;
+        Count++;
     }
 
     public override Bounding GetBounding()
@@ -181,7 +181,7 @@ public class ArrayMultiMap<T> : Container2D<T>
 
     public T Random(System.Random random, bool take = false)
     {
-        int picked = random.Next(_count);
+        int picked = random.Next(Count);
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
@@ -198,6 +198,18 @@ public class ArrayMultiMap<T> : Container2D<T>
             }
         }
         return default(T);
+    }
+
+    public override IEnumerator<Value2D<T>> GetEnumerator()
+    {
+        for (int y = 0; y < _arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < _arr.GetLength(1); x++)
+            {
+                if (_present[y,x])
+                    yield return new Value2D<T>(x, y, _arr[y,x]);
+            }
+        }
     }
 }
 #pragma warning restore 162

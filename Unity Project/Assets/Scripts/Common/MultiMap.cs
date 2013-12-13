@@ -3,9 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>>
+public class MultiMap<T> : Container2D<T>
 {
-
     int _count = 0;
     public int Count { get { return _count; } }
     public bool IsEmpty { get { return Count == 0; } }
@@ -286,21 +285,16 @@ public class MultiMap<T> : Container2D<T>, IEnumerable<Value2D<T>>
     }
 
     #region Iteration
-    public IEnumerator<Value2D<T>> GetEnumerator()
+    public override IEnumerator<Value2D<T>> GetEnumerator()
     {
         foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
         {
             foreach (KeyValuePair<int, T> val in row.Value)
             {
-                Value2D<T> ret = new Value2D<T>(val.Key, row.Key, val.Value);
+                var ret = new Value2D<T>(val.Key, row.Key, val.Value);
                 yield return ret;
             }
         }
-    }
-
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
     }
     #endregion
 }

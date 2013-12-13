@@ -20,7 +20,7 @@ public class RectangularRoom : RoomModifier
             BigBoss.Debug.w(Logs.LevelGen, "Height: " + height + ", Width: " + width);
         }
         #endregion
-        spec.Room.GetArray().GetArr().DrawSquare(width, height, new StrokedAction<GridType>()
+        spec.Array.DrawSquare(width, height, new StrokedAction<GridType>()
             {
                 UnitAction = Draw.SetTo(GridType.Floor),
                 StrokeAction = Draw.SetTo(GridType.Wall)

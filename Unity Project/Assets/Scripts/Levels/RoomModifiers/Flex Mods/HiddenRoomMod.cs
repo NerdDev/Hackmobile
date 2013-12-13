@@ -6,7 +6,6 @@ public class HiddenRoomMod : RoomModifier
 {
     public override bool Modify(RoomSpec spec)
     {
-        LayoutObjectLeaf room = spec.Room;
         int secretRoomSize = 2;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -14,18 +13,20 @@ public class HiddenRoomMod : RoomModifier
             BigBoss.Debug.printHeader(Logs.LevelGen, "Hidden Room Mod");
         }
         #endregion
-        GridMap potentialDoors = new GridMap();
-        room.GetArray().GetArr().DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
+
+        RandomPicker<GridType> picker;
+        spec.Array.DrawPotentialExternalDoors(Draw.PickRandom(spec.Array, out picker));
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            potentialDoors.ToLog(Logs.LevelGen, "After Removing Invalid Locations");
+            picker.ToLog(Logs.LevelGen, "After Removing Invalid Locations");
         }
         #endregion
-        Value2D<GridType> doorSpace = potentialDoors.RandomValue(Probability.LevelRand);
+
+        Value2D<GridType> doorSpace = picker.Pick(Probability.LevelRand);
         if (doorSpace != null)
         {
-            room.GetArray().GetArr().DrawSquare(
+            spec.Array.DrawSquare(
                 (doorSpace.x - secretRoomSize), (doorSpace.x + secretRoomSize),
                 (doorSpace.y - secretRoomSize), (doorSpace.y + secretRoomSize),
                 new StrokedAction<GridType>()
@@ -33,12 +34,12 @@ public class HiddenRoomMod : RoomModifier
                     UnitAction = Draw.SetTo(GridType.NULL, GridType.Floor),
                     StrokeAction = Draw.SetTo(GridType.NULL, GridType.Wall)
                 });
-            room.put(GridType.Door, doorSpace.x, doorSpace.y);
+            spec.Array[doorSpace.y, doorSpace.x] = GridType.Door;
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            room.ToLog(Logs.LevelGen, "Final Room After placing doors");
+            spec.Room.ToLog(Logs.LevelGen, "Final Room After placing doors");
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion

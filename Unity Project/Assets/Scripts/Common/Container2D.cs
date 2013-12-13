@@ -3,7 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class Container2D<T> {
+abstract public class Container2D<T> : IEnumerable<Value2D<T>>
+{
 
     protected Container2D()
     {
@@ -128,5 +129,12 @@ abstract public class Container2D<T> {
     public virtual List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
     {
         throw new NotImplementedException();
+    }
+
+    public abstract IEnumerator<Value2D<T>> GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

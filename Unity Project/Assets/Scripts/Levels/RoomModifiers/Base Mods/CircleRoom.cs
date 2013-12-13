@@ -13,7 +13,7 @@ public class CircleRoom : RoomModifier {
             BigBoss.Debug.w(Logs.LevelGen, "Radius: " + radius);
         }
         #endregion
-        spec.Room.GetArray().GetArr().DrawCircle(center, center, radius, GridType.Floor, GridType.Wall);
+        spec.Array.DrawCircle(center, center, radius, GridType.Floor, GridType.Wall);
         return true;
     }
 
