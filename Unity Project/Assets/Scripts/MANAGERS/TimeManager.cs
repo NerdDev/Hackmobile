@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class TimeManager : MonoBehaviour, IManager
 {
 
+    public bool Initialized { get; set; }
     /* The Time Manager script is responsible for handling as many time related functions in game as possible.  The purpose of 
      * a manager script is to robustify the Time class in order to keep track of time on certain scenes, time played on certain levels, time spent
      * doing certain things for debugging and analytic purposes.  */

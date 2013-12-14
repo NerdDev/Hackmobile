@@ -24,12 +24,12 @@ public class Spell : IXmlParsable
 
     public void Activate(IAffectable caster, params GridSpace[] space)
     {
-        Activate(new SpellCastInfo(caster) { TargetSpaces = new List<GridSpace>(space) });
+        Activate(new SpellCastInfo(caster) { TargetSpaces = space });
     }
 
     public void Activate(IAffectable caster, params IAffectable[] targets)
     {
-        Activate(new SpellCastInfo(caster) { TargetObjects = new List<IAffectable>(targets) });
+        Activate(new SpellCastInfo(caster) { TargetObjects = targets });
     }
 
     public void Activate(SpellCastInfo castInfo)

@@ -5,10 +5,10 @@ using System.Text;
 
 public class PlayerInstance : NPCInstance, IManager
 {
+    public bool Initialized { get; set; }
     public void Initialize()
     {
-        //WO = new Player();
-        //this.SetTo(WO);
-        //WO.Init();
+        this.SetTo(new Player());
+        WO.Init();
     }
 }

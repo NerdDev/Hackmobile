@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour, IManager
      Booleans for key combinations can be a possibility.  If it's related to player interaction with hardware, it should probably go here.
      */
 
+    public bool Initialized { get; set; }
     #region Safety Check Booleans
     public bool allowPlayerInput;
     public bool allowKeyboardInput;

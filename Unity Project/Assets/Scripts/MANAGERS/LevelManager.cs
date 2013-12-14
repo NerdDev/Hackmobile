@@ -4,8 +4,9 @@ using System.Threading;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour, IManager {
-	
+
     // Internal
+    public bool Initialized { get; set; }
 	public Theme Theme;
     public LevelBuilder Builder;
     public int Seed = -1;
@@ -27,8 +28,6 @@ public class LevelManager : MonoBehaviour, IManager {
     
     void Start()
     {
-        SetCurLevel(0);
-        BigBoss.DungeonMaster.PopulateLevel(Level, false);
     }
 
     public void SetCurLevel(int num)

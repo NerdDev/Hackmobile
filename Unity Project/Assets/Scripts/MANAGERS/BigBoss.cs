@@ -65,9 +65,6 @@ public class BigBoss : MonoBehaviour
             if (playerInfo == null)
             {
                 BBoss.Instantiate<PlayerInstance>(out playerInfo);
-                //playerInfo.SetTo(BigBoss.Objects.NPCs.GetPrototype("player"));
-                playerInfo.SetTo(new Player());
-                playerInfo.WO.Init();
             }
             return playerInfo;
         }
@@ -79,28 +76,16 @@ public class BigBoss : MonoBehaviour
             return (Player)PlayerInfo.WO;
         }
     }
-    private static CameraManager camera_;
-    public static CameraManager Camera
+    private static StartManager start;
+    public static StartManager Start
     {
         get
         {
-            if (camera_ == null)
+            if (start == null)
             {
-                BBoss.Instantiate<CameraManager>(out camera_);
+                BBoss.Instantiate<StartManager>(out start);
             }
-            return camera_;
-        }
-    }
-    private static PreGameManager preGame;
-    public static PreGameManager PreGame
-    {
-        get
-        {
-            if (preGame == null)
-            {
-                BBoss.Instantiate<PreGameManager>(out preGame);
-            }
-            return preGame;
+            return start;
         }
     }
     private static DungeonMaster dungeonMaster;
@@ -159,9 +144,13 @@ public class BigBoss : MonoBehaviour
         {
             GameObject go = new GameObject();
             ret = go.AddComponent<T>();
-            ret.Initialize();
             ret.transform.parent = this.transform;
             ret.name = ret.GetType().Name;
+        }
+        if (!ret.Initialized)
+        {
+            ret.Initialize();
+            ret.Initialized = true;
         }
     }
 
@@ -171,7 +160,9 @@ public class BigBoss : MonoBehaviour
 
         foreach (IManager manager in this.gameObject.GetInterfacesInChildren<IManager>())
         {
-            manager.Initialize();
+            if (!manager.Initialized)
+                manager.Initialize();
+            manager.Initialized = true;
         }
 
         //Make this game object persistent

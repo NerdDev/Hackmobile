@@ -6,6 +6,7 @@ using System.IO;
 
 public class DebugManager : MonoBehaviour, IManager
 {
+    public bool Initialized { get; set; }
     Log lastLog;
 
     #region LogTypes

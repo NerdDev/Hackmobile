@@ -6,6 +6,7 @@ using System.Linq;
 
 public class DungeonMaster : MonoBehaviour, IManager {
 
+    public bool Initialized { get; set; }
     Dictionary<ESFlags<Keywords>, LeveledPool<NPC>> npcPools = new Dictionary<ESFlags<Keywords>, LeveledPool<NPC>>();
 
     public List<GameObject> stairs = new List<GameObject>();

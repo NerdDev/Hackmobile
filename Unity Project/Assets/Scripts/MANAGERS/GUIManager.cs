@@ -19,6 +19,7 @@ public class GUIManager : MonoBehaviour, IManager
     //public bool confirmationWindowOpen;
     //public bool tooltipOpen;
 
+    public bool Initialized { get; set; }
     public GameObject debugText;
     private Queue<TextPop> textPopList = new Queue<TextPop>();
     public GameObject textPopPrefab;

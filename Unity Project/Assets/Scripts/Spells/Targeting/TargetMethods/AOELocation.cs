@@ -14,7 +14,7 @@ public class AOELocation : AOE
         var targetSpaces = new HashSet<GridSpace>();
         foreach (GridSpace point in castInfo.TargetSpaces)
             level.DrawCircle(point.X, point.Y, Radius, Draw.AddTo(targetSpaces));
-        castInfo.TargetSpaces = targetSpaces.ToList();
+        castInfo.TargetSpaces = targetSpaces.ToArray();
         return base.GetTargets(castInfo);
     }
 }

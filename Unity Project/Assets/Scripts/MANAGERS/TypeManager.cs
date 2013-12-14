@@ -14,6 +14,7 @@ using System.Text;
  */
 public class TypeManager : MonoBehaviour, IManager
 {
+    public bool Initialized { get; set; }
     public static Dictionary<Type, Dictionary<string, Type>> codexOfAllLife = new Dictionary<Type, Dictionary<string, Type>>();
 
     public void Initialize()
