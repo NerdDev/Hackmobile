@@ -24,24 +24,24 @@ public class SpellCastInfo
         numLoc -= numObj;
         if (numLoc < 0)
             numLoc = 0;
-        _targetSpaces = new GridSpace[numLoc];
-        _targetObjects = new IAffectable[numObj];
+        _targetSpaces = new List<GridSpace>(numLoc);
+        _targetObjects = new List<IAffectable>(numObj);
     }
     public SpellCastInfo(IAffectable caster, SpellCastInfo rhs)
     {
         Caster = caster;
-        _targetSpaces = new GridSpace[rhs.TargetSpaces.Length];
-        _targetObjects = new IAffectable[rhs.TargetObjects.Length];
+        _targetSpaces = new List<GridSpace>(rhs.TargetSpaces.Count);
+        _targetObjects = new List<IAffectable>(rhs.TargetObjects.Count);
     }
     public IAffectable Caster { get; protected set; }
-    private GridSpace[] _targetSpaces;
-    public GridSpace[] TargetSpaces
+    private List<GridSpace> _targetSpaces;
+    public List<GridSpace> TargetSpaces
     {
         get
         {
             if (_targetSpaces == null)
             { // If spaces not set
-                GridSpace[] derivedSpaces;
+                List<GridSpace> derivedSpaces;
                 if (_targetObjects != null)
                 { // If we have target Objects, use their locations
                     HashSet<GridSpace> spaceSet = new HashSet<GridSpace>();
@@ -49,12 +49,12 @@ public class SpellCastInfo
                     {
                         spaceSet.Add(obj.Self.GridSpace);
                     }
-                    derivedSpaces = spaceSet.ToArray();
+                    derivedSpaces = spaceSet.ToList();
                 }
                 else
                 { // If no objects set either, use caster himself
-                    derivedSpaces = new GridSpace[] { Caster.Self.GridSpace };
-                    _targetObjects = new IAffectable[] { Caster };
+                    derivedSpaces = new List<GridSpace>(new[] { Caster.Self.GridSpace });
+                    _targetObjects = new List<IAffectable>(new[] { Caster });
                 }
                 _targetSpaces = derivedSpaces;
             }
@@ -65,29 +65,29 @@ public class SpellCastInfo
     public GridSpace TargetSpace
     {
         get { return TargetSpaces.Random(Probability.Rand); }
-        set { _targetSpaces = new GridSpace[] { value }; }
+        set { _targetSpaces = new List<GridSpace>(new [] { value }); }
     }
-    private IAffectable[] _targetObjects;
-    public IAffectable[] TargetObjects
+    private List<IAffectable> _targetObjects;
+    public List<IAffectable> TargetObjects
     {
         get
         {
             if (_targetObjects == null)
             { // If spaces not set
-                IAffectable[] derivedObjects;
+                List<IAffectable> derivedObjects;
                 if (_targetSpaces != null)
                 { // If we have target spaces, use their objects
-                    HashSet<IAffectable> objSet = new HashSet<IAffectable>();
+                    var objSet = new HashSet<IAffectable>();
                     foreach (GridSpace space in _targetSpaces)
                     {
                         objSet.Union(space.GetContained().OfType<IAffectable>());
                     }
-                    derivedObjects = objSet.ToArray();
+                    derivedObjects = objSet.ToList();
                 }
                 else
                 { // If no spaces set either, use caster himself
-                    derivedObjects = new IAffectable[] { Caster };
-                    _targetSpaces = new GridSpace[] { Caster.Self.GridSpace };
+                    derivedObjects = new List<IAffectable>(new[] { Caster });
+                    _targetSpaces = new List<GridSpace>(new[] { Caster.Self.GridSpace });
                 }
                 _targetObjects = derivedObjects;
             }
@@ -98,6 +98,6 @@ public class SpellCastInfo
     public IAffectable TargetObject
     {
         get { return TargetObjects.Random(Probability.Rand); }
-        set { _targetObjects = new IAffectable[] { value }; }
+        set { _targetObjects = new List<IAffectable>(new[] { value }); }
     }
 }

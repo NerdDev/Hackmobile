@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class TargetedObject : ITargeter
+/*
+ * Targeter meant to target only selected objects
+ */
+public class TargetedObjects : ITargeter
 {
     public TargetingStyle Style { get { return TargetingStyle.TargetObject; } }
     public byte MaxTargets { get; set; }

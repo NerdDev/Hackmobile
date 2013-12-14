@@ -9,8 +9,6 @@ public class Self : ITargeter
     public byte MaxTargets { get { return 0; } set { } }
     public HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
-        HashSet<IAffectable> ret = new HashSet<IAffectable>();
-        ret.Add(castInfo.Caster);
-        return ret;
+        return new HashSet<IAffectable> {castInfo.Caster};
     }
 }
