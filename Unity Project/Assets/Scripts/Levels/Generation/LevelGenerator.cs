@@ -47,6 +47,8 @@ public class LevelGenerator
     public List<Point> DownStairs { get; set; }
     public System.Random Rand { get; set; }
     public int Depth { get; set; }
+    protected LevelLayout Layout { get; set; }
+    protected List<LayoutObjectLeaf> Rooms { get; set; }
 
     public LevelGenerator()
     {
@@ -67,14 +69,14 @@ public class LevelGenerator
             startTime = stepTime;
         }
         #endregion
-        LevelLayout layout = new LevelLayout();
-        List<LayoutObjectLeaf> rooms = GenerateRoomShells();
-        ModRooms(rooms);
+        Layout = new LevelLayout();
+        Rooms = GenerateRoomShells();
+        ModRooms();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
             BigBoss.Debug.w(Logs.LevelGenMain, "Modding Rooms took: " + (Time.realtimeSinceStartup - stepTime));
-            foreach (LayoutObjectLeaf room in rooms)
+            foreach (LayoutObjectLeaf room in Rooms)
                 room.ToLog(Logs.LevelGenMain);
             stepTime = Time.realtimeSinceStartup;
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -96,7 +98,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        PlaceRooms(rooms, layout);
+        PlaceRooms();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
@@ -108,7 +110,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        PlaceDoors(layout);
+        PlaceDoors();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
@@ -120,7 +122,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        PlacePaths(layout);
+        PlacePaths();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
@@ -132,7 +134,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        ConfirmConnection(layout);
+        ConfirmConnection();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
@@ -144,7 +146,7 @@ public class LevelGenerator
             }
         }
         #endregion
-        ConfirmEdges(layout);
+        ConfirmEdges();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
@@ -152,16 +154,15 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
         }
         #endregion
-        PlaceStairs(layout);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
             BigBoss.Debug.w(Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
-            layout.ToLog(Logs.LevelGenMain);
+            Layout.ToLog(Logs.LevelGenMain);
             BigBoss.Debug.printFooter(Logs.LevelGenMain);
         }
         #endregion
-        return layout;
+        return Layout;
     }
 
     List<LayoutObjectLeaf> GenerateRoomShells()
@@ -194,9 +195,9 @@ public class LevelGenerator
         return rooms;
     }
 
-    void ModRooms(IEnumerable<LayoutObjectLeaf> rooms)
+    void ModRooms()
     {
-        foreach (LayoutObjectLeaf room in rooms)
+        foreach (LayoutObjectLeaf room in Rooms)
         {
             #region DEBUG
             double stepTime = 0, time = 0;
@@ -290,7 +291,7 @@ public class LevelGenerator
         return mods;
     }
 
-    protected List<LayoutObject> ClusterRooms(List<LayoutObjectLeaf> rooms)
+    protected List<LayoutObject> ClusterRooms()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -301,8 +302,8 @@ public class LevelGenerator
         List<LayoutObject> ret = new List<LayoutObject>();
         int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
         // Num clusters cannot be more than half num rooms
-        if (numClusters > rooms.Count / 2)
-            numClusters = rooms.Count / 2;
+        if (numClusters > Rooms.Count / 2)
+            numClusters = Rooms.Count / 2;
         List<LayoutCluster> clusters = new List<LayoutCluster>();
         for (int i = 0; i < numClusters; i++)
             clusters.Add(new LayoutCluster(Rand));
@@ -315,8 +316,8 @@ public class LevelGenerator
         // Add two rooms to each
         foreach (LayoutCluster cluster in clusters)
         {
-            cluster.AddObject(rooms.Take());
-            cluster.AddObject(rooms.Take());
+            cluster.AddObject(Rooms.Take());
+            cluster.AddObject(Rooms.Take());
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -327,11 +328,11 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Rooms left: " + rooms.Count);
+            BigBoss.Debug.w(Logs.LevelGen, "Rooms left: " + Rooms.Count);
         }
         #endregion
         // For remaining rooms, put into random clusters
-        foreach (LayoutObjectLeaf r in rooms)
+        foreach (LayoutObjectLeaf r in Rooms)
         {
             if (Rand.Percent(clusterProbability))
             {
@@ -358,7 +359,7 @@ public class LevelGenerator
         return ret;
     }
 
-    protected void PlaceRooms(List<LayoutObjectLeaf> rooms, LevelLayout layout)
+    protected void PlaceRooms()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -368,9 +369,9 @@ public class LevelGenerator
         #endregion
         List<LayoutObject> placedRooms = new List<LayoutObject>();
         LayoutObjectLeaf seedRoom = new LayoutObjectLeaf(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2);
-        layout.AddObject(seedRoom);
+        Layout.AddObject(seedRoom);
         placedRooms.Add(seedRoom); // Seed empty center room to start positioning from.
-        foreach (LayoutObjectLeaf room in rooms)
+        foreach (LayoutObjectLeaf room in Rooms)
         {
             // Find room it will start from
             int roomNum = Rand.Next(placedRooms.Count);
@@ -394,19 +395,19 @@ public class LevelGenerator
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     BigBoss.Debug.w(Logs.LevelGen, "This layout led to an overlap: " + room.GetBounding(true));
-                    layout.ToLog(Logs.LevelGen);
+                    Layout.ToLog(Logs.LevelGen);
                 }
                 #endregion
                 room.ShiftOutside(intersect, shiftMagn, true, true);
             }
             placedRooms.Add(room);
-            layout.AddRoom(room);
-            layout.RemoveObject(seedRoom);
+            Layout.AddRoom(room);
+            Layout.RemoveObject(seedRoom);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.w(Logs.LevelGen, "Layout after placing room at: " + room.GetBounding(true));
-                layout.ToLog(Logs.LevelGen);
+                Layout.ToLog(Logs.LevelGen);
                 BigBoss.Debug.printBreakers(Logs.LevelGen, 4);
             }
             #endregion
@@ -416,7 +417,7 @@ public class LevelGenerator
         #endregion
     }
 
-    protected void PlaceDoors(LevelLayout layout)
+    protected void PlaceDoors()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -424,7 +425,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Doors");
         }
         #endregion
-        foreach (LayoutObjectLeaf room in layout.GetRooms())
+        foreach (LayoutObjectLeaf room in Layout.GetRooms())
         {
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -464,23 +465,23 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            layout.ToLog(Logs.LevelGen);
+            Layout.ToLog(Logs.LevelGen);
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
     }
 
-    protected void PlacePaths(LevelLayout layout)
+    protected void PlacePaths()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Paths");
-            layout.ToLog(Logs.LevelGen, "Pre Path Layout");
+            Layout.ToLog(Logs.LevelGen, "Pre Path Layout");
         }
         #endregion
-        var grids = layout.GetArray(layoutMargin);
-        GridMap doors = layout.getTypes(grids, GridType.Door);
+        var grids = Layout.GetArray(layoutMargin);
+        GridMap doors = Layout.getTypes(grids, GridType.Door);
         GridType[,] arr = grids.GetArr();
         #region DEBUG
         GridArray debugArr = null;
@@ -514,7 +515,7 @@ public class LevelGenerator
             if (path.isValid())
             {
                 path.Simplify();
-                path.ConnectEnds(layout);
+                path.ConnectEnds(Layout);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
@@ -523,7 +524,7 @@ public class LevelGenerator
                 #endregion
                 path.Bake(true);
                 grids.PutAll(path);
-                layout.AddPath(path);
+                Layout.AddPath(path);
             }
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -535,13 +536,13 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            layout.ToLog(Logs.LevelGen, "Final Layout");
+            Layout.ToLog(Logs.LevelGen, "Final Layout");
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
     }
 
-    protected void ConfirmConnection(LevelLayout layout)
+    protected void ConfirmConnection()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -549,18 +550,18 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
-        var roomsToConnect = new List<LayoutObject>(layout.GetRooms().Cast<LayoutObject>());
+        var roomsToConnect = new List<LayoutObject>(Layout.GetRooms().Cast<LayoutObject>());
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.w(Logs.LevelGen, "Connecting List:");
-            foreach (var layoutobj in layout.GetRooms())
+            foreach (var layoutobj in Layout.GetRooms())
             {
                 BigBoss.Debug.w(Logs.LevelGen, 1, layoutobj.ToString());
             }
         }
         #endregion
-        foreach (var layoutObj in layout.GetRooms())
+        foreach (var layoutObj in Layout.GetRooms())
         {
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -578,7 +579,7 @@ public class LevelGenerator
                     fail.ToLog(Logs.LevelGen, layoutObj + " failed to connect to:");
                 }
                 #endregion
-                MakeConnection(layout, layoutObj, fail);
+                MakeConnection(Layout, layoutObj, fail);
             }
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -595,20 +596,20 @@ public class LevelGenerator
         #endregion
     }
 
-    private static void ConfirmEdges(LevelLayout layout)
+    private void ConfirmEdges()
     {
-        layout.ShiftAll(1, 1);
-        GridArray ga = layout.GetArray(1);
+        Layout.ShiftAll(1, 1);
+        GridArray ga = Layout.GetArray(1);
         GridType[,] arr = ga.GetArr();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Edges");
-            layout.ToLog(Logs.LevelGen, "Pre Confirm Edges");
+            Layout.ToLog(Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
         LayoutObjectLeaf leaf = new LayoutObjectLeaf(ga.getWidth(), ga.getHeight());
-        layout.AddObject(leaf);
+        Layout.AddObject(leaf);
         foreach (Value2D<GridType> val in ga)
         {
             if (val.val == GridType.Floor)
@@ -624,15 +625,10 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            layout.ToLog(Logs.LevelGen, "Post Confirm Edges");
+            Layout.ToLog(Logs.LevelGen, "Post Confirm Edges");
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
-    }
-
-    private static void PlaceStairs(LevelLayout layout)
-    {
-
     }
 
     protected void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
