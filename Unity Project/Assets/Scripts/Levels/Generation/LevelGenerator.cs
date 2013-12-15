@@ -40,26 +40,20 @@ public class LevelGenerator
     public static int clusterProbability { get { return 90; } }
     #endregion
 
-    Theme theme;
-    int levelDepth;
+    public Theme Theme { get; set; }
+    public bool GenerateUpStairs { get; set; }
+    public bool GenerateDownStairs { get; set; }
+    public List<Point> UpStairs { get; set; }
+    public List<Point> DownStairs { get; set; }
+    public System.Random Rand { get; set; }
+    public int Depth { get; set; }
 
-    public LevelGenerator(Theme theme, int levelDepth)
+    public LevelGenerator()
     {
-        this.theme = theme;
-        this.levelDepth = levelDepth;
     }
 
-    public LevelLayout GenerateLayout()
+    public LevelLayout Generate()
     {
-        return GenerateLayout(Probability.LevelRand.Next());
-    }
-
-    public LevelLayout GenerateLayout(int seed)
-    {
-        if (seed == -1)
-        {
-            return GenerateLayout(Probability.Rand.Next());
-        }
         #region DEBUG
         int debugNum = 1;
         float stepTime = 0, startTime = 0;
@@ -67,14 +61,12 @@ public class LevelGenerator
         {
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.printHeader(Logs.LevelGenMain, "Generating Level: " + levelDepth);
-                BigBoss.Debug.w(Logs.LevelGenMain, "Random seed int: " + seed);
+                BigBoss.Debug.printHeader(Logs.LevelGenMain, "Generating Level: " + Depth);
             }
             stepTime = Time.realtimeSinceStartup;
             startTime = stepTime;
         }
         #endregion
-        Probability.LevelRand.SetSeed(seed);
         LevelLayout layout = new LevelLayout();
         List<LayoutObjectLeaf> rooms = GenerateRoomShells();
         ModRooms(rooms);
@@ -85,7 +77,7 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Cluster Rooms");
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Cluster Rooms");
             }
         }
         #endregion
@@ -98,7 +90,7 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Rooms");
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Place Rooms");
             }
         }
         #endregion
@@ -110,7 +102,7 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Doors");
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Place Doors");
             }
         }
         #endregion
@@ -122,7 +114,7 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Place Paths");
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Place Paths");
             }
         }
         #endregion
@@ -134,7 +126,7 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Connections");
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Confirm Connections");
             }
         }
         #endregion
@@ -146,7 +138,7 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + debugNum++ + " - Confirm Edges");
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Confirm Edges");
             }
         }
         #endregion
@@ -158,7 +150,7 @@ public class LevelGenerator
             stepTime = Time.realtimeSinceStartup;
         }
         #endregion
-
+        PlaceStairs(layout);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
@@ -212,12 +204,12 @@ public class LevelGenerator
             }
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + levelDepth + "/" + levelDepth + " " + 0 + " - Generate Room " + room.Id);
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + 0 + " - Generate Room " + room.Id);
                 BigBoss.Debug.printHeader(Logs.LevelGen, "Modding " + room);
                 time = Time.realtimeSinceStartup;
             }
             #endregion
-            RoomSpec spec = new RoomSpec(room, levelDepth, theme, Probability.LevelRand);
+            RoomSpec spec = new RoomSpec(room, Depth, Theme, Probability.LevelRand);
             foreach (RoomModifier mod in PickMods())
             {
                 #region DEBUG
@@ -627,6 +619,11 @@ public class LevelGenerator
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
+    }
+
+    private static void PlaceStairs(LevelLayout layout)
+    {
+
     }
 
     private static void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour, IManager {
+public class LevelManager : MonoBehaviour, IManager
+{
 
     // Internal
     public bool Initialized { get; set; }
-	public Theme Theme;
+    public Theme Theme;
     public LevelBuilder Builder;
     public int Seed = -1;
     private const int MaxLevels = 100;
@@ -24,8 +25,17 @@ public class LevelManager : MonoBehaviour, IManager {
         Builder.Theme = Theme;
         Levels = new Level[MaxLevels];
         ArrayExt.Converters.Add(typeof(GridType), (b) => { return GridTypeEnum.Convert((GridType)b); });
+        if (Seed == -1)
+            Seed = Probability.Rand.Next();
+        Probability.LevelRand.SetSeed(Seed);
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGenMain))
+        {
+            BigBoss.Debug.w(Logs.LevelGenMain, "Random seed int: " + Seed);
+        }
+        #endregion
     }
-    
+
     void Start()
     {
     }
@@ -88,7 +98,7 @@ public class LevelManager : MonoBehaviour, IManager {
 
     void Deploy(Level level)
     {
-        foreach(Value2D<GridSpace> space in level)
+        foreach (Value2D<GridSpace> space in level)
         {
             if (space != null)
             {
@@ -110,9 +120,12 @@ public class LevelManager : MonoBehaviour, IManager {
 
     void GenerateLevel(int num)
     {
-        Theme theme = GetTheme();
-        LevelGenerator gen = new LevelGenerator(theme, num);
-        Levels[num] = new Level(gen.GenerateLayout(Seed), theme);
+        LevelGenerator gen = new LevelGenerator();
+        gen.Theme = GetTheme();
+        gen.GenerateDownStairs = true;
+        gen.GenerateUpStairs = num != 0;
+        gen.Depth = num;
+        Levels[num] = new Level(gen.Generate(), gen.Theme);
     }
 
     Theme GetTheme()
