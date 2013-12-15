@@ -5,23 +5,18 @@ using System.Collections;
 
 public abstract class ProbabilityPool<T>  {
 
-    protected RandomGen rand;
+    public System.Random Rand { get; set; }
     static protected int maxProbDiv = 100000;
     public bool Fresh { get; protected set; }
 
-    public static ProbabilityPool<T> Create()
-    {
-        return new ProbabilityList<T>();
-    }
-
-    public static ProbabilityPool<T> Create(RandomGen rand)
+    public static ProbabilityPool<T> Create(System.Random rand = null)
     {
         return new ProbabilityList<T>(rand);
     }
 
-    public ProbabilityPool(RandomGen rand)
+    public ProbabilityPool(System.Random rand)
     {
-        this.rand = rand;
+        Rand = rand;
     }
 
     public ProbabilityPool() : this(Probability.Rand)
@@ -30,7 +25,7 @@ public abstract class ProbabilityPool<T>  {
 
     public ProbabilityPool(ProbabilityList<T> rhs)
     {
-        this.rand = rhs.rand;
+        this.Rand = rhs.Rand;
     }
 
     public abstract void Add(T item, double multiplier, bool unique);
@@ -59,6 +54,8 @@ public abstract class ProbabilityPool<T>  {
 
     public List<T> Get(int amount)
     {
+        if (amount == 1)
+            return new List<T>(new[] {Get()});
         List<T> picks = new List<T>();
         T item;
         for (int i = 0; i < amount; i++)

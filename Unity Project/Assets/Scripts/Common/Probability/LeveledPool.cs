@@ -8,7 +8,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
     ProbabilityPool<T> currentPool;
     int curLevel = -1;
 
-    public LeveledPool(RandomGen rand, Func<int, float> curve)
+    public LeveledPool(System.Random rand, Func<int, float> curve)
         : base(rand)
     {
         this.levelCurve = curve;
@@ -29,7 +29,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
     {
         if (curLevel != -1)
         {
-            currentPool = ProbabilityPool<T>.Create(rand);
+            currentPool = ProbabilityPool<T>.Create(Rand);
             curLevel = -1;
         }
     }
@@ -60,7 +60,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
     {
         if (curLevel == level)
             return;
-        currentPool = ProbabilityPool<T>.Create(rand);
+        currentPool = ProbabilityPool<T>.Create(Rand);
         foreach (ProbContainer prototype in prototypePool)
         {
             float multiplier = levelCurve(prototype.Level);
@@ -99,7 +99,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
 
     public override ProbabilityPool<T> Filter(Func<T, bool> filter)
     {
-        LeveledPool<T> ret = new LeveledPool<T>(rand, levelCurve);
+        LeveledPool<T> ret = new LeveledPool<T>(Rand, levelCurve);
         foreach (ProbContainer cont in prototypePool)
         {
             if (filter(cont.Item))

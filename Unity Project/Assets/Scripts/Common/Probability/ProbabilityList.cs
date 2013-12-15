@@ -21,7 +21,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         }
     }
 
-    public ProbabilityList(RandomGen rand)
+    public ProbabilityList(System.Random rand)
         : base(rand)
     {
     }
@@ -85,7 +85,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public bool Get(out T item, out int resultIndex)
     {
-        double picked = rand.NextDouble() * Max;
+        double picked = Rand.NextDouble() * Max;
         resultIndex = 0;
         double curNum = 0;
         foreach (ProbContainer cont in itemList)
@@ -131,7 +131,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public override ProbabilityPool<T> Filter(System.Func<T, bool> filter)
     {
-        ProbabilityList<T> ret = new ProbabilityList<T>(rand);
+        ProbabilityList<T> ret = new ProbabilityList<T>(Rand);
         List<ProbContainer> filtered = new List<ProbContainer>();
         foreach (ProbContainer cont in itemList)
         {

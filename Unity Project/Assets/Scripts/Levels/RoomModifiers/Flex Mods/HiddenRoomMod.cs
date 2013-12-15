@@ -23,7 +23,7 @@ public class HiddenRoomMod : RoomModifier
         }
         #endregion
 
-        Value2D<GridType> doorSpace = picker.Pick(Probability.LevelRand);
+        Value2D<GridType> doorSpace = picker.Pick(spec.Random);
         if (doorSpace != null)
         {
             spec.Array.DrawSquare(

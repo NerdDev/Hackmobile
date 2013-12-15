@@ -144,6 +144,12 @@
  <Reference Include="AudioToolkit_FreeVersion_Editor">
  <HintPath>Assets\AudioToolkit\AudioToolkit\Editor\AudioToolkit_FreeVersion_Editor.dll</HintPath>
  </Reference>
+ <Reference Include="CruncherEditor">
+ <HintPath>Assets\Resources\Tools\Cruncher\Editor\CruncherEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="CruncherScripts">
+ <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
+ </Reference>
  <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
  <HintPath>Assets\UnityVS\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
  </Reference>
@@ -152,12 +158,6 @@
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Unity Pro\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
- </Reference>
- <Reference Include="CruncherEditor">
- <HintPath>Assets\Resources\Tools\Cruncher\Editor\CruncherEditor.dll</HintPath>
- </Reference>
- <Reference Include="CruncherScripts">
- <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@ public class ArrayMultiMapTesting : MonoBehaviour
         arr.Fill(GridType.Floor);
         RandomPicker<GridType> picker;
         arr.DrawSquare(Draw.PickRandom(arr, out picker));
-        List<Value2D<GridType>> picked = picker.Pick(Probability.LevelRand, 4, 4);
+        List<Value2D<GridType>> picked = picker.Pick(Probability.Rand, 4, 4);
         foreach (Value2D<GridType> v in picked)
             arr[v.y, v.x] = GridType.Wall;
 

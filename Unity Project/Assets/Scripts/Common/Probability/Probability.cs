@@ -4,12 +4,10 @@ using System.Collections.Generic;
 
 public static class Probability
 {
-    private static RandomGen _rand = new RandomGen();
-    public static RandomGen Rand { get { return _rand; } }
-    private static RandomGen _levelRand = new RandomGen();
-    public static RandomGen LevelRand { get { return _levelRand; } }
-    private static RandomGen _spawnRand = new RandomGen();
-    public static RandomGen SpawnRand { get { return _spawnRand; } }
+    private static System.Random _rand = new System.Random();
+    public static System.Random Rand { get { return _rand; } }
+    private static System.Random _spawnRand = new System.Random();
+    public static System.Random SpawnRand { get { return _spawnRand; } }
 
     public static int getRandomInt() 
     {

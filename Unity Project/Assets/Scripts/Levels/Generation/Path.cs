@@ -13,7 +13,7 @@ public class Path : LayoutObjectLeaf
     private static GridSet typesSet = new GridSet(searchTypes);
     List<Value2D<GridType>> _list;
 
-    public Path(Value2D<GridType> startPoint, GridArray grids)
+    public Path(Value2D<GridType> startPoint, GridArray grids, System.Random rand)
         : base()
     {
         _list = new List<Value2D<GridType>>(grids.GetArr().DrawDepthFirstSearch(
@@ -24,7 +24,7 @@ public class Path : LayoutObjectLeaf
                 GridType t = arr[y, x];
                 return typesSet.Contains(t); 
             },
-            Probability.LevelRand,
+            rand,
             true));
     }
 

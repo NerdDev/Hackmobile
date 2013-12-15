@@ -23,9 +23,9 @@ public class LevelLayout : LayoutObjectContainer {
         return new List<LayoutObjectLeaf>(rooms);
 	}
 
-    public LayoutObjectLeaf GetRandomRoom()
+    public LayoutObjectLeaf GetRandomRoom(System.Random rand)
     {
-        return rooms[Probability.LevelRand.Next(rooms.Count)];
+        return rooms[rand.Next(rooms.Count)];
     }
 
     public void AddPath(Path p)

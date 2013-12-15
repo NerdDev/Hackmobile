@@ -28,7 +28,7 @@ public class GiantPillarMod : RoomModifier
             }
         }
         #endregion
-        Bounding l = locations.Random(Probability.LevelRand);
+        Bounding l = locations.Random(spec.Random);
         // Draw inner square without stroke (stroke was just used to analyze surroundings)
         spec.Array.DrawSquare(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(GridType.Wall));
         return true;

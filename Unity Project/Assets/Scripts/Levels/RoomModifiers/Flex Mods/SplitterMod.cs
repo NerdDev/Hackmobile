@@ -19,7 +19,7 @@ public class HorizSplitterMod : RoomModifier
     {
         Bounding bounds = spec.Room.GetBounding(false);
         List<int> options = new List<int>();
-        bool horizontal = Probability.LevelRand.NextBool();
+        bool horizontal = spec.Random.NextBool();
         int from = bounds.GetMin(horizontal);
         int to = bounds.GetMax(horizontal);
         int fromAlt = bounds.GetMin(!horizontal);
@@ -60,8 +60,8 @@ public class HorizSplitterMod : RoomModifier
         spec.Array.DrawLine(from, to, picked, horizontal, 
             Draw.IfThen<GridType>(Draw.CanDrawDoor(), Draw.PickRandom(spec.Array, out picker)));
         
-        int numDoors = Probability.LevelRand.Next(1, 4);
-        List<Value2D<GridType>> doors = picker.Pick(Probability.LevelRand, numDoors, 1, false);
+        int numDoors = spec.Random.Next(1, 4);
+        List<Value2D<GridType>> doors = picker.Pick(spec.Random, numDoors, 1, false);
         foreach (Value2D<GridType> door in doors)
             spec.Array[door.y, door.x] = GridType.Door;
         return true;

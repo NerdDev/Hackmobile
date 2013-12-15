@@ -12,8 +12,8 @@ public class RectangularRoom : RoomModifier
             BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
-        int height = Probability.LevelRand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        int width = Probability.LevelRand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int height = spec.Random.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int width = spec.Random.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

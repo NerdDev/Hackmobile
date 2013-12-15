@@ -268,7 +268,6 @@
     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityLevItem.cs" />
     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityList.cs" />
     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityPool.cs" />
-    <Compile Include="Assets\Scripts\Common\Probability\RandomGen.cs" />
     <Compile Include="Assets\Scripts\Common\StringStream.cs" />
     <Compile Include="Assets\Scripts\Common\Value2D.cs" />
     <Compile Include="Assets\Scripts\ExposePropertyAttribute.cs" />

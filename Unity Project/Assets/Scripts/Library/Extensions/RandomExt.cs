@@ -42,5 +42,10 @@ namespace System
             }
             return pickedList;
         }
+
+        public static bool NextBool(this System.Random rand)
+        {
+            return rand.Next(2) == 1;
+        }
     }
 }

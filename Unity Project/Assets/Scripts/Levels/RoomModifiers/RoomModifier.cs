@@ -24,7 +24,7 @@ abstract public class RoomModifier : ProbabilityItem
         List<RoomModifier> modPrototypes = BigBoss.Types.GetInstantiations<RoomModifier>();
         foreach (RoomModType e in Enum.GetValues(typeof(RoomModType)))
         {
-            Mods[(int)e] = ProbabilityPool<RoomModifier>.Create(Probability.LevelRand);
+            Mods[(int)e] = ProbabilityPool<RoomModifier>.Create();
         }
         foreach (RoomModifier mod in modPrototypes)
         {
@@ -44,28 +44,30 @@ abstract public class RoomModifier : ProbabilityItem
         #endregion
     }
 
-    public static RoomModifier GetBase()
+    public static RoomModifier Get(RoomModType type, System.Random random)
     {
-        if (!initialized)
-            RegisterModifiers();
-        Mods[(int)RoomModType.Base].ClearSkipped();
-        return Mods[(int)RoomModType.Base].Get();
+        ProbabilityPool<RoomModifier> pool = Mods[(int)type];
+        pool.ClearSkipped();
+        pool.Rand = random;
+        return pool.Get();
     }
 
-    public static List<RoomModifier> GetFlexible(int num)
+    public static RoomModifier GetBase(System.Random random)
     {
-        if (!initialized)
-            RegisterModifiers();
-        Mods[(int)RoomModType.Flexible].ClearSkipped();
-        return Mods[(int)RoomModType.Flexible].Get(num);
+        return Get(RoomModType.Base, random);
     }
 
-    public static RoomModifier GetFinal()
+    public static List<RoomModifier> GetFlexible(int num, System.Random random)
     {
-        if (!initialized)
-            RegisterModifiers();
-        Mods[(int)RoomModType.Final].ClearSkipped();
-        return Mods[(int)RoomModType.Final].Get();
+        ProbabilityPool<RoomModifier> pool = Mods[(int)RoomModType.Flexible];
+        pool.ClearSkipped();
+        pool.Rand = random;
+        return pool.Get(num);
+    }
+
+    public static RoomModifier GetFinal(System.Random random)
+    {
+        return Get(RoomModType.Final, random);
     }
 
     public override string ToString()

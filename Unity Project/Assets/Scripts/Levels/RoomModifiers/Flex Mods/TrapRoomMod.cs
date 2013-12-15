@@ -16,6 +16,7 @@ public class TrapRoomMod : RoomModifier
 
     public override bool Modify(RoomSpec spec)
     {
+        treasureSizeList.Rand = spec.Random;
         LayoutObjectLeaf room = spec.Room;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -46,7 +47,7 @@ public class TrapRoomMod : RoomModifier
             Draw.EqualTo(GridType.Floor),
             Draw.PickRandom(spec.Array, out picker)));
 
-        List<Value2D<GridType>> treasureList = picker.Pick(Probability.LevelRand, treasureInRoom, 2, true);
+        List<Value2D<GridType>> treasureList = picker.Pick(spec.Random, treasureInRoom, 2, true);
         foreach (Value2D<GridType> val in treasureList)
             spec.Array[val.y, val.x] = GridType.Chest;
 
@@ -57,7 +58,7 @@ public class TrapRoomMod : RoomModifier
         }
         #endregion
 
-        List<Value2D<GridType>> trapList = picker.Pick(Probability.LevelRand, trapsInRoom, 0, true);
+        List<Value2D<GridType>> trapList = picker.Pick(spec.Random, trapsInRoom, 0, true);
         foreach (Value2D<GridType> val in trapList)
             spec.Array[val.y, val.x] = GridType.Trap;
         #region DEBUG

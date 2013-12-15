@@ -5,29 +5,32 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour, IManager
 {
-
     // Internal
+    private const int _maxLevels = 100;
+    private static Level[] _levels;
+    private int[] _levelSeeds = new int[_maxLevels];
+
+    // Public Access
+    public Level Level { get; private set; }
+    public int CurLevelDepth { get; private set; }    
     public bool Initialized { get; set; }
     public Theme Theme;
     public LevelBuilder Builder;
     public int Seed = -1;
-    private const int MaxLevels = 100;
-    private static Level[] Levels;
-
-    // Public Access
-    public Level Level { get; private set; }
-    public int CurLevelDepth { get; private set; }
 
     public int CurLevel;
 
     public void Initialize()
     {
+        RoomModifier.RegisterModifiers();
         Builder.Theme = Theme;
-        Levels = new Level[MaxLevels];
+        _levels = new Level[_maxLevels];
         ArrayExt.Converters.Add(typeof(GridType), (b) => { return GridTypeEnum.Convert((GridType)b); });
         if (Seed == -1)
             Seed = Probability.Rand.Next();
-        Probability.LevelRand.SetSeed(Seed);
+        System.Random rand = new System.Random(Seed);
+        for (int i = 0; i < _maxLevels; i++)
+            _levelSeeds[i] = rand.Next();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
@@ -40,12 +43,20 @@ public class LevelManager : MonoBehaviour, IManager
     {
     }
 
-    public void SetCurLevel(int num)
+    protected bool InRange(int depth)
     {
+        return depth >= 0 && depth < _maxLevels;
+    }
+
+    public void SetCurLevel(int depth)
+    {
+        if (!InRange(depth)) return;
         Destroy(Level);
-        Level = GetLevel(num);
-        CurLevelDepth = num;
-        Deploy(Level);
+        Level level;
+        GetLevel(depth, out level);
+        CurLevelDepth = depth;
+        Deploy(level);
+        Level = level;
     }
 
     public void SetCurLevel(bool up)
@@ -68,13 +79,19 @@ public class LevelManager : MonoBehaviour, IManager
         BigBoss.DungeonMaster.PopulateLevel(Level, up);
     }
 
-    public Level GetLevel(int num)
+    public bool GetLevel(int depth, out Level level)
     {
-        if (Levels[num] == null)
+        if (!InRange(depth))
         {
-            GenerateLevel(num);
+            level = null;
+            return false;
         }
-        return Levels[num];
+        if (_levels[depth] == null)
+        {
+            GenerateLevel(depth);
+        }
+        level = _levels[depth];
+        return true;
     }
 
     void Destroy(Level level)
@@ -118,14 +135,15 @@ public class LevelManager : MonoBehaviour, IManager
         }
     }
 
-    void GenerateLevel(int num)
+    void GenerateLevel(int depth)
     {
         LevelGenerator gen = new LevelGenerator();
         gen.Theme = GetTheme();
         gen.GenerateDownStairs = true;
-        gen.GenerateUpStairs = num != 0;
-        gen.Depth = num;
-        Levels[num] = new Level(gen.Generate(), gen.Theme);
+        gen.GenerateUpStairs = depth != 0;
+        gen.Depth = depth;
+        gen.Rand = new System.Random(_levelSeeds[depth]);
+        _levels[depth] = new Level(gen.Generate(), gen.Theme);
     }
 
     Theme GetTheme()

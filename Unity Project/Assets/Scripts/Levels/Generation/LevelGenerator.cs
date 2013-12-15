@@ -74,6 +74,8 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
             BigBoss.Debug.w(Logs.LevelGenMain, "Modding Rooms took: " + (Time.realtimeSinceStartup - stepTime));
+            foreach (LayoutObjectLeaf room in rooms)
+                room.ToLog(Logs.LevelGenMain);
             stepTime = Time.realtimeSinceStartup;
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -171,7 +173,7 @@ public class LevelGenerator
         }
         #endregion
         List<LayoutObjectLeaf> rooms = new List<LayoutObjectLeaf>();
-        int numRooms = Probability.LevelRand.Next(minRooms, maxRooms);
+        int numRooms = Rand.Next(minRooms, maxRooms);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -209,7 +211,7 @@ public class LevelGenerator
                 time = Time.realtimeSinceStartup;
             }
             #endregion
-            RoomSpec spec = new RoomSpec(room, Depth, Theme, Probability.LevelRand);
+            RoomSpec spec = new RoomSpec(room, Depth, Theme, Rand);
             foreach (RoomModifier mod in PickMods())
             {
                 #region DEBUG
@@ -231,7 +233,6 @@ public class LevelGenerator
                     BigBoss.Debug.w(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.  Total time: " + (Time.realtimeSinceStartup - time));
                 }
                 #endregion
-
             }
             room.Bake(false);
             #region DEBUG
@@ -251,13 +252,19 @@ public class LevelGenerator
         #endregion
     }
 
-    static List<RoomModifier> PickMods()
+    protected List<RoomModifier> PickMods()
     {
         List<RoomModifier> mods = new List<RoomModifier>();
-        RoomModifier baseMod = RoomModifier.GetBase();
+        RoomModifier baseMod = RoomModifier.GetBase(Rand);
         mods.Add(baseMod);
-        int numFlex = Probability.LevelRand.Next(1, maxFlexMod);
-        List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex);
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Picked Base Mod: " + baseMod);
+        }
+        #endregion
+        int numFlex = Rand.Next(1, maxFlexMod);
+        List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex, Rand);
         mods.AddRange(flexMods);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -269,21 +276,21 @@ public class LevelGenerator
             }
         }
         #endregion
-        if (chanceNoFinalMod < Probability.LevelRand.Next(100))
+        if (chanceNoFinalMod < Rand.Next(100))
         {
-            RoomModifier finalMod = RoomModifier.GetFinal();
+            RoomModifier finalMod = RoomModifier.GetFinal(Rand);
             mods.Add(finalMod);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(Logs.LevelGen, "Picked Base Mod: " + finalMod);
+                BigBoss.Debug.w(Logs.LevelGen, "Picked Final Mod: " + finalMod);
             }
             #endregion
         }
         return mods;
     }
 
-    static List<LayoutObject> ClusterRooms(List<LayoutObjectLeaf> rooms)
+    protected List<LayoutObject> ClusterRooms(List<LayoutObjectLeaf> rooms)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -292,11 +299,13 @@ public class LevelGenerator
         }
         #endregion
         List<LayoutObject> ret = new List<LayoutObject>();
-        int numClusters = Probability.LevelRand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
+        int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
         // Num clusters cannot be more than half num rooms
         if (numClusters > rooms.Count / 2)
             numClusters = rooms.Count / 2;
-        List<LayoutCluster> clusters = new List<LayoutCluster>().Populate(numClusters);
+        List<LayoutCluster> clusters = new List<LayoutCluster>();
+        for (int i = 0; i < numClusters; i++)
+            clusters.Add(new LayoutCluster(Rand));
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -324,9 +333,9 @@ public class LevelGenerator
         // For remaining rooms, put into random clusters
         foreach (LayoutObjectLeaf r in rooms)
         {
-            if (Probability.LevelRand.Percent(clusterProbability))
+            if (Rand.Percent(clusterProbability))
             {
-                LayoutCluster cluster = clusters.Random(Probability.LevelRand);
+                LayoutCluster cluster = clusters.Random(Rand);
                 cluster.AddObject(r);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -349,7 +358,7 @@ public class LevelGenerator
         return ret;
     }
 
-    static void PlaceRooms(List<LayoutObjectLeaf> rooms, LevelLayout layout)
+    protected void PlaceRooms(List<LayoutObjectLeaf> rooms, LevelLayout layout)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -364,11 +373,11 @@ public class LevelGenerator
         foreach (LayoutObjectLeaf room in rooms)
         {
             // Find room it will start from
-            int roomNum = Probability.LevelRand.Next(placedRooms.Count);
+            int roomNum = Rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
             room.setShift(startRoom);
             // Find where it will shift away
-            Point shiftMagn = GenerateShiftMagnitude(shiftRange);
+            Point shiftMagn = GenerateShiftMagnitude(shiftRange, Rand);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -407,7 +416,7 @@ public class LevelGenerator
         #endregion
     }
 
-    static void PlaceDoors(LevelLayout layout)
+    protected void PlaceDoors(LevelLayout layout)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -425,7 +434,7 @@ public class LevelGenerator
             #endregion
             var potentialDoors = new GridMap();
             room.GetArray().GetArr().DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
-            int numDoors = Probability.LevelRand.Next(doorsMin, doorsMax);
+            int numDoors = Rand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -433,7 +442,7 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
-            foreach (Value2D<GridType> doorSpace in potentialDoors.Random(Probability.LevelRand, numDoors, minDoorSpacing))
+            foreach (Value2D<GridType> doorSpace in potentialDoors.Random(Rand, numDoors, minDoorSpacing))
             {
                 room.put(GridType.Door, doorSpace.x, doorSpace.y);
                 #region DEBUG
@@ -461,7 +470,7 @@ public class LevelGenerator
         #endregion
     }
 
-    static void PlacePaths(LevelLayout layout)
+    protected void PlacePaths(LevelLayout layout)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -493,7 +502,7 @@ public class LevelGenerator
         foreach (var door in doors)
         {
 
-            var path = new Path(door, grids);
+            var path = new Path(door, grids, Rand);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -532,7 +541,7 @@ public class LevelGenerator
         #endregion
     }
 
-    private static void ConfirmConnection(LevelLayout layout)
+    protected void ConfirmConnection(LevelLayout layout)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -626,7 +635,7 @@ public class LevelGenerator
 
     }
 
-    private static void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
+    protected void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -650,7 +659,7 @@ public class LevelGenerator
             1, 1,
             Draw.EqualTo(GridType.NULL),
             Draw.ContainedIn(Path.PathTypes()),
-            Probability.LevelRand,
+            Rand,
             true);
         if (startPtStack.Count > 0)
         {
@@ -664,7 +673,7 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
             }
             #endregion
-            var path = new Path(startPoint, layoutArr);
+            var path = new Path(startPoint, layoutArr, Rand);
             if (path.isValid())
             {
                 #region DEBUG
@@ -696,8 +705,9 @@ public class LevelGenerator
         #endregion
     }
 
-    public static Point GenerateShiftMagnitude(int mag)
+    public static Point GenerateShiftMagnitude(int mag, System.Random rand)
     {
+        Random.seed = rand.Next();
         Vector2 vect = Random.insideUnitCircle * mag;
         Point p = new Point(vect);
         while (p.isZero())

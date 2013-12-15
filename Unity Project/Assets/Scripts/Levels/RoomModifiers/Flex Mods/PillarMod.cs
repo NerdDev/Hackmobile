@@ -4,7 +4,7 @@ using System.Collections;
 public class PillarMod : RoomModifier
 {
     public override bool Unique { get { return true; } }
-    static ProbabilityList<int> spacingOptions = new ProbabilityList<int>(Probability.LevelRand);
+    static ProbabilityList<int> spacingOptions = new ProbabilityList<int>();
     static PillarMod()
     {
         spacingOptions.Add(2, 4, false);
@@ -17,8 +17,9 @@ public class PillarMod : RoomModifier
     public override bool Modify(RoomSpec spec)
     {
         Bounding bounds = spec.Room.GetBounding(false);
+        spacingOptions.Rand = spec.Random;
         int spacingX = spacingOptions.Get();
-        int spacingY = Probability.LevelRand.Percent(differingSpacingChance) ? spacingOptions.Get() : spacingX;
+        int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get() : spacingX;
         GridType[,] arr = spec.Array;
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {

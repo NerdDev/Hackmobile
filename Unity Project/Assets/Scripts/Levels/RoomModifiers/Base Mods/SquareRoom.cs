@@ -11,7 +11,7 @@ public class SquareRoom : RoomModifier {
             BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
-        int side = Probability.LevelRand.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int side = spec.Random.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
