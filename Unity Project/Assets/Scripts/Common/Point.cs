@@ -90,20 +90,10 @@ public class Point {
 
     public override bool Equals(object obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
+        Point rhs = obj as Point;
+        if (rhs == null) return false;
+        if (x != rhs.x || y != rhs.y)
             return false;
-        }
-
-        Point p = obj as Point;
-        if (x != p.x)
-        {
-            return false;
-        }
-        if (y != p.y)
-        {
-            return false;
-        }
         return true;
     }
 

@@ -2,6 +2,7 @@ using System.Linq;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class LevelGenerator
 {
@@ -43,117 +44,38 @@ public class LevelGenerator
     public Theme Theme { get; set; }
     public bool GenerateUpStairs { get; set; }
     public bool GenerateDownStairs { get; set; }
-    public List<Point> UpStairs { get; set; }
-    public List<Point> DownStairs { get; set; }
+    public List<Point> UpStairs = new List<Point>();
+    public List<Point> DownStairs = new List<Point>();
     public System.Random Rand { get; set; }
     public int Depth { get; set; }
     protected LevelLayout Layout { get; set; }
     protected List<LayoutObjectLeaf> Rooms { get; set; }
-
-    public LevelGenerator()
-    {
-    }
+    private int _debugNum = 0;
 
     public LevelLayout Generate()
     {
         #region DEBUG
         int debugNum = 1;
-        float stepTime = 0, startTime = 0;
+        float startTime = 0;
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.printHeader(Logs.LevelGenMain, "Generating Level: " + Depth);
             }
-            stepTime = Time.realtimeSinceStartup;
-            startTime = stepTime;
+            startTime = Time.realtimeSinceStartup;
         }
         #endregion
         Layout = new LevelLayout();
         Rooms = GenerateRoomShells();
-        ModRooms();
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
-        {
-            BigBoss.Debug.w(Logs.LevelGenMain, "Modding Rooms took: " + (Time.realtimeSinceStartup - stepTime));
-            foreach (LayoutObjectLeaf room in Rooms)
-                room.ToLog(Logs.LevelGenMain);
-            stepTime = Time.realtimeSinceStartup;
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Cluster Rooms");
-            }
-        }
-        #endregion
+        Log("Mod Rooms", false, ModRooms);
         // Not complete
         //ClusterRooms(rooms);
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
-        {
-            BigBoss.Debug.w(Logs.LevelGenMain, "Cluster Rooms took: " + (Time.realtimeSinceStartup - stepTime));
-            stepTime = Time.realtimeSinceStartup;
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Place Rooms");
-            }
-        }
-        #endregion
-        PlaceRooms();
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
-        {
-            BigBoss.Debug.w(Logs.LevelGenMain, "Place Rooms took: " + (Time.realtimeSinceStartup - stepTime));
-            stepTime = Time.realtimeSinceStartup;
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Place Doors");
-            }
-        }
-        #endregion
-        PlaceDoors();
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
-        {
-            BigBoss.Debug.w(Logs.LevelGenMain, "Place Doors took: " + (Time.realtimeSinceStartup - stepTime));
-            stepTime = Time.realtimeSinceStartup;
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Place Paths");
-            }
-        }
-        #endregion
-        PlacePaths();
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
-        {
-            BigBoss.Debug.w(Logs.LevelGenMain, "Place paths took: " + (Time.realtimeSinceStartup - stepTime));
-            stepTime = Time.realtimeSinceStartup;
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Confirm Connections");
-            }
-        }
-        #endregion
-        ConfirmConnection();
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
-        {
-            BigBoss.Debug.w(Logs.LevelGenMain, "Confirm Connection took: " + (Time.realtimeSinceStartup - stepTime));
-            stepTime = Time.realtimeSinceStartup;
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + debugNum++ + " - Confirm Edges");
-            }
-        }
-        #endregion
-        ConfirmEdges();
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
-        {
-            BigBoss.Debug.w(Logs.LevelGenMain, "Confirm Edges took: " + (Time.realtimeSinceStartup - stepTime));
-            stepTime = Time.realtimeSinceStartup;
-        }
-        #endregion
+        Log("Place Rooms", true, CheckStairOverlap, PlaceRooms);
+        Log("Place Doors", true, PlaceDoors);
+        Log("Place Paths", true, PlacePaths);
+        Log("Confirm Connection", true, ConfirmConnection);
+        Log("Confirm Edges", true, ConfirmEdges);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
@@ -163,6 +85,23 @@ public class LevelGenerator
         }
         #endregion
         return Layout;
+    }
+
+    protected void Log(string name, bool newLog, params Action[] a)
+    {
+        float time = 0;
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            time = Time.realtimeSinceStartup;
+            if (newLog)
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + _debugNum++ + " - " + name);
+        }
+        foreach (Action action in a)
+            action();
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.w(Logs.LevelGenMain, name + " took: " + (Time.realtimeSinceStartup - time));
+        }
     }
 
     List<LayoutObjectLeaf> GenerateRoomShells()
@@ -239,7 +178,7 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                room.ToLog(Logs.LevelGen); 
+                room.ToLog(Logs.LevelGen);
                 BigBoss.Debug.w(Logs.LevelGen, "Modding " + room + " took " + (Time.realtimeSinceStartup - time) + " seconds.");
                 BigBoss.Debug.printFooter(Logs.LevelGen);
             }
@@ -249,6 +188,11 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printFooter(Logs.LevelGen);
+        }
+        if (BigBoss.Debug.logging(Logs.LevelGenMain)
+        {
+            foreach (LayoutObjectLeaf room in Rooms)
+                room.ToLog(Logs.LevelGenMain);
         }
         #endregion
     }
@@ -415,6 +359,18 @@ public class LevelGenerator
         #region DEBUG
         BigBoss.Debug.printFooter(Logs.LevelGen);
         #endregion
+    }
+
+    protected void CheckStairOverlap()
+    {
+        Point mag = null;
+        while (UpStairs.Intersect(DownStairs).Count() != 0)
+        {
+            if (mag == null)
+                mag = GenerateShiftMagnitude(20, Rand);
+            foreach (Point p in DownStairs)
+                p.Shift(mag);
+        }
     }
 
     protected void PlaceDoors()
@@ -703,12 +659,12 @@ public class LevelGenerator
 
     public static Point GenerateShiftMagnitude(int mag, System.Random rand)
     {
-        Random.seed = rand.Next();
-        Vector2 vect = Random.insideUnitCircle * mag;
+        UnityEngine.Random.seed = rand.Next();
+        Vector2 vect = UnityEngine.Random.insideUnitCircle * mag;
         Point p = new Point(vect);
         while (p.isZero())
         {
-            vect = Random.insideUnitCircle * mag;
+            vect = UnityEngine.Random.insideUnitCircle * mag;
             p = new Point(vect);
         }
         return p;
