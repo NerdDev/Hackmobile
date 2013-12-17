@@ -70,7 +70,7 @@ public class Player : NPC
 
     public override void OnClick()
     {
-        BigBoss.Gooey.displayGUI = !BigBoss.Gooey.displayGUI;
+        BigBoss.Gooey.displayInventory = !BigBoss.Gooey.displayInventory;
         BigBoss.Gooey.RegenInventoryGUI();
     }
     #endregion

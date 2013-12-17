@@ -189,7 +189,7 @@ public class LevelGenerator
         {
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
-        if (BigBoss.Debug.logging(Logs.LevelGenMain)
+        if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
             foreach (LayoutObjectLeaf room in Rooms)
                 room.ToLog(Logs.LevelGenMain);

@@ -15,21 +15,19 @@ public class GUIManager : MonoBehaviour, IManager
         Managers.Gooey.CreateText(GUIManager.TextLocations.TopLeft,"Works!");
     */
 
-    //SAFETIES WHICH ANY SCRIPT CAN CHECK THROUGH BIGBOSS:
-    //public bool confirmationWindowOpen;
-    //public bool tooltipOpen;
-
+    #region GUI Variables
     public bool Initialized { get; set; }
-    public GameObject debugText;
     private Queue<TextPop> textPopList = new Queue<TextPop>();
-    public GameObject textPopPrefab;
 
-    #region Clean Inventory Variables
-    //public bool isInventoryOpen = false;
-    //Panels:
-    //private UIPanel inventoryPanel;  //this is currently required to stay at 0,0,0 (camera screen center)
+    internal ItemChest currentChest;
 
-    //Publicly populated variables from scene
+    internal bool categoryDisplay = false;
+    internal bool displayItem = false;
+    internal string category = "";
+    public bool displayInventory;
+    #endregion
+
+    #region Publicly populated variables from scene
     //Clip panels
     public UIPanel inventoryClip;
     public UIPanel groundClip;
@@ -57,22 +55,8 @@ public class GUIManager : MonoBehaviour, IManager
     //Misc
     public GameObject InventoryLabel;
     public GameObject GroundLabel;
-
-    //Sprites:
-    private UISprite inventoryFrameSprite;
-    //Anims
-    //public TweenPosition invPanelTweenPos;
-
-    //Misc NGUI Integration:
-    private ItemStorage inventoryStorageScript;
-    //public UISprite[] inventoryIconArray;
-
-    internal ItemChest currentChest;
-
-    internal bool categoryDisplay = false;
-    internal bool displayItem = false;
-    internal string category = "";
-    public bool displayGUI;
+    public GameObject debugText;
+    public GameObject textPopPrefab;
     #endregion
 
     void Start()
@@ -83,6 +67,28 @@ public class GUIManager : MonoBehaviour, IManager
 
     public void Initialize()
     {
+    }
+
+    public void OpenMenuGUI()
+    {
+        //prep, close other GUI elements
+        displayInventory = false;
+        RegenInventoryGUI();
+        GenerateGroundItems(null);
+
+        GUIButton startButton = CreateButton("Start");
+        startButton.OnSingleClick = new Action(() =>
+        {
+            OpenInventoryGUI();
+            BigBoss.Start.StartGame();
+        });
+    }
+
+    public void OpenInventoryGUI()
+    {
+        displayInventory = true;
+        RegenInventoryGUI();
+        GenerateGroundItems(currentChest);
     }
 
     //Debugging Coroutine
@@ -133,46 +139,7 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    #region INVENTORY
-    public void InventoryGUICaptureReferences()//To refresh references when game starts or upon inventory max size change:
-    {
-        /*
-        //NEED TO PUT A FAILSAFE HERE IN CASE ONE RETURNS NULL!!!!!!!
-        try
-        {
-            inventoryPanel = GameObject.Find("Inventory_Panel_Background").GetComponent("UIPanel") as UIPanel;
-            inventoryStorageScript = inventoryPanel.gameObject.GetComponentInChildren<ItemStorage>();
-            invPanelTweenPos = (TweenPosition)inventoryPanel.GetComponent("TweenPosition") as TweenPosition;
-            inventoryFrameSprite = GameObject.Find("Sprite_InventoryFrame").GetComponent("UISprite") as UISprite;
-        }
-        catch (Exception ex)
-        {
-            Debug.Log("GUI Exception: " + ex);
-        }
-
-        //Icon array to switch on visuals, initializing to size:
-        //inventoryIconArray = new UISprite[itemStorageScript.maxItemCount];
-        //inventoryIconArray = itemStorageScript.gameObject.GetComponentsInChildren<UISprite>();
-
-        //Debug:
-        //Debug.Log(inventoryIconArray.Length);
-         */
-    }
     /*
-    public void ToggleInventoryPanel()
-    {
-        if (isInventoryOpen)
-        {
-            //Debug.Log("Calling CloseInventory()...");
-            //CloseInventoryUI();
-        }
-        else
-        {
-            //Debug.Log("Calling OpenInventory()...");
-           // OpenInventoryUI();
-        }
-    }
-
     public void OpenInventoryUI()
     {
         //Calling tween pos script on panel object
@@ -196,50 +163,7 @@ public class GUIManager : MonoBehaviour, IManager
     }
     */
 
-    #endregion
-
-    #region KCInventory
-
-    public void ClearAllInventorySprites()
-    {
-        foreach (ItemSlot sl in inventoryStorageScript.InventorySlots)
-        {
-            sl.icon.enabled = false;
-            //Debug.Log(sl.icon.spriteName);
-        }
-    }
-
-    public void AddItemToGUIInventory(Item item, int count)
-    {
-        ItemSlot slot = inventoryStorageScript.InventorySlots[count];
-        slot.icon.spriteName = "berry02"; //DOUBLE CHECK IF THE ZERO INDEXING IS CORRECT!!!!!!
-        //Quantity Label:
-        slot.label.enabled = true;
-        slot.label.text = count.ToString();
-
-    }
-
-    public void SeedInventory(List<Item> invList)
-    {
-        //		foreach (UISprite icon in inventoryIconArray)
-        //		{
-        //			
-        //		}
-        Debug.Log("Seeding inventory..." + invList.Count + " items in player's list.");
-        foreach (Item item in invList)
-        {
-            //Debugging:
-            Debug.Log(item.Name);
-            string iconToSetString = item.ModelTexture.ToString();
-
-            //inventoryStorageScript.items.Add(item);
-            Debug.Log(item + " added.");
-        }
-        Debug.Log("Seed Inventory end - " + inventoryStorageScript.items.Count + " items in player's UIStorage.");
-    }
-    #endregion
-
-    #region UPDATING OF VARIOUS NGUI ELEMENTS - GENERALLY DRIVEN FROM CODE ELSEWHERE IN THE PROJECT
+    #region GUI
     public void UpdateHealthBar()
     {
         //		HUDplayerHealthBar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentHealth/(float)BigBoss.PlayerInfo.stats.MaxHealth;	
@@ -327,7 +251,7 @@ public class GUIManager : MonoBehaviour, IManager
 
     internal void RegenInventoryGUI()
     {
-        if (displayGUI)
+        if (displayInventory)
         {
             InventoryLabel.SetActive(true);
             inventoryClip.gameObject.SetActive(true);
@@ -376,7 +300,7 @@ public class GUIManager : MonoBehaviour, IManager
 
     internal void GenerateGroundItems(ItemChest chest)
     {
-        if (displayGUI && chest != null)
+        if (displayInventory && chest != null)
         {
             currentChest = chest;
             List<Item> items = chest.items;
@@ -423,7 +347,7 @@ public class GUIManager : MonoBehaviour, IManager
 
     internal void RegenItemInfoGUI(ItemList item)
     {
-        if (displayGUI)
+        if (displayInventory)
         {
             itemInfoGrid.Clear();
             itemActionsGrid.Clear();
@@ -486,17 +410,6 @@ public class GUIManager : MonoBehaviour, IManager
         button.UIDragPanel.draggablePanel = panel;
     }
 
-    void CreateTextButton(string s, KGrid grid, UIDraggablePanel panel)
-    {
-        GameObject go = Instantiate(InvItemPrefab) as GameObject;
-        go.transform.parent = grid.transform;
-        go.name = s;
-        UIDragPanelContents uiDrag = go.GetComponent<UIDragPanelContents>() as UIDragPanelContents;
-        uiDrag.draggablePanel = panel;
-        go.transform.localScale = new Vector3(1f, 1f, 1f);
-        go.transform.localPosition = new Vector3(0f, 0f, 0f);
-    }
-
     void CreateItemButton(ItemList itemList, KGrid grid, UIDraggablePanel panel)
     {
         string buttonText;
@@ -544,7 +457,7 @@ public class GUIManager : MonoBehaviour, IManager
         {
             foreach (KeyValuePair<string, string> kvp in item[0].GetGUIDisplays())
             {
-                CreateTextButton(kvp.Key + ": " + kvp.Value, itemInfoGrid, itemInfoClipDrag);
+                //CreateTextButton(kvp.Key + ": " + kvp.Value, itemInfoGrid, itemInfoClipDrag);
             }
             CreateBackLabel(itemInfoGrid, itemInfoClipDrag);
             this.itemInfoClipDrag.ResetPosition();

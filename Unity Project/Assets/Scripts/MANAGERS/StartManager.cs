@@ -15,6 +15,11 @@ public class StartManager : MonoBehaviour, IManager
 
     public void Start()
     {
+        BigBoss.Gooey.OpenMenuGUI();
+    }
+
+    public void StartGame()
+    {
         BigBoss.Levels.SetCurLevel(0);
         BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level, false);
     }
