@@ -9,7 +9,7 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
     public void Add(Item i)
     {
         InventoryCategory ic;
-        if (TryGetValue(i.Type, out ic))
+        if (!TryGetValue(i.Type, out ic))
         {
             ic = new InventoryCategory(i.Type);
             Add(i.Type, ic);
