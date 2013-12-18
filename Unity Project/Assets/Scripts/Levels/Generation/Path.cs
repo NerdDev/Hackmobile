@@ -48,7 +48,7 @@ public class Path : LayoutObjectLeaf
         Bounding ret = new Bounding();
         foreach (Value2D<GridType> val in _list)
         {
-            ret.absorb(val);
+            ret.Absorb(val);
         }
         return ret;
     }

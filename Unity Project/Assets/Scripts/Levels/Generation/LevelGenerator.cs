@@ -44,8 +44,8 @@ public class LevelGenerator
     public Theme Theme { get; set; }
     public bool GenerateUpStairs { get; set; }
     public bool GenerateDownStairs { get; set; }
-    public List<Point> UpStairs = new List<Point>();
-    public List<Point> DownStairs = new List<Point>();
+    public StairLinks UpStairs { get; set; }
+    public StairLinks DownStairs { get; set; }
     public System.Random Rand { get; set; }
     public int Depth { get; set; }
     protected LevelLayout Layout { get; set; }
@@ -189,7 +189,7 @@ public class LevelGenerator
         {
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
-        if (BigBoss.Debug.logging(Logs.LevelGenMain)
+        if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
             foreach (LayoutObjectLeaf room in Rooms)
                 room.ToLog(Logs.LevelGenMain);

@@ -9,6 +9,8 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     public GridSpace[,] Array { get; protected set; }
     private List<RoomMap> roomMaps = new List<RoomMap>();
     private MultiMap<RoomMap> roomMapping = new MultiMap<RoomMap>();
+    public StairLinks UpStairs { get; set; }
+    public StairLinks DownStairs { get; set; }
     public Theme Theme { get; protected set; }
 
     public Level(LevelLayout layout, Theme theme)

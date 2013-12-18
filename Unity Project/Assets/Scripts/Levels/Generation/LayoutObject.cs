@@ -329,7 +329,7 @@ abstract public class LayoutObject
         list.Add(this);
         if (bounds != null)
         {
-            bounds.absorb(GetBounding(true));
+            bounds.Absorb(GetBounding(true));
         }
         foreach (var connected in _connectedTo)
         {

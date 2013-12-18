@@ -65,24 +65,24 @@ public class Bounding
 	}
 	
     #region Absorbs
-    public void absorb(int x, int y)
+    public void Absorb(int x, int y)
     {
-        absorbX(x);
-        absorbY(y);
+        AbsorbX(x);
+        AbsorbY(y);
     }
 
-    public void absorb<T>(Value2D<T> val)
+    public void Absorb(Point val)
     {
-        absorb(val.x, val.y);
+        Absorb(val.x, val.y);
     }
 	
-	public void absorb(Bounding rhs)	
+	public void Absorb(Bounding rhs)	
 	{
-		absorb(rhs.XMin, rhs.YMin);
-		absorb(rhs.XMax, rhs.YMax);
+		Absorb(rhs.XMin, rhs.YMin);
+		Absorb(rhs.XMax, rhs.YMax);
 	}
 
-    public void absorbX(int x)
+    public void AbsorbX(int x)
     {
         if (XMin > x)
         {
@@ -94,7 +94,7 @@ public class Bounding
         }
     }
 
-    public void absorbY(int y)
+    public void AbsorbY(int y)
     {
         if (YMin > y)
         {
@@ -230,7 +230,7 @@ public class Bounding
     }
 
     // Gets center point of intersecting bounds
-    public Point GetCenterPoint(Bounding rhs)
+    public Point GetIntersectCenter(Bounding rhs)
     {
         Bounding intersection = IntersectBounds(rhs);
         return intersection.GetCenter();

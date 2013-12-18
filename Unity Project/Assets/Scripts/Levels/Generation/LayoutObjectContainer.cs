@@ -104,7 +104,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 			Bounding objBound = obj.GetBounding(true);
 			if (objBound.IsValid())
 			{
-				bound.absorb(objBound);
+				bound.Absorb(objBound);
 			}
 		}
 		return bound;

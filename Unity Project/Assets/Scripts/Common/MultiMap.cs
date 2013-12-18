@@ -204,7 +204,7 @@ public class MultiMap<T> : Container2D<T>
         {
             foreach (KeyValuePair<int, T> val in row.Value)
             {
-                bounds.absorb(val.Key, row.Key);
+                bounds.Absorb(val.Key, row.Key);
             }
         }
         return bounds;

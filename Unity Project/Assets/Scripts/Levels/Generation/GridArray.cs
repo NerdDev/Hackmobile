@@ -81,7 +81,7 @@ public class GridArray : Array2D<GridType>
             {
                 if (array[y, x] != GridType.NULL)
                 {
-                    ret.absorb(x, y);
+                    ret.Absorb(x, y);
                 }
             }
         }

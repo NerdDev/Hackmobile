@@ -62,7 +62,7 @@ public class ArrayMultiMap<T> : Container2D<T>
             bound = new Bounding();
             for (int y = 0; y < Height; y++)
                 for (int x = 0; x < Width; x++)
-                    bound.absorb(x, y);
+                    bound.Absorb(x, y);
             _accurateBounding = true;
         }
         return bound;
