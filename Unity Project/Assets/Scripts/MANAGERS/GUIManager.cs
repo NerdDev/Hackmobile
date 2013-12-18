@@ -57,6 +57,13 @@ public class GUIManager : MonoBehaviour, IManager
     public GameObject GroundLabel;
     public GameObject debugText;
     public GameObject textPopPrefab;
+    public Light light;
+    public Texture cookie;
+    public GUITexture LoadImage;
+
+    //Cameras
+    public Camera GUICam;
+    public Camera HeroCam;
     #endregion
 
     void Start()
@@ -75,12 +82,29 @@ public class GUIManager : MonoBehaviour, IManager
         displayInventory = false;
         RegenInventoryGUI();
         GenerateGroundItems(null);
+        //LoadImage.gameObject.SetActive(false);
 
+        List<GameObject> buttons = new List<GameObject>();
         GUIButton startButton = CreateButton("Start");
+        buttons.Add(startButton.gameObject);
+        FixButton(startButton);
+        startButton.transform.localScale = new Vector3(.01f, .01f, .01f);
+        startButton.transform.localPosition = new Vector3(0f, .5f, 0f);
         startButton.OnSingleClick = new Action(() =>
         {
-            OpenInventoryGUI();
-            BigBoss.Start.StartGame();
+            StartCoroutine(BigBoss.Start.StartGame(buttons));
+        });
+
+        GUIButton startButton2 = CreateButton("Disco Start");
+        buttons.Add(startButton2.gameObject);
+        FixButton(startButton2);
+        startButton2.transform.localScale = new Vector3(.01f, .01f, .01f);
+        startButton2.transform.localPosition = new Vector3(0f, -.5f, 0f);
+        startButton2.OnSingleClick = new Action(() =>
+        {
+            light.color = Color.white;
+            light.cookie = cookie;
+            StartCoroutine(BigBoss.Start.StartGame(buttons));
         });
     }
 
@@ -89,6 +113,16 @@ public class GUIManager : MonoBehaviour, IManager
         displayInventory = true;
         RegenInventoryGUI();
         GenerateGroundItems(currentChest);
+    }
+
+    public void DisplayLoading()
+    {
+        LoadImage.enabled = true;
+    }
+
+    public void CloseLoading()
+    {
+        LoadImage.enabled = false;
     }
 
     //Debugging Coroutine
@@ -249,6 +283,23 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
+    public IEnumerator Wait(float f, int numRepetitions)
+    {
+        bool b = true;
+        int counter = 0;
+        while (b)
+        {
+            counter++;
+            if (counter > numRepetitions) { b = false; }
+            yield return new WaitForSeconds(f);
+        }
+    }
+
+    public IEnumerator Wait(float f)
+    {
+        yield return new WaitForSeconds(f);
+    }
+
     internal void RegenInventoryGUI()
     {
         if (displayInventory)
@@ -273,11 +324,11 @@ public class GUIManager : MonoBehaviour, IManager
                 {
                     foreach (ItemList itemList in ic.Values)
                     {
-                    if (itemList.Count > 0)
-                    {
-                        CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
+                        if (itemList.Count > 0)
+                        {
+                            CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
+                        }
                     }
-                }
                     CreateBackLabel(inventoryGrid, inventoryClipDrag);
                 }
             }
@@ -365,18 +416,20 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    GUIButton CreateButton(string buttonName = "Button")
+    GUIButton CreateButton(string buttonName = "Button", string buttonText = null)
     {
         GameObject button = Instantiate(ButtonPrefab) as GameObject;
+        GUIButton butt = button.GetComponent<GUIButton>();
         button.name = buttonName;
-        return button.GetComponent<GUIButton>();
+        if (buttonText == null) buttonText = buttonName;
+        butt.Text = buttonText;
+        return butt;
     }
 
     GUIButton CreateButton(KGrid parent, string buttonName = "Button", string buttonText = null)
     {
         if (buttonText == null) buttonText = buttonName;
-        GUIButton button = CreateButton(buttonName);
-        button.Text = buttonText;
+        GUIButton button = CreateButton(buttonName, buttonText);
         parent.AddButton(button);
         FixButton(button);
         return button.GetComponent<GUIButton>();

@@ -1776,6 +1776,7 @@ GameObject:
   - 4: {fileID: 400234}
   - 111: {fileID: 11100000}
   - 95: {fileID: 9500000}
+  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: Giant_Spider
   m_TagString: Untagged
@@ -3368,6 +3369,16 @@ Animation:
   m_UserAABB:
     m_Center: {x: .0385004878, y: .278583556, z: -.0229667425}
     m_Extent: {x: .906939566, y: .629363298, z: .966974854}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
+  m_Name: 
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

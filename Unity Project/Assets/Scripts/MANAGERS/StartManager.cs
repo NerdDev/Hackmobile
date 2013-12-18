@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,9 +19,17 @@ public class StartManager : MonoBehaviour, IManager
         BigBoss.Gooey.OpenMenuGUI();
     }
 
-    public void StartGame()
+    public IEnumerator StartGame(List<GameObject> objectsToDestroy)
     {
+        BigBoss.Gooey.DisplayLoading();
+        foreach (GameObject go in objectsToDestroy)
+        {
+            Destroy(go);
+        }
+        yield return new WaitForSeconds(.01f);
         BigBoss.Levels.SetCurLevel(0);
         BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level, false);
+        BigBoss.Gooey.OpenInventoryGUI();
+        BigBoss.Gooey.CloseLoading();
     }
 }
