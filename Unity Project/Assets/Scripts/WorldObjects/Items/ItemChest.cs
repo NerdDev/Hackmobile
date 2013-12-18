@@ -10,7 +10,8 @@ class ItemChest : MonoBehaviour
     public void init()
     {
         Vector3 blockPos = Location.Block.transform.position;
-        this.transform.localPosition = new Vector3(blockPos.x, blockPos.y + .5f, blockPos.z);
+        this.transform.localPosition = new Vector3(blockPos.x + .25f, blockPos.y + .5f, blockPos.z + .25f);
+        this.transform.Rotate(Vector3.up, 45f);
     }
 
     void OnMouseDown()
@@ -23,6 +24,10 @@ class ItemChest : MonoBehaviour
 
     internal bool CheckDistance()
     {
+        if (Location.Equals(BigBoss.Player.GridSpace))
+        {
+            return true;
+        }
         PathTree path = new PathTree(Location, BigBoss.Player.GridSpace);
         List<PathNode> nodes = path.getPath();
         if (nodes.Count == 2)

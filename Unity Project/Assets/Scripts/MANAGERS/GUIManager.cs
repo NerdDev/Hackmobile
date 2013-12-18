@@ -69,7 +69,6 @@ public class GUIManager : MonoBehaviour, IManager
     void Start()
     {
         StartCoroutine(Display());
-        //StartCoroutine(DisplayInventory());
     }
 
     public void Initialize()
