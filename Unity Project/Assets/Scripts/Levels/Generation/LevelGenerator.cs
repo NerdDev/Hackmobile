@@ -42,8 +42,6 @@ public class LevelGenerator
     #endregion
 
     public Theme Theme { get; set; }
-    public bool GenerateUpStairs { get; set; }
-    public bool GenerateDownStairs { get; set; }
     public StairLinks UpStairs { get; set; }
     public StairLinks DownStairs { get; set; }
     public System.Random Rand { get; set; }
@@ -51,6 +49,12 @@ public class LevelGenerator
     protected LevelLayout Layout { get; set; }
     protected List<LayoutObjectLeaf> Rooms { get; set; }
     private int _debugNum = 0;
+
+    public LevelGenerator()
+    {
+        UpStairs = new StairLinks();
+        DownStairs = new StairLinks();
+    }
 
     public LevelLayout Generate()
     {
@@ -68,10 +72,11 @@ public class LevelGenerator
         #endregion
         Layout = new LevelLayout();
         Rooms = GenerateRoomShells();
+        Log("Align Stairs", true, ValidateStairPlacement);
         Log("Mod Rooms", false, ModRooms);
         // Not complete
         //ClusterRooms(rooms);
-        Log("Place Rooms", true, CheckStairOverlap, PlaceRooms);
+        Log("Place Rooms", true, PlaceRooms);
         Log("Place Doors", true, PlaceDoors);
         Log("Place Paths", true, PlacePaths);
         Log("Confirm Connection", true, ConfirmConnection);
@@ -101,6 +106,17 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.w(Logs.LevelGenMain, name + " took: " + (Time.realtimeSinceStartup - time));
+        }
+    }
+
+    protected void ValidateStairPlacement()
+    {
+        UpStairs.Center();
+        DownStairs.Center();
+        Point mag = GenerateShiftMagnitude(20, Rand);
+        while (UpStairs.Intersect(DownStairs))
+        {
+            DownStairs.Shift(mag);
         }
     }
 
@@ -359,18 +375,6 @@ public class LevelGenerator
         #region DEBUG
         BigBoss.Debug.printFooter(Logs.LevelGen);
         #endregion
-    }
-
-    protected void CheckStairOverlap()
-    {
-        Point mag = null;
-        while (UpStairs.Intersect(DownStairs).Count() != 0)
-        {
-            if (mag == null)
-                mag = GenerateShiftMagnitude(20, Rand);
-            foreach (Point p in DownStairs)
-                p.Shift(mag);
-        }
     }
 
     protected void PlaceDoors()

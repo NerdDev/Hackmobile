@@ -8,7 +8,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     public bool Populated { get; set; }
     public GridSpace[,] Array { get; protected set; }
     private List<RoomMap> roomMaps = new List<RoomMap>();
-    private MultiMap<RoomMap> roomMapping = new MultiMap<RoomMap>();
+    private MultiMap<RoomMap> roomMapping = new MultiMap<RoomMap>(); // floor space to roommap
     public StairLinks UpStairs { get; set; }
     public StairLinks DownStairs { get; set; }
     public Theme Theme { get; protected set; }
@@ -53,15 +53,31 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         }
     }
 
+    public Point CenterShift()
+    {
+        Bounding bound = new Bounding();
+        Array.DrawSquare(Draw.IfThen<GridSpace>((arr, x, y) =>
+            {
+                return arr[y, x].Type == GridType.NULL;
+            },
+            (arr, x, y) =>
+            {
+                GridSpace gs = arr[y, x];
+                bound.Absorb(gs.X, gs.Y);
+                return true;
+            }));
+        return bound.GetCenter();
+    }
+
     #region ConvenienceFunctions
     public void Put(int x, int y, WorldObject obj)
     {
-        this[x,y].Put(obj);
+        this[x, y].Put(obj);
     }
 
     public void Remove(int x, int y, WorldObject obj)
     {
-        this[x,y].Remove(obj);
+        this[x, y].Remove(obj);
     }
 
     public void Move(WorldObject obj, int xFrom, int yFrom, int xTo, int yTo)
@@ -72,42 +88,42 @@ public class Level : IEnumerable<Value2D<GridSpace>>
 
     public bool Accept(int x, int y, WorldObject obj)
     {
-        return this[x,y].Accept(obj);
+        return this[x, y].Accept(obj);
     }
 
     public bool IsBlocked(int x, int y)
     {
-        return this[x,y].IsBlocked();
+        return this[x, y].IsBlocked();
     }
 
     public bool HasNonBlocking(int x, int y)
     {
-        return this[x,y].HasNonBlocking();
+        return this[x, y].HasNonBlocking();
     }
 
     public bool HasObject(int x, int y)
     {
-        return this[x,y].HasObject();
+        return this[x, y].HasObject();
     }
 
     public bool IsEmpty(int x, int y)
     {
-        return this[x,y].IsEmpty();
+        return this[x, y].IsEmpty();
     }
 
     public List<WorldObject> GetContained(int x, int y)
     {
-        return this[x,y].GetContained();
+        return this[x, y].GetContained();
     }
 
     public List<WorldObject> GetFreeObjects(int x, int y)
     {
-        return this[x,y].GetFreeObjects();
+        return this[x, y].GetFreeObjects();
     }
 
     public List<WorldObject> GetBlockingObjects(int x, int y)
     {
-        return this[x,y].GetBlockingObjects();
+        return this[x, y].GetBlockingObjects();
     }
     #endregion
 
