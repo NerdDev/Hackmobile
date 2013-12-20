@@ -276,7 +276,7 @@ public static class ArrayDrawExt
     #endregion
     #endregion
     #region Lines
-    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, StrokedAction<T> action)
+    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, DrawActionCall<T> action)
     {
         if (horizontal)
             return DrawRow(arr, from, to, on, action);
@@ -284,32 +284,33 @@ public static class ArrayDrawExt
             return DrawCol(arr, from, to, on, action);
     }
 
-    public static bool DrawLine<T>(this T[,] arr, int from, int to, int on, bool horizontal, T setTo)
+    public static bool DrawCol<T>(this T[,] arr, int yb, int yt, int x, DrawActionCall<T> action, bool BottomToTop = true)
     {
-        return arr.DrawLine(from, to, on, horizontal, SetTo(setTo));
-    }
-
-    public static bool DrawCol<T>(this T[,] arr, int y1, int y2, int x, T setTo)
-    {
-        return DrawCol(arr, y1, y2, x, SetTo(setTo));
-    }
-
-    public static bool DrawCol<T>(this T[,] arr, int y1, int y2, int x, StrokedAction<T> action)
-    {
-        for (; y1 <= y2; y1++)
-            if (!action.UnitAction(arr, x, y1)) return false;
+        if (BottomToTop)
+        {
+            for (; yb <= yt; yb++)
+                if (!action(arr, x, yb)) return false;
+        }
+        else
+        {
+            for (; yb <= yt; yt--)
+                if (!action(arr, x, yt)) return false;
+        }
         return true;
     }
 
-    public static bool DrawRow<T>(this T[,] arr, int xl, int xr, int y, T setTo)
+    public static bool DrawRow<T>(this T[,] arr, int xl, int xr, int y, DrawActionCall<T> action, bool LeftToRight = true)
     {
-        return DrawRow(arr, xl, xr, y, SetTo(setTo));
-    }
-
-    public static bool DrawRow<T>(this T[,] arr, int xl, int xr, int y, StrokedAction<T> action)
-    {
-        for (; xl <= xr; xl++)
-            if (!action.UnitAction(arr, xl, y)) return false;
+        if (LeftToRight)
+        {
+            for (; xl <= xr; xl++)
+                if (!action(arr, xl, y)) return false;
+        }
+        else
+        {
+            for (; xl <= xr; xr--)
+                if (!action(arr, xr, y)) return false;
+        }
         return true;
     }
 
@@ -460,6 +461,44 @@ public static class ArrayDrawExt
         int top = center.y + height / 2;
         if (height % 2 == 0) top--;
         return arr.DrawSquare(left, right, bottom, top, stroke);
+    }
+    #endregion
+    #region Expand
+    public static bool DrawSpiral<T>(this T[,] arr, int x, int y, DrawAction<T> draw, Bounding bounds = null)
+    {
+        Bounding arrBound = arr.GetBounds();
+        if (bounds == null)
+            bounds = arrBound;
+        else
+            bounds.IntersectBounds(arrBound);
+        if (!bounds.IsValid() || !bounds.Contains(x, y)) return true;
+
+        if (!draw.Call(arr, x, y)) return false;
+        Bounding currentBounds = new Bounding() { XMin = x - 1, XMax = x + 1, YMin = y - 1, YMax = y + 1 };
+        while (!currentBounds.Contains(arrBound))
+        {
+            if (currentBounds.YMin >= bounds.YMin)
+            {
+                if (!arr.DrawRow(currentBounds.XMin + 1, currentBounds.XMax - 1, currentBounds.YMin, draw)) return false;
+                currentBounds.YMin--;
+            }
+            if (currentBounds.XMax <= bounds.XMax)
+            {
+                if (!arr.DrawCol(currentBounds.YMin + 1, currentBounds.YMax - 1, currentBounds.XMax, draw)) return false;
+                currentBounds.XMax++;
+            }
+            if (currentBounds.YMax <= bounds.YMax)
+            {
+                if (!arr.DrawRow(currentBounds.XMin + 1, currentBounds.XMax - 1, currentBounds.YMax, draw, false)) return false;
+                currentBounds.YMax++;
+            }
+            if (currentBounds.XMin >= bounds.XMin)
+            {
+                if (!arr.DrawCol(currentBounds.YMin + 1, currentBounds.YMax - 1, currentBounds.XMin, draw, false)) return false;
+                currentBounds.XMin--;
+            }
+        }
+        return true;
     }
     #endregion
     #region Find Options

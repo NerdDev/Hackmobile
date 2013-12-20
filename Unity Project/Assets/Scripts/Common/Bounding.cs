@@ -286,6 +286,16 @@ public class Bounding
         Shift(GetShiftNonNeg());
     }
 
+    public bool Contains(int x, int y)
+    {
+        return x >= XMin && x <= XMax && y >= YMin && y <= YMax;
+    }
+
+    public bool Contains(Bounding rhs)
+    {
+        return XMin < rhs.XMin && XMax > rhs.XMax && YMin < rhs.YMin && YMax > rhs.YMax;
+    }
+
     public Bounding InBounds<T>(T[,] arr)
     {
         return IntersectBounds(arr.GetBounds());

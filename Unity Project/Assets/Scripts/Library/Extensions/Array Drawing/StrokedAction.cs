@@ -24,7 +24,12 @@ public class StrokedAction<T>
         return new StrokedAction<T>() { UnitAction = normalFunc };
     }
 
-    public static explicit operator DrawAction<T>(StrokedAction<T> actions)
+    public static implicit operator DrawAction<T>(StrokedAction<T> actions)
+    {
+        return actions.UnitAction;
+    }
+
+    public static implicit operator DrawActionCall<T>(StrokedAction<T> actions)
     {
         return actions.UnitAction;
     }
