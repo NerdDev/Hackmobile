@@ -144,12 +144,12 @@ public class LevelManager : MonoBehaviour, IManager
         if (depth != 0)
             if (_levels[depth - 1] != null)
                 gen.UpStairs = _levels[depth - 1].DownStairs;
-        else
-            gen.UpStairs.Set = true;
         if (_levels[depth + 1] != null)
             gen.DownStairs = _levels[depth + 1].UpStairs;
-        gen.UpStairs.SelectedUp = true;
-        gen.DownStairs.SelectedUp = false;
+        if (gen.UpStairs != null)
+            gen.UpStairs.Select(true);
+        if (gen.DownStairs != null)
+            gen.DownStairs.Select(false);
         _levels[depth] = new Level(gen.Generate(), gen.Theme);
     }
 

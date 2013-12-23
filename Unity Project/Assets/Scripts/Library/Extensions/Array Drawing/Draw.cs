@@ -122,6 +122,30 @@ public class Draw
         return counter.Action<T>();
     }
 
+    public static DrawAction<T> AlternatesSides<T>(Func<T, bool> eval)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return arr.AlternatesSides(x, y, eval);
+        });
+    }
+
+    public static DrawAction<T> Cornered<T>(Func<T, bool> eval, bool withOpposing = false)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return arr.Cornered(x, y, eval, withOpposing);
+        });
+    }
+
+    public static DrawAction<T> NotBlocking<T>(Func<T, bool> eval)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+            {
+                return !arr.Blocking(x, y, eval);
+            }
+        );
+    }
     #region GridType
     public static DrawAction<GridType> CanDrawDoor()
     {
@@ -130,9 +154,17 @@ public class Draw
                 if (arr[y, x] != GridType.Wall)
                     return false;
                 // Include null to work with levelgen placement
-                return (arr.Alternates(x, y, GridTypeEnum.WalkableOrNull));
+                return (arr.AlternatesSides(x, y, GridTypeEnum.WalkableOrNull));
             }
         );
+    }
+
+    public static DrawAction<GridType> Walkable()
+    {
+        return new DrawAction<GridType>((arr, x, y) =>
+            {
+                return GridTypeEnum.Walkable(arr[y, x]);
+            });
     }
     #endregion
 }

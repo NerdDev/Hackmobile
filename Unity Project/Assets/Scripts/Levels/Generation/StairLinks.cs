@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StairLinks
+public class StairLinks : IEnumerable<Point>
 {
     private bool _upSet = false;
     private bool _downSet = false;
@@ -69,5 +69,18 @@ public class StairLinks
             UpLink = new Point(p);
             DownLink = new Point(p);
         }
+    }
+
+    public IEnumerator<Point> GetEnumerator()
+    {
+        foreach (StairLink link in links)
+        {
+            yield return link.Get(SelectedUp);
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
 }

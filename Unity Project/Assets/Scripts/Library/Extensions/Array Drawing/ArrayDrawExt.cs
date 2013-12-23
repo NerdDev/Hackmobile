@@ -9,31 +9,45 @@ public static class ArrayDrawExt
     #region Draws
     public static IEnumerable<T> DrawAround<T>(this T[,] arr, int x, int y, bool cornered)
     {
-        yield return arr[y + 1, x];
-        yield return arr[y - 1, x];
-        yield return arr[y, x + 1];
-        yield return arr[y, x - 1];
-        if (cornered)
+        if (!cornered)
         {
-            yield return arr[y + 1, x + 1];
-            yield return arr[y - 1, x + 1];
-            yield return arr[y + 1, x - 1];
-            yield return arr[y - 1, x - 1];
+            yield return arr[y + 1, x];
+            yield return arr[y - 1, x];
+            yield return arr[y, x + 1];
+            yield return arr[y, x - 1];
+        }
+        else
+        {
+            yield return arr[y - 1, x - 1]; // bottom left
+            yield return arr[y - 1, x]; // bottom
+            yield return arr[y - 1, x + 1]; // bottom right
+            yield return arr[y, x + 1]; // Right
+            yield return arr[y + 1, x + 1]; // Top Right
+            yield return arr[y + 1, x]; // Top
+            yield return arr[y + 1, x - 1]; // Top Left
+            yield return arr[y, x - 1]; // Left
         }
     }
 
     public static bool DrawAround<T>(this T[,] arr, int x, int y, bool cornered, DrawActionCall<T> action)
     {
-        if (!action(arr, x, y + 1)) return false;
-        if (!action(arr, x, y - 1)) return false;
-        if (!action(arr, x + 1, y)) return false;
-        if (!action(arr, x - 1, y)) return false;
-        if (cornered)
+        if (!cornered)
         {
-            if (!action(arr, x + 1, y + 1)) return false;
-            if (!action(arr, x + 1, y - 1)) return false;
-            if (!action(arr, x - 1, y + 1)) return false;
-            if (!action(arr, x - 1, y - 1)) return false;
+            if (!action(arr, x, y + 1)) return false;
+            if (!action(arr, x, y - 1)) return false;
+            if (!action(arr, x + 1, y)) return false;
+            if (!action(arr, x - 1, y)) return false;
+        }
+        else
+        {
+            if (!action(arr, x - 1, y - 1)) return false; // Bottom left
+            if (!action(arr, x, y - 1)) return false; // Bottom
+            if (!action(arr, x + 1, y - 1)) return false; // Bottom right
+            if (!action(arr, x + 1, y)) return false; // Right
+            if (!action(arr, x + 1, y + 1)) return false; // Top Right
+            if (!action(arr, x, y + 1)) return false; // Top
+            if (!action(arr, x - 1, y + 1)) return false; // Top Left
+            if (!action(arr, x - 1, y)) return false; // Left
         }
         return true;
     }
@@ -256,7 +270,12 @@ public static class ArrayDrawExt
     }
     #endregion
     #region Utility
-    public static bool Alternates<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator)
+    /*
+     * _#_         ___
+     * ___    or   #_#
+     * _#_         ___
+     */
+    public static bool AlternatesSides<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator)
     {
         bool pass = evaluator(arr[y, x - 1]);
         if (pass != evaluator(arr[y, x + 1])) return false;
@@ -265,13 +284,44 @@ public static class ArrayDrawExt
         return true;
     }
 
-    public static bool Cornered<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator)
+    /*
+     * ___                            __#
+     * #__       or with opposing     #__
+     * _#_                            _#_
+     */
+    public static bool Cornered<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator, bool withOpposing = false)
     {
-        bool pass = evaluator(arr[y, x - 1]);
-        if (pass == evaluator(arr[y, x + 1])) return false;
-        pass = evaluator(arr[y - 1, x]);
-        if (pass == evaluator(arr[y + 1, x])) return false;
-        return true;
+        bool Xpass = evaluator(arr[y, x - 1]);
+        if (Xpass == evaluator(arr[y, x + 1])) return false;
+        bool Ypass = evaluator(arr[y - 1, x]);
+        if (Ypass == evaluator(arr[y + 1, x])) return false;
+        return !withOpposing || evaluator(arr[Ypass ? y + 1 : y - 1, Xpass ? x + 1 : x - 1]);
+    }
+
+    /*
+     * Walk edges and if alternates more than twice, it's blocking
+     */
+    public static bool Blocking<T>(this T[,] arr, int x, int y, Func<T, bool> evaluator)
+    {
+        int count = 0;
+        bool status = evaluator(arr[y - 1, x - 1]); // Bottom left
+        DrawActionCall<T> func = (arr2, x2, y2) =>
+            {
+                if (evaluator(arr2[y2, x2]) != status)
+                {
+                    status = !status;
+                    return ++count > 2;
+                }
+                return false;
+            };
+        if (func(arr, x, y - 1)) return true; // Bottom
+        if (func(arr, x + 1, y - 1)) return true; // Bottom right
+        if (func(arr, x + 1, y)) return true; // Right
+        if (func(arr, x + 1, y + 1)) return true; // Top Right
+        if (func(arr, x, y + 1)) return true; // Top
+        if (func(arr, x - 1, y + 1)) return true; // Top Left
+        if (func(arr, x - 1, y)) return true; // Left
+        return false;
     }
     #endregion
     #endregion

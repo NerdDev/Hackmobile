@@ -10,6 +10,8 @@ public enum GridType
     Wall,
     Door,
     TrapDoor,
+    StairUp,
+    StairDown,
 
     Path_Horiz,
     Path_Vert,
@@ -51,6 +53,10 @@ public class GridTypeEnum
                 return '=';
             case GridType.Wall:
                 return '#';
+            case GridType.StairUp:
+                return (char)217;
+            case GridType.StairDown:
+                return (char)218;
             case GridType.NULL:
                 return ' ';
             case GridType.INTERNAL_RESERVED_BLOCKED:
@@ -89,6 +95,7 @@ public class GridTypeEnum
             case GridType.Trap:
             case GridType.SmallLoot:
             case GridType.Chest:
+            case GridType.Door:
                 return true;
             default:
                 return false;

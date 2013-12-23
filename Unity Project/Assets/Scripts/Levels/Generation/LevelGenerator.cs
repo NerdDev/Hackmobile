@@ -42,18 +42,16 @@ public class LevelGenerator
     #endregion
 
     public Theme Theme { get; set; }
-    public StairLinks UpStairs { get; set; }
-    public StairLinks DownStairs { get; set; }
     public System.Random Rand { get; set; }
     public int Depth { get; set; }
+    public StairLink UpStairs { get; set; }
+    public StairLink DownStairs { get; set; }
     protected LevelLayout Layout { get; set; }
     protected List<LayoutObjectLeaf> Rooms { get; set; }
     private int _debugNum = 0;
 
     public LevelGenerator()
     {
-        UpStairs = new StairLinks();
-        DownStairs = new StairLinks();
     }
 
     public LevelLayout Generate()
@@ -71,16 +69,16 @@ public class LevelGenerator
         }
         #endregion
         Layout = new LevelLayout();
-        Rooms = GenerateRoomShells();
-        Log("Align Stairs", true, ValidateStairPlacement);
-        Log("Mod Rooms", false, ModRooms);
+        Log("Mod Rooms", false, GenerateRoomShells, ModRooms);
         // Not complete
         //ClusterRooms(rooms);
+        Log("Align Stairs", true, ValidateStairPlacement);
         Log("Place Rooms", true, PlaceRooms);
         Log("Place Doors", true, PlaceDoors);
         Log("Place Paths", true, PlacePaths);
         Log("Confirm Connection", true, ConfirmConnection);
         Log("Confirm Edges", true, ConfirmEdges);
+        Log("Place Stairs", true, PlaceMissingStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
@@ -111,16 +109,15 @@ public class LevelGenerator
 
     protected void ValidateStairPlacement()
     {
-        UpStairs.Center();
-        DownStairs.Center();
-        Point mag = GenerateShiftMagnitude(20, Rand);
-        while (UpStairs.Intersect(DownStairs))
+        if (UpStairs == null || DownStairs == null) return;
+        Point mag = GenerateShiftMagnitude(5, Rand);
+        while (UpStairs.SelectedLink.Distance(DownStairs.SelectedLink) < 40)
         {
-            DownStairs.Shift(mag);
+            DownStairs.SelectedLink.Shift(mag);
         }
     }
 
-    List<LayoutObjectLeaf> GenerateRoomShells()
+    protected void GenerateRoomShells()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -147,7 +144,7 @@ public class LevelGenerator
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
-        return rooms;
+        Rooms = rooms;
     }
 
     void ModRooms()
@@ -327,11 +324,45 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Rooms");
         }
         #endregion
+        List<LayoutObject> unplacedRooms = new List<LayoutObject>(Rooms.Cast<LayoutObject>());
         List<LayoutObject> placedRooms = new List<LayoutObject>();
+        PlaceRoomsOnStairs(placedRooms, unplacedRooms);
+        PlaceRemainingRooms(placedRooms, unplacedRooms);
+        #region DEBUG
+        BigBoss.Debug.printFooter(Logs.LevelGen);
+        #endregion
+    }
+
+    protected void PlaceRoomsOnStairs(List<LayoutObject> placedRooms, List<LayoutObject> unplacedRooms)
+    {
+        if (UpStairs != null)
+        {
+            LayoutObject pairedObj = unplacedRooms.Take();
+            placedRooms.Add(pairedObj);
+            PlaceRoomOnStairs(UpStairs.SelectedLink, true, pairedObj);
+        }
+        if (DownStairs != null)
+        {
+            LayoutObject pairedObj = unplacedRooms.Take();
+            placedRooms.Add(pairedObj);
+            PlaceRoomOnStairs(DownStairs.SelectedLink, false, pairedObj);
+        }
+    }
+
+    protected void PlaceRoomOnStairs(Point stair, bool up, LayoutObject pairedObj)
+    {
+        List<Bounding> options = pairedObj.GetArray().GetArr().GetSquares(3, 3, false, Draw.EqualTo(GridType.Floor));
+        Bounding picked = options.Random(Rand);
+        pairedObj.shift(stair - new Point(picked.XMin + 1, picked.YMin + 1));
+        pairedObj.GetArray().Put(up ? GridType.StairUp : GridType.StairDown, picked.XMin + 1, picked.YMin + 1);
+    }
+
+    protected void PlaceRemainingRooms(List<LayoutObject> placedRooms, List<LayoutObject> unplacedRooms)
+    {
         LayoutObjectLeaf seedRoom = new LayoutObjectLeaf(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2);
         Layout.AddObject(seedRoom);
         placedRooms.Add(seedRoom); // Seed empty center room to start positioning from.
-        foreach (LayoutObjectLeaf room in Rooms)
+        foreach (LayoutObjectLeaf room in unplacedRooms)
         {
             // Find room it will start from
             int roomNum = Rand.Next(placedRooms.Count);
@@ -372,9 +403,6 @@ public class LevelGenerator
             }
             #endregion
         }
-        #region DEBUG
-        BigBoss.Debug.printFooter(Logs.LevelGen);
-        #endregion
     }
 
     protected void PlaceDoors()
@@ -589,6 +617,63 @@ public class LevelGenerator
             BigBoss.Debug.printFooter(Logs.LevelGen);
         }
         #endregion
+    }
+
+    protected void PlaceMissingStairs()
+    {
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Placing missing stairs");
+        }
+        #endregion
+        if (UpStairs == null && Depth != 0)
+            PlaceMissingStair(true, DownStairs);
+        if (DownStairs == null)
+            PlaceMissingStair(false, UpStairs);
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printFooter();
+        }
+        #endregion
+    }
+
+    protected void PlaceMissingStair(bool up, StairLink otherLink)
+    {
+        Point otherStair;
+        if (otherLink == null)
+            otherStair = new Point(-5000, -5000);
+        else
+            otherStair = otherLink.SelectedLink;
+        foreach (LayoutObject room in Rooms.Cast<LayoutObject>().Randomize(Rand))
+        {
+            MultiMap<GridType> options = new MultiMap<GridType>();
+            room.GetArray().GetArr().DrawSquare(Draw.IfThen<GridType>(
+                // If is floor
+                Draw.EqualTo(GridType.Floor).
+                // If not blocking a path
+                Then(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable)).
+                // If there's a floor around
+                Then((arr, x, y) =>
+                {
+                    foreach (GridType g in arr.DrawAround(x, y, false))
+                    {
+                        if (g == GridType.Floor) return true;
+                    }
+                    return false;
+                }),
+                // Then
+                Draw.AddTo(options)), false);
+            if (options.Count == 0) continue;
+            Value2D<GridType> picked = options.Random(Rand);
+            room.GetArray().Put(up ? GridType.StairUp : GridType.StairDown, picked.x, picked.y);
+            #region Debug
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+                room.ToLog(Logs.LevelGen, "Placed stairs");
+            #endregion
+            break;
+        }
     }
 
     protected void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)

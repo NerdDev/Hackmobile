@@ -78,7 +78,7 @@ public class SquareFinder<T>
             }
 
             // Test to see if next is out of range horizontally
-            if (_x + _width > _arr.GetLength(1) || (_scope == null || _x + _width > _scope.XMax))
+            if (_x + _width > _arr.GetLength(1) || (_scope != null && _x + _width > _scope.XMax))
             { // it is, so reset to left of array and move up
                 _x = _scope == null ? 0 : _scope.XMin;
                 _lowestFail++;

@@ -59,6 +59,16 @@ public class Point {
 	}
     #endregion Shifts
 
+    public double Distance(Point rhs)
+    {
+        return Distance(rhs.x, rhs.y);
+    }
+
+    public double Distance(int x, int y)
+    {
+        return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
+    }
+
     public Point Invert()
     {
         return new Point(-x, -y);

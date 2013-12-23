@@ -10,7 +10,7 @@ public class HorizSplitterMod : RoomModifier
         return new DrawAction<GridType>((arr, x, y) =>
             {
                 // Not a hallway, and no doors nearby
-                return !arr.Alternates(x, y, GridTypeEnum.Walkable) && !arr.DrawAround(x, y, false, Draw.EqualTo(GridType.Door));
+                return !arr.AlternatesSides(x, y, GridTypeEnum.Walkable) && !arr.DrawAround(x, y, false, Draw.EqualTo(GridType.Door));
             }
             );
     }

@@ -224,7 +224,7 @@ public class MultiMap<T> : Container2D<T>
         return arr;
     }
 
-    public Value2D<T> RandomValue(System.Random rand)
+    public Value2D<T> Random(System.Random rand)
     {
         if (Count != 0)
         {
@@ -259,7 +259,7 @@ public class MultiMap<T> : Container2D<T>
         if (distance < 0) distance = 0;
         for (int i = 0; i < amount; i++)
         {
-            Value2D<T> g = RandomValue(random);
+            Value2D<T> g = Random(random);
             if (g == null) return list;
             if (distance > 0)
             {

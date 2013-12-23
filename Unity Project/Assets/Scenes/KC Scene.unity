@@ -747,7 +747,7 @@ MonoBehaviour:
   m_Name: 
   Logging: 1
   ActiveLogs: 000000000100000002000000
-  ActiveFlags: 00000000
+  ActiveFlags: 0000000002000000
 --- !u!1 &132977053
 GameObject:
   m_ObjectHideFlags: 0
@@ -3316,7 +3316,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 0, g: .832167625, b: 1, a: 1}
   mPivot: 4
@@ -5140,7 +5140,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 0, g: .832167625, b: 1, a: 1}
   mPivot: 4
@@ -5639,6 +5639,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400030, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: ActiveFlags.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5674,6 +5678,10 @@ Prefab:
     - target: {fileID: 11400120, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: mMat
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400030, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: ActiveFlags.Array.data[1]
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}

@@ -15,7 +15,9 @@ public class StartManager : MonoBehaviour, IManager
 
     public void Start()
     {
-        BigBoss.Levels.SetCurLevel(0);
+        Level level;
+        BigBoss.Levels.GetLevel(0, out level);
+        BigBoss.Levels.SetCurLevel(1);
         BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level, false);
     }
 }
