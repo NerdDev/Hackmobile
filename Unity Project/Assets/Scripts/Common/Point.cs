@@ -55,8 +55,18 @@ public class Point {
 	
 	public void Shift(Point p)
 	{
-		Shift (p.x, p.y);	
-	}
+		Shift (p.x, p.y);
+    }
+
+    public void Unshift(int shiftx, int shifty)
+    {
+        Shift(-shiftx, -shifty);
+    }
+
+    public void Unshift(Point shift)
+    {
+        Unshift(shift.x, shift.y);
+    }
     #endregion Shifts
 
     public double Distance(Point rhs)

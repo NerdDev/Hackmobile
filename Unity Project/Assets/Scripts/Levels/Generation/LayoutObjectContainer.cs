@@ -137,7 +137,8 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         #endregion
         foreach (LayoutObject obj in this)
         {
-            if (obj.ContainsPoint(val.Unshift(obj.GetShift())))
+            val.Unshift(obj.GetShift());
+            if (obj.ContainsPoint(val))
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
