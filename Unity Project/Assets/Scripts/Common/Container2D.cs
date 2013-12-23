@@ -66,20 +66,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             Put(t, xl, y);
         }
     }
-    public virtual void PutCol(T t, int y1, int y2, int x)
-    {
-        for (; y1 <= y2; y1++)
-        {
-            Put(t, x, y1);
-        }
-    }
-    public virtual void putSquare(T t, int xl, int xr, int yb, int yt)
-    {
-        for (; yb <= yt; yb++)
-        {
-            putRow(t, xl, xr, yb);
-        }
-    }
 
     public abstract T[,] GetArr();
 	

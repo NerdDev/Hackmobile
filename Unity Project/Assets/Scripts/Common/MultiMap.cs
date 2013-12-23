@@ -141,15 +141,6 @@ public class MultiMap<T> : Container2D<T>
         }
     }
 
-    public void PutRow(T t, int xl, int xr, int y)
-    {
-        Dictionary<int, T> row = GetRowCreate(y);
-        for (; xl <= xr; xl++)
-        {
-            row[xl] = t;
-        }
-    }
-
     public void RemoveAll(MultiMap<T> rhs)
     {
         foreach (Value2D<T> val in rhs)
@@ -172,14 +163,6 @@ public class MultiMap<T> : Container2D<T>
             {
                 Remove(val);
             }
-        }
-    }
-
-    public override void PutCol(T t, int y1, int y2, int x)
-    {
-        for (; y1 <= y2; y1++)
-        {
-            Put(t, x, y1);
         }
     }
 

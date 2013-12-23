@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class GridArray : Array2D<GridType>
 {
-
     #region Ctors
     public GridArray(int width, int height) : base(width, height)
     {
@@ -40,10 +39,10 @@ public class GridArray : Array2D<GridType>
 
     public override void Put(GridType val, int x, int y)
     {
-		if (val != GridType.NULL)
-		{
-			base.Put(val, x, y);
-		}
+        if (val != GridType.NULL)
+        {
+            base.Put(val, x, y);
+        }
     }
 
     public void PutNull(int x, int y)
@@ -119,31 +118,6 @@ public class GridArray : Array2D<GridType>
             ret.Add(rowStr);
         }
         return ret;
-    }
-
-
-    // Fills in a row with a desired value
-    public override void PutRow(GridType t, int xl, int xr, int y)
-    {
-        for (; xl <= xr; xl++)
-        {
-            if (GridType.NULL == arr[y, xl])
-            {
-                arr[y, xl] = t;
-            }
-        }
-    }
-
-    // Fills in a col with a desired value
-    public override void PutCol(GridType t, int y1, int y2, int x)
-    {
-        for (; y1 <= y2; y1++)
-        {
-            if (GridType.NULL == arr[y1, x])
-            {
-                arr[y1, x] = t;
-            }
-        }
     }
 
     public static implicit operator GridType[,](GridArray src)

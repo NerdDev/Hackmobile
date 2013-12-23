@@ -148,24 +148,6 @@ public class Array2D<T> : Container2D<T>
         PutAll(rhs, shift.x, shift.y);
     }
 
-    // Fills in a row with a desired value
-    public virtual void PutRow(T t, int xl, int xr, int y)
-    {
-        for (; xl <= xr; xl++)
-        {
-            arr[y, xl] = t;
-        }
-    }
-
-    // Fills in a col with a desired value
-    public override void PutCol(T t, int y1, int y2, int x)
-    {
-        for (; y1 <= y2; y1++)
-        {
-            arr[y1, x] = t;
-        }
-    }
-
     // Gets public bounds of array 
     // (Expanding equally both directions from the origin)
     public override Bounding GetBounding()
