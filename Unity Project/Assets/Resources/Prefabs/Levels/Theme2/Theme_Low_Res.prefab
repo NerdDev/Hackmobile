@@ -37,9 +37,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a09421567d6ee843ad7968312c5642f, type: 3}
   m_Name: 
-  wall: {fileID: 100000, guid: 6fdc3d723739f8b46bcc54ff4f0cb8e8, type: 2}
-  door: {fileID: 100000, guid: 37175b1933d48c949ab9a0e7cdd44471, type: 2}
-  floor: {fileID: 100000, guid: 90b5fc7c5c9510f408ee4affb4cc5b2d, type: 2}
+  Wall: {fileID: 100000, guid: 6fdc3d723739f8b46bcc54ff4f0cb8e8, type: 2}
+  Door: {fileID: 100000, guid: 37175b1933d48c949ab9a0e7cdd44471, type: 2}
+  Floor: {fileID: 100000, guid: 90b5fc7c5c9510f408ee4affb4cc5b2d, type: 2}
+  StairUp: {fileID: 100000, guid: 3e9601da2de63574980a9a60c41c32bc, type: 2}
+  StairDown: {fileID: 100000, guid: 3e9601da2de63574980a9a60c41c32bc, type: 2}
+  keywords: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

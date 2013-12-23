@@ -9,8 +9,6 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public bool Initialized { get; set; }
     Dictionary<ESFlags<Keywords>, LeveledPool<NPC>> npcPools = new Dictionary<ESFlags<Keywords>, LeveledPool<NPC>>();
 
-    public List<GameObject> stairs = new List<GameObject>();
-
     public void Initialize()
     {
         SpawnModifier.RegisterModifiers();
@@ -22,46 +20,6 @@ public class DungeonMaster : MonoBehaviour, IManager {
         {
             ForcePopulateLevel(l);
         }
-
-        //Place stairs
-        ClearPriorLevel();
-        GridSpace stairsDown = CreateStairs(l, "StairsDown", PrimitiveType.Sphere);
-        GridSpace stairsUp = CreateStairs(l, "StairsUp", PrimitiveType.Cylinder);
-
-        //Place Player
-        if (up)
-        {
-            PlacePlayer(l, stairsDown);
-        }
-        else
-        {
-            PlacePlayer(l, stairsUp);
-        }
-    }
-
-    private void ClearPriorLevel()
-    {
-        if (stairs.Count > 0)
-        {
-            foreach (GameObject go in stairs)
-            {
-                Destroy(go);
-            }
-        }
-        BigBoss.Objects.NPCs.DestroyWrappers();
-    }
-
-    public GridSpace CreateStairs(Level l, string name, PrimitiveType prim)
-    {
-        GridSpace locStairs = BigBoss.DungeonMaster.PickSpawnableLocation(l);
-        GameObject stairs = GameObject.CreatePrimitive(prim);
-        stairs.name = name;
-        stairs.transform.position = new Vector3(locStairs.X, 0f, locStairs.Y);
-        locStairs.Block.layer = 13;
-        locStairs.Block.collider.isTrigger = false;
-        locStairs.Block.name = name;
-        this.stairs.Add(stairs);
-        return locStairs;
     }
 
     public void PlacePlayer(Level l, GridSpace stairsUp)

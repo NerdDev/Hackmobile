@@ -628,9 +628,9 @@ public class LevelGenerator
         }
         #endregion
         if (UpStairs == null && Depth != 0)
-            PlaceMissingStair(true, DownStairs);
+            UpStairs = PlaceMissingStair(true, DownStairs);
         if (DownStairs == null)
-            PlaceMissingStair(false, UpStairs);
+            DownStairs = PlaceMissingStair(false, UpStairs);
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -639,13 +639,14 @@ public class LevelGenerator
         #endregion
     }
 
-    protected void PlaceMissingStair(bool up, StairLink otherLink)
+    protected StairLink PlaceMissingStair(bool up, StairLink otherLink)
     {
         Point otherStair;
         if (otherLink == null)
             otherStair = new Point(-5000, -5000);
         else
             otherStair = otherLink.SelectedLink;
+        StairLink link = null;
         foreach (LayoutObject room in Rooms.Cast<LayoutObject>().Randomize(Rand))
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
@@ -668,12 +669,16 @@ public class LevelGenerator
             if (options.Count == 0) continue;
             Value2D<GridType> picked = options.Random(Rand);
             room.GetArray().Put(up ? GridType.StairUp : GridType.StairDown, picked.x, picked.y);
+            Point p = new Point(picked);
+            p.Shift(room.GetShift());
+            link = new StairLink(p, up);
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
                 room.ToLog(Logs.LevelGen, "Placed stairs");
             #endregion
             break;
         }
+        return link;
     }
 
     protected void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)

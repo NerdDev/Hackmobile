@@ -150,7 +150,10 @@ public class LevelManager : MonoBehaviour, IManager
             gen.UpStairs.Select(true);
         if (gen.DownStairs != null)
             gen.DownStairs.Select(false);
-        _levels[depth] = new Level(gen.Generate(), gen.Theme);
+        Level level = new Level(gen.Generate(), gen.Theme);
+        level.UpStairs = gen.UpStairs;
+        level.DownStairs = gen.DownStairs;
+        _levels[depth] = level;
     }
 
     Theme GetTheme()

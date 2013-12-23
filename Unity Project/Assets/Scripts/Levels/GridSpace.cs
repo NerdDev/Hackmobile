@@ -6,8 +6,8 @@ public class GridSpace
 {
     public GridType Type { get; private set; }
     public GameObject Block { get; set; }
-    public int X { get { return (int)Block.transform.position.x; } }
-    public int Y { get { return (int)Block.transform.position.z; } }
+    public int X { get; protected set; }
+    public int Y { get; protected set; }
     public WorldObject RandomContainedObj { 
         get 
         {
@@ -22,9 +22,11 @@ public class GridSpace
     private ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
 
-    public GridSpace(GridType type)
+    public GridSpace(GridType type, int x, int y)
     {
         this.Type = type;
+        X = x;
+        Y = y;
     }
 
     public void ColliderTrigger(bool on)
@@ -203,7 +205,7 @@ public class GridSpace
                     val.val = GridType.Floor;
                     break;
             }
-            arrOut[val.y, val.x] = new GridSpace(val.val);
+            arrOut[val.y, val.x] = new GridSpace(val.val, val.x, val.y);
         }
         return arrOut;
     }

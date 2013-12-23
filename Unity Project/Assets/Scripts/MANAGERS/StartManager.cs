@@ -15,9 +15,27 @@ public class StartManager : MonoBehaviour, IManager
 
     public void Start()
     {
-        Level level;
-        BigBoss.Levels.GetLevel(0, out level);
-        BigBoss.Levels.SetCurLevel(1);
+        //Level level;
+        //BigBoss.Levels.GetLevel(0, out level);
+        BigBoss.Levels.SetCurLevel(0);
         BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level, false);
+        //BigBoss.Levels.GetLevel(1, out level);
+
+
+        // Temp (will move eventually)
+        RandomPicker<GridSpace> picker;
+        Level level = BigBoss.Levels.Level;
+        level.DownStairs.Select(true);
+        if (level.UpStairs != null)
+            level.UpStairs.Select(false);
+        Point stair = level.DownStairs.SelectedLink;
+        level.Array.DrawAround(stair.x, stair.y, false,
+            Draw.IfThen<GridSpace>((arr, x, y) => 
+                {
+                    return arr[y, x].Type == GridType.Floor;
+                },
+            Draw.PickRandom(level.Array, out picker)));
+        Value2D<GridSpace> pt = picker.Pick(new System.Random());
+        BigBoss.PlayerInfo.transform.position = new Vector3(pt.x, -.5f, pt.y);
     }
 }

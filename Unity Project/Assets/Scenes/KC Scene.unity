@@ -5683,6 +5683,11 @@ Prefab:
       propertyPath: ActiveFlags.Array.data[1]
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 11400104, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: Theme
+      value: 
+      objectReference: {fileID: 11400000, guid: 190358207bedb01488dc7d4be001c31a,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
   m_RootGameObject: {fileID: 494564653}
@@ -6161,7 +6166,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a481f2cbcee4164e8575888c6e5e653, type: 3}
   m_Name: 
-  Theme: {fileID: 11400000, guid: 631dbf33a897fc14f88db2d53201f711, type: 2}
+  Theme: {fileID: 11400000, guid: 190358207bedb01488dc7d4be001c31a, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
   Seed: 10
   CurLevel: 0

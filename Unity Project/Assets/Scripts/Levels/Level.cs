@@ -43,7 +43,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
                 GridSpace space = Array[y, x];
                 if (space == null)
                 { // Create empty gridspace
-                    space = new GridSpace(GridType.NULL);
+                    space = new GridSpace(GridType.NULL, x, y);
                     Array[y, x] = space;
                     return space;
                 }
