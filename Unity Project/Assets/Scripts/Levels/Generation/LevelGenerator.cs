@@ -57,7 +57,6 @@ public class LevelGenerator
     public LevelLayout Generate()
     {
         #region DEBUG
-        int debugNum = 1;
         float startTime = 0;
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
@@ -93,16 +92,22 @@ public class LevelGenerator
     protected void Log(string name, bool newLog, params Action[] a)
     {
         float time = 0;
-        if (BigBoss.Debug.logging(Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGenMain) ||
+            BigBoss.Debug.logging(Logs.LevelGen))
         {
             time = Time.realtimeSinceStartup;
+        }
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
             if (newLog)
                 BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + _debugNum++ + " - " + name);
+            BigBoss.Debug.w(Logs.LevelGen, "Start time: " + time);
         }
         foreach (Action action in a)
             action();
-        if (BigBoss.Debug.logging(Logs.LevelGen))
+        if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
+            BigBoss.Debug.w(Logs.LevelGen, "End time: " + Time.realtimeSinceStartup + ", Total time: " + (Time.realtimeSinceStartup - time));
             BigBoss.Debug.w(Logs.LevelGenMain, name + " took: " + (Time.realtimeSinceStartup - time));
         }
     }
