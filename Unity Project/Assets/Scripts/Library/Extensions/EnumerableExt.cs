@@ -7,6 +7,6 @@ public static class EnumerableExt
 {
     public static IEnumerable<T> Randomize<T>(this IEnumerable<T> e, System.Random rand)
     {
-        return e.OrderBy<T, int>((item) => Probability.Rand.Next());
+        return e.OrderBy<T, int>((item) => rand.Next());
     }
 }

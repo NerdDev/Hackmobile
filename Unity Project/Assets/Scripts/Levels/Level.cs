@@ -131,12 +131,12 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     {
         if (BigBoss.Debug.logging(log))
         {
-            GridArray ga = this;
+            Array2D<GridType> ga =  (Array2D<GridType>)this;
             ga.ToLog(log, customContent);
         }
     }
 
-    public static implicit operator GridArray(Level lev)
+    public static explicit operator Array2D<GridType>(Level lev)
     {
         GridArray ret = new GridArray(lev.Array.getWidth(), lev.Array.getHeight());
         for (int y = 0; y < lev.Array.getHeight(); y++)

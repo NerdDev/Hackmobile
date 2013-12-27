@@ -647,14 +647,7 @@ public class LevelGenerator
                 // If not blocking a path
                 And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable)).
                 // If there's a floor around
-                And((arr, x, y) =>
-                {
-                    foreach (GridType g in arr.DrawAround(x, y, false))
-                    {
-                        if (g == GridType.Floor) return true;
-                    }
-                    return false;
-                }),
+                And(Draw.Around(false, Draw.EqualTo(GridType.Floor))),
                 // Then
                 Draw.AddTo(options)), false);
             if (options.Count == 0) continue;
