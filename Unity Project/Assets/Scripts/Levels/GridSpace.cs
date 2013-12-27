@@ -188,9 +188,9 @@ public class GridSpace
             Block.SetActive(on);
     }
 
-    public static GridSpace[,] Convert(GridArray arr)
+    public static Array2D<GridSpace> Convert(GridArray arr)
     {
-        GridSpace[,] arrOut = new GridSpace[arr.getHeight(), arr.getWidth()];
+        Array2D<GridSpace> arrOut = new Array2D<GridSpace>(arr.getWidth(), arr.getHeight());
         foreach (Value2D<GridType> val in arr)
         {
             if (val == null) continue;
@@ -205,7 +205,7 @@ public class GridSpace
                     val.val = GridType.Floor;
                     break;
             }
-            arrOut[val.y, val.x] = new GridSpace(val.val, val.x, val.y);
+            arrOut[val.x, val.y] = new GridSpace(val.val, val.x, val.y);
         }
         return arrOut;
     }

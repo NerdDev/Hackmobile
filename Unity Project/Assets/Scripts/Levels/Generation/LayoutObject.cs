@@ -83,7 +83,7 @@ abstract public class LayoutObject
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Shift Outside " + ToString());
         }
         #endregion
     }
@@ -145,13 +145,12 @@ abstract public class LayoutObject
     public GridMap getType(GridArray grids, GridType t)
     {
         GridMap ret = new GridMap();
-        GridType[,] arr = grids;
-        for (int y = 0; y < arr.GetLength(0); y++)
+        for (int y = 0; y < grids.getHeight(); y++)
         {
-            for (int x = 0; x < arr.GetLength(1); x++)
+            for (int x = 0; x < grids.getWidth(); x++)
             {
-                if (t == arr[y, x])
-                    ret[x + ShiftP.x, y + ShiftP.y] = arr[y, x];
+                if (t == grids[x, y])
+                    ret[x + ShiftP.x, y + ShiftP.y] = grids[x, y];
             }
         }
         return ret;
@@ -175,13 +174,12 @@ abstract public class LayoutObject
     public GridMap getTypes(GridArray grids, HashSet<GridType> ts)
     {
         GridMap ret = new GridMap();
-        GridType[,] arr = grids;
-        for (int y = 0; y < arr.GetLength(0); y++)
+        for (int y = 0; y < grids.getHeight(); y++)
         {
-            for (int x = 0; x < arr.GetLength(1); x++)
+            for (int x = 0; x < grids.getWidth(); x++)
             {
-                if (ts.Contains(arr[y, x]))
-                    ret[x + ShiftP.x, y + ShiftP.y] = arr[y, x];
+                if (ts.Contains(grids[x, y]))
+                    ret[x + ShiftP.x, y + ShiftP.y] = grids[x, y];
             }
         }
         return ret;
@@ -191,12 +189,11 @@ abstract public class LayoutObject
     {
         GridMap ret = new GridMap();
         GridArray grids = GetArray();
-        GridType[,] arr = grids.GetArr();
         GridMap targets = getType(grids, target);
         foreach (Value2D<GridType> val in targets)
         {
             Value2D<GridType> nullDir;
-            if (arr.GetPointAround(val.x, val.y, false, Draw.EqualTo(GridType.NULL), out nullDir))
+            if (grids.GetPointAround(val.x, val.y, false, Draw.EqualTo(GridType.NULL), out nullDir))
                 ret[val] = val.val;
         }
         return ret;
@@ -273,7 +270,7 @@ abstract public class LayoutObject
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Get Connected Grid " + this);
         }
         #endregion
         return arrOut;
@@ -341,7 +338,7 @@ abstract public class LayoutObject
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Connected To Recursive: " + this);
         }
         #endregion
     }
@@ -372,7 +369,7 @@ abstract public class LayoutObject
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Connected To");
         }
         #endregion
         return failObj == null;
@@ -530,7 +527,7 @@ abstract public class LayoutObject
             BigBoss.Debug.w(log, "Bounds Shifted: " + bounds.ToString());
             bounds.Shift(ShiftP.Invert());
             BigBoss.Debug.w(log, "Bounds: " + bounds.ToString());
-            BigBoss.Debug.printFooter(log);
+            BigBoss.Debug.printFooter(log, ToString());
         }
     }
 

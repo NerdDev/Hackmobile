@@ -8,18 +8,18 @@ public class ArrayMultiMap<T> : Container2D<T>
 {
     const bool _debug = false;
     public int Count { get; private set; }
-    readonly bool[,] _present;
-    readonly T[,] _arr;
+    readonly Array2D<bool> _present;
+    readonly Array2D<T> _arr;
     bool _accurateBounding = false;
     Bounding bound;
-    public int Width { get { return _arr.GetLength(1); } }
-    public int Height { get { return _arr.GetLength(0); } }
+    public int Width { get { return _arr.getWidth(); } }
+    public int Height { get { return _arr.getHeight(); } }
 
     public ArrayMultiMap(int width, int height)
     {
         Count = 0;
-        _arr = new T[height, width];
-        _present = new bool[height, width];
+        _arr = new Array2D<T>(height, width);
+        _present = new Array2D<bool>(height, width);
     }
 
     protected T Take(int x, int y)
@@ -31,7 +31,7 @@ public class ArrayMultiMap<T> : Container2D<T>
 
     protected override T Get(int x, int y)
     {
-        return _arr[y, x];
+        return _arr[x, y];
     }
 
     public override bool InRange(int x, int y)
@@ -41,16 +41,16 @@ public class ArrayMultiMap<T> : Container2D<T>
 
     protected override void PutInternal(T val, int x, int y)
     {
-        _arr[y, x] = val;
-        _present[y, x] = true;
+        _arr[x, y] = val;
+        _present[x, y] = true;
         _accurateBounding = false;
         Count++;
     }
 
     public void Remove(int x, int y)
     {
-        _arr[y, x] = default(T);
-        _present[y, x] = false;
+        _arr[x, y] = default(T);
+        _present[x, y] = false;
         _accurateBounding = false;
         Count++;
     }
@@ -70,14 +70,14 @@ public class ArrayMultiMap<T> : Container2D<T>
 
     public override T[,] GetArr()
     {
-        return _arr;
+        return _arr.GetArr();
     }
 
     public override List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>();
-        bool[,] availableArr = new bool[Height, Width];
-        Array.Copy(_present, availableArr, _present.Length);
+        Array2D<bool> availableArr = new Array2D<bool>(Height, Width);
+        Array.Copy(_present.GetArr(), availableArr.GetArr(), _present.GetArr().Length);
         if (Count < amount)
             amount = Count;
         List<int> pickedList = random.PickSeveral(amount, Count);
@@ -109,13 +109,13 @@ public class ArrayMultiMap<T> : Container2D<T>
         #region DEBUG
         if (_debug)
         {
-            BigBoss.Debug.printFooter();
+            BigBoss.Debug.printFooter("Array Multimap Random amount");
         }
         #endregion
         return ret;
     }
 
-    protected int PickRandom(List<int> pickedList, bool[,] availableArr, bool take, int distance, int count, List<Value2D<T>> ret)
+    protected int PickRandom(List<int> pickedList, Array2D<bool> availableArr, bool take, int distance, int count, List<Value2D<T>> ret)
     {
         int numPassed = 0;
         int listIndex = pickedList.Count - 1;
@@ -126,11 +126,11 @@ public class ArrayMultiMap<T> : Container2D<T>
         {
             for (int x = 0; x < Width; x++)
             {
-                if (availableArr[y, x])
+                if (availableArr[x, y])
                 { // Valid space to analyze
                     if (pickedList[listIndex] == numPassed)
                     { // One we picked
-                        Value2D<T> pickedVal = new Value2D<T>(x, y, _arr[y, x]);
+                        Value2D<T> pickedVal = new Value2D<T>(x, y, _arr[x, y]);
                         ret.Add(pickedVal);
                         if (take)
                             Remove(x, y);
@@ -157,12 +157,6 @@ public class ArrayMultiMap<T> : Container2D<T>
                         listIndex--;
                         if (listIndex < 0)
                         { // Done picking.  Break
-                            #region DEBUG
-                            if (_debug)
-                            {
-                                BigBoss.Debug.printFooter();
-                            }
-                            #endregion
                             return internalCount;
                         }
                         #region DEBUG
@@ -186,7 +180,7 @@ public class ArrayMultiMap<T> : Container2D<T>
         {
             for (int x = 0; x < Width; x++)
             {
-                if (_present[y, x])
+                if (_present[x, y])
                 {
                     if (picked > 0)
                         picked--;
@@ -202,12 +196,12 @@ public class ArrayMultiMap<T> : Container2D<T>
 
     public override IEnumerator<Value2D<T>> GetEnumerator()
     {
-        for (int y = 0; y < _arr.GetLength(0); y++)
+        for (int y = 0; y < _arr.getHeight(); y++)
         {
-            for (int x = 0; x < _arr.GetLength(1); x++)
+            for (int x = 0; x < _arr.getWidth(); x++)
             {
-                if (_present[y,x])
-                    yield return new Value2D<T>(x, y, _arr[y,x]);
+                if (_present[x, y])
+                    yield return new Value2D<T>(x, y, _arr[x, y]);
             }
         }
     }

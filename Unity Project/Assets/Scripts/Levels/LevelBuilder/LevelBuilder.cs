@@ -32,7 +32,7 @@ public class LevelBuilder : MonoBehaviour
     {
         for (int y = 0; y < array.GetLength(0); y++)
         {
-            for (int x = 0; x < array.GetLength(0); x++)
+            for (int x = 0; x < array.GetLength(1); x++)
             {
                 Build(array[y,x], x, y);
             }

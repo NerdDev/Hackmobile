@@ -16,16 +16,18 @@ public class Path : LayoutObjectLeaf
     public Path(Value2D<GridType> startPoint, GridArray grids, System.Random rand)
         : base()
     {
-        _list = new List<Value2D<GridType>>(grids.GetArr().DrawDepthFirstSearch(
+        Stack<Value2D<GridType>> stack = grids.DrawDepthFirstSearch(
             startPoint.x,
             startPoint.y,
             Draw.EqualTo(GridType.NULL),
-            (arr, x, y) => {
-                GridType t = arr[y, x];
-                return typesSet.Contains(t); 
+            (arr, x, y) =>
+            {
+                GridType t = arr[x, y];
+                return typesSet.Contains(t);
             },
             rand,
-            true));
+            true);
+        _list = new List<Value2D<GridType>>(stack);
     }
 
     public Path(IEnumerable<Value2D<GridType>> stack)
@@ -182,21 +184,20 @@ public class Path : LayoutObjectLeaf
         bounds.expand(1);
         Array2D<int> indexes = new Array2D<int>(bounds, false);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
-        int[,] arr = indexes.GetArr();
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
             int lastDiff = 0;
             Value2D<int> neighbor = null;
-            arr.DrawAround(val.x, val.y, false, (arr2, x, y) =>
+            indexes.DrawAround(val.x, val.y, false, (arr2, x, y) =>
             { // Find neighboring point on path with the largest distance from current
-                if (arr2[y,x] == 0) return true;
-                int valDiff = Mathf.Abs(index - arr2[y,x]);
+                if (arr2[x, y] == 0) return true;
+                int valDiff = Mathf.Abs(index - arr2[x, y]);
                 if (valDiff > 1 // Diff meets requirements
                     && (neighbor == null || lastDiff < valDiff)) // Larger than last found diff
                 {
                     lastDiff = valDiff;
-                    neighbor = new Value2D<int>(x, y, arr2[y,x]);
+                    neighbor = new Value2D<int>(x, y, arr2[x, y]);
                 }
                 return true;
             });
@@ -238,7 +239,7 @@ public class Path : LayoutObjectLeaf
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Prune");
         }
         #endregion
     }
@@ -261,7 +262,7 @@ public class Path : LayoutObjectLeaf
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Connect Ends");
         }
         #endregion
     }

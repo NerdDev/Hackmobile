@@ -39,7 +39,7 @@ abstract public class RoomModifier : ProbabilityItem
                 Mods[(int)e].ToLog(Logs.LevelGenMain);
             }
             BigBoss.Debug.w(Logs.LevelGenMain, "Registering Room Modifiers took " + (Time.realtimeSinceStartup - time));
-            BigBoss.Debug.printFooter(Logs.LevelGenMain);
+            BigBoss.Debug.printFooter(Logs.LevelGenMain, "Registering Room Mods");
         }
         #endregion
     }

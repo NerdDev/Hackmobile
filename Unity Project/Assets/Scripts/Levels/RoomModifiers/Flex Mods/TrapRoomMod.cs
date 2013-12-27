@@ -45,11 +45,11 @@ public class TrapRoomMod : RoomModifier
         RandomPicker<GridType> picker;
         spec.Array.DrawSquare(Draw.IfThen<GridType>(
             Draw.EqualTo(GridType.Floor),
-            Draw.PickRandom(spec.Array, out picker)));
+            Draw.PickRandom(out picker)));
 
         List<Value2D<GridType>> treasureList = picker.Pick(spec.Random, treasureInRoom, 2, true);
         foreach (Value2D<GridType> val in treasureList)
-            spec.Array[val.y, val.x] = GridType.Chest;
+            spec.Array[val.x, val.y] = GridType.Chest;
 
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -60,11 +60,11 @@ public class TrapRoomMod : RoomModifier
 
         List<Value2D<GridType>> trapList = picker.Pick(spec.Random, trapsInRoom, 0, true);
         foreach (Value2D<GridType> val in trapList)
-            spec.Array[val.y, val.x] = GridType.Trap;
+            spec.Array[val.x, val.y] = GridType.Trap;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, ToString());
         }
         #endregion
         return true;

@@ -192,7 +192,12 @@ public class Array2D<T> : Container2D<T>
     }
     #endregion
 
-    public static void invert(Array2D<bool> arr)
+    public Point Center()
+    {
+        return new Point(arr.GetLength(1) / 2, arr.GetLength(0) / 2);
+    }
+
+    public static void Invert(Array2D<bool> arr)
     {
         foreach (Value2D<bool> val in arr)
         {

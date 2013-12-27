@@ -237,13 +237,28 @@ public class MultiMap<T> : Container2D<T>
 
     public override List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
     {
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+        {
+            BigBoss.Debug.printHeader("Multimap pick several random");
+        }
+        #endregion
         MultiMap<T> removed = new MultiMap<T>();
         List<Value2D<T>> list = new List<Value2D<T>>();
         if (distance < 0) distance = 0;
         for (int i = 0; i < amount; i++)
         {
             Value2D<T> g = Random(random);
-            if (g == null) return list;
+            if (g == null)
+            {
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+                {
+                    BigBoss.Debug.printFooter("Multimap pick several random");
+                }
+                #endregion
+                return list;
+            }
             if (distance > 0)
             {
                 for (int yCur = g.y - distance; yCur <= g.y + distance; yCur++)
@@ -257,6 +272,12 @@ public class MultiMap<T> : Container2D<T>
             }
             Remove(g.x, g.y, distance - 1);
             list.Add(g);
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+            {
+                ToLog("After picking value: (" + g.x + "," + g.y + ")");
+            }
+            #endregion
         }
         if (take)
         {
@@ -264,6 +285,12 @@ public class MultiMap<T> : Container2D<T>
                 removed.Remove(val);
         }
         this.PutAll(removed);
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+        {
+            BigBoss.Debug.printFooter("Multimap pick several random");
+        }
+        #endregion
         return list;
     }
 

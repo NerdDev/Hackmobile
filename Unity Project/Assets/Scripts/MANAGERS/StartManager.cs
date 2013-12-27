@@ -18,7 +18,7 @@ public class StartManager : MonoBehaviour, IManager
         //Level level;
         //BigBoss.Levels.GetLevel(0, out level);
         BigBoss.Levels.SetCurLevel(0);
-        BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level, false);
+        BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level);
         //BigBoss.Levels.GetLevel(1, out level);
 
 
@@ -30,11 +30,11 @@ public class StartManager : MonoBehaviour, IManager
             level.UpStairs.Select(false);
         Point stair = level.DownStairs.SelectedLink;
         level.Array.DrawAround(stair.x, stair.y, false,
-            Draw.IfThen<GridSpace>((arr, x, y) => 
+            Draw.IfThen<GridSpace>((arr, x, y) =>
                 {
-                    return arr[y, x].Type == GridType.Floor;
+                    return arr[x, y].Type == GridType.Floor;
                 },
-            Draw.PickRandom(level.Array, out picker)));
+            Draw.PickRandom(out picker)));
         Value2D<GridSpace> pt = picker.Pick(new System.Random());
         BigBoss.PlayerInfo.transform.position = new Vector3(pt.x, -.5f, pt.y);
     }

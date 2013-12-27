@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public delegate bool DrawActionCall<T>(T[,] arr, int x, int y);
+public delegate bool DrawActionCall<T>(Container2D<T> arr, int x, int y);
 public class DrawAction<T>
 {
     public DrawActionCall<T> Call { get; protected set; }
@@ -36,12 +36,12 @@ public class DrawAction<T>
         return action.Call;
     }
 
-    public DrawAction<T> Then(DrawAction<T> rhs)
+    public DrawAction<T> And(DrawAction<T> rhs)
     {
-        return Then(rhs.Call);
+        return And(rhs.Call);
     }
 
-    public DrawAction<T> Then(params DrawAction<T>[] rhs)
+    public DrawAction<T> And(params DrawAction<T>[] rhs)
     {
         if (rhs.Length == 0) return this;
         DrawActionCall<T>[] arr = new DrawActionCall<T>[rhs.Length];
@@ -50,7 +50,7 @@ public class DrawAction<T>
         return Then(arr);
     }
 
-    public DrawAction<T> Then(DrawActionCall<T> rhs)
+    public DrawAction<T> And(DrawActionCall<T> rhs)
     {
         if (rhs == null) return this;
         return new DrawAction<T>((arr, x, y) =>
@@ -63,7 +63,7 @@ public class DrawAction<T>
     public DrawAction<T> Then(params DrawActionCall<T>[] rhs)
     {
         if (rhs.Length == 0) return this;
-        if (rhs.Length == 1) return Then(rhs[0]);
+        if (rhs.Length == 1) return And(rhs[0]);
         return new DrawAction<T>((arr, x, y) =>
         {
             if (!Call(arr, x, y)) return false;

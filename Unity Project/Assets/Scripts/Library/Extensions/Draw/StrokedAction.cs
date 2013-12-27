@@ -39,8 +39,8 @@ public class StrokedAction<T>
         if (rhs == null) return rhs;
         return new StrokedAction<T>()
         {
-            UnitAction = ((DrawAction<T>)UnitAction).Then(rhs.UnitAction),
-            StrokeAction = ((DrawAction<T>)StrokeAction).Then(rhs.StrokeAction)
+            UnitAction = ((DrawAction<T>)UnitAction).And(rhs.UnitAction),
+            StrokeAction = ((DrawAction<T>)StrokeAction).And(rhs.StrokeAction)
         };
     }
 }

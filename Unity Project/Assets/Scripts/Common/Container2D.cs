@@ -66,6 +66,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             Put(t, xl, y);
         }
     }
+    public Point Center { get { return GetBounding().GetCenter(); } }
 
     public abstract T[,] GetArr();
 	
@@ -82,6 +83,11 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
     }
 
+    public void ToLog(params string[] customContent)
+    {
+        ToLog(BigBoss.Debug.LastLog, customContent);
+    }
+
     public virtual void ToLog(Logs log, params string[] customContent)
     {
         if (BigBoss.Debug.logging(log))
@@ -96,7 +102,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                 BigBoss.Debug.w(log, s);
             }
             BigBoss.Debug.w(log, "Bounds: " + GetBounding().ToString());
-            BigBoss.Debug.printFooter(log);
+            BigBoss.Debug.printFooter(log, ToString());
         }
     }
 

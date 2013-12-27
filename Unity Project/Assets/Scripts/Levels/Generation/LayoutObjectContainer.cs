@@ -110,7 +110,6 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
 		return bound;
 	}
 
-
     public override bool ContainsPoint(Value2D<GridType> val)
     {
         return GetObjAt(val) != null;
@@ -144,7 +143,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     BigBoss.Debug.w(Logs.LevelGen, "Returning " + obj);
-                    BigBoss.Debug.printFooter(Logs.LevelGen);
+                    BigBoss.Debug.printFooter(Logs.LevelGen, "Get Object At");
                 }
                 #endregion
                 return obj;
@@ -153,7 +152,7 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Get Object At");
         }
         #endregion
         return null;

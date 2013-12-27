@@ -59,6 +59,8 @@ public static class ArrayExt
             {
                 converter = new Func<T, char>((t) =>
                     {
+                        if (t == null)
+                            return ' ';
                         string str = t.ToString();
                         return str.Length > 0 ? str[0] : ' ';
                     });

@@ -11,8 +11,8 @@ public class GiantPillarMod : RoomModifier
         int size = spec.Random.Next(2, 5) + 2;
         List<Bounding> locations = spec.Array.GetSquares(size, size, false, new OptionTests<GridType>()
             {
-                UnitAction = (arr, x, y) => arr[y, x] == GridType.Floor,
-                StrokeAction = (arr, x, y) => GridTypeEnum.Walkable(arr[y, x])
+                UnitAction = (arr, x, y) => arr[x, y] == GridType.Floor,
+                StrokeAction = (arr, x, y) => GridTypeEnum.Walkable(arr[x, y])
             },
             spec.Room.GetBounding(false));
         if (locations.Count == 0) return false;
@@ -23,7 +23,7 @@ public class GiantPillarMod : RoomModifier
             foreach (Bounding r in locations)
             {
                 GridArray copy = new GridArray(spec.Room.GetArray());
-                copy.GetArr().DrawSquare(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, Draw.SetTo(GridType.Path_Vert));
+                copy.DrawSquare(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, Draw.SetTo(GridType.Path_Vert));
                 copy.ToLog(Logs.LevelGen);
             }
         }

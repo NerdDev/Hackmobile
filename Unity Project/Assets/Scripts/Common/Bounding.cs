@@ -296,6 +296,11 @@ public class Bounding
         return XMin < rhs.XMin && XMax > rhs.XMax && YMin < rhs.YMin && YMax > rhs.YMax;
     }
 
+    public Bounding InBounds<T>(Container2D<T> arr)
+    {
+        return IntersectBounds(arr.GetBounding());
+    }
+
     public Bounding InBounds<T>(T[,] arr)
     {
         return IntersectBounds(arr.GetBounds());

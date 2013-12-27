@@ -14,7 +14,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
         SpawnModifier.RegisterModifiers();
     }
 
-    public void PopulateLevel(Level l, bool up)
+    public void PopulateLevel(Level l)
     {
         if (!l.Populated)
         {
@@ -27,7 +27,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
         Value2D<GridSpace> grid;
         l.Array.GetPointAround(stairsUp.X, stairsUp.Y, false, (arr, x, y) =>
             {
-                return arr[y, x].Type == GridType.Floor;
+                return arr[x, y].Type == GridType.Floor;
             }, out grid);
         BigBoss.PlayerInfo.transform.position = new Vector3(grid.x, -.5f, grid.y);
     }

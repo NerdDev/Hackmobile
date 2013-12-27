@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class Draw
+public static class Draw
 {
     public static DrawAction<T> EqualTo<T>(T t)
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            return t.Equals(arr[y, x]);
+            return t.Equals(arr[x, y]);
         });
     }
 
@@ -27,7 +27,7 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            if (item.Equals(arr[y, x]) != not)
+            if (item.Equals(arr[x, y]) != not)
                 return then(arr, x, y);
             return true;
         });
@@ -37,7 +37,31 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            return col.Contains(arr[y, x]);
+            return col.Contains(arr[x, y]);
+        });
+    }
+
+    public static DrawAction<T> Around<T>(bool cornered, DrawAction<T> call)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+            {
+                return arr.DrawAround(x, y, cornered, call);
+            });
+    }
+
+    public static DrawAction<T> Dir<T>(GridDirection dir, DrawAction<T> call)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return arr.DrawDir(x, y, dir, call);
+        });
+    }
+
+    public static DrawAction<T> Loc<T>(GridLocation loc, DrawAction<T> call)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return arr.DrawLocation(x, y, loc, call);
         });
     }
 
@@ -45,20 +69,65 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            arr[y, x] = g;
+            arr[x, y] = g;
             return true;
+        });
+    }
+
+    public static DrawAction<T> Not<T>(DrawAction<T> call)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+            {
+                return !call.Call(arr, x, y);
+            });
+    }
+
+    public static DrawAction<T> And<T>(this DrawAction<T> call1, DrawAction<T> call2)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return call1.Call(arr, x, y) && call2.Call(arr, x, y);
+        });
+    }
+
+    public static DrawAction<T> AndNot<T>(this DrawAction<T> call1, DrawAction<T> call2)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return call1.Call(arr, x, y) && !call2.Call(arr, x, y);
+        });
+    }
+
+    public static DrawAction<T> Or<T>(this DrawAction<T> call1, DrawAction<T> call2)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return call1.Call(arr, x, y) || call2.Call(arr, x, y);
+        });
+    }
+
+    public static DrawAction<T> OrNot<T>(this DrawAction<T> call1, DrawAction<T> call2)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return call1.Call(arr, x, y) || !call2.Call(arr, x, y);
         });
     }
 
     public static DrawAction<T> NotEdgeOfArray<T>()
     {
-        return new DrawAction<T>((arr, x, y) =>
+        return new DrawAction<T>((cont, x, y) =>
         {
-            if (x <= 0
-                || y <= 0
-                || y >= arr.GetLength(0) - 1
-                || x >= arr.GetLength(1) - 1) return false;
-            return true;
+            if (cont is Array2D<T>)
+            {
+                Array2D<T> arr = (Array2D<T>) cont;
+                if (x <= 0
+                    || y <= 0
+                    || y >= arr.getHeight() - 1
+                    || x >= arr.getWidth() - 1) return false;
+                return true;
+            }
+            return false;
         });
     }
 
@@ -66,7 +135,7 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
             {
-                t.Add(arr[y, x]);
+                t.Add(arr[x, y]);
                 return true;
             });
     }
@@ -75,7 +144,7 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            t.Add(new Value2D<T>(x, y, arr[y, x]));
+            t.Add(new Value2D<T>(x, y, arr[x, y]));
             return true;
         });
     }
@@ -84,7 +153,7 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            map.Put(arr[y, x], x, y);
+            map.Put(arr[x, y], x, y);
             return true;
         });
     }
@@ -93,8 +162,8 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            if (arr[y, x].Equals(from))
-                arr[y, x] = to;
+            if (arr[x, y].Equals(from))
+                arr[x, y] = to;
             return true;
         });
     }
@@ -103,15 +172,15 @@ public class Draw
     {
         return new DrawAction<T>((arr, x, y) =>
         {
-            if (!arr[y, x].Equals(not))
-                arr[y, x] = to;
+            if (!arr[x, y].Equals(not))
+                arr[x, y] = to;
             return true;
         });
     }
 
-    public static DrawAction<T> PickRandom<T>(T[,] arr, out RandomPicker<T> picker)
+    public static DrawAction<T> PickRandom<T>(out RandomPicker<T> picker)
     {
-        picker = new RandomPicker<T>(arr);
+        picker = new RandomPicker<T>();
         DrawActionCall<T> f = picker.DrawingAction;
         return f;
     }
@@ -151,7 +220,7 @@ public class Draw
     {
         return new DrawAction<GridType>((arr, x, y) =>
             {
-                if (arr[y, x] != GridType.Wall)
+                if (arr[x, y] != GridType.Wall)
                     return false;
                 // Include null to work with levelgen placement
                 return (arr.AlternatesSides(x, y, GridTypeEnum.WalkableOrNull));
@@ -163,7 +232,7 @@ public class Draw
     {
         return new DrawAction<GridType>((arr, x, y) =>
             {
-                return GridTypeEnum.Walkable(arr[y, x]);
+                return GridTypeEnum.Walkable(arr[x, y]);
             });
     }
     #endregion

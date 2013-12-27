@@ -54,6 +54,7 @@ public class LevelManager : MonoBehaviour, IManager
         Destroy(Level);
         Level level;
         GetLevel(depth, out level);
+        level.ToLog(Logs.Main, "Setting level to");
         CurLevelDepth = depth;
         Deploy(level);
         Level = level;
@@ -76,7 +77,6 @@ public class LevelManager : MonoBehaviour, IManager
             SetCurLevel(CurLevelDepth + 1);
         }
         CurLevel = CurLevelDepth;
-        BigBoss.DungeonMaster.PopulateLevel(Level, up);
     }
 
     public bool GetLevel(int depth, out Level level)

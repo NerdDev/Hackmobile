@@ -5,7 +5,7 @@ using System.Text;
 
 public static class GridTypeDrawExt
 {
-    public static void DrawPotentialDoors(this GridType[,] arr, DrawActionCall<GridType> action)
+    public static void DrawPotentialDoors(this Array2D<GridType> arr, DrawActionCall<GridType> action)
     {
         DrawActionCall<GridType> check = Draw.CanDrawDoor();
         arr.DrawSquare(new DrawActionCall<GridType>((arr2, x, y) =>
@@ -16,7 +16,7 @@ public static class GridTypeDrawExt
             }));
     }
 
-    public static void DrawPotentialDoors(this GridType[,] arr, StrokedAction<GridType> action)
+    public static void DrawPotentialDoors(this Array2D<GridType> arr, StrokedAction<GridType> action)
     {
         DrawActionCall<GridType> check = Draw.CanDrawDoor();
         StrokedAction<GridType> findDoors = new StrokedAction<GridType>();
@@ -41,18 +41,18 @@ public static class GridTypeDrawExt
 
         arr.DrawPerimeter((arr2, x, y) =>
             {
-                return arr2[y, x] != GridType.NULL;
+                return arr2[x, y] != GridType.NULL;
             },
             findDoors
             );
     }
 
-    public static void DrawPotentialExternalDoors(this GridType[,] arr, DrawActionCall<GridType> action)
+    public static void DrawPotentialExternalDoors(this Array2D<GridType> arr, DrawActionCall<GridType> action)
     {
         DrawPotentialDoors(arr, new StrokedAction<GridType>() { StrokeAction = action });
     }
 
-    public static void DrawPotentialInternalDoors(this GridType[,] arr, DrawActionCall<GridType> action)
+    public static void DrawPotentialInternalDoors(this Array2D<GridType> arr, DrawActionCall<GridType> action)
     {
         DrawPotentialDoors(arr, new StrokedAction<GridType>() { UnitAction = action });
     }

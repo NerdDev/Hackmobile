@@ -5,18 +5,15 @@ using System;
 
 public class HorizSplitterMod : RoomModifier
 {
-    protected DrawAction<GridType> ViableSplitter()
-    {
-        return new DrawAction<GridType>((arr, x, y) =>
-            {
-                // Not a hallway, and no doors nearby
-                return !arr.AlternatesSides(x, y, GridTypeEnum.Walkable) && !arr.DrawAround(x, y, false, Draw.EqualTo(GridType.Door));
-            }
-            );
-    }
 
     public override bool Modify(RoomSpec spec)
     {
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Splitter Mod");
+        }
+        #endregion
         Bounding bounds = spec.Room.GetBounding(false);
         List<int> options = new List<int>();
         bool horizontal = spec.Random.NextBool();
@@ -26,9 +23,25 @@ public class HorizSplitterMod : RoomModifier
         int toAlt = bounds.GetMax(!horizontal);
 
         // Iterate and find all viable options
-        for (int i = fromAlt; i < toAlt; i++)
+        for (int i = fromAlt; i <= toAlt; i++)
         {
-            if (spec.Array.DrawLine(from, to, i, horizontal, ViableSplitter()))
+            Counter floorCount;
+            Counter side1;
+            Counter side2;
+            if (spec.Array.DrawLine<GridType>(from, to, i, horizontal,
+                // If no doors around
+                Draw.Not(Draw.Around(false, Draw.EqualTo(GridType.Door)))
+                // Not blocking walking
+                .And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable))
+                // Count floors on line as well as sides
+                .And(Draw.IfThen<GridType>(Draw.EqualTo(GridType.Floor), Draw.Count<GridType>(out floorCount)))
+                .And(Draw.Loc(horizontal ? GridLocation.UP : GridLocation.LEFT,
+                    Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out side1))))
+                .And(Draw.Loc(horizontal ? GridLocation.DOWN : GridLocation.RIGHT,
+                    Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out side2)))))
+                // Has a floor in each
+                && floorCount > 0 && side1 > 0 && side2 > 0
+                )
                 options.Add(i);
         }
         if (options.Count == 0) return false;
@@ -38,7 +51,7 @@ public class HorizSplitterMod : RoomModifier
             foreach (int i in options)
             {
                 GridArray copy = new GridArray(spec.Room.GetArray());
-                copy.GetArr().DrawLine(from, to, i, horizontal, Draw.SetToIfNotEqual(GridType.NULL, GridType.Wall));
+                copy.DrawLine(from, to, i, horizontal, Draw.SetToIfNotEqual(GridType.NULL, GridType.INTERNAL_RESERVED_BLOCKED));
                 copy.ToLog(Logs.LevelGen);
             }
         }
@@ -58,12 +71,19 @@ public class HorizSplitterMod : RoomModifier
         // Draw at least one door
         RandomPicker<GridType> picker;
         spec.Array.DrawLine(from, to, picked, horizontal, 
-            Draw.IfThen<GridType>(Draw.CanDrawDoor(), Draw.PickRandom(spec.Array, out picker)));
+            Draw.IfThen<GridType>(Draw.CanDrawDoor(), Draw.PickRandom(out picker)));
         
         int numDoors = spec.Random.Next(1, 4);
         List<Value2D<GridType>> doors = picker.Pick(spec.Random, numDoors, 1, false);
         foreach (Value2D<GridType> door in doors)
-            spec.Array[door.y, door.x] = GridType.Door;
+            spec.Array[door.x, door.y] = GridType.Door;
+
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Splitter Mod");
+        }
+        #endregion
         return true;
     }
 

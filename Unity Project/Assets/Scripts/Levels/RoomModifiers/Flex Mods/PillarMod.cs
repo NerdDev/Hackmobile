@@ -20,16 +20,16 @@ public class PillarMod : RoomModifier
         spacingOptions.Rand = spec.Random;
         int spacingX = spacingOptions.Get();
         int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get() : spacingX;
-        GridType[,] arr = spec.Array;
+        Container2D<GridType> arr = spec.Array;
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)
             {
-                if (GridTypeEnum.Walkable(arr[y, x]))
+                if (GridTypeEnum.Walkable(arr[x, y]))
                 {
                     if (!arr.AlternatesSides(x, y, GridTypeEnum.Walkable))
                     { // If not blocking a path
-                        arr[y, x] = GridType.Wall;
+                        arr[x, y] = GridType.Wall;
                     }
                 }
             }

@@ -15,11 +15,11 @@ public class HiddenRoomMod : RoomModifier
         #endregion
 
         RandomPicker<GridType> picker;
-        spec.Array.DrawPotentialExternalDoors(Draw.PickRandom(spec.Array, out picker));
+        spec.Array.DrawPotentialExternalDoors(Draw.PickRandom(out picker));
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            picker.ToLog(Logs.LevelGen, "After Removing Invalid Locations");
+            picker.ToLog(Logs.LevelGen, spec.Array.GetArr(), "After Removing Invalid Locations");
         }
         #endregion
 
@@ -34,20 +34,13 @@ public class HiddenRoomMod : RoomModifier
                     UnitAction = Draw.SetTo(GridType.NULL, GridType.Floor),
                     StrokeAction = Draw.SetTo(GridType.NULL, GridType.Wall)
                 });
-            spec.Array[doorSpace.y, doorSpace.x] = GridType.Door;
+            spec.Array[doorSpace.x, doorSpace.y] = GridType.Door;
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             spec.Room.ToLog(Logs.LevelGen, "Final Room After placing doors");
-            BigBoss.Debug.printFooter(Logs.LevelGen);
-        }
-        #endregion
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            //layout.ToLog(Logs.LevelGen);
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Hidden Room Mod");
         }
         #endregion
         return true;

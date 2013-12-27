@@ -34,6 +34,8 @@ public class Theme : MonoBehaviour {
                 return StairUp;
             case GridType.StairDown:
                 return StairDown;
+            case GridType.NULL:
+                return null;
             default:
                 return Floor;
         }

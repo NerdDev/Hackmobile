@@ -7,6 +7,7 @@ using System.IO;
 public class DebugManager : MonoBehaviour, IManager
 {
     public bool Initialized { get; set; }
+    public Logs LastLog { get; protected set; }
     Log lastLog;
 
     #region LogTypes
@@ -27,7 +28,8 @@ public class DebugManager : MonoBehaviour, IManager
     const string depthStr = "|   ";
     const string headerStrMid = @"/=============  ";
     const string headerStrMid2 = @"  =============\";
-    const string headerStrFoot = @"\=================================================/";
+    const string headerStrFoot = @"\=============  ";
+    const string headerStrFoot2 = @"  =============/";
     const string breaker = @"___________________________________________________";
     const string breaker2 = @"|/////////////////////////////////////////////////|";
     #endregion
@@ -169,18 +171,18 @@ public class DebugManager : MonoBehaviour, IManager
             lastLog.printHeader(line);
     }
 
-    public void printFooter(Logs e)
+    public void printFooter(Logs e, string line)
     {
         if (logging(e))
         {
-            Get(e).printFooter();
+            Get(e).printFooter(line);
         }
     }
 
-    public void printFooter()
+    public void printFooter(string line)
     {
         if (lastLog != null)
-            lastLog.printFooter();
+            lastLog.printFooter(line);
     }
 
     public void printBreakers(Logs e, int num)
@@ -253,6 +255,7 @@ public class DebugManager : MonoBehaviour, IManager
             CreateNewLog(e, getName(e));
         }
         lastLog = logs[(int)e];
+        LastLog = e;
         return lastLog;
     }
 
@@ -345,10 +348,10 @@ public class DebugManager : MonoBehaviour, IManager
             w("");
         }
 
-        public void printFooter()
+        public void printFooter(string line)
         {
             decrementDepth();
-            w(headerStrFoot);
+            w(headerStrFoot + line + headerStrFoot2);
         }
 
         public void w(string line)
