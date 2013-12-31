@@ -5,11 +5,12 @@ using System.Collections.Generic;
 public class GridArray : Array2D<GridType>
 {
     #region Ctors
-    public GridArray(int width, int height) : base(width, height)
+    public GridArray(int width, int height)
+        : base(width, height)
     {
     }
 
-    public GridArray(GridArray rhs) 
+    public GridArray(GridArray rhs)
         : base(rhs.arr.GetLength(1), rhs.arr.GetLength(0))
     {
         PutAll(rhs);
@@ -24,16 +25,12 @@ public class GridArray : Array2D<GridType>
     public GridArray(GridArray rhs, int xShift, int yShift)
         : base(rhs.arr.GetLength(1), rhs.arr.GetLength(0))
     {
-        PutAll(rhs.arr, xShift, yShift);
+        PutAll(rhs, xShift, yShift);
     }
-	
-	public GridArray(Bounding bounds, bool minimize) : base(bounds, minimize)
-	{
-	}
 
-    public GridArray(GridType[,] arr)
+    public GridArray(Bounding bounds, bool minimize)
+        : base(bounds, minimize)
     {
-        this.arr = arr;
     }
     #endregion
 
@@ -49,14 +46,14 @@ public class GridArray : Array2D<GridType>
     {
         base.Put(GridType.NULL, x, y);
     }
-	
-	public void PutAll(LayoutObject obj, Bounding origBound)
-	{
-		Point shift = obj.GetShift();
-		shift.x -= origBound.XMin;
-		shift.y -= origBound.YMin;
-		base.PutAll (obj.GetArray(), shift);	
-	}
+
+    public void PutAll(LayoutObject obj, Bounding origBound)
+    {
+        Point shift = obj.GetShift();
+        shift.x -= origBound.XMin;
+        shift.y -= origBound.YMin;
+        base.PutAll(obj.GetArray(), shift);
+    }
     public void PutAll(LayoutObject rhs)
     {
         PutAll(rhs.GetArray(), rhs.GetShift());
@@ -69,8 +66,8 @@ public class GridArray : Array2D<GridType>
             Put(type, val.x, val.y);
         }
     }
-	
-	public override Bounding GetBounding ()
+
+    public override Bounding GetBounding()
     {
         Bounding ret = new Bounding();
         for (int y = 0; y < getHeight(); y++)
@@ -84,8 +81,8 @@ public class GridArray : Array2D<GridType>
             }
         }
         return ret;
-	}
-	
+    }
+
     public Bounding GetBoundingInternal()
     {
         return base.GetBounding();
@@ -97,14 +94,23 @@ public class GridArray : Array2D<GridType>
         bounds.expand(buffer);
         bounds.ShiftNonNeg();
         GridType[,] tmp = arr;
+        bool[,] tmpPresent = present;
         arr = BoundedArr(bounds, true);
-        PutAll(tmp, - bounds.XMin, - bounds.YMin);
+        present = new bool[arr.GetLength(0), arr.GetLength(1)];
+        for (int y = 0; y < tmp.GetLength(0); y++)
+        {
+            for (int x = 0; x < tmp.GetLength(1); x++)
+            {
+                if (tmpPresent[y, x])
+                    Put(tmp[y, x], x - bounds.XMin, y - bounds.YMin);
+            }
+        }
         return new Point(bounds.XMin, bounds.YMin);
     }
 
     public override List<string> ToRowStrings()
     {
-		Bounding bounds = GetBounding();
+        Bounding bounds = GetBounding();
         List<string> ret = new List<string>();
         for (int y = bounds.YMax; y >= bounds.YMin; y -= 1)
         {
