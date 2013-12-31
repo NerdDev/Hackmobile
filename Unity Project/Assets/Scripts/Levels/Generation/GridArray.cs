@@ -108,39 +108,8 @@ public class GridArray : Array2D<GridType>
         return new Point(bounds.XMin, bounds.YMin);
     }
 
-    public override List<string> ToRowStrings()
-    {
-        Bounding bounds = GetBounding();
-        List<string> ret = new List<string>();
-        for (int y = bounds.YMax; y >= bounds.YMin; y -= 1)
-        {
-            string rowStr = "";
-            for (int x = bounds.XMin; x <= bounds.XMax; x += 1)
-            {
-                rowStr += GridTypeEnum.CharConverter(this[x, y]);
-            }
-            ret.Add(rowStr);
-        }
-        return ret;
-    }
-
     public static implicit operator GridType[,](GridArray src)
     {
         return src.arr;
-    }
-
-    public override IEnumerator<Value2D<GridType>> GetEnumerator()
-    {
-        for (int y = 0; y < getHeight(); y++)
-        {
-            for (int x = 0; x < arr.GetLength(1); x++)
-            {
-                if (this[x, y] != GridType.NULL)
-                {
-                    Value2D<GridType> val = new Value2D<GridType>(x, y, this[x, y]);
-                    yield return val;
-                }
-            }
-        }
     }
 }

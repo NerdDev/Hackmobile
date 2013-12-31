@@ -177,11 +177,11 @@ public class Array2D<T> : Container2D<T>
         {
             for (int x = 1; x < arr.GetLength(1) - 1; x++)
             {
-                //if (present[y, x])
-                //{
-                var val = new Value2D<T>(x, y, arr[y, x]);
-                yield return val;
-                //}
+                if (present[y, x])
+                {
+                    var val = new Value2D<T>(x, y, arr[y, x]);
+                    yield return val;
+                }
             }
         }
     }
@@ -192,11 +192,11 @@ public class Array2D<T> : Container2D<T>
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                //if (present[y, x])
-                //{
-                var val = new Value2D<T>(x, y, arr[y, x]);
-                yield return val;
-                //}
+                if (present[y, x])
+                {
+                    var val = new Value2D<T>(x, y, arr[y, x]);
+                    yield return val;
+                }
             }
         }
     }
@@ -212,7 +212,7 @@ public class Array2D<T> : Container2D<T>
         foreach (Value2D<bool> val in arr)
         {
             arr.arr[val.y, val.x] = !val.val;
-            //arr.present[val.y, val.x] = !arr.present[val.y, val.x];
+            arr.present[val.y, val.x] = !arr.present[val.y, val.x];
         }
     }
 }
