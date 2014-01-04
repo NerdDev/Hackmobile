@@ -19,7 +19,7 @@ public class HiddenRoomMod : RoomModifier
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            picker.ToLog(Logs.LevelGen, spec.Array.GetArr(), "After Removing Invalid Locations");
+            picker.ToLog(Logs.LevelGen, spec.Array, "After Removing Invalid Locations");
         }
         #endregion
 

@@ -5,7 +5,7 @@ using System.Text;
 
 public class SquareFinder<T>
 {
-    Array2D<T> _arr;
+    Container2D<T> _arr;
     int _width;
     int _height;
     OptionTests<T> _tester;
@@ -17,7 +17,7 @@ public class SquareFinder<T>
     StrokedAction<T> incremental = new StrokedAction<T>();
     public bool Single { get; set; }
 
-    public SquareFinder(Array2D<T> arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
+    public SquareFinder(Container2D<T> arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
     {
         _arr = arr;
         _width = width;
@@ -56,9 +56,9 @@ public class SquareFinder<T>
     public List<Bounding> Find()
     {
         List<Bounding> ret = new List<Bounding>();
-        if (_width >= _arr.getWidth() || _height >= _arr.getHeight()) return ret;
+        if (_width >= _arr.Width || _height >= _arr.Height) return ret;
 
-        while (_y + _height <= _arr.getHeight() && (_scope == null || _y + _height <= _scope.YMax))
+        while (_y + _height <= _arr.Height && (_scope == null || _y + _height <= _scope.YMax))
         { // In range vertically
             if (_tester.InitialTest == null || _tester.InitialTest(_arr))
             { // Passed initial test
@@ -78,7 +78,7 @@ public class SquareFinder<T>
             }
 
             // Test to see if next is out of range horizontally
-            if (_x + _width > _arr.getHeight() || (_scope != null && _x + _width > _scope.XMax))
+            if (_x + _width > _arr.Height || (_scope != null && _x + _width > _scope.XMax))
             { // it is, so reset to left of array and move up
                 _x = _scope == null ? 0 : _scope.XMin;
                 _lowestFail++;

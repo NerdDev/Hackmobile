@@ -250,8 +250,6 @@
      <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemStorage.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\GridArray.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\GridMap.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\GridSet.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutCluster.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
@@ -268,7 +266,6 @@
      <Compile Include="Assets\Scripts\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Levels\LevelBuilder\LevelBuilder.cs" />
      <Compile Include="Assets\Scripts\Levels\LevelBuilder\Theme.cs" />
-     <Compile Include="Assets\Scripts\Levels\RoomMap.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\CircleRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\RectangularRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\SquareRoom.cs" />

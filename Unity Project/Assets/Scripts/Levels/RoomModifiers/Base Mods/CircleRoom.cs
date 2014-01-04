@@ -6,7 +6,7 @@ public class CircleRoom : RoomModifier {
     public override bool Modify(RoomSpec spec)
     {
         int radius = spec.Random.Next(LevelGenerator.minRadiusSize, LevelGenerator.maxRadiusSize);
-        int center = spec.Room.Width / 2;
+        int center = spec.Room.Grids.Width / 2;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

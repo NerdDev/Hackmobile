@@ -50,7 +50,7 @@ public class HorizSplitterMod : RoomModifier
         {
             foreach (int i in options)
             {
-                GridArray copy = new GridArray(spec.Room.GetArray());
+                Container2D<GridType> copy = new Array2D<GridType>(spec.Room.Grids);
                 copy.DrawLine(from, to, i, horizontal, Draw.SetToIfNotEqual(GridType.NULL, GridType.INTERNAL_RESERVED_BLOCKED));
                 copy.ToLog(Logs.LevelGen);
             }

@@ -5,8 +5,10 @@ using System;
 
 public class Array2D<T> : Container2D<T>
 {
-    protected bool[,] present;
+    bool _validCount = false;
+    int _count = 0;
     protected T[,] arr;
+    protected bool[,] present;
 
     #region Ctors
     protected Array2D()
@@ -18,7 +20,16 @@ public class Array2D<T> : Container2D<T>
         : base()
     {
         arr = new T[height, width];
-        present = new bool[height, width];
+    }
+
+    public Array2D(Container2D<T> rhs)
+        : base(rhs)
+    {
+    }
+
+    public Array2D(Array2D<T> rhs)
+        : this(rhs.Width, rhs.Height, rhs)
+    {
     }
 
     public Array2D(int width, int height, Array2D<T> rhs)
@@ -43,7 +54,6 @@ public class Array2D<T> : Container2D<T>
         : this()
     {
         arr = BoundedArr(bound, minimize);
-        present = new bool[arr.GetLength(0), arr.GetLength(1)];
     }
     #endregion
 
@@ -67,16 +77,12 @@ public class Array2D<T> : Container2D<T>
         return new T[height, width];
     }
 
-    #region GetSet
-    protected override T Get(int x, int y)
+    public override List<string> ToRowStrings()
     {
-        if (InRange(x, y))
-        {
-            return arr[y, x];
-        }
-        return default(T);
+        return Nifty.AddRuler(arr.ToRowStrings(), Bounding);
     }
 
+    #region GetSet
     public override bool InRange(int x, int y)
     {
         return y < arr.GetLength(0)
@@ -85,7 +91,7 @@ public class Array2D<T> : Container2D<T>
             && x >= 0;
     }
 
-    public bool TryGet(int x, int y, out T val)
+    public override bool TryGetValue(int x, int y, out T val)
     {
         if (InRange(x, y))
         {
@@ -96,77 +102,9 @@ public class Array2D<T> : Container2D<T>
         return false;
     }
 
-    public int getWidth()
+    public override Array2D<T> Array
     {
-        return arr.GetLength(1);
-    }
-
-    public int getHeight()
-    {
-        return arr.GetLength(0);
-    }
-
-    public override void Put(T val, int x, int y)
-    {
-        if (InRange(x, y))
-        {
-            arr[y, x] = val;
-            present[y, x] = true;
-        }
-    }
-
-    // Unsafe put that does no checking or expanding
-    protected override void PutInternal(T val, int x, int y)
-    {
-        arr[y, x] = val;
-        present[y, x] = true;
-    }
-
-    public void PutAll(Array2D<T> rhs)
-    {
-        for (int y = 0; y < rhs.arr.GetLength(0); y++)
-        {
-            for (int x = 0; x < rhs.arr.GetLength(1); x++)
-            {
-                if (rhs.present[y, x])
-                    Put(rhs.arr[y, x], x, y);
-            }
-        }
-    }
-
-    public void PutAll(Array2D<T> rhs, int additionalXshift, int additionalYshift)
-    {
-        for (int y = 0; y < rhs.arr.GetLength(0); y++)
-        {
-            for (int x = 0; x < rhs.arr.GetLength(1); x++)
-            {
-                if (rhs.present[y, x])
-                    Put(rhs.arr[y, x], x + additionalXshift, y + additionalYshift);
-            }
-        }
-    }
-
-    // Puts in values from another collection with desired shift
-    public void PutAll(Array2D<T> rhs, Point shift)
-    {
-        PutAll(rhs, shift.x, shift.y);
-    }
-
-    // Gets public bounds of array 
-    // (Expanding equally both directions from the origin)
-    public override Bounding GetBounding()
-    {
-        Bounding ret = new Bounding();
-        ret.XMin = 0;
-        ret.XMax = arr.GetLength(1) - 1;
-        ret.YMin = 0;
-        ret.YMax = arr.GetLength(0) - 1;
-        return ret;
-    }
-
-    public override T[,] GetArr()
-    {
-        return arr;
+        get { return this; }
     }
     #endregion
 
@@ -177,11 +115,8 @@ public class Array2D<T> : Container2D<T>
         {
             for (int x = 1; x < arr.GetLength(1) - 1; x++)
             {
-                if (present[y, x])
-                {
-                    var val = new Value2D<T>(x, y, arr[y, x]);
-                    yield return val;
-                }
+                var val = new Value2D<T>(x, y, arr[y, x]);
+                yield return val;
             }
         }
     }
@@ -192,27 +127,100 @@ public class Array2D<T> : Container2D<T>
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                if (present[y, x])
-                {
-                    var val = new Value2D<T>(x, y, arr[y, x]);
-                    yield return val;
-                }
+                var val = new Value2D<T>(x, y, arr[y, x]);
+                yield return val;
             }
         }
     }
     #endregion
 
-    public Point Center()
-    {
-        return new Point(arr.GetLength(1) / 2, arr.GetLength(0) / 2);
-    }
-
-    public static void Invert(Array2D<bool> arr)
+    public static void invert(Array2D<bool> arr)
     {
         foreach (Value2D<bool> val in arr)
         {
-            arr.arr[val.y, val.x] = !val.val;
-            arr.present[val.y, val.x] = !arr.present[val.y, val.x];
+            arr[val] = !val.val;
         }
+    }
+
+    public override T this[int x, int y]
+    {
+        get
+        {
+            return arr[y, x];
+        }
+        set
+        {
+            _validCount = false;
+            arr[y, x] = value;
+        }
+    }
+
+    public override int Count
+    {
+        get
+        {
+            if (!_validCount)
+            {
+                _count = 0;
+                T def = default(T);
+                for (int y = 0; y < arr.GetLength(0); y++)
+                {
+                    for (int x = 0; x < arr.GetLength(1); x++)
+                    {
+                        T val = arr[y, x];
+                        if (val != null && !val.Equals(def))
+                        {
+                            _count++;
+                        }
+                    }
+                }
+                _validCount = true;
+            }
+            return _count;
+        }
+    }
+
+    public override Bounding Bounding
+    {
+        get
+        {
+            Bounding ret = new Bounding();
+            ret.XMin = 0;
+            ret.XMax = arr.GetLength(1) - 1;
+            ret.YMin = 0;
+            ret.YMax = arr.GetLength(0) - 1;
+            return ret;
+        }
+    }
+
+    public override bool Contains(int x, int y)
+    {
+        T val = arr[y, x];
+        return val != null && !val.Equals(default(T));
+    }
+
+    public override bool Remove(int x, int y)
+    {
+        bool contained = Contains(x, y);
+        arr[y, x] = default(T);
+        return contained;
+    }
+
+    public Point Minimize(int buffer)
+    {
+        Bounding bounds = new Bounding(Bounding);
+        bounds.expand(buffer);
+        bounds.ShiftNonNeg();
+        Array2D<T> tmp = new Array2D<T>(this);
+        arr = BoundedArr(bounds, true);
+        PutAll(tmp, -bounds.XMin, -bounds.YMin);
+        return new Point(bounds.XMin, bounds.YMin);
+    }
+
+    public override void Clear()
+    {
+        _validCount = false;
+        arr = new T[arr.GetLength(0), arr.GetLength(1)];
+        present = new bool[arr.GetLength(0), arr.GetLength(1)];
     }
 }

@@ -5,50 +5,63 @@ using System.Collections.Generic;
 
 abstract public class LayoutObject
 {
-    protected bool finalized = false;
-    protected Bounding bakedBounds = new Bounding();
-    protected Point ShiftP = new Point();
+    public Point ShiftP { get; protected set; }
     readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
     private static int _nextId = 0;
+    public abstract Container2D<GridType> Grids { get; protected set; }
+    public virtual Bounding Bounding
+    {
+        get
+        {
+            Bounding bound = Grids.Bounding;
+            AdjustBounding(bound, true);
+            return bound;
+        }
+    }
     public int Id { get; protected set; }
 
     protected LayoutObject()
     {
         Id = _nextId++;
+        ShiftP = new Point();
     }
 
     #region Shifts
-    public void shift(int x, int y)
+    public void Shift(int x, int y)
     {
         ShiftP.Shift(x, y);
     }
 
-    public void shift(Point p)
+    public void Shift(Point p)
     {
         ShiftP.Shift(p);
     }
 
-    public void setShift(LayoutObject rhs)
+    public virtual void Bake()
     {
-        Bounding bounds = GetBoundingUnshifted();
-        Bounding rhsBounds = rhs.GetBoundingUnshifted();
-        Point center = bounds.GetCenter();
-        Point centerRhs = rhsBounds.GetCenter();
+    }
+
+    public void CenterOn(LayoutObject rhs)
+    {
+        Point center = Bounding.GetCenter();
+        Point centerRhs = Bounding.GetCenter();
         ShiftP.x = rhs.ShiftP.x + (centerRhs.x - center.x);
         ShiftP.y = rhs.ShiftP.y + (centerRhs.y - center.y);
     }
 
-    public Value2D<GridType> ShiftValue(Value2D<GridType> val)
+    public void ShiftOutside(IEnumerable<LayoutObject> rhs, Point dir)
     {
-        return new Value2D<GridType>(val.x + ShiftP.x, val.y + ShiftP.y, val.val);
+        List<Container2D<GridType>> list = new List<Container2D<GridType>>();
+        foreach (LayoutObject obj in rhs)
+            list.Add(obj.Grids);
+        Container2D<GridType> intersect;
+        while (Grids.Intersects(list, out intersect))
+        {
+            ShiftOutside(intersect, dir, true, true);
+        }
     }
 
-    public Point GetShift()
-    {
-        return new Point(ShiftP);
-    }
-
-    public void ShiftOutside(LayoutObject rhs, Point dir, bool rough, bool finalShift)
+    public void ShiftOutside(Container2D<GridType> rhs, Point dir, bool rough, bool finalShift)
     {
         Point reducBase = dir.reduce();
         Point reduc = new Point(reducBase);
@@ -59,19 +72,19 @@ abstract public class LayoutObject
             BigBoss.Debug.printHeader(Logs.LevelGen, "Shift Outside " + ToString());
             BigBoss.Debug.w(Logs.LevelGen, "Shifting outside of " + rhs.ToString());
             BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
-            BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + GetBounding(true) + "  RHS bounds: " + rhs.GetBounding(true));
+            BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + Bounding + "  RHS bounds: " + rhs.Bounding);
         }
         #endregion
-        while (this.IntersectsSmart(rhs))
+        while (Grids.Intersects(rhs))
         {
             if (rough)
             {
-                shift(reduc);
+                Shift(reduc);
             }
             else
             {
                 reduc.Take(out xShift, out yShift);
-                shift(xShift, yShift);
+                Shift(xShift, yShift);
                 if (reduc.isZero())
                 {
                     reduc = new Point(reducBase);
@@ -79,7 +92,7 @@ abstract public class LayoutObject
             }
         }
         if (finalShift)
-            shift(dir);
+            Shift(dir);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -92,13 +105,12 @@ abstract public class LayoutObject
     #region Bounds
     public Bounding GetBounding(bool shifted)
     {
-        Bounding bound = new Bounding(GetBoundingUnshifted());
-        if (shifted)
-            adjustBounding(bound, true);
+        Bounding bound = Grids.Bounding;
+        AdjustBounding(bound, true);
         return bound;
     }
 
-    protected void adjustBounding(Bounding bound, bool toExternal)
+    protected void AdjustBounding(Bounding bound, bool toExternal)
     {
         if (toExternal)
         {
@@ -109,21 +121,12 @@ abstract public class LayoutObject
             bound.Shift(ShiftP.Invert());
         }
     }
-
-    protected abstract Bounding GetBoundingUnshifted();
     #endregion Bounds
 
     #region GetSet
-    public abstract GridArray GetArray();
-
-    public virtual GridArray GetPrintArray()
-    {
-        return GetArray();
-    }
-
     public virtual GridType[,] GetMinimizedArray(GridArray inArr)
     {
-        Bounding bounds = GetBoundingUnshifted();
+        Bounding bounds = Grids.Bounding;
         GridType[,] outArr = new GridType[bounds.Height + 1, bounds.Width + 1];
         for (int y = bounds.YMin; y <= bounds.YMax; y++)
         {
@@ -136,113 +139,6 @@ abstract public class LayoutObject
     }
     #endregion GetSet
 
-    #region SpecGet
-    public GridMap getType(GridType t)
-    {
-        return getType(GetArray(), t);
-    }
-
-    public GridMap getType(GridArray grids, GridType t)
-    {
-        GridMap ret = new GridMap();
-        for (int y = 0; y < grids.getHeight(); y++)
-        {
-            for (int x = 0; x < grids.getWidth(); x++)
-            {
-                if (t == grids[x, y])
-                    ret[x + ShiftP.x, y + ShiftP.y] = grids[x, y];
-            }
-        }
-        return ret;
-    }
-
-    public GridMap getTypes(params GridType[] ts)
-    {
-        return getTypes(new HashSet<GridType>(ts));
-    }
-
-    public GridMap getTypes(HashSet<GridType> ts)
-    {
-        return getTypes(GetArray(), ts);
-    }
-
-    public GridMap getTypes(GridArray grids, params GridType[] ts)
-    {
-        return getTypes(grids, new HashSet<GridType>(ts));
-    }
-
-    public GridMap getTypes(GridArray grids, HashSet<GridType> ts)
-    {
-        GridMap ret = new GridMap();
-        for (int y = 0; y < grids.getHeight(); y++)
-        {
-            for (int x = 0; x < grids.getWidth(); x++)
-            {
-                if (ts.Contains(grids[x, y]))
-                    ret[x + ShiftP.x, y + ShiftP.y] = grids[x, y];
-            }
-        }
-        return ret;
-    }
-
-    public GridMap GetTouchingNull(GridType target)
-    {
-        GridMap ret = new GridMap();
-        GridArray grids = GetArray();
-        GridMap targets = getType(grids, target);
-        foreach (Value2D<GridType> val in targets)
-        {
-            Value2D<GridType> nullDir;
-            if (grids.GetPointAround(val.x, val.y, false, Draw.EqualTo(GridType.NULL), out nullDir))
-                ret[val] = val.val;
-        }
-        return ret;
-    }
-
-    public GridMap GetCorneredBy(GridType target, params GridType[] by)
-    {
-        return GetCorneredBy(target, new HashSet<GridType>(by));
-    }
-
-    public GridMap GetCorneredBy(GridType target, HashSet<GridType> by)
-    {
-        GridMap ret = new GridMap();
-        GridArray grids = GetArray();
-        GridMap targets = getType(grids, target);
-        GridMap cornerOptions = getTypes(grids, by);
-        foreach (Value2D<GridType> tval in targets)
-        {
-            bool corneredHoriz = cornerOptions.Contains(tval.x + 1, tval.y)
-                || cornerOptions.Contains(tval.x - 1, tval.y);
-            bool corneredVert = cornerOptions.Contains(tval.x, tval.y + 1)
-                || cornerOptions.Contains(tval.x, tval.y - 1);
-            if (corneredHoriz && corneredVert)
-            {
-                ret.Put(tval);
-            }
-        }
-        return ret;
-    }
-
-    public Value2D<GridType> ScanForFirst(GridType type)
-    {
-        foreach (Value2D<GridType> val in GetArray())
-        {
-            if (val.val == type)
-            {
-                return val;
-            }
-        }
-        return null;
-    }
-    #endregion
-
-    public virtual void Bake(bool shiftCompensate)
-    {
-        bakedBounds = GetBounding(true);
-        finalized = true;
-    }
-
     public Bounding GetConnectedBounds()
     {
         List<LayoutObject> connected;
@@ -251,7 +147,7 @@ abstract public class LayoutObject
         return bounds;
     }
 
-    public GridArray GetConnectedGrid()
+    public Container2D<GridType> GetConnectedGrid()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
@@ -262,11 +158,9 @@ abstract public class LayoutObject
         List<LayoutObject> connected;
         Bounding bounds;
         ConnectedToAll(out connected, out bounds);
-        var arrOut = new GridArray(bounds, false);
+        var arrOut = new MultiMap<GridType>();
         foreach (var obj in connected)
-        {
-            arrOut.PutAll(obj);
-        }
+            arrOut.PutAll(obj.Grids);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
         {
@@ -294,7 +188,10 @@ abstract public class LayoutObject
         Connect(layout.GetObjAt(pt));
     }
 
-    abstract public bool ContainsPoint(Value2D<GridType> val);
+    public virtual bool ContainsPoint(Point pt)
+    {
+        return Grids.Contains(pt);
+    }
 
     public void ConnectedToAll(out List<LayoutObject> connected, out Bounding bounds)
     {
@@ -412,73 +309,6 @@ abstract public class LayoutObject
         return false;
     }
 
-    #region Intersects
-    public bool IntersectsSmart(LayoutObject rhs)
-    {
-        // Get Arrays
-        GridType[,] arr = GetArray().GetArr();
-        GridType[,] rhsArr = rhs.GetArray().GetArr();
-
-        // Get Limits
-        Bounding bounds = GetBounding(true);
-        Bounding rhsBounds = rhs.GetBounding(true);
-        Bounding intersect = bounds.IntersectBounds(rhsBounds);
-
-        for (int y = intersect.YMin; y < intersect.YMax; y++)
-        {
-            for (int x = intersect.XMin; x < intersect.XMax; x++)
-            {
-                if (arr[y - ShiftP.y, x - ShiftP.x] != GridType.NULL
-                    && rhsArr[y - rhs.ShiftP.y, x - rhs.ShiftP.x] != GridType.NULL)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public LayoutObject IntersectSmart<T>(IEnumerable<T> list) where T : LayoutObject
-    {
-        foreach (LayoutObject rhs in list)
-        {
-            if (IntersectsSmart(rhs))
-            {
-                return rhs;
-            }
-        }
-        return null;
-    }
-
-    public bool IntersectsBounds(LayoutObject rhs, int buffer)
-    {
-        Bounding rhsBound = rhs.GetBounding(true);
-        if (rhsBound.IsValid())
-        {
-            rhsBound.expand(buffer);
-            return GetBounding(true).Intersects(rhsBound);
-        }
-        return false;
-    }
-
-    public bool InsersectsBounds(List<LayoutObject> list, int buffer)
-    {
-        return null != IntersectObjBounds(list, buffer);
-    }
-
-    public LayoutObject IntersectObjBounds<T>(IEnumerable<T> list, int buffer) where T : LayoutObject
-    {
-        foreach (LayoutObject rhs in list)
-        {
-            if (IntersectsBounds(rhs, buffer))
-            {
-                return rhs;
-            }
-        }
-        return null;
-    }
-    #endregion Intersects
-
     #region Printing
     public override string ToString()
     {
@@ -499,15 +329,7 @@ abstract public class LayoutObject
 
     protected virtual List<string> ToRowStrings()
     {
-        return ToRowStrings(GetBounding(true));
-    }
-
-    protected virtual List<string> ToRowStrings(Bounding bounds)
-    {
-        GridType[,] array = GetMinimizedArray(GetPrintArray());
-        List<string> ret = array.ToRowStrings();
-        ret = Nifty.AddRuler(ret, bounds);
-        return ret;
+        return Grids.ToRowStrings();
     }
 
     public virtual void ToLog(Logs log, params String[] customContent)

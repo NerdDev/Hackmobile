@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class LevelLayout : LayoutObjectContainer {
+public class LevelLayout : LayoutObjectContainer
+{
 
     List<LayoutObjectLeaf> rooms = new List<LayoutObjectLeaf>();
-	List<Path> paths = new List<Path>();
+    List<Path> paths = new List<Path>();
 
     public void AddRoom(LayoutObjectLeaf r)
     {
@@ -19,9 +20,9 @@ public class LevelLayout : LayoutObjectContainer {
     }
 
     public List<LayoutObjectLeaf> GetRooms()
-	{
+    {
         return new List<LayoutObjectLeaf>(rooms);
-	}
+    }
 
     public LayoutObjectLeaf GetRandomRoom(System.Random rand)
     {
@@ -31,14 +32,14 @@ public class LevelLayout : LayoutObjectContainer {
     public void AddPath(Path p)
     {
         paths.Add(p);
-        AddObject(p, 0);
+        AddObject(p);
     }
-	
-	public List<Path> GetPaths()
-	{
-		List<Path> ret = new List<Path>(paths);
-		return ret;
-	}
+
+    public List<Path> GetPaths()
+    {
+        List<Path> ret = new List<Path>(paths);
+        return ret;
+    }
 
     public override string GetTypeString()
     {

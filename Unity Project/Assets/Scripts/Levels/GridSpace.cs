@@ -188,9 +188,9 @@ public class GridSpace
             Block.SetActive(on);
     }
 
-    public static Array2D<GridSpace> Convert(GridArray arr)
+    public static Array2D<GridSpace> Convert(Container2D<GridType> arr)
     {
-        Array2D<GridSpace> arrOut = new Array2D<GridSpace>(arr.getWidth(), arr.getHeight());
+        Array2D<GridSpace> arrOut = new Array2D<GridSpace>(arr.Width, arr.Height);
         foreach (Value2D<GridType> val in arr)
         {
             if (val == null) continue;

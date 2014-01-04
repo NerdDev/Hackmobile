@@ -14,7 +14,7 @@ public class RandomPicker<T>
 
     public bool DrawingAction(Container2D<T> arr, int x, int y)
     {
-        _options.Put(arr[x, y], x, y);
+        _options[x, y] = arr[x, y];
         return true;
     }
 
@@ -30,10 +30,10 @@ public class RandomPicker<T>
         return list[0];
     }
 
-    public void ToLog(Logs logs, T[,] orig, params string[] customContent)
+    public void ToLog(Logs logs, Container2D<T> orig, params string[] customContent)
     {
         BigBoss.Debug.printHeader(logs, "Random Picker");
-        var tmp = new T[orig.GetLength(0), orig.GetLength(1)];
+        var tmp = new T[orig.Height, orig.Width];
         foreach (Value2D<T> val in _options)
             tmp[val.y, val.x] = val.val;
         tmp.ToLog(logs, customContent);

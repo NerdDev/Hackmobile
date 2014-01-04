@@ -30,5 +30,5 @@ public abstract class SpawnModifier : ProbabilityItem
 
     public abstract bool Modify(SpawnSpec spec);
 
-    public abstract bool ShouldSpawn(RoomMap room, params Keywords[] keywords);
+    public abstract bool ShouldSpawn(SpawnSpec spec);
 }

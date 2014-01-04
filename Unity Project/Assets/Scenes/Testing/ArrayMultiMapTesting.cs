@@ -66,7 +66,7 @@ public class ArrayMultiMapTesting : MonoBehaviour
 
     //public static int TestMultimap(GridType[,] arr, System.Random rand)
     //{
-    //    GridMap map = new GridMap();
+    //    MultiMap<GridType> map = new MultiMap<GridType>();
     //    for (int y = 0; y < arr.GetLength(0); y++)
     //        for (int x = 0; x < arr.GetLength(1); x++)
     //            if (arr[y, x] == GridType.Floor)

@@ -20,11 +20,14 @@ public class GiantPillarMod : RoomModifier
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.w(Logs.LevelGen, "Options: ");
+            MultiMap<GridType> save = new MultiMap<GridType>();
+            Array2D<GridType> copy = new Array2D<GridType>(spec.Room.Grids);
             foreach (Bounding r in locations)
             {
-                GridArray copy = new GridArray(spec.Room.GetArray());
-                copy.DrawSquare(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, Draw.SetTo(GridType.Path_Vert));
+                save.Clear();
+                copy.DrawSquare(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, Draw.AddTo(save).And(Draw.SetTo(GridType.Path_Vert)));
                 copy.ToLog(Logs.LevelGen);
+                copy.PutAll(save);
             }
         }
         #endregion

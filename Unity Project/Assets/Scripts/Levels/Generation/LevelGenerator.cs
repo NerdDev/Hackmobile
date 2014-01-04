@@ -28,9 +28,6 @@ public class LevelGenerator
     public static int doorsMax { get { return 5; } } //Max not inclusive
     public static int minDoorSpacing { get { return 1; } }
 
-    // Margin space on room layout
-    public static int layoutMargin { get { return 8; } }
-
     // Room modifier probabilies
     public static int maxFlexMod { get { return 5; } } //Max not inclusive
     public static int chanceNoFinalMod { get { return 40; } }
@@ -140,7 +137,7 @@ public class LevelGenerator
         #endregion
         for (int i = 1; i <= numRooms; i++)
         {
-            LayoutObjectLeaf room = new LayoutObjectLeaf(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2);
+            LayoutObjectLeaf room = new LayoutObjectLeaf();
             rooms.Add(room);
         }
         #region DEBUG
@@ -192,7 +189,7 @@ public class LevelGenerator
                 }
                 #endregion
             }
-            room.Bake(false);
+            room.Bake();
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -352,15 +349,15 @@ public class LevelGenerator
 
     protected void PlaceRoomOnStairs(Point stair, bool up, LayoutObject pairedObj)
     {
-        List<Bounding> options = pairedObj.GetArray().GetSquares(3, 3, false, Draw.EqualTo(GridType.Floor));
+        List<Bounding> options = pairedObj.Grids.GetSquares(3, 3, false, Draw.EqualTo(GridType.Floor));
         Bounding picked = options.Random(Rand);
-        pairedObj.shift(stair - new Point(picked.XMin + 1, picked.YMin + 1));
-        pairedObj.GetArray().Put(up ? GridType.StairUp : GridType.StairDown, picked.XMin + 1, picked.YMin + 1);
+        pairedObj.Shift(stair - new Point(picked.XMin + 1, picked.YMin + 1));
+        pairedObj.Grids[picked.XMin + 1, picked.YMin + 1] = up ? GridType.StairUp : GridType.StairDown;
     }
 
     protected void PlaceRemainingRooms(List<LayoutObject> placedRooms, List<LayoutObject> unplacedRooms)
     {
-        LayoutObjectLeaf seedRoom = new LayoutObjectLeaf(LevelGenerator.maxRectSize * 2, LevelGenerator.maxRectSize * 2);
+        LayoutObjectLeaf seedRoom = new LayoutObjectLeaf();
         Layout.AddObject(seedRoom);
         placedRooms.Add(seedRoom); // Seed empty center room to start positioning from.
         foreach (LayoutObjectLeaf room in unplacedRooms)
@@ -368,7 +365,7 @@ public class LevelGenerator
             // Find room it will start from
             int roomNum = Rand.Next(placedRooms.Count);
             LayoutObject startRoom = placedRooms[roomNum];
-            room.setShift(startRoom);
+            room.CenterOn(startRoom);
             // Find where it will shift away
             Point shiftMagn = GenerateShiftMagnitude(shiftRange, Rand);
             #region DEBUG
@@ -379,19 +376,7 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Shift: " + shiftMagn);
             }
             #endregion
-            // Keep moving until room doesn't overlap any other rooms
-            LayoutObject intersect;
-            while ((intersect = room.IntersectObjBounds(placedRooms, 1)) != null)
-            {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    BigBoss.Debug.w(Logs.LevelGen, "This layout led to an overlap: " + room.GetBounding(true));
-                    Layout.ToLog(Logs.LevelGen);
-                }
-                #endregion
-                room.ShiftOutside(intersect, shiftMagn, true, true);
-            }
+            room.ShiftOutside(placedRooms, shiftMagn);
             placedRooms.Add(room);
             Layout.AddRoom(room);
             Layout.RemoveObject(seedRoom);
@@ -422,8 +407,8 @@ public class LevelGenerator
                 BigBoss.Debug.printHeader(Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
-            var potentialDoors = new GridMap();
-            room.GetArray().DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
+            var potentialDoors = new MultiMap<GridType>();
+            room.Grids.DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
             int numDoors = Rand.Next(doorsMin, doorsMax);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -434,7 +419,7 @@ public class LevelGenerator
             #endregion
             foreach (Value2D<GridType> doorSpace in potentialDoors.Random(Rand, numDoors, minDoorSpacing))
             {
-                room.put(GridType.Door, doorSpace.x, doorSpace.y);
+                room.Grids[doorSpace] = GridType.Door;
             }
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -461,19 +446,19 @@ public class LevelGenerator
             Layout.ToLog(Logs.LevelGen, "Pre Path Layout");
         }
         #endregion
-        var grids = Layout.GetArray(layoutMargin);
-        GridMap doors = Layout.getTypes(grids, GridType.Door);
+        MultiMap<GridType> doors = new MultiMap<GridType>();
+        Layout.Grids.DrawAll(Draw.IfThen<GridType>(Draw.EqualTo(GridType.Door), Draw.AddTo(doors)));
         #region DEBUG
-        GridArray debugArr = null;
+        Container2D<GridType> debugArr = null;
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            debugArr = new GridArray(grids);
+            debugArr = new Array2D<GridType>(Layout.Grids);
         }
         #endregion
         foreach (var door in doors)
         {
             // Block nearby floors
-            grids.DrawAround(door.x, door.y, false, (arr2, x, y) =>
+            Layout.Grids.DrawAround(door.x, door.y, false, (arr2, x, y) =>
                 {
                     if (arr2[x, y] == GridType.Floor)
                         arr2[x, y] = GridType.INTERNAL_RESERVED_BLOCKED;
@@ -483,12 +468,12 @@ public class LevelGenerator
         foreach (var door in doors)
         {
 
-            var path = new Path(door, grids, Rand);
+            var path = new Path(door, Layout.Grids, Rand);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                GridArray messyPathArr = new GridArray(debugArr);
-                messyPathArr.PutAll(path.GetArray());
+                MultiMap<GridType> messyPathArr = new MultiMap<GridType>(debugArr);
+                messyPathArr.PutAll(path.Grids);
                 messyPathArr.ToLog(Logs.LevelGen, "Map after placing for door: " + door);
             }
             #endregion
@@ -499,11 +484,11 @@ public class LevelGenerator
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    debugArr.PutAll(path);
+                    debugArr.PutAll(path.Grids, path.ShiftP);
                 }
                 #endregion
-                path.Bake(true);
-                grids.PutAll(path);
+                path.Bake();
+                Layout.Grids.PutAll(path.Grids, path.ShiftP);
                 Layout.AddPath(path);
             }
             #region DEBUG
@@ -579,7 +564,6 @@ public class LevelGenerator
     private void ConfirmEdges()
     {
         Layout.ShiftAll(1, 1);
-        GridArray ga = Layout.GetArray(1);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -587,20 +571,13 @@ public class LevelGenerator
             Layout.ToLog(Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
-        LayoutObjectLeaf leaf = new LayoutObjectLeaf(ga.getWidth(), ga.getHeight());
+        LayoutObjectLeaf leaf = new LayoutObjectLeaf();
         Layout.AddObject(leaf);
-        foreach (Value2D<GridType> val in ga)
-        {
-            if (val.val == GridType.Floor)
+        Layout.Grids.DrawAll(Draw.EqualTo(GridType.Floor).IfThen((arr, x, y) =>
             {
-                ga.DrawAround(val.x, val.y, true, (arr2, x, y) =>
-                    {
-                        if (arr2[x, y] == GridType.NULL)
-                            leaf.put(GridType.Wall, x, y);
-                        return true;
-                    });
-            }
-        }
+                Layout.Grids.DrawAround(x, y, true, Draw.SetToIfNotEqual(GridType.NULL, GridType.Wall));
+                return true;
+            }));
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -641,7 +618,7 @@ public class LevelGenerator
         foreach (LayoutObject room in Rooms.Cast<LayoutObject>().Randomize(Rand))
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
-            room.GetArray().DrawSquare(Draw.IfThen<GridType>(
+            room.Grids.DrawSquare(Draw.IfThen<GridType>(
                 // If is floor
                 Draw.EqualTo(GridType.Floor).
                 // If not blocking a path
@@ -652,9 +629,9 @@ public class LevelGenerator
                 Draw.AddTo(options)), false);
             if (options.Count == 0) continue;
             Value2D<GridType> picked = options.Random(Rand);
-            room.GetArray().Put(up ? GridType.StairUp : GridType.StairDown, picked.x, picked.y);
+            room.Grids[picked.x, picked.y] = up ? GridType.StairUp : GridType.StairDown;
             Point p = new Point(picked);
-            p.Shift(room.GetShift());
+            p.Shift(room.ShiftP);
             link = new StairLink(p, up);
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -673,10 +650,10 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Make Connection - " + obj1 + " AND " + obj2);
         }
         #endregion
-        GridArray smallest;
-        GridArray largest;
-        GridArray layoutArr = layout.GetArray();
-        layoutArr.PutAs(layoutArr, GridType.INTERNAL_RESERVED_BLOCKED);
+        Container2D<GridType> smallest;
+        Container2D<GridType> largest;
+        Container2D<GridType> layoutArr = layout.Grids;
+        layoutArr.DrawAll(Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED));
         Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -688,7 +665,7 @@ public class LevelGenerator
         var startPtStack = smallest.DrawDepthFirstSearch(
             1, 1,
             Draw.EqualTo(GridType.NULL),
-            Draw.ContainedIn(Path.PathTypes()),
+            Draw.ContainedIn(Path.PathTypes),
             Rand,
             true);
         if (startPtStack.Count > 0)
@@ -709,11 +686,11 @@ public class LevelGenerator
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    largest.PutAll(path);
+                    largest.PutAll(path.Grids, path.ShiftP);
                     largest.ToLog(Logs.LevelGen, "Connecting Path");
                 }
                 #endregion
-                path.Finalize(layout);
+                path.Finalize();
                 layout.AddPath(path);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))

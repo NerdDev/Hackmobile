@@ -1,31 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutObject> {
-
-    protected List<LayoutObject> Objects = new List<LayoutObject>(); 
-
-    public virtual void AddObject(LayoutObject obj, int buffer)
-    {
-        Objects.Add(obj);
-        /// Shift so nothing is in the negative 
-        Bounding bounds = obj.GetBounding(true);
-        Point shift = bounds.GetShiftNonNeg(buffer);
-        if (!shift.isZero())
-        {
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "Shifted elements of " + this + " " + shift);
-            }
-            #endregion
-            ShiftAll(shift);
-        }
-    }
+public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutObject>
+{
+    protected List<LayoutObject> Objects = new List<LayoutObject>();
 
     public virtual void AddObject(LayoutObject obj)
     {
-        AddObject(obj, LevelGenerator.layoutMargin);
+        Objects.Add(obj);
     }
 
     public void RemoveObject(LayoutObject obj)
@@ -37,8 +19,8 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
     {
         foreach (LayoutObject obj in Objects)
         {
-            obj.shift(x, y);
-        }   
+            obj.Shift(x, y);
+        }
     }
 
     public void ShiftAll(Point shift)
@@ -46,47 +28,25 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         ShiftAll(shift.x, shift.y);
     }
 
-    public GridArray GetArray(Bounding bound, bool minimize)
+    protected Container2D<GridType> _baked;
+    public override Container2D<GridType> Grids
     {
-        adjustBounding(bound, false);
-        GridArray ret = new GridArray(bound, minimize);
-        foreach (LayoutObject obj in this)
+        get
         {
-            if (minimize)
-                ret.PutAll(obj, bound);
-            else
-                ret.PutAll(obj);
+            if (_baked != null) return _baked;
+            MultiMap<GridType> map = new MultiMap<GridType>();
+            foreach (LayoutObject obj in this)
+            {
+                map.PutAll(obj.Grids, obj.ShiftP);
+            }
+            return map;
         }
-        return ret;
+        protected set
+        {
+            _baked = value;
+        }
     }
 
-    public override GridArray GetArray()
-    {
-        GridArray ret = new GridArray(GetBounding(true), false);
-        foreach (LayoutObject obj in this)
-        {
-            ret.PutAll(obj);
-        }
-        return ret;
-    }
-
-    public override GridArray GetPrintArray()
-    {
-        GridArray ret = new GridArray(GetBounding(true), false);
-        foreach (LayoutObject obj in this)
-        {
-            ret.PutAll(obj.GetPrintArray(), obj.GetShift());
-        }
-        return ret;
-    }
-
-    public GridArray GetArray(int buffer)
-    {
-        var bounds = GetBounding(true);
-        bounds.expand(buffer);
-        return GetArray(bounds, false);
-    }
-	
     public IEnumerator<LayoutObject> GetEnumerator()
     {
         return Objects.GetEnumerator();
@@ -97,30 +57,18 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         return this.GetEnumerator();
     }
 
-    protected override Bounding GetBoundingUnshifted()
-	{
-		Bounding bound = new Bounding();
-		foreach (LayoutObject obj in this){
-			Bounding objBound = obj.GetBounding(true);
-			if (objBound.IsValid())
-			{
-				bound.Absorb(objBound);
-			}
-		}
-		return bound;
-	}
-
-    public override bool ContainsPoint(Value2D<GridType> val)
+    public override bool ContainsPoint(Point pt)
     {
-        return GetObjAt(val) != null;
+        return GetObjAt(pt) != null;
     }
 
-    public void FindAndConnect(LayoutObject obj1, Value2D<GridType> connectPt)
+    public void FindAndConnect(LayoutObject obj1, Point connectPt)
     {
-        obj1.Connect(GetObjAt(obj1.ShiftValue(connectPt)));
+        Point pt = new Value2D<GridType>(connectPt.x + obj1.ShiftP.x, connectPt.y + obj1.ShiftP.y);
+        obj1.Connect(GetObjAt(pt));
     }
 
-    public LayoutObject GetObjAt(Value2D<GridType> val)
+    public LayoutObject GetObjAt(Point pt)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -131,13 +79,13 @@ abstract public class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Getting object at val " + val);
+            BigBoss.Debug.w(Logs.LevelGen, "Getting object at val " + pt);
         }
         #endregion
         foreach (LayoutObject obj in this)
         {
-            val.Unshift(obj.GetShift());
-            if (obj.ContainsPoint(val))
+            pt.Unshift(obj.ShiftP);
+            if (obj.ContainsPoint(pt))
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))

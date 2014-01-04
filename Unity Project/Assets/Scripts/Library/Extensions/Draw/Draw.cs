@@ -13,6 +13,14 @@ public static class Draw
         });
     }
 
+    public static DrawAction<T> If<T>(Predicate<T> predicate)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+            {
+                return predicate(arr[x, y]);
+            });
+    }
+
     public static DrawAction<T> IfThen<T>(DrawActionCall<T> ifCall, DrawActionCall<T> then)
     {
         return new DrawAction<T>((arr, x, y) =>
@@ -123,8 +131,8 @@ public static class Draw
                 Array2D<T> arr = (Array2D<T>) cont;
                 if (x <= 0
                     || y <= 0
-                    || y >= arr.getHeight() - 1
-                    || x >= arr.getWidth() - 1) return false;
+                    || y >= arr.Height - 1
+                    || x >= arr.Width - 1) return false;
                 return true;
             }
             return false;
@@ -149,13 +157,24 @@ public static class Draw
         });
     }
 
-    public static DrawAction<T> AddTo<T>(MultiMap<T> map)
+    public static DrawAction<T> AddTo<T>(Container2D<T> map, Point shift = null)
     {
-        return new DrawAction<T>((arr, x, y) =>
+        if (shift == null)
         {
-            map.Put(arr[x, y], x, y);
-            return true;
-        });
+            return new DrawAction<T>((arr, x, y) =>
+            {
+                map[x, y] = arr[x, y];
+                return true;
+            });
+        }
+        else
+        {
+            return new DrawAction<T>((arr, x, y) =>
+            {
+                map[x + shift.x, y + shift.y] = arr[x, y];
+                return true;
+            });
+        }
     }
 
     public static DrawAction<T> SetTo<T>(T from, T to)

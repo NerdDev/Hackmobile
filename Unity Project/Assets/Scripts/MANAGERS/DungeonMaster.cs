@@ -35,28 +35,40 @@ public class DungeonMaster : MonoBehaviour, IManager {
     void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
-        foreach (RoomMap room in l.GetRooms())
+        foreach (Container2D<GridType> room in l.RoomMaps)
         {
-            SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, l.Theme, room);
+            MultiMap<GridSpace> roomMap = new MultiMap<GridSpace>();
+            room.DrawAll((arr, x, y) =>
+                {
+                    roomMap[x, y] = l[x, y];
+                    return true;
+                });
+            SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, l.Theme, roomMap);
             SpawnModifier mod = SpawnModifier.GetMod();
             mod.Modify(spec);
         }
     }
 
-    public static MultiMap<GridSpace> Spawnable(MultiMap<GridSpace> map)
+    public static MultiMap<GridSpace> Spawnable<T>(Level l, IEnumerable<Value2D<T>> points)
+    {
+        return Spawnable(l, points.Cast<Point>());
+    }
+
+    public static MultiMap<GridSpace> Spawnable(Level l, IEnumerable<Point> points)
     {
         MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
-        foreach (Value2D<GridSpace> space in map)
+        foreach (Point p in points)
         {
-            if (space.val.Spawnable)
-                ret.Put(space);
+            GridSpace s = l[p];
+            if (s.Spawnable)
+                ret[p] = s;
         }
         return ret;
     }
 
     public GridSpace PickSpawnableLocation(Level l)
     {
-        MultiMap<GridSpace> room = Spawnable(l.GetRooms().Random(Probability.SpawnRand));
+        MultiMap<GridSpace> room = Spawnable(l, l.RoomMaps.Random(Probability.SpawnRand));
         Value2D<GridSpace> pick = room.Random(Probability.SpawnRand);
         return pick.val;
     }

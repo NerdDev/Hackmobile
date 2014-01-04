@@ -7,8 +7,8 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     protected LevelLayout Layout { get; private set; }
     public bool Populated { get; set; }
     public Array2D<GridSpace> Array { get; protected set; }
-    private List<RoomMap> roomMaps = new List<RoomMap>();
-    private MultiMap<RoomMap> roomMapping = new MultiMap<RoomMap>(); // floor space to roommap
+    public List<Container2D<GridType>> RoomMaps = new List<Container2D<GridType>>();
+    private MultiMap<Container2D<GridType>> roomMapping = new MultiMap<Container2D<GridType>>(); // floor space to roommap
     public StairLink UpStairs { get; set; }
     public StairLink DownStairs { get; set; }
     public Theme Theme { get; protected set; }
@@ -16,7 +16,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     public Level(LevelLayout layout, Theme theme)
     {
         Layout = layout;
-        Array = GridSpace.Convert(layout.GetArray());
+        Array = GridSpace.Convert(layout.Grids);
         LoadRoomMaps();
         Theme = theme;
     }
@@ -25,11 +25,10 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     {
         foreach (LayoutObjectLeaf room in Layout.GetRooms())
         {
-            RoomMap roomMap = new RoomMap(room, Array);
-            roomMaps.Add(roomMap);
-            foreach (Value2D<GridSpace> floor in roomMap)
+            RoomMaps.Add(room.Grids);
+            foreach (Value2D<GridType> floor in room.Grids)
             {
-                roomMapping[floor.x, floor.y] = roomMap;
+                roomMapping[floor.x, floor.y] = room.Grids;
             }
         }
     }
@@ -38,7 +37,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     {
         get
         {
-            if (x < Array.getWidth() && y < Array.getHeight())
+            if (x < Array.Width && y < Array.Height)
             {
                 GridSpace space = Array[x, y];
                 if (space == null)
@@ -52,6 +51,8 @@ public class Level : IEnumerable<Value2D<GridSpace>>
             return null;
         }
     }
+
+    public GridSpace this[Point p] { get { return this[p.x, p.y]; } }
 
     public Point CenterShift()
     {
@@ -131,23 +132,8 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     {
         if (BigBoss.Debug.logging(log))
         {
-            Array2D<GridType> ga =  (Array2D<GridType>)this;
-            ga.ToLog(log, customContent);
+            Array.ToLog(log, customContent);
         }
-    }
-
-    public static explicit operator Array2D<GridType>(Level lev)
-    {
-        GridArray ret = new GridArray(lev.Array.getWidth(), lev.Array.getHeight());
-        for (int y = 0; y < lev.Array.getHeight(); y++)
-        {
-            for (int x = 0; x < lev.Array.getWidth(); x++)
-            {
-                if (lev.Array[x, y] != null)
-                    ret[x, y] = lev[x, y];
-            }
-        }
-        return ret;
     }
 
     public MultiMap<GridSpace> GetArea(Bounding bounds)
@@ -168,9 +154,9 @@ public class Level : IEnumerable<Value2D<GridSpace>>
 
     public IEnumerable<GridSpace> Iterate()
     {
-        for (int y = 0; y < Array.getHeight(); y++)
+        for (int y = 0; y < Array.Height; y++)
         {
-            for (int x = 0; x < Array.getWidth(); x++)
+            for (int x = 0; x < Array.Width; x++)
             {
                 GridSpace space = this[x, y];
                 if (space != null)
@@ -179,16 +165,11 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         }
     }
 
-    public List<RoomMap> GetRooms()
-    {
-        return roomMaps;
-    }
-
     public IEnumerator<Value2D<GridSpace>> GetEnumerator()
     {
-        for (int y = 0; y < Array.getHeight(); y++)
+        for (int y = 0; y < Array.Height; y++)
         {
-            for (int x = 0; x < Array.getWidth(); x++)
+            for (int x = 0; x < Array.Width; x++)
             {
                 GridSpace space = this[x, y];
                 if (space != null)

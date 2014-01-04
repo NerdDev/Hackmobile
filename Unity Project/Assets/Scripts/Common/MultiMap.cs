@@ -5,9 +5,10 @@ using System.Collections.Generic;
 
 public class MultiMap<T> : Container2D<T>
 {
+    bool _validCount = false;
     int _count = 0;
-    public int Count { get { return _count; } }
-    public bool IsEmpty { get { return Count == 0; } }
+    Bounding _bounding = null;
+    Array2D<T> _arr = null;
     protected Dictionary<int, Dictionary<int, T>> multimap = new Dictionary<int, Dictionary<int, T>>();
     public Dictionary<int, Dictionary<int, T>>.KeyCollection Keys { get { return multimap.Keys; } }
     public Dictionary<int, Dictionary<int, T>>.ValueCollection Values { get { return multimap.Values; } }
@@ -17,156 +18,53 @@ public class MultiMap<T> : Container2D<T>
     {
     }
 
-    public MultiMap(MultiMap<T> rhs)
-        : this()
+    public MultiMap(Container2D<T> rhs)
+        : base(rhs)
     {
-        PutAll(rhs);
     }
 
-    public MultiMap(MultiMap<T> rhs, Point shift)
-        : this()
+    public MultiMap(Container2D<T> rhs, Point shift)
+        : base(rhs, shift)
     {
-        PutAll(rhs, shift);
     }
 
-    public MultiMap(MultiMap<T> rhs, int xShift, int yShift)
-        : this()
+    public MultiMap(Container2D<T> rhs, int xShift, int yShift)
+        : base(rhs, xShift, yShift)
     {
-        PutAll(rhs, xShift, yShift);
     }
     #endregion
 
-    #region GetSet
-    protected override T Get(int x, int y)
+    public override T this[int x, int y]
     {
-        T val;
-        TryGetValue(x, y, out val);
-        return val;
-    }
-
-    public bool Contains(int x, int y)
-    {
-        Dictionary<int, T> row;
-        if (GetRow(y, out row))
+        get
         {
-            return row.ContainsKey(x);
-        }
-        return false;
-    }
-
-    public bool GetRow(int y, out Dictionary<int, T> val)
-    {
-        bool ret = multimap.TryGetValue(y, out val);
-        return ret;
-    }
-
-    public override bool InRange(int x, int y)
-    {
-        return true;
-    }
-
-    Dictionary<int, T> GetRowCreate(int y)
-    {
-        Dictionary<int, T> row;
-        if (!multimap.TryGetValue(y, out row))
-        {
-            row = new Dictionary<int, T>();
-            multimap[y] = row;
-        }
-        return row;
-    }
-
-    public override void Put(T val, int x, int y)
-    {
-        PutInternal(val, x, y);
-    }
-
-    protected override void PutInternal(T val, int x, int y)
-    {
-        Dictionary<int, T> row = GetRowCreate(y);
-        Put(row, val, x);
-    }
-
-    void Put(Dictionary<int, T> row, T val, int x)
-    {
-        if (!row.ContainsKey(x))
-            _count++;
-        row[x] = val;
-    }
-
-    public void Remove(int x, int y)
-    {
-        Dictionary<int, T> row;
-        if (GetRow(y, out row))
-        {
-            if (row.Remove(x))
-                _count--;
-        }
-    }
-
-    public void Remove(Value2D<T> val)
-    {
-        Remove(val.x, val.y);
-    }
-
-    public void Remove(int x, int y, int width)
-    {
-        for (int yCur = y - width; yCur <= y + width; yCur++)
-        {
-            for (int xCur = x - width; xCur <= x + width; xCur++)
+            Dictionary<int, T> row;
+            if (multimap.TryGetValue(y, out row))
             {
-                Remove(xCur, yCur);
+                T val;
+                if (row.TryGetValue(x, out val))
+                {
+                    return val;
+                }
             }
+            return default(T);
         }
-    }
-
-    public void PutAll(MultiMap<T> rhs)
-    {
-        foreach (Value2D<T> val in rhs)
+        set
         {
-            this[val] = val.val;
-        }
-    }
-
-    public void PutAll(MultiMap<T> rhs, Point shift)
-    {
-        PutAll(rhs, shift.x, shift.y);
-    }
-
-    public void PutAll(MultiMap<T> rhs, int xShift, int yShift)
-    {
-        foreach (Value2D<T> val in rhs)
-        {
-            Put(val.val, val.x + xShift, val.y + yShift);
-        }
-    }
-
-    public void RemoveAll(MultiMap<T> rhs)
-    {
-        foreach (Value2D<T> val in rhs)
-        {
-            Remove(val);
-        }
-    }
-
-    public void RemoveAllBut(params T[] types)
-    {
-        RemoveAllBut(new HashSet<T>(types));
-    }
-
-    public void RemoveAllBut(HashSet<T> types)
-    {
-        List<Value2D<T>> vals = new List<Value2D<T>>(this);
-        foreach (Value2D<T> val in vals)
-        {
-            if (!types.Contains(val.val))
+            _bounding = null;
+            _arr = null;
+            _validCount = false;
+            Dictionary<int, T> row;
+            if (!multimap.TryGetValue(y, out row))
             {
-                Remove(val);
+                row = new Dictionary<int, T>();
+                multimap[y] = row;
             }
+            row[x] = value;
         }
     }
 
-    public bool TryGetValue(int x, int y, out T val)
+    public override bool TryGetValue(int x, int y, out T val)
     {
         Dictionary<int, T> row;
         if (multimap.TryGetValue(y, out row))
@@ -180,34 +78,90 @@ public class MultiMap<T> : Container2D<T>
         return false;
     }
 
-    public override Bounding GetBounding()
+    public override int Count
     {
-        Bounding bounds = new Bounding();
-        foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+        get
         {
-            foreach (KeyValuePair<int, T> val in row.Value)
+            if (!_validCount)
             {
-                bounds.Absorb(val.Key, row.Key);
+                _count = 0;
+                foreach (Dictionary<int, T> row in multimap.Values)
+                    _count += row.Count;
+                _validCount = true;
             }
+            return _count;
         }
-        return bounds;
     }
 
-    public override T[,] GetArr()
+    public override Bounding Bounding
     {
-        Bounding bounds = GetBounding();
-        T[,] arr = new T[bounds.Height + 1, bounds.Width + 1];
-        foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+        get
         {
-            foreach (KeyValuePair<int, T> val in row.Value)
+            if (_bounding == null)
             {
-                arr[row.Key - bounds.YMin, val.Key - bounds.XMin] = val.Value;
+                _bounding = new Bounding();
+                foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+                {
+                    foreach (int x in row.Value.Keys)
+                    {
+                        _bounding.Absorb(x, row.Key);
+                    }
+                }
             }
+            return new Bounding(_bounding);
         }
-        return arr;
     }
 
-    public Value2D<T> Random(System.Random rand)
+    public override Array2D<T> Array
+    {
+        get
+        {
+            if (_arr != null) return _arr;
+            Bounding bounds = Bounding;
+            _arr = new Array2D<T>(bounds.Width + 1, bounds.Height + 1);
+            foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+            {
+                foreach (KeyValuePair<int, T> val in row.Value)
+                {
+                    _arr[row.Key - bounds.YMin, val.Key - bounds.XMin] = val.Value;
+                }
+            }
+            return _arr;
+        }
+    }
+
+    public override bool Contains(int x, int y)
+    {
+        Dictionary<int, T> row;
+        if (multimap.TryGetValue(y, out row))
+        {
+            return row.ContainsKey(x);
+        }
+        return false;
+    }
+
+    #region GetSet
+
+    public override bool InRange(int x, int y)
+    {
+        return true;
+    }
+
+    public override bool Remove(int x, int y)
+    {
+        Dictionary<int, T> row;
+        if (multimap.TryGetValue(y, out row))
+        {
+            if (row.Remove(x))
+            {
+                _count--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Value2D<T> RandomValue(System.Random rand)
     {
         if (Count != 0)
         {
@@ -216,68 +170,30 @@ public class MultiMap<T> : Container2D<T>
         }
         return null;
     }
-
-    public Value2D<T> GetNth(int n)
-    {
-        if (n >= 0)
-        {
-            int count = 0;
-            foreach (Value2D<T> val in this)
-            {
-                if (count == n)
-                {
-                    return val;
-                }
-                count++;
-            }
-        }
-        return null;
-    }
     #endregion
 
     public override List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
     {
-        #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
-        {
-            BigBoss.Debug.printHeader("Multimap pick several random");
-        }
-        #endregion
         MultiMap<T> removed = new MultiMap<T>();
         List<Value2D<T>> list = new List<Value2D<T>>();
         if (distance < 0) distance = 0;
         for (int i = 0; i < amount; i++)
         {
-            Value2D<T> g = Random(random);
-            if (g == null)
-            {
-                #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
-                {
-                    BigBoss.Debug.printFooter("Multimap pick several random");
-                }
-                #endregion
-                return list;
-            }
+            Value2D<T> g = RandomValue(random);
+            if (g == null) return list;
             if (distance > 0)
             {
                 for (int yCur = g.y - distance; yCur <= g.y + distance; yCur++)
                 {
                     for (int xCur = g.x - distance; xCur <= g.x + distance; xCur++)
                     {
-                        removed.Put(g);
+                        removed[g] = g.val;
                         Remove(xCur, yCur);
                     }
                 }
             }
             Remove(g.x, g.y, distance - 1);
             list.Add(g);
-            #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
-            {
-                ToLog("After picking value: (" + g.x + "," + g.y + ")");
-            }
-            #endregion
         }
         if (take)
         {
@@ -285,12 +201,6 @@ public class MultiMap<T> : Container2D<T>
                 removed.Remove(val);
         }
         this.PutAll(removed);
-        #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
-        {
-            BigBoss.Debug.printFooter("Multimap pick several random");
-        }
-        #endregion
         return list;
     }
 
@@ -307,4 +217,13 @@ public class MultiMap<T> : Container2D<T>
         }
     }
     #endregion
+
+
+    public override void Clear()
+    {
+        _validCount = false;
+        _bounding = null;
+        _arr = null;
+        multimap.Clear();
+    }
 }

@@ -376,6 +376,15 @@ public static class DrawExt
         });
     }
     #endregion
+    #region Standard
+    public static void DrawAll<T>(this Container2D<T> arr, DrawActionCall<T> action)
+    {
+        foreach (Value2D<T> val in arr)
+        {
+            action(arr, val.x, val.y);
+        }
+    }
+    #endregion
     #region Circles
     /*
      * Uses Bressenham's Midpoint Algo
@@ -467,12 +476,12 @@ public static class DrawExt
     #endregion
     #endregion
     #region Squares
-    public static bool DrawSquare<T>(this Array2D<T> arr, StrokedAction<T> action, bool includeEdges = true)
+    public static bool DrawSquare<T>(this Container2D<T> arr, StrokedAction<T> action, bool includeEdges = true)
     {
         if (includeEdges)
-            return DrawSquare(arr, 0, arr.getWidth() - 1, 0, arr.getHeight() - 1, action);
+            return DrawSquare(arr, 0, arr.Width - 1, 0, arr.Height - 1, action);
         else
-            return DrawSquare(arr, 1, arr.getWidth() - 2, 1, arr.getHeight() - 2, action);
+            return DrawSquare(arr, 1, arr.Width - 2, 1, arr.Height - 2, action);
     }
 
     public static bool DrawSquare<T>(this Container2D<T> arr, int xl, int xr, int yb, int yt, StrokedAction<T> action)
@@ -507,7 +516,7 @@ public static class DrawExt
     #region Expand
     public static bool DrawSquareSpiral<T>(this Container2D<T> arr, int x, int y, DrawAction<T> draw, Bounding bounds = null)
     {
-        Bounding arrBound = arr.GetBounding();
+        Bounding arrBound = arr.Bounding;
         if (bounds == null)
             bounds = arrBound;
         else
@@ -543,14 +552,14 @@ public static class DrawExt
     }
     #endregion
     #region Find Options
-    public static List<Bounding> GetSquares<T>(this Array2D<T> arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
+    public static List<Bounding> GetSquares<T>(this Container2D<T> arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
     {
         SquareFinder<T> finder = new SquareFinder<T>(arr, width, height, tryFlipped, tester, scope);
         return finder.Find();
     }
     #endregion
     #region Searches
-    public static Stack<Value2D<T>> DrawDepthFirstSearch<T>(this Array2D<T> arr, int x, int y,
+    public static Stack<Value2D<T>> DrawDepthFirstSearch<T>(this Container2D<T> arr, int x, int y,
         DrawActionCall<T> allowedSpace,
         DrawActionCall<T> target,
         System.Random rand,
@@ -560,16 +569,15 @@ public static class DrawExt
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen) && typeof(T) == typeof(GridType))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Depth First Search");
-            GridArray tmpArr = new GridArray(arr.getWidth(), arr.getHeight());
-            for (int y1 = 0; y1 < arr.getHeight(); y1++)
-                for (int x1 = 0; x1 < arr.getWidth(); x1++)
+            Array2D<GridType> tmpArr = new Array2D<GridType>(arr.Width, arr.Height);
+            for (int y1 = 0; y1 < arr.Height; y1++)
+                for (int x1 = 0; x1 < arr.Width; x1++)
                     tmpArr[x1, y1] = (GridType)(object)arr[x1, y1];
-            GridArray tmp = new GridArray(tmpArr);
-            tmp[x, y] = GridType.INTERNAL_RESERVED_CUR;
-            tmp.ToLog(Logs.LevelGen, "Starting Map:");
+            tmpArr[x, y] = GridType.INTERNAL_RESERVED_CUR;
+            tmpArr.ToLog(Logs.LevelGen, "Starting Map:");
         }
         #endregion
-        var blockedPoints = new Array2D<bool>(arr.getWidth(), arr.getHeight());
+        var blockedPoints = new Array2D<bool>(arr.Width, arr.Height);
         var pathTaken = new Stack<Value2D<T>>();
         DrawAction<T> filter = new DrawActionCall<T>((arr2, x2, y2) =>
         {
@@ -635,7 +643,7 @@ public static class DrawExt
         return pathTaken;
     }
 
-    public static void DrawBreadthFirstFill<T>(this Array2D<T> arr, int x, int y,
+    public static void DrawBreadthFirstFill<T>(this Container2D<T> arr, int x, int y,
         bool cornered,
         DrawActionCall<T> run,
         bool edgeSafe = false)
@@ -649,7 +657,7 @@ public static class DrawExt
         #endregion
         Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
         queue.Enqueue(new Value2D<T>(x, y));
-        Array2D<bool> visited = new Array2D<bool>(arr.getWidth(), arr.getHeight());
+        Array2D<bool> visited = new Array2D<bool>(arr.Width, arr.Height);
         visited[x, y] = true;
         Point curPoint;
         while (queue.Count > 0)
@@ -682,14 +690,14 @@ public static class DrawExt
         #endregion
     }
 
-    public static void DrawPerimeter<T>(this Array2D<T> arr, DrawActionCall<T> evaluator, StrokedAction<T> action)
+    public static void DrawPerimeter<T>(this Container2D<T> arr, DrawActionCall<T> evaluator, StrokedAction<T> action)
     {
         DrawActionCall<T> unit = action.UnitAction;
         DrawActionCall<T> stroke = action.StrokeAction;
         bool hasFill = unit != null;
         Array2D<bool> fillArr = null;
         if (hasFill)
-            fillArr = new Array2D<bool>(arr.getWidth(), arr.getHeight());
+            fillArr = new Array2D<bool>(arr.Width, arr.Height);
         // Get null spaces surrounding room
         arr.DrawBreadthFirstFill(0, 0, true, (arr2, x, y) =>
         {
@@ -703,8 +711,8 @@ public static class DrawExt
             return false; // We aren't on null, so don't continue using this space
         }, true);
         if (hasFill)
-            for (int y = 0; y < arr.getHeight(); y++)
-                for (int x = 0; x < arr.getWidth(); x++)
+            for (int y = 0; y < arr.Height; y++)
+                for (int x = 0; x < arr.Width; x++)
                     if (!fillArr[x, y])
                         unit(arr, x, y);
     }

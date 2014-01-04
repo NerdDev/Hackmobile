@@ -20,7 +20,7 @@ public class RectangularRoom : RoomModifier
             BigBoss.Debug.w(Logs.LevelGen, "Height: " + height + ", Width: " + width);
         }
         #endregion
-        Point center = spec.Array.Center();
+        Point center = spec.Array.Center;
         int left = center.x - (width / 2);
         int bottom = center.y - (height / 2);
         spec.Array.DrawSquare(left, left + width, bottom, bottom + height, new StrokedAction<GridType>()

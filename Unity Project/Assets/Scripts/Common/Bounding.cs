@@ -11,15 +11,18 @@ public class Bounding
     public int XMax { get; set; }
     public int YMin { get; set; }
     public int YMax { get; set; }
-	public int Width {
-		get { return XMax - XMin; }
-	}
-	public int Height {
-		get { return YMax - YMin; }
-	}
-	public int Area {
-		get { return Width * Height; }
-	}
+    public int Width
+    {
+        get { return XMax - XMin; }
+    }
+    public int Height
+    {
+        get { return YMax - YMin; }
+    }
+    public int Area
+    {
+        get { return Width * Height; }
+    }
 
     #region Ctors
     public Bounding()
@@ -39,10 +42,10 @@ public class Bounding
     }
 
     public Bounding(Point leftdownOrigin, int width, int height)
-        : this (leftdownOrigin.x, leftdownOrigin.x + width - 1, 
+        : this(leftdownOrigin.x, leftdownOrigin.x + width - 1,
         leftdownOrigin.y, leftdownOrigin.y + height - 1)
     {
-        
+
     }
 
     public Bounding(Bounding rhs)
@@ -55,15 +58,15 @@ public class Bounding
     {
         return XMin > min && XMin < max;
     }
-	
-	public Point GetCenter()
-	{
-		if (IsValid())
-			return new Point(XMin + Width / 2, YMin + Height / 2);
-		else
-			return new Point();
-	}
-	
+
+    public Point GetCenter()
+    {
+        if (IsValid())
+            return new Point(XMin + Width / 2, YMin + Height / 2);
+        else
+            return new Point();
+    }
+
     #region Absorbs
     public void Absorb(int x, int y)
     {
@@ -75,12 +78,12 @@ public class Bounding
     {
         Absorb(val.x, val.y);
     }
-	
-	public void Absorb(Bounding rhs)	
-	{
-		Absorb(rhs.XMin, rhs.YMin);
-		Absorb(rhs.XMax, rhs.YMax);
-	}
+
+    public void Absorb(Bounding rhs)
+    {
+        Absorb(rhs.XMin, rhs.YMin);
+        Absorb(rhs.XMax, rhs.YMax);
+    }
 
     public void AbsorbX(int x)
     {
@@ -195,11 +198,11 @@ public class Bounding
         IntersectingDimensions(rhs, out width, out height);
 
         // If either x or y intersect is negative, there's no intersection
-		if (width > 0 && height > 0)
-		{
-			return width * height;
-		}
-		return 0;
+        if (width > 0 && height > 0)
+        {
+            return width * height;
+        }
+        return 0;
     }
 
     public bool Intersects(Bounding rhs)
@@ -298,7 +301,7 @@ public class Bounding
 
     public Bounding InBounds<T>(Container2D<T> arr)
     {
-        return IntersectBounds(arr.GetBounding());
+        return IntersectBounds(arr.Bounding);
     }
 
     public Bounding InBounds<T>(T[,] arr)
