@@ -24,6 +24,7 @@ abstract public class LayoutObject
     {
         Id = _nextId++;
         ShiftP = new Point();
+        Grids = new MultiMap<GridType>();
     }
 
     #region Shifts
@@ -122,22 +123,6 @@ abstract public class LayoutObject
         }
     }
     #endregion Bounds
-
-    #region GetSet
-    public virtual GridType[,] GetMinimizedArray(GridArray inArr)
-    {
-        Bounding bounds = Grids.Bounding;
-        GridType[,] outArr = new GridType[bounds.Height + 1, bounds.Width + 1];
-        for (int y = bounds.YMin; y <= bounds.YMax; y++)
-        {
-            for (int x = bounds.XMin; x <= bounds.XMax; x++)
-            {
-                outArr[y - bounds.YMin, x - bounds.XMin] = inArr[x, y];
-            }
-        }
-        return outArr;
-    }
-    #endregion GetSet
 
     public Bounding GetConnectedBounds()
     {

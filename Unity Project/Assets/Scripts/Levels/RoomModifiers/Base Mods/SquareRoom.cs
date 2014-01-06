@@ -18,10 +18,10 @@ public class SquareRoom : RoomModifier {
             BigBoss.Debug.w(Logs.LevelGen, "Side: " + side);
         }
         #endregion
-        Point center = spec.Array.Center;
+        Point center = spec.Grids.Center;
         int left = center.x - (side / 2);
         int bottom = center.y - (side / 2);
-        spec.Array.DrawSquare(left, left + side, bottom, bottom + side, new StrokedAction<GridType>()
+        spec.Grids.DrawSquare(left, left + side, bottom, bottom + side, new StrokedAction<GridType>()
         {
             UnitAction = Draw.SetTo(GridType.Floor),
             StrokeAction = Draw.SetTo(GridType.Wall)

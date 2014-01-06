@@ -5,77 +5,57 @@ using System;
 
 public class Array2D<T> : Container2D<T>
 {
-    bool _validCount = false;
-    int _count = 0;
+    protected int count;
     protected T[,] arr;
     protected bool[,] present;
+    Point shift;
 
     #region Ctors
     protected Array2D()
         : base()
     {
+        shift = new Point();
     }
 
     public Array2D(int width, int height)
-        : base()
-    {
-        arr = new T[height, width];
-    }
-
-    public Array2D(Container2D<T> rhs)
-        : base(rhs)
-    {
-    }
-
-    public Array2D(Array2D<T> rhs)
-        : this(rhs.Width, rhs.Height, rhs)
-    {
-    }
-
-    public Array2D(int width, int height, Array2D<T> rhs)
-        : this(width, height)
-    {
-        PutAll(rhs);
-    }
-
-    public Array2D(int width, int height, Array2D<T> rhs, Point shift)
-        : this(width, height)
-    {
-        PutAll(rhs, shift);
-    }
-
-    public Array2D(int width, int height, Array2D<T> rhs, int xShift, int yShift)
-        : this(width, height)
-    {
-        PutAll(rhs, xShift, yShift);
-    }
-
-    public Array2D(Bounding bound, bool minimize)
         : this()
     {
-        arr = BoundedArr(bound, minimize);
+        arr = new T[height, width];
+        present = new bool[height, width];
+    }
+
+    public Array2D(Bounding bounds)
+        : this(bounds.Width, bounds.Height)
+    {
+        shift.x = bounds.XMin;
+        shift.y = bounds.YMin;
+    }
+
+    public Array2D(Container2D<T> rhs, Point shift = null)
+        : this(rhs.Width, rhs.Height)
+    {
+        if (rhs is Array2D<T> && shift == null)
+        {
+            Array2D<T> rhsArr = (Array2D<T>)rhs;
+            for (int y = 0; y < rhsArr.Height; y++)
+            {
+                for (int x = 0; x < rhsArr.Width; x++)
+                {
+                    arr[y, x] = rhsArr.arr[y, x];
+                    present[y, x] = rhsArr.present[y, x];
+                }
+            }
+            shift = new Point(rhsArr.shift);
+        }
+        else
+        {
+            if (shift == null)
+                PutAll(rhs);
+            else
+                PutAll(rhs, shift);
+        }
     }
     #endregion
-
-    protected static T[,] BoundedArr(Bounding bound, bool minimize)
-    {
-        int width = 0;
-        int height = 0;
-        if (bound.IsValid())
-        {
-            if (minimize)
-            {
-                width = bound.Width + 1;
-                height = bound.Height + 1;
-            }
-            else
-            {
-                width = bound.XMax + 1;
-                height = bound.YMax + 1;
-            }
-        }
-        return new T[height, width];
-    }
 
     public override List<string> ToRowStrings()
     {
@@ -85,6 +65,8 @@ public class Array2D<T> : Container2D<T>
     #region GetSet
     public override bool InRange(int x, int y)
     {
+        x -= shift.x;
+        y -= shift.y;
         return y < arr.GetLength(0)
             && x < arr.GetLength(1)
             && y >= 0
@@ -95,7 +77,7 @@ public class Array2D<T> : Container2D<T>
     {
         if (InRange(x, y))
         {
-            val = arr[y, x];
+            val = arr[y - shift.y, x - shift.x];
             return true;
         }
         val = default(T);
@@ -109,118 +91,114 @@ public class Array2D<T> : Container2D<T>
     #endregion
 
     #region Iteration
-    public IEnumerable<Value2D<T>> IterateNoEdges()
-    {
-        for (int y = 1; y < arr.GetLength(0) - 1; y++)
-        {
-            for (int x = 1; x < arr.GetLength(1) - 1; x++)
-            {
-                var val = new Value2D<T>(x, y, arr[y, x]);
-                yield return val;
-            }
-        }
-    }
-
     public override IEnumerator<Value2D<T>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                var val = new Value2D<T>(x, y, arr[y, x]);
-                yield return val;
+                if (present[y, x])
+                {
+                    var val = new Value2D<T>(x + shift.x, y + shift.y, arr[y, x]);
+                    yield return val;
+                }
             }
         }
     }
     #endregion
 
-    public static void invert(Array2D<bool> arr)
-    {
-        foreach (Value2D<bool> val in arr)
-        {
-            arr[val] = !val.val;
-        }
-    }
-
     public override T this[int x, int y]
     {
         get
         {
-            return arr[y, x];
+            T ret;
+            TryGetValue(x, y, out ret);
+            return ret;
         }
         set
         {
-            _validCount = false;
+            if (!InRange(x, y))
+                ExpandToInclude(x, y);
+            x -= shift.x;
+            y -= shift.y;
             arr[y, x] = value;
+            if (present[y, x])
+                count++;
+            present[y, x] = true;
         }
     }
 
-    public override int Count
-    {
-        get
-        {
-            if (!_validCount)
-            {
-                _count = 0;
-                T def = default(T);
-                for (int y = 0; y < arr.GetLength(0); y++)
-                {
-                    for (int x = 0; x < arr.GetLength(1); x++)
-                    {
-                        T val = arr[y, x];
-                        if (val != null && !val.Equals(def))
-                        {
-                            _count++;
-                        }
-                    }
-                }
-                _validCount = true;
-            }
-            return _count;
-        }
-    }
+    public override int Count { get { return count; } }
 
     public override Bounding Bounding
     {
         get
         {
             Bounding ret = new Bounding();
-            ret.XMin = 0;
-            ret.XMax = arr.GetLength(1) - 1;
-            ret.YMin = 0;
-            ret.YMax = arr.GetLength(0) - 1;
+            ret.XMin = 0 + shift.x;
+            ret.XMax = arr.GetLength(1) - 1 + shift.x;
+            ret.YMin = 0 + shift.y;
+            ret.YMax = arr.GetLength(0) - 1 + shift.y;
             return ret;
         }
     }
 
     public override bool Contains(int x, int y)
     {
-        T val = arr[y, x];
-        return val != null && !val.Equals(default(T));
+        return present[y - shift.y, x - shift.x];
     }
 
     public override bool Remove(int x, int y)
     {
         bool contained = Contains(x, y);
+        x -= shift.x;
+        y -= shift.y;
         arr[y, x] = default(T);
+        if (present[y, x])
+            count--;
+        present[y, x] = false;
         return contained;
-    }
-
-    public Point Minimize(int buffer)
-    {
-        Bounding bounds = new Bounding(Bounding);
-        bounds.expand(buffer);
-        bounds.ShiftNonNeg();
-        Array2D<T> tmp = new Array2D<T>(this);
-        arr = BoundedArr(bounds, true);
-        PutAll(tmp, -bounds.XMin, -bounds.YMin);
-        return new Point(bounds.XMin, bounds.YMin);
     }
 
     public override void Clear()
     {
-        _validCount = false;
+        count = 0;
         arr = new T[arr.GetLength(0), arr.GetLength(1)];
         present = new bool[arr.GetLength(0), arr.GetLength(1)];
+    }
+
+    protected void Expand(int left, int right, int top, int bottom)
+    {
+        if (left == 0 && right == 0 & top == 0 && bottom == 0) return;
+        shift.x -= left;
+        shift.y -= top;
+        T[,] tmp = arr;
+        bool[,] tmpPresent = present;
+        arr = new T[tmp.GetLength(0) + top + bottom, tmp.GetLength(1) + left + right];
+        present = new bool[arr.GetLength(0), arr.GetLength(1)];
+        for (int y = 0; y < tmp.GetLength(0); y++)
+        {
+            for (int x = 0; x < tmp.GetLength(1); x++)
+            {
+                arr[y, x] = tmp[y + bottom, x + left];
+                present[y, x] = tmpPresent[y + bottom, x + left];
+            }
+        }
+    }
+
+    protected void ExpandToInclude(int x, int y)
+    { // external space
+        int left = 0, right = 0, top = 0, bottom = 0;
+        x -= shift.x;
+        y -= shift.y;
+        if (x < 0)
+            left = 0 - x;
+        else if (x >= Width)
+            right = Width - x;
+        if (y < 0)
+            bottom = 0 - y;
+        else if (y >= Height)
+            top = Height - y;
+        Expand(left, right, top, bottom);
     }
 }

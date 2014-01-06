@@ -20,7 +20,7 @@ public class PillarMod : RoomModifier
         spacingOptions.Rand = spec.Random;
         int spacingX = spacingOptions.Get();
         int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get() : spacingX;
-        Container2D<GridType> arr = spec.Array;
+        Container2D<GridType> arr = spec.Grids;
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)

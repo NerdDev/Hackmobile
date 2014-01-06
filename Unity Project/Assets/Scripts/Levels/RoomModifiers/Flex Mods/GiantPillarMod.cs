@@ -9,7 +9,7 @@ public class GiantPillarMod : RoomModifier
     {
         // Add an extra 2 for stroke width for analysis
         int size = spec.Random.Next(2, 5) + 2;
-        List<Bounding> locations = spec.Array.GetSquares(size, size, false, new OptionTests<GridType>()
+        List<Bounding> locations = spec.Grids.GetSquares(size, size, false, new OptionTests<GridType>()
             {
                 UnitAction = (arr, x, y) => arr[x, y] == GridType.Floor,
                 StrokeAction = (arr, x, y) => GridTypeEnum.Walkable(arr[x, y])
@@ -33,7 +33,7 @@ public class GiantPillarMod : RoomModifier
         #endregion
         Bounding l = locations.Random(spec.Random);
         // Draw inner square without stroke (stroke was just used to analyze surroundings)
-        spec.Array.DrawSquare(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(GridType.Wall));
+        spec.Grids.DrawSquare(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(GridType.Wall));
         return true;
     }
 

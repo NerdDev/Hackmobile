@@ -121,7 +121,7 @@ public static class DrawExt
         }));
         return ret;
     }
-    
+
     // Returns list of values around that satisfy
     public static List<T> GetValuesAllAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawActionCall<T> tester)
     {
@@ -645,8 +645,7 @@ public static class DrawExt
 
     public static void DrawBreadthFirstFill<T>(this Container2D<T> arr, int x, int y,
         bool cornered,
-        DrawActionCall<T> run,
-        bool edgeSafe = false)
+        DrawActionCall<T> run)
     {
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -655,9 +654,10 @@ public static class DrawExt
             arr.ToLog(Logs.LevelGen, "Container to fill starting on (" + x + "," + y + ")");
         }
         #endregion
+        Bounding bounds = arr.Bounding;
         Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
         queue.Enqueue(new Value2D<T>(x, y));
-        Array2D<bool> visited = new Array2D<bool>(arr.Width, arr.Height);
+        Array2D<bool> visited = new Array2D<bool>(bounds);
         visited[x, y] = true;
         Point curPoint;
         while (queue.Count > 0)
@@ -665,20 +665,18 @@ public static class DrawExt
             curPoint = queue.Dequeue();
             arr.DrawAround(curPoint.x, curPoint.y, true, (arr2, x2, y2) =>
             {
-                if (!edgeSafe || arr.InRange(x2, y2))
+                if (!bounds.Contains(x, y)) return true;
+                if (!visited[x2, y2] && run(arr2, x2, y2))
                 {
-                    if (!visited[x2, y2] && run(arr2, x2, y2))
+                    queue.Enqueue(new Value2D<T>(x2, y2, arr2[x2, y2]));
+                    #region DEBUG
+                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                     {
-                        queue.Enqueue(new Value2D<T>(x2, y2, arr2[x2, y2]));
-                        #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            visited.ToLog(Logs.LevelGen, "Queued " + x2 + " " + y2);
-                        }
-                        #endregion
+                        visited.ToLog(Logs.LevelGen, "Queued " + x2 + " " + y2);
                     }
-                    visited[x2, y2] = true;
+                    #endregion
                 }
+                visited[x2, y2] = true;
                 return true;
             });
         }
@@ -709,7 +707,7 @@ public static class DrawExt
             else
                 unit(arr, x, y);
             return false; // We aren't on null, so don't continue using this space
-        }, true);
+        });
         if (hasFill)
             for (int y = 0; y < arr.Height; y++)
                 for (int x = 0; x < arr.Width; x++)

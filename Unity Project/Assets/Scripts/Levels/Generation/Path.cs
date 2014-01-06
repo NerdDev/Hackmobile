@@ -135,9 +135,7 @@ public class Path : LayoutObjectLeaf
             BigBoss.Debug.printHeader(Logs.LevelGen, "Prune");
         }
         #endregion
-        Bounding bounds = GetBounding(true);
-        bounds.expand(1);
-        Array2D<int> indexes = new Array2D<int>(bounds, false);
+        Array2D<int> indexes = new Array2D<int>(Grids.Width, Grids.Height);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
         int index = 0;
         foreach (Value2D<GridType> val in tmp)

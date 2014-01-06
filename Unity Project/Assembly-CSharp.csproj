@@ -221,7 +221,6 @@
      <Compile Include="Assets\Scripts\Camera scripts\MasterCamera.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\maxCamera.cs" />
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
-     <Compile Include="Assets\Scripts\Common\Array2Dcoord.cs" />
      <Compile Include="Assets\Scripts\Common\ArrayMultiMap.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
@@ -249,7 +248,6 @@
      <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemStorage.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\GridArray.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutCluster.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
