@@ -31,7 +31,7 @@ public class Array2D<T> : Container2D<T>
         shift.y = bounds.YMin;
     }
 
-    public Array2D(Container2D<T> rhs, Point shift = null)
+    public Array2D(Container2D<T> rhs)
         : this(rhs.Width, rhs.Height)
     {
         if (rhs is Array2D<T> && shift == null)
@@ -49,10 +49,9 @@ public class Array2D<T> : Container2D<T>
         }
         else
         {
-            if (shift == null)
-                PutAll(rhs);
-            else
-                PutAll(rhs, shift);
+            shift.x = rhs.Bounding.XMin;
+            shift.y = rhs.Bounding.YMin;
+            PutAll(rhs);
         }
     }
     #endregion
