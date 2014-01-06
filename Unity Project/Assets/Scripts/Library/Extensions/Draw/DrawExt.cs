@@ -552,7 +552,7 @@ public static class DrawExt
     }
     #endregion
     #region Find Options
-    public static List<Bounding> GetSquares<T>(this Container2D<T> arr, int width, int height, bool tryFlipped, OptionTests<T> tester, Bounding scope = null)
+    public static List<Bounding> GetSquares<T>(this Container2D<T> arr, int width, int height, bool tryFlipped, StrokedAction<T> tester, Bounding scope = null)
     {
         SquareFinder<T> finder = new SquareFinder<T>(arr, width, height, tryFlipped, tester, scope);
         return finder.Find();

@@ -7,7 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
@@ -309,7 +310,6 @@
     <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawAction.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Draw\GridDrawExt.cs" />
-    <Compile Include="Assets\Scripts\Library\Extensions\Draw\OptionTests.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Draw\RandomPicker.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Draw\SquareFinder.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Draw\StrokedAction.cs" />

@@ -284,7 +284,6 @@
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\GridDrawExt.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Draw\OptionTests.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\RandomPicker.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\SquareFinder.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\StrokedAction.cs" />
