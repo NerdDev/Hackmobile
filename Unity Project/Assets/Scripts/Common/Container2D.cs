@@ -180,6 +180,16 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
     }
 
+    public void ToLog()
+    {
+        ToLog(BigBoss.Debug.LastLog);
+    }
+
+    public void ToLog(params string[] customContent)
+    {
+        ToLog(BigBoss.Debug.LastLog, customContent);
+    }
+
     public virtual void ToLog(Logs log, params string[] customContent)
     {
         if (BigBoss.Debug.logging(log))

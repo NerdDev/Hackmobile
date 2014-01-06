@@ -690,32 +690,50 @@ public static class DrawExt
         #endregion
     }
 
-    public static void DrawPerimeter<T>(this Container2D<T> arr, DrawActionCall<T> evaluator, StrokedAction<T> action)
+    public static void DrawPerimeter<T>(this Container2D<T> cont, DrawActionCall<T> evaluator, StrokedAction<T> action)
     {
-        DrawActionCall<T> unit = action.UnitAction;
-        DrawActionCall<T> stroke = action.StrokeAction;
-        bool hasFill = unit != null;
-        Array2D<bool> fillArr = null;
-        Bounding bounds = arr.Bounding;
-        if (hasFill)
-            fillArr = new Array2D<bool>(arr.Width, arr.Height);
-        // Get null spaces surrounding room
-        arr.DrawBreadthFirstFill(bounds.XMin - 1, bounds.YMin - 1, true, (arr2, x, y) =>
+        DrawActionCall<T> call;
+        Container2D<bool> debugArr;
+        if (action.UnitAction != null && action.StrokeAction != null)
         {
-            if (hasFill)
-                fillArr[x, y] = true;
-            if (!evaluator(arr, x, y)) return true; // Valid space to continue from
-            if (stroke != null)
-                stroke(arr2, x, y);
-            else
-                unit(arr, x, y);
-            return false; // We aren't on null, so don't continue using this space
-        });
-        if (hasFill)
-            for (int y = 0; y < arr.Height; y++)
-                for (int x = 0; x < arr.Width; x++)
-                    if (!fillArr[x, y])
-                        unit(arr, x, y);
+            call = (arr, x, y) =>
+            {
+                if (arr.DrawAround(x, y, true, evaluator))
+                    action.UnitAction(arr, x, y);
+                else
+                    action.StrokeAction(arr, x, y);
+                return true;
+            };
+        }
+        else if (action.UnitAction != null)
+        {
+            call = (arr, x, y) =>
+            {
+                if (arr.DrawAround(x, y, true, evaluator))
+                    action.UnitAction(arr, x, y);
+                return true;
+            };
+        }
+        else
+        {
+            call = (arr, x, y) =>
+            {
+                if (!arr.DrawAround(x, y, true, evaluator))
+                    action.StrokeAction(arr, x, y);
+                return true;
+            };
+        }
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+        {
+            debugArr = new Array2D<bool>(cont.Bounding);
+            call = new DrawAction<T>(call).And((arr, x, y) => 
+                {
+                    debugArr[x, y] = true;
+                    debugArr.ToLog("Draw Perimeter");
+                    return true;
+                });
+        }
+        cont.DrawAll(call);
     }
     #endregion
 }
