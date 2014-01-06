@@ -171,7 +171,7 @@ public class Array2D<T> : Container2D<T>
     {
         if (left == 0 && right == 0 & top == 0 && bottom == 0) return;
         shift.x -= left;
-        shift.y -= top;
+        shift.y -= bottom;
         T[,] tmp = arr;
         bool[,] tmpPresent = present;
         arr = new T[tmp.GetLength(0) + top + bottom, tmp.GetLength(1) + left + right];
@@ -180,8 +180,8 @@ public class Array2D<T> : Container2D<T>
         {
             for (int x = 0; x < tmp.GetLength(1); x++)
             {
-                arr[y, x] = tmp[y + bottom, x + left];
-                present[y, x] = tmpPresent[y + bottom, x + left];
+                arr[y + bottom, x + left] = tmp[y, x];
+                present[y + bottom, x + left] = tmpPresent[y, x];
             }
         }
     }
@@ -194,11 +194,11 @@ public class Array2D<T> : Container2D<T>
         if (x < 0)
             left = 0 - x;
         else if (x >= Width)
-            right = Width - x;
+            right = x - Width + 1;
         if (y < 0)
             bottom = 0 - y;
         else if (y >= Height)
-            top = Height - y;
+            top = y - Height + 1;
         Expand(left, right, top, bottom);
     }
 }

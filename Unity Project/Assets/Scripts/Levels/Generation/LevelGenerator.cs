@@ -70,11 +70,11 @@ public class LevelGenerator
         //ClusterRooms(rooms);
         Log("Align Stairs", true, ValidateStairPlacement);
         Log("Place Doors", true, PlaceDoors);
-        Log("Place Rooms", true, PlaceRooms);
-        Log("Place Paths", true, PlacePaths);
-        Log("Confirm Connection", true, ConfirmConnection);
-        Log("Confirm Edges", true, ConfirmEdges);
-        Log("Place Stairs", true, PlaceMissingStairs);
+        //Log("Place Rooms", true, PlaceRooms);
+        //Log("Place Paths", true, PlacePaths);
+        //Log("Confirm Connection", true, ConfirmConnection);
+        //Log("Confirm Edges", true, ConfirmEdges);
+        //Log("Place Stairs", true, PlaceMissingStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {

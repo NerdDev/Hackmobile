@@ -655,6 +655,7 @@ public static class DrawExt
         }
         #endregion
         Bounding bounds = arr.Bounding;
+        bounds.expand(1);
         Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
         queue.Enqueue(new Value2D<T>(x, y));
         Array2D<bool> visited = new Array2D<bool>(bounds);
@@ -665,13 +666,14 @@ public static class DrawExt
             curPoint = queue.Dequeue();
             arr.DrawAround(curPoint.x, curPoint.y, true, (arr2, x2, y2) =>
             {
-                if (!bounds.Contains(x, y)) return true;
+                if (!bounds.Contains(x2, y2)) return true;
                 if (!visited[x2, y2] && run(arr2, x2, y2))
                 {
                     queue.Enqueue(new Value2D<T>(x2, y2, arr2[x2, y2]));
                     #region DEBUG
                     if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                     {
+                        visited[x2, y2] = true;
                         visited.ToLog(Logs.LevelGen, "Queued " + x2 + " " + y2);
                     }
                     #endregion
@@ -694,10 +696,11 @@ public static class DrawExt
         DrawActionCall<T> stroke = action.StrokeAction;
         bool hasFill = unit != null;
         Array2D<bool> fillArr = null;
+        Bounding bounds = arr.Bounding;
         if (hasFill)
             fillArr = new Array2D<bool>(arr.Width, arr.Height);
         // Get null spaces surrounding room
-        arr.DrawBreadthFirstFill(0, 0, true, (arr2, x, y) =>
+        arr.DrawBreadthFirstFill(bounds.XMin - 1, bounds.YMin - 1, true, (arr2, x, y) =>
         {
             if (hasFill)
                 fillArr[x, y] = true;

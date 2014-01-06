@@ -123,7 +123,7 @@ public class MultiMap<T> : Container2D<T>
             {
                 foreach (KeyValuePair<int, T> val in row.Value)
                 {
-                    _arr[row.Key - bounds.YMin, val.Key - bounds.XMin] = val.Value;
+                    _arr[val.Key - bounds.XMin, row.Key - bounds.YMin] = val.Value;
                 }
             }
             return _arr;

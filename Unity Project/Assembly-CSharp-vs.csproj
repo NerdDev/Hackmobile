@@ -213,7 +213,6 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
      <Compile Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApplySubstance.cs" />
-     <Compile Include="Assets\Scenes\Testing\ArrayMultiMapTesting.cs" />
      <Compile Include="Assets\Scenes\Testing\ProbabilityTesting.cs" />
      <Compile Include="Assets\Scenes\Testing\SpellTesting.cs" />
      <Compile Include="Assets\Scripts\AtlasGenerator.cs" />
@@ -221,7 +220,6 @@
      <Compile Include="Assets\Scripts\Camera scripts\MasterCamera.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\maxCamera.cs" />
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
-     <Compile Include="Assets\Scripts\Common\ArrayMultiMap.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\IXmlParsable.cs" />
