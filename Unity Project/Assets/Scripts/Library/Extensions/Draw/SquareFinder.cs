@@ -9,13 +9,8 @@ public class SquareFinder<T>
     int _width;
     int _height;
     StrokedAction<T> _tester;
-    int _x = 0;
-    int _y = 0;
     bool _tryFlipped;
-    int _lowestFail = int.MaxValue;
     Bounding _scope;
-    StrokedAction<T> incremental = new StrokedAction<T>();
-    public bool Single { get; set; }
 
     public SquareFinder(Container2D<T> arr, int width, int height, bool tryFlipped, StrokedAction<T> tester, Bounding scope = null)
     {
@@ -25,32 +20,7 @@ public class SquareFinder<T>
         _tryFlipped = tryFlipped && width != height;
         _tester = tester;
         _scope = scope;
-        if (scope != null)
-        {
-            _x = scope.XMin;
-            _y = scope.YMin;
-        }
-        if (tester.UnitAction != null)
-            incremental.UnitAction = WrapTest(tester, false);
-        if (tester.StrokeAction != null)
-            incremental.StrokeAction = WrapTest(tester, true);
-        Single = false;
-    }
-
-    protected DrawAction<T> WrapTest(StrokedAction<T> drawTest, bool stroke)
-    {
-        DrawAction<T> da = stroke ? drawTest.StrokeAction : drawTest.UnitAction;
-        return new DrawAction<T>((af, xf, yf) =>
-                    { // For each in test square, run user's test
-                        if (!da.Call(af, xf, yf))
-                        { // If desired test fails, stop and record position
-                            _lowestFail = Math.Min(_y, _lowestFail);
-                            _x = xf + 1; // Move our next test square right of failure.
-                            return false;
-                        }
-                        return true;
-                    }
-            );
+        if (scope == null) scope = arr.Bounding;
     }
 
     public List<Bounding> Find()
@@ -58,27 +28,10 @@ public class SquareFinder<T>
         List<Bounding> ret = new List<Bounding>();
         if (_width >= _arr.Width || _height >= _arr.Height) return ret;
 
-        while (_y + _height <= _arr.Height && (_scope == null || _y + _height <= _scope.YMax))
-        { // In range vertically
-            // Try to draw a square that passes the user's test
-            if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, incremental))
-            { // Found a square
-                Bounding b = new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 };
-                ret.Add(b);
-                if (Single) // Just want one, so return.
-                    return ret;
-                // Move over one
-                _x++;
-            }
-
-            // Test to see if next is out of range horizontally
-            if (_x + _width > _arr.Height || (_scope != null && _x + _width > _scope.XMax))
-            { // it is, so reset to left of array and move up
-                _x = _scope == null ? 0 : _scope.XMin;
-                _lowestFail++;
-                _y = _lowestFail;
-            }
-        }
+        if (_tester.StrokeAction != null)
+            FindNormal(ret);
+        else
+            FindSkip(ret);
 
         if (_tryFlipped && ret.Count == 0)
         { // Flip and try again
@@ -89,5 +42,110 @@ public class SquareFinder<T>
             return Find();
         }
         return ret;
+    }
+
+    protected void FindNormal(List<Bounding> ret)
+    {
+        int _x = _scope.XMin;
+        int _y = _scope.YMin;
+        while (_y <= _scope.YMax)
+        { // In range vertically
+            // Try to draw a square that passes the user's test
+            if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, _tester))
+            { // Found a square
+                Bounding b = new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 };
+                ret.Add(b);
+            }
+            // Move over one
+            _x++;
+
+            // Test to see if next is out of range horizontally
+            if (_x > _scope.XMax)
+            { // it is, so reset to left of array and move up
+                _x = _scope.XMin;
+                _y++;
+            }
+        }
+    }
+
+    protected void FindSkip(List<Bounding> ret)
+    {
+        int _x = _scope.XMin;
+        int _y = _scope.YMin;
+        int _lastPassedX = int.MaxValue;
+        int _lastTestedX = _scope.XMin;
+        int _lastPassedY = _scope.YMin;
+        int xShift = _arr.Bounding.XMin;
+        int xMax = Math.Min(_arr.Bounding.XMax - _width, _scope == null ? _scope.XMax - _width : int.MaxValue);
+        int yMax = Math.Min(_arr.Bounding.YMax - _height, _scope == null ? _scope.YMax - _height : int.MaxValue);
+        while (_y <= yMax)
+        { // In range vertically
+            BigBoss.Debug.w(Logs.LevelGenMain, "Testing " + _x + " " + _y);
+            // Try to draw a square that passes the user's test
+            if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, _tester))
+            { // Found a square
+                if (_lastPassedX == _lastTestedX)
+                { // Draw all previous squares
+                    for (int _tmpX = _lastPassedX; _tmpX <= _x; _tmpX++)
+                    {
+                        BigBoss.Debug.w(Logs.LevelGenMain, "Accepting " + _tmpX + " " + _y);
+                        ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
+                    }
+                }
+                else
+                {
+                    for (int _tmpX = _lastTestedX + 1; _tmpX <= _x - 1; _tmpX++)
+                    {
+                        BigBoss.Debug.w(Logs.LevelGenMain, "Not last pass Testing " + _tmpX + " " + _y);
+                        if (_arr.DrawSquare(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
+                        {
+                            BigBoss.Debug.w(Logs.LevelGenMain, "Not last pass Accepting " + _tmpX + " " + _y);
+                            ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
+                            _lastPassedX = _x;
+                        }
+                    }
+                }
+                // Set last passed to cur square
+                _lastPassedX = _x;
+                _lastTestedX = _x;
+            }
+            else
+            { // Square failed, test previous squares
+                for (int _tmpX = _lastTestedX + 1; _tmpX <= _x - 1; _tmpX++)
+                {
+                    BigBoss.Debug.w(Logs.LevelGenMain, "Fail Testing " + _tmpX + " " + _y);
+                    if (_arr.DrawSquare(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
+                    {
+                        BigBoss.Debug.w(Logs.LevelGenMain, "Fail Accepting " + _tmpX + " " + _y);
+                        ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
+                        _lastPassedX = _x;
+                    }
+                }
+                _lastTestedX = _x;
+            }
+            // Skip to next full untested square
+            _x += _width;
+
+            // Test to see if next is out of range horizontally
+            if (_x > xMax)
+            {
+                // Roll back and check the last few skipped boxes
+                for (int _tmpX = _lastTestedX + 1; _tmpX <= xMax; _tmpX++)
+                {
+                    BigBoss.Debug.w(Logs.LevelGenMain, "End Testing " + _tmpX + " " + _y);
+                    if (_arr.DrawSquare(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
+                    {
+                        BigBoss.Debug.w(Logs.LevelGenMain, "End Accepting " + _tmpX + " " + _y);
+                        ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
+                    }
+                }
+                // go up one
+                _x = _scope.XMin;
+                _lastPassedY = _y;
+                _lastPassedX = int.MaxValue;
+                _lastTestedX = _scope.XMin;
+                _y++;
+            }
+        }
     }
 }

@@ -177,7 +177,6 @@ public static class Nifty
 
     public static List<string> AddRuler(List<string> list, Bounding bounds)
     {
-        bounds.ShiftNonNeg();
         if (bounds != null && bounds.IsValid())
             return AddRuler(list, bounds.XMin, bounds.YMin);
         return AddRuler(list);
