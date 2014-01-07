@@ -492,19 +492,16 @@ public static class DrawExt
         if (xl == xr && yb == yt)
             return action.StrokeAction(arr, xl, yb);
 
-        StrokedAction<T> stroke = new StrokedAction<T>() { UnitAction = action.StrokeAction };
-        StrokedAction<T> fill = new StrokedAction<T>() { UnitAction = action.UnitAction };
-
-        if (!arr.DrawRow(xl, xr, yb, stroke)) return false;
-        if (!arr.DrawRow(xl, xr, yt, stroke)) return false;
+        if (!arr.DrawRow(xl, xr, yb,  action.StrokeAction)) return false;
+        if (!arr.DrawRow(xl, xr, yt,  action.StrokeAction)) return false;
         yb++;
         yt--;
-        if (!arr.DrawCol(yb, yt, xl, stroke)) return false;
-        if (!arr.DrawCol(yb, yt, xr, stroke)) return false;
+        if (!arr.DrawCol(yb, yt, xl,  action.StrokeAction)) return false;
+        if (!arr.DrawCol(yb, yt, xr,  action.StrokeAction)) return false;
         xl++;
         xr--;
-        if (fill != null)
-            if (!DrawSquareHelper.DrawSquareNoStroke(arr, xl, xr, yb, yt, fill)) return false;
+        if (action.UnitAction != null)
+            if (!DrawSquareHelper.DrawSquareNoStroke(arr, xl, xr, yb, yt, action.UnitAction)) return false;
         return true;
     }
 

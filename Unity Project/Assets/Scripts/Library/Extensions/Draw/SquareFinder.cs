@@ -28,10 +28,36 @@ public class SquareFinder<T>
         List<Bounding> ret = new List<Bounding>();
         if (_width >= _arr.Width || _height >= _arr.Height) return ret;
 
-        if (_tester.StrokeAction != null)
-            FindNormal(ret);
-        else
+        if (_tester.StrokeAction == null)
+        {
             FindSkip(ret);
+        }
+        else if (_tester.UnitAction != null && _width > 3 && _height > 3)
+        { // Find non-stroke options, then test stroke
+            DrawAction<T> stroke = _tester.StrokeAction;
+            _tester.StrokeAction = null;
+            _width -= 2;
+            _height -= 2;
+            FindSkip(ret);
+            _width += 2;
+            _height += 2;
+            _tester.StrokeAction = stroke;
+            List<Bounding> retTmp = new List<Bounding>(ret);
+            ret.Clear();
+            StrokedAction<T> strokeTest = new StrokedAction<T>() { StrokeAction = _tester.StrokeAction };
+            foreach (Bounding b in retTmp)
+            {
+                b.expand(1);
+                if (_arr.DrawSquare(b.XMin, b.XMax, b.YMin, b.YMax, strokeTest))
+                {
+                    ret.Add(b);
+                }
+            }
+        }
+        else
+        {
+            FindNormal(ret);
+        }
 
         if (_tryFlipped && ret.Count == 0)
         { // Flip and try again
