@@ -25,7 +25,7 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
         return false;
     }
 
-    public bool TryGetValue(string category, string item, out ItemList list)
+    public bool TryGetValue(string category, string item, out Item list)
     {
         InventoryCategory cate;
         if (TryGetValue(category, out cate))
@@ -34,12 +34,13 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
         return false;
     }
 
+    //unused now?
     public bool TryGetFirst(string category, string itemName, out Item item)
     {
-        ItemList list;
+        Item list;
         if (TryGetValue(category, itemName, out list))
         { // list has count > 0
-            item = list[0];
+            item = list;
             return true;
         }
         item = null;
@@ -73,5 +74,21 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
 
     public void ParseXML(XMLNode x)
     {
+    }
+
+    internal void Add(Item item, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Add(item);
+        }
+    }
+
+    internal void Remove(Item item, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Remove(item);
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class InventoryCategory : SortedDictionary<string, ItemList>
+public class InventoryCategory : SortedDictionary<string, Item>
 {
     public string id;
 
@@ -14,37 +14,43 @@ public class InventoryCategory : SortedDictionary<string, ItemList>
 
     public void Add(Item i)
     {
-        ItemList list;
-        if (!this.TryGetValue(i.Name, out list))
+        Item item;
+        if (!this.TryGetValue(i.Name, out item))
         {
-            list = new ItemList(i.Name);
-            this.Add(i.Name, list);
+            this.Add(i.Name, i);
         }
-        list.Add(i);
-        this[i.Name].onGround = false;
+        else
+        {
+            item.Add();
+            if (i != item)
+            {
+                i.Destroy();
+            }
+        }
+        this[i.Name].OnGround = false;
     }
 
     public bool Remove(Item i)
     {
-        ItemList list;
-        if (TryGetValue(i.Name, out list))
-            return list.Remove(i);
+        Item item;
+        if (TryGetValue(i.Name, out item))
+            item.RemoveItem();
         return false;
     }
 
     public bool Contains(string item)
     {
-        ItemList list;
-        if (TryGetValue(item, out list))
-            return list.Count > 0;
+        Item i;
+        if (TryGetValue(item, out i))
+            return true;
         return false;
     }
 
     public bool Contains(Item i)
     {
-        ItemList list;
+        Item list;
         if (TryGetValue(i.Name, out list))
-            return list.Contains(i);
+            return true;
         return false;
     }
 }

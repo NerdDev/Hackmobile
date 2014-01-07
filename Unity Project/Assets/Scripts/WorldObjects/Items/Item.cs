@@ -13,6 +13,8 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     public string Icon { get; set; }
     public ItemProperties props = new ItemProperties();
 
+    public bool OnGround { get; set; }
+
     //flags
     public Flags<ItemFlags> itemFlags = new Flags<ItemFlags>();
 
@@ -23,10 +25,20 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     protected Spell onEaten = new Spell();
     protected Spell onEquip = new Spell();
     protected Spell onUse = new Spell();
+
+    //Count
+    private uint _count; //uneditable except from inside this class
+    internal uint Count { get { return _count; } }
     #endregion
 
     public Item()
     {
+        _count = 1;
+    }
+
+    public Item(int count)
+    {
+        _count = (uint) count;
     }
 
     #region Usage:
@@ -35,9 +47,10 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     {
         if (onEaten != null)
         {
-            Debug.Log("Activating OnEatenEvent()");
             onEaten.Activate(this, n);
         }
+        n.removeFromInventory(this);
+        RemoveItem();
     }
 
     public bool isUsable()
@@ -53,7 +66,6 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         {
             onUse.Activate(n);
         }
-
         //if usage needs restricted, change that here
     }
 
@@ -103,6 +115,20 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         onEaten = x.Select<Spell>("OnEatenEffect");
         stats = x.Select<ItemStats>("stats");
         Icon = x.SelectString("icon");
+    }
+
+    internal void RemoveItem()
+    {
+        _count--;
+        if (_count <= 0)
+        {
+            this.Destroy();
+        }
+    }
+
+    internal void Add()
+    {
+        _count++;
     }
     #endregion
 

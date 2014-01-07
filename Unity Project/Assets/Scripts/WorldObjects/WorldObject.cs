@@ -69,7 +69,10 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
 
     public void Unwrap()
     {
-        Instance.Destroy();
+        if (Instance != null) //maybe the item isn't tied to a gameobject?
+        {
+            Instance.Destroy();
+        }
     }
 
     protected virtual void Unregister()

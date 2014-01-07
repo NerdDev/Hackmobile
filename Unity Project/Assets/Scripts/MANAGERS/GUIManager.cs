@@ -321,12 +321,9 @@ public class GUIManager : MonoBehaviour, IManager
                 InventoryCategory ic;
                 if (BigBoss.Player.Inventory.TryGetValue(category, out ic))
                 {
-                    foreach (ItemList itemList in ic.Values)
+                    foreach (Item item in ic.Values)
                     {
-                        if (itemList.Count > 0)
-                        {
-                            CreateItemButton(itemList, inventoryGrid, inventoryClipDrag);
-                        }
+                        CreateItemButton(item, inventoryGrid, inventoryClipDrag);
                     }
                     CreateBackLabel(inventoryGrid, inventoryClipDrag);
                 }
@@ -395,7 +392,7 @@ public class GUIManager : MonoBehaviour, IManager
         button.UIDragPanel.draggablePanel = panel;
     }
 
-    internal void RegenItemInfoGUI(ItemList item)
+    internal void RegenItemInfoGUI(Item item)
     {
         if (displayInventory)
         {
@@ -462,33 +459,26 @@ public class GUIManager : MonoBehaviour, IManager
         button.UIDragPanel.draggablePanel = panel;
     }
 
-    void CreateItemButton(ItemList itemList, KGrid grid, UIDraggablePanel panel)
+    void CreateItemButton(Item item, KGrid grid, UIDraggablePanel panel)
     {
+        if (grid == groundGrid) { item.OnGround = true; }
+        else if (grid == inventoryGrid) { item.OnGround = false; }
         string buttonText;
-        if (itemList.Count > 1)
+        if (item.Count > 1)
         {
-            buttonText = itemList.id + " (" + itemList.Count + ")";
+            buttonText = item.Name + " (" + item.Count + ")";
         }
-        else { buttonText = itemList.id; }
-        GUIButton itemButton = CreateObjectButton(itemList, grid, itemList.id, buttonText);
+        else { buttonText = item.Name; }
+        GUIButton itemButton = CreateObjectButton(item, grid, item.Name, buttonText);
         itemButton.OnSingleClick = new Action(() =>
         {
-            if ((itemButton.refObject as ItemList).Count > 0)
+            if ((itemButton.refObject as Item).Count > 0)
             {
                 BigBoss.Gooey.displayItem = true;
-                BigBoss.Gooey.RegenItemInfoGUI(itemButton.refObject as ItemList);
+                BigBoss.Gooey.RegenItemInfoGUI(itemButton.refObject as Item);
             }
         });
         itemButton.UIDragPanel.draggablePanel = panel;
-    }
-
-    void CreateItemButton(Item item, KGrid grid, UIDraggablePanel panel)
-    {
-        ItemList itemList = new ItemList(item.Name);
-        if (grid == groundGrid) { itemList.onGround = true; }
-        else if (grid == inventoryGrid) { itemList.onGround = false; }
-        itemList.Add(item);
-        CreateItemButton(itemList, grid, panel);
     }
 
     void CreateCategoryButton(InventoryCategory ic, KGrid grid, UIDraggablePanel panel)
@@ -503,11 +493,11 @@ public class GUIManager : MonoBehaviour, IManager
         categoryButton.UIDragPanel.draggablePanel = panel;
     }
 
-    void GenerateItemInfo(ItemList item)
+    void GenerateItemInfo(Item item)
     {
         if (item.Count > 0)
         {
-            foreach (KeyValuePair<string, string> kvp in item[0].GetGUIDisplays())
+            foreach (KeyValuePair<string, string> kvp in item.GetGUIDisplays())
             {
                 //CreateTextButton(kvp.Key + ": " + kvp.Value, itemInfoGrid, itemInfoClipDrag);
             }
@@ -519,100 +509,101 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    void GenerateItemActions(ItemList item)
+    void GenerateItemActions(Item item)
     {
-        if (item.Count > 0)
+        if (!item.itemFlags[ItemFlags.IS_EQUIPPED])
         {
             CreateEquipButton(item);
-            CreateUseButton(item);
-            CreateEatButton(item);
-            if (item.onGround)
-            {
-                CreatePickUpButton(item);
-            }
-            else
-            {
-                CreateDropButton(item);
-            }
-            this.itemActionsClipDrag.ResetPosition();
-            itemActionClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-            itemActionClip.clipRange = new Vector4(500, -400, 200, 800);
-            this.itemActionsGrid.Reposition();
         }
+        else
+        {
+            CreateUnEquipButton(item);
+        }
+        CreateUseButton(item);
+        CreateEatButton(item);
+        if (item.OnGround)
+        {
+            CreatePickUpButton(item);
+        }
+        else
+        {
+            CreateDropButton(item);
+        }
+        this.itemActionsClipDrag.ResetPosition();
+        itemActionClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+        itemActionClip.clipRange = new Vector4(500, -400, 200, 800);
+        this.itemActionsGrid.Reposition();
     }
 
-    void CreateEquipButton(ItemList item)
+    void CreateEquipButton(Item item)
     {
         GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Equip Item");
         itemButton.OnSingleClick = new Action(() =>
         {
-            ItemList itemList = itemButton.refObject as ItemList;
-            if (itemList.Count > 0)
+            Item i = itemButton.refObject as Item;
+            if (i.OnGround == true)
             {
-                Item itemAlreadyEquipped = BigBoss.Player.getEquippedItems().Find(i => i.Name.Equals(itemList[0].Name));
-                if (itemAlreadyEquipped != null)
-                {
-                    BigBoss.Player.unequipItem(itemAlreadyEquipped);
-                    BigBoss.Gooey.RegenItemInfoGUI(itemList);
-                }
-                else
-                {
-                    if (itemList.onGround == true)
-                    {
-                        BigBoss.Player.Inventory.Add(itemList[itemList.Count - 1]);
-                        BigBoss.Player.GridSpace.Remove(itemList[itemList.Count - 1]);
-                        BigBoss.Gooey.GenerateGroundItems(currentChest);
-                    }
-                    BigBoss.Player.equipItem(itemList[itemList.Count - 1]);
-                    BigBoss.Gooey.RegenItemInfoGUI(itemList);
-                }
+                BigBoss.Player.Inventory.Add(i);
+                BigBoss.Player.GridSpace.Remove(i);
+                BigBoss.Gooey.GenerateGroundItems(currentChest);
+            }
+            BigBoss.Player.equipItem(i);
+            BigBoss.Gooey.RegenItemInfoGUI(i);
+        });
+        itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
+    }
+
+    void CreateUnEquipButton(Item item)
+    {
+        GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "UnEquip Item");
+        itemButton.OnSingleClick = new Action(() =>
+        {
+            Item i = itemButton.refObject as Item;
+            Item itemAlreadyEquipped = BigBoss.Player.getEquippedItems().Find(items => items.Name.Equals(i.Name));
+            if (itemAlreadyEquipped != null)
+            {
+                BigBoss.Player.unequipItem(itemAlreadyEquipped);
+                BigBoss.Gooey.RegenItemInfoGUI(itemAlreadyEquipped);
             }
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
 
-    void CreateUseButton(ItemList item)
+    void CreateUseButton(Item item)
     {
         GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Use Item");
         itemButton.OnSingleClick = new Action(() =>
         {
-            ItemList itemList = itemButton.refObject as ItemList;
-            if (itemList.Count > 0)
-            {
-                BigBoss.Player.useItem(itemList[itemList.Count - 1]);
-                BigBoss.Gooey.RegenItemInfoGUI(itemList);
-            }
+            Item i = itemButton.refObject as Item;
+            BigBoss.Player.useItem(i);
+            BigBoss.Gooey.RegenItemInfoGUI(i);
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
 
-    void CreateDropButton(ItemList item)
+    void CreateDropButton(Item item)
     {
         GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Drop Item");
         itemButton.OnSingleClick = new Action(() =>
         {
-            ItemList itemList = itemButton.refObject as ItemList;
-            if (itemList.Count > 0)
-            {
-                Item dropped = itemList[itemList.Count - 1];
-                BigBoss.Player.Inventory.Remove(dropped);
-                BigBoss.Player.GridSpace.Put(dropped);
-                BigBoss.Gooey.RegenInventoryGUI();
-                BigBoss.Gooey.GenerateGroundItems(currentChest);
-            }
+            Item i = itemButton.refObject as Item;
+            BigBoss.Player.Inventory.Remove(i);
+            BigBoss.Player.GridSpace.Put(i);
+            BigBoss.Gooey.RegenInventoryGUI();
+            BigBoss.Gooey.GenerateGroundItems(currentChest);
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
 
-    void CreatePickUpButton(ItemList item)
+    void CreatePickUpButton(Item item)
     {
         GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Pick Up Item");
         itemButton.OnSingleClick = new Action(() =>
         {
-            ItemList itemList = itemButton.refObject as ItemList;
-            if (itemList.Count > 0)
+            Item i = itemButton.refObject as Item;
+            if (i.Count > 0)
             {
-                Item picked = itemList[itemList.Count - 1];
+                Item picked = i;
                 BigBoss.Player.Inventory.Add(picked);
                 if (BigBoss.Gooey.currentChest.Remove(picked))
                 {
@@ -625,22 +616,19 @@ public class GUIManager : MonoBehaviour, IManager
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
 
-    void CreateEatButton(ItemList item)
+    void CreateEatButton(Item item)
     {
         GUIButton itemButton = CreateObjectButton(item, itemActionsGrid, "Eat Item");
         itemButton.OnSingleClick = new Action(() =>
         {
-            ItemList itemList = itemButton.refObject as ItemList;
-            if (itemList.Count > 0)
-            {
-                if (itemList.onGround == true)
+            Item i = itemButton.refObject as Item;
+                if (i.OnGround == true)
                 {
-                    BigBoss.Player.GridSpace.Remove(itemList[itemList.Count - 1]);
+                    BigBoss.Player.GridSpace.Remove(i);
                     BigBoss.Gooey.GenerateGroundItems(currentChest);
                 }
-                BigBoss.Player.eatItem(itemList[itemList.Count - 1]);
-                BigBoss.Gooey.RegenItemInfoGUI(itemList);
-            }
+                BigBoss.Player.eatItem(i);
+                BigBoss.Gooey.RegenItemInfoGUI(i);
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }

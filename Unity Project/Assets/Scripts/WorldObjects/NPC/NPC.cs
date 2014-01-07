@@ -388,15 +388,6 @@ public class NPC : Affectable
                 unequipItem(i);
             }
             i.onEatenEvent(this);
-            removeFromInventory(i);
-
-            //unless you're Jose, in which case you'll be using a mac
-            //and who knows what happens when mac people eat
-            //no one can finish big macs anyways
-
-            //removes item permanently
-            //DestroyObject(i.gameObject);
-            //DestroyObject(i);
         }
     }
 
@@ -505,21 +496,7 @@ public class NPC : Affectable
 
     public virtual void addToInventory(Item item, int count)
     {
-        if (Inventory.Contains(item))
-        {
-            for (int i = 0; i < count - 1; i++)
-            {
-                Inventory.Add(item.Copy());
-            }
-        }
-        else
-        {
-            Inventory.Add(item);
-            for (int i = 0; i < count - 1; i++)
-            {
-                Inventory.Add(item.Copy());
-            }
-        }
+        Inventory.Add(item, count);
         Stats.Encumbrance += item.props.Weight * count;
     }
 
@@ -533,7 +510,7 @@ public class NPC : Affectable
     {
         if (Inventory.Contains(item))
         {
-            Inventory.Remove(item);
+            Inventory.Remove(item, count);
         }
         else
         {
