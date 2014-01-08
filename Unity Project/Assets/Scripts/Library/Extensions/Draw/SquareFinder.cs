@@ -12,6 +12,18 @@ public class SquareFinder<T>
     bool _tryFlipped;
     Bounding _scope;
 
+    // Used internally
+    int _x;
+    int _y;
+    int _lastPassedX;
+    int _lastTestedX;
+    int _lastPassedY;
+    int _lastTestedY;
+    int xShift;
+    bool[] previousLastPassedX;
+    bool[] _lastPassedXArr;
+
+
     public SquareFinder(Container2D<T> arr, int width, int height, bool tryFlipped, StrokedAction<T> tester, Bounding scope = null)
     {
         _arr = arr;
@@ -28,12 +40,23 @@ public class SquareFinder<T>
         List<Bounding> ret = new List<Bounding>();
         if (_width >= _arr.Width || _height >= _arr.Height) return ret;
 
-        if (_tester.StrokeAction == null)
-        {
+        // Initialize
+        _x = _scope.XMin;
+        _y = _scope.YMin;
+        _lastPassedX = int.MaxValue;
+        _lastTestedX = _scope.XMin;
+        _lastPassedY = int.MaxValue;
+        _lastTestedY = _scope.YMin;
+        xShift = _arr.Bounding.XMin;
+        _lastPassedXArr = new bool[_arr.Width];
+
+        if (_tester.StrokeAction == null && _width > 3 && _height > 3)
+        { // Just unit
             FindSkip(ret);
         }
-        else if (_tester.UnitAction != null && _width > 3 && _height > 3)
-        { // Find non-stroke options, then test stroke
+        else if (_tester.StrokeAction != null && _tester.UnitAction != null && _width > 5 && _height > 5)
+        { // Unit and stroke with optimization
+            // Find non-stroke options, then test stroke
             DrawAction<T> stroke = _tester.StrokeAction;
             _tester.StrokeAction = null;
             _width -= 2;
@@ -72,8 +95,6 @@ public class SquareFinder<T>
 
     protected void FindNormal(List<Bounding> ret)
     {
-        int _x = _scope.XMin;
-        int _y = _scope.YMin;
         while (_y <= _scope.YMax)
         { // In range vertically
             // Try to draw a square that passes the user's test
@@ -96,15 +117,7 @@ public class SquareFinder<T>
 
     protected void FindSkip(List<Bounding> ret)
     {
-        int _x = _scope.XMin;
-        int _y = _scope.YMin;
-        int _lastPassedX = int.MaxValue;
-        int _lastTestedX = _scope.XMin;
-        int _lastPassedY = _scope.YMin;
-        int xShift = _arr.Bounding.XMin;
-        int xMax = Math.Min(_arr.Bounding.XMax - _width, _scope == null ? _scope.XMax - _width : int.MaxValue);
-        int yMax = Math.Min(_arr.Bounding.YMax - _height, _scope == null ? _scope.YMax - _height : int.MaxValue);
-        while (_y <= yMax)
+        while (_y <= _scope.YMax)
         { // In range vertically
             BigBoss.Debug.w(Logs.LevelGenMain, "Testing " + _x + " " + _y);
             // Try to draw a square that passes the user's test
@@ -112,65 +125,69 @@ public class SquareFinder<T>
             { // Found a square
                 if (_lastPassedX == _lastTestedX)
                 { // Draw all previous squares
-                    for (int _tmpX = _lastPassedX; _tmpX <= _x; _tmpX++)
-                    {
-                        BigBoss.Debug.w(Logs.LevelGenMain, "Accepting " + _tmpX + " " + _y);
-                        ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
-                    }
+                    AcceptPreviousXSquares(ret);
                 }
                 else
-                {
-                    for (int _tmpX = _lastTestedX + 1; _tmpX <= _x - 1; _tmpX++)
-                    {
-                        BigBoss.Debug.w(Logs.LevelGenMain, "Not last pass Testing " + _tmpX + " " + _y);
-                        if (_arr.DrawSquare(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
-                        {
-                            BigBoss.Debug.w(Logs.LevelGenMain, "Not last pass Accepting " + _tmpX + " " + _y);
-                            ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
-                            _lastPassedX = _x;
-                        }
-                    }
+                { // Last test wasn't passed, so we cannot assume previous passed
+                    TestXSquares(ret, _lastTestedX + 1, _x - 1);
+                    ret.Add(new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 });
+                    _lastPassedXArr[_x - xShift] = true;
+                    _lastPassedX = _x;
                 }
-                // Set last passed to cur square
-                _lastPassedX = _x;
-                _lastTestedX = _x;
             }
             else
             { // Square failed, test previous squares
-                for (int _tmpX = _lastTestedX + 1; _tmpX <= _x - 1; _tmpX++)
-                {
-                    BigBoss.Debug.w(Logs.LevelGenMain, "Fail Testing " + _tmpX + " " + _y);
-                    if (_arr.DrawSquare(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
-                    {
-                        BigBoss.Debug.w(Logs.LevelGenMain, "Fail Accepting " + _tmpX + " " + _y);
-                        ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
-                        _lastPassedX = _x;
-                    }
-                }
-                _lastTestedX = _x;
+                TestXSquares(ret, _lastTestedX + 1, _x - 1);
             }
             // Skip to next full untested square
+            _lastTestedX = _x;
             _x += _width;
 
             // Test to see if next is out of range horizontally
-            if (_x > xMax)
+            if (_x > _scope.XMax)
             {
                 // Roll back and check the last few skipped boxes
-                for (int _tmpX = _lastTestedX + 1; _tmpX <= xMax; _tmpX++)
-                {
-                    BigBoss.Debug.w(Logs.LevelGenMain, "End Testing " + _tmpX + " " + _y);
-                    if (_arr.DrawSquare(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
-                    {
-                        BigBoss.Debug.w(Logs.LevelGenMain, "End Accepting " + _tmpX + " " + _y);
-                        ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
-                    }
-                }
+                TestXSquares(ret, _lastTestedX + 1, _scope.XMax);
                 // go up one
                 _x = _scope.XMin;
                 _lastPassedY = _y;
                 _lastPassedX = int.MaxValue;
                 _lastTestedX = _scope.XMin;
                 _y++;
+            }
+        }
+    }
+
+    protected void AcceptPreviousXSquares(List<Bounding> ret)
+    {
+        for (int _tmpX = _lastPassedX; _tmpX <= _x; _tmpX++)
+        { // Accept horizontal
+            BigBoss.Debug.w(Logs.LevelGenMain, "Accepting " + _tmpX + " " + _y);
+            ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
+            //Test vertical if they didn't pass below
+            //for (int _tmpY = _lastPassedY; _tmpY <= _y; _tmpY++)
+            //{
+            //    if (_lastPassedXArr[_tmpX - xShift] || _arr.DrawSquare(_tmpX, _tmpX + _width - 1, _tmpY, _tmpY + _height - 1, _tester))
+            //    {
+            //        BigBoss.Debug.w(Logs.LevelGenMain, "Accepting " + _tmpX + " " + _y);
+            //        ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
+            //    }
+            //}
+            _lastPassedXArr[_tmpX - xShift] = true;
+        }
+    }
+
+    protected void TestXSquares(List<Bounding> ret, int from, int to)
+    {
+        for (int _tmpX = from; _tmpX <= to; _tmpX++)
+        {
+            BigBoss.Debug.w(Logs.LevelGenMain, "Not last pass Testing " + _tmpX + " " + _y);
+            if (_arr.DrawSquare(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
+            {
+                BigBoss.Debug.w(Logs.LevelGenMain, "Not last pass Accepting " + _tmpX + " " + _y);
+                ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
+                _lastPassedX = _x;
+                _lastPassedXArr[_tmpX - xShift] = true;
             }
         }
     }
