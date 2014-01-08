@@ -210,6 +210,11 @@ public static class Draw
         return counter.Action<T>();
     }
 
+    public static DrawAction<T> Count<T>(Counter counter)
+    {
+        return counter.Action<T>();
+    }
+
     public static DrawAction<T> AlternatesSides<T>(Func<T, bool> eval)
     {
         return new DrawAction<T>((arr, x, y) =>

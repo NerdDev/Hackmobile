@@ -7,7 +7,7 @@ public class GiantPillarMod : RoomModifier
 {
     public override bool Modify(RoomSpec spec)
     {
-        int size = spec.Random.Next(2, 5);
+        int size = spec.Random.Next(3, 5);
         BigBoss.Debug.w("Size: " + size);
         // Add an extra 2 for stroke width for analysis
         size += 2;
@@ -21,7 +21,7 @@ public class GiantPillarMod : RoomModifier
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Options: ");
+            BigBoss.Debug.w(Logs.LevelGen, locations.Count + " Options: ");
             MultiMap<GridType> save = new MultiMap<GridType>();
             Array2D<GridType> copy = new Array2D<GridType>(spec.Room.Grids);
             foreach (Bounding r in locations)
