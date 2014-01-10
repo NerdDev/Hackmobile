@@ -95,7 +95,7 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
 
     public void ShiftOutside(LayoutObject rhs, Point dir, Point hint, bool rough, bool finalShift)
     {
-        Point reducBase = dir.reduce();
+        Point reducBase = dir.Reduce();
         Point reduc = new Point(reducBase);
         int xShift, yShift;
         #region DEBUG

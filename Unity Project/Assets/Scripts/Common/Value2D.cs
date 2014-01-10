@@ -4,7 +4,7 @@ using System.Collections;
 
 public class Value2D<T> : Point {
 
-    public T val { get; set; }
+    public T val;
     
     public Value2D()
         : base()

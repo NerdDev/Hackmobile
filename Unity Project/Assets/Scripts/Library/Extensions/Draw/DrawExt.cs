@@ -376,12 +376,6 @@ public static class DrawExt
         });
     }
     #endregion
-    #region Standard
-    public static void DrawAll<T>(this Container2D<T> arr, DrawActionCall<T> action)
-    {
-        arr.DrawAll(action);
-    }
-    #endregion
     #region Circles
     /*
      * Uses Bressenham's Midpoint Algo
