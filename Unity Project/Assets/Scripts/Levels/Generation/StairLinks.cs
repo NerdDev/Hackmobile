@@ -19,7 +19,7 @@ public class StairLinks : IEnumerable<Point>
                 _downSet = value;
         }
     }
-    public bool SelectedUp { get; set; }
+    public bool SelectedUp;
     List<StairLink> links = new List<StairLink>();
 
     public void Center()
@@ -58,8 +58,8 @@ public class StairLinks : IEnumerable<Point>
 
     protected class StairLink
     {
-        public Point UpLink { get; set; }
-        public Point DownLink { get; set; }
+        public Point UpLink;
+        public Point DownLink;
         public Point Get(bool up)
         {
             return up ? UpLink : DownLink;

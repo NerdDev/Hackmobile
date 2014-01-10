@@ -12,14 +12,14 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     protected static uint nextID = 0;
     public uint ID { get; protected set; }
     public GameObject GO { get { return _instance.gameObject; } }
-    public string Model { get; set; }
-    public string ModelTexture { get; set; }
+    public string Model;
+    public string ModelTexture;
     public string Name { get; set; }
     private string _prefab;
     public virtual string Prefab { get { return _prefab; } set { _prefab = "Prefabs/" + value; } }
     public GridSpace GridSpace { get { return _grid; } set { _grid = value; } } // Placeholder. Needs to actually be implemented and updated.
     //X,Y coordinate for other scripts to grab:
-    public Vector2 GridCoordinate { get; set; }
+    public Vector2 GridCoordinate;
     //X, Y in integers, GridSpace ref
     private GridSpace _grid;
     public event Action<WorldObject> OnDestroy;

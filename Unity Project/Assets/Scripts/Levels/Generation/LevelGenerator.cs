@@ -38,13 +38,13 @@ public class LevelGenerator
     public static int clusterProbability { get { return 90; } }
     #endregion
 
-    public Theme Theme { get; set; }
-    public System.Random Rand { get; set; }
-    public int Depth { get; set; }
-    public StairLink UpStairs { get; set; }
-    public StairLink DownStairs { get; set; }
-    protected LevelLayout Layout { get; set; }
-    protected List<LayoutObjectLeaf> Rooms { get; set; }
+    public Theme Theme;
+    public System.Random Rand;
+    public int Depth;
+    public StairLink UpStairs;
+    public StairLink DownStairs;
+    protected LevelLayout Layout;
+    protected List<LayoutObjectLeaf> Rooms;
     private int _debugNum = 0;
 
     public LevelGenerator()

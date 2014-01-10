@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BigBoss : MonoBehaviour
 {
-    protected static BigBoss BBoss { get; set; }
+    protected static BigBoss BBoss;
     private static GUIManager gooey;
     public static GUIManager Gooey
     {

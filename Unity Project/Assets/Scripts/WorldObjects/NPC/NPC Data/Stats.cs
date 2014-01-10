@@ -4,19 +4,19 @@ using XML;
 
 public class Stats : IXmlParsable
 {
-    public int MaxHealth { get; set; }
-    public int CurrentHealth { get; set; }
-    public int MaxPower { get; set; }
-    public int CurrentPower { get; set; }
-    public float Hunger { get; set; }
-    public float Encumbrance { get; set; } //needs calc'd on NPC
-    public float MaxEncumbrance { get; set; }
-    public int Level { get; set; }
-    public float CurrentXP { get; set; }
-    public float XPToNextLevel { get; set; } //needs calc'd on NPC
-    public float hungerRate { get; set; }
-    public HungerLevel HungerLevel { get; set; }
-    public EncumbranceLevel EncumbranceLevel { get; set; }
+    public int MaxHealth;
+    public int CurrentHealth;
+    public int MaxPower;
+    public int CurrentPower;
+    public float Hunger;
+    public float Encumbrance; //needs calc'd on NPC
+    public float MaxEncumbrance;
+    public int Level;
+    public float CurrentXP;
+    public float XPToNextLevel; //needs calc'd on NPC
+    public float hungerRate;
+    public HungerLevel HungerLevel;
+    public EncumbranceLevel EncumbranceLevel;
 
     public Stats()
     {

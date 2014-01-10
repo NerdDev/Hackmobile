@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class WOWrapper : MonoBehaviour
 {
-    public WorldObject WO { get; set; }
+    public WorldObject WO;
 
     public WOWrapper()
     {

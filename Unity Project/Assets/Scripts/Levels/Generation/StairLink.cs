@@ -5,9 +5,9 @@ using System.Text;
 
 public class StairLink
 {
-    public Point UpLink { get; set; }
-    public Point DownLink { get; set; }
-    public Point SelectedLink { get; set; }
+    public Point UpLink;
+    public Point DownLink;
+    public Point SelectedLink;
 
     public void Select(bool up)
     {

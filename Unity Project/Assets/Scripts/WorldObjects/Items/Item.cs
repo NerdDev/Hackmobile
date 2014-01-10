@@ -9,8 +9,8 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     #region Properties of Items
     //Properties
     public override string Prefab { get { return Prefab; } set { base.Prefab = value + "Items/"; } }
-    public string Type { get; set; }
-    public string Icon { get; set; }
+    public string Type;
+    public string Icon;
     public ItemProperties props = new ItemProperties();
 
     //flags

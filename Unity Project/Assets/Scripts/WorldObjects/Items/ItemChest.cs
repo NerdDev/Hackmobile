@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 class ItemChest : MonoBehaviour
 {
-    public GridSpace Location { get; set; }
+    public GridSpace Location;
     public List<Item> items = new List<Item>();
 
     public void init()

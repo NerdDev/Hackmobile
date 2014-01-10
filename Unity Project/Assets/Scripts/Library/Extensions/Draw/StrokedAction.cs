@@ -5,8 +5,8 @@ using System.Text;
 
 public class StrokedAction<T>
 {
-    public virtual DrawActionCall<T> UnitAction { get; set; }
-    public virtual DrawActionCall<T> StrokeAction { get; set; }
+    public DrawActionCall<T> UnitAction;
+    public DrawActionCall<T> StrokeAction;
 
     public StrokedAction()
     {

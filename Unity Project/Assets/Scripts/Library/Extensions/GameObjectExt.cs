@@ -42,6 +42,4 @@ public static class GameObjectExt
         WOWrapper instance = gObj.GetComponent<WOWrapper>();
         return (W)instance.WO;
     }
-
-    public static object List { get; set; }
 }

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
     protected LevelLayout Layout { get; private set; }
-    public bool Populated { get; set; }
+    public bool Populated;
     public Array2D<GridSpace> Array { get; protected set; }
     public List<Container2D<GridType>> RoomMaps = new List<Container2D<GridType>>();
     private MultiMap<Container2D<GridType>> roomMapping = new MultiMap<Container2D<GridType>>(); // floor space to roommap
-    public StairLink UpStairs { get; set; }
-    public StairLink DownStairs { get; set; }
+    public StairLink UpStairs;
+    public StairLink DownStairs;
     public Theme Theme { get; protected set; }
 
     public Level(LevelLayout layout, Theme theme)

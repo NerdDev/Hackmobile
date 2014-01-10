@@ -5,8 +5,8 @@ using System.Text;
 
 public class SpellAspect
 {
-    public ITargeter Targeter { get; set; }
-    public List<EffectInstance> Effects { get; set; }
+    public ITargeter Targeter;
+    public List<EffectInstance> Effects;
 
     public void Activate(SpellCastInfo castInfo)
     {

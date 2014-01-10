@@ -5,7 +5,7 @@ using UnityEngine;
 public class GridSpace
 {
     public GridType Type { get; private set; }
-    public GameObject Block { get; set; }
+    public GameObject Block;
     public int X { get; protected set; }
     public int Y { get; protected set; }
     public WorldObject RandomContainedObj { 

@@ -7,10 +7,10 @@ public class Bounding
 
     private static int max = Int32.MaxValue / 2;
     private static int min = Int32.MinValue / 2;
-    public int XMin { get; set; }
-    public int XMax { get; set; }
-    public int YMin { get; set; }
-    public int YMax { get; set; }
+    public int XMin;
+    public int XMax;
+    public int YMin;
+    public int YMax;
     public int Width
     {
         get { return XMax - XMin; }

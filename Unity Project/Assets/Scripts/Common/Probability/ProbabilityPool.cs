@@ -5,7 +5,7 @@ using System.Collections;
 
 public abstract class ProbabilityPool<T>  {
 
-    public System.Random Rand { get; set; }
+    public System.Random Rand;
     static protected int maxProbDiv = 100000;
     public bool Fresh { get; protected set; }
 

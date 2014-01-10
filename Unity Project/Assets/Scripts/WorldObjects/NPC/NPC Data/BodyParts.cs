@@ -3,9 +3,9 @@ using XML;
 
 public class BodyParts : IXmlParsable
 {
-    public int Arms { get; set; }
-    public int Legs { get; set; }
-    public int Heads { get; set; }
+    public int Arms;
+    public int Legs;
+    public int Heads;
 
     public void ParseXML(XMLNode x)
     {
