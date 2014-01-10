@@ -117,13 +117,12 @@ public class MultiMap<T> : Container2D<T>
         get
         {
             if (_arr != null) return _arr;
-            Bounding bounds = Bounding;
-            _arr = new Array2D<T>(bounds.Width + 1, bounds.Height + 1);
+            _arr = new Array2D<T>(Bounding);
             foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
             {
                 foreach (KeyValuePair<int, T> val in row.Value)
                 {
-                    _arr[val.Key - bounds.XMin, row.Key - bounds.YMin] = val.Value;
+                    _arr[val.Key, row.Key] = val.Value;
                 }
             }
             return _arr;
@@ -154,7 +153,9 @@ public class MultiMap<T> : Container2D<T>
         {
             if (row.Remove(x))
             {
-                _count--;
+                _validCount = false;
+                _bounding = null;
+                _arr = null;
                 return true;
             }
         }
@@ -216,8 +217,19 @@ public class MultiMap<T> : Container2D<T>
             }
         }
     }
-    #endregion
 
+    public override bool DrawAll(DrawActionCall<T> call)
+    {
+        foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+        {
+            foreach (KeyValuePair<int, T> val in row.Value)
+            {
+                if (!call(this, val.Key, row.Key)) return false;
+            }
+        }
+        return true;
+    }
+    #endregion
 
     public override void Clear()
     {
@@ -225,5 +237,10 @@ public class MultiMap<T> : Container2D<T>
         _bounding = null;
         _arr = null;
         multimap.Clear();
+    }
+
+    public override Array2DRaw<T> RawArray(out Point shift)
+    {
+        return Array.RawArray(out shift);
     }
 }

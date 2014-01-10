@@ -220,6 +220,7 @@
      <Compile Include="Assets\Scripts\Camera scripts\MasterCamera.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\maxCamera.cs" />
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
+     <Compile Include="Assets\Scripts\Common\Array2DRaw.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\IXmlParsable.cs" />

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class LayoutObject
+abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
 {
     public Point ShiftP { get; protected set; }
     readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
@@ -24,7 +24,6 @@ abstract public class LayoutObject
     {
         Id = _nextId++;
         ShiftP = new Point();
-        Grids = new MultiMap<GridType>();
     }
 
     #region Shifts
@@ -52,17 +51,49 @@ abstract public class LayoutObject
 
     public void ShiftOutside(IEnumerable<LayoutObject> rhs, Point dir)
     {
-        List<Container2D<GridType>> list = new List<Container2D<GridType>>();
-        foreach (LayoutObject obj in rhs)
-            list.Add(obj.Grids);
-        Container2D<GridType> intersect;
-        while (Grids.Intersects(list, out intersect))
+        LayoutObject intersect;
+        Point hint;
+        while (Intersects(rhs, out intersect, out hint))
         {
-            ShiftOutside(intersect, dir, true, true);
+            ShiftOutside(intersect, dir, hint, true, true);
         }
     }
 
-    public void ShiftOutside(Container2D<GridType> rhs, Point dir, bool rough, bool finalShift)
+    public bool Intersects(IEnumerable<LayoutObject> rhs, out LayoutObject obj, out Point at)
+    {
+        foreach (LayoutObject l in rhs)
+        {
+            if (Intersects(l, null, out at))
+            {
+                obj = l;
+                return true;
+            }
+        }
+        obj = null;
+        at = null;
+        return false;
+    }
+
+    public bool Intersects(LayoutObject rhs, Point hint, out Point at)
+    {
+        if (hint != null && rhs.ContainsPoint(hint))
+        {
+            at = hint;
+            return true;
+        }
+        foreach (Value2D<GridType> val in this)
+        {
+            if (rhs.ContainsPoint(val))
+            {
+                at = val;
+                return true;
+            }
+        }
+        at = null;
+        return false;
+    }
+
+    public void ShiftOutside(LayoutObject rhs, Point dir, Point hint, bool rough, bool finalShift)
     {
         Point reducBase = dir.reduce();
         Point reduc = new Point(reducBase);
@@ -74,13 +105,20 @@ abstract public class LayoutObject
             BigBoss.Debug.w(Logs.LevelGen, "Shifting outside of " + rhs.ToString());
             BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
             BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + Bounding + "  RHS bounds: " + rhs.Bounding);
+            MultiMap<GridType> tmp = new MultiMap<GridType>();
+            tmp.PutAll(rhs.Grids, rhs.ShiftP);
+            tmp.PutAll(Grids, ShiftP);
+            tmp.ToLog(Logs.LevelGen, "Before shifting");
         }
         #endregion
-        while (Grids.Intersects(rhs))
+        Point at;
+        while (Intersects(rhs, hint, out at))
         {
             if (rough)
             {
                 Shift(reduc);
+                at.Shift(reduc);
+                hint = at;
             }
             else
             {
@@ -90,7 +128,19 @@ abstract public class LayoutObject
                 {
                     reduc = new Point(reducBase);
                 }
+                at.Shift(xShift, yShift);
+                hint = at;
             }
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "Intersected at " + at);
+                MultiMap<GridType> tmp = new MultiMap<GridType>();
+                tmp.PutAll(rhs.Grids, rhs.ShiftP);
+                tmp.PutAll(Grids, ShiftP);
+                tmp.ToLog(Logs.LevelGen, "After shifting");
+            }
+            #endregion
         }
         if (finalShift)
             Shift(dir);
@@ -175,7 +225,7 @@ abstract public class LayoutObject
 
     public virtual bool ContainsPoint(Point pt)
     {
-        return Grids.Contains(pt);
+        return Grids.Contains(pt - ShiftP);
     }
 
     public void ConnectedToAll(out List<LayoutObject> connected, out Bounding bounds)
@@ -373,5 +423,20 @@ abstract public class LayoutObject
     public static bool operator !=(LayoutObject left, LayoutObject right)
     {
         return !Equals(left, right);
+    }
+
+    public IEnumerator<Value2D<GridType>> GetEnumerator()
+    {
+        foreach (Value2D<GridType> val in Grids)
+        {
+            val.x += ShiftP.x;
+            val.y += ShiftP.y;
+            yield return val;
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
 }

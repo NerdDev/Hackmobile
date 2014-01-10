@@ -50,18 +50,14 @@ public class DrawAction<T>
         });
     }
 
-    //public DrawAction<T> Then(params DrawActionCall<T>[] rhs)
-    //{
-    //    if (rhs.Length == 0) return this;
-    //    if (rhs.Length == 1) return And(rhs[0]);
-    //    return new DrawAction<T>((arr, x, y) =>
-    //    {
-    //        if (!Call(arr, x, y)) return false;
-    //        for (int i = 0; i < rhs.Length; i++)
-    //            if (!rhs[i](arr, x, y)) return false;
-    //        return true;
-    //    });
-    //}
+    public DrawAction<T> Then(DrawActionCall<T> rhs)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+            {
+                Call(arr, x, y);
+                return rhs(arr, x, y);
+            });
+    }
 
     public DrawAction<T> IfThen(DrawActionCall<T> rhs)
     {

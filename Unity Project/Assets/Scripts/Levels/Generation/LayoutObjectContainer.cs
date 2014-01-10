@@ -43,8 +43,12 @@ public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         }
         protected set
         {
-            _baked = value;
         }
+    }
+
+    public override void Bake()
+    {
+        _baked = Grids;
     }
 
     public IEnumerator<LayoutObject> GetEnumerator()

@@ -379,10 +379,7 @@ public static class DrawExt
     #region Standard
     public static void DrawAll<T>(this Container2D<T> arr, DrawActionCall<T> action)
     {
-        foreach (Value2D<T> val in arr)
-        {
-            action(arr, val.x, val.y);
-        }
+        arr.DrawAll(action);
     }
     #endregion
     #region Circles
@@ -640,7 +637,7 @@ public static class DrawExt
         return pathTaken;
     }
 
-    public static void DrawBreadthFirstFill<T>(this Container2D<T> arr, int x, int y,
+    public static void DrawBreadthFirstFill<T>(this Container2D<T> container, int x, int y,
         bool cornered,
         DrawActionCall<T> run)
     {
@@ -648,25 +645,26 @@ public static class DrawExt
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
-            arr.ToLog(Logs.LevelGen, "Container to fill starting on (" + x + "," + y + ")");
+            container.ToLog(Logs.LevelGen, "Container to fill starting on (" + x + "," + y + ")");
         }
         #endregion
-        Bounding bounds = arr.Bounding;
-        bounds.expand(1);
+        Point shift;
+        Array2DRaw<T> rawArr = container.RawArray(out shift);
+        x -= shift.x;
+        y -= shift.y;
         Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
         queue.Enqueue(new Value2D<T>(x, y));
-        Array2D<bool> visited = new Array2D<bool>(bounds);
+        bool[,] visited = new bool[rawArr.Width, rawArr.Height];
         visited[x, y] = true;
         Point curPoint;
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
-            arr.DrawAround(curPoint.x, curPoint.y, true, (arr2, x2, y2) =>
+            rawArr.DrawAround(curPoint.x, curPoint.y, true, (arr2, x2, y2) =>
             {
-                if (!bounds.Contains(x2, y2)) return true;
-                if (!visited[x2, y2] && run(arr2, x2, y2))
+                if (!visited[x2, y2] && run(container, x2 + shift.x, y2 + shift.y))
                 {
-                    queue.Enqueue(new Value2D<T>(x2, y2, arr2[x2, y2]));
+                    queue.Enqueue(new Value2D<T>(x2 + shift.x, y2 + shift.y, arr2[x2, y2]));
                     #region DEBUG
                     if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                     {

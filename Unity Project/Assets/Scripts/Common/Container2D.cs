@@ -68,12 +68,16 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return null;
     }
 
+    public abstract bool DrawAll(DrawActionCall<T> call);
+
     public abstract void Clear();
 
     public void Put(Value2D<T> val)
     {
         this[val] = val.val;
     }
+
+    public abstract Array2DRaw<T> RawArray(out Point shift);
 
     #region Removes
     public bool Remove(Point p)
@@ -146,9 +150,10 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         Bounding intersect = bounds.IntersectBounds(rhsBounds);
         if (!intersect.IsValid()) return false;
 
-        for (int y = intersect.YMin; y < intersect.YMax; y++)
-            for (int x = intersect.XMin; x < intersect.XMax; x++)
-                if (Contains(x, y) && rhs.Contains(x, y)) return true;
+        foreach (Value2D<T> val in this)
+        {
+            if (rhs.Contains(val)) return true;
+        }
         return false;
     }
 

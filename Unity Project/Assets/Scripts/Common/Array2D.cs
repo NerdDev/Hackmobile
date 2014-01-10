@@ -104,6 +104,21 @@ public class Array2D<T> : Container2D<T>
             }
         }
     }
+
+    public override bool DrawAll(DrawActionCall<T> call)
+    {
+        for (int y = 0; y < arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < arr.GetLength(1); x++)
+            {
+                if (present[y, x])
+                {
+                    if (!call(this, x, y)) return false;
+                }
+            }
+        }
+        return true;
+    }
     #endregion
 
     public override T this[int x, int y]
@@ -199,5 +214,11 @@ public class Array2D<T> : Container2D<T>
         else if (y >= Height)
             top = y - Height + 1;
         Expand(left, right, top, bottom);
+    }
+
+    public override Array2DRaw<T> RawArray(out Point shift)
+    {
+        shift = new Point(this.shift);
+        return new Array2DRaw<T>(arr);
     }
 }

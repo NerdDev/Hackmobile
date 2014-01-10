@@ -56,7 +56,7 @@ public class LevelManager : MonoBehaviour, IManager
         GetLevel(depth, out level);
         level.ToLog(Logs.Main, "Setting level to");
         CurLevelDepth = depth;
-        Deploy(level);
+        //Deploy(level);
         Level = level;
     }
 

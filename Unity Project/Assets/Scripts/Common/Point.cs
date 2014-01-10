@@ -141,4 +141,9 @@ public class Point {
         tmp.y -= p2.y;
         return tmp;
     }
+
+    public static Point operator -(Point p1)
+    {
+        return new Point(-p1.x, -p1.y);
+    }
 }

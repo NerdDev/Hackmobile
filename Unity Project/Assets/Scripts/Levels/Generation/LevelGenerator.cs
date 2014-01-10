@@ -70,7 +70,7 @@ public class LevelGenerator
         //ClusterRooms(rooms);
         Log("Align Stairs", true, ValidateStairPlacement);
         Log("Place Doors", true, PlaceDoors);
-        //Log("Place Rooms", true, PlaceRooms);
+        Log("Place Rooms", true, PlaceRooms);
         //Log("Place Paths", true, PlacePaths);
         //Log("Confirm Connection", true, ConfirmConnection);
         //Log("Confirm Edges", true, ConfirmEdges);
@@ -324,7 +324,7 @@ public class LevelGenerator
         #endregion
         List<LayoutObject> unplacedRooms = new List<LayoutObject>(Rooms.Cast<LayoutObject>());
         List<LayoutObject> placedRooms = new List<LayoutObject>();
-        PlaceRoomsOnStairs(placedRooms, unplacedRooms);
+        //PlaceRoomsOnStairs(placedRooms, unplacedRooms);
         PlaceRemainingRooms(placedRooms, unplacedRooms);
         #region DEBUG
         BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
@@ -383,8 +383,7 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(Logs.LevelGen, "Layout after placing room at: " + room.GetBounding(true));
-                Layout.ToLog(Logs.LevelGen);
+                Layout.ToLog(Logs.LevelGen, "Layout after placing room at: " + room.GetBounding(true));
                 BigBoss.Debug.printBreakers(Logs.LevelGen, 4);
             }
             #endregion
