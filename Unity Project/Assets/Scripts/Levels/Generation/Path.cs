@@ -12,7 +12,7 @@ public class Path : LayoutObjectLeaf
     List<Value2D<GridType>> _list;
 
     public Path(Value2D<GridType> startPoint, Container2D<GridType> grids, System.Random rand)
-        : base()
+        : base(null)
     {
         Stack<Value2D<GridType>> stack = grids.DrawDepthFirstSearch(
             startPoint.x,
@@ -25,7 +25,7 @@ public class Path : LayoutObjectLeaf
     }
 
     public Path(IEnumerable<Value2D<GridType>> stack)
-        : base()
+        : base(null)
     {
         _list = new List<Value2D<GridType>>(stack);
     }
@@ -199,7 +199,7 @@ public class Path : LayoutObjectLeaf
 
     public override bool isValid()
     {
-        return Grids != null || (_list != null && _list.Count > 2);
+        return base.Grids != null || (_list != null && _list.Count > 2);
     }
 
     public void ConnectEnds(LayoutObjectContainer container)

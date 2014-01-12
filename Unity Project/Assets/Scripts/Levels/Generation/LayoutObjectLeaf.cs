@@ -12,8 +12,7 @@ public class LayoutObjectLeaf : LayoutObject
         Grids = new MultiMap<GridType>();
     }
 
-    public LayoutObjectLeaf(Container2D<GridType> arr) 
-        : this()
+    public LayoutObjectLeaf(Container2D<GridType> arr)
     {
         Grids = arr;
     }

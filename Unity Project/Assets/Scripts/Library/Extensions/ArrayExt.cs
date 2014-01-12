@@ -146,4 +146,17 @@ public static class ArrayExt
         Array.Copy(array, ret, array.Length);
         return ret;
     }
+
+    public static T[,] Expand<T>(this T[,] array, int buffer)
+    {
+        T[,] ret = new T[array.GetLength(0) + 2 * buffer, array.GetLength(1) + 2 * buffer];
+        for (int y = 0; y < array.GetLength(0); y++)
+        {
+            for (int x = 0; x < array.GetLength(1); x++)
+            {
+                ret[y + buffer, x + buffer] = array[y, x];
+            }
+        }
+        return ret;
+    }
 }

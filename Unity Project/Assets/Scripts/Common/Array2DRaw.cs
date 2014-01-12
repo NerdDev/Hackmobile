@@ -32,7 +32,7 @@ public class Array2DRaw<T> : Container2D<T>
 
     public override Bounding Bounding
     {
-        get { throw new NotImplementedException(); }
+        get { return _arr.GetBounds(); }
     }
 
     public override Array2D<T> Array
@@ -77,5 +77,10 @@ public class Array2DRaw<T> : Container2D<T>
     public override bool DrawAll(DrawActionCall<T> call)
     {
         throw new NotImplementedException();
+    }
+
+    public void Expand(int buffer)
+    {
+        _arr = _arr.Expand(buffer);
     }
 }

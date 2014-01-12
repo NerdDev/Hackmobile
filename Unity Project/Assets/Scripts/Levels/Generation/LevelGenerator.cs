@@ -71,7 +71,7 @@ public class LevelGenerator
         Log("Align Stairs", true, ValidateStairPlacement);
         Log("Place Doors", true, PlaceDoors);
         Log("Place Rooms", true, PlaceRooms);
-        //Log("Place Paths", true, PlacePaths);
+        Log("Place Paths", true, PlacePaths);
         //Log("Confirm Connection", true, ConfirmConnection);
         //Log("Confirm Edges", true, ConfirmEdges);
         //Log("Place Stairs", true, PlaceMissingStairs);
@@ -442,32 +442,34 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Paths");
-            Layout.ToLog(Logs.LevelGen, "Pre Path Layout");
         }
         #endregion
+        Container2D<GridType> grids = Layout.Grids;
         MultiMap<GridType> doors = new MultiMap<GridType>();
-        Layout.Grids.DrawAll(Draw.IfThen<GridType>(Draw.EqualTo(GridType.Door), Draw.AddTo(doors)));
+        // If a door and near a null
+        grids.DrawAll(Draw.IfThen<GridType>(Draw.EqualTo(GridType.Door).And(Draw.HasAround(false, Draw.EqualTo(GridType.NULL))), Draw.AddTo(doors)));
+        foreach (var door in doors)
+        {
+            // Block nearby walkable
+            grids.DrawAround(door.x, door.y, false, Draw.IfThen<GridType>(Draw.If<GridType>(GridTypeEnum.Walkable), Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED)));
+        }
+        Point shift;
+        Array2DRaw<GridType> rawArr = grids.RawArray(out shift);
+        rawArr.Expand(20);
+        shift.Shift(-20, -20);
         #region DEBUG
         Container2D<GridType> debugArr = null;
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            debugArr = new Array2D<GridType>(Layout.Grids);
+            grids.ToLog("Initial Map");
+            doors.ToLog(Logs.LevelGen, "Doors to connect");
+            debugArr = new MultiMap<GridType>(grids, -shift);
         }
         #endregion
         foreach (var door in doors)
         {
-            // Block nearby floors
-            Layout.Grids.DrawAround(door.x, door.y, false, (arr2, x, y) =>
-                {
-                    if (arr2[x, y] == GridType.Floor)
-                        arr2[x, y] = GridType.INTERNAL_RESERVED_BLOCKED;
-                    return true;
-                });
-        }
-        foreach (var door in doors)
-        {
-
-            var path = new Path(door, Layout.Grids, Rand);
+            door.Shift(-shift);
+            var path = new Path(door, rawArr, Rand);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -487,7 +489,8 @@ public class LevelGenerator
                 }
                 #endregion
                 path.Bake();
-                Layout.Grids.PutAll(path.Grids, path.ShiftP);
+                rawArr.PutAll(path.Grids);
+                path.Shift(shift);
                 Layout.AddPath(path);
             }
             #region DEBUG

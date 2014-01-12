@@ -557,6 +557,7 @@ public static class DrawExt
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen) && typeof(T) == typeof(GridType))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Depth First Search");
+            BigBoss.Debug.w(Logs.LevelGen, "Starting from (" + x + "," + y + ")");
             Array2D<GridType> tmpArr = new Array2D<GridType>(arr.Width, arr.Height);
             for (int y1 = 0; y1 < arr.Height; y1++)
                 for (int x1 = 0; x1 < arr.Width; x1++)

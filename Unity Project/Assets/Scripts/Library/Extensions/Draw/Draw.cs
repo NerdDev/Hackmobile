@@ -57,6 +57,14 @@ public static class Draw
             });
     }
 
+    public static DrawAction<T> HasAround<T>(bool cornered, DrawAction<T> call)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+            {
+                return !arr.DrawAround(x, y, cornered, Draw.Not<T>(call.Call));
+            });
+    }
+
     public static DrawAction<T> Dir<T>(GridDirection dir, DrawAction<T> call)
     {
         return new DrawAction<T>((arr, x, y) =>
@@ -126,9 +134,9 @@ public static class Draw
     {
         return new DrawAction<T>((cont, x, y) =>
         {
-            if (cont is Array2D<T>)
+            if (cont is Array2DRaw<T>)
             {
-                Array2D<T> arr = (Array2D<T>) cont;
+                Array2DRaw<T> arr = (Array2DRaw<T>) cont;
                 if (x <= 0
                     || y <= 0
                     || y >= arr.Height - 1
