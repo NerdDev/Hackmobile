@@ -5,6 +5,7 @@ using System;
 
 public class Array2D<T> : Container2D<T>
 {
+    private const int _expandAmount = 10;
     protected int count;
     protected T[,] arr;
     protected bool[,] present;
@@ -32,7 +33,7 @@ public class Array2D<T> : Container2D<T>
     }
 
     public Array2D(Container2D<T> rhs)
-        : this(rhs.Width, rhs.Height)
+        : this(rhs.Bounding)
     {
         if (rhs is Array2D<T> && shift == null)
         {
@@ -45,12 +46,9 @@ public class Array2D<T> : Container2D<T>
                     present[y, x] = rhsArr.present[y, x];
                 }
             }
-            shift = new Point(rhsArr.shift);
         }
         else
         {
-            shift.x = rhs.Bounding.XMin;
-            shift.y = rhs.Bounding.YMin;
             PutAll(rhs);
         }
     }
@@ -64,8 +62,11 @@ public class Array2D<T> : Container2D<T>
     #region GetSet
     public override bool InRange(int x, int y)
     {
-        x -= shift.x;
-        y -= shift.y;
+        return InRangeInternal(x - shift.x, y - shift.y);
+    }
+
+    protected bool InRangeInternal(int x, int y)
+    {
         return y < arr.GetLength(0)
             && x < arr.GetLength(1)
             && y >= 0
@@ -74,9 +75,11 @@ public class Array2D<T> : Container2D<T>
 
     public override bool TryGetValue(int x, int y, out T val)
     {
-        if (InRange(x, y))
+        x -= shift.x;
+        y -= shift.y;
+        if (InRangeInternal(x, y))
         {
-            val = arr[y - shift.y, x - shift.x];
+            val = arr[y, x];
             return true;
         }
         val = default(T);
@@ -131,10 +134,14 @@ public class Array2D<T> : Container2D<T>
         }
         set
         {
-            if (!InRange(x, y))
-                ExpandToInclude(x, y);
             x -= shift.x;
             y -= shift.y;
+            if (!InRangeInternal(x, y))
+            {
+                Point expandShift = ExpandToInclude(x, y);
+                x -= expandShift.x;
+                y -= expandShift.y;
+            }
             arr[y, x] = value;
             if (present[y, x])
                 count++;
@@ -159,7 +166,10 @@ public class Array2D<T> : Container2D<T>
 
     public override bool Contains(int x, int y)
     {
-        return present[y - shift.y, x - shift.x];
+        x -= shift.x;
+        y -= shift.y;
+        if (!InRangeInternal(x, y)) return false;
+        return present[y, x];
     }
 
     public override bool Remove(int x, int y)
@@ -181,11 +191,9 @@ public class Array2D<T> : Container2D<T>
         present = new bool[arr.GetLength(0), arr.GetLength(1)];
     }
 
-    protected void Expand(int left, int right, int top, int bottom)
+    protected Point Expand(int left, int right, int top, int bottom)
     {
-        if (left == 0 && right == 0 & top == 0 && bottom == 0) return;
-        shift.x -= left;
-        shift.y -= bottom;
+        if (left == 0 && right == 0 & top == 0 && bottom == 0) return new Point(0,0);
         T[,] tmp = arr;
         bool[,] tmpPresent = present;
         arr = new T[tmp.GetLength(0) + top + bottom, tmp.GetLength(1) + left + right];
@@ -198,22 +206,23 @@ public class Array2D<T> : Container2D<T>
                 present[y + bottom, x + left] = tmpPresent[y, x];
             }
         }
+        shift.x -= left;
+        shift.y -= bottom;
+        return new Point(-left, -bottom);
     }
 
-    protected void ExpandToInclude(int x, int y)
-    { // external space
+    protected Point ExpandToInclude(int x, int y)
+    {
         int left = 0, right = 0, top = 0, bottom = 0;
-        x -= shift.x;
-        y -= shift.y;
         if (x < 0)
-            left = 0 - x;
+            left = 0 - x + _expandAmount;
         else if (x >= Width)
-            right = x - Width + 1;
+            right = x - Width + 1 + _expandAmount;
         if (y < 0)
-            bottom = 0 - y;
+            bottom = 0 - y + _expandAmount;
         else if (y >= Height)
-            top = y - Height + 1;
-        Expand(left, right, top, bottom);
+            top = y - Height + 1 + _expandAmount;
+        return Expand(left, right, top, bottom);
     }
 
     public override Array2DRaw<T> RawArray(out Point shift)

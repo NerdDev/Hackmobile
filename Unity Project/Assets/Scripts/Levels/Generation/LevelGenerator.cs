@@ -73,7 +73,7 @@ public class LevelGenerator
         Log("Place Rooms", true, PlaceRooms);
         Log("Place Paths", true, PlacePaths);
         Log("Confirm Connection", true, ConfirmConnection);
-        //Log("Confirm Edges", true, ConfirmEdges);
+        Log("Confirm Edges", true, ConfirmEdges);
         //Log("Place Stairs", true, PlaceMissingStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
@@ -558,7 +558,6 @@ public class LevelGenerator
 
     private void ConfirmEdges()
     {
-        Layout.ShiftAll(1, 1);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -566,13 +565,14 @@ public class LevelGenerator
             Layout.ToLog(Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
-        LayoutObjectLeaf leaf = new LayoutObjectLeaf();
-        Layout.AddObject(leaf);
-        Layout.Grids.DrawAll(Draw.EqualTo(GridType.Floor).IfThen((arr, x, y) =>
+        LayoutObjectLeaf edgeObject = new LayoutObjectLeaf();
+        Container2D<GridType> grids = Layout.Grids;
+        grids.DrawAll(Draw.EqualTo(GridType.Floor).IfThen((arr, x, y) =>
             {
-                Layout.Grids.DrawAround(x, y, true, Draw.SetToIfNotEqual(GridType.NULL, GridType.Wall));
+                grids.DrawAround(x, y, true, Draw.IfThen<GridType>(Draw.EqualTo(GridType.Wall), Draw.SetTo(edgeObject.Grids, GridType.Wall)));
                 return true;
             }));
+        Layout.AddObject(edgeObject);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

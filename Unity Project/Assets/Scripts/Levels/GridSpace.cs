@@ -190,7 +190,7 @@ public class GridSpace
 
     public static Array2D<GridSpace> Convert(Container2D<GridType> arr)
     {
-        Array2D<GridSpace> arrOut = new Array2D<GridSpace>(arr.Width, arr.Height);
+        Array2D<GridSpace> arrOut = new Array2D<GridSpace>(arr.Bounding);
         foreach (Value2D<GridType> val in arr)
         {
             if (val == null) continue;

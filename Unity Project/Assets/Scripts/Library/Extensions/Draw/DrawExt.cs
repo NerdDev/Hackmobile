@@ -565,7 +565,7 @@ public static class DrawExt
             tmpArr.ToLog(Logs.LevelGen, "Starting Map:");
         }
         #endregion
-        var blockedPoints = new Array2D<bool>(arr.Width, arr.Height);
+        var blockedPoints = new Array2D<bool>(arr.Bounding);
         var pathTaken = new Stack<Value2D<T>>();
         DrawAction<T> filter = new DrawActionCall<T>((arr2, x2, y2) =>
         {

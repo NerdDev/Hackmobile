@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Path : LayoutObjectLeaf
 {
@@ -141,7 +142,9 @@ public class Path : LayoutObjectLeaf
             BigBoss.Debug.printHeader(Logs.LevelGen, "Prune");
         }
         #endregion
-        Array2D<int> indexes = new Array2D<int>(Grids.Width, Grids.Height);
+        Bounding bounds = new Bounding();
+        foreach (Value2D<GridType> g in _list) bounds.Absorb(g);
+        Array2D<int> indexes = new Array2D<int>(bounds);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
