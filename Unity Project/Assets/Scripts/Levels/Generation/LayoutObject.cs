@@ -174,30 +174,20 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
     }
     #endregion Bounds
 
-    public Bounding GetConnectedBounds()
-    {
-        List<LayoutObject> connected;
-        Bounding bounds;
-        ConnectedToAll(out connected, out bounds);
-        return bounds;
-    }
-
     public Container2D<GridType> GetConnectedGrid()
     {
         #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Get Connected Grid " + this);
         }
         #endregion
-        List<LayoutObject> connected;
-        Bounding bounds;
-        ConnectedToAll(out connected, out bounds);
+        List<LayoutObject> connected = ConnectedToAll();
         var arrOut = new MultiMap<GridType>();
         foreach (var obj in connected)
-            arrOut.PutAll(obj.Grids);
+            arrOut.PutAll(obj.Grids, obj.ShiftP);
         #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.printFooter(Logs.LevelGen, "Get Connected Grid " + this);
         }
@@ -228,24 +218,17 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
         return Grids.Contains(pt - ShiftP);
     }
 
-    public void ConnectedToAll(out List<LayoutObject> connected, out Bounding bounds)
-    {
-        connected = new List<LayoutObject>();
-        bounds = new Bounding();
-        ConnectedToRecursive(connected, bounds);
-    }
-
     public List<LayoutObject> ConnectedToAll()
     {
         var connected = new List<LayoutObject>();
-        ConnectedToRecursive(connected, null);
+        ConnectedToRecursive(connected);
         return connected;
     }
 
-    void ConnectedToRecursive(List<LayoutObject> list, Bounding bounds)
+    void ConnectedToRecursive(List<LayoutObject> list)
     {
         #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Connected To Recursive: " + this);
             BigBoss.Debug.w(Logs.LevelGen, "Connected to:");
@@ -256,19 +239,15 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
         }
         #endregion
         list.Add(this);
-        if (bounds != null)
-        {
-            bounds.Absorb(GetBounding(true));
-        }
         foreach (var connected in _connectedTo)
         {
             if (!list.Contains(connected))
             {
-                connected.ConnectedToRecursive(list, bounds);
+                connected.ConnectedToRecursive(list);
             }
         }
         #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.printFooter(Logs.LevelGen, "Connected To Recursive: " + this);
         }
@@ -283,7 +262,7 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
     public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
     {
         #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Connected To");
         }
@@ -299,7 +278,7 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
             }
         }
         #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Connected_To))
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.printFooter(Logs.LevelGen, "Connected To");
         }

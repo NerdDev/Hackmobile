@@ -88,7 +88,6 @@ public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         #endregion
         foreach (LayoutObject obj in this)
         {
-            pt.Unshift(obj.ShiftP);
             if (obj.ContainsPoint(pt))
             {
                 #region DEBUG

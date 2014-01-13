@@ -6,7 +6,13 @@ public class Path : LayoutObjectLeaf
 {
     private static HashSet<GridType> _pathTypes = new HashSet<GridType>(new[] {
             GridType.Floor,
-            GridType.Door
+            GridType.Door,
+            GridType.Path_Horiz,
+            GridType.Path_LB,
+            GridType.Path_LT,
+            GridType.Path_RB,
+            GridType.Path_RT,
+            GridType.Path_Vert
     });
     public static HashSet<GridType> PathTypes { get { return _pathTypes; } }
     List<Value2D<GridType>> _list;
@@ -202,7 +208,7 @@ public class Path : LayoutObjectLeaf
         return base.Grids != null || (_list != null && _list.Count > 2);
     }
 
-    public void ConnectEnds(LayoutObjectContainer container)
+    public void ConnectEnds(LayoutObjectContainer container, Point shift)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -210,8 +216,8 @@ public class Path : LayoutObjectLeaf
             BigBoss.Debug.printHeader(Logs.LevelGen, "Connect Ends");
         }
         #endregion
-        container.FindAndConnect(this, _list[0]);
-        container.FindAndConnect(this, _list[_list.Count - 1]);
+        container.FindAndConnect(this, _list[0] + shift);
+        container.FindAndConnect(this, _list[_list.Count - 1] + shift);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

@@ -72,7 +72,7 @@ public class LevelGenerator
         Log("Place Doors", true, PlaceDoors);
         Log("Place Rooms", true, PlaceRooms);
         Log("Place Paths", true, PlacePaths);
-        //Log("Confirm Connection", true, ConfirmConnection);
+        Log("Confirm Connection", true, ConfirmConnection);
         //Log("Confirm Edges", true, ConfirmEdges);
         //Log("Place Stairs", true, PlaceMissingStairs);
         #region DEBUG
@@ -470,35 +470,34 @@ public class LevelGenerator
         {
             door.Shift(-shift);
             var path = new Path(door, rawArr, Rand);
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                MultiMap<GridType> messyPathArr = new MultiMap<GridType>(debugArr);
-                messyPathArr.PutAll(path.Grids);
-                messyPathArr.ToLog(Logs.LevelGen, "Map after placing for door: " + door);
-            }
-            #endregion
             if (path.isValid())
             {
-                path.Simplify();
-                path.ConnectEnds(Layout);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    debugArr.PutAll(path.Grids, path.ShiftP);
+                    MultiMap<GridType> messyPathArr = new MultiMap<GridType>(debugArr);
+                    messyPathArr.PutAll(path.Grids);
+                    messyPathArr.ToLog(Logs.LevelGen, "Map after placing for door: " + door);
                 }
                 #endregion
+                path.Simplify();
+                path.ConnectEnds(Layout, shift);
                 path.Bake();
                 rawArr.PutAll(path.Grids);
                 path.Shift(shift);
                 Layout.AddPath(path);
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    debugArr.PutAll(path.Grids);
+                    debugArr.ToLog(Logs.LevelGen, "Map after simplifying path for door: " + door);
+                    List<LayoutObject> list = path.ConnectedToAll();
+                    BigBoss.Debug.w(Logs.LevelGen, path + " connected to:");
+                    foreach (LayoutObject obj in list)
+                        BigBoss.Debug.w(Logs.LevelGen, "   " + obj);
+                }
+                #endregion
             }
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                debugArr.ToLog(Logs.LevelGen, "Map after simplifying path for door: " + door);
-            }
-            #endregion
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -548,12 +547,6 @@ public class LevelGenerator
                 #endregion
                 MakeConnection(Layout, layoutObj, fail);
             }
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.printFooter(Logs.LevelGen, "Confirm Connections");
-            }
-            #endregion
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -654,12 +647,13 @@ public class LevelGenerator
         #endregion
         Container2D<GridType> smallest;
         Container2D<GridType> largest;
-        Container2D<GridType> layoutArr = layout.Grids;
-        layoutArr.DrawAll(Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED));
+        Container2D<GridType> layoutArr = new MultiMap<GridType>();
+        layout.Grids.DrawAll(Draw.SetTo(layoutArr, GridType.INTERNAL_RESERVED_BLOCKED));
         Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
+            layoutArr.ToLog(Logs.LevelGen, "All Blocked");
             smallest.ToLog(Logs.LevelGen, "Smallest");
             largest.ToLog(Logs.LevelGen, "Largest");
         }

@@ -81,6 +81,15 @@ public static class Draw
         });
     }
 
+    public static DrawAction<T> SetTo<T>(Container2D<T> container, T g)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            container[x, y] = g;
+            return true;
+        });
+    }
+
     public static DrawAction<T> SetTo<T>(T g)
     {
         return new DrawAction<T>((arr, x, y) =>

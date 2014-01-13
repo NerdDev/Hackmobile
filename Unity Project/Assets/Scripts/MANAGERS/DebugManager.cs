@@ -41,7 +41,6 @@ public class DebugManager : MonoBehaviour, IManager
         FineSteps,
         Probability,
         LevelGen_Path_Simplify_Prune,
-        LevelGen_Connected_To,
         XML_Print
     }
 

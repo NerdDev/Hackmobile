@@ -483,12 +483,12 @@ public static class DrawExt
         if (xl == xr && yb == yt)
             return action.StrokeAction(arr, xl, yb);
 
-        if (!arr.DrawRow(xl, xr, yb,  action.StrokeAction)) return false;
-        if (!arr.DrawRow(xl, xr, yt,  action.StrokeAction)) return false;
+        if (!arr.DrawRow(xl, xr, yb, action.StrokeAction)) return false;
+        if (!arr.DrawRow(xl, xr, yt, action.StrokeAction)) return false;
         yb++;
         yt--;
-        if (!arr.DrawCol(yb, yt, xl,  action.StrokeAction)) return false;
-        if (!arr.DrawCol(yb, yt, xr,  action.StrokeAction)) return false;
+        if (!arr.DrawCol(yb, yt, xl, action.StrokeAction)) return false;
+        if (!arr.DrawCol(yb, yt, xr, action.StrokeAction)) return false;
         xl++;
         xr--;
         if (action.UnitAction != null)
@@ -558,10 +558,9 @@ public static class DrawExt
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Depth First Search");
             BigBoss.Debug.w(Logs.LevelGen, "Starting from (" + x + "," + y + ")");
-            Array2D<GridType> tmpArr = new Array2D<GridType>(arr.Width, arr.Height);
-            for (int y1 = 0; y1 < arr.Height; y1++)
-                for (int x1 = 0; x1 < arr.Width; x1++)
-                    tmpArr[x1, y1] = (GridType)(object)arr[x1, y1];
+            Array2D<GridType> tmpArr = new Array2D<GridType>(arr.Bounding);
+            foreach (Value2D<T> val in arr)
+                tmpArr[val] = (GridType)(object)arr[val];
             tmpArr[x, y] = GridType.INTERNAL_RESERVED_CUR;
             tmpArr.ToLog(Logs.LevelGen, "Starting Map:");
         }
@@ -716,7 +715,7 @@ public static class DrawExt
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             debugArr = new Array2D<bool>(cont.Bounding);
-            call = new DrawAction<T>(call).And((arr, x, y) => 
+            call = new DrawAction<T>(call).And((arr, x, y) =>
                 {
                     debugArr[x, y] = true;
                     debugArr.ToLog("Draw Perimeter");

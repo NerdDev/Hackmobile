@@ -71,7 +71,13 @@ public class Array2DRaw<T> : Container2D<T>
 
     public override IEnumerator<Value2D<T>> GetEnumerator()
     {
-        throw new NotImplementedException();
+        for (int y = 0; y < _arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < _arr.GetLength(1); x++)
+            {
+                yield return new Value2D<T>(x, y, _arr[y, x]);
+            }
+        }
     }
 
     public override bool DrawAll(DrawActionCall<T> call)
