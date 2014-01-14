@@ -567,15 +567,16 @@ public class LevelGenerator
         #endregion
         LayoutObjectLeaf edgeObject = new LayoutObjectLeaf();
         Container2D<GridType> grids = Layout.Grids;
-        grids.DrawAll(Draw.EqualTo(GridType.Floor).IfThen((arr, x, y) =>
+        grids.DrawAll(Draw.Not(Draw.EqualTo(GridType.NULL).Or(Draw.EqualTo(GridType.Wall))).IfThen((arr, x, y) =>
             {
-                grids.DrawAround(x, y, true, Draw.IfThen<GridType>(Draw.EqualTo(GridType.Wall), Draw.SetTo(edgeObject.Grids, GridType.Wall)));
+                grids.DrawAround(x, y, true, Draw.IfThen<GridType>(Draw.EqualTo(GridType.NULL), Draw.SetTo(edgeObject.Grids, GridType.Wall)));
                 return true;
             }));
         Layout.AddObject(edgeObject);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
+            edgeObject.ToLog(Logs.LevelGen, "Edge Object");
             Layout.ToLog(Logs.LevelGen, "Post Confirm Edges");
             BigBoss.Debug.printFooter(Logs.LevelGen, "Confirm Edges");
         }

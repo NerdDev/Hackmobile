@@ -56,7 +56,7 @@ public class LevelManager : MonoBehaviour, IManager
         GetLevel(depth, out level);
         level.ToLog(Logs.Main, "Setting level to");
         CurLevelDepth = depth;
-        //Deploy(level);
+        Deploy(level);
         Level = level;
     }
 
@@ -97,24 +97,25 @@ public class LevelManager : MonoBehaviour, IManager
     void Destroy(Level level)
     {
         if (level == null) return;
-        foreach (GridSpace space in level.Iterate())
+        foreach (Value2D<GridSpace> val in level)
         {
-            foreach (WorldObject wo in space.GetBlockingObjects())
+            foreach (WorldObject wo in val.val.GetBlockingObjects())
             {
                 if (wo.IsNotAFreaking<Player>())
                     wo.Destroy();
             }
-            foreach (WorldObject wo in space.GetFreeObjects())
+            foreach (WorldObject wo in val.val.GetFreeObjects())
             {
                 if (wo.IsNotAFreaking<Player>())
                     wo.Destroy();
             }
-            space.SetActive(false);
+            val.val.SetActive(false);
         }
     }
 
     void Deploy(Level level)
     {
+        BigBoss.Debug.w(Logs.LevelGenMain, "Deploying " + level);
         foreach (Value2D<GridSpace> space in level)
         {
             if (space != null)
@@ -125,6 +126,7 @@ public class LevelManager : MonoBehaviour, IManager
                     space.val.SetActive(true);
             }
         }
+        BigBoss.Debug.w(Logs.LevelGenMain, "Deployed " + level);
     }
 
     void GenerateLevels(int num)

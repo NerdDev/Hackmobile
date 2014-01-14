@@ -27,15 +27,4 @@ public class LevelBuilder : MonoBehaviour
         space.Block = obj;
         return obj;
     }
-
-    public void Build(GridSpace[,] array)
-    {
-        for (int y = 0; y < array.GetLength(0); y++)
-        {
-            for (int x = 0; x < array.GetLength(1); x++)
-            {
-                Build(array[y,x], x, y);
-            }
-        }
-    }
 }

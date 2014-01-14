@@ -152,30 +152,9 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return ret;
     }
 
-    public IEnumerable<GridSpace> Iterate()
-    {
-        for (int y = 0; y < Array.Height; y++)
-        {
-            for (int x = 0; x < Array.Width; x++)
-            {
-                GridSpace space = this[x, y];
-                if (space != null)
-                    yield return space;
-            }
-        }
-    }
-
     public IEnumerator<Value2D<GridSpace>> GetEnumerator()
     {
-        for (int y = 0; y < Array.Height; y++)
-        {
-            for (int x = 0; x < Array.Width; x++)
-            {
-                GridSpace space = this[x, y];
-                if (space != null)
-                    yield return new Value2D<GridSpace>(x, y, this[x, y]);
-            }
-        }
+        return Array.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
