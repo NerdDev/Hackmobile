@@ -188,10 +188,10 @@ public class GridSpace
             Block.SetActive(on);
     }
 
-    public static Array2D<GridSpace> Convert(Container2D<GridType> arr)
+    public static Array2D<GridSpace> Convert(Container2D<GridType> container)
     {
-        Array2D<GridSpace> arrOut = new Array2D<GridSpace>(arr.Bounding);
-        foreach (Value2D<GridType> val in arr)
+        Array2D<GridSpace> arrOut = new Array2D<GridSpace>(container.Bounding);
+        foreach (Value2D<GridType> val in container)
         {
             if (val == null) continue;
             switch (val.val)
