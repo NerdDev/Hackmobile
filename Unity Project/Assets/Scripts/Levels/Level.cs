@@ -25,10 +25,17 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     {
         foreach (LayoutObjectLeaf room in Layout.GetRooms())
         {
-            RoomMaps.Add(room.Grids);
+            MultiMap<GridType> roomMap = new MultiMap<GridType>(room.Grids, room.ShiftP);
+            RoomMaps.Add(roomMap);
+            #region Debug
+            if (BigBoss.Debug.logging(Logs.LevelGenMain))
+            {
+                roomMap.ToLog(Logs.LevelGenMain, "Room map for " + room);
+            }
+            #endregion
             foreach (Value2D<GridType> floor in room.Grids)
             {
-                roomMapping[floor.x, floor.y] = room.Grids;
+                roomMapping[floor.x + room.ShiftP.x, floor.y + room.ShiftP.y] = room.Grids;
             }
         }
     }

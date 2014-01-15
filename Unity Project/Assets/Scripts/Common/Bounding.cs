@@ -13,11 +13,11 @@ public class Bounding
     public int YMax;
     public int Width
     {
-        get { return XMax - XMin; }
+        get { return XMax - XMin + 1; }
     }
     public int Height
     {
-        get { return YMax - YMin; }
+        get { return YMax - YMin + 1; }
     }
     public int Area
     {

@@ -50,15 +50,6 @@ public class DrawAction<T>
         });
     }
 
-    public DrawAction<T> Then(DrawActionCall<T> rhs)
-    {
-        return new DrawAction<T>((arr, x, y) =>
-            {
-                Call(arr, x, y);
-                return rhs(arr, x, y);
-            });
-    }
-
     public DrawAction<T> IfThen(DrawActionCall<T> rhs)
     {
         return new DrawAction<T>((arr, x, y) =>
