@@ -21,16 +21,6 @@ public static class Draw
             });
     }
 
-    public static DrawAction<T> IfThen<T>(DrawActionCall<T> ifCall, DrawActionCall<T> then)
-    {
-        return new DrawAction<T>((arr, x, y) =>
-        {
-            if (ifCall(arr, x, y))
-                return then(arr, x, y);
-            return true;
-        });
-    }
-
     public static DrawAction<T> EqualThen<T>(T item, DrawActionCall<T> then, bool not = false)
     {
         return new DrawAction<T>((arr, x, y) =>
@@ -275,6 +265,14 @@ public static class Draw
             {
                 return GridTypeEnum.Walkable(arr[x, y]);
             });
+    }
+
+    public static DrawAction<GridSpace> IsType(GridType g)
+    {
+        return new DrawAction<GridSpace>((arr, x, y) =>
+        {
+            return arr[x, y].Type == g;
+        });
     }
     #endregion
 }

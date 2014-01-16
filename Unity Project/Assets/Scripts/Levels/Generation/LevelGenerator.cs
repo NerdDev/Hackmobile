@@ -447,11 +447,11 @@ public class LevelGenerator
         Container2D<GridType> grids = Layout.Grids;
         MultiMap<GridType> doors = new MultiMap<GridType>();
         // If a door and near a null
-        grids.DrawAll(Draw.IfThen<GridType>(Draw.EqualTo(GridType.Door).And(Draw.HasAround(false, Draw.EqualTo(GridType.NULL))), Draw.AddTo(doors)));
+        grids.DrawAll(Draw.EqualTo(GridType.Door).And(Draw.HasAround(false, Draw.EqualTo(GridType.NULL))).IfThen(Draw.AddTo(doors)));
         foreach (var door in doors)
         {
             // Block nearby walkable
-            grids.DrawAround(door.x, door.y, false, Draw.IfThen<GridType>(Draw.If<GridType>(GridTypeEnum.Walkable), Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED)));
+            grids.DrawAround(door.x, door.y, false, Draw.If<GridType>(GridTypeEnum.Walkable).IfThen(Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED)));
         }
         Point shift;
         Array2DRaw<GridType> rawArr = grids.RawArray(out shift);
@@ -569,7 +569,7 @@ public class LevelGenerator
         Container2D<GridType> grids = Layout.Grids;
         grids.DrawAll(Draw.Not(Draw.EqualTo(GridType.NULL).Or(Draw.EqualTo(GridType.Wall))).IfThen((arr, x, y) =>
             {
-                grids.DrawAround(x, y, true, Draw.IfThen<GridType>(Draw.EqualTo(GridType.NULL), Draw.SetTo(edgeObject.Grids, GridType.Wall)));
+                grids.DrawAround(x, y, true, Draw.EqualTo(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, GridType.Wall)));
                 return true;
             }));
         Layout.AddObject(edgeObject);
@@ -615,15 +615,14 @@ public class LevelGenerator
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
             room.Grids.DrawAll(
-                Draw.IfThen<GridType>(
                 // If is floor
                 Draw.EqualTo(GridType.Floor).
                 // If not blocking a path
                 And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable)).
                 // If there's a floor around
-                And(Draw.Around(false, Draw.EqualTo(GridType.Floor))),
+                And(Draw.Around(false, Draw.EqualTo(GridType.Floor)))
                 // Then
-                Draw.AddTo(options)));
+                .IfThen(Draw.AddTo(options)));
             if (options.Count == 0) continue;
             Value2D<GridType> picked = options.Random(Rand);
             room.Grids[picked.x, picked.y] = up ? GridType.StairUp : GridType.StairDown;

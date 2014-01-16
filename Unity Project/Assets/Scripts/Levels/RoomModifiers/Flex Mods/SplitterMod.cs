@@ -34,7 +34,7 @@ public class HorizSplitterMod : RoomModifier
                 // Not blocking walking
                 .And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable))
                 // Count floors on line as well as sides
-                .And(Draw.IfThen<GridType>(Draw.EqualTo(GridType.Floor), Draw.Count<GridType>(out floorCount)))
+                .And(Draw.EqualTo(GridType.Floor).IfThen(Draw.Count<GridType>(out floorCount)))
                 .And(Draw.Loc(horizontal ? GridLocation.UP : GridLocation.LEFT,
                     Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out side1))))
                 .And(Draw.Loc(horizontal ? GridLocation.DOWN : GridLocation.RIGHT,
@@ -71,7 +71,7 @@ public class HorizSplitterMod : RoomModifier
         // Draw at least one door
         RandomPicker<GridType> picker;
         spec.Grids.DrawLine(from, to, picked, horizontal, 
-            Draw.IfThen<GridType>(Draw.CanDrawDoor(), Draw.PickRandom(out picker)));
+            Draw.CanDrawDoor().IfThen(Draw.PickRandom(out picker)));
         
         int numDoors = spec.Random.Next(1, 4);
         List<Value2D<GridType>> doors = picker.Pick(spec.Random, numDoors, 1, false);

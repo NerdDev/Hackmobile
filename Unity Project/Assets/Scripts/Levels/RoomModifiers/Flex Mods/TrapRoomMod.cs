@@ -43,9 +43,9 @@ public class TrapRoomMod : RoomModifier
         }
         #endregion
         RandomPicker<GridType> picker;
-        spec.Grids.DrawSquare(Draw.IfThen<GridType>(
-            Draw.EqualTo(GridType.Floor),
-            Draw.PickRandom(out picker)));
+        spec.Grids.DrawSquare(
+            Draw.EqualTo(GridType.Floor)
+            .IfThen(Draw.PickRandom(out picker)));
 
         List<Value2D<GridType>> treasureList = picker.Pick(spec.Random, treasureInRoom, 2, true);
         foreach (Value2D<GridType> val in treasureList)
