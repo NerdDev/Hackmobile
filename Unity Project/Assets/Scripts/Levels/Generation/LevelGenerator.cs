@@ -690,7 +690,7 @@ public class LevelGenerator
                     largest.ToLog(Logs.LevelGen, "Connecting Path");
                 }
                 #endregion
-                path.Finalize();
+                path.Bake();
                 layout.AddPath(path);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))

@@ -13,6 +13,7 @@ abstract public class RoomModifier : ProbabilityItem
 
     public static void RegisterModifiers()
     {
+        if (initialized) return;
         #region Debug
         double time = 0;
         if (BigBoss.Debug.logging(Logs.LevelGenMain))

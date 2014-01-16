@@ -122,7 +122,7 @@ public class Path : LayoutObjectLeaf
         }
     }
 
-    public void Finalize()
+    public override void Bake()
     {
         base.Grids = Grids;
         _list = null;
