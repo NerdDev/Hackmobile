@@ -41,15 +41,6 @@ public class DrawAction<T>
         });
     }
 
-    public DrawAction<T> And(DrawActionCall<T> rhs)
-    {
-        return new DrawAction<T>((arr, x, y) =>
-        {
-            if (!Call(arr, x, y)) return false;
-            return rhs(arr, x, y);
-        });
-    }
-
     public DrawAction<T> IfThen(DrawActionCall<T> rhs)
     {
         return new DrawAction<T>((arr, x, y) =>
@@ -58,5 +49,37 @@ public class DrawAction<T>
                     return rhs(arr, x, y);
                 return true;
             });
+    }
+
+    public DrawAction<T> And(DrawActionCall<T> call2)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return Call(arr, x, y) && call2(arr, x, y);
+        });
+    }
+
+    public DrawAction<T> AndNot(DrawActionCall<T> call2)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return Call(arr, x, y) && !call2(arr, x, y);
+        });
+    }
+
+    public DrawAction<T> Or(DrawActionCall<T> call2)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return Call(arr, x, y) || call2(arr, x, y);
+        });
+    }
+
+    public DrawAction<T> OrNot(DrawActionCall<T> call2)
+    {
+        return new DrawAction<T>((arr, x, y) =>
+        {
+            return Call(arr, x, y) || !call2(arr, x, y);
+        });
     }
 }

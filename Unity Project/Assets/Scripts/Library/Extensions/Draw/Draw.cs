@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public static class Draw
+public class Draw
 {
     public static DrawAction<T> EqualTo<T>(T t)
     {
@@ -97,45 +97,13 @@ public static class Draw
             });
     }
 
-    public static DrawAction<T> And<T>(this DrawAction<T> call1, DrawAction<T> call2)
-    {
-        return new DrawAction<T>((arr, x, y) =>
-        {
-            return call1.Call(arr, x, y) && call2.Call(arr, x, y);
-        });
-    }
-
-    public static DrawAction<T> AndNot<T>(this DrawAction<T> call1, DrawAction<T> call2)
-    {
-        return new DrawAction<T>((arr, x, y) =>
-        {
-            return call1.Call(arr, x, y) && !call2.Call(arr, x, y);
-        });
-    }
-
-    public static DrawAction<T> Or<T>(this DrawAction<T> call1, DrawAction<T> call2)
-    {
-        return new DrawAction<T>((arr, x, y) =>
-        {
-            return call1.Call(arr, x, y) || call2.Call(arr, x, y);
-        });
-    }
-
-    public static DrawAction<T> OrNot<T>(this DrawAction<T> call1, DrawAction<T> call2)
-    {
-        return new DrawAction<T>((arr, x, y) =>
-        {
-            return call1.Call(arr, x, y) || !call2.Call(arr, x, y);
-        });
-    }
-
     public static DrawAction<T> NotEdgeOfArray<T>()
     {
         return new DrawAction<T>((cont, x, y) =>
         {
             if (cont is Array2DRaw<T>)
             {
-                Array2DRaw<T> arr = (Array2DRaw<T>) cont;
+                Array2DRaw<T> arr = (Array2DRaw<T>)cont;
                 if (x <= 0
                     || y <= 0
                     || y >= arr.Height - 1
@@ -247,24 +215,25 @@ public static class Draw
         );
     }
     #region GridType
+    private static DrawAction<GridType> _canDrawDoor = new DrawAction<GridType>((arr, x, y) =>
+    {
+        if (arr[x, y] != GridType.Wall)
+            return false;
+        // Include null to work with levelgen placement
+        return (arr.AlternatesSides(x, y, GridTypeEnum.WalkableOrNull));
+    });
     public static DrawAction<GridType> CanDrawDoor()
     {
-        return new DrawAction<GridType>((arr, x, y) =>
-            {
-                if (arr[x, y] != GridType.Wall)
-                    return false;
-                // Include null to work with levelgen placement
-                return (arr.AlternatesSides(x, y, GridTypeEnum.WalkableOrNull));
-            }
-        );
+        return _canDrawDoor;
     }
 
+    private static DrawAction<GridType> _walkable = new DrawAction<GridType>((arr, x, y) =>
+    {
+        return GridTypeEnum.Walkable(arr[x, y]);
+    });
     public static DrawAction<GridType> Walkable()
     {
-        return new DrawAction<GridType>((arr, x, y) =>
-            {
-                return GridTypeEnum.Walkable(arr[x, y]);
-            });
+        return _walkable;
     }
 
     public static DrawAction<GridSpace> IsType(GridType g)
