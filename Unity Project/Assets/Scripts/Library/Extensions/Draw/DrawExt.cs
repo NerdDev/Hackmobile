@@ -29,7 +29,7 @@ public static class DrawExt
         }
     }
 
-    public static bool DrawAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawActionCall<T> action)
+    public static bool DrawAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawAction<T> action)
     {
         if (!cornered)
         {
@@ -52,7 +52,7 @@ public static class DrawExt
         return true;
     }
 
-    public static bool DrawDir<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawActionCall<T> action)
+    public static bool DrawDir<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawAction<T> action)
     {
         switch (dir)
         {
@@ -76,7 +76,7 @@ public static class DrawExt
         return true;
     }
 
-    public static bool DrawLocation<T>(this Container2D<T> arr, int x, int y, GridLocation loc, DrawActionCall<T> action)
+    public static bool DrawLocation<T>(this Container2D<T> arr, int x, int y, GridLocation loc, DrawAction<T> action)
     {
         switch (loc)
         {
@@ -110,7 +110,7 @@ public static class DrawExt
     #endregion
     #region Around
     // Returns list of points around that satisfy
-    public static List<Value2D<T>> GetPointsAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawActionCall<T> tester)
+    public static List<Value2D<T>> GetPointsAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawAction<T> tester)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>(cornered ? 9 : 4);
         arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
@@ -123,7 +123,7 @@ public static class DrawExt
     }
 
     // Returns list of values around that satisfy
-    public static List<T> GetValuesAllAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawActionCall<T> tester)
+    public static List<T> GetValuesAllAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawAction<T> tester)
     {
         List<T> ret = new List<T>(cornered ? 9 : 4);
         arr.DrawAround(x, y, cornered, (arr2, x2, y2) =>
@@ -136,7 +136,7 @@ public static class DrawExt
     }
 
     // Returns true if square around has
-    public static bool HasAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawActionCall<T> tester)
+    public static bool HasAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawAction<T> tester)
     {
         return !arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
         {
@@ -146,7 +146,7 @@ public static class DrawExt
         }));
     }
 
-    public static bool GetPointAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawActionCall<T> tester, out Value2D<T> val)
+    public static bool GetPointAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawAction<T> tester, out Value2D<T> val)
     {
         Value2D<T> ret = null;
         if (arr.DrawAround(x, y, cornered, new DrawAction<T>((arr2, x2, y2) =>
@@ -166,7 +166,7 @@ public static class DrawExt
         return true;
     }
 
-    public static bool GetValueAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawActionCall<T> tester, out T val)
+    public static bool GetValueAround<T>(this Container2D<T> arr, int x, int y, bool cornered, DrawAction<T> tester, out T val)
     {
         T ret = default(T);
         if (arr.DrawAround(x, y, cornered, (arr2, x2, y2) =>
@@ -184,7 +184,7 @@ public static class DrawExt
         return true;
     }
 
-    public static bool GetRandomValueAround<T>(this Container2D<T> arr, int x, int y, bool cornered, Random rand, DrawActionCall<T> tester, out T val)
+    public static bool GetRandomValueAround<T>(this Container2D<T> arr, int x, int y, bool cornered, Random rand, DrawAction<T> tester, out T val)
     {
         List<T> options = GetValuesAllAround(arr, x, y, cornered, tester);
         if (options.Count > 0)
@@ -196,7 +196,7 @@ public static class DrawExt
         return false;
     }
 
-    public static bool GetRandomPointAround<T>(this Container2D<T> arr, int x, int y, bool cornered, Random rand, DrawActionCall<T> tester, out Value2D<T> val)
+    public static bool GetRandomPointAround<T>(this Container2D<T> arr, int x, int y, bool cornered, Random rand, DrawAction<T> tester, out Value2D<T> val)
     {
         List<Value2D<T>> options = GetPointsAround(arr, x, y, cornered, tester);
         if (options.Count > 0)
@@ -209,7 +209,7 @@ public static class DrawExt
     }
     #endregion
     #region Get Direction
-    public static List<Value2D<T>> GetPointsOn<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawActionCall<T> tester)
+    public static List<Value2D<T>> GetPointsOn<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawAction<T> tester)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>(4);
         arr.DrawDir(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
@@ -221,7 +221,7 @@ public static class DrawExt
         return ret;
     }
 
-    public static List<T> GetValuesOn<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawActionCall<T> tester)
+    public static List<T> GetValuesOn<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawAction<T> tester)
     {
         List<T> ret = new List<T>(4);
         arr.DrawDir(x, y, dir, (arr2, x2, y2) =>
@@ -234,7 +234,7 @@ public static class DrawExt
         return ret;
     }
 
-    public static bool GetPointOn<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawActionCall<T> tester, out Value2D<T> val)
+    public static bool GetPointOn<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawAction<T> tester, out Value2D<T> val)
     {
         Value2D<T> ret = null;
         if (arr.DrawDir(x, y, dir, new DrawAction<T>((arr2, x2, y2) =>
@@ -254,7 +254,7 @@ public static class DrawExt
         return true;
     }
 
-    public static bool GetValueOn<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawActionCall<T> tester, out T val)
+    public static bool GetValueOn<T>(this Container2D<T> arr, int x, int y, GridDirection dir, DrawAction<T> tester, out T val)
     {
         T ret = default(T);
         if (arr.DrawDir(x, y, dir, (arr2, x2, y2) =>
@@ -308,7 +308,7 @@ public static class DrawExt
     {
         int count = 0;
         bool status = evaluator(arr[x - 1, y - 1]); // Bottom left
-        DrawActionCall<T> func = (arr2, x2, y2) =>
+        DrawAction<T> func = (arr2, x2, y2) =>
             {
                 if (evaluator(arr2[x2, y2]) != status)
                 {
@@ -329,7 +329,7 @@ public static class DrawExt
     #endregion
     #endregion
     #region Lines
-    public static bool DrawLine<T>(this Container2D<T> arr, int from, int to, int on, bool horizontal, DrawActionCall<T> action)
+    public static bool DrawLine<T>(this Container2D<T> arr, int from, int to, int on, bool horizontal, DrawAction<T> action)
     {
         if (horizontal)
             return DrawRow(arr, from, to, on, action);
@@ -337,7 +337,7 @@ public static class DrawExt
             return DrawCol(arr, from, to, on, action);
     }
 
-    public static bool DrawCol<T>(this Container2D<T> arr, int yb, int yt, int x, DrawActionCall<T> action, bool BottomToTop = true)
+    public static bool DrawCol<T>(this Container2D<T> arr, int yb, int yt, int x, DrawAction<T> action, bool BottomToTop = true)
     {
         if (BottomToTop)
         {
@@ -352,7 +352,7 @@ public static class DrawExt
         return true;
     }
 
-    public static bool DrawRow<T>(this Container2D<T> arr, int xl, int xr, int y, DrawActionCall<T> action, bool LeftToRight = true)
+    public static bool DrawRow<T>(this Container2D<T> arr, int xl, int xr, int y, DrawAction<T> action, bool LeftToRight = true)
     {
         if (LeftToRight)
         {
@@ -369,11 +369,11 @@ public static class DrawExt
 
     public static DrawAction<T> SetTo<T>(T to)
     {
-        return new DrawAction<T>((arr, x, y) =>
+        return (arr, x, y) =>
         {
             arr[x, y] = to;
             return true;
-        });
+        };
     }
     #endregion
     #region Circles
@@ -511,7 +511,7 @@ public static class DrawExt
             bounds.IntersectBounds(arrBound);
         if (!bounds.IsValid() || !bounds.Contains(x, y)) return true;
 
-        if (!draw.Call(arr, x, y)) return false;
+        if (!draw(arr, x, y)) return false;
         Bounding currentBounds = new Bounding() { XMin = x - 1, XMax = x + 1, YMin = y - 1, YMax = y + 1 };
         while (!currentBounds.Contains(arrBound))
         {
@@ -548,8 +548,8 @@ public static class DrawExt
     #endregion
     #region Searches
     public static Stack<Value2D<T>> DrawDepthFirstSearch<T>(this Container2D<T> arr, int x, int y,
-        DrawActionCall<T> allowedSpace,
-        DrawActionCall<T> target,
+        DrawAction<T> allowedSpace,
+        DrawAction<T> target,
         System.Random rand,
         bool edgeSafe = false)
     {
@@ -567,11 +567,11 @@ public static class DrawExt
         #endregion
         var blockedPoints = new Array2D<bool>(arr.Bounding);
         var pathTaken = new Stack<Value2D<T>>();
-        DrawAction<T> filter = new DrawActionCall<T>((arr2, x2, y2) =>
+        DrawAction<T> filter = new DrawAction<T>((arr2, x2, y2) =>
         {
             return !blockedPoints[x2, y2] && allowedSpace(arr2, x2, y2);
         });
-        DrawAction<T> foundTarget = new DrawActionCall<T>((arr2, x2, y2) =>
+        DrawAction<T> foundTarget = new DrawAction<T>((arr2, x2, y2) =>
         {
             return !blockedPoints[x2, y2] && target(arr2, x2, y2);
         });
@@ -633,7 +633,7 @@ public static class DrawExt
 
     public static void DrawBreadthFirstFill<T>(this Container2D<T> container, int x, int y,
         bool cornered,
-        DrawActionCall<T> run)
+        DrawAction<T> run)
     {
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -679,9 +679,9 @@ public static class DrawExt
         #endregion
     }
 
-    public static void DrawPerimeter<T>(this Container2D<T> cont, DrawActionCall<T> evaluator, StrokedAction<T> action)
+    public static void DrawPerimeter<T>(this Container2D<T> cont, DrawAction<T> evaluator, StrokedAction<T> action)
     {
-        DrawActionCall<T> call;
+        DrawAction<T> call;
         Container2D<bool> debugArr;
         if (action.UnitAction != null && action.StrokeAction != null)
         {

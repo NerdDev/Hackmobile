@@ -68,7 +68,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return null;
     }
 
-    public abstract bool DrawAll(DrawActionCall<T> call);
+    public abstract bool DrawAll(DrawAction<T> call);
 
     public abstract void Clear();
 

@@ -218,7 +218,7 @@ public class MultiMap<T> : Container2D<T>
         }
     }
 
-    public override bool DrawAll(DrawActionCall<T> call)
+    public override bool DrawAll(DrawAction<T> call)
     {
         foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
         {

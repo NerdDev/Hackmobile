@@ -108,7 +108,7 @@ public class Array2D<T> : Container2D<T>
         }
     }
 
-    public override bool DrawAll(DrawActionCall<T> call)
+    public override bool DrawAll(DrawAction<T> call)
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
