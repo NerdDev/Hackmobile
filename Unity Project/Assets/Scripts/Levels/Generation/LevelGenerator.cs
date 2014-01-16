@@ -74,7 +74,7 @@ public class LevelGenerator
         Log("Place Paths", true, PlacePaths);
         Log("Confirm Connection", true, ConfirmConnection);
         Log("Confirm Edges", true, ConfirmEdges);
-        //Log("Place Stairs", true, PlaceMissingStairs);
+        Log("Place Stairs", true, PlaceMissingStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
@@ -611,10 +611,11 @@ public class LevelGenerator
         else
             otherStair = otherLink.SelectedLink;
         StairLink link = null;
-        foreach (LayoutObject room in Rooms.Cast<LayoutObject>().Randomize(Rand))
+        foreach (LayoutObjectLeaf room in Rooms.Randomize(Rand))
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
-            room.Grids.DrawSquare(Draw.IfThen<GridType>(
+            room.Grids.DrawAll(
+                Draw.IfThen<GridType>(
                 // If is floor
                 Draw.EqualTo(GridType.Floor).
                 // If not blocking a path
@@ -622,16 +623,19 @@ public class LevelGenerator
                 // If there's a floor around
                 And(Draw.Around(false, Draw.EqualTo(GridType.Floor))),
                 // Then
-                Draw.AddTo(options)), false);
+                Draw.AddTo(options)));
             if (options.Count == 0) continue;
             Value2D<GridType> picked = options.Random(Rand);
             room.Grids[picked.x, picked.y] = up ? GridType.StairUp : GridType.StairDown;
             Point p = new Point(picked);
-            p.Shift(room.ShiftP);
+            p.Shift(-room.ShiftP);
             link = new StairLink(p, up);
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                options.ToLog(Logs.LevelGen, "Stair Options");
                 room.ToLog(Logs.LevelGen, "Placed stairs");
+            }
             #endregion
             break;
         }
