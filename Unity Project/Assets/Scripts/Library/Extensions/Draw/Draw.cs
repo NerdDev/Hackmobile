@@ -239,7 +239,8 @@ public class Draw
     {
         return new DrawAction<GridSpace>((arr, x, y) =>
         {
-            return arr[x, y].Type == g;
+            GridSpace space = arr[x, y];
+            return space != null && space.Type == g;
         });
     }
     #endregion

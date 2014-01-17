@@ -21,19 +21,18 @@ public class StartManager : MonoBehaviour, IManager
 
 
         // Temp (will move eventually)
-        //RandomPicker<GridSpace> picker;
-        //Level level = BigBoss.Levels.Level;
-        //level.DownStairs.Select(true);
-        //if (level.UpStairs != null)
-        //    level.UpStairs.Select(false);
-        //Point stair = level.DownStairs.SelectedLink;
-        //level.Array.DrawAround(stair.x, stair.y, false,
-        //    Draw.IfThen<GridSpace>((arr, x, y) =>
-        //        {
-        //            return arr[x, y].Type == GridType.Floor;
-        //        },
-        //    Draw.PickRandom(out picker)));
-        //Value2D<GridSpace> pt = picker.Pick(new System.Random());
+        BigBoss.Debug.w(Logs.Main, "Placing player in initial position.");
+        RandomPicker<GridSpace> picker;
+        Level level = BigBoss.Levels.Level;
+        level.DownStairs.Select(true);
+        if (level.UpStairs != null)
+            level.UpStairs.Select(false);
+        Point stair = level.DownStairs.SelectedLink;
+        level.Array.DrawAround(stair.x, stair.y, false,
+            Draw.IsType(GridType.Floor)
+            .IfThen(Draw.PickRandom(out picker)));
+        Value2D<GridSpace> pt = picker.Pick(new System.Random());
         //BigBoss.PlayerInfo.transform.position = new Vector3(pt.x, -.5f, pt.y);
+        BigBoss.Debug.w(Logs.Main, "Placed player on " + pt);
     }
 }
