@@ -164,7 +164,8 @@ public class Player : NPC
         {
             if (UpdateCurrentTileVectors())
             {
-                BigBoss.Time.PassTurn(60);
+                // Needs to be reactivated later when turn manager is revamped
+                //BigBoss.Time.PassTurn(60);
             }
         }
 

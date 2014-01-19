@@ -319,6 +319,64 @@ public class Bounding
         return horiz ? XMax : YMax;
     }
 
+    public void DistanceTo(Point p, out double closestDist, out double farthestDist)
+    {
+        if (p.x < XMin)
+        { // On left
+            if (p.y < YMin)
+            { // Bottom left
+                closestDist = p.Distance(XMin, YMin);
+                farthestDist = p.Distance(XMax, YMax);
+            }
+            else if (p.y > YMin)
+            { // Top left
+                closestDist = p.Distance(XMin, YMax);
+                farthestDist = p.Distance(XMax, YMin);
+            }
+            else
+            { // Left
+                closestDist = XMin - p.x;
+                farthestDist = XMax - p.x;
+            }
+        }
+        else if (p.x > XMax)
+        { // On right
+            if (p.y < YMin)
+            { // Bottom right
+                closestDist = p.Distance(XMax, YMin);
+                farthestDist = p.Distance(XMin, YMax);
+            }
+            else if (p.y > YMin)
+            { // Top right
+                closestDist = p.Distance(XMax, YMax);
+                farthestDist = p.Distance(XMin, YMin);
+            }
+            else
+            { // right
+                closestDist = p.x - XMax;
+                farthestDist = p.x - XMin;
+            }
+        }
+        else
+        { // Inside horizontally
+            if (p.y < YMin)
+            { // Bottom
+                closestDist = YMin - p.y;
+                farthestDist = YMax - p.y;
+            }
+            else if (p.y > YMin)
+            { // Top
+                closestDist = p.y - YMax;
+                farthestDist = p.y - YMin;
+            }
+            else
+            { // Inside Vertically
+                closestDist = -1;
+                farthestDist = -1;
+            }
+        }
+    }
+
     #region Printing
     public override string ToString()
     {

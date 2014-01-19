@@ -152,6 +152,19 @@ public class Draw
         }
     }
 
+    public static DrawAction<T> WithinTo<T>(float dist, Point to)
+    {
+        return (arr, x, y) =>
+        {
+            return to.Distance(x, y) <= dist;
+        };
+    }
+
+    public static DrawAction<T> WithinTo<T>(float dist, int x, int y)
+    {
+        return WithinTo<T>(dist, new Point(x, y));
+    }
+
     public static DrawAction<T> SetTo<T>(T from, T to)
     {
         return (arr, x, y) =>
@@ -213,6 +226,12 @@ public class Draw
                 return !arr.Blocking(x, y, eval);
             };
     }
+
+    public static DrawAction<T> Stop<T>()
+    {
+        return (arr, x, y) => { return false; };
+    }
+
     #region GridType
     private static DrawAction<GridType> _canDrawDoor = new DrawAction<GridType>((arr, x, y) =>
     {

@@ -29,7 +29,7 @@ public class LevelManager : MonoBehaviour, IManager
         ArrayExt.Converters.Add(typeof(GridSpace), (b) => 
         {
             GridSpace s = b as GridSpace;
-            if (s == null) return ' ';
+            if (s == null) return GridTypeEnum.Convert(GridType.NULL);
             return GridTypeEnum.Convert(((GridSpace)b).Type); 
         });
         if (Seed == -1)

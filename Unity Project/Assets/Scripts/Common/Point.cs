@@ -80,7 +80,7 @@ public class Point
 
     public double Distance(int x, int y)
     {
-        return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
+        return Math.Sqrt(Math.Pow(x - this.x, 2) + Math.Pow(y - this.y, 2));
     }
 
     public Point Invert()

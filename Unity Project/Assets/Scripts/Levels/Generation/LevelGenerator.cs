@@ -36,6 +36,9 @@ public class LevelGenerator
     public static int minRoomClusters { get { return 2; } }
     public static int maxRoomClusters { get { return 5; } }
     public static int clusterProbability { get { return 90; } }
+
+    // Stairs
+    public const float MinStairDist = 30;
     #endregion
 
     public Theme Theme;
@@ -605,29 +608,45 @@ public class LevelGenerator
 
     protected StairLink PlaceMissingStair(bool up, StairLink otherLink)
     {
-        Point otherStair;
-        if (otherLink == null)
-            otherStair = new Point(-5000, -5000);
-        else
-            otherStair = otherLink.SelectedLink;
         StairLink link = null;
         foreach (LayoutObjectLeaf room in Rooms.Randomize(Rand))
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
-            room.Grids.DrawAll(
-                // If is floor
+            DrawAction<GridType> test = // If is floor
                 Draw.EqualTo(GridType.Floor).
                 // If not blocking a path
                 And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable)).
                 // If there's a floor around
-                And(Draw.Around(false, Draw.EqualTo(GridType.Floor)))
-                // Then
-                .IfThen(Draw.AddTo(options)));
+                And(Draw.Around(false, Draw.EqualTo(GridType.Floor)));
+            if (otherLink != null)
+            {
+                double farthest;
+                double closest;
+                room.Grids.Bounding.DistanceTo(otherLink.SelectedLink, out closest, out farthest);
+                if (farthest < MinStairDist)
+                { // Inside or way too close
+                    continue;
+                }
+                else if (closest < MinStairDist)
+                { // On the edge.. could have a potential
+                    test = test.And(Draw.Not(Draw.WithinTo<GridType>(MinStairDist, otherLink.SelectedLink)));
+                }
+            }
+            room.Grids.DrawAll(test.IfThen(Draw.AddTo(options)));
             if (options.Count == 0) continue;
+
+            // Place stair
             Value2D<GridType> picked = options.Random(Rand);
             room.Grids[picked.x, picked.y] = up ? GridType.StairUp : GridType.StairDown;
+
+            // Place startpoint
+            MultiMap<GridType> startOptions = new MultiMap<GridType>();
+            room.Grids.DrawAround(picked.x, picked.y, false, Draw.EqualTo(GridType.Floor).IfThen(Draw.AddTo(startOptions)));
+            Point start = startOptions.Random(Rand);
+            room.Grids[start] = GridType.StairPlace;
+
             Point p = new Point(picked);
-            p.Shift(-room.ShiftP);
+            p.Shift(room.ShiftP);
             link = new StairLink(p, up);
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
