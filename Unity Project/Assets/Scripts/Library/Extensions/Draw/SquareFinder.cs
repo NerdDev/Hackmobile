@@ -72,7 +72,7 @@ public class SquareFinder<T>
             StrokedAction<T> strokeTest = new StrokedAction<T>() { StrokeAction = _tester.StrokeAction };
             foreach (Bounding b in retTmp)
             {
-                b.expand(1);
+                b.Expand(1);
                 if (_arr.DrawSquare(b.XMin, b.XMax, b.YMin, b.YMax, strokeTest))
                 {
                     ret.Add(b);

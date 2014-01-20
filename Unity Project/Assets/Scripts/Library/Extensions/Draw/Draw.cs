@@ -110,7 +110,7 @@ public class Draw
                     || x >= arr.Width - 1) return false;
                 return true;
             }
-            return false;
+            return true;
         });
     }
 
@@ -230,6 +230,14 @@ public class Draw
     public static DrawAction<T> Stop<T>()
     {
         return (arr, x, y) => { return false; };
+    }
+
+    public static DrawAction<T> Inside<T>(Bounding bounds)
+    {
+        return (arr, x, y) =>
+        {
+            return bounds.Contains(x, y);
+        };
     }
 
     #region GridType

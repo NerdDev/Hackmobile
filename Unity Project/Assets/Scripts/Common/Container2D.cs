@@ -226,11 +226,16 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         largest = obj1;
     }
 
-    public Value2D<T> Random(System.Random random, bool take = false)
+    public bool Random(System.Random random, out Value2D<T> ret, bool take = false)
     {
         List<Value2D<T>> list = Random(random, 1, 0, take);
-        if (list.Count == 0) return null;
-        return list[0];
+        if (list.Count == 0)
+        {
+            ret = null;
+            return false;
+        }
+        ret = list[0];
+        return true;
     }
 
     public virtual List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)

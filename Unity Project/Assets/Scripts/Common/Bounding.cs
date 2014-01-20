@@ -240,7 +240,7 @@ public class Bounding
     }
     #endregion Intersects
 
-    public void expand(int amount)
+    public Bounding Expand(int amount)
     {
         if (IsValid())
         {
@@ -249,6 +249,7 @@ public class Bounding
             XMin -= amount;
             YMin -= amount;
         }
+        return this;
     }
 
     public Point GetShiftNonNeg(int buffer)

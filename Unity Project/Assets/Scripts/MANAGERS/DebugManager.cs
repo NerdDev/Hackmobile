@@ -39,6 +39,7 @@ public class DebugManager : MonoBehaviour, IManager
         GlobalLogging,
         LineNumbers,
         FineSteps,
+        SearchSteps,
         Probability,
         LevelGen_Path_Simplify_Prune,
         XML_Print

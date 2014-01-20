@@ -575,7 +575,7 @@ public static class DrawExt
         {
             return !blockedPoints[x2, y2] && target(arr2, x2, y2);
         });
-        if (edgeSafe)
+        if (edgeSafe && arr is Array2DRaw<T>)
         {
             filter = filter.And(Draw.NotEdgeOfArray<T>());
             foundTarget = foundTarget.And(Draw.NotEdgeOfArray<T>());
@@ -609,7 +609,7 @@ public static class DrawExt
             if (arr.GetRandomPointAround<T>(curPoint.x, curPoint.y, false, rand, filter, out targetDir))
             {
                 #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + targetDir);
                 }
@@ -660,7 +660,7 @@ public static class DrawExt
                 {
                     queue.Enqueue(new Value2D<T>(x2 + shift.x, y2 + shift.y, arr2[x2, y2]));
                     #region DEBUG
-                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                     {
                         visited[x2, y2] = true;
                         visited.ToLog(Logs.LevelGen, "Queued " + x2 + " " + y2);
@@ -679,7 +679,7 @@ public static class DrawExt
         #endregion
     }
 
-    public static void DrawPerimeter<T>(this Container2D<T> cont, DrawAction<T> evaluator, StrokedAction<T> action)
+    public static void DrawPerimeter<T>(this Container2D<T> cont, DrawAction<T> isInsideTest, StrokedAction<T> action)
     {
         DrawAction<T> call;
         Container2D<bool> debugArr;
@@ -687,7 +687,7 @@ public static class DrawExt
         {
             call = (arr, x, y) =>
             {
-                if (arr.DrawAround(x, y, true, evaluator))
+                if (arr.DrawAround(x, y, true, isInsideTest))
                     action.UnitAction(arr, x, y);
                 else
                     action.StrokeAction(arr, x, y);
@@ -698,7 +698,7 @@ public static class DrawExt
         {
             call = (arr, x, y) =>
             {
-                if (arr.DrawAround(x, y, true, evaluator))
+                if (arr.DrawAround(x, y, true, isInsideTest))
                     action.UnitAction(arr, x, y);
                 return true;
             };
@@ -707,12 +707,12 @@ public static class DrawExt
         {
             call = (arr, x, y) =>
             {
-                if (!arr.DrawAround(x, y, true, evaluator))
+                if (!arr.DrawAround(x, y, true, isInsideTest))
                     action.StrokeAction(arr, x, y);
                 return true;
             };
         }
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps))
         {
             debugArr = new Array2D<bool>(cont.Bounding);
             call = new DrawAction<T>(call).And((arr, x, y) =>

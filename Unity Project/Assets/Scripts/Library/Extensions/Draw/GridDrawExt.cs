@@ -39,12 +39,7 @@ public static class GridTypeDrawExt
                 };
         }
 
-        arr.DrawPerimeter((arr2, x, y) =>
-            {
-                return arr2[x, y] != GridType.NULL;
-            },
-            findDoors
-            );
+        arr.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), findDoors);
     }
 
     public static void DrawPotentialExternalDoors(this Container2D<GridType> arr, DrawAction<GridType> action)

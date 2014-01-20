@@ -18,19 +18,6 @@ public class Path : LayoutObjectLeaf
     public static HashSet<GridType> PathTypes { get { return _pathTypes; } }
     List<Value2D<GridType>> _list;
 
-    public Path(Value2D<GridType> startPoint, Container2D<GridType> grids, System.Random rand)
-        : base(null)
-    {
-        Stack<Value2D<GridType>> stack = grids.DrawDepthFirstSearch(
-            startPoint.x,
-            startPoint.y,
-            Draw.EqualTo(GridType.NULL),
-            (arr, x, y) => PathTypes.Contains(arr[x, y]),
-            rand,
-            true);
-        _list = new List<Value2D<GridType>>(stack);
-    }
-
     public Path(IEnumerable<Value2D<GridType>> stack)
         : base(null)
     {

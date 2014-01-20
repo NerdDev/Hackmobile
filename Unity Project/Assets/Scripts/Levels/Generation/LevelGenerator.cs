@@ -472,7 +472,13 @@ public class LevelGenerator
         foreach (var door in doors)
         {
             door.Shift(-shift);
-            var path = new Path(door, rawArr, Rand);
+            Stack<Value2D<GridType>> stack = rawArr.DrawDepthFirstSearch(
+                door.x,
+                door.y,
+                Draw.EqualTo(GridType.NULL),
+                Draw.ContainedIn(Path.PathTypes),
+                Rand, true);
+            var path = new Path(stack);
             if (path.isValid())
             {
                 #region DEBUG
@@ -633,16 +639,17 @@ public class LevelGenerator
                 }
             }
             room.Grids.DrawAll(test.IfThen(Draw.AddTo(options)));
-            if (options.Count == 0) continue;
 
             // Place stair
-            Value2D<GridType> picked = options.Random(Rand);
+            Value2D<GridType> picked;
+            if (!options.Random(Rand, out picked)) continue;
             room.Grids[picked.x, picked.y] = up ? GridType.StairUp : GridType.StairDown;
 
             // Place startpoint
             MultiMap<GridType> startOptions = new MultiMap<GridType>();
             room.Grids.DrawAround(picked.x, picked.y, false, Draw.EqualTo(GridType.Floor).IfThen(Draw.AddTo(startOptions)));
-            Point start = startOptions.Random(Rand);
+            Value2D<GridType> start;
+            startOptions.Random(Rand, out start);
             room.Grids[start] = GridType.StairPlace;
 
             Point p = new Point(picked);
@@ -671,26 +678,25 @@ public class LevelGenerator
         Container2D<GridType> smallest;
         Container2D<GridType> largest;
         Container2D<GridType> layoutArr = new MultiMap<GridType>();
-        layout.Grids.DrawAll(Draw.SetTo(layoutArr, GridType.INTERNAL_RESERVED_BLOCKED));
         Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
+        MultiMap<GridType> startPoints = new MultiMap<GridType>();
+        smallest.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
+        {
+            StrokeAction = Draw.ContainedIn(Path.PathTypes).IfThen(Draw.AddTo(startPoints))
+        });
+        Value2D<GridType> startPoint;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            layoutArr.ToLog(Logs.LevelGen, "All Blocked");
             smallest.ToLog(Logs.LevelGen, "Smallest");
             largest.ToLog(Logs.LevelGen, "Largest");
+            startPoints.ToLog(Logs.LevelGen, "Start options");
         }
         #endregion
-        var startPtStack = smallest.DrawDepthFirstSearch(
-            1, 1,
-            Draw.EqualTo(GridType.NULL),
-            Draw.ContainedIn(Path.PathTypes),
-            Rand,
-            true);
-        if (startPtStack.Count > 0)
+        if (startPoints.Random(Rand, out startPoint))
         {
             layoutArr.PutAll(largest);
-            Value2D<GridType> startPoint = startPtStack.Pop();
+            smallest.DrawAll(Draw.SetTo(layoutArr, GridType.INTERNAL_RESERVED_BLOCKED));
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -699,7 +705,13 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
             }
             #endregion
-            var path = new Path(startPoint, layoutArr, Rand);
+            Stack<Value2D<GridType>> stack = layoutArr.DrawDepthFirstSearch(
+            startPoint.x,
+            startPoint.y,
+            Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutArr.Bounding.Expand(5))),
+            Draw.ContainedIn(Path.PathTypes),
+            Rand);
+            var path = new Path(stack);
             if (path.isValid())
             {
                 #region DEBUG
@@ -709,6 +721,8 @@ public class LevelGenerator
                     largest.ToLog(Logs.LevelGen, "Connecting Path");
                 }
                 #endregion
+                path.Simplify();
+                path.ConnectEnds(Layout, new Point(0,0));
                 path.Bake();
                 layout.AddPath(path);
                 #region DEBUG

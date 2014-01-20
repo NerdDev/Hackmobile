@@ -66,27 +66,23 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return ret;
     }
 
-    public GridSpace PickSpawnableLocation(Level l)
+    public bool PickSpawnableLocation(Level l, out Value2D<GridSpace> pick)
     {
         MultiMap<GridSpace> room = Spawnable(l, l.RoomMaps.Random(Probability.SpawnRand));
-        Value2D<GridSpace> pick = room.Random(Probability.SpawnRand);
-        return pick.val;
+        return room.Random(Probability.SpawnRand, out pick);
     }
 
-    public GridSpace PickSpawnableLocation()
+    public bool PickSpawnableLocation(out Value2D<GridSpace> pick)
     {
-        return PickSpawnableLocation(BigBoss.Levels.Level);
+        return PickSpawnableLocation(BigBoss.Levels.Level, out pick);
     }
 
     public NPC SpawnNPC(GridSpace g, NPC n)
     {
-        if (g == null)
-            g = PickSpawnableLocation();
         try
         {
             return BigBoss.Objects.NPCs.InstantiateAndWrap(n, g);
         }
-
         catch (ArgumentException)
         {
             throw new ArgumentException("The prefab is null: '" + n.Prefab + "' on NPC " + n.ToString());

@@ -8,8 +8,8 @@ public class SpawnNPCs : SpawnModifier {
     {
         MultiMap<GridSpace> spawnable = new MultiMap<GridSpace>();
         spec.Room.DrawAll(Draw.If<GridSpace>((g) => g.Spawnable).IfThen(Draw.AddTo(spawnable)));
-        Value2D<GridSpace> space = spawnable.Random(spec.Random);
-        if (space == null || space.val == null) return false;
+        Value2D<GridSpace> space;
+        if (!spawnable.Random(spec.Random, out space)) return false;
         BigBoss.DungeonMaster.SpawnNPC(space.val, spec.Theme.Keywords);
         return true;
     }
