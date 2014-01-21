@@ -270,6 +270,16 @@ public class Draw
             return space != null && space.Type == g;
         });
     }
+
+    private static DrawAction<GridType> _drawStairs = Draw.EqualTo(GridType.Floor).
+        // If not blocking a path
+                And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable)).
+        // If there's a floor around
+                And(Draw.Around(false, Draw.EqualTo(GridType.Floor)));
+    public static DrawAction<GridType> CanDrawStair()
+    {
+        return _drawStairs;
+    }
     #endregion
 }
 

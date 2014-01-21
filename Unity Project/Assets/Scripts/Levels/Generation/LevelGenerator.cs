@@ -327,6 +327,7 @@ public class LevelGenerator
         #endregion
         List<LayoutObject> unplacedRooms = new List<LayoutObject>(Rooms.Cast<LayoutObject>());
         List<LayoutObject> placedRooms = new List<LayoutObject>();
+        // Dont need to do this if only one stair.  Also, not complete.
         //PlaceRoomsOnStairs(placedRooms, unplacedRooms);
         PlaceRemainingRooms(placedRooms, unplacedRooms);
         #region DEBUG
@@ -336,26 +337,53 @@ public class LevelGenerator
 
     protected void PlaceRoomsOnStairs(List<LayoutObject> placedRooms, List<LayoutObject> unplacedRooms)
     {
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader("Place Room On Stairs");
+        }
+        #endregion
+        List<StairLink> stairs = new List<StairLink>();
         if (UpStairs != null)
-        {
-            LayoutObject pairedObj = unplacedRooms.Take();
-            placedRooms.Add(pairedObj);
-            PlaceRoomOnStairs(UpStairs.SelectedLink, true, pairedObj);
-        }
+            stairs.Add(UpStairs);
         if (DownStairs != null)
+            stairs.Add(DownStairs);
+        foreach (StairLink stair in stairs)
         {
-            LayoutObject pairedObj = unplacedRooms.Take();
-            placedRooms.Add(pairedObj);
-            PlaceRoomOnStairs(DownStairs.SelectedLink, false, pairedObj);
+            foreach (LayoutObject room in unplacedRooms)
+            {
+                MultiMap<GridType> options = new MultiMap<GridType>();
+                room.Grids.DrawAll(Draw.CanDrawStair().IfThen(Draw.AddTo(options)));
+                Value2D<GridType> picked;
+                if (options.Random(Rand, out picked))
+                {
+                    room.Shift(stair.SelectedLink - new Point(picked.x, picked.y));
+                    room.Grids[picked.x, picked.y] = stair.SelectedUp ? GridType.StairUp : GridType.StairDown;
+                    unplacedRooms.Remove(room);
+                    placedRooms.Add(room);
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        BigBoss.Debug.w(Logs.LevelGen, "Stair on " + stair.SelectedLink);
+                        room.ToLog(Logs.LevelGen, "Room to place stair in");
+                        options.ToLog(Logs.LevelGen, "Room stair options");
+                        BigBoss.Debug.w(Logs.LevelGen, "Picked " + picked);
+                    }
+                    #endregion
+                    break;
+                }
+            }
         }
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printFooter("Place Room On Stairs");
+        }
+        #endregion
     }
 
     protected void PlaceRoomOnStairs(Point stair, bool up, LayoutObject pairedObj)
     {
-        List<Bounding> options = pairedObj.Grids.GetSquares(3, 3, false, Draw.EqualTo(GridType.Floor));
-        Bounding picked = options.Random(Rand);
-        pairedObj.Shift(stair - new Point(picked.XMin + 1, picked.YMin + 1));
-        pairedObj.Grids[picked.XMin + 1, picked.YMin + 1] = up ? GridType.StairUp : GridType.StairDown;
     }
 
     protected void PlaceRemainingRooms(List<LayoutObject> placedRooms, List<LayoutObject> unplacedRooms)
@@ -618,12 +646,7 @@ public class LevelGenerator
         foreach (LayoutObjectLeaf room in Rooms.Randomize(Rand))
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
-            DrawAction<GridType> test = // If is floor
-                Draw.EqualTo(GridType.Floor).
-                // If not blocking a path
-                And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable)).
-                // If there's a floor around
-                And(Draw.Around(false, Draw.EqualTo(GridType.Floor)));
+            DrawAction<GridType> test = Draw.CanDrawStair();
             if (otherLink != null)
             {
                 double farthest;

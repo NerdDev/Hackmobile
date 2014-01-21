@@ -31,7 +31,7 @@ public class SquareFinder<T>
         _tryFlipped = tryFlipped && width != height;
         _tester = tester;
         _scope = scope;
-        if (scope == null) scope = arr.Bounding;
+        if (scope == null) _scope = arr.Bounding;
         if (_tester.StrokeAction != null)
             _tester.StrokeAction = Draw.Count<T>(counter).And(_tester.StrokeAction);
         if (_tester.UnitAction != null)
