@@ -280,8 +280,6 @@
     <Compile Include="Assets\Scripts\Levels\Generation\LevelGenerator.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\LevelLayout.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\Path.cs" />
-    <Compile Include="Assets\Scripts\Levels\Generation\StairLink.cs" />
-    <Compile Include="Assets\Scripts\Levels\Generation\StairLinks.cs" />
     <Compile Include="Assets\Scripts\Levels\GridDirection.cs" />
     <Compile Include="Assets\Scripts\Levels\GridLocation.cs" />
     <Compile Include="Assets\Scripts\Levels\GridSpace.cs" />

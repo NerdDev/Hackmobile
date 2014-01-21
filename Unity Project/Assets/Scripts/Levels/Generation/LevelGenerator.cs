@@ -44,8 +44,6 @@ public class LevelGenerator
     public Theme Theme;
     public System.Random Rand;
     public int Depth;
-    public StairLink UpStairs;
-    public StairLink DownStairs;
     protected LevelLayout Layout;
     protected List<LayoutObjectLeaf> Rooms;
     private int _debugNum = 0;
@@ -71,13 +69,12 @@ public class LevelGenerator
         Log("Mod Rooms", false, GenerateRoomShells, ModRooms);
         // Not complete
         //ClusterRooms(rooms);
-        Log("Align Stairs", true, ValidateStairPlacement);
         Log("Place Doors", true, PlaceDoors);
         Log("Place Rooms", true, PlaceRooms);
         Log("Place Paths", true, PlacePaths);
         Log("Confirm Connection", true, ConfirmConnection);
         Log("Confirm Edges", true, ConfirmEdges);
-        Log("Place Stairs", true, PlaceMissingStairs);
+        Log("Place Stairs", true, PlaceStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
@@ -111,17 +108,6 @@ public class LevelGenerator
             BigBoss.Debug.w(Logs.LevelGenMain, name + " took: " + (Time.realtimeSinceStartup - time));
         }
     }
-
-    protected void ValidateStairPlacement()
-    {
-        if (UpStairs == null || DownStairs == null) return;
-        Point mag = GenerateShiftMagnitude(5, Rand);
-        while (UpStairs.SelectedLink.Distance(DownStairs.SelectedLink) < 40)
-        {
-            DownStairs.SelectedLink.Shift(mag);
-        }
-    }
-
     protected void GenerateRoomShells()
     {
         #region DEBUG
@@ -327,67 +313,6 @@ public class LevelGenerator
         #endregion
         List<LayoutObject> unplacedRooms = new List<LayoutObject>(Rooms.Cast<LayoutObject>());
         List<LayoutObject> placedRooms = new List<LayoutObject>();
-        // Dont need to do this if only one stair.  Also, not complete.
-        //PlaceRoomsOnStairs(placedRooms, unplacedRooms);
-        PlaceRemainingRooms(placedRooms, unplacedRooms);
-        #region DEBUG
-        BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
-        #endregion
-    }
-
-    protected void PlaceRoomsOnStairs(List<LayoutObject> placedRooms, List<LayoutObject> unplacedRooms)
-    {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader("Place Room On Stairs");
-        }
-        #endregion
-        List<StairLink> stairs = new List<StairLink>();
-        if (UpStairs != null)
-            stairs.Add(UpStairs);
-        if (DownStairs != null)
-            stairs.Add(DownStairs);
-        foreach (StairLink stair in stairs)
-        {
-            foreach (LayoutObject room in unplacedRooms)
-            {
-                MultiMap<GridType> options = new MultiMap<GridType>();
-                room.Grids.DrawAll(Draw.CanDrawStair().IfThen(Draw.AddTo(options)));
-                Value2D<GridType> picked;
-                if (options.Random(Rand, out picked))
-                {
-                    room.Shift(stair.SelectedLink - new Point(picked.x, picked.y));
-                    room.Grids[picked.x, picked.y] = stair.SelectedUp ? GridType.StairUp : GridType.StairDown;
-                    unplacedRooms.Remove(room);
-                    placedRooms.Add(room);
-                    #region DEBUG
-                    if (BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        BigBoss.Debug.w(Logs.LevelGen, "Stair on " + stair.SelectedLink);
-                        room.ToLog(Logs.LevelGen, "Room to place stair in");
-                        options.ToLog(Logs.LevelGen, "Room stair options");
-                        BigBoss.Debug.w(Logs.LevelGen, "Picked " + picked);
-                    }
-                    #endregion
-                    break;
-                }
-            }
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter("Place Room On Stairs");
-        }
-        #endregion
-    }
-
-    protected void PlaceRoomOnStairs(Point stair, bool up, LayoutObject pairedObj)
-    {
-    }
-
-    protected void PlaceRemainingRooms(List<LayoutObject> placedRooms, List<LayoutObject> unplacedRooms)
-    {
         LayoutObjectLeaf seedRoom = new LayoutObjectLeaf();
         Layout.AddObject(seedRoom);
         placedRooms.Add(seedRoom); // Seed empty center room to start positioning from.
@@ -419,6 +344,9 @@ public class LevelGenerator
             }
             #endregion
         }
+        #region DEBUG
+        BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
+        #endregion
     }
 
     protected void PlaceDoors()
@@ -620,7 +548,7 @@ public class LevelGenerator
         #endregion
     }
 
-    protected void PlaceMissingStairs()
+    protected void PlaceStairs()
     {
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -628,10 +556,8 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Placing missing stairs");
         }
         #endregion
-        if (UpStairs == null && Depth != 0)
-            UpStairs = PlaceMissingStair(true, DownStairs);
-        if (DownStairs == null)
-            DownStairs = PlaceMissingStair(false, UpStairs);
+        Layout.UpStart = PlaceMissingStair(true, null);
+        Layout.DownStart = PlaceMissingStair(false, Layout.UpStart);
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -640,25 +566,24 @@ public class LevelGenerator
         #endregion
     }
 
-    protected StairLink PlaceMissingStair(bool up, StairLink otherLink)
+    protected Point PlaceMissingStair(bool up, Point otherStair)
     {
-        StairLink link = null;
         foreach (LayoutObjectLeaf room in Rooms.Randomize(Rand))
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
             DrawAction<GridType> test = Draw.CanDrawStair();
-            if (otherLink != null)
+            if (otherStair != null)
             {
                 double farthest;
                 double closest;
-                room.Grids.Bounding.DistanceTo(otherLink.SelectedLink, out closest, out farthest);
+                room.Grids.Bounding.DistanceTo(otherStair, out closest, out farthest);
                 if (farthest < MinStairDist)
                 { // Inside or way too close
                     continue;
                 }
                 else if (closest < MinStairDist)
                 { // On the edge.. could have a potential
-                    test = test.And(Draw.Not(Draw.WithinTo<GridType>(MinStairDist, otherLink.SelectedLink)));
+                    test = test.And(Draw.Not(Draw.WithinTo<GridType>(MinStairDist, otherStair)));
                 }
             }
             room.Grids.DrawAll(test.IfThen(Draw.AddTo(options)));
@@ -677,7 +602,6 @@ public class LevelGenerator
 
             Point p = new Point(picked);
             p.Shift(room.ShiftP);
-            link = new StairLink(p, up);
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -685,9 +609,9 @@ public class LevelGenerator
                 room.ToLog(Logs.LevelGen, "Placed stairs");
             }
             #endregion
-            break;
+            return p;
         }
-        return link;
+        return null;
     }
 
     protected void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
@@ -745,7 +669,7 @@ public class LevelGenerator
                 }
                 #endregion
                 path.Simplify();
-                path.ConnectEnds(Layout, new Point(0,0));
+                path.ConnectEnds(Layout, new Point(0, 0));
                 path.Bake();
                 layout.AddPath(path);
                 #region DEBUG

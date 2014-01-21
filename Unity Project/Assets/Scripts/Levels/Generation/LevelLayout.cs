@@ -4,7 +4,8 @@ using System;
 
 public class LevelLayout : LayoutObjectContainer
 {
-
+    public Point UpStart;
+    public Point DownStart;
     List<LayoutObjectLeaf> rooms = new List<LayoutObjectLeaf>();
     List<Path> paths = new List<Path>();
 

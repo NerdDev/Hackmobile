@@ -149,18 +149,7 @@ public class LevelManager : MonoBehaviour, IManager
         gen.Theme = GetTheme();
         gen.Depth = depth;
         gen.Rand = new System.Random(_levelSeeds[depth]);
-        if (depth != 0)
-            if (_levels[depth - 1] != null)
-                gen.UpStairs = _levels[depth - 1].DownStairs;
-        if (_levels[depth + 1] != null)
-            gen.DownStairs = _levels[depth + 1].UpStairs;
-        if (gen.UpStairs != null)
-            gen.UpStairs.SelectedUp = true;
-        if (gen.DownStairs != null)
-            gen.DownStairs.SelectedUp = false;
         Level level = new Level(gen.Generate(), gen.Theme);
-        level.UpStairs = gen.UpStairs;
-        level.DownStairs = gen.DownStairs;
         _levels[depth] = level;
     }
 

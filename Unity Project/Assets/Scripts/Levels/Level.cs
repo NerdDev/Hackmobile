@@ -9,8 +9,8 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     public Array2D<GridSpace> Array { get; protected set; }
     public List<Container2D<GridType>> RoomMaps = new List<Container2D<GridType>>();
     private MultiMap<Container2D<GridType>> roomMapping = new MultiMap<Container2D<GridType>>(); // floor space to roommap
-    public StairLink UpStairs;
-    public StairLink DownStairs;
+    public Point UpStartPoint;
+    public Point DownStartPoint;
     public Theme Theme { get; protected set; }
 
     public Level(LevelLayout layout, Theme theme)
@@ -19,6 +19,8 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         Array = GridSpace.Convert(layout.Grids);
         LoadRoomMaps();
         Theme = theme;
+        UpStartPoint = layout.UpStart;
+        DownStartPoint = layout.DownStart;
     }
 
     private void LoadRoomMaps()

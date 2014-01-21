@@ -22,10 +22,7 @@ public class StartManager : MonoBehaviour, IManager
         // Temp (will move eventually)
         BigBoss.Debug.w(Logs.Main, "Placing player in initial position.");
         Level level = BigBoss.Levels.Level;
-        level.DownStairs.SelectedUp = true;
-        if (level.UpStairs != null)
-            level.UpStairs.SelectedUp = false;
-        Point stair = level.DownStairs.SelectedLink;
+        Point stair = level.DownStartPoint;
         Value2D<GridSpace> start;
         level.Array.GetPointAround(stair.x, stair.y, false, Draw.IsType(GridType.StairPlace), out start);
         BigBoss.PlayerInfo.transform.position = new Vector3(start.x, -.5f, start.y);

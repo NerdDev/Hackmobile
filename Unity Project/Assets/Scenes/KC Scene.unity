@@ -747,7 +747,7 @@ MonoBehaviour:
   m_Name: 
   Logging: 0
   ActiveLogs: 000000000200000001000000
-  ActiveFlags: 000000000200000003000000
+  ActiveFlags: 00000000
 --- !u!1 &132977053
 GameObject:
   m_ObjectHideFlags: 0
@@ -5645,7 +5645,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400030, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: ActiveFlags.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: m_LocalPosition.x
