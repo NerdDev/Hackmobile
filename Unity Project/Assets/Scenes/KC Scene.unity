@@ -4,13 +4,12 @@
 SceneSettings:
   m_ObjectHideFlags: 0
   m_PVSData: 
-  m_QueryMode: 1
   m_PVSObjectsArray: []
   m_PVSPortalsArray: []
   m_OcclusionBakeSettings:
-    viewCellSize: 1
-    bakeMode: 2
-    memoryUsage: 10485760
+    smallestOccluder: 5
+    smallestHole: .25
+    backfaceThreshold: 100
 --- !u!104 &2
 RenderSettings:
   m_Fog: 0
@@ -23,11 +22,12 @@ RenderSettings:
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: .5
   m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-GameManager:
+LevelGameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -120,12 +120,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300032, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 1946790915}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1946790915}
   m_AABB:
     m_Center: {x: -.0204737447, y: .00738065317, z: 1.49011612e-08}
@@ -198,6 +202,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b70453b5b50b7647b6268553c271b13, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   displayInventory: 0
   inventoryClip: {fileID: 2005882283}
   groundClip: {fileID: 1315280606}
@@ -209,7 +214,7 @@ MonoBehaviour:
   itemActionsGrid: {fileID: 1708259974}
   InvItemPrefab: {fileID: 100000, guid: b819e8f39001caa4e8fde413f3b67073, type: 2}
   ButtonPrefab: {fileID: 100004, guid: 3deade3808c408c49bdd373de0e1d4e9, type: 2}
-  ChestPrefab: {fileID: 100000, guid: e94577d0bb6196b48acacb64b122db5c, type: 2}
+  ChestPrefab: {fileID: 100000, guid: 7e43200f971e8cc4ba108181e6494a32, type: 2}
   inventoryClipDrag: {fileID: 2005882281}
   groundClipDrag: {fileID: 1315280605}
   itemInfoClipDrag: {fileID: 1532298574}
@@ -325,12 +330,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300012, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 946149480}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 946149480}
   m_AABB:
     m_Center: {x: -.0388293117, y: -.00617454574, z: .109411418}
@@ -382,12 +391,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300040, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 117033450}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 117033450}
   m_AABB:
     m_Center: {x: -.0931507647, y: .00286127999, z: .0375615321}
@@ -433,6 +446,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 0}
@@ -456,6 +470,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &73516079
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -509,6 +524,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 0}
@@ -532,6 +548,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &83349686
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -617,12 +634,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300004, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 1249800452}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1249800452}
   m_AABB:
     m_Center: {x: -.0770143494, y: .0323919356, z: 7.07805157e-08}
@@ -701,12 +722,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300008, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 357587269}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 357587269}
   m_AABB:
     m_Center: {x: -.0984856784, y: -.0148213357, z: -.0609879531}
@@ -750,6 +775,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a8e122e8b0def44f9497a4dd4bd576b, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   Logging: 1
   ActiveLogs: 000000000100000002000000
   ActiveFlags: 00000000
@@ -800,6 +826,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &132977056
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -876,6 +905,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d896faa75ea396d4baf03f14a79a912d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   range: {x: 2, y: 2}
   lineOfSightCheck: 0
   isActive: 1
@@ -890,6 +920,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   scalingStyle: 1
   automatic: 0
   manualHeight: 800
@@ -942,6 +973,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &186589763
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -996,12 +1030,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300014, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 1945974531}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1945974531}
   m_AABB:
     m_Center: {x: -.0739156604, y: -.0117772073, z: .0837200433}
@@ -1053,6 +1091,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -1062,6 +1103,7 @@ SkinnedMeshRenderer:
   - {fileID: 117033450}
   - {fileID: 804009525}
   - {fileID: 1835617408}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 117033450}
   m_AABB:
     m_Center: {x: -.39061448, y: -.16012226, z: .00990005583}
@@ -1108,6 +1150,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -1128,6 +1171,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c8d596c16f05d949922ef16347e4cc9, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mBG: {fileID: 1288342828}
   mFG: {fileID: 83349684}
   mDir: 1
@@ -1175,6 +1219,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c8d596c16f05d949922ef16347e4cc9, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mBG: {fileID: 1857417375}
   mFG: {fileID: 73516077}
   mDir: 1
@@ -1192,6 +1237,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -1291,6 +1337,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca07aa49cc0eb6145b4b59b6af927e71, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   totalTimePlayed: 0
   turnsPassed: 0
   numTilesCrossed: 0
@@ -1391,6 +1438,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -1501,6 +1549,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cb67c6dcb4e4d74eb7aed04254e4089, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   enable: 1
   isActivated: 1
   showDebugRadius: 0
@@ -1620,12 +1669,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300002, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 1249800452}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1249800452}
   m_AABB:
     m_Center: {x: -.0770143494, y: .0323919356, z: 7.07805157e-08}
@@ -1699,6 +1752,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 0}
@@ -1722,6 +1776,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &489941571
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1781,6 +1836,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -1790,6 +1848,7 @@ SkinnedMeshRenderer:
   - {fileID: 1945974531}
   - {fileID: 713746678}
   - {fileID: 946149480}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 838677877}
   m_AABB:
     m_Center: {x: -.288861781, y: -.0216698796, z: .234873995}
@@ -1840,6 +1899,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8925a196ce6dac747ac84e45a0d6c866, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &494564656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1851,6 +1911,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -1898,6 +1959,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7c9945366dd4e343a288fafc656379c, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   allowPlayerInput: 1
   allowKeyboardInput: 1
   allowMouseInput: 1
@@ -1962,6 +2024,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c0d02b39c7ba8449a6d3fc9e2d72c8f, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   shader: {fileID: 4800000, guid: 37468656736260e46bec101701353244, type: 3}
   unexploredColor: {r: 0, g: 0, b: 0, a: 0}
   exploredColor: {r: 0, g: 0, b: 0, a: 0}
@@ -1976,6 +2039,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b803f01d0abaffd4a8b866ca36d9a3ec, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   target: {fileID: 817220787}
   targetOffset: {x: 0, y: 0, z: 0}
   distance: 5
@@ -2026,6 +2090,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_HDR: 0
+  m_OcclusionCulling: 1
 --- !u!1 &639682970
 GameObject:
   m_ObjectHideFlags: 0
@@ -2091,6 +2156,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -2172,6 +2238,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2183,6 +2252,7 @@ SkinnedMeshRenderer:
   - {fileID: 838677877}
   - {fileID: 2011013914}
   - {fileID: 1946790915}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1946790915}
   m_AABB:
     m_Center: {x: -.39882645, y: -.100739658, z: -.0101578534}
@@ -2261,6 +2331,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2289,6 +2362,7 @@ SkinnedMeshRenderer:
   - {fileID: 488603364}
   - {fileID: 1835617408}
   - {fileID: 1324755108}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1946790915}
   m_AABB:
     m_Center: {x: -.0255761743, y: .124461845, z: .00249287486}
@@ -2341,6 +2415,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &717078615
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2447,6 +2524,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2454,6 +2534,7 @@ SkinnedMeshRenderer:
   m_Bones:
   - {fileID: 357587269}
   - {fileID: 1946790915}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1946790915}
   m_AABB:
     m_Center: {x: .0545951985, y: .0409232005, z: .122935787}
@@ -2486,6 +2567,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58b779dcddad2e84aa4cf85818a9447f, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &802794508
 Transform:
   m_ObjectHideFlags: 0
@@ -2631,11 +2713,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d896faa75ea396d4baf03f14a79a912d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   range: {x: 4, y: 4}
   lineOfSightCheck: 0
   isActive: 1
 --- !u!95 &817220790
 Animator:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 9500000, guid: 7068fdc9835e2eb46896da2a78416f13,
     type: 2}
@@ -2647,6 +2731,7 @@ Animator:
   m_CullingMode: 1
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 1
+  m_HasTransformHierarchy: 1
 --- !u!54 &817220791
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2674,6 +2759,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8dbfb821551f25408b927bdd480a6b9, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   Active: 0
 --- !u!111 &817220793
 Animation:
@@ -2704,9 +2790,6 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 1
-  m_UserAABB:
-    m_Center: {x: .0629487634, y: 1.21839547, z: .315524936}
-    m_Extent: {x: 1.18296313, y: 1.4506855, z: 1.4667598}
 --- !u!1 &819286173
 GameObject:
   m_ObjectHideFlags: 0
@@ -2779,12 +2862,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300058, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 1249800452}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1249800452}
   m_AABB:
     m_Center: {x: -.0762626305, y: .0303833969, z: 7.07805157e-08}
@@ -2836,6 +2923,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2846,6 +2936,7 @@ SkinnedMeshRenderer:
   - {fileID: 2038382003}
   - {fileID: 488603364}
   - {fileID: 1324755108}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 838677877}
   m_AABB:
     m_Center: {x: -.297124922, y: .139969885, z: -.106393799}
@@ -2945,6 +3036,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -3018,6 +3110,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4caccf65f596ca340974e8060e28b65f, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &896860188
 GameObject:
   m_ObjectHideFlags: 0
@@ -3057,6 +3150,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -3193,6 +3287,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04d1b7c9e9a19a24ab67123a43c6544b, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   method: 3
   style: 0
   animationCurve:
@@ -3266,6 +3361,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &974908239
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3316,6 +3414,42 @@ Prefab:
     - target: {fileID: 13100000, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400234, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -533.333374
+      objectReference: {fileID: 0}
+    - target: {fileID: 400194, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: .707106829
+      objectReference: {fileID: 0}
+    - target: {fileID: 400194, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400194, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400194, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: .707106829
+      objectReference: {fileID: 0}
+    - target: {fileID: 100098, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400140, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: worldSize
+      value: 384
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400140, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: updateFrequency
+      value: .400000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400140, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: textureBlendTime
+      value: .400000006
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
@@ -3368,12 +3502,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300020, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 1324755108}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1324755108}
   m_AABB:
     m_Center: {x: -.039737232, y: -.00621710345, z: -.11077781}
@@ -3417,6 +3555,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 0, g: .832167625, b: 1, a: 1}
@@ -3482,12 +3621,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300016, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 1946790915}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1946790915}
   m_AABB:
     m_Center: {x: .0374155492, y: -.0361069925, z: -.000820666552}
@@ -3616,6 +3759,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be10cbaaf1096094ca8285024d49002e, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   target: {x: 252.89119, y: 902.000793, z: 0}
   strength: 13
 --- !u!114 &1164357154
@@ -3629,6 +3773,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d81807633ea807d4c8e3fff7e10c6000, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   restrictWithinPanel: 1
   disableDragIfFits: 0
   dragEffect: 2
@@ -3652,6 +3797,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -3700,6 +3846,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -3806,6 +3953,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 0, g: 0, b: 0, a: 0}
@@ -3829,6 +3977,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1288342830
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3883,6 +4032,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -3903,6 +4053,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c8d596c16f05d949922ef16347e4cc9, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mBG: {fileID: 1617425179}
   mFG: {fileID: 489941569}
   mDir: 1
@@ -3956,6 +4107,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &1312037809
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4005,6 +4159,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be10cbaaf1096094ca8285024d49002e, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   target: {x: 252.89119, y: 902.000793, z: 0}
   strength: 13
 --- !u!114 &1315280605
@@ -4018,6 +4173,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d81807633ea807d4c8e3fff7e10c6000, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   restrictWithinPanel: 1
   disableDragIfFits: 0
   dragEffect: 2
@@ -4041,6 +4197,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -4097,6 +4254,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &1321514134
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4197,6 +4357,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e334c7742c4b004e9ac93bec1d17a29, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   arrangement: 1
   maxPerLine: 0
   cellWidth: 200
@@ -4217,6 +4378,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d35d721694fa0ee48a2d14bddfcbf4a4, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   springStrength: 8
 --- !u!1 &1394875464
 GameObject:
@@ -4285,6 +4447,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 0, g: 0, b: 0, a: 0}
@@ -4308,6 +4471,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1429149905
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4388,6 +4552,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 0}
@@ -4411,6 +4576,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1478924274
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4518,6 +4684,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be10cbaaf1096094ca8285024d49002e, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   target: {x: 252.89119, y: 902.000793, z: 0}
   strength: 13
 --- !u!114 &1532298574
@@ -4531,6 +4698,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d81807633ea807d4c8e3fff7e10c6000, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   restrictWithinPanel: 1
   disableDragIfFits: 0
   dragEffect: 2
@@ -4554,6 +4722,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -4602,6 +4771,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e334c7742c4b004e9ac93bec1d17a29, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   arrangement: 1
   maxPerLine: 0
   cellWidth: 200
@@ -4622,6 +4792,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d35d721694fa0ee48a2d14bddfcbf4a4, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   springStrength: 8
 --- !u!1 &1574321697
 GameObject:
@@ -4669,6 +4840,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -4678,6 +4852,7 @@ SkinnedMeshRenderer:
   - {fileID: 357587269}
   - {fileID: 1394875465}
   - {fileID: 1528784607}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 357587269}
   m_AABB:
     m_Center: {x: -.389014274, y: -.160767555, z: .00181115046}
@@ -4775,6 +4950,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 0, g: 0, b: 0, a: 0}
@@ -4798,6 +4974,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1617425181
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4904,6 +5081,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -4935,7 +5113,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400194, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
   m_PrefabInternal: {fileID: 992947966}
   m_GameObject: {fileID: 1672657088}
-  m_LocalRotation: {x: .417492062, y: -.607857883, z: .573980987, w: .356026769}
+  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
   m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1.66666663, y: 1.66666663, z: 1.66666663}
   m_Children: []
@@ -4956,10 +5134,10 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 1.20000005
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: 3
-    m_Strength: 1
-    m_Bias: 0
+    m_Strength: .75
+    m_Bias: .600000024
     m_Softness: 5.07999992
     m_SoftnessFade: .800000012
   m_Cookie: {fileID: 0}
@@ -5022,6 +5200,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -5032,6 +5213,7 @@ SkinnedMeshRenderer:
   - {fileID: 2038382003}
   - {fileID: 488603364}
   - {fileID: 1324755108}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 838677877}
   m_AABB:
     m_Center: {x: -.348658979, y: .152795047, z: -.120173693}
@@ -5076,6 +5258,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e334c7742c4b004e9ac93bec1d17a29, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   arrangement: 1
   maxPerLine: 0
   cellWidth: 300
@@ -5096,6 +5279,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d35d721694fa0ee48a2d14bddfcbf4a4, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   springStrength: 8
 --- !u!1 &1732168481
 GameObject:
@@ -5138,6 +5322,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c8d596c16f05d949922ef16347e4cc9, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mBG: {fileID: 1429149903}
   mFG: {fileID: 1478924272}
   mDir: 1
@@ -5155,6 +5340,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -5190,6 +5376,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 829ac6b46ba2c1c4a81ea415c3ca1a13, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   virtualWidth: 1024
   virtualHeight: 768
 --- !u!4 &1754468262
@@ -5241,6 +5428,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 0, g: .832167625, b: 1, a: 1}
@@ -5298,6 +5486,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42241010c6f9ddc46b78abdc21d505c5, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   enable: 1
   enableRemote: 0
   useBroadcastMessage: 0
@@ -5477,6 +5666,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 0, g: 0, b: 0, a: 0}
@@ -5500,6 +5690,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1857417377
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5571,6 +5762,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_HDR: 0
+  m_OcclusionCulling: 1
 --- !u!114 &1859925711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5582,6 +5774,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a92b5d748695fd44aac9feef17ba415, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   debug: 0
   useMouse: 1
   useTouch: 1
@@ -5634,6 +5827,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cb67c6dcb4e4d74eb7aed04254e4089, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   enable: 1
   isActivated: 1
   showDebugRadius: 0
@@ -5779,6 +5973,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -5790,6 +5987,7 @@ SkinnedMeshRenderer:
   - {fileID: 838677877}
   - {fileID: 2011013914}
   - {fileID: 1249800452}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 838677877}
   m_AABB:
     m_Center: {x: -.254506469, y: -.0113379508, z: .00704508275}
@@ -5842,6 +6040,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &1943348898
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5896,12 +6097,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300006, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 1249800452}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1249800452}
   m_AABB:
     m_Center: {x: -.0770143494, y: .0323919356, z: 7.07805157e-08}
@@ -6010,7 +6215,7 @@ Transform:
   m_PrefabInternal: {fileID: 992947966}
   m_GameObject: {fileID: 1961604088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -965.155151, y: 400, z: 0}
+  m_LocalPosition: {x: -533.333374, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 974323334}
@@ -6026,6 +6231,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   uiCamera: {fileID: 1859925710}
   widgetContainer: {fileID: 0}
   panelContainer: {fileID: 0}
@@ -6073,6 +6279,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d81807633ea807d4c8e3fff7e10c6000, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   restrictWithinPanel: 1
   disableDragIfFits: 0
   dragEffect: 2
@@ -6096,6 +6303,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be10cbaaf1096094ca8285024d49002e, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   target: {x: 252.89119, y: 902.000793, z: 0}
   strength: 13
 --- !u!114 &2005882283
@@ -6109,6 +6317,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   showInPanelTool: 1
   generateNormals: 0
   depthPass: 0
@@ -6156,10 +6365,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff305e18ad52574498a55f1e786a069c, type: 3}
   m_Name: 
-  worldSize: 256
-  textureSize: 128
-  updateFrequency: .200000003
-  textureBlendTime: .200000003
+  m_EditorClassIdentifier: 
+  worldSize: 384
+  textureSize: 256
+  updateFrequency: .400000006
+  textureBlendTime: .400000006
   blurIterations: 0
   heightRange: {x: -2, y: 15}
   raycastMask:
@@ -6206,6 +6416,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a481f2cbcee4164e8575888c6e5e653, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   Theme: {fileID: 11400000, guid: 631dbf33a897fc14f88db2d53201f711, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
   Seed: 12
@@ -6421,6 +6632,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -6430,6 +6644,7 @@ SkinnedMeshRenderer:
   - {fileID: 357587269}
   - {fileID: 1394875465}
   - {fileID: 1528784607}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 357587269}
   m_AABB:
     m_Center: {x: -.39015916, y: -.160670832, z: .00231791288}
@@ -6474,6 +6689,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e334c7742c4b004e9ac93bec1d17a29, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   arrangement: 1
   maxPerLine: 0
   cellWidth: 200
@@ -6494,6 +6710,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d35d721694fa0ee48a2d14bddfcbf4a4, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   springStrength: 8
 --- !u!1 &2071263239
 GameObject:
@@ -6541,6 +6758,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -6549,6 +6769,7 @@ SkinnedMeshRenderer:
   - {fileID: 1457858816}
   - {fileID: 804009525}
   - {fileID: 1835617408}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 1835617408}
   m_AABB:
     m_Center: {x: -.208341792, y: .0553318225, z: .00845355541}
@@ -6600,12 +6821,16 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_Mesh: {fileID: 4300022, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Bones:
   - {fileID: 117033450}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 117033450}
   m_AABB:
     m_Center: {x: -.0987767875, y: -.014850799, z: .0626028627}

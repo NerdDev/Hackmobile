@@ -57,6 +57,7 @@ public class LevelManager : MonoBehaviour, IManager
         CurLevelDepth = depth;
         Deploy(level);
         Level = level;
+        Builder.Combine();
     }
 
     public void SetCurLevel(bool up)
@@ -99,6 +100,7 @@ public class LevelManager : MonoBehaviour, IManager
         if (level == null) return;
         foreach (GridSpace space in level.Iterate())
         {
+            //this is temporary as really these objects need stored
             foreach (WorldObject wo in space.GetBlockingObjects())
             {
                 if (wo.IsNotAFreaking<Player>())
@@ -120,7 +122,9 @@ public class LevelManager : MonoBehaviour, IManager
             if (space != null)
             {
                 if (space.val.Block == null)
+                {
                     Builder.Build(space);
+                }
                 else
                     space.val.SetActive(true);
             }

@@ -91,4 +91,13 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
             Remove(item);
         }
     }
+
+    internal bool IsEmpty()
+    {
+        foreach (InventoryCategory ic in this.Values)
+        {
+            if (!ic.IsEmpty()) return false;
+        }
+        return true;
+    }
 }

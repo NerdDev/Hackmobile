@@ -24,6 +24,7 @@ public class LevelBuilder : MonoBehaviour
         GameObject obj = Instantiate(protoType) as GameObject;
         obj.transform.parent = holder.transform;
         obj.transform.Translate(new Vector3(x, 0, y));
+        obj.collider.enabled = true;
         space.Block = obj;
         return obj;
     }
@@ -37,5 +38,10 @@ public class LevelBuilder : MonoBehaviour
                 Build(array[y,x], x, y);
             }
         }
+    }
+
+    public void Combine()
+    {
+        StaticBatchingUtility.Combine(holder);
     }
 }

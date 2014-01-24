@@ -566,6 +566,26 @@ public class NPC : Affectable
     {
         return EquippedItems;
     }
+
+    internal bool dropItem(Item i, GridSpace space)
+    {
+        if (this.Inventory.Remove(i))
+        {
+            space.Put(i);
+            return true;
+        }
+        return false;
+    }
+
+    internal bool pickUpItem(Item i, GridSpace space)
+    {
+        if (space.inventory.Remove(i))
+        {
+            this.addToInventory(i);
+            return true;
+        }
+        return false;
+    }
     #endregion
 
     #region NPC Data Management for Instances
@@ -666,7 +686,7 @@ public class NPC : Affectable
         Value2D<GridSpace> space;
         return BigBoss.Levels.Level.Array.GetPointAround(playerSpace.X, playerSpace.Y, true, (arr, x, y) =>
         {
-            return playerSpace.X == x && playerSpace.Y == y;
+            return this.GridSpace.X == x && this.GridSpace.Y == y;
         }, out space);
     }
 

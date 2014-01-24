@@ -62,7 +62,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     {
         Unregister();
         Unwrap();
-        GridSpace.Remove(this);
+        if (GridSpace != null) GridSpace.Remove(this);
         if (OnDestroy != null)
             OnDestroy(this);
     }

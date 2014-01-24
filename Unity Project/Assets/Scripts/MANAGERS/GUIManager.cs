@@ -350,15 +350,18 @@ public class GUIManager : MonoBehaviour, IManager
         if (displayInventory && chest != null)
         {
             currentChest = chest;
-            List<Item> items = chest.items;
+            Inventory inv = chest.Location.inventory;
             GroundLabel.SetActive(true);
             groundClip.gameObject.SetActive(true);
             itemInfoClip.gameObject.SetActive(true);
             itemActionClip.gameObject.SetActive(true);
             groundGrid.Clear();
-            foreach (Item item in items)
+            foreach (InventoryCategory ic in inv.Values)
             {
-                CreateItemButton(item, groundGrid, groundClipDrag);
+                foreach (Item item in ic.Values)
+                {
+                    CreateItemButton(item, groundGrid, groundClipDrag);
+                }
             }
             CreateCloseLabel(groundGrid, groundClipDrag);
             this.groundClipDrag.ResetPosition();
@@ -587,8 +590,7 @@ public class GUIManager : MonoBehaviour, IManager
         itemButton.OnSingleClick = new Action(() =>
         {
             Item i = itemButton.refObject as Item;
-            BigBoss.Player.Inventory.Remove(i);
-            BigBoss.Player.GridSpace.Put(i);
+            BigBoss.Player.dropItem(i, BigBoss.Player.GridSpace);
             BigBoss.Gooey.RegenInventoryGUI();
             BigBoss.Gooey.GenerateGroundItems(currentChest);
         });
@@ -605,7 +607,7 @@ public class GUIManager : MonoBehaviour, IManager
             {
                 Item picked = i;
                 BigBoss.Player.Inventory.Add(picked);
-                if (BigBoss.Gooey.currentChest.Remove(picked))
+                if (BigBoss.Gooey.currentChest.Location.inventory.Remove(picked))
                 {
                     currentChest = null;
                 }
@@ -622,13 +624,11 @@ public class GUIManager : MonoBehaviour, IManager
         itemButton.OnSingleClick = new Action(() =>
         {
             Item i = itemButton.refObject as Item;
-                if (i.OnGround == true)
+                if (!i.OnGround)
                 {
-                    BigBoss.Player.GridSpace.Remove(i);
-                    BigBoss.Gooey.GenerateGroundItems(currentChest);
+                    BigBoss.Player.eatItem(i);
+                    BigBoss.Gooey.RegenItemInfoGUI(i);
                 }
-                BigBoss.Player.eatItem(i);
-                BigBoss.Gooey.RegenItemInfoGUI(i);
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }

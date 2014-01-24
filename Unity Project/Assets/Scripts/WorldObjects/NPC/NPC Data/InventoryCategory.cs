@@ -34,7 +34,13 @@ public class InventoryCategory : SortedDictionary<string, Item>
     {
         Item item;
         if (TryGetValue(i.Name, out item))
-            item.RemoveItem();
+        {
+            if (item.RemoveItem())
+            {
+                this.Remove(item);
+            }
+            return true;
+        }
         return false;
     }
 
@@ -52,5 +58,17 @@ public class InventoryCategory : SortedDictionary<string, Item>
         if (TryGetValue(i.Name, out list))
             return true;
         return false;
+    }
+
+    public bool IsEmpty()
+    {
+        foreach (Item i in this.Values)
+        {
+            if (i.Count != 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

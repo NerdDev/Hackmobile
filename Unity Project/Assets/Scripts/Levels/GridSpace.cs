@@ -19,6 +19,7 @@ public class GridSpace
     }
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
+    internal Inventory inventory = new Inventory();
     private ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
 
@@ -65,15 +66,15 @@ public class GridSpace
             _chest.Location = this;
             _chest.init();
         }
-        _chest.items.Add(i);
+        inventory.Add(i);
     }
 
     public bool RemoveFromChest(Item i)
     {
         if (_chest != null)
         {
-            _chest.items.Remove(i);
-            if (_chest.items.Count == 0)
+            inventory.Remove(i);
+            if (inventory.IsEmpty())
             {
                 GameObject.Destroy(_chest.gameObject);
                 _chest = null;

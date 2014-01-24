@@ -5,12 +5,11 @@ using System.Collections.Generic;
 class ItemChest : MonoBehaviour
 {
     public GridSpace Location { get; set; }
-    public List<Item> items = new List<Item>();
 
     public void init()
     {
         Vector3 blockPos = Location.Block.transform.position;
-        this.transform.localPosition = new Vector3(blockPos.x + .25f, blockPos.y + .5f, blockPos.z + .25f);
+        this.transform.localPosition = new Vector3(blockPos.x + .3f, blockPos.y + .5f, blockPos.z + .3f);
         this.transform.Rotate(Vector3.up, 45f);
     }
 
@@ -28,17 +27,11 @@ class ItemChest : MonoBehaviour
         {
             return true;
         }
-        PathTree path = new PathTree(Location, BigBoss.Player.GridSpace);
-        List<PathNode> nodes = path.getPath();
-        if (nodes.Count == 2)
+        Value2D<GridSpace> space;
+        GridSpace playerSpace = BigBoss.Player.GridSpace;
+        return BigBoss.Levels.Level.Array.GetPointAround(playerSpace.X, playerSpace.Y, true, (arr, x, y) =>
         {
-            return true;
-        }
-        return false;
-    }
-
-    public bool Remove(Item item)
-    {
-        return Location.RemoveFromChest(item);
+            return Location.X == x && Location.Y == y;
+        }, out space);
     }
 }

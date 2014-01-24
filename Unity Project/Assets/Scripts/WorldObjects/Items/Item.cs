@@ -117,13 +117,15 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         Icon = x.SelectString("icon");
     }
 
-    internal void RemoveItem()
+    internal bool RemoveItem()
     {
         _count--;
         if (_count <= 0)
         {
             this.Destroy();
+            return true;
         }
+        return false;
     }
 
     internal void Add()
