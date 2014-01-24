@@ -1,168 +1,119 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Path : LayoutObjectLeaf
 {
-
-    private static GridType[] searchTypes = new GridType[]
-        {
+    private static HashSet<GridType> _pathTypes = new HashSet<GridType>(new[] {
             GridType.Floor,
-            GridType.Door
-        };
-    private static GridSet typesSet = new GridSet(searchTypes);
+            GridType.Door,
+            GridType.Path_Horiz,
+            GridType.Path_LB,
+            GridType.Path_LT,
+            GridType.Path_RB,
+            GridType.Path_RT,
+            GridType.Path_Vert
+    });
+    public static HashSet<GridType> PathTypes { get { return _pathTypes; } }
     List<Value2D<GridType>> _list;
 
-    public Path(Value2D<GridType> startPoint, GridArray grids, System.Random rand)
-        : base()
-    {
-        _list = new List<Value2D<GridType>>(grids.GetArr().DrawDepthFirstSearch(
-            startPoint.x,
-            startPoint.y,
-            Draw.EqualTo(GridType.NULL),
-            (arr, x, y) => {
-                GridType t = arr[y, x];
-                return typesSet.Contains(t); 
-            },
-            rand,
-            true));
-    }
-
     public Path(IEnumerable<Value2D<GridType>> stack)
-        : base()
+        : base(null)
     {
         _list = new List<Value2D<GridType>>(stack);
     }
 
-    public static GridSet PathTypes()
+    public override Bounding Bounding
     {
-        return typesSet;
-    }
-
-    protected override Bounding GetBoundingUnshifted()
-    {
-        if (grids != null)
+        get
         {
-            return base.GetBoundingUnshifted();
-        }
-        Bounding ret = new Bounding();
-        foreach (Value2D<GridType> val in _list)
-        {
-            ret.absorb(val);
-        }
-        return ret;
-    }
-
-    public override GridArray GetArray()
-    {
-        return GetArray(false);
-    }
-
-    public override GridArray GetPrintArray()
-    {
-        return GetArray(true);
-    }
-
-    public void Finalize(LayoutObjectContainer obj)
-    {
-        Simplify();
-        ConnectEnds(obj);
-        Bake(true);
-    }
-
-    public override void Bake(bool shiftCompensate)
-    {
-        grids = GetArray(false);
-        _list = null;
-        base.Bake(shiftCompensate);
-    }
-
-    public GridArray GetArray(bool print)
-    {
-        if (grids != null)
-        {
-            return grids;
-        }
-        Bounding bounds = GetBoundingUnshifted();
-        GridArray ret = new GridArray(bounds, false);
-        if (_list.Count > 0)
-        {
-            if (print)
+            if (Grids != null)
             {
-                Value2D<GridType> backward = null;
-                Value2D<GridType> cur = null;
-                Value2D<GridType> forward = null;
-                foreach (Value2D<GridType> val in _list)
+                return base.Bounding;
+            }
+            Bounding ret = new Bounding();
+            foreach (Value2D<GridType> val in _list)
+            {
+                ret.Absorb(val);
+            }
+            return ret;
+        }
+    }
+
+    public override Container2D<GridType> Grids
+    {
+        get
+        {
+            if (base.Grids != null)
+                return base.Grids;
+            MultiMap<GridType> ret = new MultiMap<GridType>();
+            if (_list.Count == 0) return ret;
+            Value2D<GridType> backward = null;
+            Value2D<GridType> cur = null;
+            Value2D<GridType> forward = null;
+            foreach (Value2D<GridType> val in _list)
+            {
+                forward = val;
+                if (cur != null)
                 {
-                    forward = val;
-                    if (print)
-                    { // Handle piping print logic
-                        if (cur != null)
+                    if (backward == null) { }
+                    else if (Mathf.Abs(forward.x - backward.x) == 2)
+                    {
+                        // Horizontal
+                        ret[cur.x, cur.y] = GridType.Path_Horiz;
+                    }
+                    else if (Mathf.Abs(forward.y - backward.y) == 2)
+                    {
+                        // Vertical
+                        ret[cur.x, cur.y] = GridType.Path_Vert;
+                    }
+                    else
+                    {
+                        // Corner
+                        bool top = (forward.y == (cur.y + 1)) || (backward.y == (cur.y + 1));
+                        bool right = (forward.x == (cur.x + 1)) || (backward.x == (cur.x + 1));
+                        if (top)
                         {
-                            if (backward == null)
+                            if (right)
                             {
-                                ret[cur.x, cur.y] = GridType.INTERNAL_RESERVED_CUR;
-                            }
-                            else if (Mathf.Abs(forward.x - backward.x) == 2)
-                            {
-                                // Horizontal
-                                ret[cur.x, cur.y] = GridType.Path_Horiz;
-                            }
-                            else if (Mathf.Abs(forward.y - backward.y) == 2)
-                            {
-                                // Vertical
-                                ret[cur.x, cur.y] = GridType.Path_Vert;
+                                ret[cur.x, cur.y] = GridType.Path_RT;
                             }
                             else
                             {
-                                // Corner
-                                bool top = (forward.y == (cur.y + 1)) || (backward.y == (cur.y + 1));
-                                bool right = (forward.x == (cur.x + 1)) || (backward.x == (cur.x + 1));
-                                if (top)
-                                {
-                                    if (right)
-                                    {
-                                        ret[cur.x, cur.y] = GridType.Path_RT;
-                                    }
-                                    else
-                                    {
-                                        ret[cur.x, cur.y] = GridType.Path_LT;
-                                    }
-                                }
-                                else
-                                {
-                                    if (right)
-                                    {
-                                        ret[cur.x, cur.y] = GridType.Path_RB;
-                                    }
-                                    else
-                                    {
-                                        ret[cur.x, cur.y] = GridType.Path_LB;
-                                    }
-                                }
+                                ret[cur.x, cur.y] = GridType.Path_LT;
                             }
                         }
-                        // Set up for next point
-                        backward = cur;
-                        cur = forward;
+                        else
+                        {
+                            if (right)
+                            {
+                                ret[cur.x, cur.y] = GridType.Path_RB;
+                            }
+                            else
+                            {
+                                ret[cur.x, cur.y] = GridType.Path_LB;
+                            }
+                        }
                     }
                 }
-                ret[forward.x, forward.y] = GridType.INTERNAL_RESERVED_CUR;
+                // Set up for next point
+                backward = cur;
+                cur = forward;
             }
-            else
-            {
-                Value2D<GridType> first = _list[0];
-                Value2D<GridType> last = null;
-                foreach (Value2D<GridType> val in _list)
-                {
-                    last = val;
-                    ret[val] = GridType.Floor;
-                }
-                ret.PutNull(first.x, first.y);
-                ret.PutNull(last.x, last.y);
-            }
+            return ret;
         }
-        return ret;
+        protected set
+        {
+            base.Grids = value;
+        }
+    }
+
+    public override void Bake()
+    {
+        base.Grids = Grids;
+        _list = null;
+        base.Bake();
     }
 
     public void Simplify()
@@ -178,25 +129,24 @@ public class Path : LayoutObjectLeaf
             BigBoss.Debug.printHeader(Logs.LevelGen, "Prune");
         }
         #endregion
-        Bounding bounds = GetBounding(true);
-        bounds.expand(1);
-        Array2D<int> indexes = new Array2D<int>(bounds, false);
+        Bounding bounds = new Bounding();
+        foreach (Value2D<GridType> g in _list) bounds.Absorb(g);
+        Array2D<int> indexes = new Array2D<int>(bounds);
         List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
-        int[,] arr = indexes.GetArr();
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
             int lastDiff = 0;
             Value2D<int> neighbor = null;
-            arr.DrawAround(val.x, val.y, false, (arr2, x, y) =>
+            indexes.DrawAround(val.x, val.y, false, (arr2, x, y) =>
             { // Find neighboring point on path with the largest distance from current
-                if (arr2[y,x] == 0) return true;
-                int valDiff = Mathf.Abs(index - arr2[y,x]);
+                if (arr2[x, y] == 0) return true;
+                int valDiff = Mathf.Abs(index - arr2[x, y]);
                 if (valDiff > 1 // Diff meets requirements
                     && (neighbor == null || lastDiff < valDiff)) // Larger than last found diff
                 {
                     lastDiff = valDiff;
-                    neighbor = new Value2D<int>(x, y, arr2[y,x]);
+                    neighbor = new Value2D<int>(x, y, arr2[x, y]);
                 }
                 return true;
             });
@@ -238,17 +188,17 @@ public class Path : LayoutObjectLeaf
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Prune");
         }
         #endregion
     }
 
     public override bool isValid()
     {
-        return grids != null || (_list != null && _list.Count > 2);
+        return base.Grids != null || (_list != null && _list.Count > 2);
     }
 
-    public void ConnectEnds(LayoutObjectContainer container)
+    public void ConnectEnds(LayoutObjectContainer container, Point shift)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -256,12 +206,12 @@ public class Path : LayoutObjectLeaf
             BigBoss.Debug.printHeader(Logs.LevelGen, "Connect Ends");
         }
         #endregion
-        container.FindAndConnect(this, _list[0]);
-        container.FindAndConnect(this, _list[_list.Count - 1]);
+        container.FindAndConnect(this, _list[0] + shift);
+        container.FindAndConnect(this, _list[_list.Count - 1] + shift);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Connect Ends");
         }
         #endregion
     }

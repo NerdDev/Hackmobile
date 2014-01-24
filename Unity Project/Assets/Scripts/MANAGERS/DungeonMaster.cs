@@ -9,59 +9,17 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public bool Initialized { get; set; }
     Dictionary<ESFlags<Keywords>, LeveledPool<NPC>> npcPools = new Dictionary<ESFlags<Keywords>, LeveledPool<NPC>>();
 
-    public List<GameObject> stairs = new List<GameObject>();
-
     public void Initialize()
     {
         SpawnModifier.RegisterModifiers();
     }
 
-    public void PopulateLevel(Level l, bool up)
+    public void PopulateLevel(Level l)
     {
         if (!l.Populated)
         {
             ForcePopulateLevel(l);
         }
-
-        //Place stairs
-        ClearPriorLevel();
-        GridSpace stairsDown = CreateStairs(l, "StairsDown", PrimitiveType.Sphere);
-        GridSpace stairsUp = CreateStairs(l, "StairsUp", PrimitiveType.Cylinder);
-
-        //Place Player
-        if (up)
-        {
-            PlacePlayer(l, stairsDown);
-        }
-        else
-        {
-            PlacePlayer(l, stairsUp);
-        }
-    }
-
-    private void ClearPriorLevel()
-    {
-        if (stairs.Count > 0)
-        {
-            foreach (GameObject go in stairs)
-            {
-                Destroy(go);
-            }
-        }
-        BigBoss.Objects.NPCs.DestroyWrappers();
-    }
-
-    public GridSpace CreateStairs(Level l, string name, PrimitiveType prim)
-    {
-        GridSpace locStairs = BigBoss.DungeonMaster.PickSpawnableLocation(l);
-        GameObject stairs = GameObject.CreatePrimitive(prim);
-        stairs.name = name;
-        stairs.transform.position = new Vector3(locStairs.X, 0f, locStairs.Y);
-        locStairs.Block.layer = 13;
-        locStairs.Block.collider.isTrigger = false;
-        locStairs.Block.name = name;
-        this.stairs.Add(stairs);
-        return locStairs;
     }
 
     public void PlacePlayer(Level l, GridSpace stairsUp)
@@ -69,7 +27,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
         Value2D<GridSpace> grid;
         l.Array.GetPointAround(stairsUp.X, stairsUp.Y, false, (arr, x, y) =>
             {
-                return arr[y, x].Type == GridType.Floor;
+                return arr[x, y].Type == GridType.Floor;
             }, out grid);
         BigBoss.PlayerInfo.transform.position = new Vector3(grid.x, -.5f, grid.y);
     }
@@ -77,46 +35,54 @@ public class DungeonMaster : MonoBehaviour, IManager {
     void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
-        foreach (RoomMap room in l.GetRooms())
+        foreach (Container2D<GridType> room in l.RoomMaps)
         {
-            SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, l.Theme, room);
+            MultiMap<GridSpace> roomMap = new MultiMap<GridSpace>();
+            room.DrawAll((arr, x, y) =>
+                {
+                    roomMap[x, y] = l[x, y];
+                    return true;
+                });
+            SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, l.Theme, roomMap);
             SpawnModifier mod = SpawnModifier.GetMod();
             mod.Modify(spec);
         }
     }
 
-    public static MultiMap<GridSpace> Spawnable(MultiMap<GridSpace> map)
+    public static MultiMap<GridSpace> Spawnable<T>(Level l, IEnumerable<Value2D<T>> points)
+    {
+        return Spawnable(l, points.Cast<Point>());
+    }
+
+    public static MultiMap<GridSpace> Spawnable(Level l, IEnumerable<Point> points)
     {
         MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
-        foreach (Value2D<GridSpace> space in map)
+        foreach (Point p in points)
         {
-            if (space.val.Spawnable)
-                ret.Put(space);
+            GridSpace s = l[p];
+            if (s.Spawnable)
+                ret[p] = s;
         }
         return ret;
     }
 
-    public GridSpace PickSpawnableLocation(Level l)
+    public bool PickSpawnableLocation(Level l, out Value2D<GridSpace> pick)
     {
-        MultiMap<GridSpace> room = Spawnable(l.GetRooms().Random(Probability.SpawnRand));
-        Value2D<GridSpace> pick = room.RandomValue(Probability.SpawnRand);
-        return pick.val;
+        MultiMap<GridSpace> room = Spawnable(l, l.RoomMaps.Random(Probability.SpawnRand));
+        return room.Random(Probability.SpawnRand, out pick);
     }
 
-    public GridSpace PickSpawnableLocation()
+    public bool PickSpawnableLocation(out Value2D<GridSpace> pick)
     {
-        return PickSpawnableLocation(BigBoss.Levels.Level);
+        return PickSpawnableLocation(BigBoss.Levels.Level, out pick);
     }
 
     public NPC SpawnNPC(GridSpace g, NPC n)
     {
-        if (g == null)
-            g = PickSpawnableLocation();
         try
         {
             return BigBoss.Objects.NPCs.InstantiateAndWrap(n, g);
         }
-
         catch (ArgumentException)
         {
             throw new ArgumentException("The prefab is null: '" + n.Prefab + "' on NPC " + n.ToString());

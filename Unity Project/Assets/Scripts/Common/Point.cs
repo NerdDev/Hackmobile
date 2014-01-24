@@ -2,16 +2,18 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class Point {
+public class Point
+{
 
-	public int x { get; set; }
-	public int y { get; set; }
+    public int x;
+    public int y;
 
     #region Ctors
-    public Point() {
-		x = 0;
-		y = 0;
-	}
+    public Point()
+    {
+        x = 0;
+        y = 0;
+    }
 
     public Point(int x, int y)
     {
@@ -21,27 +23,29 @@ public class Point {
 
     public Point(float x, float y)
     {
-        this.x = (int) Math.Round(x);
-        this.y = (int) Math.Round(y);
+        this.x = (int)Math.Round(x);
+        this.y = (int)Math.Round(y);
     }
-	
-	public Point(Vector2 vect) : this(vect.x, vect.y)
-	{
-		
-	}
-	
-	public Point (Point rhs) : this(rhs.x, rhs.y)
-	{
-			
-	}
+
+    public Point(Vector2 vect)
+        : this(vect.x, vect.y)
+    {
+
+    }
+
+    public Point(Point rhs)
+        : this(rhs.x, rhs.y)
+    {
+
+    }
     #endregion Ctors
 
     #region Shifts
     public void Shift(int x, int y)
-	{
-		this.x += x;
-		this.y += y;
-	}
+    {
+        this.x += x;
+        this.y += y;
+    }
 
     public void Shift(float x, float y)
     {
@@ -52,12 +56,32 @@ public class Point {
     {
         Shift(vect.x, vect.y);
     }
-	
-	public void Shift(Point p)
-	{
-		Shift (p.x, p.y);	
-	}
+
+    public void Shift(Point p)
+    {
+        Shift(p.x, p.y);
+    }
+
+    public void Unshift(int shiftx, int shifty)
+    {
+        Shift(-shiftx, -shifty);
+    }
+
+    public void Unshift(Point shift)
+    {
+        Unshift(shift.x, shift.y);
+    }
     #endregion Shifts
+
+    public double Distance(Point rhs)
+    {
+        return Distance(rhs.x, rhs.y);
+    }
+
+    public double Distance(int x, int y)
+    {
+        return Math.Sqrt(Math.Pow(x - this.x, 2) + Math.Pow(y - this.y, 2));
+    }
 
     public Point Invert()
     {
@@ -65,20 +89,20 @@ public class Point {
     }
 
     public bool isZero()
-	{
-		return x == 0 && y == 0;	
-	}
-	
-	public override string ToString ()
-	{
-		return "(" + x + "," + y + ")";
-	}
-	
-	public Point reduce()
-	{
-		int gcd = Nifty.GCD(x, y);
-		return new Point(x / gcd, y / gcd);
-	}
+    {
+        return x == 0 && y == 0;
+    }
+
+    public override string ToString()
+    {
+        return "(" + x + "," + y + ")";
+    }
+
+    public Point Reduce()
+    {
+        int gcd = Nifty.GCD(x, y);
+        return new Point(x / gcd, y / gcd);
+    }
 
     public void Take(out int x, out int y)
     {
@@ -103,7 +127,7 @@ public class Point {
 
         hash = 5 * hash + x;
         hash = 11 * hash + y;
-        
+
         return hash;
     }
 
@@ -120,5 +144,10 @@ public class Point {
         tmp.x -= p2.x;
         tmp.y -= p2.y;
         return tmp;
+    }
+
+    public static Point operator -(Point p1)
+    {
+        return new Point(-p1.x, -p1.y);
     }
 }

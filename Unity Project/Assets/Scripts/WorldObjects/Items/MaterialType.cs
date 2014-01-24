@@ -5,13 +5,13 @@ using XML;
 public class MaterialType : IXmlParsable, INamed
 {
     public string Name { get; set; }
-    public bool Oxidizes { get; set; }
-    public bool Burns { get; set; }
-    public int Hardness { get; set; }
-    public int MeltingPoint { get; set; }
+    public bool Oxidizes;
+    public bool Burns;
+    public int Hardness;
+    public int MeltingPoint;
 
     private float[] density = new float[3];
-    public float Density { get; set; }
+    public float Density;
 
     public void ParseXML(XMLNode x)
     {

@@ -5,29 +5,33 @@ using System.Collections.Generic;
 public class Level : IEnumerable<Value2D<GridSpace>>
 {
     protected LevelLayout Layout { get; private set; }
-    public bool Populated { get; set; }
-    public GridSpace[,] Array { get; protected set; }
-    private List<RoomMap> roomMaps = new List<RoomMap>();
-    private MultiMap<RoomMap> roomMapping = new MultiMap<RoomMap>();
+    public bool Populated;
+    public Array2D<GridSpace> Array { get; protected set; }
+    public List<Container2D<GridType>> RoomMaps = new List<Container2D<GridType>>();
+    private MultiMap<Container2D<GridType>> roomMapping = new MultiMap<Container2D<GridType>>(); // floor space to roommap
+    public Point UpStartPoint;
+    public Point DownStartPoint;
     public Theme Theme { get; protected set; }
 
     public Level(LevelLayout layout, Theme theme)
     {
         Layout = layout;
-        Array = GridSpace.Convert(layout.GetArray());
+        Array = GridSpace.Convert(layout.Grids);
         LoadRoomMaps();
         Theme = theme;
+        UpStartPoint = layout.UpStart;
+        DownStartPoint = layout.DownStart;
     }
 
     private void LoadRoomMaps()
     {
         foreach (LayoutObjectLeaf room in Layout.GetRooms())
         {
-            RoomMap roomMap = new RoomMap(room, Array);
-            roomMaps.Add(roomMap);
-            foreach (Value2D<GridSpace> floor in roomMap)
+            MultiMap<GridType> roomMap = new MultiMap<GridType>(room.Grids, room.ShiftP);
+            RoomMaps.Add(roomMap);
+            foreach (Value2D<GridType> floor in room.Grids)
             {
-                roomMapping[floor.x, floor.y] = roomMap;
+                roomMapping[floor.x + room.ShiftP.x, floor.y + room.ShiftP.y] = room.Grids;
             }
         }
     }
@@ -36,13 +40,13 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     {
         get
         {
-            if (x < Array.GetLength(1) && y < Array.GetLength(0))
+            if (x < Array.Width && y < Array.Height)
             {
-                GridSpace space = Array[y, x];
+                GridSpace space = Array[x, y];
                 if (space == null)
                 { // Create empty gridspace
-                    space = new GridSpace(GridType.NULL);
-                    Array[y, x] = space;
+                    space = new GridSpace(GridType.NULL, x, y);
+                    Array[x, y] = space;
                     return space;
                 }
                 return space;
@@ -51,15 +55,34 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         }
     }
 
+    public GridSpace this[Point p] { get { return this[p.x, p.y]; } }
+
+    public Point CenterShift()
+    {
+        Bounding bound = new Bounding();
+        Array.DrawSquare(
+            new DrawAction<GridSpace>((arr, x, y) =>
+            {
+                return arr[x, y].Type == GridType.NULL;
+            }).IfThen(
+            (arr, x, y) =>
+            {
+                GridSpace gs = arr[x, y];
+                bound.Absorb(gs.X, gs.Y);
+                return true;
+            }));
+        return bound.GetCenter();
+    }
+
     #region ConvenienceFunctions
     public void Put(int x, int y, WorldObject obj)
     {
-        this[x,y].Put(obj);
+        this[x, y].Put(obj);
     }
 
     public void Remove(int x, int y, WorldObject obj)
     {
-        this[x,y].Remove(obj);
+        this[x, y].Remove(obj);
     }
 
     public void Move(WorldObject obj, int xFrom, int yFrom, int xTo, int yTo)
@@ -70,42 +93,42 @@ public class Level : IEnumerable<Value2D<GridSpace>>
 
     public bool Accept(int x, int y, WorldObject obj)
     {
-        return this[x,y].Accept(obj);
+        return this[x, y].Accept(obj);
     }
 
     public bool IsBlocked(int x, int y)
     {
-        return this[x,y].IsBlocked();
+        return this[x, y].IsBlocked();
     }
 
     public bool HasNonBlocking(int x, int y)
     {
-        return this[x,y].HasNonBlocking();
+        return this[x, y].HasNonBlocking();
     }
 
     public bool HasObject(int x, int y)
     {
-        return this[x,y].HasObject();
+        return this[x, y].HasObject();
     }
 
     public bool IsEmpty(int x, int y)
     {
-        return this[x,y].IsEmpty();
+        return this[x, y].IsEmpty();
     }
 
     public List<WorldObject> GetContained(int x, int y)
     {
-        return this[x,y].GetContained();
+        return this[x, y].GetContained();
     }
 
     public List<WorldObject> GetFreeObjects(int x, int y)
     {
-        return this[x,y].GetFreeObjects();
+        return this[x, y].GetFreeObjects();
     }
 
     public List<WorldObject> GetBlockingObjects(int x, int y)
     {
-        return this[x,y].GetBlockingObjects();
+        return this[x, y].GetBlockingObjects();
     }
     #endregion
 
@@ -113,23 +136,8 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     {
         if (BigBoss.Debug.logging(log))
         {
-            GridArray ga = this;
-            ga.ToLog(log, customContent);
+            Array.ToLog(log, customContent);
         }
-    }
-
-    public static implicit operator GridArray(Level lev)
-    {
-        GridType[,] ret = new GridType[lev.Array.GetLength(0), lev.Array.GetLength(1)];
-        for (int y = 0; y < lev.Array.GetLength(0); y++)
-        {
-            for (int x = 0; x < lev.Array.GetLength(1); x++)
-            {
-                if (lev.Array[y, x] != null)
-                    ret[y, x] = lev.Array[y, x];
-            }
-        }
-        return new GridArray(ret);
     }
 
     public MultiMap<GridSpace> GetArea(Bounding bounds)
@@ -140,7 +148,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         {
             for (int x = inBound.XMin; x < inBound.XMax; x++)
             {
-                GridSpace space = Array[y, x];
+                GridSpace space = this[x, y];
                 if (space != null)
                     ret[x, y] = space;
             }
@@ -148,35 +156,9 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return ret;
     }
 
-    public IEnumerable<GridSpace> Iterate()
-    {
-        for (int y = 0; y < Array.GetLength(0); y++)
-        {
-            for (int x = 0; x < Array.GetLength(1); x++)
-            {
-                GridSpace space = Array[y, x];
-                if (space != null)
-                    yield return space;
-            }
-        }
-    }
-
-    public List<RoomMap> GetRooms()
-    {
-        return roomMaps;
-    }
-
     public IEnumerator<Value2D<GridSpace>> GetEnumerator()
     {
-        for (int y = 0; y < Array.GetLength(0); y++)
-        {
-            for (int x = 0; x < Array.GetLength(1); x++)
-            {
-                GridSpace space = Array[y, x];
-                if (space != null)
-                    yield return new Value2D<GridSpace>(x, y, Array[y, x]);
-            }
-        }
+        return Array.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()

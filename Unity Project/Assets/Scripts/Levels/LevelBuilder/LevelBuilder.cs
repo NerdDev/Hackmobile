@@ -29,17 +29,6 @@ public class LevelBuilder : MonoBehaviour
         return obj;
     }
 
-    public void Build(GridSpace[,] array)
-    {
-        for (int y = 0; y < array.GetLength(0); y++)
-        {
-            for (int x = 0; x < array.GetLength(0); x++)
-            {
-                Build(array[y,x], x, y);
-            }
-        }
-    }
-
     public void Combine()
     {
         StaticBatchingUtility.Combine(holder);

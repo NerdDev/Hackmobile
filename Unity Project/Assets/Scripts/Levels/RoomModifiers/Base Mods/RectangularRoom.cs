@@ -20,7 +20,10 @@ public class RectangularRoom : RoomModifier
             BigBoss.Debug.w(Logs.LevelGen, "Height: " + height + ", Width: " + width);
         }
         #endregion
-        spec.Array.DrawSquare(width, height, new StrokedAction<GridType>()
+        Point center = spec.Grids.Center;
+        int left = center.x - (width / 2);
+        int bottom = center.y - (height / 2);
+        spec.Grids.DrawSquare(left, left + width, bottom, bottom + height, new StrokedAction<GridType>()
             {
                 UnitAction = Draw.SetTo(GridType.Floor),
                 StrokeAction = Draw.SetTo(GridType.Wall)
@@ -28,7 +31,7 @@ public class RectangularRoom : RoomModifier
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
+            BigBoss.Debug.printFooter(Logs.LevelGen, ToString());
         }
         #endregion
         return true;

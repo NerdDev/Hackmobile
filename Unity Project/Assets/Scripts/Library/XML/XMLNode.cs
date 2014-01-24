@@ -20,12 +20,12 @@ namespace XML
         const string ENDCOMMENT = "-->";
         #endregion
 
-        public string Key { get; set; }
+        public string Key;
         public List<XMLNode> Children { get; protected set; }
         public XMLNode Parent { get; protected set; }
         public string Name { get { return SelectString("name"); } }
-        public string Content { get; set; }
-        public int Depth { get; set; }
+        public string Content;
+        public int Depth;
 
         public XMLNode(XMLNode parent)
         {

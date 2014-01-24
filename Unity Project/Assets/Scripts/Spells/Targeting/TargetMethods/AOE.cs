@@ -11,7 +11,7 @@ public abstract class AOE : TargetedLocations
 {
     private int radius = 1;
     public int Radius { get { return radius; } set { radius = value; } }
-    public bool RequiresLOS { get; set; }
-    public bool ObjectsBlockLOS { get; set; }
-    public bool RequiresPathTo { get; set; }
+    public bool RequiresLOS;
+    public bool ObjectsBlockLOS;
+    public bool RequiresPathTo;
 }

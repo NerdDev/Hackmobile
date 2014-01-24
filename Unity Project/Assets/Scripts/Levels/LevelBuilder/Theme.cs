@@ -2,9 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class Theme : MonoBehaviour {
-	public GameObject wall;
-	public GameObject door;
-	public GameObject floor;
+	public GameObject Wall;
+	public GameObject Door;
+    public GameObject Floor;
+    public GameObject StairUp;
+    public GameObject StairDown;
+
     public Keywords[] keywords = new Keywords[0];
     private ESFlags<Keywords> keywordFlags;
     public ESFlags<Keywords> Keywords
@@ -19,45 +22,22 @@ public class Theme : MonoBehaviour {
         }
     }
 
-    public GameObject getFloor()
-    {
-        return floor;
-    }
-
-    public GameObject getWall()
-    {
-        return wall;
-    }
-
-    public GameObject getDoor()
-    {
-        return door;
-    }
-
     public GameObject Get(GridType t)
     {
         switch (t)
         {
             case GridType.Door:
-                return getDoor();
+                return Door;
             case GridType.Wall:
-                return getWall();
-            case GridType.Floor:
-                return getFloor();
-            case GridType.Path_Horiz:
-                return getFloor();
-            case GridType.Path_Vert:
-                return getFloor();
-            case GridType.Path_RT:
-                return getFloor();
-            case GridType.Path_RB:
-                return getFloor();
-            case GridType.Path_LT:
-                return getFloor();
-            case GridType.Path_LB:
-                return getFloor();
+                return Wall;
+            case GridType.StairUp:
+                return StairUp;
+            case GridType.StairDown:
+                return StairDown;
+            case GridType.NULL:
+                return null;
             default:
-                return getFloor();
+                return Floor;
         }
     }
 

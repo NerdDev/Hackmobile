@@ -19,4 +19,9 @@ public class Counter
     {
         return c._count;
     }
+
+    public override string ToString()
+    {
+        return Count.ToString();
+    }
 }

@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 95: {fileID: 9500000}
   m_Layer: 0
-  m_Name: Stairs
+  m_Name: StairsUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: fe279a0fc79e71c41969ff04b4f591fb, type: 2}
+  - {fileID: -1262342082, guid: 8dc76b6d3014cdc4c87aae0d94a3a969, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0

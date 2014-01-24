@@ -13,29 +13,16 @@ class TreasureRoomMod : RoomModifier
         Bounding bounds = room.GetBounding(true);
         int centerX = (bounds.XMin + bounds.XMax) / 2;
         int centerY = (bounds.YMin + bounds.YMax) / 2;
-        for (int y = centerY - 2; y <= centerY + 2; y++)
+        room.Grids.DrawSquare(centerX, centerY, 2, new StrokedAction<GridType>()
         {
-            room.put(GridType.Wall, centerX - 2, y);
-            room.put(GridType.Wall, centerX + 2, y);
-        }
-        for (int x = centerX - 2; x <= centerX + 2; x++)
-        {
-            room.put(GridType.Wall, x, centerY - 2);
-            room.put(GridType.Wall, x, centerY + 2);
-        }
-        for (int x = centerX - 1; x <= centerX + 1; x++)
-        {
-            for (int y = centerY - 1; y <= centerY + 1; y++)
-            {
-                room.put(GridType.Floor, x, y);
-            }
-        }
-        room.put(GridType.Door, centerX, centerY + 2);
-        room.put(GridType.Door, centerX, centerY - 2);
-        room.put(GridType.Door, centerX + 2, centerY);
-        room.put(GridType.Door, centerX - 2, centerY);
-        room.put(GridType.Chest, centerX, centerY);
-
+            StrokeAction = Draw.SetTo(GridType.Wall),
+            UnitAction = Draw.SetTo(GridType.Floor)
+        });
+        room.Grids[centerX, centerY + 2] = GridType.Door;
+        room.Grids[centerX, centerY - 2] = GridType.Door;
+        room.Grids[centerX + 2, centerY] = GridType.Door;
+        room.Grids[centerX - 2, centerY] = GridType.Door;
+        room.Grids[centerX, centerY] = GridType.Chest;
         return true;
     }
 

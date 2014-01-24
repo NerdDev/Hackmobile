@@ -79,7 +79,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             {
                 BigBoss.Debug.w(log, (cont.Multiplier / max * 100) + "% - " + cont.Multiplier + " - " + cont.Multiplier + " - " + cont.Item);
             }
-            BigBoss.Debug.printFooter(log);
+            BigBoss.Debug.printFooter(log, "Probability List - " + name);
         }
     }
 

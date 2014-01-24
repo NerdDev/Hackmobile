@@ -52,8 +52,8 @@ public class NPC : Affectable
     private float _rotationSpeed = .5f;  //temporarily hard-coded
     public float NPCRotationSpeed { get { return _rotationSpeed; } }
 
-    public Vector3 CurrentOccupiedGridCenterWorldPoint { get; set; }
-    public Vector3 LastOccupiedGridCenterWorldPoint { get; set; }
+    public Vector3 CurrentOccupiedGridCenterWorldPoint;
+    public Vector3 LastOccupiedGridCenterWorldPoint;
 
     bool moving; //stores moving condition
     protected bool verticalMoving;

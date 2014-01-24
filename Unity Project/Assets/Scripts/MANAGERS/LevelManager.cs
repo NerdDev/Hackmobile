@@ -26,6 +26,12 @@ public class LevelManager : MonoBehaviour, IManager
         Builder.Theme = Theme;
         _levels = new Level[_maxLevels];
         ArrayExt.Converters.Add(typeof(GridType), (b) => { return GridTypeEnum.Convert((GridType)b); });
+        ArrayExt.Converters.Add(typeof(GridSpace), (b) => 
+        {
+            GridSpace s = b as GridSpace;
+            if (s == null) return GridTypeEnum.Convert(GridType.NULL);
+            return GridTypeEnum.Convert(((GridSpace)b).Type); 
+        });
         if (Seed == -1)
             Seed = Probability.Rand.Next();
         System.Random rand = new System.Random(Seed);
@@ -54,6 +60,7 @@ public class LevelManager : MonoBehaviour, IManager
         Destroy(Level);
         Level level;
         GetLevel(depth, out level);
+        level.ToLog(Logs.Main, "Setting level to");
         CurLevelDepth = depth;
         Deploy(level);
         Level = level;
@@ -77,7 +84,6 @@ public class LevelManager : MonoBehaviour, IManager
             SetCurLevel(CurLevelDepth + 1);
         }
         CurLevel = CurLevelDepth;
-        BigBoss.DungeonMaster.PopulateLevel(Level, up);
     }
 
     public bool GetLevel(int depth, out Level level)
@@ -98,25 +104,25 @@ public class LevelManager : MonoBehaviour, IManager
     void Destroy(Level level)
     {
         if (level == null) return;
-        foreach (GridSpace space in level.Iterate())
+        foreach (Value2D<GridSpace> val in level)
         {
-            //this is temporary as really these objects need stored
-            foreach (WorldObject wo in space.GetBlockingObjects())
+            foreach (WorldObject wo in val.val.GetBlockingObjects())
             {
                 if (wo.IsNotAFreaking<Player>())
                     wo.Destroy();
             }
-            foreach (WorldObject wo in space.GetFreeObjects())
+            foreach (WorldObject wo in val.val.GetFreeObjects())
             {
                 if (wo.IsNotAFreaking<Player>())
                     wo.Destroy();
             }
-            space.SetActive(false);
+            val.val.SetActive(false);
         }
     }
 
     void Deploy(Level level)
     {
+        BigBoss.Debug.w(Logs.LevelGenMain, "Deploying " + level);
         foreach (Value2D<GridSpace> space in level)
         {
             if (space != null)
@@ -129,6 +135,7 @@ public class LevelManager : MonoBehaviour, IManager
                     space.val.SetActive(true);
             }
         }
+        BigBoss.Debug.w(Logs.LevelGenMain, "Deployed " + level);
     }
 
     void GenerateLevels(int num)
@@ -143,11 +150,10 @@ public class LevelManager : MonoBehaviour, IManager
     {
         LevelGenerator gen = new LevelGenerator();
         gen.Theme = GetTheme();
-        gen.GenerateDownStairs = true;
-        gen.GenerateUpStairs = depth != 0;
         gen.Depth = depth;
         gen.Rand = new System.Random(_levelSeeds[depth]);
-        _levels[depth] = new Level(gen.Generate(), gen.Theme);
+        Level level = new Level(gen.Generate(), gen.Theme);
+        _levels[depth] = level;
     }
 
     Theme GetTheme()

@@ -5,76 +5,67 @@ using System;
 
 public class Array2D<T> : Container2D<T>
 {
+    private const int _expandAmount = 10;
+    protected int count;
     protected T[,] arr;
+    protected bool[,] present;
+    Point shift;
 
     #region Ctors
     protected Array2D()
         : base()
     {
+        shift = new Point();
     }
 
     public Array2D(int width, int height)
-        : base()
-    {
-        arr = new T[height, width];
-    }
-
-    public Array2D(int width, int height, Array2D<T> rhs)
-        : this(width, height)
-    {
-        PutAll(rhs);
-    }
-
-    public Array2D(int width, int height, Array2D<T> rhs, Point shift)
-        : this(width, height)
-    {
-        PutAll(rhs, shift);
-    }
-
-    public Array2D(int width, int height, Array2D<T> rhs, int xShift, int yShift)
-        : this(width, height)
-    {
-        PutAll(rhs, xShift, yShift);
-    }
-
-    public Array2D(Bounding bound, bool minimize)
         : this()
     {
-        arr = BoundedArr(bound, minimize);
+        arr = new T[height, width];
+        present = new bool[height, width];
+    }
+
+    public Array2D(Bounding bounds)
+        : this(bounds.Width, bounds.Height)
+    {
+        shift.x = bounds.XMin;
+        shift.y = bounds.YMin;
+    }
+
+    public Array2D(Container2D<T> rhs)
+        : this(rhs.Bounding)
+    {
+        if (rhs is Array2D<T> && shift == null)
+        {
+            Array2D<T> rhsArr = (Array2D<T>)rhs;
+            for (int y = 0; y < rhsArr.Height; y++)
+            {
+                for (int x = 0; x < rhsArr.Width; x++)
+                {
+                    arr[y, x] = rhsArr.arr[y, x];
+                    present[y, x] = rhsArr.present[y, x];
+                }
+            }
+        }
+        else
+        {
+            PutAll(rhs);
+        }
     }
     #endregion
 
-    protected static T[,] BoundedArr(Bounding bound, bool minimize)
+    public override List<string> ToRowStrings()
     {
-        int width = 0;
-        int height = 0;
-        if (bound.IsValid())
-        {
-            if (minimize)
-            {
-                width = bound.Width + 1;
-                height = bound.Height + 1;
-            }
-            else
-            {
-                width = bound.XMax + 1;
-                height = bound.YMax + 1;
-            }
-        }
-        return new T[height, width];
+        return Nifty.AddRuler(arr.ToRowStrings(), Bounding);
     }
 
     #region GetSet
-    protected override T Get(int x, int y)
+    public override bool InRange(int x, int y)
     {
-        if (InRange(x, y))
-        {
-            return arr[y, x];
-        }
-        return default(T);
+        return InRangeInternal(x - shift.x, y - shift.y);
     }
 
-    public override bool InRange(int x, int y)
+    protected bool InRangeInternal(int x, int y)
     {
         return y < arr.GetLength(0)
             && x < arr.GetLength(1)
@@ -82,9 +73,11 @@ public class Array2D<T> : Container2D<T>
             && x >= 0;
     }
 
-    public bool TryGet(int x, int y, out T val)
+    public override bool TryGetValue(int x, int y, out T val)
     {
-        if (InRange(x, y))
+        x -= shift.x;
+        y -= shift.y;
+        if (InRangeInternal(x, y))
         {
             val = arr[y, x];
             return true;
@@ -93,128 +86,148 @@ public class Array2D<T> : Container2D<T>
         return false;
     }
 
-    public int getWidth()
+    public override Array2D<T> Array
     {
-        return arr.GetLength(1);
-    }
-
-    public int getHeight()
-    {
-        return arr.GetLength(0);
-    }
-
-    public override void Put(T val, int x, int y)
-    {
-        if (InRange(x, y))
-            arr[y, x] = val;
-    }
-
-    // Unsafe put that does no checking or expanding
-    protected override void PutInternal(T val, int x, int y)
-    {
-        arr[y, x] = val;
-    }
-
-    public void PutAll(Array2D<T> rhs)
-    {
-        for (int y = 0; y < rhs.arr.GetLength(0); y++)
-        {
-            for (int x = 0; x < rhs.arr.GetLength(1); x++)
-            {
-                Put(rhs.arr[y, x], x, y);
-            }
-        }
-    }
-
-    public void PutAll(Array2D<T> rhs, int additionalXshift, int additionalYshift)
-    {
-        PutAll(rhs.arr, additionalXshift, additionalYshift);
-    }
-
-    public void PutAll(T[,] rhs, int additionalXshift, int additionalYshift)
-    {
-        for (int y = 0; y < rhs.GetLength(0); y++)
-        {
-            for (int x = 0; x < rhs.GetLength(1); x++)
-            {
-                Put(rhs[y, x], x + additionalXshift, y + additionalYshift);
-            }
-        }
-    }
-
-    // Puts in values from another collection with desired shift
-    public void PutAll(Array2D<T> rhs, Point shift)
-    {
-        PutAll(rhs, shift.x, shift.y);
-    }
-
-    // Fills in a row with a desired value
-    public virtual void PutRow(T t, int xl, int xr, int y)
-    {
-        for (; xl <= xr; xl++)
-        {
-            arr[y, xl] = t;
-        }
-    }
-
-    // Fills in a col with a desired value
-    public override void PutCol(T t, int y1, int y2, int x)
-    {
-        for (; y1 <= y2; y1++)
-        {
-            arr[y1, x] = t;
-        }
-    }
-
-    // Gets public bounds of array 
-    // (Expanding equally both directions from the origin)
-    public override Bounding GetBounding()
-    {
-        Bounding ret = new Bounding();
-        ret.XMin = 0;
-        ret.XMax = arr.GetLength(1) - 1;
-        ret.YMin = 0;
-        ret.YMax = arr.GetLength(0) - 1;
-        return ret;
-    }
-
-    public override T[,] GetArr()
-    {
-        return arr;
+        get { return this; }
     }
     #endregion
 
     #region Iteration
-    public IEnumerable<Value2D<T>> IterateNoEdges()
-    {
-        for (int y = 1; y < arr.GetLength(0) - 1; y++)
-        {
-            for (int x = 1; x < arr.GetLength(1) - 1; x++)
-            {
-                var val = new Value2D<T>(x, y, arr[y, x]);
-                yield return val;
-            }
-        }
-    }
-
     public override IEnumerator<Value2D<T>> GetEnumerator()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
             for (int x = 0; x < arr.GetLength(1); x++)
             {
-                var val = new Value2D<T>(x, y, arr[y, x]);
-                yield return val;
+                if (present[y, x])
+                {
+                    var val = new Value2D<T>(x + shift.x, y + shift.y, arr[y, x]);
+                    yield return val;
+                }
             }
         }
     }
+
+    public override bool DrawAll(DrawAction<T> call)
+    {
+        for (int y = 0; y < arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < arr.GetLength(1); x++)
+            {
+                if (present[y, x])
+                {
+                    if (!call(this, x, y)) return false;
+                }
+            }
+        }
+        return true;
+    }
     #endregion
 
-    public static void invert(Array2D<bool> arr)
+    public override T this[int x, int y]
     {
-        foreach (Value2D<bool> val in arr)
+        get
         {
-            arr.Put(!val.val, val.x, val.y);
+            T ret;
+            TryGetValue(x, y, out ret);
+            return ret;
         }
+        set
+        {
+            x -= shift.x;
+            y -= shift.y;
+            if (!InRangeInternal(x, y))
+            {
+                Point expandShift = ExpandToInclude(x, y);
+                x -= expandShift.x;
+                y -= expandShift.y;
+            }
+            arr[y, x] = value;
+            if (present[y, x])
+                count++;
+            present[y, x] = true;
+        }
+    }
+
+    public override int Count { get { return count; } }
+
+    public override Bounding Bounding
+    {
+        get
+        {
+            Bounding ret = new Bounding();
+            ret.XMin = 0 + shift.x;
+            ret.XMax = arr.GetLength(1) - 1 + shift.x;
+            ret.YMin = 0 + shift.y;
+            ret.YMax = arr.GetLength(0) - 1 + shift.y;
+            return ret;
+        }
+    }
+
+    public override bool Contains(int x, int y)
+    {
+        x -= shift.x;
+        y -= shift.y;
+        if (!InRangeInternal(x, y)) return false;
+        return present[y, x];
+    }
+
+    public override bool Remove(int x, int y)
+    {
+        bool contained = Contains(x, y);
+        x -= shift.x;
+        y -= shift.y;
+        arr[y, x] = default(T);
+        if (present[y, x])
+            count--;
+        present[y, x] = false;
+        return contained;
+    }
+
+    public override void Clear()
+    {
+        count = 0;
+        arr = new T[arr.GetLength(0), arr.GetLength(1)];
+        present = new bool[arr.GetLength(0), arr.GetLength(1)];
+    }
+
+    protected Point Expand(int left, int right, int top, int bottom)
+    {
+        if (left == 0 && right == 0 & top == 0 && bottom == 0) return new Point(0,0);
+        T[,] tmp = arr;
+        bool[,] tmpPresent = present;
+        arr = new T[tmp.GetLength(0) + top + bottom, tmp.GetLength(1) + left + right];
+        present = new bool[arr.GetLength(0), arr.GetLength(1)];
+        for (int y = 0; y < tmp.GetLength(0); y++)
+        {
+            for (int x = 0; x < tmp.GetLength(1); x++)
+            {
+                arr[y + bottom, x + left] = tmp[y, x];
+                present[y + bottom, x + left] = tmpPresent[y, x];
+            }
+        }
+        shift.x -= left;
+        shift.y -= bottom;
+        return new Point(-left, -bottom);
+    }
+
+    protected Point ExpandToInclude(int x, int y)
+    {
+        int left = 0, right = 0, top = 0, bottom = 0;
+        if (x < 0)
+            left = 0 - x + _expandAmount;
+        else if (x >= Width)
+            right = x - Width + 1 + _expandAmount;
+        if (y < 0)
+            bottom = 0 - y + _expandAmount;
+        else if (y >= Height)
+            top = y - Height + 1 + _expandAmount;
+        return Expand(left, right, top, bottom);
+    }
+
+    public override Array2DRaw<T> RawArray(out Point shift)
+    {
+        shift = new Point(this.shift);
+        return new Array2DRaw<T>(arr);
     }
 }

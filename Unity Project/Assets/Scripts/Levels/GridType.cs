@@ -10,6 +10,9 @@ public enum GridType
     Wall,
     Door,
     TrapDoor,
+    StairUp,
+    StairDown,
+    StairPlace,
 
     Path_Horiz,
     Path_Vert,
@@ -38,21 +41,27 @@ public class GridTypeEnum
         switch (g)
         {
             case GridType.Floor:
-                return '.';
+                return ' ';
             case GridType.TrapDoor:
                 return 'T';
             case GridType.Trap:
                 return 'X';
             case GridType.Door:
-                return '|';
+                return ':';
             case GridType.SmallLoot:
                 return '$';
             case GridType.Chest:
-                return '=';
+                return (char)227;
             case GridType.Wall:
-                return '#';
+                return (char)178;
+            case GridType.StairUp:
+                return (char)207;
+            case GridType.StairDown:
+                return (char)209;
+            case GridType.StairPlace:
+                return (char)167;
             case GridType.NULL:
-                return ' ';
+                return (char)219;
             case GridType.INTERNAL_RESERVED_BLOCKED:
                 return '*';
             case GridType.INTERNAL_RESERVED_CUR:
@@ -89,6 +98,7 @@ public class GridTypeEnum
             case GridType.Trap:
             case GridType.SmallLoot:
             case GridType.Chest:
+            case GridType.Door:
                 return true;
             default:
                 return false;

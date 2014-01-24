@@ -2,50 +2,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
-public class Value2D<T> {
+public class Value2D<T> : Point {
 
-    public int x { get; set; }
-    public int y { get; set; }
-    public T val { get; set; }
-
+    public T val;
+    
     public Value2D()
+        : base()
     {
     }
 
-    public Value2D(int x_, int y_) : this()
+    public Value2D(int x, int y)
+        : base(x, y)
     {
-        SetPoint(x_, y_);
     }
+
+    public Value2D(float x, float y)
+        : base(x, y)
+    {
+    }
+	
+	public Value2D(Vector2 vect) 
+        : base(vect)
+	{
+	}
+	
+	public Value2D (Point rhs) 
+        : base(rhs)
+	{
+			
+	}
 
     public Value2D(int x_, int y_, T val_) : this(x_, y_)
     {
         val = val_;
     }
 
-    public void SetPoint(int x_, int y_)
+    public Value2D(Value2D<T> rhs)
+        : base(rhs)
     {
-        x = x_;
-        y = y_;
-    }
-
-    public Value2D<T> Shift(Point shift)
-    {
-        return Shift(shift.x, shift.y);
-    }
-
-    public Value2D<T> Unshift(Point shift)
-    {
-        return Unshift(shift.x, shift.y);
-    }
-
-    public Value2D<T> Shift(int shiftx, int shifty)
-    {
-        return new Value2D<T>(x + shiftx, y + shifty, val);
-    }
-
-    public Value2D<T> Unshift(int shiftx, int shifty)
-    {
-        return Shift(-shiftx, -shifty);
+        val = rhs.val;
     }
 
     public override string ToString()
@@ -53,17 +48,14 @@ public class Value2D<T> {
         return "Value2D (" + x + "," + y + ", " + val + ")";
     }
 
-    protected bool Equals(Value2D<T> other)
-    {
-        return x == other.x && y == other.y && EqualityComparer<T>.Default.Equals(val, other.val);
-    }
-
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((Value2D<T>) obj);
+        Value2D<T> rhs = obj as Value2D<T>;
+        if (rhs == null) return false;
+        if (x != rhs.x || y != rhs.y) return false;
+        if (val == null) return rhs.val == null;
+        if (rhs.val == null) return false;
+        return val.Equals(rhs.val);
     }
 
     public override int GetHashCode()
@@ -85,10 +77,5 @@ public class Value2D<T> {
     public static bool operator !=(Value2D<T> left, Value2D<T> right)
     {
         return !Equals(left, right);
-    }
-
-    public static implicit operator Point(Value2D<T> val)
-    {
-        return new Point(val.x, val.y);
     }
 }

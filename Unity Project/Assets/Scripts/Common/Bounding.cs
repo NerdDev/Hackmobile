@@ -7,19 +7,22 @@ public class Bounding
 
     private static int max = Int32.MaxValue / 2;
     private static int min = Int32.MinValue / 2;
-    public int XMin { get; set; }
-    public int XMax { get; set; }
-    public int YMin { get; set; }
-    public int YMax { get; set; }
-	public int Width {
-		get { return XMax - XMin; }
-	}
-	public int Height {
-		get { return YMax - YMin; }
-	}
-	public int Area {
-		get { return Width * Height; }
-	}
+    public int XMin;
+    public int XMax;
+    public int YMin;
+    public int YMax;
+    public int Width
+    {
+        get { return XMax - XMin + 1; }
+    }
+    public int Height
+    {
+        get { return YMax - YMin + 1; }
+    }
+    public int Area
+    {
+        get { return Width * Height; }
+    }
 
     #region Ctors
     public Bounding()
@@ -39,10 +42,10 @@ public class Bounding
     }
 
     public Bounding(Point leftdownOrigin, int width, int height)
-        : this (leftdownOrigin.x, leftdownOrigin.x + width - 1, 
+        : this(leftdownOrigin.x, leftdownOrigin.x + width - 1,
         leftdownOrigin.y, leftdownOrigin.y + height - 1)
     {
-        
+
     }
 
     public Bounding(Bounding rhs)
@@ -55,34 +58,34 @@ public class Bounding
     {
         return XMin > min && XMin < max;
     }
-	
-	public Point GetCenter()
-	{
-		if (IsValid())
-			return new Point(XMin + Width / 2, YMin + Height / 2);
-		else
-			return new Point();
-	}
-	
+
+    public Point GetCenter()
+    {
+        if (IsValid())
+            return new Point(XMin + Width / 2, YMin + Height / 2);
+        else
+            return new Point();
+    }
+
     #region Absorbs
-    public void absorb(int x, int y)
+    public void Absorb(int x, int y)
     {
-        absorbX(x);
-        absorbY(y);
+        AbsorbX(x);
+        AbsorbY(y);
     }
 
-    public void absorb<T>(Value2D<T> val)
+    public void Absorb(Point val)
     {
-        absorb(val.x, val.y);
+        Absorb(val.x, val.y);
     }
-	
-	public void absorb(Bounding rhs)	
-	{
-		absorb(rhs.XMin, rhs.YMin);
-		absorb(rhs.XMax, rhs.YMax);
-	}
 
-    public void absorbX(int x)
+    public void Absorb(Bounding rhs)
+    {
+        Absorb(rhs.XMin, rhs.YMin);
+        Absorb(rhs.XMax, rhs.YMax);
+    }
+
+    public void AbsorbX(int x)
     {
         if (XMin > x)
         {
@@ -94,7 +97,7 @@ public class Bounding
         }
     }
 
-    public void absorbY(int y)
+    public void AbsorbY(int y)
     {
         if (YMin > y)
         {
@@ -195,11 +198,11 @@ public class Bounding
         IntersectingDimensions(rhs, out width, out height);
 
         // If either x or y intersect is negative, there's no intersection
-		if (width > 0 && height > 0)
-		{
-			return width * height;
-		}
-		return 0;
+        if (width > 0 && height > 0)
+        {
+            return width * height;
+        }
+        return 0;
     }
 
     public bool Intersects(Bounding rhs)
@@ -230,14 +233,14 @@ public class Bounding
     }
 
     // Gets center point of intersecting bounds
-    public Point GetCenterPoint(Bounding rhs)
+    public Point GetIntersectCenter(Bounding rhs)
     {
         Bounding intersection = IntersectBounds(rhs);
         return intersection.GetCenter();
     }
     #endregion Intersects
 
-    public void expand(int amount)
+    public Bounding Expand(int amount)
     {
         if (IsValid())
         {
@@ -246,6 +249,7 @@ public class Bounding
             XMin -= amount;
             YMin -= amount;
         }
+        return this;
     }
 
     public Point GetShiftNonNeg(int buffer)
@@ -286,6 +290,21 @@ public class Bounding
         Shift(GetShiftNonNeg());
     }
 
+    public bool Contains(int x, int y)
+    {
+        return x >= XMin && x <= XMax && y >= YMin && y <= YMax;
+    }
+
+    public bool Contains(Bounding rhs)
+    {
+        return XMin < rhs.XMin && XMax > rhs.XMax && YMin < rhs.YMin && YMax > rhs.YMax;
+    }
+
+    public Bounding InBounds<T>(Container2D<T> arr)
+    {
+        return IntersectBounds(arr.Bounding);
+    }
+
     public Bounding InBounds<T>(T[,] arr)
     {
         return IntersectBounds(arr.GetBounds());
@@ -299,6 +318,64 @@ public class Bounding
     public int GetMax(bool horiz)
     {
         return horiz ? XMax : YMax;
+    }
+
+    public void DistanceTo(Point p, out double closestDist, out double farthestDist)
+    {
+        if (p.x < XMin)
+        { // On left
+            if (p.y < YMin)
+            { // Bottom left
+                closestDist = p.Distance(XMin, YMin);
+                farthestDist = p.Distance(XMax, YMax);
+            }
+            else if (p.y > YMin)
+            { // Top left
+                closestDist = p.Distance(XMin, YMax);
+                farthestDist = p.Distance(XMax, YMin);
+            }
+            else
+            { // Left
+                closestDist = XMin - p.x;
+                farthestDist = XMax - p.x;
+            }
+        }
+        else if (p.x > XMax)
+        { // On right
+            if (p.y < YMin)
+            { // Bottom right
+                closestDist = p.Distance(XMax, YMin);
+                farthestDist = p.Distance(XMin, YMax);
+            }
+            else if (p.y > YMin)
+            { // Top right
+                closestDist = p.Distance(XMax, YMax);
+                farthestDist = p.Distance(XMin, YMin);
+            }
+            else
+            { // right
+                closestDist = p.x - XMax;
+                farthestDist = p.x - XMin;
+            }
+        }
+        else
+        { // Inside horizontally
+            if (p.y < YMin)
+            { // Bottom
+                closestDist = YMin - p.y;
+                farthestDist = YMax - p.y;
+            }
+            else if (p.y > YMin)
+            { // Top
+                closestDist = p.y - YMax;
+                farthestDist = p.y - YMin;
+            }
+            else
+            { // Inside Vertically
+                closestDist = -1;
+                farthestDist = -1;
+            }
+        }
     }
 
     #region Printing

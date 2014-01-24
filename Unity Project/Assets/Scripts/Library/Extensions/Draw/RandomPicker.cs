@@ -5,25 +5,16 @@ using System.Text;
 
 public class RandomPicker<T>
 {
-    private T[,] _arr;
     private readonly Container2D<T> _options;
 
-    public RandomPicker(T[,] arr)
+    public RandomPicker()
     {
-        _arr = arr;
-        if (arr.Length >= 2025) //45 * 45
-        {
-            _options = new MultiMap<T>();
-        }
-        else
-        {
-            _options = new ArrayMultiMap<T>(arr.GetLength(0), arr.GetLength(1));
-        }
+        _options = new MultiMap<T>();
     }
 
-    public bool DrawingAction(T[,] arr, int x, int y)
+    public bool DrawingAction(Container2D<T> arr, int x, int y)
     {
-        _options.Put(arr[y, x], x, y);
+        _options[x, y] = arr[x, y];
         return true;
     }
 
@@ -39,13 +30,13 @@ public class RandomPicker<T>
         return list[0];
     }
 
-    public void ToLog(Logs logs, params string[] customContent)
+    public void ToLog(Logs logs, Container2D<T> orig, params string[] customContent)
     {
         BigBoss.Debug.printHeader(logs, "Random Picker");
-        var tmp = new T[_arr.GetLength(0), _arr.GetLength(1)];
+        var tmp = new T[orig.Height, orig.Width];
         foreach (Value2D<T> val in _options)
             tmp[val.y, val.x] = val.val;
         tmp.ToLog(logs, customContent);
-        BigBoss.Debug.printFooter(logs);
+        BigBoss.Debug.printFooter(logs, "Random Picker");
     }
 }

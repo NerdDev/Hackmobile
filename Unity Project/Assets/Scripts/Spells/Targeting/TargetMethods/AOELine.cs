@@ -9,8 +9,8 @@ using System.Text;
 
 public class AOELine : AOE
 {
-    public bool IncludeCaster { get; set; }
-    public bool IncludeEndPoint { get; set; }
+    public bool IncludeCaster;
+    public bool IncludeEndPoint;
     public override HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
     {
         // Logic to draw line in any direction

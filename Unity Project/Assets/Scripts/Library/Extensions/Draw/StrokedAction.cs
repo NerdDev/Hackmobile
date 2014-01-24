@@ -5,8 +5,8 @@ using System.Text;
 
 public class StrokedAction<T>
 {
-    public virtual DrawActionCall<T> UnitAction { get; set; }
-    public virtual DrawActionCall<T> StrokeAction { get; set; }
+    public DrawAction<T> UnitAction;
+    public DrawAction<T> StrokeAction;
 
     public StrokedAction()
     {
@@ -18,13 +18,7 @@ public class StrokedAction<T>
         return new StrokedAction<T>() { UnitAction = normalFunc };
     }
 
-    public static implicit operator StrokedAction<T>(DrawActionCall<T> normalFunc)
-    {
-        if (normalFunc == null) return null;
-        return new StrokedAction<T>() { UnitAction = normalFunc };
-    }
-
-    public static explicit operator DrawAction<T>(StrokedAction<T> actions)
+    public static implicit operator DrawAction<T>(StrokedAction<T> actions)
     {
         return actions.UnitAction;
     }
@@ -34,8 +28,8 @@ public class StrokedAction<T>
         if (rhs == null) return rhs;
         return new StrokedAction<T>()
         {
-            UnitAction = ((DrawAction<T>)UnitAction).Then(rhs.UnitAction),
-            StrokeAction = ((DrawAction<T>)StrokeAction).Then(rhs.StrokeAction)
+            UnitAction = ((DrawAction<T>)UnitAction).And(rhs.UnitAction),
+            StrokeAction = ((DrawAction<T>)StrokeAction).And(rhs.StrokeAction)
         };
     }
 }

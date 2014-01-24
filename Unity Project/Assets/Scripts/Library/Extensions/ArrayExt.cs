@@ -19,7 +19,7 @@ public static class ArrayExt
 
     public static Bounding GetBounds<T>(this T[,] arr)
     {
-        return new Bounding(0, arr.GetLength(1), 0, arr.GetLength(0));
+        return new Bounding(0, arr.GetLength(1) - 1, 0, arr.GetLength(0) - 1);
     }
 
     public static T Random<T>(this T[] arr, System.Random rand)
@@ -59,6 +59,8 @@ public static class ArrayExt
             {
                 converter = new Func<T, char>((t) =>
                     {
+                        if (t == null)
+                            return ' ';
                         string str = t.ToString();
                         return str.Length > 0 ? str[0] : ' ';
                     });
@@ -142,6 +144,19 @@ public static class ArrayExt
     {
         T[,] ret = new T[array.GetLength(0), array.GetLength(1)];
         Array.Copy(array, ret, array.Length);
+        return ret;
+    }
+
+    public static T[,] Expand<T>(this T[,] array, int buffer)
+    {
+        T[,] ret = new T[array.GetLength(0) + 2 * buffer, array.GetLength(1) + 2 * buffer];
+        for (int y = 0; y < array.GetLength(0); y++)
+        {
+            for (int x = 0; x < array.GetLength(1); x++)
+            {
+                ret[y + buffer, x + buffer] = array[y, x];
+            }
+        }
         return ret;
     }
 }
