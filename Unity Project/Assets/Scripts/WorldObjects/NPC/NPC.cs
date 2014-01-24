@@ -19,7 +19,9 @@ public class NPC : Affectable
         //IsActive = true;
         if (IsActive)
         {
-            UpdateCurrentTileVectors();
+            GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
+            GridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
+            GridSpace.Put(this);
         }
     }
 
@@ -355,19 +357,13 @@ public class NPC : Affectable
         return true;
     }
 
+    
     protected virtual bool UpdateCurrentTileVectors()
     {
-        if (GridSpace != null)
-        {
-            GridSpace.Remove(this);
-        }
-        GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
-        GridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
-        GridSpace.Put(this);
-        CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
+        CurrentOccupiedGridCenterWorldPoint = new Vector3(GridSpace.X, -.5f + verticalOffset, GridSpace.Y);
         return true;
     }
-
+    
     public PathTree getPathTree(GridSpace dest)
     {
         PathTree path = new PathTree(GridSpace, dest);
@@ -446,13 +442,13 @@ public class NPC : Affectable
 
     public void MoveNPC(GridSpace node)
     {
-        GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
-        if (!grid.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
+        //GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
+        if (!node.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
         {
             int xmove = GridSpace.X - node.X;
             int ymove = GridSpace.Y - node.Y;
-            GridSpace.Remove(this);
-            GridSpace = BigBoss.Levels.Level[node.X, node.Y];
+            if (GridSpace != null) GridSpace.Remove(this);
+            GridSpace = node;
             GridSpace.Put(this);
             MoveNPC(xmove, ymove);
         }
