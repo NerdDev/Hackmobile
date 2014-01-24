@@ -27,7 +27,6 @@ public class StartManager : MonoBehaviour, IManager
             Destroy(go);
         }
         yield return new WaitForSeconds(.01f);
-        BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level, false);
         BigBoss.Gooey.OpenInventoryGUI();
         BigBoss.Gooey.CloseLoading();
         BigBoss.Levels.SetCurLevel(0);

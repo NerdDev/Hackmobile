@@ -189,9 +189,6 @@ public class LevelGenerator
             #endregion
         }
         #region DEBUG
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen);
-        }
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
             foreach (LayoutObjectLeaf room in Rooms)

@@ -18,8 +18,6 @@ public class LevelManager : MonoBehaviour, IManager
     public LevelBuilder Builder;
     public int Seed = -1;
 
-    public int CurLevel;
-
     public void Initialize()
     {
         RoomModifier.RegisterModifiers();
@@ -69,21 +67,17 @@ public class LevelManager : MonoBehaviour, IManager
 
     public void SetCurLevel(bool up)
     {
-        if (up && CurLevelDepth > 0)
+        if (up)
         {
-            SetCurLevel(CurLevelDepth - 1);
-        }
-        else if (up)
-        {
-            //do nothing, these stairs do not go anywhere
-            CurLevel = CurLevelDepth;
-            return;
+            if (CurLevelDepth > 0)
+            {
+                SetCurLevel(CurLevelDepth - 1);
+            }
         }
         else
         {
             SetCurLevel(CurLevelDepth + 1);
         }
-        CurLevel = CurLevelDepth;
     }
 
     public bool GetLevel(int depth, out Level level)
