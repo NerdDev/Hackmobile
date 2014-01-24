@@ -99,6 +99,7 @@ public class GridTypeEnum
             case GridType.SmallLoot:
             case GridType.Chest:
             case GridType.Door:
+            case GridType.StairPlace:
                 return true;
             default:
                 return false;

@@ -223,7 +223,7 @@ public class Player : NPC
     {
         GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
         GridSpace newGridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
-        if (!newGridSpace.IsBlocked() && newGridSpace.Type == GridType.Floor)
+        if (!newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
         {
             if (GridSpace != null && GridSpace != null)
             {
