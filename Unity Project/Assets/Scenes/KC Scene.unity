@@ -972,7 +972,6 @@ MonoBehaviour:
   Theme: {fileID: 11400000, guid: 631dbf33a897fc14f88db2d53201f711, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
   Seed: 10
-  CurLevel: 0
 --- !u!1 &302477827
 GameObject:
   m_ObjectHideFlags: 0
