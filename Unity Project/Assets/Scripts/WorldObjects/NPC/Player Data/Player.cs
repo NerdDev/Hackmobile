@@ -156,23 +156,25 @@ public class Player : NPC
 
     private void movement()
     {
-        Vector3 lookVectorToOccupiedTile = CurrentOccupiedGridCenterWorldPoint - GO.transform.position;
-        Debug.DrawLine(GO.transform.position + Vector3.up, CurrentOccupiedGridCenterWorldPoint, Color.green);
-
-        //If distance is greater than 1.3 (var), pass turn
-        if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
+        if (GridSpace != null)
         {
-            if (UpdateCurrentTileVectors())
+            Vector3 lookVectorToOccupiedTile = new Vector3(GridSpace.X, GO.transform.position.y, GridSpace.Y) - GO.transform.position;
+            Debug.DrawLine(GO.transform.position + Vector3.up, new Vector3(GridSpace.X, -.5f, GridSpace.Y), Color.green);
+
+            //If distance is greater than 1.3 (var), pass turn
+            if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
             {
-                // Needs to be reactivated later when turn manager is revamped
-                //BigBoss.Time.PassTurn(60);
+                if (UpdateCurrentTileVectors())
+                {
+                    // Needs to be reactivated later when turn manager is revamped
+                    //BigBoss.Time.PassTurn(60);
+                }
             }
+
+            //Moving toward closest center point if player isn't moving with input:
+            resetToGrid(lookVectorToOccupiedTile);
+            Debug.DrawRay(new Vector3(GridSpace.X, -.5f, GridSpace.Y), Vector3.up, Color.yellow);
         }
-
-        //Moving toward closest center point if player isn't moving with input:
-        resetToGrid(lookVectorToOccupiedTile);
-
-        Debug.DrawRay(CurrentOccupiedGridCenterWorldPoint, Vector3.up, Color.yellow);
     }
 
     private void resetToGrid(Vector3 lookVectorToOccupiedTile)
@@ -186,7 +188,7 @@ public class Player : NPC
             }
             if (UnityEngine.Time.time > timePassed)
             {
-                if (!checkPosition(GO.transform.position, CurrentOccupiedGridCenterWorldPoint))
+                if (!checkXYPosition(GO.transform.position, new Vector3(GridSpace.X, 0f, GridSpace.Y)))
                 {
                     MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime, .75f, .25f);
                     isMoving = true;
@@ -211,7 +213,7 @@ public class Player : NPC
 
     private void resetPosition()
     {
-        GO.transform.position = CurrentOccupiedGridCenterWorldPoint;
+        GO.transform.position = new Vector3(GridSpace.X, GO.transform.position.y, GridSpace.Y);
     }
 
     public void MovePlayer(Vector3 heading)
@@ -221,16 +223,10 @@ public class Player : NPC
 
     protected override bool UpdateCurrentTileVectors()
     {
-        GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
-        GridSpace newGridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
+        Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
+        GridSpace newGridSpace = BigBoss.Levels.Level[currentLoc.x.ToInt(), currentLoc.y.ToInt()];
         if (!newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
         {
-            if (GridSpace != null && GridSpace != null)
-            {
-                GridSpace.Remove(this);
-            }
-            newGridSpace.Put(this);
-            CurrentOccupiedGridCenterWorldPoint = new Vector3(GridCoordinate.x, -.5f + verticalOffset, GridCoordinate.y);
             GridSpace = newGridSpace;
             BigBoss.Gooey.CheckChestDistance();
             return true;
@@ -280,9 +276,6 @@ public class Player : NPC
         }
         anim.SetFloat("runSpeed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis
         currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
-        //		if(anim.layerCount ==2)		
-        //			layer2CurrentState = anim.GetCurrentAnimatorStateInfo(1);	// set our layer2CurrentState variable to the current state of the second Layer (1) of animation
-
     }
 
     #region MECANIM EXAMPLE SCRIPT

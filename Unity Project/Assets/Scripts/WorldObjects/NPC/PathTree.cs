@@ -6,7 +6,8 @@ using System.Text;
 
 public class PathTree
 {
-    static PathNode[,] Arr = new PathNode[200, 200];
+    static Array2D<PathNode> Arr = new Array2D<PathNode>(200, 200);
+    //static PathNode[,] Arr = new PathNode[200, 200];
     int terminateDistance;
     protected List<PathNode> closed = new List<PathNode>();
     GridSpace start, dest;
@@ -90,7 +91,7 @@ public class PathTree
 
     public bool isValidSpace(GridSpace p)
     {
-        if (p != null && p.X > -1 && p.Y > -1)
+        if (p != null)
         {
             try
             {

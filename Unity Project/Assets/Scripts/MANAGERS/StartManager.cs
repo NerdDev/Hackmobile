@@ -40,6 +40,7 @@ public class StartManager : MonoBehaviour, IManager
         Value2D<GridSpace> start;
         level.Array.GetPointAround(stair.x, stair.y, false, Draw.IsType(GridType.StairPlace), out start);
         BigBoss.PlayerInfo.transform.position = new Vector3(start.x, -.5f, start.y);
+        BigBoss.Player.GridSpace = start.val;
         BigBoss.Debug.w(Logs.Main, "Placed player on " + start);
     }
 }

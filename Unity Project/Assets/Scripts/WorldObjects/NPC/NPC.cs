@@ -19,9 +19,8 @@ public class NPC : Affectable
         //IsActive = true;
         if (IsActive)
         {
-            GridCoordinate = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
-            GridSpace = BigBoss.Levels.Level[GridCoordinate.x.ToInt(), GridCoordinate.y.ToInt()];
-            GridSpace.Put(this);
+            Vector2 currentPos = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
+            GridSpace = BigBoss.Levels.Level[currentPos.x.ToInt(), currentPos.y.ToInt()];
         }
     }
 
@@ -54,16 +53,15 @@ public class NPC : Affectable
     private float _rotationSpeed = .5f;  //temporarily hard-coded
     public float NPCRotationSpeed { get { return _rotationSpeed; } }
 
-    public Vector3 CurrentOccupiedGridCenterWorldPoint;
-    public Vector3 LastOccupiedGridCenterWorldPoint;
+    //public Vector3 CurrentOccupiedGridCenterWorldPoint;
+    //public Vector3 LastOccupiedGridCenterWorldPoint;
 
     bool moving; //stores moving condition
     protected bool verticalMoving;
     protected bool movingUp;
-    protected Vector3 targetVerticalCoords;
     protected float verticalOffset;
-    Vector3 targetGridCoords; //this refs target grid coords in pathing
-    Vector3 heading; //this is the heading of target minus current location
+    internal Queue<GridSpace> targetGrids = new Queue<GridSpace>();
+    internal Vector3 heading; //this is the heading of target minus current location
 
     Animator animator;
     float velocity;
@@ -265,21 +263,26 @@ public class NPC : Affectable
     #region Movement
     private void movement()
     {
-        if (!checkPosition(GO.transform.position, targetGridCoords))
+        GridSpace currentTarget = targetGrids.Peek();
+        if (!checkXYPosition(GO.transform.position, new Vector3(currentTarget.X, 0f, currentTarget.Y)))
         {
-            MoveNPCStepwise(targetGridCoords);
+            MoveNPCStepwise(currentTarget);
         }
         else
         {
-            moving = false;
-            GO.transform.position = targetGridCoords;
-            UpdateCurrentTileVectors();
+            GridSpace grid = targetGrids.Dequeue();
+            GO.transform.position = new Vector3(grid.X, GO.transform.position.y, grid.Y);
+
+            if (targetGrids.Count <= 0)
+            {
+                moving = false;
+            }
         }
     }
 
     protected void verticalMovement()
     {
-        if (!checkVerticalPosition(GO.transform.position, targetVerticalCoords))
+        if (!checkVerticalPosition(GO.transform.position, new Vector3(0f, verticalOffset, 0f)))
         {
             MoveNPCStepwiseUp();
         }
@@ -287,16 +290,27 @@ public class NPC : Affectable
         {
             verticalMoving = false;
             Vector3 pos = GO.transform.position;
-            pos.y = targetVerticalCoords.y;
+            pos.y = verticalOffset;
             GO.transform.position = pos;
         }
     }
 
-    public void move(int x, int y)
+    public void MoveNPC(GridSpace node)
+    {
+        //GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
+        if (!node.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
+        {
+            int xmove = GridSpace.X - node.X;
+            int ymove = GridSpace.Y - node.Y;
+            GridSpace = node;
+            move(node);
+        }
+    }
+
+    public void move(GridSpace node)
     {
         moving = true;
-        targetGridCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x - x, -.5f, CurrentOccupiedGridCenterWorldPoint.z - y);
-        heading = targetGridCoords - GO.transform.position;
+        targetGrids.Enqueue(node);
     }
 
     public void verticalMove(float z)
@@ -311,15 +325,11 @@ public class NPC : Affectable
         {
             movingUp = false;
         }
-        targetVerticalCoords = new Vector3(CurrentOccupiedGridCenterWorldPoint.x, CurrentOccupiedGridCenterWorldPoint.y + z, CurrentOccupiedGridCenterWorldPoint.z);
-        Vector3 pos = CurrentOccupiedGridCenterWorldPoint;
-        pos.y += verticalOffset;
-        CurrentOccupiedGridCenterWorldPoint = pos;
     }
 
-    void MoveNPCStepwise(Vector3 gridCoords)
+    void MoveNPCStepwise(GridSpace gridTarget)
     {
-        heading = gridCoords - GO.transform.position;
+        heading = new Vector3(gridTarget.X - GO.transform.position.x, GO.transform.position.y, gridTarget.Y - GO.transform.position.z);
         GO.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         Quaternion toRot = Quaternion.LookRotation(heading);
         GO.transform.rotation = Quaternion.Slerp(GO.transform.rotation, toRot, NPCRotationSpeed);
@@ -338,7 +348,7 @@ public class NPC : Affectable
     }
 
     protected float variance = .08f;
-    protected bool checkPosition(Vector3 playPos, Vector3 curPos)
+    protected bool checkXYPosition(Vector3 playPos, Vector3 curPos)
     {
         if (Math.Abs(playPos.x - curPos.x) > variance ||
             Math.Abs(playPos.z - curPos.z) > variance)
@@ -360,7 +370,7 @@ public class NPC : Affectable
     
     protected virtual bool UpdateCurrentTileVectors()
     {
-        CurrentOccupiedGridCenterWorldPoint = new Vector3(GridSpace.X, -.5f + verticalOffset, GridSpace.Y);
+        //CurrentOccupiedGridCenterWorldPoint = new Vector3(GridSpace.X, -.5f + verticalOffset, GridSpace.Y);
         return true;
     }
     
@@ -438,26 +448,6 @@ public class NPC : Affectable
                 AdjustXP(n.getXPfromNPC());
             }
         }
-    }
-
-    public void MoveNPC(GridSpace node)
-    {
-        //GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
-        if (!node.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
-        {
-            int xmove = GridSpace.X - node.X;
-            int ymove = GridSpace.Y - node.Y;
-            if (GridSpace != null) GridSpace.Remove(this);
-            GridSpace = node;
-            GridSpace.Put(this);
-            MoveNPC(xmove, ymove);
-        }
-    }
-
-    public void MoveNPC(int x, int y)
-    {
-        moving = true;
-        move(x, y);
     }
 
     protected int calcHandDamage()
@@ -717,7 +707,7 @@ public class NPC : Affectable
                 GridSpace nodeToMove = nodes[nodes.Count - 2].loc;
                 MoveNPC(nodeToMove);
             }
-            UpdateCurrentTileVectors();
+            //UpdateCurrentTileVectors();
         }
     }
 
