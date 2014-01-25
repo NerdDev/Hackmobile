@@ -99,7 +99,7 @@ public class PathTree
                 {
                     return true;
                 }
-                if ((p.Type == GridType.Floor || p.Type == GridType.Door))
+                if (GridTypeEnum.Walkable(p.Type))
                 {
                     return true;
                 }
