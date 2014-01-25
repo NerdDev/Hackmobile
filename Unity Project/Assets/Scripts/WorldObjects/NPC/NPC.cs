@@ -329,7 +329,7 @@ public class NPC : Affectable
 
     void MoveNPCStepwise(GridSpace gridTarget)
     {
-        heading = new Vector3(gridTarget.X - GO.transform.position.x, GO.transform.position.y, gridTarget.Y - GO.transform.position.z);
+        heading = new Vector3(gridTarget.X - GO.transform.position.x, verticalOffset, gridTarget.Y - GO.transform.position.z);
         GO.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         Quaternion toRot = Quaternion.LookRotation(heading);
         GO.transform.rotation = Quaternion.Slerp(GO.transform.rotation, toRot, NPCRotationSpeed);
