@@ -679,7 +679,7 @@ public static class DrawExt
         #endregion
     }
 
-    public static void DrawPerimeter<T>(this Container2D<T> cont, DrawAction<T> isInsideTest, StrokedAction<T> action)
+    public static void DrawPerimeter<T>(this Container2D<T> cont, DrawAction<T> isInsideTest, StrokedAction<T> action, bool cornered = true)
     {
         DrawAction<T> call;
         Container2D<bool> debugArr;
@@ -687,7 +687,7 @@ public static class DrawExt
         {
             call = (arr, x, y) =>
             {
-                if (arr.DrawAround(x, y, true, isInsideTest))
+                if (arr.DrawAround(x, y, cornered, isInsideTest))
                     action.UnitAction(arr, x, y);
                 else
                     action.StrokeAction(arr, x, y);
@@ -698,7 +698,7 @@ public static class DrawExt
         {
             call = (arr, x, y) =>
             {
-                if (arr.DrawAround(x, y, true, isInsideTest))
+                if (arr.DrawAround(x, y, cornered, isInsideTest))
                     action.UnitAction(arr, x, y);
                 return true;
             };
@@ -707,7 +707,7 @@ public static class DrawExt
         {
             call = (arr, x, y) =>
             {
-                if (!arr.DrawAround(x, y, true, isInsideTest))
+                if (!arr.DrawAround(x, y, cornered, isInsideTest))
                     action.StrokeAction(arr, x, y);
                 return true;
             };

@@ -72,7 +72,7 @@ public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         obj1.Connect(GetObjAt(pt));
     }
 
-    public LayoutObject GetObjAt(Point pt)
+    public LayoutObjectLeaf GetObjAt(Point pt)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -97,7 +97,14 @@ public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
                     BigBoss.Debug.printFooter(Logs.LevelGen, "Get Object At");
                 }
                 #endregion
-                return obj;
+                if (obj is LayoutObjectLeaf)
+                {
+                    return (LayoutObjectLeaf)obj;
+                }
+                else
+                {
+                    return ((LayoutObjectContainer)obj).GetObjAt(pt);
+                }
             }
         }
         #region DEBUG

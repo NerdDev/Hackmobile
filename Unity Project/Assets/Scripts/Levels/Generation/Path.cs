@@ -18,6 +18,9 @@ public class Path : LayoutObjectLeaf
     public static HashSet<GridType> PathTypes { get { return _pathTypes; } }
     List<Value2D<GridType>> _list;
 
+    public Value2D<GridType> FirstEnd { get { return _list.Count > 0 ? _list[0] : null; } }
+    public Value2D<GridType> SecondEnd { get { return _list.Count > 0 ? _list[_list.Count - 1] : null; } }
+
     public Path(IEnumerable<Value2D<GridType>> stack)
         : base(null)
     {

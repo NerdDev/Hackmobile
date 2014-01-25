@@ -39,6 +39,14 @@ public class Draw
         };
     }
 
+    public static DrawAction<T> ContainedIn<T>(Container2D<T> coll)
+    {
+        return (arr, x, y) =>
+        {
+            return coll.Contains(x, y);
+        };
+    }
+
     public static DrawAction<T> Around<T>(bool cornered, DrawAction<T> call)
     {
         return (arr, x, y) =>
@@ -71,13 +79,24 @@ public class Draw
         };
     }
 
-    public static DrawAction<T> SetTo<T>(Container2D<T> container, T g)
+    public static DrawAction<T> SetTo<T>(Container2D<T> container, T g, Point shift = null)
     {
-        return (arr, x, y) =>
+        if (shift == null)
         {
-            container[x, y] = g;
-            return true;
-        };
+            return (arr, x, y) =>
+            {
+                container[x, y] = g;
+                return true;
+            };
+        }
+        else
+        {
+            return (arr, x, y) =>
+            {
+                container[x + shift.x, y + shift.y] = g;
+                return true;
+            };
+        }
     }
 
     public static DrawAction<T> SetTo<T>(T g)
