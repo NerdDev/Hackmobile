@@ -479,7 +479,6 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
-        var roomsToConnect = new List<LayoutObject>(Layout.GetRooms().Cast<LayoutObject>());
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -490,7 +489,12 @@ public class LevelGenerator
             }
         }
         #endregion
-        foreach (var layoutObj in Layout.GetRooms())
+        Container2D<GridType> layoutCopy = new Array2D<GridType>(Layout.Grids);
+        List<LayoutObjectLeaf> rooms = new List<LayoutObjectLeaf>(Layout.GetRooms());
+        LayoutObject startingRoom = rooms.Take();
+        Container2D<GridType> runningConnected = new Array2D<GridType>(startingRoom.Grids);
+        startingRoom.Grids.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED));
+        foreach (var layoutObj in rooms)
         {
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -498,18 +502,85 @@ public class LevelGenerator
                 layoutObj.ToLog(Logs.LevelGen, "Connecting");
             }
             #endregion
-            roomsToConnect.Remove(layoutObj);
-            LayoutObject fail;
-            if (!layoutObj.ConnectedTo(roomsToConnect, out fail))
+            if (layoutObj.ConnectedTo(layoutObj)) continue;
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                layoutObj.ToLog(Logs.LevelGen, layoutObj + " failed to connect to:");
+            }
+            #endregion
+            MultiMap<GridType> startPoints = new MultiMap<GridType>();
+            DrawAction<GridType> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.EqualTo(GridType.Wall));
+            smallest.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
+            {
+                StrokeAction = passTest.IfThen(Draw.AddTo(startPoints))
+            }, false);
+            passTest = passTest.And(Draw.ContainedIn(largest));
+            Value2D<GridType> startPoint;
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                smallest.ToLog(Logs.LevelGen, "Smallest");
+                largest.ToLog(Logs.LevelGen, "Largest");
+                startPoints.ToLog(Logs.LevelGen, "Start options");
+            }
+            #endregion
+            if (startPoints.Random(Rand, out startPoint))
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    fail.ToLog(Logs.LevelGen, layoutObj + " failed to connect to:");
+                    layoutArr[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                    layoutArr.ToLog(Logs.LevelGen, "Largest after putting blocked");
+                    BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
                 }
                 #endregion
-                MakeConnection(Layout, layoutObj, fail);
+                Stack<Value2D<GridType>> stack = layoutArr.DrawDepthFirstSearch(
+                startPoint.x,
+                startPoint.y,
+                Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutArr.Bounding.Expand(5))),
+                passTest,
+                Rand);
+                var path = new Path(stack);
+                if (path.isValid())
+                {
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        path.ToLog(Logs.LevelGen, "Connecting Path");
+                    }
+                    #endregion
+                    path.Simplify();
+                    path.ConnectEnds(Layout, new Point(0, 0));
+                    Point first = path.FirstEnd;
+                    Point second = path.SecondEnd;
+                    LayoutObjectLeaf leaf1 = Layout.GetObjAt(first);
+                    LayoutObjectLeaf leaf2 = Layout.GetObjAt(second);
+                    if (leaf1[first] == GridType.Wall)
+                    {
+                        leaf1[first] = GridType.Door;
+                    }
+                    if (leaf2[second] == GridType.Wall)
+                    {
+                        leaf2[second] = GridType.Door;
+                    }
+                    path.ConnectEnds(Layout, new Point());
+                    path.Bake();
+                    layout.AddPath(path);
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        layout.ToLog(Logs.LevelGen, "Final Connection");
+                    }
+                    #endregion
+                }
             }
+            #region DEBUG
+            else if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "Could not make an initial start point connection.");
+            }
+            #endregion
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

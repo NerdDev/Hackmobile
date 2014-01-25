@@ -288,8 +288,8 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
 
     public bool ConnectedTo(LayoutObject obj)
     {
-        List<LayoutObject> list;
-        return GetPathTo(obj, out list);
+        var connected = ConnectedToAll();
+        return connected.Contains(obj);
     }
 
     public bool GetPathTo(LayoutObject target, out List<LayoutObject> list)
