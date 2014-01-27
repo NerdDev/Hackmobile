@@ -8,7 +8,7 @@ using System.IO;
 public class ObjectManager : MonoBehaviour, IManager
 {
     public bool Initialized { get; set; }
-    const string XMLPath = "Assets/XML/";
+    const string XMLPath = "Assets/Resources/XML/";
     public NPCDictionary<NPC, NPCInstance> NPCs { get; protected set; }
     public ItemDictionary Items { get; protected set; }
     public Dictionary<string, string> Strings { get; protected set; }

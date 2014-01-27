@@ -460,17 +460,17 @@
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
+    <None Include="Assets\Resources\XML\consumables.xml" />
+    <None Include="Assets\Resources\XML\materials.xml" />
+    <None Include="Assets\Resources\XML\npcs.xml" />
+    <None Include="Assets\Resources\XML\player.xml" />
+    <None Include="Assets\Resources\XML\strings.xml" />
+    <None Include="Assets\Resources\XML\titles.xml" />
+    <None Include="Assets\Resources\XML\weapons.xml" />
     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
-    <None Include="Assets\XML\consumables.xml" />
-    <None Include="Assets\XML\materials.xml" />
-    <None Include="Assets\XML\npcs.xml" />
-    <None Include="Assets\XML\player.xml" />
-    <None Include="Assets\XML\strings.xml" />
-    <None Include="Assets\XML\titles.xml" />
-    <None Include="Assets\XML\weapons.xml" />
     <None Include="Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll" />
     <None Include="Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll" />
   </ItemGroup>
