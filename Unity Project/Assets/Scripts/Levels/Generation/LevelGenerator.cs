@@ -489,7 +489,7 @@ public class LevelGenerator
             MultiMap<GridType> startPoints = new MultiMap<GridType>();
             runningConnected.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
             {
-                StrokeAction = passTest.IfThen(Draw.AddTo(startPoints, startingRoom.ShiftP))
+                StrokeAction = passTest.IfThen(Draw.AddTo(startPoints))
             }, false);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -543,9 +543,9 @@ public class LevelGenerator
                         }
                         path.Bake();
                         path.Grids.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED));
-                        leaf1.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED));
-                        leaf1.ToLog(Logs.LevelGen, "Test");
+                        leaf1.Grids.DrawAll(Draw.AddTo(runningConnected, leaf1.ShiftP).And(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED, leaf1.ShiftP)));
                         Layout.AddPath(path);
+                        runningConnected.PutAll(path.Grids);
                         #region DEBUG
                         if (BigBoss.Debug.logging(Logs.LevelGen))
                         {
