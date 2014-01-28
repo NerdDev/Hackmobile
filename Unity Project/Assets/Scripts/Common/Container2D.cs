@@ -143,6 +143,13 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     }
     #endregion
 
+    public abstract void Shift(int x, int y);
+
+    public void Shift(Point p)
+    {
+        Shift(p.x, p.y);
+    }
+
     public bool Intersects(Container2D<T> rhs)
     {
         Bounding bounds = Bounding;

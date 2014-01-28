@@ -60,4 +60,12 @@ public static class DrawActionExt
             return call(arr, x, y) || !call2(arr, x, y);
         };
     }
+
+    public static DrawAction<T> Shift<T>(this DrawAction<T> call, int shiftX, int shiftY)
+    {
+        return (arr, x, y) =>
+        {
+            return call(arr, x + shiftX, y + shiftY);
+        };
+    }
 }

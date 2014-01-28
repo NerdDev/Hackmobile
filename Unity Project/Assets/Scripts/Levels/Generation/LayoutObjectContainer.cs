@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutObject>
+public abstract class LayoutObjectContainer : IEnumerable<LayoutObject>
 {
     protected List<LayoutObject> Objects = new List<LayoutObject>();
 
@@ -28,27 +28,19 @@ public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         ShiftAll(shift.x, shift.y);
     }
 
-    protected Container2D<GridType> _baked;
-    public override Container2D<GridType> Grids
+    public void ToLog(Logs log, params string[] customContent)
     {
-        get
-        {
-            if (_baked != null) return _baked;
-            MultiMap<GridType> map = new MultiMap<GridType>();
-            foreach (LayoutObject obj in this)
-            {
-                map.PutAll(obj.Grids, obj.ShiftP);
-            }
-            return map;
-        }
-        protected set
-        {
-        }
+        Bake().ToLog(log, customContent);
     }
 
-    public override void Bake()
+    public LayoutObject Bake()
     {
-        _baked = Grids;
+        LayoutObject obj = new LayoutObject();
+        foreach (LayoutObject rhs in this)
+        {
+            obj.PutAll(rhs.Grids, rhs.ShiftP);
+        }
+        return obj;
     }
 
     public IEnumerator<LayoutObject> GetEnumerator()
@@ -61,7 +53,7 @@ public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         return this.GetEnumerator();
     }
 
-    public override bool ContainsPoint(Point pt)
+    public bool ContainsPoint(Point pt)
     {
         return GetObjAt(pt) != null;
     }
@@ -72,7 +64,7 @@ public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
         obj1.Connect(GetObjAt(pt));
     }
 
-    public LayoutObjectLeaf GetObjAt(Point pt)
+    public LayoutObject GetObjAt(Point pt)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -97,14 +89,7 @@ public abstract class LayoutObjectContainer : LayoutObject, IEnumerable<LayoutOb
                     BigBoss.Debug.printFooter(Logs.LevelGen, "Get Object At");
                 }
                 #endregion
-                if (obj is LayoutObjectLeaf)
-                {
-                    return (LayoutObjectLeaf)obj;
-                }
-                else
-                {
-                    return ((LayoutObjectContainer)obj).GetObjAt(pt);
-                }
+                return obj;
             }
         }
         #region DEBUG

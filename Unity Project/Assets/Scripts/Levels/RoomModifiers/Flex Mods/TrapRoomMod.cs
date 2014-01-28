@@ -17,7 +17,7 @@ public class TrapRoomMod : RoomModifier
     public override bool Modify(RoomSpec spec)
     {
         treasureSizeList.Rand = spec.Random;
-        LayoutObjectLeaf room = spec.Room;
+        LayoutObject room = spec.Room;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

@@ -230,4 +230,9 @@ public class Array2D<T> : Container2D<T>
         shift = new Point(this.shift);
         return new Array2DRaw<T>(arr);
     }
+
+    public override void Shift(int x, int y)
+    {
+        shift.Shift(x, y);
+    }
 }

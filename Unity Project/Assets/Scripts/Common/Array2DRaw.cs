@@ -89,4 +89,9 @@ public class Array2DRaw<T> : Container2D<T>
     {
         _arr = _arr.Expand(buffer);
     }
+
+    public override void Shift(int x, int y)
+    {
+        throw new NotImplementedException();
+    }
 }

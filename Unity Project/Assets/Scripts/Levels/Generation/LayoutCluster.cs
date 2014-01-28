@@ -17,8 +17,4 @@ public class LayoutCluster : LayoutObjectContainer {
         base.AddObject(r);
     }
 
-    public override string GetTypeString()
-    {
-        return "Room Cluster";
-    }
 }

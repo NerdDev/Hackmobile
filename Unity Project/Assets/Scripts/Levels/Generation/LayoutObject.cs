@@ -3,13 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
+public class LayoutObject : Container2D<GridType>
 {
     public Point ShiftP { get; protected set; }
     readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
     private static int _nextId = 0;
-    public abstract Container2D<GridType> Grids { get; protected set; }
-    public virtual Bounding Bounding
+    public virtual Container2D<GridType> Grids { get; protected set; }
+    public override Bounding Bounding
     {
         get
         {
@@ -20,21 +20,29 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
     }
     public int Id { get; protected set; }
 
-    protected LayoutObject()
+    public LayoutObject()
     {
         Id = _nextId++;
         ShiftP = new Point();
+        Grids = new MultiMap<GridType>();
+    }
+
+    public override GridType this[int x, int y]
+    {
+        get
+        {
+            return Grids[x - ShiftP.x, y - ShiftP.y];
+        }
+        set
+        {
+            Grids[x - ShiftP.x, y - ShiftP.y] = value;
+        }
     }
 
     #region Shifts
-    public void Shift(int x, int y)
+    public override void Shift(int x, int y)
     {
         ShiftP.Shift(x, y);
-    }
-
-    public void Shift(Point p)
-    {
-        ShiftP.Shift(p);
     }
 
     public virtual void Bake()
@@ -329,7 +337,10 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
         return GetTypeString() + " " + Id;
     }
 
-    public abstract string GetTypeString();
+    public virtual string GetTypeString()
+    {
+        return "Layout Object";
+    }
 
     protected string printContent()
     {
@@ -404,7 +415,7 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
         return !Equals(left, right);
     }
 
-    public IEnumerator<Value2D<GridType>> GetEnumerator()
+    public override IEnumerator<Value2D<GridType>> GetEnumerator()
     {
         foreach (Value2D<GridType> val in Grids)
         {
@@ -414,8 +425,57 @@ abstract public class LayoutObject : IEnumerable<Value2D<GridType>>
         }
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    #region Container2D
+    public override bool TryGetValue(int x, int y, out GridType val)
     {
-        return this.GetEnumerator();
+        return Grids.TryGetValue(x - ShiftP.x, y - ShiftP.y, out val);
     }
+
+    public override int Count
+    {
+        get { return Grids.Count; }
+    }
+
+    public override Array2D<GridType> Array
+    {
+        get 
+        {
+            Grids.Shift(ShiftP);
+            ShiftP = new Point();
+            return Grids.Array;
+        }
+    }
+
+    public override bool Contains(int x, int y)
+    {
+        return Grids.Contains(x - ShiftP.x, y - ShiftP.y);
+    }
+
+    public override bool InRange(int x, int y)
+    {
+        return Grids.Contains(x - ShiftP.x, y - ShiftP.y);
+    }
+
+    public override bool DrawAll(DrawAction<GridType> call)
+    {
+        return Grids.DrawAll(call.Shift(ShiftP.x, ShiftP.y));
+    }
+
+    public override void Clear()
+    {
+        Grids.Clear();
+    }
+
+    public override Array2DRaw<GridType> RawArray(out Point shift)
+    {
+        Array2DRaw<GridType> ret = Grids.RawArray(out shift);
+        shift += ShiftP;
+        return ret;
+    }
+
+    public override bool Remove(int x, int y)
+    {
+        return Grids.Remove(x - ShiftP.x, y - ShiftP.y);
+    }
+    #endregion
 }

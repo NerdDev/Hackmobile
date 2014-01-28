@@ -9,7 +9,7 @@ class TreasureRoomMod : RoomModifier
 
     public override bool Modify(RoomSpec spec)
     {
-        LayoutObjectLeaf room = spec.Room;
+        LayoutObject room = spec.Room;
         Bounding bounds = room.GetBounding(true);
         int centerX = (bounds.XMin + bounds.XMax) / 2;
         int centerY = (bounds.YMin + bounds.YMax) / 2;

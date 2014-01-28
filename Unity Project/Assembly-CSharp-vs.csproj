@@ -252,7 +252,6 @@
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutCluster.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectLeaf.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LevelGenerator.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LevelLayout.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\Path.cs" />
@@ -282,7 +281,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\DoubleExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\Counter.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\Draw.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawActionCall.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawActionExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\GridDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\RandomPicker.cs" />

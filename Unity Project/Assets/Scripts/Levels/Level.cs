@@ -16,7 +16,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     public Level(LevelLayout layout, Theme theme)
     {
         Layout = layout;
-        Array = GridSpace.Convert(layout.Grids);
+        Array = GridSpace.Convert(layout.Bake().Grids);
         LoadRoomMaps();
         Theme = theme;
         UpStartPoint = layout.UpStart;
@@ -25,7 +25,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
 
     private void LoadRoomMaps()
     {
-        foreach (LayoutObjectLeaf room in Layout.GetRooms())
+        foreach (LayoutObject room in Layout.GetRooms())
         {
             MultiMap<GridType> roomMap = new MultiMap<GridType>(room.Grids, room.ShiftP);
             RoomMaps.Add(roomMap);

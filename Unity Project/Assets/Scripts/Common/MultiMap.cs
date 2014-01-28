@@ -243,4 +243,22 @@ public class MultiMap<T> : Container2D<T>
     {
         return Array.RawArray(out shift);
     }
+
+    public override void Shift(int x, int y)
+    {
+        if (x == 0)
+        { // Just vertical
+            Dictionary<int, Dictionary<int, T>> multimapRhs = new Dictionary<int, Dictionary<int, T>>();
+            foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+            {
+                multimapRhs[row.Key + y] = row.Value;
+            }
+            multimap = multimapRhs;
+        }
+        else
+        {
+            MultiMap<T> rhs = new MultiMap<T>(this, x, y);
+            this.multimap = rhs.multimap;
+        }
+    }
 }

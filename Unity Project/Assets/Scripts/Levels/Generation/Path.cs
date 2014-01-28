@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Path : LayoutObjectLeaf
+public class Path : LayoutObject
 {
     private static HashSet<GridType> _pathTypes = new HashSet<GridType>(new[] {
             GridType.Floor,
@@ -22,7 +22,6 @@ public class Path : LayoutObjectLeaf
     public Value2D<GridType> SecondEnd { get { return _list.Count > 0 ? _list[_list.Count - 1] : null; } }
 
     public Path(IEnumerable<Value2D<GridType>> stack)
-        : base(null)
     {
         _list = new List<Value2D<GridType>>(stack);
     }
@@ -48,7 +47,7 @@ public class Path : LayoutObjectLeaf
     {
         get
         {
-            if (base.Grids != null)
+            if (_list == null)
                 return base.Grids;
             MultiMap<GridType> ret = new MultiMap<GridType>();
             if (_list.Count == 0) return ret;
@@ -198,7 +197,7 @@ public class Path : LayoutObjectLeaf
 
     public override bool isValid()
     {
-        return base.Grids != null || (_list != null && _list.Count > 2);
+        return _list == null || _list.Count > 2;
     }
 
     public void ConnectEnds(LayoutObjectContainer container, Point shift)

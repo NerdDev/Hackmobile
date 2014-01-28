@@ -6,26 +6,26 @@ public class LevelLayout : LayoutObjectContainer
 {
     public Point UpStart;
     public Point DownStart;
-    List<LayoutObjectLeaf> rooms = new List<LayoutObjectLeaf>();
+    List<LayoutObject> rooms = new List<LayoutObject>();
     List<Path> paths = new List<Path>();
 
-    public void AddRoom(LayoutObjectLeaf r)
+    public void AddRoom(LayoutObject r)
     {
         rooms.Add(r);
         AddObject(r);
     }
 
-    public void AddRooms(List<LayoutObjectLeaf> rs)
+    public void AddRooms(List<LayoutObject> rs)
     {
         rooms.AddRange(rs);
     }
 
-    public List<LayoutObjectLeaf> GetRooms()
+    public List<LayoutObject> GetRooms()
     {
-        return new List<LayoutObjectLeaf>(rooms);
+        return new List<LayoutObject>(rooms);
     }
 
-    public LayoutObjectLeaf GetRandomRoom(System.Random rand)
+    public LayoutObject GetRandomRoom(System.Random rand)
     {
         return rooms[rand.Next(rooms.Count)];
     }
@@ -40,10 +40,5 @@ public class LevelLayout : LayoutObjectContainer
     {
         List<Path> ret = new List<Path>(paths);
         return ret;
-    }
-
-    public override string GetTypeString()
-    {
-        return "Level Layout";
     }
 }
