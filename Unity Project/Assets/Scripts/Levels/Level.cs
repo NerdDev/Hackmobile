@@ -60,12 +60,9 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     public Point CenterShift()
     {
         Bounding bound = new Bounding();
-        Array.DrawSquare(
-            new DrawAction<GridSpace>((arr, x, y) =>
-            {
-                return arr[x, y].Type == GridType.NULL;
-            }).IfThen(
-            (arr, x, y) =>
+        Array.DrawAll(
+            Draw.Not(Draw.IsType(GridType.NULL))
+            .IfThen((arr, x, y) =>
             {
                 GridSpace gs = arr[x, y];
                 bound.Absorb(gs.X, gs.Y);

@@ -8,7 +8,7 @@ public static class GridTypeDrawExt
     public static void DrawPotentialDoors(this Container2D<GridType> arr, DrawAction<GridType> action)
     {
         DrawAction<GridType> check = Draw.CanDrawDoor();
-        arr.DrawSquare(new DrawAction<GridType>((arr2, x, y) =>
+        arr.DrawAll(new DrawAction<GridType>((arr2, x, y) =>
             {
                 if (check(arr2, x, y))
                     action(arr2, x, y);

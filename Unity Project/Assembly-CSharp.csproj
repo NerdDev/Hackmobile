@@ -282,7 +282,6 @@
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\Counter.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\Draw.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawActionExt.cs" />
-     <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\GridDrawExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\RandomPicker.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\SquareFinder.cs" />

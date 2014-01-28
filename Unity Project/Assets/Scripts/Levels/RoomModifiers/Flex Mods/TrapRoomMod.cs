@@ -25,14 +25,18 @@ public class TrapRoomMod : RoomModifier
         }
         #endregion
         Counter floorSpace;
-        spec.Grids.DrawSquare(Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out floorSpace)));
-        #region DEBUG
+        RandomPicker<GridType> picker;
+        spec.Grids.DrawAll(Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out floorSpace).And(Draw.PickRandom(out picker))));
         if (floorSpace < 15)
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Room was too small: " + floorSpace);
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "Room was too small: " + floorSpace);
+            }
+            #endregion
             return false;
         }
-        #endregion
         int treasureInRoom = treasureSizeList.Get();
         int trapsInRoom = (floorSpace - treasureInRoom) / 8;
         #region DEBUG
@@ -42,10 +46,6 @@ public class TrapRoomMod : RoomModifier
             BigBoss.Debug.w(Logs.LevelGen, "Floor Space: " + floorSpace + " Traps In Room: " + trapsInRoom);
         }
         #endregion
-        RandomPicker<GridType> picker;
-        spec.Grids.DrawSquare(
-            Draw.EqualTo(GridType.Floor)
-            .IfThen(Draw.PickRandom(out picker)));
 
         List<Value2D<GridType>> treasureList = picker.Pick(spec.Random, treasureInRoom, 2, true);
         foreach (Value2D<GridType> val in treasureList)

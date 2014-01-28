@@ -28,7 +28,7 @@ public class HorizSplitterMod : RoomModifier
             Counter floorCount;
             Counter side1;
             Counter side2;
-            if (spec.Grids.DrawLine<GridType>(from, to, i, horizontal,
+            if (spec.Grids.DrawLine(from, to, i, horizontal,
                 // If no doors around
                 Draw.Not(Draw.Around(false, Draw.EqualTo(GridType.Door)))
                 // Not blocking walking

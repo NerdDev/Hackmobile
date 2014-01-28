@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class CircleRoom : RoomModifier {
+public class CircleRoom : RoomModifier
+{
 
     public override bool Modify(RoomSpec spec)
     {
@@ -13,7 +14,11 @@ public class CircleRoom : RoomModifier {
             BigBoss.Debug.w(Logs.LevelGen, "Radius: " + radius);
         }
         #endregion
-        spec.Grids.DrawCircle(center, center, radius, GridType.Floor, GridType.Wall);
+        spec.Grids.DrawCircle(center, center, radius, new StrokedAction<GridType>()
+            {
+                UnitAction = Draw.SetTo(GridType.Floor),
+                StrokeAction = Draw.SetTo(GridType.Wall)
+            });
         return true;
     }
 
