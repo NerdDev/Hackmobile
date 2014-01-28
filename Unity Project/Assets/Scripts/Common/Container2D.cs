@@ -5,6 +5,17 @@ using System.Collections.Generic;
 
 abstract public class Container2D<T> : IEnumerable<Value2D<T>>
 {
+    public static Container2D<T> CreateArrayFromBounds<R>(Container2D<R> rhs)
+    {
+        Container2D<T> ret = new Array2D<T>(rhs.Bounding);
+        if (rhs is Array2DRaw<R>)
+        {
+            Point shift;
+            ret = ret.RawArray(out shift);
+        }
+        return ret;
+    }
+
     protected Container2D()
     {
     }

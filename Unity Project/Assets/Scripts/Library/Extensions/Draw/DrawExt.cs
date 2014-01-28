@@ -565,7 +565,7 @@ public static class DrawExt
             tmpArr.ToLog(Logs.LevelGen, "Starting Map:");
         }
         #endregion
-        var blockedPoints = new Array2D<bool>(arr.Bounding);
+        Container2D<bool> blockedPoints = Container2D<bool>.CreateArrayFromBounds<T>(arr);
         var pathTaken = new Stack<Value2D<T>>();
         DrawAction<T> filter = new DrawAction<T>((arr2, x2, y2) =>
         {
@@ -585,11 +585,10 @@ public static class DrawExt
 
         // Push start point onto path
         pathTaken.Push(new Value2D<T>(x, y));
+        blockedPoints[x, y] = true;
         while (pathTaken.Count > 0)
         {
             curPoint = pathTaken.Peek();
-            // Don't want to visit the same point on a different route later
-            blockedPoints[curPoint] = true;
 
             // If found target, return path we took
             if (arr.GetPointAround(curPoint.x, curPoint.y, false, foundTarget, out targetDir))
@@ -616,6 +615,7 @@ public static class DrawExt
                 #endregion
                 curPoint = targetDir;
                 pathTaken.Push(curPoint);
+                blockedPoints[curPoint] = true;
             }
             else
             { // If all directions are bad, back up
