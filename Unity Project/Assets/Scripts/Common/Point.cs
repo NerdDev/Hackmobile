@@ -1,9 +1,18 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class Point
 {
+    private static List<Point> _directions = new List<Point>(new[] { new Point(1,0), new Point(-1, 0), new Point(0, 1), new Point(0, -1) });
+    public static List<Point> Directions
+    {
+        get
+        {
+            return new List<Point>(_directions);
+        }
+    }
 
     public int x;
     public int y;
@@ -72,6 +81,15 @@ public class Point
         Unshift(shift.x, shift.y);
     }
     #endregion Shifts
+
+    public Point UnitDir()
+    {
+        Point ret = new Point();
+        int max = Math.Max(x, y);
+        ret.x = (int)Math.Round(((decimal)x) / max);
+        ret.y = (int)Math.Round(((decimal)y) / max);
+        return ret;
+    }
 
     public double Distance(Point rhs)
     {
@@ -149,5 +167,10 @@ public class Point
     public static Point operator -(Point p1)
     {
         return new Point(-p1.x, -p1.y);
+    }
+
+    public static Point operator *(Point p1, int num)
+    {
+        return new Point(p1.x * num, p1.y * num);
     }
 }

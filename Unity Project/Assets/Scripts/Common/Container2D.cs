@@ -881,21 +881,48 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         bool cornered,
         DrawAction<T> run)
     {
+        DrawBreadthFirstFill(new[] { new Point(x, y) },
+            new[] { new Point(x, y) },
+            cornered,
+            run);
+    }
+
+    public void DrawBreadthFirstFill(IEnumerable<Point> startQueue,
+        IEnumerable<Point> startVisited,
+        bool cornered,
+        DrawAction<T> run)
+    {
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
-            this.ToLog(Logs.LevelGen, "Container to fill starting on (" + x + "," + y + ")");
         }
         #endregion
         Point shift;
         Array2DRaw<T> rawArr = this.RawArray(out shift);
-        x -= shift.x;
-        y -= shift.y;
-        Queue<Value2D<T>> queue = new Queue<Value2D<T>>();
-        queue.Enqueue(new Value2D<T>(x, y));
+        Queue<Point> queue = new Queue<Point>();
+        foreach (Point p in startQueue)
+        {
+            queue.Enqueue(p);
+        }
         bool[,] visited = new bool[rawArr.Width, rawArr.Height];
-        visited[x, y] = true;
+        foreach (Point p in startVisited)
+        {
+            visited[p.x, p.y] = true;
+        }
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            MultiMap<GridType> queueMap = new MultiMap<GridType>();
+            foreach (Point p in startQueue)
+                queueMap[p] = GridType.INTERNAL_RESERVED_BLOCKED;
+            queueMap.ToLog("Starting queue");
+            MultiMap<GridType> visitedMap = new MultiMap<GridType>();
+            foreach (Point p in startVisited)
+                visitedMap[p] = GridType.INTERNAL_RESERVED_BLOCKED;
+            visitedMap.ToLog("Starting visited");
+        }
+        #endregion
         Point curPoint;
         while (queue.Count > 0)
         {
@@ -969,6 +996,22 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             });
         }
         this.DrawAll(call);
+    }
+
+    public Stack<List<Value2D<T>>> DrawJumpTowardsSearch(int x, int y,
+        int minJump,
+        int maxJump,
+        DrawAction<T> allowedSpace,
+        DrawAction<T> target,
+        System.Random rand,
+        Point gravityPt,
+        bool edgeSafe = false)
+    {
+        JumpTowardsSearcher<T> searcher = new JumpTowardsSearcher<T>(this, x, y,
+            minJump, maxJump,
+            allowedSpace, target,
+            rand, gravityPt, edgeSafe);
+        return searcher.Find();
     }
     #endregion
     #endregion
