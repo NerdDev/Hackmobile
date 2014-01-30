@@ -52,7 +52,7 @@ public class GridSpace
         }
         else if (obj is Item)
         {
-            PutInChest(obj as Item);
+            PutInventory(obj as Item);
         }
         else
         {
@@ -60,30 +60,12 @@ public class GridSpace
         }
     }
 
-    public void PutInChest(Item i)
+    public void Put(WorldObject obj, int count)
     {
-        if (_chest == null)
+        for (int i = 0; i < count; i++)
         {
-            _chest = (GameObject.Instantiate(BigBoss.Gooey.ChestPrefab) as GameObject).GetComponent<ItemChest>();
-            _chest.Location = this;
-            _chest.init();
+            Put(obj);
         }
-        inventory.Add(i);
-    }
-
-    public bool RemoveFromChest(Item i)
-    {
-        if (_chest != null)
-        {
-            inventory.Remove(i);
-            if (inventory.IsEmpty())
-            {
-                GameObject.Destroy(_chest.gameObject);
-                _chest = null;
-                return true;
-            }
-        }
-        return false;
     }
 
     protected void PutFree(WorldObject obj)
@@ -104,14 +86,33 @@ public class GridSpace
         _blockingObjects.Add(obj);
     }
 
+    internal void PutInventory(Item i)
+    {
+        if (_chest == null)
+        {
+            _chest = (GameObject.Instantiate(BigBoss.Gooey.ChestPrefab) as GameObject).GetComponent<ItemChest>();
+            _chest.Location = this;
+            _chest.init();
+        }
+        inventory.Add(i);
+    }
+
     public void Remove(WorldObject obj)
     {
         RemoveFree(obj);
         RemoveBlocked(obj);
-        if (obj is Item) { RemoveFromChest(obj as Item); }
+        if (obj is Item) { RemoveInventory(obj as Item); }
         if (_blockingObjects.Count == 0)
         {
             ColliderTrigger(true);
+        }
+    }
+
+    public void Remove(WorldObject obj, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Remove(obj);
         }
     }
 
@@ -125,6 +126,21 @@ public class GridSpace
     {
         if (_blockingObjects != null)
             _blockingObjects.Remove(obj);
+    }
+
+    internal bool RemoveInventory(Item i)
+    {
+        if (_chest != null)
+        {
+            inventory.Remove(i);
+            if (inventory.IsEmpty())
+            {
+                GameObject.Destroy(_chest.gameObject);
+                _chest = null;
+                return true;
+            }
+        }
+        return false;
     }
     #endregion
 

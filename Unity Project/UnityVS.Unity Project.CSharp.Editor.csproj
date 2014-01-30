@@ -173,8 +173,8 @@
     <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
     <None Include="Assets\Resources\XML\consumables.xml" />
     <None Include="Assets\Resources\XML\materials.xml" />
-    <None Include="Assets\Resources\XML\npcs.xml" />
-    <None Include="Assets\Resources\XML\player.xml" />
+    <None Include="Assets\Resources\XML\npcs.txt" />
+    <None Include="Assets\Resources\XML\player.txt" />
     <None Include="Assets\Resources\XML\strings.xml" />
     <None Include="Assets\Resources\XML\titles.xml" />
     <None Include="Assets\Resources\XML\weapons.xml" />

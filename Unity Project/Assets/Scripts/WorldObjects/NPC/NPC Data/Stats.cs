@@ -9,7 +9,6 @@ public class Stats : IXmlParsable
     public int MaxPower;
     public int CurrentPower;
     public float Hunger;
-    public float Encumbrance; //needs calc'd on NPC
     public float MaxEncumbrance;
     public int Level;
     public float CurrentXP;
@@ -34,7 +33,6 @@ public class Stats : IXmlParsable
     {
         this.CurrentHealth = this.MaxHealth;
         this.CurrentPower = this.MaxPower;
-        this.Encumbrance = 0;
         this.CurrentXP = 0;
         this.Hunger = 500f;
         this.hungerRate = .2f;

@@ -72,7 +72,6 @@ public class NPC : Affectable
     {
         Equipment = new Equipment(Bodyparts);
         Stats.MaxEncumbrance = getMaxInventoryWeight();
-        Stats.Encumbrance = getCurrentInventoryWeight();
         Stats.CurrentHealth = Stats.MaxHealth;
         Stats.CurrentPower = Stats.MaxPower;
         Stats.XPToNextLevel = calcXPForNextLevel();
@@ -222,7 +221,6 @@ public class NPC : Affectable
     //Use this for a re-calc on level up or any attribute changes.
     protected void calcStats()
     {
-        Stats.Encumbrance = getCurrentInventoryWeight();
         Stats.MaxEncumbrance = getMaxInventoryWeight();
         Stats.XPToNextLevel = calcXPForNextLevel();
     }
@@ -483,7 +481,6 @@ public class NPC : Affectable
     public virtual void addToInventory(Item item, int count)
     {
         Inventory.Add(item, count);
-        Stats.Encumbrance += item.props.Weight * count;
     }
 
     public void removeFromInventory(Item item)
@@ -555,22 +552,12 @@ public class NPC : Affectable
 
     internal bool dropItem(Item i, GridSpace space)
     {
-        if (this.Inventory.Remove(i))
-        {
-            space.Put(i);
-            return true;
-        }
-        return false;
+        return Inventory.TransferTo(i, space);
     }
 
     internal bool pickUpItem(Item i, GridSpace space)
     {
-        if (space.inventory.Remove(i))
-        {
-            this.addToInventory(i);
-            return true;
-        }
-        return false;
+        return Inventory.TransferFrom(i, space);
     }
     #endregion
 

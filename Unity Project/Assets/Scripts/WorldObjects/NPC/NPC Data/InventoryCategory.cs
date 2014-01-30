@@ -37,11 +37,25 @@ public class InventoryCategory : SortedDictionary<string, Item>
         {
             if (item.RemoveItem())
             {
-                this.Remove(item);
+                this.Remove(item.Name);
             }
             return true;
         }
         return false;
+    }
+
+    public Item GetForTransfer(Item i)
+    {
+        Item item;
+        if (TryGetValue(i.Name, out item))
+        {
+            Item newItem = item.GetForTransfer();
+            if (newItem != null)
+            {
+                return newItem;
+            }
+        }
+        return null;
     }
 
     public bool Contains(string item)

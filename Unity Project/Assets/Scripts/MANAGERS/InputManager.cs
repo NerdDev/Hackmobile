@@ -171,19 +171,6 @@ public class InputManager : MonoBehaviour, IManager
         {
             BigBoss.Time.TogglePause();
         }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Item food;
-            if (BigBoss.Player.Inventory.TryGetFirst("food", "spoiled bread", out food))
-                BigBoss.Player.eatItem(food);
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log(BigBoss.Player.Inventory.Dump());
-            Item food;
-            if (BigBoss.Player.Inventory.TryGetFirst("potion", "health potion", out food))
-                BigBoss.Player.eatItem(food);
-        }
     }
 
     #endregion

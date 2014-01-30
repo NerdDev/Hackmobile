@@ -603,17 +603,9 @@ public class GUIManager : MonoBehaviour, IManager
         itemButton.OnSingleClick = new Action(() =>
         {
             Item i = itemButton.refObject as Item;
-            if (i.Count > 0)
-            {
-                Item picked = i;
-                BigBoss.Player.Inventory.Add(picked);
-                if (BigBoss.Gooey.currentChest.Location.inventory.Remove(picked))
-                {
-                    currentChest = null;
-                }
-                BigBoss.Gooey.GenerateGroundItems(currentChest);
-                BigBoss.Gooey.RegenInventoryGUI();
-            }
+            BigBoss.Player.pickUpItem(i, currentChest.Location);
+            BigBoss.Gooey.GenerateGroundItems(currentChest);
+            BigBoss.Gooey.RegenInventoryGUI();
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
@@ -624,11 +616,11 @@ public class GUIManager : MonoBehaviour, IManager
         itemButton.OnSingleClick = new Action(() =>
         {
             Item i = itemButton.refObject as Item;
-                if (!i.OnGround)
-                {
-                    BigBoss.Player.eatItem(i);
-                    BigBoss.Gooey.RegenItemInfoGUI(i);
-                }
+            if (!i.OnGround)
+            {
+                BigBoss.Player.eatItem(i);
+                BigBoss.Gooey.RegenItemInfoGUI(i);
+            }
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
