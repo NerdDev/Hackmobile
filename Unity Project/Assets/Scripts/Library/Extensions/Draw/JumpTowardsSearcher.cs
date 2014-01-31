@@ -10,6 +10,7 @@ public class JumpTowardsSearcher<T>
     int minJump;
     int maxJump;
     List<int> jumpAmountOptionPrototype;
+    List<int> jumpSmallerOptionPrototype;
     Container2D<JumpSetup> jumps;
     List<Value2D<T>> lastJump;
     DrawAction<T> allowedSpace;
@@ -37,6 +38,11 @@ public class JumpTowardsSearcher<T>
         for (int i = minJump; i <= maxJump; i++)
         {
             jumpAmountOptionPrototype.Add(i);
+        }
+        jumpSmallerOptionPrototype = new List<int>(minJump);
+        for (int i = 1; i < minJump; i++)
+        {
+            jumpSmallerOptionPrototype.Add(i);
         }
     }
 
@@ -113,16 +119,15 @@ public class JumpTowardsSearcher<T>
         return pathTaken;
     }
 
-    protected bool GetJumpTowards(JumpSetup setup, out List<Value2D<T>> ret)
+    bool GetJumpTowards(JumpSetup setup, out List<Value2D<T>> ret)
     {
-        Point dir;
-        int amount;
-        if (!setup.Get(out dir, out amount))
+        Jump jump;
+        if (!setup.Get(out jump))
         {
             ret = null;
             return false;
         }
-        Point endPoint = curPoint + (dir * amount);
+        Point endPoint = curPoint + jump.JumpVector;
         if (edgeSafe && !jumps.InRange(endPoint))
         { // Out of range
             #region DEBUG
@@ -135,11 +140,11 @@ public class JumpTowardsSearcher<T>
             return false;
         }
         // Can test this route
-        ret = new List<Value2D<T>>(amount);
+        ret = new List<Value2D<T>>(jump.Amount);
         Point cur = new Point(curPoint);
-        for (int i = 0; i < amount; i++)
+        for (int i = 0; i < jump.Amount; i++)
         {
-            cur += dir;
+            cur += jump.Dir;
             // If found target, return path we took
             if (foundTarget(container, cur.x, cur.y))
             {
@@ -171,9 +176,11 @@ public class JumpTowardsSearcher<T>
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    BigBoss.Debug.w(Logs.LevelGen, "failed to step past " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + amount);
+                    BigBoss.Debug.w(Logs.LevelGen, "failed to step past " + cur + " from " + setup.Point + " in dir " + jump.Dir + " jumping " + jump.Amount);
                 }
                 #endregion
+                //  Clear setup of longer jumps
+
                 break;
             }
         }
@@ -186,7 +193,7 @@ public class JumpTowardsSearcher<T>
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + dir + " from " + setup.Point + " jumping " + (cur - curPoint));
+                BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + jump.Dir + " from " + setup.Point + " jumping " + (cur - curPoint));
                 PrintSetup();
             }
             #endregion
@@ -194,21 +201,33 @@ public class JumpTowardsSearcher<T>
         return false;
     }
 
-    public class JumpSetup
+    class Jump
+    {
+        public Point JumpVector;
+        public Point Dir;
+        public int Amount;
+
+        public Jump(Point dir, int amount)
+        {
+            Dir = dir;
+            Amount = amount;
+            JumpVector = Dir * Amount;
+        }
+    }
+
+    class JumpSetup
     {
         public Point Point;
         public bool Blocked = false;
         public bool Allowed;
         public JumpTowardsSearcher<T> Searcher;
-        byte dirPtr;
-        List<Point> Dirs;
-        byte amountPtr;
-        List<int> Amount;
+        List<Jump> Jumps;
+        int jumpPtr;
         public bool Done
         {
             get
             {
-                return dirPtr >= Dirs.Count && amountPtr >= Amount.Count - 1;
+                return jumpPtr >= Jumps.Count;
             }
         }
 
@@ -238,59 +257,43 @@ public class JumpTowardsSearcher<T>
             List<Point> tmpDirs = Point.Directions;
             tmpDirs.Remove(pref);
             tmpDirs.Remove(secondary);
-            Dirs = new List<Point>(4);
-            Dirs.Add(pref);
-            Dirs.Add(secondary);
-            Dirs.AddRange(tmpDirs.Randomize(searcher.rand));
-
-            Amount = new List<int>(searcher.jumpAmountOptionPrototype.Randomize(searcher.rand));
+            List<Point> dirs = new List<Point>(4);
+            dirs.Add(pref);
+            dirs.Add(secondary);
+            dirs.AddRange(tmpDirs.Randomize(searcher.rand));
+            Jumps = new List<Jump>(dirs.Count * searcher.jumpAmountOptionPrototype.Count);
+            foreach (int i in searcher.jumpAmountOptionPrototype.Randomize(searcher.rand))
+            {
+                foreach (Point p in dirs)
+                {
+                    Jumps.Add(new Jump(p, i));
+                }
+            }
+            if (searcher.jumpSmallerOptionPrototype.Count > 0)
+            {
+                foreach (int i in searcher.jumpSmallerOptionPrototype.Randomize(searcher.rand))
+                {
+                    foreach (Point p in dirs)
+                    {
+                        Jumps.Add(new Jump(p, i));
+                    }
+                }
+            }
         }
 
         public void Reset()
         {
-            amountPtr = 0;
-            dirPtr = 0;
+            jumpPtr = 0;
         }
 
-        public bool GetAmount(out int p)
+        public bool Get(out Jump jump)
         {
-            if (amountPtr < Amount.Count)
+            if (!Done)
             {
-                p = Amount[amountPtr++];
+                jump = Jumps[jumpPtr++];
                 return true;
             }
-            p = 0;
-            return false;
-        }
-
-        public bool GetDir(out Point p)
-        {
-            if (dirPtr < Dirs.Count)
-            {
-                p = Dirs[dirPtr++];
-                return true;
-            }
-            p = null;
-            return false;
-        }
-
-        public bool Get(out Point dir, out int amount)
-        {
-            if (dirPtr < Dirs.Count)
-            {
-                dir = Dirs[dirPtr++];
-                amount = Amount[amountPtr];
-                return true;
-            }
-            if (amountPtr < Amount.Count - 1)
-            {
-                dirPtr = 1;
-                dir = Dirs[0];
-                amount = Amount[amountPtr++];
-                return true;
-            }
-            dir = null;
-            amount = 0;
+            jump = null;
             return false;
         }
     }
