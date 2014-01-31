@@ -85,7 +85,7 @@ public class Point
     public Point UnitDir()
     {
         Point ret = new Point();
-        int max = Math.Max(x, y);
+        int max = Math.Max(Math.Abs(x), Math.Abs(y));
         ret.x = (int)Math.Round(((decimal)x) / max);
         ret.y = (int)Math.Round(((decimal)y) / max);
         return ret;

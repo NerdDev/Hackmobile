@@ -62,6 +62,10 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return Contains(val.x, val.y);
     }
     public abstract bool InRange(int x, int y);
+    public bool InRange(Point p)
+    {
+        return InRange(p.x, p.y);
+    }
 
     public Value2D<T> GetNth(int n)
     {
@@ -991,14 +995,14 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             call = new DrawAction<T>(call).And((arr, x, y) =>
             {
                 debugArr[x, y] = true;
-                debugArr.ToLog("Draw Perimeter");
+                debugArr.ToLog("Draw Perimeter on " + x + " " + y);
                 return true;
             });
         }
         this.DrawAll(call);
     }
 
-    public Stack<List<Value2D<T>>> DrawJumpTowardsSearch(int x, int y,
+    public List<Value2D<T>> DrawJumpTowardsSearch(int x, int y,
         int minJump,
         int maxJump,
         DrawAction<T> allowedSpace,
@@ -1011,7 +1015,20 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             minJump, maxJump,
             allowedSpace, target,
             rand, gravityPt, edgeSafe);
-        return searcher.Find();
+        Stack<List<Value2D<T>>> stack = searcher.Find();
+        Stack<List<Value2D<T>>> tmp = new Stack<List<Value2D<T>>>(stack.Count);
+        int count = 0;
+        foreach (List<Value2D<T>> val in stack)
+        {
+            count += val.Count;
+            tmp.Push(val);
+        }
+        List<Value2D<T>> ret = new List<Value2D<T>>(count);
+        foreach (List<Value2D<T>> val in tmp)
+        {
+            ret.AddRange(val);
+        }
+        return ret;
     }
     #endregion
     #endregion

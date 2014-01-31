@@ -477,7 +477,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
-        DrawAction<GridType> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.EqualTo(GridType.Wall));
+        DrawAction<GridType> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.CanDrawDoor());
         Container2D<GridType> layoutCopy = Layout.Bake().Array;
         List<LayoutObject> rooms = new List<LayoutObject>(Layout.GetRooms().Cast<LayoutObject>());
         LayoutObject startingRoom = rooms.Take();
@@ -512,12 +512,15 @@ public class LevelGenerator
                         BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
                     }
                     #endregion
-                    Stack<Value2D<GridType>> stack = layoutCopy.DrawDepthFirstSearch(
+                    List<Value2D<GridType>> stack = layoutCopy.DrawJumpTowardsSearch(
                     startPoint.x,
                     startPoint.y,
+                    3,
+                    5,
                     Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutCopy.Bounding.Expand(5))),
                     passTest,
-                    Rand);
+                    Rand,
+                    fail.Center);
                     var path = new Path(stack);
                     if (path.isValid())
                     {
@@ -543,7 +546,7 @@ public class LevelGenerator
                         }
                         path.Bake();
                         path.Grids.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED));
-                        leaf1.Grids.DrawAll(Draw.AddTo(runningConnected, leaf1.ShiftP).And(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED, leaf1.ShiftP)));
+                        leaf2.Grids.DrawAll(Draw.AddTo(runningConnected, leaf2.ShiftP).And(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED, leaf2.ShiftP)));
                         Layout.AddPath(path);
                         runningConnected.PutAll(path.Grids);
                         #region DEBUG
