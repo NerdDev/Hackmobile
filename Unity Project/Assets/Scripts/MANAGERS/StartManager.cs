@@ -29,10 +29,10 @@ public class StartManager : MonoBehaviour, IManager
         yield return new WaitForSeconds(.01f);
         BigBoss.Gooey.OpenInventoryGUI();
         BigBoss.Levels.SetCurLevel(0);
-        BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level);
+        //BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level);
 
         // Temp (will move eventually)
-        //BigBoss.Debug.w(Logs.Main, "Placing player in initial position.");
+        BigBoss.Debug.w(Logs.Main, "Placing player in initial position.");
         Level level = BigBoss.Levels.Level;
         Point stair = level.DownStartPoint;
         Value2D<GridSpace> start;
