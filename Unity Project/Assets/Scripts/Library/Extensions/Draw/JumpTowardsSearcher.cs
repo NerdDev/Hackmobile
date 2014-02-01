@@ -95,11 +95,12 @@ public class JumpTowardsSearcher<T>
                     {
                         jumps[val].Blocked = false;
                     }
+                    jumpSetup.Reset();
                     pathTaken.Pop();
                     #region DEBUG
                     if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                     {
-                        BigBoss.Debug.w(Logs.LevelGen, "Backing up from " + curPoint);
+                        BigBoss.Debug.w(Logs.LevelGen, "Backing up from " + curPoint.x + " " + curPoint.y);
                         PrintSetup();
                     }
                     #endregion
@@ -121,6 +122,10 @@ public class JumpTowardsSearcher<T>
 
     bool GetJumpTowards(JumpSetup setup, out List<Value2D<T>> ret)
     {
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps))
+        {
+            setup.PrintSetup();
+        }
         Jump jump;
         if (!setup.Get(out jump))
         {
@@ -142,7 +147,7 @@ public class JumpTowardsSearcher<T>
         // Can test this route
         ret = new List<Value2D<T>>(jump.Amount);
         Point cur = new Point(curPoint);
-        for (int i = 0; i < jump.Amount; i++)
+        for (int i = 1; i <= jump.Amount; i++)
         {
             cur += jump.Dir;
             // If found target, return path we took
@@ -169,7 +174,17 @@ public class JumpTowardsSearcher<T>
             if (space.Allowed && !space.Blocked)
             { // Jumping
                 ret.Add(new Value2D<T>(cur.x, cur.y, container[cur]));
-                space.Blocked = true;
+            }
+            else if (space.Blocked)
+            { // Hit blocked
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "hit blocked space " + cur + " from " + setup.Point + " in dir " + jump.Dir + " jumping " + jump.Amount);
+                }
+                #endregion
+                ret.Clear();
+                break;
             }
             else
             { // Hit fail
@@ -180,7 +195,9 @@ public class JumpTowardsSearcher<T>
                 }
                 #endregion
                 //  Clear setup of longer jumps
-
+                setup.Shave(jump.Dir, i);
+                setup.JumpPtr--;
+                ret.Clear();
                 break;
             }
         }
@@ -188,8 +205,12 @@ public class JumpTowardsSearcher<T>
         {
             ret = null;
         }
-        else
+        else 
         {
+            foreach (Value2D<T> v in ret)
+            {
+                jumps[v].Blocked = true;
+            }
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -222,12 +243,12 @@ public class JumpTowardsSearcher<T>
         public bool Allowed;
         public JumpTowardsSearcher<T> Searcher;
         List<Jump> Jumps;
-        int jumpPtr;
+        public int JumpPtr;
         public bool Done
         {
             get
             {
-                return jumpPtr >= Jumps.Count;
+                return JumpPtr >= Jumps.Count;
             }
         }
 
@@ -283,18 +304,39 @@ public class JumpTowardsSearcher<T>
 
         public void Reset()
         {
-            jumpPtr = 0;
+            JumpPtr = 0;
         }
 
         public bool Get(out Jump jump)
         {
             if (!Done)
             {
-                jump = Jumps[jumpPtr++];
+                jump = Jumps[JumpPtr++];
                 return true;
             }
             jump = null;
             return false;
+        }
+
+        public void Shave(Point dir, int amount)
+        {
+            Jumps = Jumps.FindAll((j) =>
+            {
+                return !j.Dir.Equals(dir) || j.Amount < amount;
+            });
+        }
+
+        public void PrintSetup()
+        {
+            if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "Jump Setup at " + Point + " (Count: " + Jumps.Count + ")");
+                for (int i = 0; i < Jumps.Count; i++)
+                {
+                    Jump jump = Jumps[i];
+                    BigBoss.Debug.w(Logs.LevelGen, "  " + (i == JumpPtr ? "***" : "") + jump.Dir + " Amount: " + jump.Amount);
+                }
+            }
         }
     }
 
