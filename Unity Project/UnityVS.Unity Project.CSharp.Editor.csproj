@@ -60,12 +60,6 @@
     <Reference Include="AudioToolkit_FreeVersion_Editor">
       <HintPath>Assets\AudioToolkit\AudioToolkit\Editor\AudioToolkit_FreeVersion_Editor.dll</HintPath>
     </Reference>
-    <Reference Include="CruncherEditor">
-      <HintPath>Assets\Resources\Tools\Cruncher\Editor\CruncherEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="CruncherScripts">
-      <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
-    </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Assets\UnityVS\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
@@ -169,9 +163,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
-    <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
-    <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
-    <None Include="Assets\Resources\XML\items.xml" />
     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
@@ -184,7 +175,6 @@
     <None Include="Assets\XML\titles.xml" />
     <None Include="Assets\XML\weapons.xml" />
     <None Include="Assets\AudioToolkit\AudioToolkit\Editor\AudioToolkit_FreeVersion_Editor.dll" />
-    <None Include="Assets\Resources\Tools\Cruncher\Editor\CruncherEditor.dll" />
     <None Include="Assets\UnityVS\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll" />
     <None Include="Assets\UnityVS\Editor\SyntaxTree.VisualStudio.Unity.Messaging.dll" />
   </ItemGroup>

@@ -7,8 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
@@ -57,9 +56,6 @@
     </Reference>
     <Reference Include="AudioToolkit_FreeVersion">
       <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
-    </Reference>
-    <Reference Include="CruncherScripts">
-      <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -244,7 +240,6 @@
     <Compile Include="Assets\NGUI\Scripts\UI\UITiledSprite.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
-    <Compile Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApplySubstance.cs" />
     <Compile Include="Assets\Scenes\Testing\ProbabilityTesting.cs" />
     <Compile Include="Assets\Scenes\Testing\SpellTesting.cs" />
     <Compile Include="Assets\Scripts\AtlasGenerator.cs" />
@@ -458,9 +453,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
-    <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
-    <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
-    <None Include="Assets\Resources\XML\items.xml" />
     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
@@ -473,7 +465,6 @@
     <None Include="Assets\XML\titles.xml" />
     <None Include="Assets\XML\weapons.xml" />
     <None Include="Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll" />
-    <None Include="Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2012\UnityVS.CSharp.targets" />
 </Project>

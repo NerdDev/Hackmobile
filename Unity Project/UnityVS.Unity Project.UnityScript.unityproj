@@ -57,9 +57,6 @@
     <Reference Include="AudioToolkit_FreeVersion">
       <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
     </Reference>
-    <Reference Include="CruncherScripts">
-      <HintPath>Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="UnityVS.Unity Project.CSharp.Plugins.csproj">
@@ -107,9 +104,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
-    <None Include="Assets\Resources\Textures\B2M_2.1\Script\BatchApply_README.txt" />
-    <None Include="Assets\Resources\Tools\Cruncher\Documentation\Version History.txt" />
-    <None Include="Assets\Resources\XML\items.xml" />
     <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
@@ -122,7 +116,6 @@
     <None Include="Assets\XML\titles.xml" />
     <None Include="Assets\XML\weapons.xml" />
     <None Include="Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll" />
-    <None Include="Assets\Resources\Tools\Cruncher\Scripts\CruncherScripts.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets" />
@@ -155,15 +148,6 @@
     <Folder Include="Assets\NGUI\Resources\Shaders" />
     <Folder Include="Assets\Plugins" />
     <Folder Include="Assets\Plugins\Android" />
-    <Folder Include="Assets\Resources" />
-    <Folder Include="Assets\Resources\Textures" />
-    <Folder Include="Assets\Resources\Textures\B2M_2.1" />
-    <Folder Include="Assets\Resources\Textures\B2M_2.1\Script" />
-    <Folder Include="Assets\Resources\Tools" />
-    <Folder Include="Assets\Resources\Tools\Cruncher" />
-    <Folder Include="Assets\Resources\Tools\Cruncher\Documentation" />
-    <Folder Include="Assets\Resources\Tools\Cruncher\Scripts" />
-    <Folder Include="Assets\Resources\XML" />
     <Folder Include="Assets\Scripts" />
     <Folder Include="Assets\Scripts\Library" />
     <Folder Include="Assets\Scripts\Library\XML" />

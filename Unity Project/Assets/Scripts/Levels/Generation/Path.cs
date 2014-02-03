@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class Path : LayoutObject
 {
@@ -43,6 +44,62 @@ public class Path : LayoutObject
         }
     }
 
+    public static IEnumerable<Value2D<GridType>> PathPrint(IEnumerable<Point> points)
+    {
+        Point backward = null;
+        Point cur = null;
+        Point forward = null;
+        foreach (Point p in points)
+        {
+            forward = p;
+            if (cur != null)
+            {
+                if (backward == null) { }
+                else if (Mathf.Abs(forward.x - backward.x) == 2)
+                {
+                    // Horizontal
+                    yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_Horiz);
+                }
+                else if (Mathf.Abs(forward.y - backward.y) == 2)
+                {
+                    // Vertical
+                    yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_Vert);
+                }
+                else
+                {
+                    // Corner
+                    bool top = (forward.y == (cur.y + 1)) || (backward.y == (cur.y + 1));
+                    bool right = (forward.x == (cur.x + 1)) || (backward.x == (cur.x + 1));
+                    if (top)
+                    {
+                        if (right)
+                        {
+                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_RT);
+                        }
+                        else
+                        {
+                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_LT);
+                        }
+                    }
+                    else
+                    {
+                        if (right)
+                        {
+                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_RB);
+                        }
+                        else
+                        {
+                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_LB);
+                        }
+                    }
+                }
+            }
+            // Set up for next point
+            backward = cur;
+            cur = forward;
+        }
+    }
+
     public override Container2D<GridType> Grids
     {
         get
@@ -51,57 +108,9 @@ public class Path : LayoutObject
                 return base.Grids;
             MultiMap<GridType> ret = new MultiMap<GridType>();
             if (_list.Count == 0) return ret;
-            Value2D<GridType> backward = null;
-            Value2D<GridType> cur = null;
-            Value2D<GridType> forward = null;
-            foreach (Value2D<GridType> val in _list)
+            foreach (Value2D<GridType> val in PathPrint(_list.Cast<Point>()))
             {
-                forward = val;
-                if (cur != null)
-                {
-                    if (backward == null) { }
-                    else if (Mathf.Abs(forward.x - backward.x) == 2)
-                    {
-                        // Horizontal
-                        ret[cur.x, cur.y] = GridType.Path_Horiz;
-                    }
-                    else if (Mathf.Abs(forward.y - backward.y) == 2)
-                    {
-                        // Vertical
-                        ret[cur.x, cur.y] = GridType.Path_Vert;
-                    }
-                    else
-                    {
-                        // Corner
-                        bool top = (forward.y == (cur.y + 1)) || (backward.y == (cur.y + 1));
-                        bool right = (forward.x == (cur.x + 1)) || (backward.x == (cur.x + 1));
-                        if (top)
-                        {
-                            if (right)
-                            {
-                                ret[cur.x, cur.y] = GridType.Path_RT;
-                            }
-                            else
-                            {
-                                ret[cur.x, cur.y] = GridType.Path_LT;
-                            }
-                        }
-                        else
-                        {
-                            if (right)
-                            {
-                                ret[cur.x, cur.y] = GridType.Path_RB;
-                            }
-                            else
-                            {
-                                ret[cur.x, cur.y] = GridType.Path_LB;
-                            }
-                        }
-                    }
-                }
-                // Set up for next point
-                backward = cur;
-                cur = forward;
+                ret[val] = val.val;
             }
             return ret;
         }
