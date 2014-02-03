@@ -67,43 +67,34 @@ public class JumpTowardsSearcher<T>
         }
         #endregion
         // Push start point onto path
-        pathTaken.Push(new List<Value2D<T>>(new Value2D<T>[] { new Value2D<T>(curPoint.x, curPoint.y, container[curPoint]) }));
+        lastJump = new List<Value2D<T>>(new Value2D<T>[] { new Value2D<T>(curPoint.x, curPoint.y, container[curPoint]) });
+        pathTaken.Push(lastJump);
         jumps[curPoint] = new JumpSetup(this, curPoint, curPoint);
         try
         {
             while (pathTaken.Count > 0)
             {
-                lastJump = pathTaken.Peek();
                 curPoint = lastJump[lastJump.Count - 1];
-                List<Value2D<T>> jumpList = null;
 
                 // Didn't find target, go towards target
                 JumpSetup jumpSetup = jumps[curPoint];
-                while (!jumpSetup.Done)
-                {
-                    if (GetJumpTowards(jumpSetup, out jumpList))
-                    { // Found target
-                        pathTaken.Push(jumpList);
-                        return pathTaken;
-                    }
-                    if (jumpList.Count > 0)
-                    { // Jumped
-                        // Chose a dir
-                        pathTaken.Push(jumpList);
-                        #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            PrintSetup();
-                        }
-                        #endregion
-                        break;
-                    }
-                    else
-                    {
-                        jumpList = null;
-                    }
+                if (GetJumpTowards(jumpSetup, out lastJump))
+                { // Found target
+                    pathTaken.Push(lastJump);
+                    break;
                 }
-                if (jumpList == null)
+                if (lastJump.Count > 0)
+                { // Jumped
+                    // Chose a dir
+                    pathTaken.Push(lastJump);
+                    #region DEBUG
+                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        PrintSetup();
+                    }
+                    #endregion
+                }
+                else
                 { // None found.  Pop
                     if (lastJump.Count <= 1)
                     {
@@ -120,12 +111,19 @@ public class JumpTowardsSearcher<T>
                         PrintSetup();
                     }
                     #endregion
+                    lastJump = pathTaken.Peek();
                 }
             }
         }
         catch (Exception ex)
         {
             BigBoss.Debug.w(Logs.LevelGen, ex.ToString());
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.printFooter(Logs.LevelGen, "Jump Towards Search");
+            }
+            #endregion
             throw;
         }
         #region DEBUG
@@ -139,42 +137,65 @@ public class JumpTowardsSearcher<T>
 
     bool GetJumpTowards(JumpSetup setup, out List<Value2D<T>> ret)
     {
-        Point dir = setup.Dirs[setup.DirPtr++];
-        Point endPoint = curPoint + dir;
-        if (edgeSafe && !jumps.InRange(endPoint))
-        { // Out of range
-            #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "end point out of array range " + endPoint);
-            }
-            #endregion
-            ret = new List<Value2D<T>>(0);
-            return false;
-        }
-        // Can test this route
         ret = new List<Value2D<T>>(setup.Amount);
         Point last;
-        Point cur = new Point(curPoint);
-        for (int i = 1; i <= setup.Amount; i++)
+        while (!setup.Done)
         {
-            last = cur;
-            cur += dir;
-            JumpSetup space = jumps[cur];
-            if (space == null)
-            {
-                space = new JumpSetup(this, cur, last);
-                jumps[cur] = space;
-                if (space.Allowed)
+            Point dir = setup.Dirs[setup.DirPtr++];
+            Point endPoint = curPoint + dir;
+            if (edgeSafe && !jumps.InRange(endPoint))
+            { // Out of range
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    ret.Add(new Value2D<T>(cur.x, cur.y, container[cur]));
+                    BigBoss.Debug.w(Logs.LevelGen, "end point out of array range " + endPoint);
+                }
+                #endregion
+                ret = new List<Value2D<T>>(0);
+                return false;
+            }
+            // Can test this route
+            Point cur = new Point(curPoint);
+            for (int i = 1; i <= setup.Amount; i++)
+            {
+                last = cur;
+                cur += dir;
+                JumpSetup space = jumps[cur];
+                if (space == null)
+                {
+                    space = new JumpSetup(this, cur, last);
+                    jumps[cur] = space;
+                    if (space.Allowed)
+                    {
+                        ret.Add(new Value2D<T>(cur.x, cur.y, container[cur]));
+                    }
+                    else
+                    {
+                        #region DEBUG
+                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                        {
+                            BigBoss.Debug.w(Logs.LevelGen, "failed to step past " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
+                        }
+                        #endregion
+                        if (hugCorners)
+                        {
+                            if (ret.Count == 0)
+                            {
+                                setup.Amount = 1;
+                            }
+                            else
+                            {
+                                jumps[cur - dir].Amount = 1;
+                            }
+                        }
+                    }
                 }
                 else
-                {
+                { // Blocked
                     #region DEBUG
                     if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                     {
-                        BigBoss.Debug.w(Logs.LevelGen, "failed to step past " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
+                        BigBoss.Debug.w(Logs.LevelGen, "blocked at " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
                     }
                     #endregion
                     if (hugCorners)
@@ -189,49 +210,31 @@ public class JumpTowardsSearcher<T>
                         }
                     }
                 }
-            }
-            else
-            { // Blocked
-                #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                // If found target, return path we took
+                Value2D<T> found;
+                if (container.GetPointAround(cur.x, cur.y, false, foundTarget, out found))
                 {
-                    BigBoss.Debug.w(Logs.LevelGen, "blocked at " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
-                }
-                #endregion
-                if (hugCorners)
-                {
-                    if (ret.Count == 0)
+                    #region DEBUG
+                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                     {
-                        setup.Amount = 1;
+                        BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + found);
+                        BigBoss.Debug.printFooter(Logs.LevelGen, "Jump Towards Search");
                     }
-                    else
-                    {
-                        jumps[cur - dir].Amount = 1;
-                    }
-                }
-            }
-            // If found target, return path we took
-            Value2D<T> found;
-            if (container.GetPointAround(cur.x, cur.y, false, foundTarget, out found))
-            {
-                #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + found);
-                    BigBoss.Debug.printFooter(Logs.LevelGen, "Jump Towards Search");
-                }
-                #endregion
+                    #endregion
 
-                ret.Add(new Value2D<T>(found.x, found.y, container[found]));
-                return true;
+                    ret.Add(new Value2D<T>(found.x, found.y, container[found]));
+                    return true;
+                }
             }
+            #region DEBUG
+            if (ret.Count > 0 && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + dir + " from " + setup.Point + " jumping " + (cur - curPoint));
+                return false;
+            }
+            #endregion
         }
-        #region DEBUG
-        if (ret.Count > 0 && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + dir + " from " + setup.Point + " jumping " + (cur - curPoint));
-        }
-        #endregion
+        ret.Clear();
         return false;
     }
 
