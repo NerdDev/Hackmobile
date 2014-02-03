@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FBD2CE9C-06CA-C6F3-4929-287F1935C70E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace></RootNamespace>
+    <AssemblyName>UnityVS.Unity Project.UnityScript.Editor</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <NoConfig>true</NoConfig>
+    <NoStdLib>true</NoStdLib>
+    <ProjectTypeGuids>{84365F2C-1DDE-431A-8C14-179ADC971E4D};{1FAC5C55-277D-4884-94A4-83DBDAF57E56}</ProjectTypeGuids>
+    <MonoProfile>2.0</MonoProfile>
+    <UnityPath>C:\UnityPro432\Editor</UnityPath>
+    <MonoPath>$(UnityPath)\Data\Mono</MonoPath>
+    <LibraryAssembly>Assembly-UnityScript-Editor.dll</LibraryAssembly>
+    <TargetFrameworkDirectory>$(MonoPath)\lib\mono\$(MonoProfile)</TargetFrameworkDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <HintPath>$(TargetFrameworkDirectory)\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>$(TargetFrameworkDirectory)\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.XML">
+      <HintPath>$(TargetFrameworkDirectory)\System.XML.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>$(TargetFrameworkDirectory)\System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(UnityPath)\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>$(UnityPath)\Data\Managed\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="AudioToolkit_FreeVersion_Editor">
+      <HintPath>Assets\Editor\AudioToolkit_FreeVersion_Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="CruncherEditor">
+      <HintPath>Assets\Editor\CruncherEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
+      <HintPath>Assets\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="SyntaxTree.VisualStudio.Unity.Messaging">
+      <HintPath>Assets\Editor\SyntaxTree.VisualStudio.Unity.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="AudioToolkit_FreeVersion">
+      <HintPath>Assets\Tools\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
+    </Reference>
+    <Reference Include="CruncherScripts">
+      <HintPath>Assets\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="UnityVS.Unity Project.CSharp.csproj">
+      <Project>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</Project>
+      <Name>UnityVS.Unity Project.CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityVS.Unity Project.UnityScript.unityproj">
+      <Project>{074A7F51-C174-8BDA-DB42-144ED6A6CADA}</Project>
+      <Name>UnityVS.Unity Project.UnityScript</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Editor\ExtraPrimitives\_3dsMeshPostprocessor.js" />
+    <Compile Include="Assets\Editor\ExtraPrimitives\ExtraPrimitives.js" />
+    <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+    <None Include="Assets\Resources\XML\consumables.xml" />
+    <None Include="Assets\Resources\XML\materials.xml" />
+    <None Include="Assets\Resources\XML\npcs.xml" />
+    <None Include="Assets\Resources\XML\player.xml" />
+    <None Include="Assets\Resources\XML\strings.xml" />
+    <None Include="Assets\Resources\XML\titles.xml" />
+    <None Include="Assets\Resources\XML\weapons.xml" />
+    <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
+    <None Include="Assets\Tools\AudioToolkit\Readme.txt" />
+    <None Include="Assets\Tools\B2M_2.1\Script\BatchApply_README.txt" />
+    <None Include="Assets\Tools\EasyTouch\Readme_first.txt" />
+    <None Include="Assets\Tools\Fog of War\FoW\FOW.shader" />
+    <None Include="Assets\Tools\Fog of War\ReadMe.txt" />
+    <None Include="Assets\Tools\iTweenEditor\README.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
+    <None Include="Assets\Tools\NGUI\Examples\Models\Orc\Orc Skin.shader" />
+    <None Include="Assets\Tools\NGUI\Examples\Other\English.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Other\French.txt" />
+    <None Include="Assets\Tools\NGUI\Examples\Shaders\Refractive.shader" />
+    <None Include="Assets\Tools\NGUI\ReadMe - 2.0.3d.txt" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Depth.shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Depth.shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (HardClip).shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
+    <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
+    <None Include="Assets\Tools\Standard Assets\Projectors\Guidelines.txt" />
+    <None Include="Assets\Tools\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
+    <None Include="Assets\Tools\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+    <None Include="Assets\Editor\AudioToolkit_FreeVersion_Editor.dll" />
+    <None Include="Assets\Editor\CruncherEditor.dll" />
+    <None Include="Assets\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll" />
+    <None Include="Assets\Editor\SyntaxTree.VisualStudio.Unity.Messaging.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets" />
+    <Folder Include="Assets\Editor" />
+    <Folder Include="Assets\Editor\ExtraPrimitives" />
+    <Folder Include="Assets\Plugins" />
+    <Folder Include="Assets\Plugins\Android" />
+    <Folder Include="Assets\Resources" />
+    <Folder Include="Assets\Resources\XML" />
+    <Folder Include="Assets\Scripts" />
+    <Folder Include="Assets\Scripts\Library" />
+    <Folder Include="Assets\Scripts\Library\XML" />
+    <Folder Include="Assets\Tools" />
+    <Folder Include="Assets\Tools\AudioToolkit" />
+    <Folder Include="Assets\Tools\B2M_2.1" />
+    <Folder Include="Assets\Tools\B2M_2.1\Script" />
+    <Folder Include="Assets\Tools\EasyTouch" />
+    <Folder Include="Assets\Tools\Fog of War" />
+    <Folder Include="Assets\Tools\Fog of War\FoW" />
+    <Folder Include="Assets\Tools\iTweenEditor" />
+    <Folder Include="Assets\Tools\NGUI" />
+    <Folder Include="Assets\Tools\NGUI\Examples" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Atlases" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Atlases\Fantasy" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Atlases\Refractive" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Atlases\SciFi" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Atlases\Wooden" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Models" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Models\Orc" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Models\Orc Armor" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Other" />
+    <Folder Include="Assets\Tools\NGUI\Examples\Shaders" />
+    <Folder Include="Assets\Tools\NGUI\Resources" />
+    <Folder Include="Assets\Tools\NGUI\Resources\Shaders" />
+    <Folder Include="Assets\Tools\Standard Assets" />
+    <Folder Include="Assets\Tools\Standard Assets\Projectors" />
+    <Folder Include="Assets\Tools\Standard Assets\Projectors\Sources" />
+    <Folder Include="Assets\Tools\Standard Assets\Projectors\Sources\Shaders" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2012\UnityVS.UnityScript.targets" />
+</Project>
