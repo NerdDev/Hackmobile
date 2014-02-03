@@ -18,6 +18,7 @@ public class JumpTowardsSearcher<T>
     System.Random rand;
     Point gravityPt;
     bool edgeSafe;
+    bool hugCorners;
     Stack<List<Value2D<T>>> pathTaken = new Stack<List<Value2D<T>>>();
 
     public JumpTowardsSearcher(Container2D<T> cont, int x, int y, int minJump, int maxJump,
@@ -25,6 +26,7 @@ public class JumpTowardsSearcher<T>
         DrawAction<T> target,
         System.Random rand,
         Point gravityPt,
+        bool hugCorners = true,
         bool edgeSafe = false)
     {
         jumps = Container2D<JumpSetup>.CreateArrayFromBounds<T>(cont);
@@ -35,6 +37,9 @@ public class JumpTowardsSearcher<T>
         this.gravityPt = gravityPt;
         this.foundTarget = target;
         this.edgeSafe = edgeSafe;
+        this.minJump = minJump;
+        this.maxJump = maxJump;
+        this.hugCorners = hugCorners;
         jumpAmountOptionPrototype = new List<int>(maxJump - minJump);
         for (int i = minJump; i <= maxJump; i++)
         {
@@ -63,10 +68,10 @@ public class JumpTowardsSearcher<T>
         #endregion
         // Push start point onto path
         pathTaken.Push(new List<Value2D<T>>(new Value2D<T>[] { new Value2D<T>(curPoint.x, curPoint.y, container[curPoint]) }));
-        jumps[curPoint] = new JumpSetup(this, curPoint) { Blocked = true };
-        while (pathTaken.Count > 0)
+        jumps[curPoint] = new JumpSetup(this, curPoint, curPoint);
+        try
         {
-            try
+            while (pathTaken.Count > 0)
             {
                 lastJump = pathTaken.Peek();
                 curPoint = lastJump[lastJump.Count - 1];
@@ -81,7 +86,7 @@ public class JumpTowardsSearcher<T>
                         pathTaken.Push(jumpList);
                         return pathTaken;
                     }
-                    if (jumpList != null)
+                    if (jumpList.Count > 0)
                     { // Jumped
                         // Chose a dir
                         pathTaken.Push(jumpList);
@@ -93,11 +98,21 @@ public class JumpTowardsSearcher<T>
                         #endregion
                         break;
                     }
+                    else
+                    {
+                        jumpList = null;
+                    }
                 }
                 if (jumpList == null)
                 { // None found.  Pop
-                    jumpSetup.Reset();
-                    pathTaken.Pop();
+                    if (lastJump.Count <= 1)
+                    {
+                        pathTaken.Pop();
+                    }
+                    else
+                    {
+                        lastJump.RemoveAt(lastJump.Count - 1);
+                    }
                     #region DEBUG
                     if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                     {
@@ -107,10 +122,11 @@ public class JumpTowardsSearcher<T>
                     #endregion
                 }
             }
-            catch (Exception ex)
-            {
-                BigBoss.Debug.w(Logs.LevelGen, ex.ToString());
-            }
+        }
+        catch (Exception ex)
+        {
+            BigBoss.Debug.w(Logs.LevelGen, ex.ToString());
+            throw;
         }
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
@@ -123,17 +139,8 @@ public class JumpTowardsSearcher<T>
 
     bool GetJumpTowards(JumpSetup setup, out List<Value2D<T>> ret)
     {
-        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps))
-        {
-            setup.PrintSetup();
-        }
-        Jump jump;
-        if (!setup.Get(out jump))
-        {
-            ret = null;
-            return false;
-        }
-        Point endPoint = curPoint + jump.JumpVector;
+        Point dir = setup.Dirs[setup.DirPtr++];
+        Point endPoint = curPoint + dir;
         if (edgeSafe && !jumps.InRange(endPoint))
         { // Out of range
             #region DEBUG
@@ -142,110 +149,120 @@ public class JumpTowardsSearcher<T>
                 BigBoss.Debug.w(Logs.LevelGen, "end point out of array range " + endPoint);
             }
             #endregion
-            ret = null;
+            ret = new List<Value2D<T>>(0);
             return false;
         }
         // Can test this route
-        ret = new List<Value2D<T>>(jump.Amount);
+        ret = new List<Value2D<T>>(setup.Amount);
+        Point last;
         Point cur = new Point(curPoint);
-        for (int i = 1; i <= jump.Amount; i++)
+        for (int i = 1; i <= setup.Amount; i++)
         {
-            cur += jump.Dir;
+            last = cur;
+            cur += dir;
+            JumpSetup space = jumps[cur];
+            if (space == null)
+            {
+                space = new JumpSetup(this, cur, last);
+                jumps[cur] = space;
+                if (space.Allowed)
+                {
+                    ret.Add(new Value2D<T>(cur.x, cur.y, container[cur]));
+                }
+                else
+                {
+                    #region DEBUG
+                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        BigBoss.Debug.w(Logs.LevelGen, "failed to step past " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
+                    }
+                    #endregion
+                    if (hugCorners)
+                    {
+                        if (ret.Count == 0)
+                        {
+                            setup.Amount = 1;
+                        }
+                        else
+                        {
+                            jumps[cur - dir].Amount = 1;
+                        }
+                    }
+                }
+            }
+            else
+            { // Blocked
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "blocked at " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
+                }
+                #endregion
+                if (hugCorners)
+                {
+                    if (ret.Count == 0)
+                    {
+                        setup.Amount = 1;
+                    }
+                    else
+                    {
+                        jumps[cur - dir].Amount = 1;
+                    }
+                }
+            }
             // If found target, return path we took
-            if (foundTarget(container, cur.x, cur.y))
+            Value2D<T> found;
+            if (container.GetPointAround(cur.x, cur.y, false, foundTarget, out found))
             {
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + cur);
-                    BigBoss.Debug.printFooter(Logs.LevelGen, "Depth First Search");
+                    BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + found);
+                    BigBoss.Debug.printFooter(Logs.LevelGen, "Jump Towards Search");
                 }
                 #endregion
 
-                ret.Add(new Value2D<T>(cur.x, cur.y, container[cur]));
+                ret.Add(new Value2D<T>(found.x, found.y, container[found]));
                 return true;
             }
-
-            JumpSetup space = jumps[cur];
-            if (space == null)
-            {
-                space = new JumpSetup(this, cur);
-                jumps[cur] = space;
-            }
-            if (space.Allowed && !space.Blocked)
-            { // Jumping
-                ret.Add(new Value2D<T>(cur.x, cur.y, container[cur]));
-            }
-            else
-            { // Hit fail
-                #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    BigBoss.Debug.w(Logs.LevelGen, "failed to step past " + cur + " from " + setup.Point + " in dir " + jump.Dir + " jumping " + jump.Amount);
-                }
-                #endregion
-                //  Clear setup of longer jumps
-                setup.Shave(jump.Dir, i);
-                setup.JumpPtr--;
-                ret.Clear();
-                break;
-            }
         }
-        if (ret.Count == 0)
+        #region DEBUG
+        if (ret.Count > 0 && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
-            ret = null;
+            BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + dir + " from " + setup.Point + " jumping " + (cur - curPoint));
         }
-        else
-        {
-            foreach (Value2D<T> v in ret)
-            {
-                jumps[v].Blocked = true;
-            }
-            #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + jump.Dir + " from " + setup.Point + " jumping " + (cur - curPoint));
-            }
-            #endregion
-        }
+        #endregion
         return false;
-    }
-
-    class Jump
-    {
-        public Point JumpVector;
-        public Point Dir;
-        public int Amount;
-
-        public Jump(Point dir, int amount)
-        {
-            Dir = dir;
-            Amount = amount;
-            JumpVector = Dir * Amount;
-        }
     }
 
     class JumpSetup
     {
         public Point Point;
-        public bool Blocked = false;
         public bool Allowed;
         public JumpTowardsSearcher<T> Searcher;
-        List<Jump> Jumps;
-        public int JumpPtr;
+        public int Amount;
+        public List<Point> Dirs;
+        public int DirPtr;
         public bool Done
         {
             get
             {
-                return JumpPtr >= Jumps.Count;
+                return DirPtr >= Dirs.Count;
             }
         }
 
-        public JumpSetup(JumpTowardsSearcher<T> searcher, Point curPoint)
+        public JumpSetup(JumpTowardsSearcher<T> searcher, Point curPoint, Point from)
         {
+            Amount = searcher.rand.Next(searcher.minJump, searcher.maxJump);
             Point = curPoint;
             Allowed = searcher.allowedSpace(searcher.container, curPoint.x, curPoint.y);
             Point rawDir = searcher.gravityPt - searcher.curPoint;
+            this.Searcher = searcher;
+            List<Point> tmpDirs = Point.Directions;
+            Dirs = new List<Point>(3);
+            // Remove from dir
+            tmpDirs.Remove(from);
+            // Set preferred route
             Point pref = rawDir.UnitDir();
             if (pref.x != 0 && pref.y != 0)
             {
@@ -254,76 +271,43 @@ public class JumpTowardsSearcher<T>
                 else
                     pref.y = 0;
             }
-            Point secondary;
-            if (pref.x != 0)
+            Point secondary = null;
+            if (pref.x != 0 && rawDir.y != 0)
             {
-                secondary = new Point(0, pref.y > 0 ? 1 : -1);
+                secondary = new Point(0, rawDir.y > 0 ? 1 : -1);
+            }
+            else if (rawDir.x != 0)
+            {
+                secondary = new Point(rawDir.x > 0 ? 1 : -1, 0);
+            }
+            tmpDirs.Remove(pref);
+            Dirs.Add(pref);
+            // Add secondary route
+            if (secondary == null)
+            { // Make secondary the "momentum" direction
+                secondary = (curPoint - from).UnitDir();
+                if (!secondary.isZero())
+                {
+                    Dirs.Add(secondary);
+                    tmpDirs.Remove(secondary);
+                }
             }
             else
             {
-                secondary = new Point(pref.x > 0 ? 1 : -1, 0);
+                Dirs.Add(secondary);
+                tmpDirs.Remove(secondary);
             }
-            this.Searcher = searcher;
-            List<Point> tmpDirs = Point.Directions;
-            tmpDirs.Remove(pref);
-            tmpDirs.Remove(secondary);
-            List<Point> dirs = new List<Point>(4);
-            dirs.Add(pref);
-            dirs.Add(secondary);
-            dirs.AddRange(tmpDirs.Randomize(searcher.rand));
-            Jumps = new List<Jump>(dirs.Count * searcher.jumpAmountOptionPrototype.Count);
-            foreach (Point p in dirs)
-            {
-                foreach (int i in searcher.jumpAmountOptionPrototype.Randomize(searcher.rand))
-                {
-                    Jumps.Add(new Jump(p, i));
-                }
-            }
-            if (searcher.jumpSmallerOptionPrototype.Count > 0)
-            {
-                foreach (Point p in dirs)
-                {
-                    foreach (int i in searcher.jumpSmallerOptionPrototype.Randomize(searcher.rand))
-                    {
-                        Jumps.Add(new Jump(p, i));
-                    }
-                }
-            }
-        }
-
-        public void Reset()
-        {
-            JumpPtr = 0;
-        }
-
-        public bool Get(out Jump jump)
-        {
-            if (!Done)
-            {
-                jump = Jumps[JumpPtr++];
-                return true;
-            }
-            jump = null;
-            return false;
-        }
-
-        public void Shave(Point dir, int amount)
-        {
-            Jumps = Jumps.FindAll((j) =>
-            {
-                return !j.Dir.Equals(dir) || j.Amount < amount;
-            });
+            Dirs.AddRange(tmpDirs.Randomize(searcher.rand));
         }
 
         public void PrintSetup()
         {
-            if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps))
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(Logs.LevelGen, "Jump Setup at " + Point + " (Count: " + Jumps.Count + ")");
-                for (int i = 0; i < Jumps.Count; i++)
+                BigBoss.Debug.w("Plan at point " + Point);
+                foreach (Point dir in Dirs)
                 {
-                    Jump jump = Jumps[i];
-                    BigBoss.Debug.w(Logs.LevelGen, "  " + (i == JumpPtr ? "***" : "") + jump.Dir + " Amount: " + jump.Amount);
+                    BigBoss.Debug.w(Logs.LevelGen, dir.ToString());
                 }
             }
         }
@@ -348,8 +332,11 @@ public class JumpTowardsSearcher<T>
             tmpArr[val] = (GridType)(object)container[val];
         foreach (Value2D<JumpSetup> setup in jumps)
         {
-            if (setup.val.Blocked)
-                tmpArr[setup] = GridType.INTERNAL_RESERVED_BLOCKED;
+            tmpArr[setup] = GridType.INTERNAL_RESERVED_BLOCKED;
+        }
+        foreach (Value2D<GridType> val in Enumerate().Cast<Point>())
+        {
+            tmpArr[val] = GridType.INTERNAL_RESERVED_CUR;
         }
         foreach (Value2D<GridType> val in Path.PathPrint(Enumerate().Cast<Point>()))
         {

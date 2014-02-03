@@ -989,7 +989,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                 return true;
             };
         }
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps))
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.Perimeter) && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps))
         {
             debugArr = new Array2D<bool>(this.Bounding);
             call = new DrawAction<T>(call).And((arr, x, y) =>
@@ -1009,12 +1009,13 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         DrawAction<T> target,
         System.Random rand,
         Point gravityPt,
+        bool hugCorners,
         bool edgeSafe = false)
     {
         JumpTowardsSearcher<T> searcher = new JumpTowardsSearcher<T>(this, x, y,
             minJump, maxJump,
             allowedSpace, target,
-            rand, gravityPt, edgeSafe);
+            rand, gravityPt, hugCorners, edgeSafe);
         Stack<List<Value2D<T>>> stack = searcher.Find();
         Stack<List<Value2D<T>>> tmp = new Stack<List<Value2D<T>>>(stack.Count);
         int count = 0;

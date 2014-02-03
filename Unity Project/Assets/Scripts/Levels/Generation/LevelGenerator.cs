@@ -520,7 +520,8 @@ public class LevelGenerator
                     Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutCopy.Bounding.Expand(5))),
                     passTest,
                     Rand,
-                    fail.Center);
+                    fail.Center,
+                    true);
                     var path = new Path(stack);
                     if (path.isValid())
                     {
