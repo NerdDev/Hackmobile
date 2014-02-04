@@ -171,68 +171,50 @@ public class JumpTowardsSearcher<T>
                     if (space.Allowed)
                     {
                         ret.Add(new Value2D<T>(cur.x, cur.y, container[cur]));
+                        // If found target, return path we took
+                        Value2D<T> found;
+                        if (container.GetPointAround(cur.x, cur.y, false, foundTarget, out found))
+                        {
+                            #region DEBUG
+                            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                            {
+                                BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + found);
+                            }
+                            #endregion
+
+                            ret.Add(new Value2D<T>(found.x, found.y, container[found]));
+                            return true;
+                        }
+                        continue;
+                    }
+                }
+                // Blocked
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "failed to step past " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
+                }
+                #endregion
+                if (hugCorners)
+                {
+                    if (ret.Count == 0)
+                    {
+                        setup.Amount = 1;
                     }
                     else
                     {
-                        #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            BigBoss.Debug.w(Logs.LevelGen, "failed to step past " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
-                        }
-                        #endregion
-                        if (hugCorners)
-                        {
-                            if (ret.Count == 0)
-                            {
-                                setup.Amount = 1;
-                            }
-                            else
-                            {
-                                jumps[cur - dir].Amount = 1;
-                            }
-                        }
+                        jumps[cur - dir].Amount = 1;
                     }
                 }
-                else
-                { // Blocked
-                    #region DEBUG
-                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        BigBoss.Debug.w(Logs.LevelGen, "blocked at " + cur + " from " + setup.Point + " in dir " + dir + " jumping " + setup.Amount);
-                    }
-                    #endregion
-                    if (hugCorners)
-                    {
-                        if (ret.Count == 0)
-                        {
-                            setup.Amount = 1;
-                        }
-                        else
-                        {
-                            jumps[cur - dir].Amount = 1;
-                        }
-                    }
-                }
-                // If found target, return path we took
-                Value2D<T> found;
-                if (container.GetPointAround(cur.x, cur.y, false, foundTarget, out found))
-                {
-                    #region DEBUG
-                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        BigBoss.Debug.w(Logs.LevelGen, "===== FOUND TARGET: " + found);
-                        BigBoss.Debug.printFooter(Logs.LevelGen, "Jump Towards Search");
-                    }
-                    #endregion
-
-                    ret.Add(new Value2D<T>(found.x, found.y, container[found]));
-                    return true;
-                }
+                break;
             }
             #region DEBUG
-            if (ret.Count > 0 && BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            if (ret.Count > 0)
             {
-                BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + dir + " from " + setup.Point + " jumping " + (cur - curPoint));
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "Chose Direction: " + dir + " from " + setup.Point + " jumping " + (cur - curPoint));
+                }
                 return false;
             }
             #endregion
@@ -282,16 +264,14 @@ public class JumpTowardsSearcher<T>
                     else
                         pref.y = 0;
                 }
+                // Momentum 
+                else if (momentum.x != 0)
+                {
+                    pref.y = 0;
+                }
                 else
                 {
-                    if (momentum.x != 0)
-                    {
-                        pref.y = 0;
-                    }
-                    else
-                    {
-                        pref.x = 0;
-                    }
+                    pref.x = 0;
                 }
             }
             Point secondary = null;
@@ -306,19 +286,15 @@ public class JumpTowardsSearcher<T>
             tmpDirs.Remove(pref);
             Dirs.Add(pref);
             // Add secondary route
-            if (secondary == null)
-            { // Make secondary the "momentum" direction
-                secondary = (curPoint - from).UnitDir();
-                if (!secondary.isZero())
-                {
-                    Dirs.Add(secondary);
-                    tmpDirs.Remove(secondary);
-                }
-            }
-            else
+            if (secondary != null)
             {
                 Dirs.Add(secondary);
                 tmpDirs.Remove(secondary);
+            }
+            // Add momentum
+            if (tmpDirs.Remove(momentum))
+            {
+                Dirs.Add(momentum);
             }
             Dirs.AddRange(tmpDirs.Randomize(searcher.rand));
         }
