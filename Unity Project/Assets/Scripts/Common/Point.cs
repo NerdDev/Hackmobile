@@ -86,8 +86,11 @@ public class Point
     {
         Point ret = new Point();
         int max = Math.Max(Math.Abs(x), Math.Abs(y));
-        ret.x = (int)Math.Round(((decimal)x) / max);
-        ret.y = (int)Math.Round(((decimal)y) / max);
+        if (max != 0)
+        {
+            ret.x = (int)Math.Round(((decimal)x) / max);
+            ret.y = (int)Math.Round(((decimal)y) / max);
+        }
         return ret;
     }
 

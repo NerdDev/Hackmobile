@@ -111,7 +111,10 @@ public class JumpTowardsSearcher<T>
                         PrintSetup();
                     }
                     #endregion
-                    lastJump = pathTaken.Peek();
+                    if (pathTaken.Count > 0)
+                    {
+                        lastJump = pathTaken.Peek();
+                    }
                 }
             }
         }
@@ -265,14 +268,31 @@ public class JumpTowardsSearcher<T>
             Dirs = new List<Point>(3);
             // Remove from dir
             tmpDirs.Remove(from);
+            // Get momentum
+            Point momentum = (curPoint - from).UnitDir();
+
             // Set preferred route
             Point pref = rawDir.UnitDir();
             if (pref.x != 0 && pref.y != 0)
             {
-                if (searcher.rand.NextBool())
-                    pref.x = 0;
+                if (momentum.isZero())
+                { // No momentum, so random
+                    if (searcher.rand.NextBool())
+                        pref.x = 0;
+                    else
+                        pref.y = 0;
+                }
                 else
-                    pref.y = 0;
+                {
+                    if (momentum.x != 0)
+                    {
+                        pref.y = 0;
+                    }
+                    else
+                    {
+                        pref.x = 0;
+                    }
+                }
             }
             Point secondary = null;
             if (pref.x != 0 && rawDir.y != 0)
