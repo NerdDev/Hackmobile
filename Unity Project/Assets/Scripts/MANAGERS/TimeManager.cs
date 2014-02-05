@@ -58,19 +58,17 @@ public class TimeManager : MonoBehaviour, IManager
     {
         totalTimePlayed = PlayerPrefs.GetInt("MinutesPlayed", totalTimePlayed);
         StartCoroutine(TheseThingsWillHappenOncePerMinute());
+        StartCoroutine(TurnProcessing());
     }
 
     public void TogglePause()
     {
         if (Time.timeScale == 1)//If Unpaused:
         {
-            //prePauseState = Managers.GameStateManager.State;
-            //BigBoss.GameStateManager.SetState(typeof(PausedState));
             Time.timeScale = 0;
         }
         else if (Time.timeScale == 0)//If Paused:
         {
-            //Managers.GameStateManager.SetState(typeof(prePauseState));
             Time.timeScale = 1;
         }
     }
@@ -80,9 +78,7 @@ public class TimeManager : MonoBehaviour, IManager
         while (Application.isPlaying)
         {
             yield return new WaitForSeconds(1f);
-            //Managers.Audio.AdjustMusicVolume(.02f,2f);works
             totalTimePlayed++;
-            //Managers.Audio.PlaySFX(Managers.Audio.otherSFX,transform.position,.1f);//works
             yield return new WaitForSeconds(60f);//Initial 60 second delay til we compute things:
         }
     }
@@ -106,39 +102,51 @@ public class TimeManager : MonoBehaviour, IManager
     #endregion
 
     #region Objects to Update
-    public List<PassesTurns> updateList = new List<PassesTurns>();
+    public List<PassesTurns> TotalObjectList = new List<PassesTurns>();
+    internal Queue<PassesTurns> updateList = new Queue<PassesTurns>();
 
     public void RegisterToUpdateList<T>(T obj) where T : PassesTurns
     {
-        updateList.Add(obj);
+        TotalObjectList.Add(obj);
     }
 
     public void RemoveFromUpdateList<T>(T obj) where T : PassesTurns
     {
-        updateList.Remove(obj);
+        TotalObjectList.Remove(obj);
     }
 
     public void runGroupUpdate(int turnPoints)
     {
-        foreach (PassesTurns obj in updateList)
+        foreach (PassesTurns obj in TotalObjectList)
         {
             if (obj.IsActive)
             {
-                runUpdate(obj, turnPoints);
+                obj.CurrentPoints += turnPoints;
+                updateList.Enqueue(obj);
             }
         }
     }
 
-    public void runUpdate<T>(T obj, int turnPoints) where T : PassesTurns
+    internal IEnumerator TurnProcessing()
     {
-        obj.CurrentPoints += turnPoints;
-        //this will prevent AI processing from doing all the small actions constantly
-        // and we can update it based on stats to make them move more or less often
-        if (obj.CurrentPoints >= obj.BasePoints)
+        while (Time.timeScale > 0)
         {
-            //The object must lower it's own base points
-            obj.UpdateTurn();
+            if (updateList.Count > 0)
+            {
+                runUpdate(updateList.Dequeue());
+            }
+            else
+            {
+                //BigBoss.PlayerInput.allowTouchInput = true;
+            }
+            yield return null;
         }
+    }
+
+    public void runUpdate<T>(T obj) where T : PassesTurns
+    {
+        //The object must lower it's own base points
+        obj.UpdateTurn();
     }
     #endregion
 }
