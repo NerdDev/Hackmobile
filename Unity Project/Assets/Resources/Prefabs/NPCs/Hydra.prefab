@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 95: {fileID: 9500000}
   - 136: {fileID: 13600000}
+  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: Hydra
   m_TagString: Untagged
@@ -1331,7 +1332,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
+  m_LocalScale: {x: .119999997, y: .119999997, z: .119999997}
   m_Children:
   - {fileID: 400002}
   - {fileID: 400004}
@@ -2380,6 +2381,7 @@ Transform:
   m_Father: {fileID: 400058}
 --- !u!95 &9500000
 Animator:
+  serializedVersion: 2
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -2390,6 +2392,18 @@ Animator:
   m_CullingMode: 1
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -2421,6 +2435,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2509,6 +2526,7 @@ SkinnedMeshRenderer:
   - {fileID: 400166}
   - {fileID: 400168}
   - {fileID: 400170}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 400024}
   m_AABB:
     m_Center: {x: -.679988146, y: .147088289, z: 1.01327896e-05}

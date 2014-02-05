@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -39,70 +39,70 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Unity Pro/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/UnityPro432/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Unity Pro/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/UnityPro432/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\EasyTouch\Example\C# Example\Examples for EasyTouch\Example-Multiplefingers\_OtherScript\bord.js" />
-     <Compile Include="Assets\EasyTouch\Plugins\_Java-Event-Template\J_EasyButtonTemplate.js" />
-     <Compile Include="Assets\EasyTouch\Plugins\_Java-Event-Template\J_EasyJoystickTemplate.js" />
-     <Compile Include="Assets\EasyTouch\Plugins\_Java-Event-Template\J_EasyTouchTemplate.js" />
-     <None Include="Assets\AudioToolkit\Readme.txt" />
-     <None Include="Assets\NGUI\Resources\Shaders\Depth.shader" />
-     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
-     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
-     <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
-     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
-     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
-     <None Include="Assets\XML\weapons.xml" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
-     <None Include="Assets\EasyTouch\Readme_first.txt" />
-     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
-     <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
-     <None Include="Assets\Fog of War\FoW\FOW.shader" />
-     <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
-     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
+     <Compile Include="Assets\Tools\EasyTouch\Example\C# Example\Examples for EasyTouch\Example-Multiplefingers\_OtherScript\bord.js" />
+     <Compile Include="Assets\Tools\EasyTouch\Plugins\_Java-Event-Template\J_EasyButtonTemplate.js" />
+     <Compile Include="Assets\Tools\EasyTouch\Plugins\_Java-Event-Template\J_EasyJoystickTemplate.js" />
+     <Compile Include="Assets\Tools\EasyTouch\Plugins\_Java-Event-Template\J_EasyTouchTemplate.js" />
+     <None Include="Assets\Tools\AudioToolkit\Readme.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Depth.shader" />
+     <None Include="Assets\Tools\Standard Assets\Projectors\Guidelines.txt" />
+     <None Include="Assets\Tools\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Models\Orc\Orc Skin.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
+     <None Include="Assets\Resources\XML\weapons.xml" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
+     <None Include="Assets\Tools\EasyTouch\Readme_first.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
+     <None Include="Assets\Tools\Fog of War\FoW\FOW.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
-     <None Include="Assets\XML\strings.xml" />
+     <None Include="Assets\Resources\XML\strings.xml" />
      <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
-     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
-     <None Include="Assets\iTweenEditor\README.txt" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
-     <None Include="Assets\XML\player.xml" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
-     <None Include="Assets\NGUI\ReadMe - 2.0.3d.txt" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (HardClip).shader" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
-     <None Include="Assets\NGUI\Examples\Other\English.txt" />
-     <None Include="Assets\NGUI\Examples\Other\French.txt" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
-     <None Include="Assets\XML\materials.xml" />
-     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
-     <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
-     <None Include="Assets\XML\consumables.xml" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth.shader" />
-     <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
-     <None Include="Assets\XML\npcs.xml" />
-     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
-     <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
-     <None Include="Assets\Fog of War\ReadMe.txt" />
-     <None Include="Assets\XML\titles.xml" />
+     <None Include="Assets\Tools\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
+     <None Include="Assets\Tools\iTweenEditor\README.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
+     <None Include="Assets\Resources\XML\player.xml" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
+     <None Include="Assets\Tools\NGUI\ReadMe - 2.0.3d.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (HardClip).shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Other\English.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Other\French.txt" />
+     <None Include="Assets\Tools\B2M_2.1\Script\BatchApply_README.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
+     <None Include="Assets\Resources\XML\materials.xml" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Shaders\Refractive.shader" />
+     <None Include="Assets\Resources\XML\consumables.xml" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Depth.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
+     <None Include="Assets\Resources\XML\npcs.xml" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
+     <None Include="Assets\Tools\Fog of War\ReadMe.txt" />
+     <None Include="Assets\Resources\XML\titles.xml" />
  <Reference Include="AudioToolkit_FreeVersion">
- <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
+ <HintPath>Assets\Tools\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{C65DF7E6-5082-3454-2A7F-EDDBED1731B5}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+ <Reference Include="CruncherScripts">
+ <HintPath>Assets\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
+ </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

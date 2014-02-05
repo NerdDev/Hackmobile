@@ -38,9 +38,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a09421567d6ee843ad7968312c5642f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Wall: {fileID: 100000, guid: 31678c17a50571c46bb65ed0bcd8fb00, type: 2}
-  Door: {fileID: 100000, guid: 322ace8b2f61ec340be76a73799154e1, type: 2}
-  Floor: {fileID: 100000, guid: 01a66e1ab34dac84ba55eaba1d261d05, type: 2}
+  Wall: {fileID: 100000, guid: 11ef9ffc0c89ee444912a2ccd7d4298f, type: 2}
+  Door: {fileID: 100000, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
+  Floor: {fileID: 100000, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
   StairUp: {fileID: 100000, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
   StairDown: {fileID: 100000, guid: f67f85124b9f802438f4fa80e9c092db, type: 2}
   keywords: 

@@ -8,7 +8,7 @@ using System.IO;
 public class ObjectManager : MonoBehaviour, IManager
 {
     public bool Initialized { get; set; }
-    const string XMLPath = "Assets/XML/";
+    const string XMLPath = "Assets/Resources/XML/";
     public NPCDictionary<NPC, NPCInstance> NPCs { get; protected set; }
     public ItemDictionary Items { get; protected set; }
     public Dictionary<string, string> Strings { get; protected set; }
@@ -28,11 +28,13 @@ public class ObjectManager : MonoBehaviour, IManager
         PlayerProfessions = new ProfessionTitles();
         Strings = new Dictionary<string, string>();
 
-        string[] files = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
-        foreach (string file in files)
+        UnityEngine.Object[] files = Resources.LoadAll("XML", typeof(TextAsset));
+        //Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
+        foreach (UnityEngine.Object file in files)
         {
-            ParseXML(file);
+            ParseXML((file as TextAsset).text);
         }
+        
     }
 
     #region Parsing
@@ -42,7 +44,7 @@ public class ObjectManager : MonoBehaviour, IManager
             BigBoss.Debug.w(Logs.XML, "Parsing " + file);
 
         XMLNode root = new XMLNode(null); // No parent
-        root.Parse(System.IO.File.ReadAllText(file));
+        root.Parse(file);
 
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.XML_Print) && BigBoss.Debug.logging(Logs.XML))
             BigBoss.Debug.w(Logs.XML, root.Print());

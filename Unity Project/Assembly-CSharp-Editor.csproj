@@ -110,8 +110,74 @@
      <None Include="Assets\Fog of War\FoW\FOW.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
+     <Compile Include="Assets\Editor\EasyTouch\GUIEasyButtonCallBack.cs" />
+     <Compile Include="Assets\Editor\EasyTouch\GUIEasyButtonInspector.cs" />
+     <Compile Include="Assets\Editor\EasyTouch\GUIEasyJoystickCallBack.cs" />
+     <Compile Include="Assets\Editor\EasyTouch\GUIEasyJoystickInspector.cs" />
+     <Compile Include="Assets\Editor\EasyTouch\GUIEasyTouchInspector.cs" />
+     <Compile Include="Assets\Editor\EasyTouch\GUIEasyTouchMenu.cs" />
+     <Compile Include="Assets\Editor\EasyTouch\GUIEasytouchCallBack.cs" />
+     <Compile Include="Assets\Editor\EasyTouch\HTEditorToolKit.cs" />
+     <Compile Include="Assets\Editor\NGUI\AtlasGenerator.cs" />
+     <Compile Include="Assets\Editor\NGUI\BMFontReader.cs" />
+     <Compile Include="Assets\Editor\NGUI\ComponentSelector.cs" />
+     <Compile Include="Assets\Editor\NGUI\NGUIEditorTools.cs" />
+     <Compile Include="Assets\Editor\NGUI\NGUIJson.cs" />
+     <Compile Include="Assets\Editor\NGUI\NGUIMenu.cs" />
+     <Compile Include="Assets\Editor\NGUI\NGUISelectionTools.cs" />
+     <Compile Include="Assets\Editor\NGUI\NGUITransformInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\SpriteSelector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIAtlasInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIAtlasMaker.cs" />
+     <Compile Include="Assets\Editor\NGUI\UICameraTool.cs" />
+     <Compile Include="Assets\Editor\NGUI\UICreateNewUIWizard.cs" />
+     <Compile Include="Assets\Editor\NGUI\UICreateWidgetWizard.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIDrawCallInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIFilledSpriteInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIFontInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIFontMaker.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIImageButtonInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UILabelInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIPanelInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIPanelTool.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIPopupListInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIScrollBarInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UISettings.cs" />
+     <Compile Include="Assets\Editor\NGUI\UISlicedSpriteInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UISliderInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UISpriteAnimationInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UISpriteInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UITextureInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UITexturePacker.cs" />
+     <Compile Include="Assets\Editor\NGUI\UITiledSpriteInspector.cs" />
+     <Compile Include="Assets\Editor\NGUI\UIWidgetInspector.cs" />
+     <Compile Include="Assets\Editor\Property Exposing\ExposeProperties.cs" />
+     <Compile Include="Assets\Editor\Property Exposing\ExposePropertyAttribute.cs" />
+     <Compile Include="Assets\Editor\Property Exposing\TimeManagerEditor.cs" />
+     <Compile Include="Assets\Editor\iTween\iTweenEventDataEditor.cs" />
+     <Compile Include="Assets\Editor\iTween\iTweenPathEditor.cs" />
+     <Compile Include="Assets\Tools\NGUI\Examples\Scripts\InventorySystem\Editor\InvDatabaseInspector.cs" />
+     <Compile Include="Assets\Tools\NGUI\Examples\Scripts\InventorySystem\Editor\InvFindItem.cs" />
+     <None Include="Assets\Tools\AudioToolkit\Readme.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Depth.shader" />
+     <None Include="Assets\Tools\Standard Assets\Projectors\Guidelines.txt" />
+     <None Include="Assets\Tools\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Models\Orc\Orc Skin.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
+     <None Include="Assets\Resources\XML\weapons.xml" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
+     <None Include="Assets\Tools\EasyTouch\Readme_first.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
+     <None Include="Assets\Tools\Fog of War\FoW\FOW.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
-     <None Include="Assets\XML\strings.xml" />
+     <None Include="Assets\Resources\XML\strings.xml" />
      <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
      <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
      <None Include="Assets\iTweenEditor\README.txt" />
@@ -141,14 +207,49 @@
  <Reference Include="AudioToolkit_FreeVersion">
  <HintPath>Assets\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
  </Reference>
+     <None Include="Assets\Tools\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
+     <None Include="Assets\Tools\iTweenEditor\README.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
+     <None Include="Assets\Resources\XML\player.xml" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
+     <None Include="Assets\Tools\NGUI\ReadMe - 2.0.3d.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (HardClip).shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Other\English.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Other\French.txt" />
+     <None Include="Assets\Tools\B2M_2.1\Script\BatchApply_README.txt" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
+     <None Include="Assets\Resources\XML\materials.xml" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
+     <None Include="Assets\Tools\NGUI\Examples\Shaders\Refractive.shader" />
+     <None Include="Assets\Resources\XML\consumables.xml" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Depth.shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
+     <None Include="Assets\Resources\XML\npcs.xml" />
+     <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
+     <None Include="Assets\Tools\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
+     <None Include="Assets\Tools\Fog of War\ReadMe.txt" />
+     <None Include="Assets\Resources\XML\titles.xml" />
  <Reference Include="AudioToolkit_FreeVersion_Editor">
- <HintPath>Assets\AudioToolkit\AudioToolkit\Editor\AudioToolkit_FreeVersion_Editor.dll</HintPath>
+ <HintPath>Assets\Editor\AudioToolkit_FreeVersion_Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="CruncherEditor">
+ <HintPath>Assets\Editor\CruncherEditor.dll</HintPath>
  </Reference>
  <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
- <HintPath>Assets\UnityVS\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
+ <HintPath>Assets\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
  </Reference>
  <Reference Include="SyntaxTree.VisualStudio.Unity.Messaging">
- <HintPath>Assets\UnityVS\Editor\SyntaxTree.VisualStudio.Unity.Messaging.dll</HintPath>
+ <HintPath>Assets\Editor\SyntaxTree.VisualStudio.Unity.Messaging.dll</HintPath>
+ </Reference>
+ <Reference Include="AudioToolkit_FreeVersion">
+ <HintPath>Assets\Tools\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll</HintPath>
+ </Reference>
+ <Reference Include="CruncherScripts">
+ <HintPath>Assets\Tools\Cruncher\Scripts\CruncherScripts.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Unity Pro\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
@@ -170,8 +271,6 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{C65DF7E6-5082-3454-2A7F-EDDBED1731B5}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{BDBCE7D3-139D-3EDB-816D-FB1D73476D25}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-UnityScript.unityproj">

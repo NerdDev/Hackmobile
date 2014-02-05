@@ -27,8 +27,8 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     protected Spell onUse = new Spell();
 
     //Count
-    private uint _count; //uneditable except from inside this class
-    internal uint Count { get { return _count; } }
+    private int _count; //uneditable except from inside this class
+    internal int Count { get { return _count; } }
     #endregion
 
     public Item()
@@ -38,7 +38,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
 
     public Item(int count)
     {
-        _count = (uint) count;
+        _count = count;
     }
 
     #region Usage:
@@ -131,6 +131,18 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     internal void Add()
     {
         _count++;
+    }
+
+    internal Item GetForTransfer()
+    {
+        Item newItem;
+        if (Count > 0)
+        {
+            newItem = this.Copy();
+            newItem._count = 1;
+        }
+        else  { newItem = null; }
+        return newItem;
     }
     #endregion
 

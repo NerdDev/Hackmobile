@@ -265,6 +265,7 @@ GameObject:
   - 4: {fileID: 400034}
   - 95: {fileID: 9500000}
   - 136: {fileID: 13600000}
+  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: Orc
   m_TagString: Untagged
@@ -1200,7 +1201,7 @@ Transform:
   m_GameObject: {fileID: 100034}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .699999988, y: .699999988, z: .699999988}
+  m_LocalScale: {x: .5, y: .5, z: .5}
   m_Children:
   - {fileID: 400110}
   - {fileID: 400114}
@@ -1784,6 +1785,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!23 &2300002
 Renderer:
   m_ObjectHideFlags: 1
@@ -1802,6 +1806,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!23 &2300004
 Renderer:
   m_ObjectHideFlags: 1
@@ -1820,6 +1827,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -1843,6 +1853,7 @@ MeshFilter:
   m_Mesh: {fileID: 4300006, guid: aa476cf34d3d46d478aa560a935400c6, type: 3}
 --- !u!95 &9500000
 Animator:
+  serializedVersion: 2
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -1853,6 +1864,18 @@ Animator:
   m_CullingMode: 1
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -1885,6 +1908,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -1900,6 +1926,7 @@ SkinnedMeshRenderer:
   - {fileID: 400064}
   - {fileID: 400058}
   - {fileID: 400066}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 400106}
   m_AABB:
     m_Center: {x: .109524094, y: -.00427303463, z: .00219139457}
@@ -1923,6 +1950,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -1934,6 +1964,7 @@ SkinnedMeshRenderer:
   - {fileID: 400098}
   - {fileID: 400104}
   - {fileID: 400102}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 400104}
   m_AABB:
     m_Center: {x: -.489609867, y: .0138360858, z: .000917166471}
@@ -1957,6 +1988,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2012,6 +2046,7 @@ SkinnedMeshRenderer:
   - {fileID: 400042}
   - {fileID: 400074}
   - {fileID: 400048}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 400106}
   m_AABB:
     m_Center: {x: .0614406466, y: .044111684, z: 2.38418579e-07}
@@ -2035,6 +2070,9 @@ SkinnedMeshRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2044,6 +2082,7 @@ SkinnedMeshRenderer:
   - {fileID: 400118}
   - {fileID: 400120}
   - {fileID: 400068}
+  m_BlendShapeWeights: []
   m_RootBone: {fileID: 400068}
   m_AABB:
     m_Center: {x: -.30916819, y: -.276274562, z: -6.89178705e-07}
