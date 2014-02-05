@@ -184,7 +184,7 @@ public class InputManager : MonoBehaviour, IManager
         horizontalMouseAxis = Input.GetAxis("Mouse X");
         verticalMouseAxis = Input.GetAxis("Mouse Y");
 
-        if (Input.GetMouseButton(1)) //hold right click
+        if (mouseMovement) //hold right click
         {
             isMovementKeyPressed = true;
             Vector2 centerScreenPointToMousePosLookVector = (Vector2)Input.mousePosition - centerPointInScreenSpace;

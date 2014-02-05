@@ -791,7 +791,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400098}
-  - 111: {fileID: 11100000}
   - 114: {fileID: 11400050}
   - 95: {fileID: 9500000}
   - 114: {fileID: 11400048}
@@ -3555,7 +3554,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100234}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -863.461487, y: 400, z: 0}
+  m_LocalPosition: {x: -533.333374, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400124}
@@ -4136,7 +4135,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
   m_Controller: {fileID: 9100000, guid: 90d1994c566f4f645ac24a51b4cafa35, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 1
   m_HasTransformHierarchy: 1
@@ -4175,34 +4174,6 @@ Light:
   m_ShadowAngle: 0
   m_IndirectIntensity: 1
   m_AreaSize: {x: 1, y: 1}
---- !u!111 &11100000
-Animation:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100098}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Animation: {fileID: 7400030, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  m_Animations:
-  - {fileID: 7400030, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400032, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400034, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400036, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400038, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400040, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400042, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400044, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400046, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400048, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400050, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400052, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400054, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  - {fileID: 7400056, guid: 245d023b51e054e40945f5cd724cf25f, type: 3}
-  m_WrapMode: 0
-  m_PlayAutomatically: 0
-  m_AnimatePhysics: 0
-  m_CullingType: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -70,7 +70,7 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         newWorldObject.OnDestroy += Unregister;
         existing.Add(newWorldObject);
         if (newWorldObject is PassesTurns)
-            BigBoss.Time.updateList.Add((PassesTurns)newWorldObject);
+            BigBoss.Time.TotalObjectList.Add((PassesTurns)newWorldObject);
         newWorldObject.IsActive = true;
         return newWorldObject;
     }
