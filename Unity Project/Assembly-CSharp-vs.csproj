@@ -117,6 +117,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ListExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\QueueExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\RandomExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />

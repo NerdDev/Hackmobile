@@ -480,8 +480,14 @@ public class LevelGenerator
         DrawAction<GridType> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.CanDrawDoor());
         Container2D<GridType> layoutCopy = Layout.Bake().Array;
         List<LayoutObject> rooms = new List<LayoutObject>(Layout.GetRooms().Cast<LayoutObject>());
+        Container2D<GridType> runningConnected = Container2D<GridType>.CreateArrayFromBounds(layoutCopy);
+        // Create initial queue and visited
         LayoutObject startingRoom = rooms.Take();
-        startingRoom.Grids.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED));
+        startingRoom.DrawAll(Draw.AddTo(runningConnected, startingRoom.ShiftP).And(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED)));
+        Container2D<bool> visited;
+        Queue<Value2D<GridType>> queue;
+        ConstructBFS(startingRoom, out queue, out visited);
+        visited = visited.Array;
         LayoutObject fail;
         while (!startingRoom.ConnectedTo(rooms, out fail))
         {
@@ -494,7 +500,9 @@ public class LevelGenerator
             }
             #endregion
             Value2D<GridType> startPoint;
-            if (!FindClosestPoint(layoutCopy, fail, out startPoint))
+            Value2D<GridType> endPoint;
+            LayoutObject hit;
+            if (!FindNextPathPoints(layoutCopy, runningConnected, out hit, passTest, queue, visited, out startPoint, out endPoint))
             {
                 throw new ArgumentException("Cannot find path to fail room");
             }
@@ -514,9 +522,9 @@ public class LevelGenerator
             3,
             5,
             Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutCopy.Bounding.Expand(5))),
-            passTest,
+            passTest.And(Draw.ContainedIn(hit)),
             Rand,
-            fail.Center,
+            endPoint,
             true);
             var path = new Path(stack);
             if (path.isValid())
@@ -543,7 +551,17 @@ public class LevelGenerator
                 }
                 path.Bake();
                 Layout.AddPath(path);
-                runningConnected.PutAll(path.Grids);
+                foreach (var v in path.Grids)
+                {
+                    layoutCopy[v] = GridType.INTERNAL_RESERVED_BLOCKED;
+                    runningConnected.Put(v);
+                    if (!visited[v])
+                    {
+                        queue.Enqueue(v);
+                    }
+                    visited[v] = true;
+                }
+                hit.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED, hit.ShiftP).And(Draw.AddTo(runningConnected, hit.ShiftP)));
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
@@ -552,13 +570,10 @@ public class LevelGenerator
                 }
                 #endregion
             }
-            #region DEBUG
-            else if (BigBoss.Debug.logging(Logs.LevelGen))
+            else
             {
-                layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_BLOCKED;
-                BigBoss.Debug.w(Logs.LevelGen, "Could not make an initial start point connection.");
+                throw new ArgumentException("Cannot create path to hit room");
             }
-            #endregion
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -568,20 +583,49 @@ public class LevelGenerator
         #endregion
     }
 
-    protected bool FindClosestPoint(Container2D<GridType> map, LayoutObject smaller, out Value2D<GridType> found)
+    protected void ConstructBFS(LayoutObject obj,
+        out Queue<Value2D<GridType>> queue,
+        out Container2D<bool> visited)
     {
-        MultiMap<GridType> inside = new MultiMap<GridType>();
-        MultiMap<GridType> perim = new MultiMap<GridType>();
-        smaller.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
+        visited = new MultiMap<bool>();
+        queue = new Queue<Value2D<GridType>>();
+        obj.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
         {
-            UnitAction = Draw.AddTo(inside, smaller.ShiftP),
-            StrokeAction = Draw.AddTo(perim, smaller.ShiftP)
+            UnitAction = Draw.SetTo<GridType, bool>(visited, true, obj.ShiftP),
+            StrokeAction = Draw.AddTo(queue, obj.ShiftP).And(Draw.SetTo<GridType, bool>(visited, true, obj.ShiftP))
         }, false);
-        return map.DrawBreadthFirstSearch(
-            perim.Cast<Point>(), inside.Cast<Point>(), false,
+    }
+    
+    protected bool FindNextPathPoints(Container2D<GridType> map, 
+        Container2D<GridType> runningConnected,
+        out LayoutObject hit, 
+        DrawAction<GridType> pass,
+        Queue<Value2D<GridType>> curQueue, 
+        Container2D<bool> curVisited, 
+        out Value2D<GridType> startPoint, 
+        out Value2D<GridType> endPoint)
+    {
+        if (!map.DrawBreadthFirstSearch(
+            curQueue, curVisited, false,
             Draw.EqualTo(GridType.NULL),
             Draw.Not(Draw.EqualTo(GridType.NULL)),
-            out found);
+            out endPoint))
+        {
+            hit = null;
+            startPoint = null;
+            return false;
+        }
+        hit = Layout.GetObjAt(endPoint);
+        Container2D<bool> hitVisited;
+        Queue<Value2D<GridType>> hitQueue;
+        ConstructBFS(hit, out hitQueue, out hitVisited);
+        curQueue.Enqueue(hitQueue);
+        curVisited.PutAll(hitVisited);
+        return map.DrawBreadthFirstSearch(
+            hitQueue, hitVisited, false,
+            Draw.EqualTo(GridType.NULL),
+            Draw.EqualTo(GridType.INTERNAL_RESERVED_BLOCKED),
+            out startPoint);
     }
 
     private void ConfirmEdges()

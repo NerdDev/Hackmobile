@@ -884,17 +884,24 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     public bool DrawBreadthFirstFill(int x, int y,
         bool cornered,
         DrawAction<T> shouldQueue,
-        DrawAction<T> shouldContinue)
+        DrawAction<T> shouldContinue,
+        out Queue<Value2D<T>> endingQueue,
+        out Container2D<bool> endingVisited)
     {
-        return DrawBreadthFirstFill(new[] { new Point(x, y) },
-            new[] { new Point(x, y) },
+        endingQueue = new Queue<Value2D<T>>();
+        endingQueue.Enqueue(new Value2D<T>(x, y, this[x, y]));
+        endingVisited = Container2D<bool>.CreateArrayFromBounds(this);
+        endingVisited[x, y] = true;
+        return DrawBreadthFirstFill(endingQueue,
+            endingVisited,
             cornered,
             shouldQueue,
             shouldContinue);
     }
 
-    public bool DrawBreadthFirstFill(IEnumerable<Point> startQueue,
-        IEnumerable<Point> startVisited,
+    public bool DrawBreadthFirstFill(
+        Queue<Value2D<T>> queue,
+        Container2D<bool> visited,
         bool cornered,
         DrawAction<T> shouldQueue,
         DrawAction<T> shouldContinue = null)
@@ -903,35 +910,20 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
-        }
-        #endregion
-        Queue<Point> queue = new Queue<Point>();
-        Container2D<bool> visited = Container2D<bool>.CreateArrayFromBounds(this);
-        foreach (Point p in startQueue)
-        {
-            queue.Enqueue(p);
-            visited[p] = true;
-        }
-        foreach (Point p in startVisited)
-        {
-            visited[p] = true;
-        }
-        #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-        {
             MultiMap<GridType> queueMap = new MultiMap<GridType>();
-            foreach (Point p in startQueue)
+            foreach (Point p in queue)
                 queueMap[p] = GridType.INTERNAL_RESERVED_BLOCKED;
             queueMap.ToLog("Starting queue");
             visited.ToLog("Starting Visited");
         }
         #endregion
-        Point curPoint;
+        Value2D<T> curPoint = null;
+        bool pass = true;
         while (queue.Count > 0)
         {
             curPoint = queue.Dequeue();
             #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
                 MultiMap<GridType> tmpMap = new MultiMap<GridType>();
                 foreach (Value2D<bool> val in visited)
@@ -946,7 +938,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                 tmpMap.ToLog("At " + curPoint);
             }
             #endregion
-            if (!DrawAround(curPoint.x, curPoint.y, true, (arr, x2, y2) =>
+            if (!DrawAround(curPoint.x, curPoint.y, cornered, (arr, x2, y2) =>
             {
                 if (!visited[x2, y2])
                 {
@@ -954,7 +946,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                     {
                         queue.Enqueue(new Value2D<T>(x2, y2, arr[x2, y2]));
                         #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                         {
                             BigBoss.Debug.w(Logs.LevelGen, "Queued " + x2 + " " + y2);
                         }
@@ -963,8 +955,13 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                     else if (shouldContinue != null && !shouldContinue(arr, x2, y2))
                     {
                         #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                         {
+                            if (x2 == 45 && y2 == 22)
+                            {
+                                int wer = 23;
+                                wer++;
+                            }
                             BigBoss.Debug.w(Logs.LevelGen, "Stopping early at " + x2 + " " + y2);
                         }
                         #endregion
@@ -976,21 +973,36 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             }))
             {
                 // Stopping early
-                return false;
+                pass = false;
+                break;
             }
         }
-        return true;
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
+            MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+            foreach (Value2D<bool> val in visited)
+            {
+                tmpMap[val] = GridType.INTERNAL_RESERVED_BLOCKED;
+            }
+            foreach (Value2D<T> val in queue)
+            {
+                tmpMap[val] = GridType.INTERNAL_RESERVED_CUR;
+            }
+            if (curPoint != null)
+            {
+                tmpMap[curPoint] = GridType.INTERNAL_RESERVED_CUR;
+            }
+            tmpMap.ToLog("Ending at " + curPoint);
             BigBoss.Debug.printFooter(Logs.LevelGen, "Breadth First Fill");
         }
         #endregion
+        return pass;
     }
 
     public bool DrawBreadthFirstSearch(
-        IEnumerable<Point> startQueue,
-        IEnumerable<Point> startVisited,
+        Queue<Value2D<T>> queue,
+        Container2D<bool> visited,
         bool cornered,
         DrawAction<T> shouldQueue,
         DrawAction<T> goal,
@@ -998,7 +1010,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     {
         found = new Value2D<T>();
         DrawAction<T> shouldContinue = Draw.Not(goal).IfNotThen(Draw.Set(found).And(Draw.Stop<T>()));
-        return !DrawBreadthFirstFill(startQueue, startVisited, cornered, shouldQueue, shouldContinue);
+        return !DrawBreadthFirstFill(queue, visited, cornered, shouldQueue, shouldContinue);
     }
 
     public bool DrawBreadthFirstSearch(
@@ -1006,11 +1018,17 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         bool cornered,
         DrawAction<T> shouldQueue,
         DrawAction<T> goal,
-        out Value2D<T> found)
+        out Value2D<T> found,
+        out Queue<Value2D<T>> endingQueue,
+        out Container2D<bool> endingVisited)
     {
+        endingQueue = new Queue<Value2D<T>>();
+        endingQueue.Enqueue(new Value2D<T>(x, y, this[x, y]));
+        endingVisited = Container2D<bool>.CreateArrayFromBounds(this);
+        endingVisited[x, y] = true;
         return DrawBreadthFirstSearch(
-            new[] { new Point(x, y) },
-            new[] { new Point(x, y) },
+            endingQueue,
+            endingVisited,
             cornered,
             shouldQueue,
             goal,

@@ -81,6 +81,11 @@ public class Draw
 
     public static DrawAction<T> SetTo<T>(Container2D<T> container, T g, Point shift = null)
     {
+        return SetTo<T, T>(container, g, shift);
+    }
+
+    public static DrawAction<T> SetTo<T, R>(Container2D<R> container, R g, Point shift = null)
+    {
         if (shift == null)
         {
             return (arr, x, y) =>
@@ -187,6 +192,26 @@ public class Draw
             return (arr, x, y) =>
             {
                 map[x + shift.x, y + shift.y] = arr[x, y];
+                return true;
+            };
+        }
+    }
+
+    public static DrawAction<T> AddTo<T>(Queue<Value2D<T>> queue, Point shift = null)
+    {
+        if (shift == null)
+        {
+            return (arr, x, y) =>
+            {
+                queue.Enqueue(new Value2D<T>(x, y, arr[x, y]));
+                return true;
+            };
+        }
+        else
+        {
+            return (arr, x, y) =>
+            {
+                queue.Enqueue(new Value2D<T>(x + shift.x, y + shift.y, arr[x, y]));
                 return true;
             };
         }

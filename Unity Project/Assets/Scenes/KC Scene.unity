@@ -2238,6 +2238,10 @@ Prefab:
       propertyPath: ActiveFlags.Array.data[2]
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: ActiveFlags.Array.data[3]
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11100000, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
