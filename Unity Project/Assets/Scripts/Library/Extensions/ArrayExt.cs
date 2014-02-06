@@ -43,14 +43,14 @@ public static class ArrayExt
 
     static public List<string> ToRowStrings(this bool[,] array)
     {
-        return ToRowStrings(array, (b) =>
+        return ToRowStrings(array, null, (b) =>
             {
                 if (b) return 'X';
                 else return ' ';
             });
     }
 
-    static public List<string> ToRowStrings<T>(this T[,] array, Func<T, char> converter = null)
+    static public List<string> ToRowStrings<T>(this T[,] array, Bounding bounds = null, Func<T, char> converter = null)
     {
         if (converter == null)
         {
@@ -74,10 +74,14 @@ public static class ArrayExt
             }
         }
         List<string> ret = new List<string>();
-        for (int y = array.GetLength(0) - 1; y >= 0; y -= 1)
+        if (bounds == null)
+        {
+            bounds = array.GetBounds();
+        }
+        for (int y = bounds.YMax; y >= bounds.YMin; y -= 1)
         {
             StringBuilder sb = new StringBuilder();
-            for (int x = 0; x < array.GetLength(1); x += 1)
+            for (int x = bounds.XMin; x <= bounds.XMax; x += 1)
             {
                 sb.Append(converter(array[y, x]));
             }
@@ -86,7 +90,7 @@ public static class ArrayExt
         return ret;
     }
 
-    public static void ToLog<T>(this T[,] array, Logs log, Func<T, char> converter, params string[] customContent)
+    public static void ToLog<T>(this T[,] array, Logs log, Bounding bounding, Func<T, char> converter, params string[] customContent)
     {
         if (BigBoss.Debug.logging(log))
         {
@@ -94,7 +98,7 @@ public static class ArrayExt
             {
                 BigBoss.Debug.w(log, s);
             }
-            foreach (string s in array.ToRowStrings(converter))
+            foreach (string s in array.ToRowStrings(bounding, converter))
             {
                 BigBoss.Debug.w(log, s);
             }
@@ -103,24 +107,24 @@ public static class ArrayExt
 
     public static void ToLog<T>(this T[,] array, Logs log, params string[] customContent)
     {
-        ToLog(array, log, null, customContent);
+        ToLog(array, log, null, null, customContent);
     }
 
-    public static void ToLog<T>(this T[,] array, Func<T, char> converter, params string[] customContent)
+    public static void ToLog<T>(this T[,] array, Bounding bounds, Func<T, char> converter, params string[] customContent)
     {
         foreach (string s in customContent)
         {
             BigBoss.Debug.w(s);
         }
-        foreach (string s in array.ToRowStrings(converter))
+        foreach (string s in array.ToRowStrings(bounds, converter))
         {
             BigBoss.Debug.w(s);
         }
     }
 
-    public static void ToLog<T>(this T[,] array, params string[] customContent)
+    public static void ToLog<T>(this T[,] array, Bounding bounds, params string[] customContent)
     {
-        ToLog(array, null, customContent);
+        ToLog(array, bounds, customContent);
     }
 
     public static Point Center<T>(this T[,] array)

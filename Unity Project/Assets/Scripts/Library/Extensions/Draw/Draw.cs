@@ -108,6 +108,27 @@ public class Draw
         };
     }
 
+    public static DrawAction<T> Set<T>(Value2D<T> val)
+    {
+        return (arr, x, y) =>
+        {
+            val.val = arr[x, y];
+            val.x = x;
+            val.y = y;
+            return true;
+        };
+    }
+
+    public static DrawAction<T> Set<T>(Point val)
+    {
+        return (arr, x, y) =>
+        {
+            val.x = x;
+            val.y = y;
+            return true;
+        };
+    }
+
     public static DrawAction<T> Not<T>(DrawAction<T> call)
     {
         return (arr, x, y) =>

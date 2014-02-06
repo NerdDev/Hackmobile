@@ -37,6 +37,16 @@ public static class DrawActionExt
         };
     }
 
+    public static DrawAction<T> IfNotThen<T>(this DrawAction<T> call, DrawAction<T> rhs)
+    {
+        return (arr, x, y) =>
+        {
+            if (!call(arr, x, y))
+                return rhs(arr, x, y);
+            return true;
+        };
+    }
+
     public static DrawAction<T> AndNot<T>(this DrawAction<T> call, DrawAction<T> call2)
     {
         return (arr, x, y) =>

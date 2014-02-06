@@ -2174,6 +2174,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400010, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: ActiveFlags.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 400068, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2225,6 +2229,14 @@ Prefab:
     - target: {fileID: 100204, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: ActiveFlags.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
+      propertyPath: ActiveFlags.Array.data[2]
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11100000, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
@@ -2367,7 +2379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Logging: 1
   ActiveLogs: 000000000100000002000000
-  ActiveFlags: 00000000
+  ActiveFlags: 000000000200000003000000
 --- !u!1 &818357654
 GameObject:
   m_ObjectHideFlags: 0

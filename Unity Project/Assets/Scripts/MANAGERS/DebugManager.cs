@@ -75,14 +75,14 @@ public class DebugManager : MonoBehaviour, IManager
         putName(Logs.TypeHarvest, "TypeHarvest");
 
         // Set Logging to be on
-        #if UNITY_ANDROID
-            Logging = false;
-        #endif
+        //#if UNITY_ANDROID
+        //    //Logging = false;
+        //#endif
         logging(Logging);
         foreach (Logs l in ActiveLogs)
-            logging(l, false);
+            logging(l, true);
         foreach (DebugFlag f in ActiveFlags)
-            flags[f] = false;
+            flags[f] = true;
 
         // Test output
         if (logging(Logs.Main))
@@ -115,7 +115,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (logging(e))
         {
-            //w(e, "");
+            w(e, "");
         }
     }
 
@@ -123,7 +123,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (logging(e))
         {
-            //Get(e).w(line);
+            Get(e).w(line);
         }
     }
 
@@ -131,7 +131,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (lastLog != null)
         {
-            //lastLog.w(line);
+            lastLog.w(line);
         }
     }
 
@@ -139,7 +139,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (logging(e))
         {
-            //Get(e).w(depthModifier, line);
+            Get(e).w(depthModifier, line);
         }
     }
 
@@ -147,25 +147,25 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (lastLog != null)
         {
-            //lastLog.w(depthModifier, line);
+            lastLog.w(depthModifier, line);
         }
     }
 
     public void log(Logs e, int depthModifier, string line)
     {
-        //w(e, depthModifier, line);
+        w(e, depthModifier, line);
     }
 
     public void log(Logs e, string line)
     {
-        //w(e, line);
+        w(e, line);
     }
 
     public void printHeader(Logs e, string line)
     {
         if (logging(e))
         {
-            //Get(e).printHeader(line);
+            Get(e).printHeader(line);
         }
     }
 
@@ -173,7 +173,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (lastLog != null)
         {
-            //lastLog.printHeader(line);
+            lastLog.printHeader(line);
         }
     }
 
@@ -181,7 +181,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (logging(e))
         {
-            //Get(e).printFooter(line);
+            Get(e).printFooter(line);
         }
     }
 
@@ -189,7 +189,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (lastLog != null)
         {
-            //lastLog.printFooter(line);
+            lastLog.printFooter(line);
         }
     }
 
@@ -197,7 +197,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (logging(e))
         {
-            //Get(e).printBreakers(num);
+            Get(e).printBreakers(num);
         }
     }
 
@@ -205,7 +205,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (lastLog != null)
         {
-            //lastLog.printBreakers(num);
+            lastLog.printBreakers(num);
         }
     }
 
@@ -218,7 +218,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (logging(e))
         {
-            //Get(e).incrementDepth();
+            Get(e).incrementDepth();
         }
     }
 
@@ -226,7 +226,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (logging(e))
         {
-            //Get(e).decrementDepth();
+            Get(e).decrementDepth();
         }
     }
 
@@ -234,7 +234,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         if (logging(e))
         {
-            //Get(e).resetDepth();
+            Get(e).resetDepth();
         }
     }
 

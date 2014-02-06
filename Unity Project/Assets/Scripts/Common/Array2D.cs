@@ -5,6 +5,7 @@ using System;
 
 public class Array2D<T> : Container2D<T>
 {
+    private Bounding _bounding;
     private const int _expandAmount = 10;
     protected int count;
     protected T[,] arr;
@@ -56,7 +57,7 @@ public class Array2D<T> : Container2D<T>
 
     public override List<string> ToRowStrings()
     {
-        return Nifty.AddRuler(arr.ToRowStrings(), Bounding);
+        return Nifty.AddRuler(arr.ToRowStrings(Bounding.Shift(-shift)), Bounding);
     }
 
     #region GetSet
@@ -146,6 +147,7 @@ public class Array2D<T> : Container2D<T>
             if (present[y, x])
                 count++;
             present[y, x] = true;
+            _bounding = null;
         }
     }
 
@@ -155,12 +157,15 @@ public class Array2D<T> : Container2D<T>
     {
         get
         {
-            Bounding ret = new Bounding();
-            ret.XMin = 0 + shift.x;
-            ret.XMax = arr.GetLength(1) - 1 + shift.x;
-            ret.YMin = 0 + shift.y;
-            ret.YMax = arr.GetLength(0) - 1 + shift.y;
-            return ret;
+            if (_bounding == null)
+            {
+                _bounding = new Bounding();
+                foreach (Value2D<T> val in this)
+                {
+                    _bounding.Absorb(val);
+                }
+            }
+            return new Bounding(_bounding);
         }
     }
 

@@ -274,7 +274,7 @@ public class Bounding
         return GetShiftNonNeg(0);
     }
 
-    public void Shift(Point shift)
+    public Bounding Shift(Point shift)
     {
         if (IsValid())
         {
@@ -283,6 +283,7 @@ public class Bounding
             YMin += shift.y;
             YMax += shift.y;
         }
+        return this;
     }
 
     public void ShiftNonNeg()

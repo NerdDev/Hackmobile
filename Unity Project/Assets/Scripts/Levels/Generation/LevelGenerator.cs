@@ -482,92 +482,83 @@ public class LevelGenerator
         List<LayoutObject> rooms = new List<LayoutObject>(Layout.GetRooms().Cast<LayoutObject>());
         LayoutObject startingRoom = rooms.Take();
         startingRoom.Grids.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED));
-        Container2D<GridType> runningConnected = new MultiMap<GridType>(startingRoom.Grids);
         LayoutObject fail;
         while (!startingRoom.ConnectedTo(rooms, out fail))
         {
-            MultiMap<GridType> startPoints = new MultiMap<GridType>();
-            runningConnected.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
-            {
-                StrokeAction = passTest.IfThen(Draw.AddTo(startPoints))
-            }, false);
+            // Find start points
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 runningConnected.ToLog(Logs.LevelGen, "Source Setup");
                 fail.ToLog(Logs.LevelGen, "Failed to connect to this");
-                startPoints.ToLog(Logs.LevelGen, "Start options");
             }
             #endregion
             Value2D<GridType> startPoint;
-            while (true)
+            if (!FindClosestPoint(layoutCopy, fail, out startPoint))
             {
-                if (startPoints.Random(Rand, out startPoint, true))
-                {
-                    #region DEBUG
-                    if (BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-                        layoutCopy.ToLog(Logs.LevelGen, "Largest after putting blocked");
-                        BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
-                    }
-                    #endregion
-                    List<Value2D<GridType>> stack = layoutCopy.DrawJumpTowardsSearch(
-                    startPoint.x,
-                    startPoint.y,
-                    3,
-                    5,
-                    Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutCopy.Bounding.Expand(5))),
-                    passTest,
-                    Rand,
-                    fail.Center,
-                    true);
-                    var path = new Path(stack);
-                    if (path.isValid())
-                    {
-                        #region DEBUG
-                        if (BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            path.ToLog(Logs.LevelGen, "Connecting Path");
-                        }
-                        #endregion
-                        path.Simplify();
-                        path.ConnectEnds(Layout, new Point(0, 0));
-                        Point first = path.FirstEnd;
-                        Point second = path.SecondEnd;
-                        LayoutObject leaf1 = Layout.GetObjAt(first);
-                        LayoutObject leaf2 = Layout.GetObjAt(second);
-                        if (leaf1[first] == GridType.Wall)
-                        {
-                            leaf1[first] = GridType.Door;
-                        }
-                        if (leaf2[second] == GridType.Wall)
-                        {
-                            leaf2[second] = GridType.Door;
-                        }
-                        path.Bake();
-                        path.Grids.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED));
-                        leaf2.Grids.DrawAll(Draw.AddTo(runningConnected, leaf2.ShiftP).And(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED, leaf2.ShiftP)));
-                        Layout.AddPath(path);
-                        runningConnected.PutAll(path.Grids);
-                        #region DEBUG
-                        if (BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_BLOCKED;
-                            Layout.ToLog(Logs.LevelGen, "Final Connection");
-                        }
-                        #endregion
-                        break;
-                    }
-                    #region DEBUG
-                    else if (BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_BLOCKED;
-                        BigBoss.Debug.w(Logs.LevelGen, "Could not make an initial start point connection.");
-                    }
-                    #endregion
-                }
+                throw new ArgumentException("Cannot find path to fail room");
             }
+            
+            // Connect
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                layoutCopy.ToLog(Logs.LevelGen, "Largest after putting blocked");
+                BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
+            }
+            #endregion
+            List<Value2D<GridType>> stack = layoutCopy.DrawJumpTowardsSearch(
+            startPoint.x,
+            startPoint.y,
+            3,
+            5,
+            Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutCopy.Bounding.Expand(5))),
+            passTest,
+            Rand,
+            fail.Center,
+            true);
+            var path = new Path(stack);
+            if (path.isValid())
+            {
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    path.ToLog(Logs.LevelGen, "Connecting Path");
+                }
+                #endregion
+                path.Simplify();
+                path.ConnectEnds(Layout, new Point(0, 0));
+                Point first = path.FirstEnd;
+                Point second = path.SecondEnd;
+                LayoutObject leaf1 = Layout.GetObjAt(first);
+                LayoutObject leaf2 = Layout.GetObjAt(second);
+                if (leaf1[first] == GridType.Wall)
+                {
+                    leaf1[first] = GridType.Door;
+                }
+                if (leaf2[second] == GridType.Wall)
+                {
+                    leaf2[second] = GridType.Door;
+                }
+                path.Bake();
+                Layout.AddPath(path);
+                runningConnected.PutAll(path.Grids);
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_BLOCKED;
+                    Layout.ToLog(Logs.LevelGen, "Final Connection");
+                }
+                #endregion
+            }
+            #region DEBUG
+            else if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_BLOCKED;
+                BigBoss.Debug.w(Logs.LevelGen, "Could not make an initial start point connection.");
+            }
+            #endregion
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -575,6 +566,22 @@ public class LevelGenerator
             BigBoss.Debug.printFooter(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
+    }
+
+    protected bool FindClosestPoint(Container2D<GridType> map, LayoutObject smaller, out Value2D<GridType> found)
+    {
+        MultiMap<GridType> inside = new MultiMap<GridType>();
+        MultiMap<GridType> perim = new MultiMap<GridType>();
+        smaller.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
+        {
+            UnitAction = Draw.AddTo(inside, smaller.ShiftP),
+            StrokeAction = Draw.AddTo(perim, smaller.ShiftP)
+        }, false);
+        return map.DrawBreadthFirstSearch(
+            perim.Cast<Point>(), inside.Cast<Point>(), false,
+            Draw.EqualTo(GridType.NULL),
+            Draw.Not(Draw.EqualTo(GridType.NULL)),
+            out found);
     }
 
     private void ConfirmEdges()

@@ -458,7 +458,7 @@ public class LayoutObject : Container2D<GridType>
 
     public override bool DrawAll(DrawAction<GridType> call)
     {
-        return Grids.DrawAll(call.Shift(ShiftP.x, ShiftP.y));
+        return Grids.DrawAll(call);
     }
 
     public override void Clear()
