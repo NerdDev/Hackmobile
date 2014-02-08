@@ -411,7 +411,7 @@ public class LevelGenerator
         Container2D<GridType> runningConnected = Container2D<GridType>.CreateArrayFromBounds(layoutCopy);
         // Create initial queue and visited
         LayoutObject startingRoom = rooms.Take();
-        startingRoom.DrawAll(Draw.AddTo(runningConnected, startingRoom.ShiftP).And(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED)));
+        startingRoom.DrawAll(Draw.AddTo(runningConnected, startingRoom.ShiftP));
         Container2D<bool> visited;
         Queue<Value2D<GridType>> queue;
         ConstructBFS(startingRoom, out queue, out visited);
@@ -480,7 +480,6 @@ public class LevelGenerator
                 LayoutObject pathObj = path.Bake();
                 foreach (var v in path)
                 {
-                    layoutCopy[v] = GridType.INTERNAL_RESERVED_BLOCKED;
                     runningConnected.Put(v);
                     if (!visited[v])
                     {
@@ -489,11 +488,10 @@ public class LevelGenerator
                     visited[v] = true;
                 }
                 Layout.AddObject(pathObj);
-                hit.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED, hit.ShiftP).And(Draw.AddTo(runningConnected, hit.ShiftP)));
+                hit.DrawAll(Draw.AddTo(runningConnected, hit.ShiftP));
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_BLOCKED;
                     Layout.ToLog(Logs.LevelGen, "Final Connection");
                 }
                 #endregion
@@ -536,7 +534,7 @@ public class LevelGenerator
         if (!map.DrawBreadthFirstSearch(
             curQueue, curVisited, false,
             Draw.EqualTo(GridType.NULL),
-            Draw.Not(Draw.EqualTo(GridType.NULL)),
+            pass,
             out endPoint))
         {
             hit = null;
@@ -552,7 +550,7 @@ public class LevelGenerator
         return map.DrawBreadthFirstSearch(
             hitQueue, hitVisited, false,
             Draw.EqualTo(GridType.NULL),
-            Draw.EqualTo(GridType.INTERNAL_RESERVED_BLOCKED),
+            pass.And(Draw.ContainedIn(runningConnected)),
             out startPoint);
     }
 

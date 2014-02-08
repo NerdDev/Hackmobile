@@ -2180,7 +2180,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400010, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: ActiveFlags.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400068, guid: 7068fdc9835e2eb46896da2a78416f13, type: 2}
       propertyPath: m_LocalPosition.x
@@ -2395,7 +2395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Logging: 1
   ActiveLogs: 000000000200000001000000
-  ActiveFlags: 0000000002000000
+  ActiveFlags: 000000000200000003000000
 --- !u!1 &818357654
 GameObject:
   m_ObjectHideFlags: 0
