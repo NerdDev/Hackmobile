@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class Path : LayoutObject
+public class Path : IEnumerable<Value2D<GridType>>
 {
     private static HashSet<GridType> _pathTypes = new HashSet<GridType>(new[] {
             GridType.Floor,
@@ -17,31 +17,14 @@ public class Path : LayoutObject
             GridType.Path_Vert
     });
     public static HashSet<GridType> PathTypes { get { return _pathTypes; } }
-    List<Value2D<GridType>> _list;
-
-    public Value2D<GridType> FirstEnd { get { return _list.Count > 0 ? _list[0] : null; } }
-    public Value2D<GridType> SecondEnd { get { return _list.Count > 0 ? _list[_list.Count - 1] : null; } }
+    List<Value2D<GridType>> List;
+    public bool Valid { get { return List.Count > 2; } }
+    public Value2D<GridType> FirstEnd { get { return List.Count > 0 ? List[0] : null; } }
+    public Value2D<GridType> SecondEnd { get { return List.Count > 0 ? List[List.Count - 1] : null; } }
 
     public Path(IEnumerable<Value2D<GridType>> stack)
     {
-        _list = new List<Value2D<GridType>>(stack);
-    }
-
-    public override Bounding Bounding
-    {
-        get
-        {
-            if (Grids != null)
-            {
-                return base.Bounding;
-            }
-            Bounding ret = new Bounding();
-            foreach (Value2D<GridType> val in _list)
-            {
-                ret.Absorb(val);
-            }
-            return ret;
-        }
+        List = new List<Value2D<GridType>>(stack);
     }
 
     public static IEnumerable<Value2D<GridType>> PathPrint(IEnumerable<Point> points)
@@ -100,36 +83,19 @@ public class Path : LayoutObject
         }
     }
 
-    public override Container2D<GridType> Grids
-    {
-        get
-        {
-            if (_list == null)
-                return base.Grids;
-            MultiMap<GridType> ret = new MultiMap<GridType>();
-            if (_list.Count == 0) return ret;
-            foreach (Value2D<GridType> val in PathPrint(_list.Cast<Point>()))
-            {
-                ret[val] = val.val;
-            }
-            return ret;
-        }
-        protected set
-        {
-            base.Grids = value;
-        }
-    }
-
-    public override LayoutObject Bake()
-    {
-        base.Grids = Grids;
-        _list = null;
-        return base.Bake();
-    }
-
     public void Simplify()
     {
         Prune();
+    }
+
+    public LayoutObject Bake()
+    {
+        LayoutObject obj = new LayoutObject();
+        foreach (var v in PathPrint(List.Cast<Point>()))
+        {
+            obj[v] = v.val;
+        }
+        return obj;
     }
 
     void Prune()
@@ -141,9 +107,9 @@ public class Path : LayoutObject
         }
         #endregion
         Bounding bounds = new Bounding();
-        foreach (Value2D<GridType> g in _list) bounds.Absorb(g);
+        foreach (Value2D<GridType> g in List) bounds.Absorb(g);
         Array2D<int> indexes = new Array2D<int>(bounds);
-        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(_list);
+        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(List);
         int index = 0;
         foreach (Value2D<GridType> val in tmp)
         { // For each point on the path
@@ -176,20 +142,25 @@ public class Path : LayoutObject
                 int fromIndex = neighbor.val + 1;
                 int count = index - neighbor.val - 1;
                 // Set indices to 0
-                List<Value2D<GridType>> toRemove = _list.GetRange(fromIndex, count);
+                List<Value2D<GridType>> toRemove = List.GetRange(fromIndex, count);
                 foreach (Value2D<GridType> r in toRemove)
                 {
                     indexes[r.x, r.y] = 0;
                 }
                 // Remove
-                _list.RemoveRange(fromIndex, count);
+                List.RemoveRange(fromIndex, count);
                 // Set next index to proper number
                 index = neighbor.val + 1;
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.LevelGen_Path_Simplify_Prune))
                 {
                     BigBoss.Debug.w(Logs.LevelGen, "Removed index: " + fromIndex + " count: " + count);
-                    ToLog(Logs.LevelGen);
+                    MultiMap<GridType> map = new MultiMap<GridType>();
+                    foreach (var v in List)
+                    {
+                        map[v] = v.val;
+                    }
+                    map.ToLog(Logs.LevelGen);
                 }
                 #endregion
             }
@@ -204,31 +175,13 @@ public class Path : LayoutObject
         #endregion
     }
 
-    public override bool isValid()
+    public IEnumerator<Value2D<GridType>> GetEnumerator()
     {
-        return _list == null || _list.Count > 2;
+        return List.GetEnumerator();
     }
 
-    public void ConnectEnds(LayoutObjectContainer container, Point shift)
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Connect Ends");
-        }
-        #endregion
-        container.FindAndConnect(this, _list[0] + shift);
-        container.FindAndConnect(this, _list[_list.Count - 1] + shift);
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen, "Connect Ends");
-        }
-        #endregion
-    }
-
-    public override string GetTypeString()
-    {
-        return "Path";
+        return this.GetEnumerator();
     }
 }

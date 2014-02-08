@@ -299,6 +299,11 @@ public class LevelGenerator
         #endregion
     }
 
+    protected void ClusterAround(ILayoutObject cluster, LayoutObject obj2)
+    {
+
+    }
+
     protected void PlaceRooms()
     {
         #region DEBUG
@@ -391,84 +396,6 @@ public class LevelGenerator
         #endregion
     }
 
-    protected void PlacePaths()
-    {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Place Paths");
-        }
-        #endregion
-        Container2D<GridType> grids = Layout.Bake();
-        MultiMap<GridType> doors = new MultiMap<GridType>();
-        // If a door and near a null
-        grids.DrawAll(Draw.EqualTo(GridType.Door).And(Draw.HasAround(false, Draw.EqualTo(GridType.NULL))).IfThen(Draw.AddTo(doors)));
-        foreach (var door in doors)
-        {
-            // Block nearby walkable
-            grids.DrawAround(door.x, door.y, false, Draw.If<GridType>(GridTypeEnum.Walkable).IfThen(Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED)));
-        }
-        Point shift;
-        Array2DRaw<GridType> rawArr = grids.RawArray(out shift);
-        rawArr.Expand(20);
-        shift.Shift(-20, -20);
-        #region DEBUG
-        Container2D<GridType> debugArr = null;
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            grids.ToLog("Initial Map");
-            doors.ToLog(Logs.LevelGen, "Doors to connect");
-            debugArr = new MultiMap<GridType>(grids, -shift);
-        }
-        #endregion
-        foreach (var door in doors)
-        {
-            door.Shift(-shift);
-            Stack<Value2D<GridType>> stack = rawArr.DrawDepthFirstSearch(
-                door.x,
-                door.y,
-                Draw.EqualTo(GridType.NULL),
-                Draw.ContainedIn(Path.PathTypes),
-                Rand, true);
-            var path = new Path(stack);
-            if (path.isValid())
-            {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    MultiMap<GridType> messyPathArr = new MultiMap<GridType>(debugArr);
-                    messyPathArr.PutAll(path.Grids);
-                    messyPathArr.ToLog(Logs.LevelGen, "Map after placing for door: " + door);
-                }
-                #endregion
-                path.Simplify();
-                path.ConnectEnds(Layout, shift);
-                path.Bake();
-                rawArr.PutAll(path.Grids);
-                path.Shift(shift);
-                Layout.AddPath(path);
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    debugArr.PutAll(path.Grids);
-                    debugArr.ToLog(Logs.LevelGen, "Map after simplifying path for door: " + door);
-                    List<LayoutObject> list = path.ConnectedToAll();
-                    BigBoss.Debug.w(Logs.LevelGen, path + " connected to:");
-                    foreach (LayoutObject obj in list)
-                        BigBoss.Debug.w(Logs.LevelGen, "   " + obj);
-                }
-                #endregion
-            }
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            Layout.ToLog(Logs.LevelGen, "Final Layout");
-            BigBoss.Debug.printFooter(Logs.LevelGen, "Place Paths");
-        }
-        #endregion
-    }
-
     #region Confirm Connection / Pathing
     protected void ConfirmConnection()
     {
@@ -528,16 +455,15 @@ public class LevelGenerator
             endPoint,
             true);
             var path = new Path(stack);
-            if (path.isValid())
+            if (path.Valid)
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    path.ToLog(Logs.LevelGen, "Connecting Path");
+                    path.Bake().ToLog(Logs.LevelGen, "Connecting Path");
                 }
                 #endregion
                 path.Simplify();
-                path.ConnectEnds(Layout, new Point(0, 0));
                 Point first = path.FirstEnd;
                 Point second = path.SecondEnd;
                 LayoutObject leaf1 = Layout.GetObjAt(first);
@@ -550,9 +476,9 @@ public class LevelGenerator
                 {
                     leaf2[second] = GridType.Door;
                 }
-                path.Bake();
-                Layout.AddPath(path);
-                foreach (var v in path.Grids)
+                leaf1.Connect(leaf2);
+                LayoutObject pathObj = path.Bake();
+                foreach (var v in path)
                 {
                     layoutCopy[v] = GridType.INTERNAL_RESERVED_BLOCKED;
                     runningConnected.Put(v);
@@ -562,6 +488,7 @@ public class LevelGenerator
                     }
                     visited[v] = true;
                 }
+                Layout.AddObject(pathObj);
                 hit.DrawAll(Draw.SetTo(layoutCopy, GridType.INTERNAL_RESERVED_BLOCKED, hit.ShiftP).And(Draw.AddTo(runningConnected, hit.ShiftP)));
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
