@@ -1,21 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class LayoutObjectContainer : IEnumerable<LayoutObject>
+public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
 {
-    protected List<LayoutObject> Objects = new List<LayoutObject>();
+    protected List<ILayoutObject> Objects = new List<ILayoutObject>();
 
-    public virtual void AddObject(LayoutObject obj)
+    public virtual void AddObject(ILayoutObject obj)
     {
         Objects.Add(obj);
     }
 
-    public void RemoveObject(LayoutObject obj)
+    public void RemoveObject(ILayoutObject obj)
     {
         Objects.Remove(obj);
     }
 
-    public void ShiftAll(int x, int y)
+    public void Shift(int x, int y)
     {
         foreach (LayoutObject obj in Objects)
         {
@@ -23,9 +23,9 @@ public abstract class LayoutObjectContainer : IEnumerable<LayoutObject>
         }
     }
 
-    public void ShiftAll(Point shift)
+    public void Shift(Point shift)
     {
-        ShiftAll(shift.x, shift.y);
+        Shift(shift.x, shift.y);
     }
 
     public void ToLog(Logs log, params string[] customContent)
@@ -43,7 +43,7 @@ public abstract class LayoutObjectContainer : IEnumerable<LayoutObject>
         return obj;
     }
 
-    public IEnumerator<LayoutObject> GetEnumerator()
+    public IEnumerator<ILayoutObject> GetEnumerator()
     {
         return Objects.GetEnumerator();
     }

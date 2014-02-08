@@ -245,9 +245,9 @@ public class LevelGenerator
         // Num clusters cannot be more than half num rooms
         if (numClusters > Rooms.Count / 2)
             numClusters = Rooms.Count / 2;
-        List<LayoutCluster> clusters = new List<LayoutCluster>();
+        List<LayoutObjectContainer> clusters = new List<LayoutObjectContainer>();
         for (int i = 0; i < numClusters; i++)
-            clusters.Add(new LayoutCluster(Rand));
+            clusters.Add(new LayoutObjectContainer());
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -255,7 +255,7 @@ public class LevelGenerator
         }
         #endregion
         // Add two rooms to each
-        foreach (LayoutCluster cluster in clusters)
+        foreach (LayoutObjectContainer cluster in clusters)
         {
             cluster.AddObject(Rooms.Take());
             cluster.AddObject(Rooms.Take());
@@ -277,7 +277,7 @@ public class LevelGenerator
         {
             if (Rand.Percent(clusterProbability))
             {
-                LayoutCluster cluster = clusters.Random(Rand);
+                LayoutObjectContainer cluster = clusters.Random(Rand);
                 cluster.AddObject(r);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -290,7 +290,7 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            foreach (LayoutCluster cluster in clusters)
+            foreach (LayoutObjectContainer cluster in clusters)
             {
                 cluster.ToLog(Logs.LevelGen);
             }
@@ -469,6 +469,7 @@ public class LevelGenerator
         #endregion
     }
 
+    #region Confirm Connection / Pathing
     protected void ConfirmConnection()
     {
         #region DEBUG
@@ -654,6 +655,7 @@ public class LevelGenerator
         }
         #endregion
     }
+    #endregion
 
     protected void PlaceStairs()
     {
@@ -719,96 +721,6 @@ public class LevelGenerator
             return p;
         }
         return null;
-    }
-
-    protected void MakeConnection(LevelLayout layout, LayoutObject obj1, LayoutObject obj2)
-    {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Make Connection - " + obj1);
-        }
-        #endregion
-        Container2D<GridType> smallest;
-        Container2D<GridType> largest;
-        Container2D<GridType>.Smallest(obj1.GetConnectedGrid(), obj2.GetConnectedGrid(), out smallest, out largest);
-        Container2D<GridType> layoutArr = layout.Bake();
-        MultiMap<GridType> startPoints = new MultiMap<GridType>();
-        DrawAction<GridType> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.EqualTo(GridType.Wall));
-        smallest.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
-        {
-            StrokeAction = passTest.IfThen(Draw.AddTo(startPoints))
-        }, false);
-        passTest = passTest.And(Draw.ContainedIn(largest));
-        Value2D<GridType> startPoint;
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            smallest.ToLog(Logs.LevelGen, "Smallest");
-            largest.ToLog(Logs.LevelGen, "Largest");
-            startPoints.ToLog(Logs.LevelGen, "Start options");
-        }
-        #endregion
-        if (startPoints.Random(Rand, out startPoint))
-        {
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                layoutArr[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
-                layoutArr.ToLog(Logs.LevelGen, "Largest after putting blocked");
-                BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
-            }
-            #endregion
-            Stack<Value2D<GridType>> stack = layoutArr.DrawDepthFirstSearch(
-            startPoint.x,
-            startPoint.y,
-            Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutArr.Bounding.Expand(5))),
-            passTest,
-            Rand);
-            var path = new Path(stack);
-            if (path.isValid())
-            {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    path.ToLog(Logs.LevelGen, "Connecting Path");
-                }
-                #endregion
-                path.Simplify();
-                path.ConnectEnds(Layout, new Point(0, 0));
-                Point first = path.FirstEnd;
-                Point second = path.SecondEnd;
-                LayoutObject leaf1 = Layout.GetObjAt(first);
-                LayoutObject leaf2 = Layout.GetObjAt(second);
-                if (leaf1[first] == GridType.Wall)
-                {
-                    leaf1[first] = GridType.Door;
-                }
-                if (leaf2[second] == GridType.Wall)
-                {
-                    leaf2[second] = GridType.Door;
-                }
-                path.ConnectEnds(Layout, new Point());
-                path.Bake();
-                layout.AddPath(path);
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    layout.ToLog(Logs.LevelGen, "Final Connection");
-                }
-                #endregion
-            }
-        }
-        #region DEBUG
-        else if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Could not make an initial start point connection.");
-        }
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen, "Make Connection - " + obj1);
-        }
-        #endregion
     }
 
     public static Point GenerateShiftMagnitude(int mag, System.Random rand)

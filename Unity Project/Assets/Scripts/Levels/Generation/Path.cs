@@ -120,11 +120,11 @@ public class Path : LayoutObject
         }
     }
 
-    public override void Bake()
+    public override LayoutObject Bake()
     {
         base.Grids = Grids;
         _list = null;
-        base.Bake();
+        return base.Bake();
     }
 
     public void Simplify()

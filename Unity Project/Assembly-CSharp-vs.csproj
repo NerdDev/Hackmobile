@@ -74,7 +74,7 @@
      <Compile Include="Assets\Scripts\Common\Value2D.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
      <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\LayoutCluster.cs" />
+     <Compile Include="Assets\Scripts\Levels\Generation\ILayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LevelGenerator.cs" />
