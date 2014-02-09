@@ -281,6 +281,7 @@ public class LevelGenerator
             if (Rand.Percent(clusterProbability))
             {
                 LayoutObjectContainer cluster = clusters.Random(Rand);
+                ClusterAround(cluster, r);
                 cluster.Objects.Add(r);
                 Objects.Remove(r);
                 #region DEBUG
@@ -310,8 +311,7 @@ public class LevelGenerator
 
     protected void ClusterAround(ILayoutObject cluster, ILayoutObject obj2)
     {
-        //Container2D<GridType> grid = cluster.GetGrid();
-        //obj2.ShiftOutside(
+        obj2.ShiftOutside(cluster, new Point(1, 0), null, false, false);
     }
 
     protected void PlaceRooms()
@@ -607,8 +607,11 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Placing missing stairs");
         }
         #endregion
-        Layout.UpStart = PlaceMissingStair(true, null);
-        Layout.DownStart = PlaceMissingStair(false, Layout.UpStart);
+        if (!PlaceMissingStair(true, null, out Layout.UpStart)
+            || !PlaceMissingStair(false, Layout.UpStart, out Layout.DownStart))
+        {
+            throw new ArgumentException("Could not place stairs");
+        }
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -617,9 +620,9 @@ public class LevelGenerator
         #endregion
     }
 
-    protected Point PlaceMissingStair(bool up, Point otherStair)
+    protected bool PlaceMissingStair(bool up, Point otherStair, out Point placed)
     {
-        foreach (LayoutObject room in Objects.Randomize(Rand))
+        foreach (LayoutObject obj in Layout.Flatten().Randomize(Rand))
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
             DrawAction<GridType> test = Draw.CanDrawStair();
@@ -627,7 +630,7 @@ public class LevelGenerator
             {
                 double farthest;
                 double closest;
-                room.Grids.Bounding.DistanceTo(otherStair, out closest, out farthest);
+                obj.Grids.Bounding.DistanceTo(otherStair, out closest, out farthest);
                 if (farthest < MinStairDist)
                 { // Inside or way too close
                     continue;
@@ -637,33 +640,34 @@ public class LevelGenerator
                     test = test.And(Draw.Not(Draw.WithinTo<GridType>(MinStairDist, otherStair)));
                 }
             }
-            room.Grids.DrawAll(test.IfThen(Draw.AddTo(options)));
+            obj.Grids.DrawAll(test.IfThen(Draw.AddTo(options)));
 
             // Place stair
             Value2D<GridType> picked;
             if (!options.Random(Rand, out picked)) continue;
-            room.Grids[picked.x, picked.y] = up ? GridType.StairUp : GridType.StairDown;
+            obj.Grids[picked.x, picked.y] = up ? GridType.StairUp : GridType.StairDown;
 
             // Place startpoint
             MultiMap<GridType> startOptions = new MultiMap<GridType>();
-            room.Grids.DrawAround(picked.x, picked.y, false, Draw.EqualTo(GridType.Floor).IfThen(Draw.AddTo(startOptions)));
+            obj.Grids.DrawAround(picked.x, picked.y, false, Draw.EqualTo(GridType.Floor).IfThen(Draw.AddTo(startOptions)));
             Value2D<GridType> start;
             startOptions.Random(Rand, out start);
-            room.Grids[start] = GridType.StairPlace;
+            obj.Grids[start] = GridType.StairPlace;
 
-            Point p = new Point(picked);
-            p.Shift(room.ShiftP);
+            placed = new Point(picked);
+            placed.Shift(obj.ShiftP);
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 options.ToLog(Logs.LevelGen, "Stair Options");
-                room.ToLog(Logs.LevelGen, "Placed stairs");
+                obj.ToLog(Logs.LevelGen, "Placed stairs");
                 Layout.ToLog(Logs.LevelGen, "Layout");
             }
             #endregion
-            return p;
+            return true;
         }
-        return null;
+        placed = null;
+        return false;
     }
 
     public static Point GenerateShiftMagnitude(int mag, System.Random rand)

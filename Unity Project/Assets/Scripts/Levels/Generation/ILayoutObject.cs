@@ -9,6 +9,7 @@ public interface ILayoutObject : IEnumerable<Value2D<GridType>>
     bool ContainsPoint(Point pt);
     void Shift(int x, int y);
     Container2D<GridType> GetGrid();
+    List<LayoutObject> Flatten();
     void ToLog(Logs log, params String[] customContent);
 }
 

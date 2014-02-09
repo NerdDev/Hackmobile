@@ -126,9 +126,18 @@ public class LayoutObjectContainer : ILayoutObject
         return map;
     }
 
-
     public void ConnectTo(ILayoutObject obj, Point at)
     {
         throw new System.NotImplementedException();
+    }
+
+    public List<LayoutObject> Flatten()
+    {
+        List<LayoutObject> ret = new List<LayoutObject>(Objects.Count);
+        foreach (ILayoutObject obj in Objects)
+        {
+            ret.AddRange(obj.Flatten());
+        }
+        return ret;
     }
 }

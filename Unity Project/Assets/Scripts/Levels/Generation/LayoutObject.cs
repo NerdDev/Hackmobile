@@ -353,4 +353,10 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         map.PutAll(Grids, ShiftP);
         return map;
     }
+
+
+    public List<LayoutObject> Flatten()
+    {
+        return new List<LayoutObject>(new[] { this });
+    }
 }
