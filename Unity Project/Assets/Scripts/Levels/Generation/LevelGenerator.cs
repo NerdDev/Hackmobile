@@ -45,7 +45,7 @@ public class LevelGenerator
     public System.Random Rand;
     public int Depth;
     protected LevelLayout Layout;
-    protected List<LayoutObject> Rooms;
+    protected List<ILayoutObject> Rooms;
     private int _debugNum = 0;
 
     public LevelGenerator()
@@ -113,7 +113,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Generate Rooms");
         }
         #endregion
-        List<LayoutObject> rooms = new List<LayoutObject>();
+        List<ILayoutObject> rooms = new List<ILayoutObject>();
         int numRooms = Rand.Next(minRooms, maxRooms);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -175,7 +175,6 @@ public class LevelGenerator
                 }
                 #endregion
             }
-            room.Bake();
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -312,16 +311,19 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Rooms");
         }
         #endregion
-        List<LayoutObject> unplacedRooms = new List<LayoutObject>(Rooms.Cast<LayoutObject>());
-        List<LayoutObject> placedRooms = new List<LayoutObject>();
-        LayoutObject seedRoom = new LayoutObject();
-        Layout.AddObject(seedRoom);
-        placedRooms.Add(seedRoom); // Seed empty center room to start positioning from.
+        List<ILayoutObject> unplacedRooms = new List<ILayoutObject>(Rooms);
+        List<ILayoutObject> placedRooms = new List<ILayoutObject>();
+        if (unplacedRooms.Count > 0)
+        { // Add seed
+            ILayoutObject seed = unplacedRooms.Take();
+            Layout.AddObject(seed);
+            placedRooms.Add(seed);
+        }
         foreach (LayoutObject room in unplacedRooms)
         {
             // Find room it will start from
             int roomNum = Rand.Next(placedRooms.Count);
-            LayoutObject startRoom = placedRooms[roomNum];
+            ILayoutObject startRoom = placedRooms[roomNum];
             room.CenterOn(startRoom);
             // Find where it will shift away
             Point shiftMagn = GenerateShiftMagnitude(shiftRange, Rand);
@@ -334,9 +336,9 @@ public class LevelGenerator
             }
             #endregion
             room.ShiftOutside(placedRooms, shiftMagn);
+            room.ToLog(Logs.LevelGen, "test");
             placedRooms.Add(room);
             Layout.AddRoom(room);
-            Layout.RemoveObject(seedRoom);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -406,7 +408,7 @@ public class LevelGenerator
         }
         #endregion
         DrawAction<GridType> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.CanDrawDoor());
-        Container2D<GridType> layoutCopy = Layout.Bake().Array;
+        Container2D<GridType> layoutCopy = Layout.GetGrid().Array;
         List<LayoutObject> rooms = new List<LayoutObject>(Layout.GetRooms().Cast<LayoutObject>());
         Container2D<GridType> runningConnected = Container2D<GridType>.CreateArrayFromBounds(layoutCopy);
         // Create initial queue and visited
@@ -478,8 +480,9 @@ public class LevelGenerator
                 }
                 leaf1.Connect(leaf2);
                 LayoutObject pathObj = path.Bake();
-                foreach (var v in path)
+                foreach (var v in pathObj)
                 {
+                    layoutCopy[v] = v.val;
                     runningConnected.Put(v);
                     if (!visited[v])
                     {
@@ -564,7 +567,7 @@ public class LevelGenerator
         }
         #endregion
         LayoutObject edgeObject = new LayoutObject();
-        Container2D<GridType> grids = Layout.Bake();
+        Container2D<GridType> grids = Layout.GetGrid();
         grids.DrawAll(Draw.Not(Draw.EqualTo(GridType.NULL).Or(Draw.EqualTo(GridType.Wall))).IfThen((arr, x, y) =>
             {
                 grids.DrawAround(x, y, true, Draw.EqualTo(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, GridType.Wall)));
@@ -641,6 +644,7 @@ public class LevelGenerator
             {
                 options.ToLog(Logs.LevelGen, "Stair Options");
                 room.ToLog(Logs.LevelGen, "Placed stairs");
+                Layout.ToLog(Logs.LevelGen, "Layout");
             }
             #endregion
             return p;

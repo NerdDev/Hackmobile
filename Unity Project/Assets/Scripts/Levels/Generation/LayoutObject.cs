@@ -19,6 +19,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         }
     }
     public int Id { get; protected set; }
+    public LayoutObject Object { get { return this; } }
 
     public LayoutObject()
     {
@@ -45,22 +46,9 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         ShiftP.Shift(x, y);
     }
 
-    public virtual LayoutObject Bake()
+    public void ShiftOutside(IEnumerable<ILayoutObject> rhs, Point dir)
     {
-        return this;
-    }
-
-    public void CenterOn(LayoutObject rhs)
-    {
-        Point center = Bounding.GetCenter();
-        Point centerRhs = Bounding.GetCenter();
-        ShiftP.x = rhs.ShiftP.x + (centerRhs.x - center.x);
-        ShiftP.y = rhs.ShiftP.y + (centerRhs.y - center.y);
-    }
-
-    public void ShiftOutside(IEnumerable<LayoutObject> rhs, Point dir)
-    {
-        LayoutObject intersect;
+        ILayoutObject intersect;
         Point hint;
         while (Intersects(rhs, out intersect, out hint))
         {
@@ -68,7 +56,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         }
     }
 
-    public bool Intersects(IEnumerable<LayoutObject> rhs, out LayoutObject obj, out Point at)
+    public bool Intersects(IEnumerable<ILayoutObject> rhs, out ILayoutObject obj, out Point at)
     {
         foreach (LayoutObject l in rhs)
         {
@@ -83,7 +71,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         return false;
     }
 
-    public bool Intersects(LayoutObject rhs, Point hint, out Point at)
+    public bool Intersects(ILayoutObject rhs, Point hint, out Point at)
     {
         if (hint != null && rhs.ContainsPoint(hint))
         {
@@ -102,7 +90,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         return false;
     }
 
-    public void ShiftOutside(LayoutObject rhs, Point dir, Point hint, bool rough, bool finalShift)
+    public void ShiftOutside(ILayoutObject rhs, Point dir, Point hint, bool rough, bool finalShift)
     {
         Point reducBase = dir.Reduce();
         Point reduc = new Point(reducBase);
@@ -115,7 +103,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
             BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
             BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + Bounding + "  RHS bounds: " + rhs.Bounding);
             MultiMap<GridType> tmp = new MultiMap<GridType>();
-            tmp.PutAll(rhs.Grids, rhs.ShiftP);
+            tmp.PutAll(rhs.GetGrid());
             tmp.PutAll(Grids, ShiftP);
             tmp.ToLog(Logs.LevelGen, "Before shifting");
         }
@@ -145,7 +133,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
             {
                 BigBoss.Debug.w(Logs.LevelGen, "Intersected at " + at);
                 MultiMap<GridType> tmp = new MultiMap<GridType>();
-                tmp.PutAll(rhs.Grids, rhs.ShiftP);
+                tmp.PutAll(rhs.GetGrid());
                 tmp.PutAll(Grids, ShiftP);
                 tmp.ToLog(Logs.LevelGen, "After shifting");
             }
@@ -206,7 +194,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
 
     public void Connect(LayoutObject obj)
     {
-        if (obj != null && isValid() && obj.isValid())
+        if (obj != null)
         {
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -261,11 +249,6 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
             BigBoss.Debug.printFooter(Logs.LevelGen, "Connected To Recursive: " + this);
         }
         #endregion
-    }
-
-    public virtual bool isValid()
-    {
-        return true;
     }
 
     public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
@@ -355,7 +338,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
 
     protected virtual List<string> ToRowStrings()
     {
-        return Grids.ToRowStrings();
+        return Grids.ToRowStrings(Grids.Bounding.Shift(ShiftP));
     }
 
     public virtual void ToLog(Logs log, params String[] customContent)
@@ -367,14 +350,11 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
             {
                 BigBoss.Debug.w(log, s);
             }
-            foreach (string s in ToRowStrings())
+            Bounding bounds = GetBounding(true);
+            foreach (string s in ToRowStrings(bounds))
             {
                 BigBoss.Debug.w(log, s);
             }
-            Bounding bounds = GetBounding(true);
-            BigBoss.Debug.w(log, "Bounds Shifted: " + bounds.ToString());
-            bounds.Shift(ShiftP.Invert());
-            BigBoss.Debug.w(log, "Bounds: " + bounds.ToString());
             BigBoss.Debug.printFooter(log, ToString());
         }
     }
@@ -479,4 +459,11 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         return Grids.Remove(x - ShiftP.x, y - ShiftP.y);
     }
     #endregion
+
+    public Container2D<GridType> GetGrid()
+    {
+        MultiMap<GridType> map = new MultiMap<GridType>();
+        map.PutAll(Grids, ShiftP);
+        return map;
+    }
 }

@@ -16,7 +16,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
     public Level(LevelLayout layout, Theme theme)
     {
         Layout = layout;
-        Array = GridSpace.Convert(layout.Bake().Grids);
+        Array = GridSpace.Convert(layout.GetGrid());
         LoadRoomMaps();
         Theme = theme;
         UpStartPoint = layout.UpStart;

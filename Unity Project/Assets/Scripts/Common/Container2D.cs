@@ -195,9 +195,9 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     }
 
     #region Logging
-    public virtual List<string> ToRowStrings()
+    public virtual List<string> ToRowStrings(Bounding bounds = null)
     {
-        return Array.ToRowStrings();
+        return Array.ToRowStrings(bounds);
     }
 
     public virtual void ToLog(Logs log)

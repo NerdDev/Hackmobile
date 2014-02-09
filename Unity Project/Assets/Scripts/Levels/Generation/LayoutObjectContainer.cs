@@ -5,14 +5,22 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
 {
     protected List<ILayoutObject> Objects = new List<ILayoutObject>();
 
+    public Bounding Bounding
+    {
+        get
+        {
+            Bounding bounds = new Bounding();
+            foreach (ILayoutObject obj in Objects)
+            {
+                bounds.Absorb(obj.Bounding);
+            }
+            return bounds;
+        }
+    }
+
     public virtual void AddObject(ILayoutObject obj)
     {
         Objects.Add(obj);
-    }
-
-    public void RemoveObject(ILayoutObject obj)
-    {
-        Objects.Remove(obj);
     }
 
     public void Shift(int x, int y)
@@ -30,17 +38,7 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
 
     public void ToLog(Logs log, params string[] customContent)
     {
-        Bake().ToLog(log, customContent);
-    }
-
-    public LayoutObject Bake()
-    {
-        LayoutObject obj = new LayoutObject();
-        foreach (LayoutObject rhs in this)
-        {
-            obj.PutAll(rhs.Grids, rhs.ShiftP);
-        }
-        return obj;
+        GetGrid().ToLog(log, customContent);
     }
 
     public IEnumerator<ILayoutObject> GetEnumerator()
@@ -99,5 +97,15 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
         }
         #endregion
         return null;
+    }
+
+    public Container2D<GridType> GetGrid()
+    {
+        MultiMap<GridType> map = new MultiMap<GridType>();
+        foreach (ILayoutObject obj in Objects)
+        {
+            map.PutAll(obj.GetGrid());
+        }
+        return map;
     }
 }

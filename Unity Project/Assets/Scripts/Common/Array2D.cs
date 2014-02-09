@@ -55,9 +55,11 @@ public class Array2D<T> : Container2D<T>
     }
     #endregion
 
-    public override List<string> ToRowStrings()
+    public override List<string> ToRowStrings(Bounding bounds = null)
     {
-        return Nifty.AddRuler(arr.ToRowStrings(Bounding.Shift(-shift)), Bounding);
+        if (bounds != null)
+            bounds = Bounding;
+        return Nifty.AddRuler(arr.ToRowStrings(Bounding.Shift(-shift)), bounds);
     }
 
     #region GetSet
