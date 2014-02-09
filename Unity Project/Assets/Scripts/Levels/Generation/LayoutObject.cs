@@ -19,10 +19,12 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         }
     }
     public int Id { get; protected set; }
+    string _name;
     public LayoutObject Object { get { return this; } }
 
-    public LayoutObject()
+    public LayoutObject(String name)
     {
+        _name = name;
         Id = _nextId++;
         ShiftP = new Point();
         Grids = new MultiMap<GridType>();
@@ -40,115 +42,10 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         }
     }
 
-    #region Shifts
     public override void Shift(int x, int y)
     {
         ShiftP.Shift(x, y);
     }
-
-    public void ShiftOutside(IEnumerable<ILayoutObject> rhs, Point dir)
-    {
-        ILayoutObject intersect;
-        Point hint;
-        while (Intersects(rhs, out intersect, out hint))
-        {
-            ShiftOutside(intersect, dir, hint, true, true);
-        }
-    }
-
-    public bool Intersects(IEnumerable<ILayoutObject> rhs, out ILayoutObject obj, out Point at)
-    {
-        foreach (LayoutObject l in rhs)
-        {
-            if (Intersects(l, null, out at))
-            {
-                obj = l;
-                return true;
-            }
-        }
-        obj = null;
-        at = null;
-        return false;
-    }
-
-    public bool Intersects(ILayoutObject rhs, Point hint, out Point at)
-    {
-        if (hint != null && rhs.ContainsPoint(hint))
-        {
-            at = hint;
-            return true;
-        }
-        foreach (Value2D<GridType> val in this)
-        {
-            if (rhs.ContainsPoint(val))
-            {
-                at = val;
-                return true;
-            }
-        }
-        at = null;
-        return false;
-    }
-
-    public void ShiftOutside(ILayoutObject rhs, Point dir, Point hint, bool rough, bool finalShift)
-    {
-        Point reducBase = dir.Reduce();
-        Point reduc = new Point(reducBase);
-        int xShift, yShift;
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Shift Outside " + ToString());
-            BigBoss.Debug.w(Logs.LevelGen, "Shifting outside of " + rhs.ToString());
-            BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
-            BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + Bounding + "  RHS bounds: " + rhs.Bounding);
-            MultiMap<GridType> tmp = new MultiMap<GridType>();
-            tmp.PutAll(rhs.GetGrid());
-            tmp.PutAll(Grids, ShiftP);
-            tmp.ToLog(Logs.LevelGen, "Before shifting");
-        }
-        #endregion
-        Point at;
-        while (Intersects(rhs, hint, out at))
-        {
-            if (rough)
-            {
-                Shift(reduc);
-                at.Shift(reduc);
-                hint = at;
-            }
-            else
-            {
-                reduc.Take(out xShift, out yShift);
-                Shift(xShift, yShift);
-                if (reduc.isZero())
-                {
-                    reduc = new Point(reducBase);
-                }
-                at.Shift(xShift, yShift);
-                hint = at;
-            }
-            #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "Intersected at " + at);
-                MultiMap<GridType> tmp = new MultiMap<GridType>();
-                tmp.PutAll(rhs.GetGrid());
-                tmp.PutAll(Grids, ShiftP);
-                tmp.ToLog(Logs.LevelGen, "After shifting");
-            }
-            #endregion
-        }
-        if (finalShift)
-            Shift(dir);
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen, "Shift Outside " + ToString());
-        }
-        #endregion
-    }
-    #endregion Shifts
 
     #region Bounds
     public Bounding GetBounding(bool shifted)
@@ -203,11 +100,6 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
             _connectedTo.Add(obj);
             obj._connectedTo.Add(this);
         }
-    }
-
-    public void Connect(LayoutObjectContainer layout, Value2D<GridType> pt)
-    {
-        Connect(layout.GetObjAt(pt));
     }
 
     public virtual bool ContainsPoint(Point pt)
@@ -318,12 +210,7 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
     #region Printing
     public override string ToString()
     {
-        return GetTypeString() + " " + Id;
-    }
-
-    public virtual string GetTypeString()
-    {
-        return "Layout Object";
+        return _name + " " + Id;
     }
 
     protected string printContent()

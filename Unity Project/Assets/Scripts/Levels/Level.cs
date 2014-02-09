@@ -25,7 +25,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
 
     private void LoadRoomMaps()
     {
-        foreach (LayoutObject room in Layout.GetRooms())
+        foreach (LayoutObject room in Layout.Rooms)
         {
             MultiMap<GridType> roomMap = new MultiMap<GridType>(room.Grids, room.ShiftP);
             RoomMaps.Add(roomMap);

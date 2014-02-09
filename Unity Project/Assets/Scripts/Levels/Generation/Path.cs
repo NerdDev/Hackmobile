@@ -90,7 +90,7 @@ public class Path : IEnumerable<Value2D<GridType>>
 
     public LayoutObject Bake()
     {
-        LayoutObject obj = new LayoutObject();
+        LayoutObject obj = new LayoutObject("Path");
         foreach (var v in PathPrint(List.Cast<Point>()))
         {
             obj[v] = v.val;

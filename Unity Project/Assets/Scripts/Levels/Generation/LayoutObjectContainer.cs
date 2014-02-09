@@ -25,7 +25,7 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
 
     public void Shift(int x, int y)
     {
-        foreach (LayoutObject obj in Objects)
+        foreach (ILayoutObject obj in Objects)
         {
             obj.Shift(x, y);
         }
@@ -53,16 +53,23 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
 
     public bool ContainsPoint(Point pt)
     {
-        return GetObjAt(pt) != null;
+        LayoutObject obj;
+        return GetObjAt(pt, out obj);
     }
 
-    public void FindAndConnect(LayoutObject obj1, Point connectPt)
+    public bool FindAndConnect(LayoutObject obj1, Point connectPt)
     {
         Point pt = new Value2D<GridType>(connectPt.x + obj1.ShiftP.x, connectPt.y + obj1.ShiftP.y);
-        obj1.Connect(GetObjAt(pt));
+        LayoutObject obj;
+        if (GetObjAt(pt, out obj))
+        {
+            obj1.Connect(obj);
+            return true;
+        }
+        return false;
     }
 
-    public LayoutObject GetObjAt(Point pt)
+    public bool GetObjAt(Point pt, out LayoutObject layoutObj)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -76,7 +83,7 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
             BigBoss.Debug.w(Logs.LevelGen, "Getting object at val " + pt);
         }
         #endregion
-        foreach (LayoutObject obj in this)
+        foreach (ILayoutObject obj in this)
         {
             if (obj.ContainsPoint(pt))
             {
@@ -87,7 +94,15 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
                     BigBoss.Debug.printFooter(Logs.LevelGen, "Get Object At");
                 }
                 #endregion
-                return obj;
+                if (obj is LayoutObject)
+                {
+                    layoutObj = (LayoutObject)obj;
+                    return true;
+                }
+                else
+                {
+                    return ((LayoutObjectContainer)obj).GetObjAt(pt, out layoutObj);
+                }
             }
         }
         #region DEBUG
@@ -96,7 +111,8 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
             BigBoss.Debug.printFooter(Logs.LevelGen, "Get Object At");
         }
         #endregion
-        return null;
+        layoutObj = null;
+        return false;
     }
 
     public Container2D<GridType> GetGrid()
@@ -107,5 +123,11 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
             map.PutAll(obj.GetGrid());
         }
         return map;
+    }
+
+
+    public void ConnectTo(ILayoutObject obj, Point at)
+    {
+        throw new System.NotImplementedException();
     }
 }

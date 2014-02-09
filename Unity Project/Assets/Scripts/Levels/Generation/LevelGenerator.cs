@@ -45,7 +45,7 @@ public class LevelGenerator
     public System.Random Rand;
     public int Depth;
     protected LevelLayout Layout;
-    protected List<ILayoutObject> Rooms;
+    protected List<ILayoutObject> Objects;
     private int _debugNum = 0;
 
     public LevelGenerator()
@@ -123,8 +123,9 @@ public class LevelGenerator
         #endregion
         for (int i = 1; i <= numRooms; i++)
         {
-            LayoutObject room = new LayoutObject();
+            LayoutObject room = new LayoutObject("Room");
             rooms.Add(room);
+            Layout.Rooms.Add(room);
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -132,12 +133,12 @@ public class LevelGenerator
             BigBoss.Debug.printFooter(Logs.LevelGen, "Generate Rooms");
         }
         #endregion
-        Rooms = rooms;
+        Objects = rooms;
     }
 
     void ModRooms()
     {
-        foreach (LayoutObject room in Rooms)
+        foreach (LayoutObject room in Objects)
         {
             #region DEBUG
             double stepTime = 0, time = 0;
@@ -187,7 +188,7 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
-            foreach (LayoutObject room in Rooms)
+            foreach (LayoutObject room in Objects)
                 room.ToLog(Logs.LevelGenMain);
         }
         #endregion
@@ -242,8 +243,8 @@ public class LevelGenerator
         List<LayoutObject> ret = new List<LayoutObject>();
         int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
         // Num clusters cannot be more than half num rooms
-        if (numClusters > Rooms.Count / 2)
-            numClusters = Rooms.Count / 2;
+        if (numClusters > Objects.Count / 2)
+            numClusters = Objects.Count / 2;
         List<LayoutObjectContainer> clusters = new List<LayoutObjectContainer>();
         for (int i = 0; i < numClusters; i++)
             clusters.Add(new LayoutObjectContainer());
@@ -256,8 +257,8 @@ public class LevelGenerator
         // Add two rooms to each
         foreach (LayoutObjectContainer cluster in clusters)
         {
-            cluster.AddObject(Rooms.Take());
-            cluster.AddObject(Rooms.Take());
+            cluster.AddObject(Objects.Take());
+            cluster.AddObject(Objects.Take());
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -268,16 +269,17 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Rooms left: " + Rooms.Count);
+            BigBoss.Debug.w(Logs.LevelGen, "Rooms left: " + Objects.Count);
         }
         #endregion
         // For remaining rooms, put into random clusters
-        foreach (LayoutObject r in Rooms)
+        foreach (LayoutObject r in new List<ILayoutObject>(Objects))
         {
             if (Rand.Percent(clusterProbability))
             {
                 LayoutObjectContainer cluster = clusters.Random(Rand);
                 cluster.AddObject(r);
+                Objects.Remove(r);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
@@ -285,6 +287,11 @@ public class LevelGenerator
                 }
                 #endregion
             }
+        }
+        // Add Clusters to rooms list
+        foreach (ILayoutObject cluster in clusters)
+        {
+            Objects.Add(cluster);
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -311,7 +318,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Rooms");
         }
         #endregion
-        List<ILayoutObject> unplacedRooms = new List<ILayoutObject>(Rooms);
+        List<ILayoutObject> unplacedRooms = new List<ILayoutObject>(Objects);
         List<ILayoutObject> placedRooms = new List<ILayoutObject>();
         if (unplacedRooms.Count > 0)
         { // Add seed
@@ -319,7 +326,7 @@ public class LevelGenerator
             Layout.AddObject(seed);
             placedRooms.Add(seed);
         }
-        foreach (LayoutObject room in unplacedRooms)
+        foreach (ILayoutObject room in unplacedRooms)
         {
             // Find room it will start from
             int roomNum = Rand.Next(placedRooms.Count);
@@ -338,11 +345,11 @@ public class LevelGenerator
             room.ShiftOutside(placedRooms, shiftMagn);
             room.ToLog(Logs.LevelGen, "test");
             placedRooms.Add(room);
-            Layout.AddRoom(room);
+            Layout.AddObject(room);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                Layout.ToLog(Logs.LevelGen, "Layout after placing room at: " + room.GetBounding(true));
+                Layout.ToLog(Logs.LevelGen, "Layout after placing room at: " + room.Bounding);
                 BigBoss.Debug.printBreakers(Logs.LevelGen, 4);
             }
             #endregion
@@ -360,7 +367,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Doors");
         }
         #endregion
-        foreach (LayoutObject room in Rooms)
+        foreach (LayoutObject room in Objects)
         {
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -409,7 +416,7 @@ public class LevelGenerator
         #endregion
         DrawAction<GridType> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.CanDrawDoor());
         Container2D<GridType> layoutCopy = Layout.GetGrid().Array;
-        List<LayoutObject> rooms = new List<LayoutObject>(Layout.GetRooms().Cast<LayoutObject>());
+        List<LayoutObject> rooms = new List<LayoutObject>(Layout.Rooms.Cast<LayoutObject>());
         Container2D<GridType> runningConnected = Container2D<GridType>.CreateArrayFromBounds(layoutCopy);
         // Create initial queue and visited
         LayoutObject startingRoom = rooms.Take();
@@ -468,8 +475,10 @@ public class LevelGenerator
                 path.Simplify();
                 Point first = path.FirstEnd;
                 Point second = path.SecondEnd;
-                LayoutObject leaf1 = Layout.GetObjAt(first);
-                LayoutObject leaf2 = Layout.GetObjAt(second);
+                LayoutObject leaf1, leaf2;
+                LayoutObject pathObj = path.Bake();
+                Layout.ConnectTo(first, pathObj, first, out leaf1, out pathObj);
+                Layout.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
                 if (leaf1[first] == GridType.Wall)
                 {
                     leaf1[first] = GridType.Door;
@@ -478,8 +487,6 @@ public class LevelGenerator
                 {
                     leaf2[second] = GridType.Door;
                 }
-                leaf1.Connect(leaf2);
-                LayoutObject pathObj = path.Bake();
                 foreach (var v in pathObj)
                 {
                     layoutCopy[v] = v.val;
@@ -544,7 +551,11 @@ public class LevelGenerator
             startPoint = null;
             return false;
         }
-        hit = Layout.GetObjAt(endPoint);
+        if (!Layout.GetObjAt(endPoint, out hit))
+        {
+            startPoint = null;
+            return false;
+        }
         Container2D<bool> hitVisited;
         Queue<Value2D<GridType>> hitQueue;
         ConstructBFS(hit, out hitQueue, out hitVisited);
@@ -566,7 +577,7 @@ public class LevelGenerator
             Layout.ToLog(Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
-        LayoutObject edgeObject = new LayoutObject();
+        LayoutObject edgeObject = new LayoutObject("Edges");
         Container2D<GridType> grids = Layout.GetGrid();
         grids.DrawAll(Draw.Not(Draw.EqualTo(GridType.NULL).Or(Draw.EqualTo(GridType.Wall))).IfThen((arr, x, y) =>
             {
@@ -605,7 +616,7 @@ public class LevelGenerator
 
     protected Point PlaceMissingStair(bool up, Point otherStair)
     {
-        foreach (LayoutObject room in Rooms.Randomize(Rand))
+        foreach (LayoutObject room in Objects.Randomize(Rand))
         {
             MultiMap<GridType> options = new MultiMap<GridType>();
             DrawAction<GridType> test = Draw.CanDrawStair();
