@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public interface ILayoutObject
+public interface ILayoutObject : IEnumerable<Value2D<GridType>>
 {
     Bounding Bounding { get; }
     bool ContainsPoint(Point pt);
@@ -112,7 +112,7 @@ public static class ILayoutObjectExt
             at = hint;
             return true;
         }
-        foreach (Value2D<GridType> val in obj.GetGrid())
+        foreach (Value2D<GridType> val in obj)
         {
             if (rhs.ContainsPoint(val))
             {

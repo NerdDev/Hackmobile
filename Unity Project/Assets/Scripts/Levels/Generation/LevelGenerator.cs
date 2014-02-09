@@ -257,8 +257,11 @@ public class LevelGenerator
         // Add two rooms to each
         foreach (LayoutObjectContainer cluster in clusters)
         {
-            cluster.AddObject(Objects.Take());
-            cluster.AddObject(Objects.Take());
+            ILayoutObject obj1 = Objects.Take();
+            ILayoutObject obj2 = Objects.Take();
+            cluster.Objects.Add(obj1);
+            cluster.Objects.Add(obj2);
+            ClusterAround(obj1, obj2);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -278,7 +281,7 @@ public class LevelGenerator
             if (Rand.Percent(clusterProbability))
             {
                 LayoutObjectContainer cluster = clusters.Random(Rand);
-                cluster.AddObject(r);
+                cluster.Objects.Add(r);
                 Objects.Remove(r);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -305,9 +308,10 @@ public class LevelGenerator
         #endregion
     }
 
-    protected void ClusterAround(ILayoutObject cluster, LayoutObject obj2)
+    protected void ClusterAround(ILayoutObject cluster, ILayoutObject obj2)
     {
-
+        //Container2D<GridType> grid = cluster.GetGrid();
+        //obj2.ShiftOutside(
     }
 
     protected void PlaceRooms()
@@ -323,7 +327,7 @@ public class LevelGenerator
         if (unplacedRooms.Count > 0)
         { // Add seed
             ILayoutObject seed = unplacedRooms.Take();
-            Layout.AddObject(seed);
+            Layout.Objects.Add(seed);
             placedRooms.Add(seed);
         }
         foreach (ILayoutObject room in unplacedRooms)
@@ -343,9 +347,8 @@ public class LevelGenerator
             }
             #endregion
             room.ShiftOutside(placedRooms, shiftMagn);
-            room.ToLog(Logs.LevelGen, "test");
             placedRooms.Add(room);
-            Layout.AddObject(room);
+            Layout.Objects.Add(room);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -497,7 +500,7 @@ public class LevelGenerator
                     }
                     visited[v] = true;
                 }
-                Layout.AddObject(pathObj);
+                Layout.Objects.Add(pathObj);
                 hit.DrawAll(Draw.AddTo(runningConnected, hit.ShiftP));
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -584,7 +587,7 @@ public class LevelGenerator
                 grids.DrawAround(x, y, true, Draw.EqualTo(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, GridType.Wall)));
                 return true;
             }));
-        Layout.AddObject(edgeObject);
+        Layout.Objects.Add(edgeObject);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

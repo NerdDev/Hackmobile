@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
+public class LayoutObjectContainer : ILayoutObject
 {
-    protected List<ILayoutObject> Objects = new List<ILayoutObject>();
+    public List<ILayoutObject> Objects = new List<ILayoutObject>();
 
     public Bounding Bounding
     {
@@ -16,11 +16,6 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
             }
             return bounds;
         }
-    }
-
-    public virtual void AddObject(ILayoutObject obj)
-    {
-        Objects.Add(obj);
     }
 
     public void Shift(int x, int y)
@@ -41,9 +36,15 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
         GetGrid().ToLog(log, customContent);
     }
 
-    public IEnumerator<ILayoutObject> GetEnumerator()
+    public IEnumerator<Value2D<GridType>> GetEnumerator()
     {
-        return Objects.GetEnumerator();
+        foreach (ILayoutObject obj in Objects)
+        {
+            foreach (Value2D<GridType> val in obj)
+            {
+                yield return val;
+            }
+        }
     }
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -83,7 +84,7 @@ public class LayoutObjectContainer : IEnumerable<ILayoutObject>, ILayoutObject
             BigBoss.Debug.w(Logs.LevelGen, "Getting object at val " + pt);
         }
         #endregion
-        foreach (ILayoutObject obj in this)
+        foreach (ILayoutObject obj in Objects)
         {
             if (obj.ContainsPoint(pt))
             {
