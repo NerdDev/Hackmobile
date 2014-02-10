@@ -123,7 +123,7 @@ public class LevelManager : MonoBehaviour, IManager
             {
                 if (space.val.Block == null)
                 {
-                    Builder.Build(space);
+                    //Builder.Build(space);
                 }
                 else
                     space.val.SetActive(true);

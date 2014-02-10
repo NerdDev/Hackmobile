@@ -44,30 +44,6 @@ public class Player : NPC
     #region Physics
     int lastCollisionTime = 0; //unused atm
 
-    void OnCollisionEnter(Collision collision)
-    {
-        //yes, it's the gspot
-        GridSpace gspot = BigBoss.Levels.Level[collision.gameObject.transform.position.x.ToInt(),
-            collision.gameObject.transform.position.z.ToInt()];
-        //I KNEW IT EXISTED
-        GridType g = gspot.Type;
-        switch (g)
-        {
-            case GridType.Wall:
-                //Debug.Log("You walked into a wall!");
-                break;
-            case GridType.Door:
-                //Debug.Log("You walked through the door!");
-                break;
-            case GridType.Floor:
-                //Debug.Log("You ended up in the floor. Don't ask how.");
-                break;
-            default:
-                //Debug.Log("I'm not sure what you collided with.");
-                break;
-        }
-    }
-
     public override void OnClick()
     {
         BigBoss.Gooey.displayInventory = !BigBoss.Gooey.displayInventory;
@@ -172,12 +148,12 @@ public class Player : NPC
             }
 
             //Moving toward closest center point if player isn't moving with input:
-            resetToGrid(lookVectorToOccupiedTile);
+            resetToGrid();
             Debug.DrawRay(new Vector3(GridSpace.X, -.5f, GridSpace.Y), Vector3.up, Color.yellow);
         }
     }
 
-    private void resetToGrid(Vector3 lookVectorToOccupiedTile)
+    private void resetToGrid()
     {
         if (!BigBoss.PlayerInput.mouseMovement && !BigBoss.PlayerInput.touchMovement)
         {
@@ -190,7 +166,8 @@ public class Player : NPC
             {
                 if (!checkXYPosition(GO.transform.position, new Vector3(GridSpace.X, 0f, GridSpace.Y)))
                 {
-                    MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime, .75f, .25f);
+                    MoveNPCStepwise(this.GridSpace);
+                    //MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime, .75f, .25f);
                     isMoving = true;
                 }
                 else
@@ -221,7 +198,7 @@ public class Player : NPC
         MovePlayer(heading, playerSpeed, playerRotationSpeed);
     }
 
-    protected override bool UpdateCurrentTileVectors()
+    protected bool UpdateCurrentTileVectors()
     {
         Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
         GridSpace newGridSpace = BigBoss.Levels.Level[currentLoc.x.ToInt(), currentLoc.y.ToInt()];

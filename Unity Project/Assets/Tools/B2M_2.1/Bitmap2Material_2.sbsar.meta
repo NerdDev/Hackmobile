@@ -6,7 +6,7 @@ SubstanceImporter:
   - serializedVersion: 10
     name: Floor
     prototypeName: Bitmap2Material2
-    shaderName: Mobile/Bumped Diffuse
+    shaderName: Mobile/Bumped Specular
     inputs:
     - name: $time
       value:
@@ -518,7 +518,7 @@ SubstanceImporter:
         data:
           first:
             name: _Shininess
-          second: .078125
+          second: .58266139
         data:
           first:
             name: _Parallax
@@ -563,7 +563,7 @@ SubstanceImporter:
   - serializedVersion: 10
     name: Door
     prototypeName: Bitmap2Material2
-    shaderName: Mobile/Bumped Diffuse
+    shaderName: Mobile/Bumped Specular
     inputs:
     - name: $time
       value:
@@ -1061,21 +1061,21 @@ SubstanceImporter:
           first:
             name: _MainTex
           second:
-            texture: {instanceID: 0}
+            texture: {fileID: 2800000, guid: f897c5db64b348549939734927d58e25, type: 3}
             scale: {x: 1, y: 1}
             offset: {x: 0, y: 0}
         data:
           first:
             name: _BumpMap
           second:
-            texture: {instanceID: 0}
+            texture: {fileID: 2800000, guid: 8edde34a7f4c3024b954e60ea6beb989, type: 3}
             scale: {x: 1, y: 1}
             offset: {x: 0, y: 0}
       floats:
         data:
           first:
             name: _Shininess
-          second: .078125
+          second: .58266139
       colors:
         data:
           first:

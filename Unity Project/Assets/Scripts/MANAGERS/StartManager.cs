@@ -22,6 +22,7 @@ public class StartManager : MonoBehaviour, IManager
     public IEnumerator StartGame(List<GameObject> objectsToDestroy)
     {
         BigBoss.Gooey.DisplayLoading();
+        PathTree tree = new PathTree();
         foreach (GameObject go in objectsToDestroy)
         {
             Destroy(go);
@@ -39,6 +40,7 @@ public class StartManager : MonoBehaviour, IManager
         level.Array.GetPointAround(stair.x, stair.y, false, Draw.IsType(GridType.StairPlace), out start);
         BigBoss.PlayerInfo.transform.position = new Vector3(start.x, -.5f, start.y);
         BigBoss.Player.GridSpace = start.val;
+        BigBoss.Levels.Builder.Build(start);
         BigBoss.Debug.w(Logs.Main, "Placed player on " + start);
         BigBoss.Gooey.CloseLoading();
     }

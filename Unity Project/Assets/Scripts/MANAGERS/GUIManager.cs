@@ -259,7 +259,11 @@ public class GUIManager : MonoBehaviour, IManager
 
     void DisplayTextPops()
     {
-        if (textPopList.Count > 20)
+        if (textPopList.Count > 80)
+        {
+            textPopList.Clear();
+        }
+        else if (textPopList.Count > 20)
         {
             //skip entries when the count gets too high
             for (int i = 0; i < 15; i++)
@@ -267,36 +271,23 @@ public class GUIManager : MonoBehaviour, IManager
                 textPopList.Dequeue();
             }
         }
-        else if (textPopList.Count > 0)
+        else
         {
             textPopList.Dequeue().Display();
         }
     }
 
+    private WaitForSeconds wfs = new WaitForSeconds(.25f);
     IEnumerator Display()
     {
-        while (true)
+        while (enabled)
         {
-            DisplayTextPops();
-            yield return new WaitForSeconds(.25f);
+            if (textPopList.Count > 0)
+            {
+                DisplayTextPops();
+            }
+            yield return wfs;
         }
-    }
-
-    public IEnumerator Wait(float f, int numRepetitions)
-    {
-        bool b = true;
-        int counter = 0;
-        while (b)
-        {
-            counter++;
-            if (counter > numRepetitions) { b = false; }
-            yield return new WaitForSeconds(f);
-        }
-    }
-
-    public IEnumerator Wait(float f)
-    {
-        yield return new WaitForSeconds(f);
     }
 
     internal void RegenInventoryGUI()
@@ -652,7 +643,7 @@ public class GUIManager : MonoBehaviour, IManager
 
         public void Display()
         {
-            GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, Camera.mainCamera.WorldToViewportPoint(pos), Quaternion.identity) as GameObject;
+            GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, Camera.main.WorldToViewportPoint(pos), Quaternion.identity) as GameObject;
             GUIText textComp = (GUIText)go.GetComponent<GUIText>();
             textComp.text = str;
             textComp.material.color = col;

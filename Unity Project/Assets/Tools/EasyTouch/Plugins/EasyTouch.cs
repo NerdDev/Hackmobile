@@ -444,7 +444,7 @@ public class EasyTouch : MonoBehaviour {
 		// We search the main camera with the tag MainCamera.
 		// For automatic object selection.
 		if (easyTouchCamera == null){
-			easyTouchCamera = Camera.mainCamera;
+			easyTouchCamera = Camera.main;
 			
 			if (easyTouchCamera==null && autoSelect){
 				Debug.LogWarning("No camera with flag \"MainCam\" was found in the scene, please setup the camera");

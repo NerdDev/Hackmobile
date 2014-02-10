@@ -29,6 +29,7 @@ public class FOWSystem : MonoBehaviour
 		public int cachedSize = 0;
 		public int cachedX = 0;
 		public int cachedY = 0;
+        public float revDist = 55;
 	}
 
 	public enum State
@@ -811,6 +812,19 @@ public class FOWSystem : MonoBehaviour
 		int index = cx + cy * textureSize;
 		return mBuffer1[index].r > 0 || mBuffer0[index].r > 0;
 	}
+
+    public bool IsVis(Vector3 pos)
+    {
+        foreach (Revealer r in mRevealers)
+        {
+            float circleRadii = Mathf.Pow((pos.x - r.pos.x), 2f) + Mathf.Pow((pos.z - r.pos.z), 2f);
+            if (circleRadii < r.revDist)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	/// <summary>
 	/// Checks to see if the specified position has been explored.

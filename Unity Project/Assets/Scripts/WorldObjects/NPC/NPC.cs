@@ -22,6 +22,7 @@ public class NPC : Affectable
             Vector2 currentPos = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
             GridSpace = BigBoss.Levels.Level[currentPos.x.ToInt(), currentPos.y.ToInt()];
         }
+        InitAI();
     }
 
     /**
@@ -47,7 +48,7 @@ public class NPC : Affectable
      */
     #region NPC Movement Properties
 
-    public float Speed = 1.5f;  //temporarily hard-coded
+    public float Speed = 1.75f;  //temporarily hard-coded
     public float NPCSpeed { get { return Speed; } }
 
     private float _rotationSpeed = .5f;  //temporarily hard-coded
@@ -325,12 +326,13 @@ public class NPC : Affectable
         }
     }
 
-    void MoveNPCStepwise(GridSpace gridTarget)
+    internal void MoveNPCStepwise(GridSpace gridTarget)
     {
         heading = new Vector3(gridTarget.X - GO.transform.position.x, verticalOffset, gridTarget.Y - GO.transform.position.z);
         GO.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         Quaternion toRot = Quaternion.LookRotation(heading);
-        GO.transform.rotation = Quaternion.Slerp(GO.transform.rotation, toRot, NPCRotationSpeed);
+        GO.transform.rotation = toRot;
+        //GO.transform.rotation = Quaternion.Slerp(GO.transform.rotation, toRot, NPCRotationSpeed);
     }
 
     void MoveNPCStepwiseUp()
@@ -364,19 +366,12 @@ public class NPC : Affectable
         }
         return true;
     }
-
     
-    protected virtual bool UpdateCurrentTileVectors()
-    {
-        //CurrentOccupiedGridCenterWorldPoint = new Vector3(GridSpace.X, -.5f + verticalOffset, GridSpace.Y);
-        return true;
-    }
-    
-    public PathTree getPathTree(GridSpace dest)
-    {
-        PathTree path = new PathTree(GridSpace, dest);
-        return path;
-    }
+    //public PathTree getPathTree(GridSpace dest)
+    //{
+    //    PathTree path = new PathTree(GridSpace, dest);
+    //    return path;
+    //}
     #endregion
 
     #region Actions
@@ -609,8 +604,6 @@ public class NPC : Affectable
                 Debug.Log("Exception: ");
                 Debug.Log(e.ToString());
             }
-
-            //AdjustHunger(-1);
         }
     }
 
@@ -653,6 +646,98 @@ public class NPC : Affectable
 
     #region AI
 
+    internal List<AIAction> actions = new List<AIAction>();
+
+    void InitAI()
+    {
+        actions.Add(new Attack(this));
+        actions.Add(new Move(this));
+    }
+    public abstract class AIAction : IComparable<AIAction>
+    {
+        private AIAction() { }
+        public AIAction(NPC n)
+        {
+            this.npc = n;
+        }
+        internal NPC npc;
+        public int Cost { get; set; }
+        internal int Weight { get; set; }
+        public abstract void Action();
+        public abstract void CalcWeighting();
+        public int CompareTo(AIAction other)
+        {
+            if (this.Weight < other.Weight)
+            {
+                return -1;
+            }
+            else if (this.Weight == other.Weight)
+            {
+                return 0;
+            }
+            return 1;
+        }
+    }
+    internal class Attack : AIAction
+    {
+        public Attack(NPC n)
+            : base(n)
+        {
+            Cost = 60;
+        }
+
+        public override void Action()
+        {
+            npc.attack(BigBoss.Player);
+        }
+
+        public override void CalcWeighting()
+        {
+            if (npc.IsNextToPlayer())
+            {
+                Weight = 50;
+            }
+            else
+            {
+                Weight = 0;
+            }
+        }
+    }
+    internal class Move : AIAction
+    {
+        public Move(NPC n)
+            : base(n)
+        {
+            Cost = 60;
+        }
+
+        public override void Action()
+        {
+            //PathTree pathToPlayer = npc.getPathTree(BigBoss.Player.GridSpace);
+            //if (pathToPlayer != null)
+            //{
+                List<PathNode> nodes = PathTree.instance.getPath(npc.GridSpace, BigBoss.Player.GridSpace, 150);
+                if (nodes.Count > 2)
+                {
+                    GridSpace nodeToMove = nodes[nodes.Count - 2].loc;
+                    npc.MoveNPC(nodeToMove);
+                }
+            //}
+        }
+
+        public override void CalcWeighting()
+        {
+            if (npc.IsNextToPlayer())
+            {
+                Weight = 0;
+            }
+            else
+            {
+                Weight = 50;
+            }
+        }
+    }
+
     bool IsNextToPlayer()
     {
         GridSpace playerSpace = BigBoss.Player.GridSpace;
@@ -665,36 +750,14 @@ public class NPC : Affectable
 
     void DecideWhatToDo()
     {
-        if (IsNextToPlayer())
+        foreach (AIAction action in actions)
         {
-            AIAttack();
+            action.CalcWeighting();
         }
-        else
+        actions.Sort();
+        if (actions[actions.Count - 1].Weight > 0)
         {
-            AIMove();
-        }
-    }
-
-    private void AIAttack()
-    {
-        if (subtractPoints(BigBoss.TimeKeeper.attackCost))
-        {
-            attack(BigBoss.Player);
-        }
-    }
-
-    private void AIMove()
-    {
-        PathTree pathToPlayer = getPathTree(BigBoss.Player.GridSpace);
-        if (pathToPlayer != null)
-        {
-            List<PathNode> nodes = pathToPlayer.getPath();
-            if (nodes.Count > 2)
-            {
-                GridSpace nodeToMove = nodes[nodes.Count - 2].loc;
-                MoveNPC(nodeToMove);
-            }
-            //UpdateCurrentTileVectors();
+            actions[actions.Count - 1].Action();
         }
     }
 
@@ -705,8 +768,8 @@ public class NPC : Affectable
     {
         if (this.IsNotAFreaking<Player>())
         {
-            PathTree pathToPlayer = getPathTree(BigBoss.Player.GridSpace);
-            List<PathNode> nodes = pathToPlayer.getPath();
+            //PathTree pathToPlayer = getPathTree(BigBoss.Player.GridSpace);
+            List<PathNode> nodes = PathTree.instance.getPath(this.GridSpace, BigBoss.Player.GridSpace, 80);
             if (nodes.Count == 2)
             {
                 BigBoss.Player.attack(this);
