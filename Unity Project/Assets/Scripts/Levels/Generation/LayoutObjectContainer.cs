@@ -72,18 +72,6 @@ public class LayoutObjectContainer : ILayoutObject
 
     public bool GetObjAt(Point pt, out LayoutObject layoutObj)
     {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Get Object At");
-        }
-        #endregion
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Getting object at val " + pt);
-        }
-        #endregion
         foreach (ILayoutObject obj in Objects)
         {
             if (obj.ContainsPoint(pt))
@@ -106,12 +94,6 @@ public class LayoutObjectContainer : ILayoutObject
                 }
             }
         }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen, "Get Object At");
-        }
-        #endregion
         layoutObj = null;
         return false;
     }

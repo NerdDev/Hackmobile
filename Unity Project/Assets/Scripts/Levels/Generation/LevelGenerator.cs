@@ -67,7 +67,7 @@ public class LevelGenerator
         #endregion
         Layout = new LevelLayout();
         Log("Mod Rooms", false, GenerateRoomShells, ModRooms);
-        //Log("Place Clusters", true, ClusterRooms);
+        Log("Place Clusters", true, ClusterRooms);
         Log("Place Rooms", true, PlaceRooms);
         Log("Confirm Connection", true, ConfirmConnection);
         Log("Confirm Edges", true, ConfirmEdges);
@@ -232,6 +232,7 @@ public class LevelGenerator
         return mods;
     }
 
+    #region Clustering
     protected void ClusterRooms()
     {
         #region DEBUG
@@ -257,8 +258,8 @@ public class LevelGenerator
         // Add two rooms to each
         foreach (LayoutObjectContainer cluster in clusters)
         {
-            ILayoutObject obj1 = Objects.Take();
-            ILayoutObject obj2 = Objects.Take();
+            LayoutObject obj1 = (LayoutObject)Objects.Take();
+            LayoutObject obj2 = (LayoutObject)Objects.Take();
             cluster.Objects.Add(obj1);
             cluster.Objects.Add(obj2);
             ClusterAround(obj1, obj2);
@@ -311,8 +312,89 @@ public class LevelGenerator
 
     protected void ClusterAround(ILayoutObject cluster, ILayoutObject obj2)
     {
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader("Cluster Around");
+        }
+        #endregion
         obj2.ShiftOutside(cluster, new Point(1, 0), null, false, false);
+        obj2.Shift(-1, 0); // Shift to overlapping slightly
+        MultiMap<bool> visited = new MultiMap<bool>();
+        visited[0, 0] = true;
+        ProbabilityList<Point> shiftOptions = new ProbabilityList<Point>(Rand);
+        Queue<Point> shiftQueue = new Queue<Point>();
+        shiftQueue.Enqueue(new Point());
+        Container2D<GridType> clusterGrid = cluster.GetGrid();
+        Container2D<GridType> objGrid = obj2.GetGrid();
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            MultiMap<GridType> tmp = new MultiMap<GridType>();
+            tmp.PutAll(obj2.GetGrid());
+            tmp.PutAll(cluster.GetGrid());
+            tmp.ToLog(Logs.LevelGen, "Starting placement");
+        }
+        #endregion
+        while (shiftQueue.Count > 0)
+        {
+            Point curShift = shiftQueue.Dequeue();
+            #region Debug
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+                tmpMap.PutAll(clusterGrid);
+                tmpMap.PutAll(objGrid, curShift);
+                tmpMap.ToLog(Logs.LevelGen, "Analyzing at shift " + curShift);
+            }
+            #endregion
+            // Test if pass
+            List<Point> intersectPoints = new List<Point>();
+            if (objGrid.DrawAll((arr, x, y) =>
+            {
+                if (GridTypeEnum.EdgeType(arr[x, y]))
+                {
+                    GridType clusterType = clusterGrid[x + curShift.x, y + curShift.y];
+                    if (clusterType == GridType.NULL) return true;
+                    intersectPoints.Add(new Point(x, y));
+                    return GridTypeEnum.EdgeType(clusterType);
+                }
+                else
+                {
+                    return !clusterGrid.Contains(x + curShift.x, y + curShift.y);
+                }
+            })
+                && intersectPoints.Count > 0)
+            { // Passed test
+                // queue surrounding points
+                visited.DrawAround(curShift.x, curShift.y, true, Draw.Not(Draw.EqualTo(true)).IfThen(Draw.AddTo<bool>(shiftQueue).And(Draw.SetTo(true))));
+
+                #region Debug
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "passed with " + intersectPoints.Count);
+                }
+                #endregion
+                shiftOptions.Add(curShift, Math.Pow(intersectPoints.Count, 3));
+            }
+        }
+        Point shift = shiftOptions.Get();
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            shiftOptions.ToLog(Logs.LevelGen, "Shift options");
+            BigBoss.Debug.w(Logs.LevelGen, "picked" + shift);
+        }
+        #endregion
+        obj2.Shift(shift.x, shift.y);
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printFooter("Cluster Around");
+        }
+        #endregion
     }
+    #endregion
 
     protected void PlaceRooms()
     {
@@ -446,7 +528,7 @@ public class LevelGenerator
             {
                 throw new ArgumentException("Cannot find path to fail room");
             }
-            
+
             // Connect
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -534,14 +616,14 @@ public class LevelGenerator
             StrokeAction = Draw.AddTo(queue, obj.ShiftP).And(Draw.SetTo<GridType, bool>(visited, true, obj.ShiftP))
         }, false);
     }
-    
-    protected bool FindNextPathPoints(Container2D<GridType> map, 
+
+    protected bool FindNextPathPoints(Container2D<GridType> map,
         Container2D<GridType> runningConnected,
-        out LayoutObject hit, 
+        out LayoutObject hit,
         DrawAction<GridType> pass,
-        Queue<Value2D<GridType>> curQueue, 
-        Container2D<bool> curVisited, 
-        out Value2D<GridType> startPoint, 
+        Queue<Value2D<GridType>> curQueue,
+        Container2D<bool> curVisited,
+        out Value2D<GridType> startPoint,
         out Value2D<GridType> endPoint)
     {
         if (!map.DrawBreadthFirstSearch(

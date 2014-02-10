@@ -70,16 +70,6 @@ public class Point
     {
         Shift(p.x, p.y);
     }
-
-    public void Unshift(int shiftx, int shifty)
-    {
-        Shift(-shiftx, -shifty);
-    }
-
-    public void Unshift(Point shift)
-    {
-        Unshift(shift.x, shift.y);
-    }
     #endregion Shifts
 
     public Point UnitDir()

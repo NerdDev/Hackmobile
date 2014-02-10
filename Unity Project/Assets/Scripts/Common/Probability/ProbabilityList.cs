@@ -70,7 +70,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public override void ToLog(Logs log, string name = "")
     {
-        if (BigBoss.Debug.logging(log) && BigBoss.Debug.Flag(DebugManager.DebugFlag.Probability))
+        if (BigBoss.Debug.logging(log))
         {
             BigBoss.Debug.printHeader(log, "Probability List - " + name);
             BigBoss.Debug.w(log, "Max Num: " + max + ", Current Max: " + uniqueTmpMax);

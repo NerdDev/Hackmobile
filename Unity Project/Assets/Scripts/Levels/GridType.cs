@@ -110,4 +110,16 @@ public class GridTypeEnum
     {
         return Walkable(t) || t == GridType.NULL;
     }
+
+    public static bool EdgeType(GridType t)
+    {
+        switch (t)
+        {
+            case GridType.Wall:
+            case GridType.Door:
+                return true;
+            default:
+                return false;
+        }
+    }
 }

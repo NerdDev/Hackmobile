@@ -5,6 +5,7 @@ using System.Collections;
 
 public abstract class ProbabilityPool<T>  {
 
+
     public System.Random Rand;
     static protected int maxProbDiv = 100000;
     public bool Fresh { get; protected set; }
@@ -29,6 +30,11 @@ public abstract class ProbabilityPool<T>  {
     }
 
     public abstract void Add(T item, double multiplier, bool unique);
+
+    public void Add(T item, double multiplier)
+    {
+        Add(item, multiplier, false);
+    }
 
     public virtual void Add(T item)
     {

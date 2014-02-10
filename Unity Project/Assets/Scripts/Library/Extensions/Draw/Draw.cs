@@ -197,6 +197,26 @@ public class Draw
         }
     }
 
+    public static DrawAction<T> AddTo<T>(Queue<Point> queue, Point shift = null)
+    {
+        if (shift == null)
+        {
+            return (arr, x, y) =>
+            {
+                queue.Enqueue(new Point(x, y));
+                return true;
+            };
+        }
+        else
+        {
+            return (arr, x, y) =>
+            {
+                queue.Enqueue(new Point(x + shift.x, y + shift.y));
+                return true;
+            };
+        }
+    }
+
     public static DrawAction<T> AddTo<T>(Queue<Value2D<T>> queue, Point shift = null)
     {
         if (shift == null)

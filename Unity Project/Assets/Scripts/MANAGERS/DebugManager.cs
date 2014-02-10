@@ -42,7 +42,6 @@ public class DebugManager : MonoBehaviour, IManager
         SearchSteps,
         Perimeter,
         BFSSteps,
-        Probability,
         LevelGen_Path_Simplify_Prune,
         XML_Print
     }
