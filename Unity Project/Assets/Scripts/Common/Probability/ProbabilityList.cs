@@ -83,7 +83,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         }
     }
 
-    public bool Get(out T item, out int resultIndex)
+    protected bool Get(out T item, out int resultIndex, bool take)
     {
         double picked = Rand.NextDouble() * Max;
         resultIndex = 0;
@@ -94,7 +94,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             curNum += cont.Multiplier;
             if (picked < curNum)
             {
-                if (cont.Unique)
+                if (cont.Unique || take)
                     SetToSkip(cont);
                 item = cont.Item;
                 return true;
@@ -110,6 +110,22 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         cont.Skip = true;
         uniqueTmpMax -= cont.Multiplier;
         Fresh = false;
+    }
+
+    public bool Get(out T item, out int resultIndex)
+    {
+        return Get(out item, out resultIndex, false);
+    }
+
+    public bool Take(out T item, out int resultIndex)
+    {
+        return Get(out item, out resultIndex, true);
+    }
+
+    public bool Take(out T item)
+    {
+        int num;
+        return Take(out item, out num);
     }
 
     public override bool Get(out T item)

@@ -76,13 +76,6 @@ public class LayoutObjectContainer : ILayoutObject
         {
             if (obj.ContainsPoint(pt))
             {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    BigBoss.Debug.w(Logs.LevelGen, "Returning " + obj);
-                    BigBoss.Debug.printFooter(Logs.LevelGen, "Get Object At");
-                }
-                #endregion
                 if (obj is LayoutObject)
                 {
                     layoutObj = (LayoutObject)obj;

@@ -391,9 +391,30 @@ public class LevelGenerator
                 shiftOptions.Add(new ClusterInfo() { Shift = curShift, Intersects = intersectPoints }, Math.Pow(intersectPoints.Count, 3));
             }
         }
-        ClusterInfo info = shiftOptions.Get();
-        obj.Shift(info.Shift.x, info.Shift.y);
-        obj.PlaceSomeDoors(info.Intersects, Rand, info.Shift);
+        List<Point> clusterDoorOptions = new List<Point>();
+        ClusterInfo info;
+        List<Value2D<GridType>> placed = new List<Value2D<GridType>>(0);
+        while (shiftOptions.Take(out info))
+        {
+            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().Shift(info.Shift).IfThen(Draw.AddTo<GridType>(clusterDoorOptions)));
+            if (clusterDoorOptions.Count > 0)
+            { // Cluster side has door options
+                obj.Shift(info.Shift.x, info.Shift.y);
+                placed = obj.PlaceSomeDoors(clusterDoorOptions, Rand, info.Shift);
+                if (placed.Count != 0)
+                { // Placed a door
+                    break;
+                }
+                else
+                {
+                    obj.Shift(-info.Shift.x, -info.Shift.y);
+                }
+            }
+        }
+        if (placed.Count == 0)
+        {
+            throw new ArgumentException("Could not cluster rooms");
+        }
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
