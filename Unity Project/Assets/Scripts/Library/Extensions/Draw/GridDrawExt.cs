@@ -51,4 +51,29 @@ public static class GridTypeDrawExt
     {
         DrawPotentialDoors(arr, new StrokedAction<GridType>() { UnitAction = action });
     }
+
+    public static ProbabilityList<int> DoorRatioPicker;
+    public static void PlaceSomeDoors(this Container2D<GridType> arr, IEnumerable<Point> points, System.Random rand)
+    {
+        MultiMap<GridType> acceptablePoints = new MultiMap<GridType>();
+        Counter numPoints = new Counter();
+        arr.DrawPoints(points, Draw.Count<GridType>(numPoints).And(Draw.CanDrawDoor().IfThen(Draw.AddTo(acceptablePoints))));
+        if (DoorRatioPicker == null)
+        {
+            DoorRatioPicker = new ProbabilityList<int>();
+            DoorRatioPicker.Add(-2, .25);
+            DoorRatioPicker.Add(-1, .5);
+            DoorRatioPicker.Add(0, 1);
+            DoorRatioPicker.Add(1, .5);
+            DoorRatioPicker.Add(2, .25);
+        }
+        int numDoors = numPoints / LevelGenerator.desiredWallToDoorRatio;
+        numDoors += DoorRatioPicker.Get();
+        if (numDoors <= 0)
+            numDoors = 1;
+        foreach (Point picked in acceptablePoints.Random(rand, numDoors, 1))
+        {
+            arr[picked] = GridType.Door;
+        }
+    }
 }

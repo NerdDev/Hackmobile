@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class LayoutObject : Container2D<GridType>, ILayoutObject
 {
-    public Point ShiftP { get; set; }
+    public Point ShiftP;
     readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
     private static int _nextId = 0;
     public virtual Container2D<GridType> Grids { get; protected set; }
@@ -44,7 +44,8 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
 
     public override void Shift(int x, int y)
     {
-        ShiftP.Shift(x, y);
+        ShiftP.x += x;
+        ShiftP.y += y;
     }
 
     #region Bounds
@@ -353,7 +354,6 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         map.PutAll(Grids, ShiftP);
         return map;
     }
-
 
     public List<LayoutObject> Flatten()
     {

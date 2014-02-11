@@ -376,6 +376,15 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
         return true;
     }
+
+    public bool DrawPoints(IEnumerable<Point> points, DrawAction<T> action)
+    {
+        foreach (Point p in points)
+        {
+            if (!action(this, p.x, p.y)) return false;
+        }
+        return true;
+    }
     #endregion
     #region Around
     // Returns list of points around that satisfy

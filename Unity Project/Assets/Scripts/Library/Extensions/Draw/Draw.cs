@@ -177,6 +177,15 @@ public class Draw
         };
     }
 
+    public static DrawAction<T> AddTo<T>(ICollection<Point> t)
+    {
+        return (arr, x, y) =>
+        {
+            t.Add(new Point(x, y));
+            return true;
+        };
+    }
+
     public static DrawAction<T> AddTo<T>(Container2D<T> map, Point shift = null)
     {
         if (shift == null)

@@ -37,5 +37,18 @@ namespace System.Collections.Generic
                 return list[rand.Next(list.Count)];
             return default(T);
         }
+
+        public static IEnumerable<T> Random<T>(this List<T> list, System.Random rand, int amount)
+        {
+            foreach (T t in list.Randomize(rand))
+            {
+                if (amount <= 0)
+                {
+                    break;
+                }
+                yield return t;
+                amount--;
+            }
+        }
     }
 }

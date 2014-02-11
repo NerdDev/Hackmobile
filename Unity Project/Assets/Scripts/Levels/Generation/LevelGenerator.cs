@@ -39,6 +39,9 @@ public class LevelGenerator
 
     // Stairs
     public const float MinStairDist = 30;
+
+    // Doors
+    public const int desiredWallToDoorRatio = 10;
     #endregion
 
     public Theme Theme;
@@ -310,7 +313,13 @@ public class LevelGenerator
         #endregion
     }
 
-    protected void ClusterAround(ILayoutObject cluster, ILayoutObject obj2)
+    protected class ClusterInfo
+    {
+        public Point Shift;
+        public List<Point> Intersects;
+    }
+
+    protected void ClusterAround(ILayoutObject cluster, LayoutObject obj)
     {
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -318,20 +327,20 @@ public class LevelGenerator
             BigBoss.Debug.printHeader("Cluster Around");
         }
         #endregion
-        obj2.ShiftOutside(cluster, new Point(1, 0), null, false, false);
-        obj2.Shift(-1, 0); // Shift to overlapping slightly
+        obj.ShiftOutside(cluster, new Point(1, 0), null, false, false);
+        obj.Shift(-1, 0); // Shift to overlapping slightly
         MultiMap<bool> visited = new MultiMap<bool>();
         visited[0, 0] = true;
-        ProbabilityList<Point> shiftOptions = new ProbabilityList<Point>(Rand);
+        ProbabilityList<ClusterInfo> shiftOptions = new ProbabilityList<ClusterInfo>(Rand);
         Queue<Point> shiftQueue = new Queue<Point>();
         shiftQueue.Enqueue(new Point());
         Container2D<GridType> clusterGrid = cluster.GetGrid();
-        Container2D<GridType> objGrid = obj2.GetGrid();
+        Container2D<GridType> objGrid = obj.GetGrid();
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             MultiMap<GridType> tmp = new MultiMap<GridType>();
-            tmp.PutAll(obj2.GetGrid());
+            tmp.PutAll(obj.GetGrid());
             tmp.PutAll(cluster.GetGrid());
             tmp.ToLog(Logs.LevelGen, "Starting placement");
         }
@@ -375,21 +384,21 @@ public class LevelGenerator
                     BigBoss.Debug.w(Logs.LevelGen, "passed with " + intersectPoints.Count);
                 }
                 #endregion
-                shiftOptions.Add(curShift, Math.Pow(intersectPoints.Count, 3));
+                shiftOptions.Add(new ClusterInfo() { Shift = curShift, Intersects = intersectPoints }, Math.Pow(intersectPoints.Count, 3));
             }
         }
-        Point shift = shiftOptions.Get();
+        ClusterInfo info = shiftOptions.Get();
+        obj.PlaceSomeDoors(info.Intersects, Rand);
+        obj.Shift(info.Shift.x, info.Shift.y);
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             shiftOptions.ToLog(Logs.LevelGen, "Shift options");
-            BigBoss.Debug.w(Logs.LevelGen, "picked" + shift);
-        }
-        #endregion
-        obj2.Shift(shift.x, shift.y);
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
+            BigBoss.Debug.w(Logs.LevelGen, "picked" + info.Shift);
+            MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+            tmpMap.PutAll(clusterGrid);
+            tmpMap.PutAll(obj.GetGrid());
+            tmpMap.ToLog(Logs.LevelGen, "Final setup " + info.Shift);
             BigBoss.Debug.printFooter("Cluster Around");
         }
         #endregion
