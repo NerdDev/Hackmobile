@@ -317,6 +317,10 @@ public class LevelGenerator
     {
         public Point Shift;
         public List<Point> Intersects;
+        public override string ToString()
+        {
+            return Shift.ToString();
+        }
     }
 
     protected void ClusterAround(ILayoutObject cluster, LayoutObject obj)
@@ -388,8 +392,8 @@ public class LevelGenerator
             }
         }
         ClusterInfo info = shiftOptions.Get();
-        obj.PlaceSomeDoors(info.Intersects, Rand);
         obj.Shift(info.Shift.x, info.Shift.y);
+        obj.PlaceSomeDoors(info.Intersects, Rand, info.Shift);
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

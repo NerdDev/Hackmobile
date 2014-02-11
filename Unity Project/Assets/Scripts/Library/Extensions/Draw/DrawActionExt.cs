@@ -78,4 +78,13 @@ public static class DrawActionExt
             return call(arr, x + shiftX, y + shiftY);
         };
     }
+
+    public static DrawAction<T> Shift<T>(this DrawAction<T> call, Point shift)
+    {
+        if (shift != null)
+        {
+            return Shift<T>(call, shift.x, shift.y);
+        }
+        return call;
+    }
 }

@@ -53,11 +53,16 @@ public static class GridTypeDrawExt
     }
 
     public static ProbabilityList<int> DoorRatioPicker;
-    public static void PlaceSomeDoors(this Container2D<GridType> arr, IEnumerable<Point> points, System.Random rand)
+    public static void PlaceSomeDoors(this Container2D<GridType> arr, IEnumerable<Point> points, System.Random rand, Point shift = null)
     {
         MultiMap<GridType> acceptablePoints = new MultiMap<GridType>();
         Counter numPoints = new Counter();
-        arr.DrawPoints(points, Draw.Count<GridType>(numPoints).And(Draw.CanDrawDoor().IfThen(Draw.AddTo(acceptablePoints))));
+        DrawAction<GridType> call = Draw.Count<GridType>(numPoints).And(Draw.CanDrawDoor().IfThen(Draw.AddTo(acceptablePoints)));
+        if (shift != null)
+        {
+            call = call.Shift<GridType>(shift.x, shift.y);
+        }
+        arr.DrawPoints(points, call);
         if (DoorRatioPicker == null)
         {
             DoorRatioPicker = new ProbabilityList<int>();

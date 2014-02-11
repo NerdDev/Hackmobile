@@ -57,7 +57,7 @@ public class Array2D<T> : Container2D<T>
 
     public override List<string> ToRowStrings(Bounding bounds = null)
     {
-        if (bounds != null)
+        if (bounds == null)
             bounds = Bounding;
         return Nifty.AddRuler(arr.ToRowStrings(Bounding.Shift(-shift)), bounds);
     }
