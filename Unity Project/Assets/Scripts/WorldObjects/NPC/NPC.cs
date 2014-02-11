@@ -768,9 +768,7 @@ public class NPC : Affectable
     {
         if (this.IsNotAFreaking<Player>())
         {
-            //PathTree pathToPlayer = getPathTree(BigBoss.Player.GridSpace);
-            List<PathNode> nodes = PathTree.instance.getPath(this.GridSpace, BigBoss.Player.GridSpace, 80);
-            if (nodes.Count == 2)
+            if (this.IsNextToPlayer())
             {
                 BigBoss.Player.attack(this);
             }

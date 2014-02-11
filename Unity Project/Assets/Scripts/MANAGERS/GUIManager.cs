@@ -303,7 +303,6 @@ public class GUIManager : MonoBehaviour, IManager
             {
                 foreach (InventoryCategory ic in BigBoss.Player.Inventory.Values)
                 {
-
                     CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
                 }
             }
@@ -316,8 +315,8 @@ public class GUIManager : MonoBehaviour, IManager
                     {
                         CreateItemButton(item, inventoryGrid, inventoryClipDrag);
                     }
-                    CreateBackLabel(inventoryGrid, inventoryClipDrag);
                 }
+                CreateBackLabel(inventoryGrid, inventoryClipDrag);
             }
             this.inventoryClipDrag.ResetPosition();
             inventoryClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
@@ -392,7 +391,7 @@ public class GUIManager : MonoBehaviour, IManager
         {
             itemInfoGrid.Clear();
             itemActionsGrid.Clear();
-            if (displayItem)
+            if (displayItem && item.Count > 0)
             {
                 GenerateItemInfo(item);
                 GenerateItemActions(item);
@@ -571,6 +570,7 @@ public class GUIManager : MonoBehaviour, IManager
             Item i = itemButton.refObject as Item;
             BigBoss.Player.useItem(i);
             BigBoss.Gooey.RegenItemInfoGUI(i);
+            BigBoss.Gooey.RegenInventoryGUI();
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
@@ -610,6 +610,7 @@ public class GUIManager : MonoBehaviour, IManager
             if (!i.OnGround)
             {
                 BigBoss.Player.eatItem(i);
+                BigBoss.Gooey.RegenInventoryGUI();
                 BigBoss.Gooey.RegenItemInfoGUI(i);
             }
         });

@@ -80,7 +80,8 @@ public class FOWRenderers : MonoBehaviour
 
     IEnumerator UpdateRendering()
     {
-        yield return wfs;
+        float mFirstUpdate = Random.value * .05f;
+        yield return new WaitForSeconds(mFirstUpdate);
         while (enabled)
         {
             //mNextUpdate = 0.2f + Random.value * .1f;

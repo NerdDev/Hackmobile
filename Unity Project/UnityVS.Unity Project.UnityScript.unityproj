@@ -78,7 +78,6 @@
     <None Include="Assets\Tools\AudioToolkit\Readme.txt" />
     <None Include="Assets\Tools\B2M_2.1\Script\BatchApply_README.txt" />
     <None Include="Assets\Tools\EasyTouch\Readme_first.txt" />
-    <None Include="Assets\Tools\Fog of War\FoW\DiffuseWithFog.shader" />
     <None Include="Assets\Tools\Fog of War\FoW\FOW.shader" />
     <None Include="Assets\Tools\Fog of War\ReadMe.txt" />
     <None Include="Assets\Tools\iTweenEditor\README.txt" />

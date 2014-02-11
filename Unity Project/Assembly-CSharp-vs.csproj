@@ -47,8 +47,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Camera scripts\HeroCam.cs" />
+     <Compile Include="Assets\Scripts\Camera scripts\JoystickCamera.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\MasterCamera.cs" />
-     <Compile Include="Assets\Scripts\Camera scripts\maxCamera.cs" />
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
      <Compile Include="Assets\Scripts\Common\Array2DRaw.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
@@ -129,7 +129,6 @@
      <Compile Include="Assets\Scripts\MANAGERS\GUIManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\IManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\InputManager.cs" />
-     <Compile Include="Assets\Scripts\MANAGERS\KCTesting.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\LevelLoadManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\LevelManager.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\ObjectManager.cs" />
@@ -179,6 +178,7 @@
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedObjects.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetingStyle.cs" />
      <Compile Include="Assets\Scripts\Testing\JustinTests.cs" />
+     <Compile Include="Assets\Scripts\Testing\KCTesting.cs" />
      <Compile Include="Assets\Scripts\Testing\ProbabilityTesting.cs" />
      <Compile Include="Assets\Scripts\Testing\SpellTesting.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Affectable.cs" />

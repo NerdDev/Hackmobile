@@ -30,6 +30,7 @@ public class PathTree
     {
         this.start = start;
         this.dest = dest;
+        listONodes.Clear();
         PathNode startNode = new PathNode(start, dest, null);
         startNode.g = 0;
         this.terminateDistance = terminateDistance;

@@ -556,8 +556,8 @@ SubstanceImporter:
     buildTargetSettings:
     - serializedVersion: 2
       buildTarget: 
-      textureWidth: 256
-      textureHeight: 256
+      textureWidth: 512
+      textureHeight: 512
       textureFormat: 0
       loadingBehavior: 4
   - serializedVersion: 10

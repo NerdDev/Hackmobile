@@ -16,7 +16,7 @@ public class InputManager : MonoBehaviour, IManager
     public bool allowKeyboardInput;
     public bool allowMouseInput;
     public bool allowTouchInput;
-    public bool isMovementKeyPressed;//mainly for debugging, will convert this bool when the input class is implemented for mobile
+    internal bool isMovementKeyPressed;//mainly for debugging, will convert this bool when the input class is implemented for mobile
     #endregion
 
     #region Mouse variables:
@@ -27,7 +27,7 @@ public class InputManager : MonoBehaviour, IManager
     #endregion
 
     //Screen/Cam space vars:
-    public Vector2 centerPointInScreenSpace;
+    internal Vector2 centerPointInScreenSpace;
 
     public void Initialize()
     {
@@ -36,9 +36,8 @@ public class InputManager : MonoBehaviour, IManager
     void Start()
     {
         centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
-        //Debug.Log("Camera Screen space center point calculated: " + centerPointInScreenSpace);
-
-        //SubscribeToEasyTouchMethods();  //feel free to relocate this
+        zoomCam = Camera.main;
+        EasyTouch.On_DoubleTap += EasyTouch_On_DoubleTap;
     }
 
     #region Touch Input
@@ -46,70 +45,12 @@ public class InputManager : MonoBehaviour, IManager
     public EasyJoystick joystickLeft;
     public EasyJoystick joystickRight;
 
-    void OnEnable()
-    {
-        //EasyTouch.On_SimpleTap += On_SimpleTap;
-    }
-
-    void OnDisable()
-    {
-        //EasyTouch.On_SimpleTap -= On_SimpleTap;
-    }
-
-    void On_SimpleTap(Gesture gesture)
-    {
-        if (gesture.pickObject != null)
-        {
-            GameObject go = gesture.pickObject;
-            if (go.layer == 12)
-            {
-                Point p = new Point(go.transform.position.x, go.transform.position.z);
-                if (this is InputManager && BigBoss.Levels.Level[p.x, p.y].HasObject())
-                {
-                    List<WorldObject> list = BigBoss.Levels.Level[p.x, p.y].GetBlockingObjects();
-                    NPC n = (NPC)list.Find(w => w is NPC);
-                    if (n != null && n.IsNotAFreaking<Player>())
-                    {
-                        GridSpace playerLoc = BigBoss.Player.GridSpace;
-                        Value2D<GridSpace> grid;
-                        if (BigBoss.Levels.Level.Array.GetPointAround(p.x, p.y, true, (arr, x, y) =>
-                            {
-                                GridSpace g = arr[x, y];
-                                return g.X == playerLoc.X && g.Y == playerLoc.Y;
-                            }, out grid))
-                        {
-                            BigBoss.Player.attack(n);
-                        }
-                    }
-                }
-            }
-            else if (go.layer == 13)
-            {
-                //stairs
-                if (go.name.Equals("StairsDown"))
-                {
-                    BigBoss.Levels.SetCurLevel(false);
-                }
-                else if (go.name.Equals("StairsUp"))
-                {
-                    BigBoss.Levels.SetCurLevel(true);
-                }
-            }
-        }
-    }
     #endregion
 
     void Update()
     {
-        CheckForMouseMovement();
-        CheckForTouchMovement();
         if (allowPlayerInput)
         {
-            //Toggle Debug Mode:
-            if (Input.GetKeyDown(KeyCode.BackQuote))
-            {
-                //BigBoss.GameStateManager.ToggleDebugMode(); 
-            }
             if (allowKeyboardInput)
             {
                 CheckForKeyboardInput();
@@ -123,13 +64,15 @@ public class InputManager : MonoBehaviour, IManager
             {
                 CheckForTouchMovement();
                 CheckForTouchInput();
+                touchZoom();
             }
         }
     }
 
     #region TOUCH
 
-    public bool touchMovement;
+    public JoystickCamera Rotation_Camera;
+    internal bool touchMovement;
 
     public void CheckForTouchInput()
     {
@@ -137,29 +80,69 @@ public class InputManager : MonoBehaviour, IManager
         {
             Application.LoadLevel(Application.loadedLevelName);
         }
-        if (touchMovement)//meshes perfectly with smoothing/inertia on the joysticks
+        if (touchMovement)
         {
             touchMove();
         }
-        if (joystickRight.JoystickValue.x != 0 || joystickRight.JoystickValue.y != 0)
+        if (joystickRight.JoystickValue.y != 0 || joystickRight.JoystickValue.x != 0)
         {
-            //MoveCamera();
-            //Write camera movement script
+            Rotation_Camera.Rotate(joystickRight.JoystickValue.x, joystickRight.JoystickValue.y);
         }
+    }
+
+    void EasyTouch_On_DoubleTap(Gesture gesture)
+    {
+        Rotation_Camera.Reset();
     }
 
     public void touchMove()
     {
         float forwardTransVector = Vector2.Distance(joystickLeft.JoystickAxis, Vector2.zero) * Time.deltaTime;
         Vector3 tar = new Vector3(joystickLeft.JoystickAxis.x, 0, joystickLeft.JoystickAxis.y); //making a fake "target" vec3 using vec2 inputs - y and z swaps intended
-        Vector3 lookVectorPreAdjusted = tar - Vector3.zero; //works, but as soon as camera rotates the direction wont compensate
+        Vector3 lookVectorPreAdjusted = tar - Vector3.zero;
         BigBoss.Player.MovePlayer(new Vector3(0, 0, forwardTransVector));
         Quaternion lookRotFinal = Quaternion.LookRotation(lookVectorPreAdjusted); //calc'ing our look vector
-        if (lookRotFinal != Quaternion.identity)
+        BigBoss.PlayerInfo.transform.rotation = lookRotFinal;
+        BigBoss.PlayerInfo.transform.Rotate(Vector3.up, Rotation_Camera.xDeg, Space.Self);
+    }
+
+    #region Zoom
+    public int speed = 4;
+    public Camera zoomCam;
+    public float Zoom_MINSCALE = 2.0F;
+    public float Zoom_MAXSCALE = 5.0F;
+    public float Zoom_minPinchSpeed = 5.0F;
+    public float Zoom_varianceInDistances = 5.0F;
+    private float touchDelta = 0.0F;
+    private Vector2 prevDist = new Vector2(0, 0);
+    private Vector2 curDist = new Vector2(0, 0);
+    private float speedTouch0 = 0.0F;
+    private float speedTouch1 = 0.0F;
+
+    public void touchZoom()
+    {
+        if (Input.touchCount == 2 && Input.GetTouch(0).phase == TouchPhase.Moved && Input.GetTouch(1).phase == TouchPhase.Moved)
         {
-            BigBoss.PlayerInfo.transform.localRotation = lookRotFinal;
+            curDist = Input.GetTouch(0).position - Input.GetTouch(1).position; //current distance between finger touches
+            prevDist = ((Input.GetTouch(0).position - Input.GetTouch(0).deltaPosition)
+                - (Input.GetTouch(1).position - Input.GetTouch(1).deltaPosition)); //difference in previous locations using delta positions
+            touchDelta = curDist.magnitude - prevDist.magnitude;
+            speedTouch0 = Input.GetTouch(0).deltaPosition.magnitude / Input.GetTouch(0).deltaTime;
+            speedTouch1 = Input.GetTouch(1).deltaPosition.magnitude / Input.GetTouch(1).deltaTime;
+
+            if ((touchDelta + Zoom_varianceInDistances <= 1) && (speedTouch0 > Zoom_minPinchSpeed) && (speedTouch1 > Zoom_minPinchSpeed))
+            {
+                Rotation_Camera.zoom(touchDelta * speed);
+                //zoomCam.fieldOfView = Mathf.Clamp(zoomCam.fieldOfView + (1 * speed), 15, 90);
+            }
+            if ((touchDelta + Zoom_varianceInDistances > 1) && (speedTouch0 > Zoom_minPinchSpeed) && (speedTouch1 > Zoom_minPinchSpeed))
+            {
+                Rotation_Camera.zoom(-touchDelta * speed);
+                //zoomCam.fieldOfView = Mathf.Clamp(zoomCam.fieldOfView - (1 * speed), 15, 90);
+            }
         }
     }
+    #endregion
 
     #endregion
 
@@ -223,4 +206,5 @@ public class InputManager : MonoBehaviour, IManager
         }
     }
     #endregion
+
 }
