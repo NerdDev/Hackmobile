@@ -3,9 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-public abstract class ProbabilityPool<T>  {
-
-
+public abstract class ProbabilityPool<T>  
+{
     public System.Random Rand;
     static protected int maxProbDiv = 100000;
     public bool Fresh { get; protected set; }

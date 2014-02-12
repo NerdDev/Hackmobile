@@ -72,6 +72,7 @@ public static class GridTypeDrawExt
             DoorRatioPicker.Add(1, .5);
             DoorRatioPicker.Add(2, .25);
         }
+        DoorRatioPicker.Rand = rand;
         int numDoors = numPoints / LevelGenerator.desiredWallToDoorRatio;
         numDoors += DoorRatioPicker.Get();
         if (numDoors <= 0)
