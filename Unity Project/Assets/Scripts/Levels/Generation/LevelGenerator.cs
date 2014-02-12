@@ -264,8 +264,8 @@ public class LevelGenerator
             LayoutObject obj1 = (LayoutObject)Objects.Take();
             LayoutObject obj2 = (LayoutObject)Objects.Take();
             cluster.Objects.Add(obj1);
+            ClusterAround(cluster, obj2);
             cluster.Objects.Add(obj2);
-            ClusterAround(obj1, obj2);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -323,7 +323,7 @@ public class LevelGenerator
         }
     }
 
-    protected void ClusterAround(ILayoutObject cluster, LayoutObject obj)
+    protected void ClusterAround(LayoutObjectContainer cluster, LayoutObject obj)
     {
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -391,22 +391,56 @@ public class LevelGenerator
                 shiftOptions.Add(new ClusterInfo() { Shift = curShift, Intersects = intersectPoints }, Math.Pow(intersectPoints.Count, 3));
             }
         }
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            shiftOptions.ToLog(Logs.LevelGen, "Shift options");
+        }
+        #endregion
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
         List<Value2D<GridType>> placed = new List<Value2D<GridType>>(0);
         while (shiftOptions.Take(out info))
         {
-            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().Shift(info.Shift).IfThen(Draw.AddTo<GridType>(clusterDoorOptions)));
+            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GridType>(clusterDoorOptions)).Shift(info.Shift));
+            #region Debug
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "selected " + info.Shift);
+                MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+                tmpMap.PutAll(clusterGrid);
+                tmpMap.PutAll(objGrid, info.Shift);
+                tmpMap.DrawPoints(info.Intersects, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR).Shift(info.Shift));
+                tmpMap.ToLog(Logs.LevelGen, "Intersect Points");
+                tmpMap = new MultiMap<GridType>();
+                tmpMap.PutAll(clusterGrid);
+                tmpMap.PutAll(objGrid, info.Shift);
+                tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(GridType.Door));
+                tmpMap.ToLog(Logs.LevelGen, "Cluster door options");
+            }
+            #endregion
             if (clusterDoorOptions.Count > 0)
             { // Cluster side has door options
                 obj.Shift(info.Shift.x, info.Shift.y);
-                placed = obj.PlaceSomeDoors(clusterDoorOptions, Rand, info.Shift);
+                placed = obj.PlaceSomeDoors(clusterDoorOptions, Rand);
                 if (placed.Count != 0)
                 { // Placed a door
+                    foreach (Point p in placed)
+                    {
+                        LayoutObject clusterObj;
+                        cluster.GetObjAt(p, out clusterObj);
+                        obj.Connect(clusterObj);
+                    }
                     break;
                 }
                 else
                 {
+                    #region Debug
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        BigBoss.Debug.w(Logs.LevelGen, "selected point failed to match " + info.Shift + ". Backing up");
+                    }
+                    #endregion
                     obj.Shift(-info.Shift.x, -info.Shift.y);
                 }
             }
@@ -418,8 +452,6 @@ public class LevelGenerator
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            shiftOptions.ToLog(Logs.LevelGen, "Shift options");
-            BigBoss.Debug.w(Logs.LevelGen, "picked" + info.Shift);
             MultiMap<GridType> tmpMap = new MultiMap<GridType>();
             tmpMap.PutAll(clusterGrid);
             tmpMap.PutAll(obj.GetGrid());
