@@ -106,11 +106,6 @@ public class GridTypeEnum
         }
     }
 
-    public static bool WalkableOrNull(GridType t)
-    {
-        return Walkable(t) || t == GridType.NULL;
-    }
-
     public static bool EdgeType(GridType t)
     {
         switch (t)

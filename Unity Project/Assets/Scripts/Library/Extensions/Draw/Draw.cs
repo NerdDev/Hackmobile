@@ -340,7 +340,9 @@ public class Draw
         if (arr[x, y] != GridType.Wall)
             return false;
         // Include null to work with levelgen placement
-        return (arr.AlternatesSides(x, y, GridTypeEnum.WalkableOrNull));
+        if (arr.AlternatesSides(x, y, (g) => { return g == GridType.NULL || GridTypeEnum.Walkable(g); })) return true;
+        if (arr.HasAround(x, y, false, Draw.Walkable()) && arr.HasAround(x, y, false, Draw.EqualTo(GridType.NULL))) return true;
+        return false;
     });
     public static DrawAction<GridType> CanDrawDoor()
     {
