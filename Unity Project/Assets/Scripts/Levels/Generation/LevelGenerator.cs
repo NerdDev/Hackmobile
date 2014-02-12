@@ -571,7 +571,7 @@ public class LevelGenerator
         Container2D<GridType> runningConnected = Container2D<GridType>.CreateArrayFromBounds(layoutCopy);
         // Create initial queue and visited
         LayoutObject startingRoom = rooms.Take();
-        startingRoom.DrawAll(Draw.AddTo(runningConnected, startingRoom.ShiftP));
+        startingRoom.GetConnectedGrid().DrawAll(Draw.AddTo(runningConnected));
         Container2D<bool> visited;
         Queue<Value2D<GridType>> queue;
         ConstructBFS(startingRoom, out queue, out visited);
@@ -604,13 +604,14 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
             }
             #endregion
+            Container2D<GridType> hitConnected = hit.GetConnectedGrid();
             List<Value2D<GridType>> stack = layoutCopy.DrawJumpTowardsSearch(
             startPoint.x,
             startPoint.y,
             3,
             5,
             Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutCopy.Bounding.Expand(5))),
-            passTest.And(Draw.ContainedIn(hit)),
+            passTest.And(Draw.ContainedIn(hitConnected)),
             Rand,
             endPoint,
             true);
@@ -649,7 +650,7 @@ public class LevelGenerator
                     visited[v] = true;
                 }
                 Layout.Objects.Add(pathObj);
-                hit.DrawAll(Draw.AddTo(runningConnected, hit.ShiftP));
+                hitConnected.DrawAll(Draw.AddTo(runningConnected));
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
@@ -676,10 +677,10 @@ public class LevelGenerator
     {
         visited = new MultiMap<bool>();
         queue = new Queue<Value2D<GridType>>();
-        obj.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
+        obj.GetConnectedGrid().DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
         {
-            UnitAction = Draw.SetTo<GridType, bool>(visited, true, obj.ShiftP),
-            StrokeAction = Draw.AddTo(queue, obj.ShiftP).And(Draw.SetTo<GridType, bool>(visited, true, obj.ShiftP))
+            UnitAction = Draw.SetTo<GridType, bool>(visited, true),
+            StrokeAction = Draw.AddTo(queue).And(Draw.SetTo<GridType, bool>(visited, true))
         }, false);
     }
 
