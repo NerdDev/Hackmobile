@@ -52,6 +52,7 @@ build/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+*.suo
 *_i.c
 *_p.c
 *.ilk
