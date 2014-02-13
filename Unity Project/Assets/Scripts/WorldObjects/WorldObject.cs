@@ -76,6 +76,23 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
         if (Instance != null) //maybe the item isn't tied to a gameobject?
         {
             Instance.Destroy();
+            _instance = null;
+        }
+    }
+
+    public virtual void Wrap()
+    {
+    }
+
+    public void Wrap(bool wrap)
+    {
+        if (wrap)
+        {
+            this.Wrap();
+        }
+        else
+        {
+            Unwrap();
         }
     }
 

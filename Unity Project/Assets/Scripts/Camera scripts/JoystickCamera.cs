@@ -25,10 +25,10 @@ public class JoystickCamera : MonoBehaviour
     public float zoomDampening = 5.0f;
 
     internal float xDeg = 0.0f;
-    private float yDeg = 44.5f;
-    private float currentDistance;
+    public float yDeg = 44.5f;
+    public float currentDistance;
     private float desiredDistance;
-    private Quaternion currentRotation;
+    public Quaternion currentRotation;
     private Quaternion desiredRotation;
     private Quaternion startRotation;
     private Quaternion rotation;
@@ -53,7 +53,7 @@ public class JoystickCamera : MonoBehaviour
 
         distance = Vector3.Distance(transform.position, target.position);
         currentDistance = distance;
-        desiredDistance = distance;
+        desiredDistance = 2;
 
         //be sure to grab the current rotations as starting points.
         position = transform.position;
@@ -110,20 +110,20 @@ public class JoystickCamera : MonoBehaviour
             transform.position = position;
         }
         #endregion
+
+        rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.deltaTime * zoomDampening);
+        transform.rotation = rotation;
+        position = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
+        transform.position = position;
     }
 
     public void Rotate(float x, float y)
     {
         xDeg += x * xSpeed * 0.02f;
         yDeg -= y * ySpeed * 0.02f;
-
-        ////////OrbitAngle
-        //Clamp the vertical axis for the orbit
         yDeg = ClampAngle(yDeg, yMinLimit, yMaxLimit);
-        // set camera rotation 
         desiredRotation = Quaternion.Euler(yDeg, xDeg, 0);
         currentRotation = transform.rotation;
-
         rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.deltaTime * zoomDampening);
         transform.rotation = rotation;
     }
@@ -133,6 +133,7 @@ public class JoystickCamera : MonoBehaviour
         rotation = startRotation;
         xDeg = 0;
         yDeg = 44.5f;
+        Rotate(0, 0);
     }
 
     private float ClampAngle(float angle, float min, float max)
@@ -147,11 +148,14 @@ public class JoystickCamera : MonoBehaviour
     public void zoom(float f)
     {
         desiredDistance -= f * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance) * .025f;
-        //clamp the zoom min/max
-        desiredDistance = Mathf.Clamp(desiredDistance, minDistance, maxDistance);
-        // For smoothing of the zoom, lerp distance
+        if (desiredDistance < maxDistance && desiredDistance > minDistance)
+        {
+            Rotate(0, f * (.3f));
+        }
+        else
+        {
+            desiredDistance = Mathf.Clamp(desiredDistance, minDistance, maxDistance);
+        }
         currentDistance = Mathf.Lerp(currentDistance, desiredDistance, Time.deltaTime * zoomDampening);
-        position = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
-        transform.position = position;
     }
 }

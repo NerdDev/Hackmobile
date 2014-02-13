@@ -10,7 +10,7 @@ public class PathTree
     static Array2D<PathNode> Arr = new Array2D<PathNode>(200, 200);
     //static PathNode[,] Arr = new PathNode[200, 200];
     int terminateDistance;
-    protected List<PathNode> closed = new List<PathNode>(200);
+    protected BetterList<PathNode> closed = new BetterList<PathNode>();
     GridSpace start, dest;
     SortedDictionary<PathNode, PathNode> openNodes = new SortedDictionary<PathNode, PathNode>();
 
@@ -21,12 +21,12 @@ public class PathTree
         instance = this;
     }
 
-    public List<PathNode> getPath(GridSpace start, GridSpace dest)
+    public BetterList<PathNode> getPath(GridSpace start, GridSpace dest)
     {
         return getPath(start, dest, 300);
     }
 
-    public List<PathNode> getPath(GridSpace start, GridSpace dest, int terminateDistance)
+    public BetterList<PathNode> getPath(GridSpace start, GridSpace dest, int terminateDistance)
     {
         this.start = start;
         this.dest = dest;
@@ -179,7 +179,7 @@ public class PathTree
         return null;
     }
 
-    private List<PathNode> listONodes = new List<PathNode>();
+    private BetterList<PathNode> listONodes = new BetterList<PathNode>();
     private void buildPath(PathNode node)
     {
         if (node.parent != null)

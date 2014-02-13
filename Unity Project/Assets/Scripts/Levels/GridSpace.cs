@@ -8,14 +8,15 @@ public class GridSpace
     public GameObject Block;
     public int X { get; protected set; }
     public int Y { get; protected set; }
-    public WorldObject RandomContainedObj { 
-        get 
+    public WorldObject RandomContainedObj
+    {
+        get
         {
             List<WorldObject> tmp = new List<WorldObject>();
             tmp.AddRange(_freeObjects);
             tmp.AddRange(_blockingObjects);
             return tmp.Random(Probability.Rand);
-        } 
+        }
     }
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
@@ -45,10 +46,6 @@ public class GridSpace
         if (obj is NPC)
         {
             PutBlocking(obj);
-            if (obj.IsNotAFreaking<Player>())
-            {
-                ColliderTrigger(false);
-            }
         }
         else if (obj is Item)
         {
@@ -102,10 +99,6 @@ public class GridSpace
         RemoveFree(obj);
         RemoveBlocked(obj);
         if (obj is Item) { RemoveInventory(obj as Item); }
-        if (_blockingObjects.Count == 0)
-        {
-            ColliderTrigger(true);
-        }
     }
 
     public void Remove(WorldObject obj, int count)
@@ -203,6 +196,23 @@ public class GridSpace
     {
         if (Block != null)
             Block.SetActive(on);
+    }
+
+    public void WrapObjects(bool wrap)
+    {
+        foreach (WorldObject wo in GetBlockingObjects())
+        {
+            if (wo.IsNotAFreaking<Player>())
+            {
+                wo.IsActive = wrap;
+                wo.Wrap(wrap);
+            }
+        }
+        foreach (WorldObject wo in GetFreeObjects())
+        {
+            wo.IsActive = wrap;
+            wo.Wrap(wrap);
+        }
     }
 
     public static Array2D<GridSpace> Convert(Container2D<GridType> container)

@@ -30,18 +30,9 @@ public class StartManager : MonoBehaviour, IManager
         yield return new WaitForSeconds(.01f);
         BigBoss.Gooey.OpenInventoryGUI();
         BigBoss.Levels.SetCurLevel(0);
-        BigBoss.DungeonMaster.PopulateLevel(BigBoss.Levels.Level);
 
         // Temp (will move eventually)
-        BigBoss.Debug.w(Logs.Main, "Placing player in initial position.");
-        Level level = BigBoss.Levels.Level;
-        Point stair = level.DownStartPoint;
-        Value2D<GridSpace> start;
-        level.Array.GetPointAround(stair.x, stair.y, false, Draw.IsType(GridType.StairPlace), out start);
-        BigBoss.PlayerInfo.transform.position = new Vector3(start.x, -.5f, start.y);
-        BigBoss.Player.GridSpace = start.val;
-        BigBoss.Levels.Builder.Build(start);
-        BigBoss.Debug.w(Logs.Main, "Placed player on " + start);
+        BigBoss.PlayerInfo.Rendering(true);
         BigBoss.Gooey.CloseLoading();
     }
 }

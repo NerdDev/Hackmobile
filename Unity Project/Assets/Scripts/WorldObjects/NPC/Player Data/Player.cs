@@ -193,9 +193,9 @@ public class Player : NPC
         GO.transform.position = new Vector3(GridSpace.X, GO.transform.position.y, GridSpace.Y);
     }
 
-    public void MovePlayer(Vector3 heading)
+    public void MovePlayer()
     {
-        MovePlayer(heading, playerSpeed, playerRotationSpeed);
+        MovePlayer(playerSpeed, playerRotationSpeed);
     }
 
     protected bool UpdateCurrentTileVectors()
@@ -214,11 +214,9 @@ public class Player : NPC
         }
     }
 
-    private void MovePlayer(Vector3 heading, float playerSpeed, float playerRotationSpeed)
+    private void MovePlayer(float playerSpeed, float playerRotationSpeed)
     {
         GO.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
-        Quaternion toRot = Quaternion.LookRotation(heading);
-        GO.transform.rotation = Quaternion.Slerp(GO.transform.rotation, toRot, playerRotationSpeed);
     }
 
     //BRAD WHAT DOES THIS DO?!

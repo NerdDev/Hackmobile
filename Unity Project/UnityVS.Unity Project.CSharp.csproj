@@ -116,6 +116,8 @@
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModifier.cs" />
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModType.cs" />
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomSpec.cs" />
+    <Compile Include="Assets\Scripts\Levels\Stairs\StairsDown.cs" />
+    <Compile Include="Assets\Scripts\Levels\Stairs\StairsUp.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />

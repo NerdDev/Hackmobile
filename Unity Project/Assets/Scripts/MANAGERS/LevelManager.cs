@@ -62,6 +62,8 @@ public class LevelManager : MonoBehaviour, IManager
         CurLevelDepth = depth;
         Deploy(level);
         Level = level;
+        Level.PlacePlayer(true);
+        BigBoss.DungeonMaster.PopulateLevel(Level);
         Builder.Combine();
     }
 
@@ -100,16 +102,7 @@ public class LevelManager : MonoBehaviour, IManager
         if (level == null) return;
         foreach (Value2D<GridSpace> val in level)
         {
-            foreach (WorldObject wo in val.val.GetBlockingObjects())
-            {
-                if (wo.IsNotAFreaking<Player>())
-                    wo.Destroy();
-            }
-            foreach (WorldObject wo in val.val.GetFreeObjects())
-            {
-                if (wo.IsNotAFreaking<Player>())
-                    wo.Destroy();
-            }
+            val.val.WrapObjects(false);
             val.val.SetActive(false);
         }
     }
@@ -126,7 +119,10 @@ public class LevelManager : MonoBehaviour, IManager
                     //Builder.Build(space);
                 }
                 else
+                {
                     space.val.SetActive(true);
+                }
+                space.val.WrapObjects(true);
             }
         }
         BigBoss.Debug.w(Logs.LevelGenMain, "Deployed " + level);

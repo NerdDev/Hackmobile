@@ -137,6 +137,11 @@ public class NPC : Affectable
         BigBoss.Gooey.CreateTextPop(GO.transform.position, str, col);
     }
 
+    public override void Wrap()
+    {
+        this.Instance = BigBoss.Objects.NPCs.Wrap(this, GridSpace);
+    }
+
     #region Stats
     public bool get(NPCFlags fl)
     {
@@ -366,7 +371,7 @@ public class NPC : Affectable
         }
         return true;
     }
-    
+
     //public PathTree getPathTree(GridSpace dest)
     //{
     //    PathTree path = new PathTree(GridSpace, dest);
@@ -713,16 +718,12 @@ public class NPC : Affectable
 
         public override void Action()
         {
-            //PathTree pathToPlayer = npc.getPathTree(BigBoss.Player.GridSpace);
-            //if (pathToPlayer != null)
-            //{
-                List<PathNode> nodes = PathTree.instance.getPath(npc.GridSpace, BigBoss.Player.GridSpace, 150);
-                if (nodes.Count > 2)
-                {
-                    GridSpace nodeToMove = nodes[nodes.Count - 2].loc;
-                    npc.MoveNPC(nodeToMove);
-                }
-            //}
+            PathNode[] nodes = PathTree.instance.getPath(npc.GridSpace, BigBoss.Player.GridSpace, 75).ToArray();
+            if (nodes.Length > 2)
+            {
+                GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
+                npc.MoveNPC(nodeToMove);
+            }
         }
 
         public override void CalcWeighting()

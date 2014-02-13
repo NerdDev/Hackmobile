@@ -71,6 +71,26 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return bound.GetCenter();
     }
 
+    public void PlacePlayer(bool up)
+    {
+        Point startPoint;
+        if (up)
+        {
+            startPoint = UpStartPoint;
+        }
+        else
+        {
+            startPoint = DownStartPoint;
+        }
+        BigBoss.Debug.w(Logs.Main, "Placing player in position.");
+        Value2D<GridSpace> start;
+        this.Array.GetPointAround(startPoint.x, startPoint.y, false, Draw.IsType(GridType.StairPlace), out start);
+        BigBoss.PlayerInfo.transform.position = new Vector3(start.x, -.5f, start.y);
+        BigBoss.Player.GridSpace = start.val;
+        BigBoss.Levels.Builder.Build(start);
+        BigBoss.Debug.w(Logs.Main, "Placed player on " + start);
+    }
+
     #region ConvenienceFunctions
     public void Put(int x, int y, WorldObject obj)
     {
