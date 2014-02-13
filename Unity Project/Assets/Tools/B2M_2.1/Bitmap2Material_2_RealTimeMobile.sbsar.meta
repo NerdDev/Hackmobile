@@ -3,7 +3,7 @@ guid: 3bee625a096a70f4ba4b37738aa685de
 SubstanceImporter:
   serializedVersion: 5
   materialInstances:
-  - serializedVersion: 7
+  - serializedVersion: 10
     name: Bitmap2Material_2_RealTimeMobile
     prototypeName: Bitmap2Material_2_RealTimeMobile
     shaderName: Bumped Specular

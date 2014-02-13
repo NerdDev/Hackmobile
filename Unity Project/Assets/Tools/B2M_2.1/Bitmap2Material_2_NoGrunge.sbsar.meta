@@ -3,7 +3,7 @@ guid: ea19f7b8ba84ff64ba0b4409172f9f49
 SubstanceImporter:
   serializedVersion: 5
   materialInstances:
-  - serializedVersion: 7
+  - serializedVersion: 10
     name: Bitmap2Material2
     prototypeName: Bitmap2Material2
     shaderName: Bumped Specular
