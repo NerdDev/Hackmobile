@@ -64,6 +64,7 @@ public class FOWEffect : MonoBehaviour
 	}
 
 	// Called by camera to apply image effect
+    
 	void OnRenderImage (RenderTexture source, RenderTexture destination)
 	{
 		if (mFog == null)

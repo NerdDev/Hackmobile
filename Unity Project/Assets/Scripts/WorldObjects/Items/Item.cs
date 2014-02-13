@@ -50,7 +50,6 @@ public class Item : Affectable, PassesTurns, IXmlParsable
             onEaten.Activate(this, n);
         }
         n.removeFromInventory(this);
-        RemoveItem();
     }
 
     public bool isUsable()

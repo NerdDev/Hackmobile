@@ -18,6 +18,11 @@ public class FOWRevealer : MonoBehaviour
 
 	public Vector2 range = new Vector2(2f, 30f);
 
+    /// <summary>
+    /// Radius of the area being occluded.
+    /// </summary>
+    public float RevealDistance = 55;
+
 	/// <summary>
 	/// What kind of line of sight checks will be performed.
 	/// - "None" means no line of sight checks, and the entire area covered by radius.y will be revealed.
@@ -63,6 +68,7 @@ public class FOWRevealer : MonoBehaviour
 			mRevealer.inner = range.x;
 			mRevealer.outer = range.y;
 			mRevealer.los = lineOfSightCheck;
+            mRevealer.revDist = RevealDistance;
 			mRevealer.isActive = true;
 		}
 		else

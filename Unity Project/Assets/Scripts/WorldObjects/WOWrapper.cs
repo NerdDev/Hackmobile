@@ -21,12 +21,18 @@ public class WOWrapper : MonoBehaviour
 
     public void Destroy()
     {
-        Destroy(this.gameObject);
         WO = null;
+        this.gameObject.SetActive(false);
+        GameObject.Destroy(this.gameObject);
     }
 
     public static implicit operator WorldObject (WOWrapper inst)
     {
         return inst.WO;
+    }
+
+    void OnMouseDown()
+    {
+        WO.OnClick();
     }
 }

@@ -7,6 +7,8 @@ public class LevelBuilder : MonoBehaviour
 
     public Theme Theme { get; set; }
 
+    private int count = 0;
+    private int otherCount = 0;
     public GameObject Build(Value2D<GridSpace> val)
     {
         return Build(val.val, val.x, val.y);
@@ -21,10 +23,21 @@ public class LevelBuilder : MonoBehaviour
         if (space == null) return null;
         GameObject protoType = Theme.Get(space.Type);
         if (protoType == null) return null;
-        GameObject obj = Instantiate(protoType) as GameObject;
+        GameObject obj = Instantiate(protoType, new Vector3(x, protoType.transform.position.y, y), Quaternion.identity) as GameObject;
         obj.transform.parent = holder.transform;
-        obj.transform.Translate(new Vector3(x, 0, y));
         space.Block = obj;
+        count++;
+        otherCount++;
+        if (otherCount > 300)
+        {
+            System.GC.Collect();
+            otherCount = 0;
+        }
+        if (count > 20)
+        {
+            count = 0;
+            Combine();
+        }
         return obj;
     }
 

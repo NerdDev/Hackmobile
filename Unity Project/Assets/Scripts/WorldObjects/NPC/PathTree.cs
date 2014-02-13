@@ -6,28 +6,31 @@ using System.Text;
 
 public class PathTree
 {
+    public static PathTree instance;
     static Array2D<PathNode> Arr = new Array2D<PathNode>(200, 200);
     //static PathNode[,] Arr = new PathNode[200, 200];
     int terminateDistance;
-    protected List<PathNode> closed = new List<PathNode>();
+    protected BetterList<PathNode> closed = new BetterList<PathNode>();
     GridSpace start, dest;
     SortedDictionary<PathNode, PathNode> openNodes = new SortedDictionary<PathNode, PathNode>();
 
     bool pathComplete;
 
-    public PathTree(GridSpace start, GridSpace dest)
+    public PathTree()
+    {
+        instance = this;
+    }
+
+    public BetterList<PathNode> getPath(GridSpace start, GridSpace dest)
+    {
+        return getPath(start, dest, 300);
+    }
+
+    public BetterList<PathNode> getPath(GridSpace start, GridSpace dest, int terminateDistance)
     {
         this.start = start;
         this.dest = dest;
-    }
-
-    public List<PathNode> getPath()
-    {
-        return getPath(300);
-    }
-
-    public List<PathNode> getPath(int terminateDistance)
-    {
+        listONodes.Clear();
         PathNode startNode = new PathNode(start, dest, null);
         startNode.g = 0;
         this.terminateDistance = terminateDistance;
@@ -37,7 +40,13 @@ public class PathTree
         {
             checkValidNodes();
         }
-        ///*
+        Clear();
+        return listONodes;
+    }
+
+    internal void Clear()
+    {
+        pathComplete = false;
         foreach (PathNode pn in closed)
         {
             Arr[pn.loc.X, pn.loc.Y] = null;
@@ -50,8 +59,10 @@ public class PathTree
         {
             Arr[pn.loc.X, pn.loc.Y] = null;
         }
-        //*/
-        return listONodes;
+        start = null;
+        dest = null;
+        closed.Clear();
+        openNodes.Clear();
     }
 
     public void getNextNodes(PathNode origin)
@@ -168,7 +179,7 @@ public class PathTree
         return null;
     }
 
-    private List<PathNode> listONodes = new List<PathNode>();
+    private BetterList<PathNode> listONodes = new BetterList<PathNode>();
     private void buildPath(PathNode node)
     {
         if (node.parent != null)

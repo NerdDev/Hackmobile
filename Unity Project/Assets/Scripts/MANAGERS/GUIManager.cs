@@ -259,7 +259,11 @@ public class GUIManager : MonoBehaviour, IManager
 
     void DisplayTextPops()
     {
-        if (textPopList.Count > 20)
+        if (textPopList.Count > 80)
+        {
+            textPopList.Clear();
+        }
+        else if (textPopList.Count > 20)
         {
             //skip entries when the count gets too high
             for (int i = 0; i < 15; i++)
@@ -267,36 +271,23 @@ public class GUIManager : MonoBehaviour, IManager
                 textPopList.Dequeue();
             }
         }
-        else if (textPopList.Count > 0)
+        else
         {
             textPopList.Dequeue().Display();
         }
     }
 
+    private WaitForSeconds wfs = new WaitForSeconds(.25f);
     IEnumerator Display()
     {
-        while (true)
+        while (enabled)
         {
-            DisplayTextPops();
-            yield return new WaitForSeconds(.25f);
+            if (textPopList.Count > 0)
+            {
+                DisplayTextPops();
+            }
+            yield return wfs;
         }
-    }
-
-    public IEnumerator Wait(float f, int numRepetitions)
-    {
-        bool b = true;
-        int counter = 0;
-        while (b)
-        {
-            counter++;
-            if (counter > numRepetitions) { b = false; }
-            yield return new WaitForSeconds(f);
-        }
-    }
-
-    public IEnumerator Wait(float f)
-    {
-        yield return new WaitForSeconds(f);
     }
 
     internal void RegenInventoryGUI()
@@ -312,7 +303,6 @@ public class GUIManager : MonoBehaviour, IManager
             {
                 foreach (InventoryCategory ic in BigBoss.Player.Inventory.Values)
                 {
-
                     CreateCategoryButton(ic, inventoryGrid, inventoryClipDrag);
                 }
             }
@@ -325,8 +315,8 @@ public class GUIManager : MonoBehaviour, IManager
                     {
                         CreateItemButton(item, inventoryGrid, inventoryClipDrag);
                     }
-                    CreateBackLabel(inventoryGrid, inventoryClipDrag);
                 }
+                CreateBackLabel(inventoryGrid, inventoryClipDrag);
             }
             this.inventoryClipDrag.ResetPosition();
             inventoryClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
@@ -401,7 +391,7 @@ public class GUIManager : MonoBehaviour, IManager
         {
             itemInfoGrid.Clear();
             itemActionsGrid.Clear();
-            if (displayItem)
+            if (displayItem && item.Count > 0)
             {
                 GenerateItemInfo(item);
                 GenerateItemActions(item);
@@ -580,6 +570,7 @@ public class GUIManager : MonoBehaviour, IManager
             Item i = itemButton.refObject as Item;
             BigBoss.Player.useItem(i);
             BigBoss.Gooey.RegenItemInfoGUI(i);
+            BigBoss.Gooey.RegenInventoryGUI();
         });
         itemButton.UIDragPanel.draggablePanel = itemActionsClipDrag;
     }
@@ -619,6 +610,7 @@ public class GUIManager : MonoBehaviour, IManager
             if (!i.OnGround)
             {
                 BigBoss.Player.eatItem(i);
+                BigBoss.Gooey.RegenInventoryGUI();
                 BigBoss.Gooey.RegenItemInfoGUI(i);
             }
         });
@@ -652,7 +644,7 @@ public class GUIManager : MonoBehaviour, IManager
 
         public void Display()
         {
-            GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, Camera.mainCamera.WorldToViewportPoint(pos), Quaternion.identity) as GameObject;
+            GameObject go = Instantiate(BigBoss.Gooey.textPopPrefab, Camera.main.WorldToViewportPoint(pos), Quaternion.identity) as GameObject;
             GUIText textComp = (GUIText)go.GetComponent<GUIText>();
             textComp.text = str;
             textComp.material.color = col;
