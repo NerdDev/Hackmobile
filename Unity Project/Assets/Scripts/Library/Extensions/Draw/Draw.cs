@@ -297,30 +297,6 @@ public class Draw
         return counter.Action<T>();
     }
 
-    public static DrawAction<T> AlternatesSides<T>(Func<T, bool> eval)
-    {
-        return (arr, x, y) =>
-        {
-            return arr.AlternatesSides(x, y, eval);
-        };
-    }
-
-    public static DrawAction<T> Cornered<T>(Func<T, bool> eval, bool withOpposing = false)
-    {
-        return (arr, x, y) =>
-        {
-            return arr.Cornered(x, y, eval, withOpposing);
-        };
-    }
-
-    public static DrawAction<T> NotBlocking<T>(Func<T, bool> eval)
-    {
-        return (arr, x, y) =>
-            {
-                return !arr.Blocking(x, y, eval);
-            };
-    }
-
     public static DrawAction<T> Stop<T>()
     {
         return (arr, x, y) => { return false; };
@@ -334,13 +310,42 @@ public class Draw
         };
     }
 
+    /*
+     * Walk edges and if alternates more than twice, it's blocking
+     */
+    public static DrawAction<T> Blocking<T>(DrawAction<T> action)
+    {
+        return (arr, x, y) =>
+        {
+            int count = 0;
+            bool status = action(arr, x - 1, y - 1); // Bottom left
+            DrawAction<T> func = (arr2, x2, y2) =>
+            {
+                if (action(arr2, x2, y2) != status)
+                {
+                    status = !status;
+                    return ++count > 2;
+                }
+                return false;
+            };
+            if (func(arr, x, y - 1)) return true; // Bottom
+            if (func(arr, x + 1, y - 1)) return true; // Bottom right
+            if (func(arr, x + 1, y)) return true; // Right
+            if (func(arr, x + 1, y + 1)) return true; // Top Right
+            if (func(arr, x, y + 1)) return true; // Top
+            if (func(arr, x - 1, y + 1)) return true; // Top Left
+            if (func(arr, x - 1, y)) return true; // Left
+            return false;
+        };
+    }
+
     #region GridType
     private static DrawAction<GridType> _canDrawDoor = new DrawAction<GridType>((arr, x, y) =>
     {
         if (arr[x, y] != GridType.Wall)
             return false;
         // Include null to work with levelgen placement
-        if (arr.AlternatesSides(x, y, (g) => { return g == GridType.NULL || GridTypeEnum.Walkable(g); })) return true;
+        if (arr.AlternatesSides(x, y, Draw.EqualTo(GridType.NULL).Or(Draw.Walkable()))) return true;
         if (arr.HasAround(x, y, false, Draw.Walkable()) && arr.HasAround(x, y, false, Draw.EqualTo(GridType.NULL))) return true;
         return false;
     });
@@ -369,7 +374,7 @@ public class Draw
 
     private static DrawAction<GridType> _drawStairs = Draw.EqualTo(GridType.Floor).
         // If not blocking a path
-                And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable)).
+                And(Draw.Not(Draw.Blocking<GridType>(Draw.Walkable()))).
         // If there's a floor around
                 And(Draw.Around(false, Draw.EqualTo(GridType.Floor)));
     public static DrawAction<GridType> CanDrawStair()

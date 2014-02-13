@@ -111,6 +111,20 @@ public class Array2D<T> : Container2D<T>
         }
     }
 
+    public override IEnumerator<T> EnumerateValues()
+    {
+        for (int y = 0; y < arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < arr.GetLength(1); x++)
+            {
+                if (present[y, x])
+                {
+                    yield return arr[y, x];
+                }
+            }
+        }
+    }
+
     public override bool DrawAll(DrawAction<T> call)
     {
         for (int y = 0; y < arr.GetLength(0); y++)

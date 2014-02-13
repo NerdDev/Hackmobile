@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Level : IEnumerable<Value2D<GridSpace>>
+public class Level : IEnumerable<GridSpace>
 {
     protected LevelLayout Layout { get; private set; }
     public bool Populated;
@@ -87,7 +87,7 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         this.Array.GetPointAround(startPoint.x, startPoint.y, false, Draw.IsType(GridType.StairPlace), out start);
         BigBoss.PlayerInfo.transform.position = new Vector3(start.x, -.5f, start.y);
         BigBoss.Player.GridSpace = start.val;
-        BigBoss.Levels.Builder.Build(start);
+        BigBoss.Levels.Builder.Instantiate(start);
         BigBoss.Debug.w(Logs.Main, "Placed player on " + start);
     }
 
@@ -173,9 +173,9 @@ public class Level : IEnumerable<Value2D<GridSpace>>
         return ret;
     }
 
-    public IEnumerator<Value2D<GridSpace>> GetEnumerator()
+    public IEnumerator<GridSpace> GetEnumerator()
     {
-        return Array.GetEnumerator();
+        return Array.EnumerateValues();
     }
 
     IEnumerator IEnumerable.GetEnumerator()

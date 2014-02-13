@@ -80,6 +80,17 @@ public class Array2DRaw<T> : Container2D<T>
         }
     }
 
+    public override IEnumerator<T> EnumerateValues()
+    {
+        for (int y = 0; y < _arr.GetLength(0); y++)
+        {
+            for (int x = 0; x < _arr.GetLength(1); x++)
+            {
+                yield return _arr[y, x];
+            }
+        }
+    }
+
     public override bool DrawAll(DrawAction<T> call)
     {
         throw new NotImplementedException();

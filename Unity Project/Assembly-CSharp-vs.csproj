@@ -82,6 +82,7 @@
      <Compile Include="Assets\Scripts\Levels\Generation\Path.cs" />
      <Compile Include="Assets\Scripts\Levels\GridDirection.cs" />
      <Compile Include="Assets\Scripts\Levels\GridLocation.cs" />
+     <Compile Include="Assets\Scripts\Levels\GridPrototype.cs" />
      <Compile Include="Assets\Scripts\Levels\GridSpace.cs" />
      <Compile Include="Assets\Scripts\Levels\GridType.cs" />
      <Compile Include="Assets\Scripts\Levels\Level.cs" />

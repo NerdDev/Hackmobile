@@ -27,7 +27,7 @@ public class PillarMod : RoomModifier
             {
                 if (GridTypeEnum.Walkable(arr[x, y]))
                 {
-                    if (!arr.AlternatesSides(x, y, GridTypeEnum.Walkable))
+                    if (!arr.AlternatesSides(x, y, Draw.Walkable()))
                     { // If not blocking a path
                         arr[x, y] = GridType.Wall;
                     }

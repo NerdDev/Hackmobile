@@ -266,6 +266,8 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         throw new NotImplementedException();
     }
 
+    public abstract IEnumerator<T> EnumerateValues();
+
     public abstract IEnumerator<Value2D<T>> GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -556,12 +558,12 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
      * ___    or   #_#
      * _#_         ___
      */
-    public bool AlternatesSides(int x, int y, Func<T, bool> evaluator)
+    public bool AlternatesSides(int x, int y, DrawAction<T> action)
     {
-        bool pass = evaluator(this[x - 1, y]);
-        if (pass != evaluator(this[x + 1, y])) return false;
-        if (pass == evaluator(this[x, y + 1])) return false;
-        if (pass == evaluator(this[x, y - 1])) return false;
+        bool pass = action(this, x - 1, y);
+        if (pass != action(this, x + 1, y)) return false;
+        if (pass == action(this, x, y + 1)) return false;
+        if (pass == action(this, x, y - 1)) return false;
         return true;
     }
 
@@ -570,39 +572,13 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
      * #__       or with opposing     #__
      * _#_                            _#_
      */
-    public bool Cornered(int x, int y, Func<T, bool> evaluator, bool withOpposing = false)
+    public bool Cornered(int x, int y, DrawAction<T> action, bool withOpposing = false)
     {
-        bool Xpass = evaluator(this[x - 1, y]);
-        if (Xpass == evaluator(this[x + 1, y])) return false;
-        bool Ypass = evaluator(this[x, y - 1]);
-        if (Ypass == evaluator(this[x, y + 1])) return false;
-        return !withOpposing || evaluator(this[Xpass ? x + 1 : x - 1, Ypass ? y + 1 : y - 1]);
-    }
-
-    /*
-     * Walk edges and if alternates more than twice, it's blocking
-     */
-    public bool Blocking(int x, int y, Func<T, bool> evaluator)
-    {
-        int count = 0;
-        bool status = evaluator(this[x - 1, y - 1]); // Bottom left
-        DrawAction<T> func = (arr, x2, y2) =>
-        {
-            if (evaluator(arr[x2, y2]) != status)
-            {
-                status = !status;
-                return ++count > 2;
-            }
-            return false;
-        };
-        if (func(this, x, y - 1)) return true; // Bottom
-        if (func(this, x + 1, y - 1)) return true; // Bottom right
-        if (func(this, x + 1, y)) return true; // Right
-        if (func(this, x + 1, y + 1)) return true; // Top Right
-        if (func(this, x, y + 1)) return true; // Top
-        if (func(this, x - 1, y + 1)) return true; // Top Left
-        if (func(this, x - 1, y)) return true; // Left
-        return false;
+        bool Xpass = action(this, x - 1, y);
+        if (Xpass == action(this, x + 1, y)) return false;
+        bool Ypass = action(this, x, y - 1);
+        if (Ypass == action(this, x, y + 1)) return false;
+        return !withOpposing || action(this, Xpass ? x + 1 : x - 1, Ypass ? y + 1 : y - 1);
     }
     #endregion
     #endregion

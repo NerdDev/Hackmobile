@@ -35,6 +35,7 @@ public class LevelManager : MonoBehaviour, IManager
         System.Random rand = new System.Random(Seed);
         for (int i = 0; i < _maxLevels; i++)
             _levelSeeds[i] = rand.Next();
+        LevelBuilder.Initialize();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
@@ -100,29 +101,29 @@ public class LevelManager : MonoBehaviour, IManager
     void Destroy(Level level)
     {
         if (level == null) return;
-        foreach (Value2D<GridSpace> val in level)
+        foreach (GridSpace val in level)
         {
-            val.val.WrapObjects(false);
-            val.val.SetActive(false);
+            val.WrapObjects(false);
+            val.SetActive(false);
         }
     }
 
     void Deploy(Level level)
     {
         BigBoss.Debug.w(Logs.LevelGenMain, "Deploying " + level);
-        foreach (Value2D<GridSpace> space in level)
+        foreach (GridSpace space in level)
         {
             if (space != null)
             {
-                if (space.val.Block == null)
+                if (space.Block == null)
                 {
                     //Builder.Build(space);
                 }
                 else
                 {
-                    space.val.SetActive(true);
+                    space.SetActive(true);
                 }
-                space.val.WrapObjects(true);
+                space.WrapObjects(true);
             }
         }
         BigBoss.Debug.w(Logs.LevelGenMain, "Deployed " + level);
@@ -143,6 +144,7 @@ public class LevelManager : MonoBehaviour, IManager
         gen.Depth = depth;
         gen.Rand = new System.Random(_levelSeeds[depth]);
         Level level = new Level(gen.Generate(), gen.Theme);
+        Builder.GeneratePrototypes(level);
         _levels[depth] = level;
     }
 

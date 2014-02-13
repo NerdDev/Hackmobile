@@ -32,7 +32,7 @@ public class HorizSplitterMod : RoomModifier
                 // If no doors around
                 Draw.Not(Draw.Around(false, Draw.EqualTo(GridType.Door)))
                 // Not blocking walking
-                .And(Draw.NotBlocking<GridType>(GridTypeEnum.Walkable))
+                .And(Draw.Not(Draw.Blocking<GridType>(Draw.Walkable())))
                 // Count floors on line as well as sides
                 .And(Draw.EqualTo(GridType.Floor).IfThen(Draw.Count<GridType>(out floorCount)))
                 .And(Draw.Loc(horizontal ? GridLocation.UP : GridLocation.LEFT,

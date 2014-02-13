@@ -294,6 +294,11 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         }
     }
 
+    public override IEnumerator<GridType> EnumerateValues()
+    {
+        return Grids.EnumerateValues();
+    }
+
     #region Container2D
     public override bool TryGetValue(int x, int y, out GridType val)
     {
