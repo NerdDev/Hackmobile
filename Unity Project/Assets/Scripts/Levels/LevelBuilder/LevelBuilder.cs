@@ -79,6 +79,7 @@ public class LevelBuilder : MonoBehaviour
     #region Handlers
     public static void HandleWall(Level level, GridSpace space)
     {
+        // Pillar
         if (level.DrawAround(space.X, space.Y, true, Draw.FloorTypeSpace()))
         {
             space.Deploys = new List<GridDeploy>(2);
@@ -97,11 +98,13 @@ public class LevelBuilder : MonoBehaviour
         GridDeploy doorDeploy = new GridDeploy(level.Theme.Get(GridType.Door));
         space.Deploys.Add(doorDeploy);
         space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
-        if (level.Array.AlternatesSides(space.X, space.Y, Draw.WalkableSpace()))
+        // Normal 
+        GridDirection walkableDir;
+        if (level.Array.AlternatesSides(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
         {
             bool neg = level.Random.NextBool();
-            if (GridTypeEnum.Walkable(level.Array[space.X - 1, space.Y].Type))
-            { // Horizontal walk
+            if (walkableDir == GridDirection.HORIZ)
+            {
                 doorDeploy.Rotation = neg ? -90 : 90;
             }
             else
@@ -109,10 +112,11 @@ public class LevelBuilder : MonoBehaviour
                 doorDeploy.Rotation = 180;
             }
         }
-        if (level.Array.AlternatesCorners(space.X, space.Y, Draw.WalkableSpace()))
+        // Diagonal door
+        else if (level.Array.AlternatesCorners(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
         {
             doorDeploy.Rotation = 45;
-            if (GridTypeEnum.Walkable(level.Array[space.X - 1, space.Y + 1]))
+            if (walkableDir == GridDirection.DIAGTLBR)
             {
                 doorDeploy.Rotation *= -1;
             }

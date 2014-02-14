@@ -560,10 +560,32 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
      */
     public bool AlternatesSides(int x, int y, DrawAction<T> action)
     {
-        bool pass = action(this, x - 1, y);
-        if (pass != action(this, x + 1, y)) return false;
-        if (pass == action(this, x, y + 1)) return false;
-        if (pass == action(this, x, y - 1)) return false;
+        bool horizPass = action(this, x - 1, y);
+        if (horizPass != action(this, x + 1, y)) return false;
+        if (horizPass == action(this, x, y + 1)) return false;
+        if (horizPass == action(this, x, y - 1)) return false;
+        return true;
+    }
+
+    public bool AlternatesSides(int x, int y, DrawAction<T> action, out GridDirection passDir)
+    {
+        bool horizPass = action(this, x - 1, y);
+        if (horizPass != action(this, x + 1, y))
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        if (horizPass == action(this, x, y + 1))
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        if (horizPass == action(this, x, y - 1))
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        passDir = horizPass ? GridDirection.HORIZ : GridDirection.VERT;
         return true;
     }
 
@@ -573,6 +595,28 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         if (pass != action(this, x + 1, y + 1)) return false;
         if (pass == action(this, x - 1, y + 1)) return false;
         if (pass == action(this, x + 1, y - 1)) return false;
+        return true;
+    }
+
+    public bool AlternatesCorners(int x, int y, DrawAction<T> action, out GridDirection passDir)
+    {
+        bool bottomLeftPass = action(this, x - 1, y - 1);
+        if (bottomLeftPass != action(this, x + 1, y + 1))
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        if (bottomLeftPass == action(this, x - 1, y + 1))
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        if (bottomLeftPass == action(this, x + 1, y - 1))
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        passDir = bottomLeftPass ? GridDirection.DIAGBLTR : GridDirection.DIAGTLBR;
         return true;
     }
 
