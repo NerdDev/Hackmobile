@@ -37,6 +37,9 @@ public class InputManager : MonoBehaviour, IManager
     {
         centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
         EasyTouch.On_DoubleTap += EasyTouch_On_DoubleTap;
+#if !UNITY_EDITOR
+        allowMouseInput = false;
+#endif
     }
 
     #region Touch Input
@@ -79,7 +82,7 @@ public class InputManager : MonoBehaviour, IManager
             Application.LoadLevel(Application.loadedLevelName);
             BigBoss.Start.Start();
         }
-        if (touchMovement)
+        if (joystickLeft.JoystickAxis.x != 0 || joystickLeft.JoystickAxis.y != 0)
         {
             touchMove();
         }
@@ -87,9 +90,8 @@ public class InputManager : MonoBehaviour, IManager
         {
             Rotation_Camera.Rotate(joystickRight.JoystickAxis.x, 0f);
         }
-        if (Math.Abs(joystickRight.JoystickValue.y) > 0.5)
+        if (Math.Abs(joystickRight.JoystickValue.y) > 0.4)
         {
-            //Rotation_Camera.Rotate(0, joystickRight.JoystickAxis.y * .45f);
             Rotation_Camera.zoom(joystickRight.JoystickAxis.y);
         }
     }
@@ -101,12 +103,12 @@ public class InputManager : MonoBehaviour, IManager
 
     public void touchMove()
     {
-        //float forwardTransVector = joystickLeft.JoystickAxis.sqrMagnitude * Time.deltaTime;
         Vector3 tar = new Vector3(joystickLeft.JoystickAxis.x, 0, joystickLeft.JoystickAxis.y); //making a fake "target" vec3 using vec2 inputs - y and z swaps intended
-        BigBoss.Player.MovePlayer();
         Quaternion lookRotFinal = Quaternion.LookRotation(tar); //calc'ing our look vector
-        BigBoss.PlayerInfo.transform.rotation = lookRotFinal;
-        BigBoss.PlayerInfo.transform.Rotate(Vector3.up, Rotation_Camera.xDeg, Space.Self);
+        Vector3 euler = lookRotFinal.eulerAngles;
+        euler = new Vector3(euler.x, euler.y + Rotation_Camera.xDeg, euler.z);
+        BigBoss.PlayerInfo.transform.rotation = Quaternion.Euler(euler);
+        BigBoss.Player.MovePlayer(joystickLeft.JoystickAxis);
     }
 
     #endregion
@@ -141,7 +143,7 @@ public class InputManager : MonoBehaviour, IManager
             Debug.DrawRay(BigBoss.PlayerInfo.transform.position,
                 playerConvertedTranslationVector,
                 Color.magenta);
-            BigBoss.Player.MovePlayer();
+            BigBoss.Player.MovePlayer(new Vector2(1f, 1f));
             Quaternion lookRotFinal = Quaternion.LookRotation(playerConvertedTranslationVector); //calc'ing our look vector
             BigBoss.PlayerInfo.transform.rotation = lookRotFinal;
             BigBoss.PlayerInfo.transform.Rotate(Vector3.up, Rotation_Camera.xDeg, Space.Self);
