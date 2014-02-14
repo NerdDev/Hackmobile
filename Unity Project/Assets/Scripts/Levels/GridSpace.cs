@@ -5,7 +5,7 @@ using UnityEngine;
 public class GridSpace
 {
     public GridType Type { get; private set; }
-    public GridDeploy Deploy;
+    public List<GridDeploy> Deploys;
     public GameObject Block;
     public int X { get; protected set; }
     public int Y { get; protected set; }

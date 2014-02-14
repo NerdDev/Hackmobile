@@ -28,20 +28,19 @@ public class LevelBuilder : MonoBehaviour
 
     public void Instantiate(GridSpace space, int x, int y)
     {
-        if (space == null || space.Deploy.GO == null) return;
-        GridDeploy deploy = space.Deploy;
-        Transform t = space.Deploy.GO.transform;
-        if (deploy.Rotation > 0)
+        if (space == null || space.Deploys == null) return;
+        for (int i = 0; i < space.Deploys.Count; i++)
         {
-            int wer = 23;
-            wer++;
+            GridDeploy deploy = space.Deploys[i];
+            if (deploy == null) continue;
+            Transform t = deploy.GO.transform;
+            GameObject obj = Instantiate(
+                deploy.GO,
+                new Vector3(x + t.position.x + deploy.X, t.position.y, y + t.position.z + deploy.Y)
+                , Quaternion.Euler(new Vector3(t.rotation.x, t.rotation.y + deploy.Rotation, t.rotation.z))) as GameObject;
+            obj.transform.parent = holder.transform;
+            space.Block = obj;
         }
-        GameObject obj = Instantiate(
-            deploy.GO,
-            new Vector3(x + t.position.x + deploy.X, t.position.y, y + t.position.z + deploy.Y)
-            , Quaternion.Euler(new Vector3(t.rotation.x, t.rotation.y + deploy.Rotation, t.rotation.z))) as GameObject;
-        obj.transform.parent = holder.transform;
-        space.Block = obj;
         combineCounter++;
         garbageCollectorCounter++;
         if (garbageCollectorCounter > 300)
@@ -60,12 +59,15 @@ public class LevelBuilder : MonoBehaviour
     {
         foreach (GridSpace space in level)
         {
-            space.Deploy = new GridDeploy();
-            space.Deploy.GO = Theme.Get(space.Type);
+            if (space.Type == GridType.NULL) continue;
             Action<Level, GridSpace> action;
             if (_handlers.TryGetValue(space.Type, out action))
             {
                 action(level, space);
+            }
+            else
+            {
+                space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.Get(space.Type)) });
             }
         }
     }
@@ -74,13 +76,15 @@ public class LevelBuilder : MonoBehaviour
     #region Doors
     public static void HandleDoor(Level level, GridSpace space)
     {
-        space.Deploy.GO = level.Theme.Get(GridType.Door);
+        space.Deploys = new List<GridDeploy>(2);
+        GridDeploy doorDeploy = new GridDeploy(level.Theme.Get(GridType.Door));
+        space.Deploys.Add(doorDeploy);
         if (level.Array.AlternatesSides(space.X, space.Y, Draw.WalkableSpace()))
         {
             float neg = level.Random.NextBool() ? -1 : 1;
             if (GridTypeEnum.Walkable(level.Array[space.X - 1, space.Y].Type))
             { // Horizontal walk
-                space.Deploy.Rotation = 90 * neg;
+                doorDeploy.Rotation = 90 * neg;
             }
         }
     }
