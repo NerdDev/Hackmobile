@@ -12,8 +12,9 @@ public class Level : IEnumerable<GridSpace>
     public Point UpStartPoint;
     public Point DownStartPoint;
     public Theme Theme { get; protected set; }
+    public System.Random Random { get; protected set; }
 
-    public Level(LevelLayout layout, Theme theme)
+    public Level(LevelLayout layout, Theme theme, System.Random rand)
     {
         Layout = layout;
         Array = GridSpace.Convert(layout.GetGrid());
@@ -21,6 +22,7 @@ public class Level : IEnumerable<GridSpace>
         Theme = theme;
         UpStartPoint = layout.UpStart;
         DownStartPoint = layout.DownStart;
+        Random = rand;
     }
 
     private void LoadRoomMaps()

@@ -6,9 +6,7 @@ using System;
 public class LevelBuilder : MonoBehaviour
 {
     private static GameObject holder;
-
-    public Theme Theme { get; set; }
-
+    public Theme Theme;
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
     private static Dictionary<GridType, Action<Level, GridSpace>> _handlers;
@@ -30,11 +28,18 @@ public class LevelBuilder : MonoBehaviour
 
     public void Instantiate(GridSpace space, int x, int y)
     {
-        if (space == null || space.Prototype.GO == null) return;
+        if (space == null || space.Deploy.GO == null) return;
+        GridDeploy deploy = space.Deploy;
+        Transform t = space.Deploy.GO.transform;
+        if (deploy.Rotation > 0)
+        {
+            int wer = 23;
+            wer++;
+        }
         GameObject obj = Instantiate(
-            space.Prototype.GO, 
-            new Vector3(x, space.Prototype.GO.transform.position.y, y)
-            , Quaternion.identity) as GameObject;
+            deploy.GO,
+            new Vector3(x + t.position.x + deploy.X, t.position.y, y + t.position.z + deploy.Y)
+            , Quaternion.Euler(new Vector3(t.rotation.x, t.rotation.y + deploy.Rotation, t.rotation.z))) as GameObject;
         obj.transform.parent = holder.transform;
         space.Block = obj;
         combineCounter++;
@@ -55,8 +60,8 @@ public class LevelBuilder : MonoBehaviour
     {
         foreach (GridSpace space in level)
         {
-            space.Prototype = new GridPrototype();
-            space.Prototype.GO = Theme.Get(space.Type);
+            space.Deploy = new GridDeploy();
+            space.Deploy.GO = Theme.Get(space.Type);
             Action<Level, GridSpace> action;
             if (_handlers.TryGetValue(space.Type, out action))
             {
@@ -66,13 +71,20 @@ public class LevelBuilder : MonoBehaviour
     }
 
     #region Handlers
+    #region Doors
     public static void HandleDoor(Level level, GridSpace space)
     {
-        //if (level.Array.AlternatesSides(space.X, space.Y, GridTypeEnum.Walkable(space.Type)))
-        //{
-
-        //}
+        space.Deploy.GO = level.Theme.Get(GridType.Door);
+        if (level.Array.AlternatesSides(space.X, space.Y, Draw.WalkableSpace()))
+        {
+            float neg = level.Random.NextBool() ? -1 : 1;
+            if (GridTypeEnum.Walkable(level.Array[space.X - 1, space.Y].Type))
+            { // Horizontal walk
+                space.Deploy.Rotation = 90 * neg;
+            }
+        }
     }
+    #endregion
     #endregion
 
     public void Combine()

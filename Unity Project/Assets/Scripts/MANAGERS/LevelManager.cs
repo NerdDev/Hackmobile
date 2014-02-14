@@ -12,7 +12,7 @@ public class LevelManager : MonoBehaviour, IManager
 
     // Public Access
     public Level Level { get; private set; }
-    public int CurLevelDepth { get; private set; }    
+    public int CurLevelDepth { get; private set; }
     public bool Initialized { get; set; }
     public Theme Theme;
     public LevelBuilder Builder;
@@ -24,11 +24,11 @@ public class LevelManager : MonoBehaviour, IManager
         Builder.Theme = Theme;
         _levels = new Level[_maxLevels];
         ArrayExt.Converters.Add(typeof(GridType), (b) => { return GridTypeEnum.Convert((GridType)b); });
-        ArrayExt.Converters.Add(typeof(GridSpace), (b) => 
+        ArrayExt.Converters.Add(typeof(GridSpace), (b) =>
         {
             GridSpace s = b as GridSpace;
             if (s == null) return GridTypeEnum.Convert(GridType.NULL);
-            return GridTypeEnum.Convert(((GridSpace)b).Type); 
+            return GridTypeEnum.Convert(((GridSpace)b).Type);
         });
         if (Seed == -1)
             Seed = Probability.Rand.Next();
@@ -113,18 +113,8 @@ public class LevelManager : MonoBehaviour, IManager
         BigBoss.Debug.w(Logs.LevelGenMain, "Deploying " + level);
         foreach (GridSpace space in level)
         {
-            if (space != null)
-            {
-                if (space.Block == null)
-                {
-                    //Builder.Build(space);
-                }
-                else
-                {
-                    space.SetActive(true);
-                }
-                space.WrapObjects(true);
-            }
+            space.SetActive(true);
+            space.WrapObjects(true);
         }
         BigBoss.Debug.w(Logs.LevelGenMain, "Deployed " + level);
     }
@@ -143,7 +133,7 @@ public class LevelManager : MonoBehaviour, IManager
         gen.Theme = GetTheme();
         gen.Depth = depth;
         gen.Rand = new System.Random(_levelSeeds[depth]);
-        Level level = new Level(gen.Generate(), gen.Theme);
+        Level level = new Level(gen.Generate(), gen.Theme, gen.Rand);
         Builder.GeneratePrototypes(level);
         _levels[depth] = level;
     }

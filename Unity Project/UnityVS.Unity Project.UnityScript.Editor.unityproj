@@ -84,6 +84,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\6by7\QuickEdit\Scripts\Editor\QuickEdit_Base.js" />
+    <Compile Include="Assets\6by7\QuickEdit\Scripts\Editor\QuickEdit_GUI.js" />
     <Compile Include="Assets\Editor\ExtraPrimitives\_3dsMeshPostprocessor.js" />
     <Compile Include="Assets\Editor\ExtraPrimitives\ExtraPrimitives.js" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
@@ -141,6 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets" />
+    <Folder Include="Assets\6by7" />
+    <Folder Include="Assets\6by7\QuickEdit" />
+    <Folder Include="Assets\6by7\QuickEdit\Scripts" />
+    <Folder Include="Assets\6by7\QuickEdit\Scripts\Editor" />
     <Folder Include="Assets\Editor" />
     <Folder Include="Assets\Editor\ExtraPrimitives" />
     <Folder Include="Assets\Plugins" />

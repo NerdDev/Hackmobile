@@ -46,6 +46,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\6by7\QuickEdit\Scripts\Editor\QuickEdit_Base.js" />
+     <Compile Include="Assets\6by7\QuickEdit\Scripts\Editor\QuickEdit_GUI.js" />
      <Compile Include="Assets\Editor\ExtraPrimitives\ExtraPrimitives.js" />
      <Compile Include="Assets\Editor\ExtraPrimitives\_3dsMeshPostprocessor.js" />
      <None Include="Assets\Tools\AudioToolkit\Readme.txt" />

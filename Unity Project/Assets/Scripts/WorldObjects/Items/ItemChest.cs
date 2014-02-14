@@ -8,8 +8,7 @@ class ItemChest : MonoBehaviour
 
     public void init()
     {
-        Vector3 blockPos = Location.Block.transform.position;
-        this.transform.localPosition = new Vector3(blockPos.x + .3f, blockPos.y + .5f, blockPos.z + .3f);
+        this.transform.localPosition = new Vector3(Location.X + .3f, 0.5f, Location.Y + .3f);
         this.transform.Rotate(Vector3.up, 45f);
     }
 

@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\6by7\QuickEdit\Scripts\QuickEdit_VertHandleScript.js" />
      <Compile Include="Assets\Tools\EasyTouch\Example\C# Example\Examples for EasyTouch\Example-Multiplefingers\_OtherScript\bord.js" />
      <Compile Include="Assets\Tools\EasyTouch\Plugins\_Java-Event-Template\J_EasyButtonTemplate.js" />
      <Compile Include="Assets\Tools\EasyTouch\Plugins\_Java-Event-Template\J_EasyJoystickTemplate.js" />

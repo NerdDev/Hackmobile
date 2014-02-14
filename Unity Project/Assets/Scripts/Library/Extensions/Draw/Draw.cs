@@ -363,6 +363,15 @@ public class Draw
         return _walkable;
     }
 
+    private static DrawAction<GridSpace> _walkableSpace = new DrawAction<GridSpace>((arr, x, y) =>
+    {
+        return GridTypeEnum.Walkable(arr[x, y].Type);
+    });
+    public static DrawAction<GridSpace> WalkableSpace()
+    {
+        return _walkableSpace;
+    }
+
     public static DrawAction<GridSpace> IsType(GridType g)
     {
         return new DrawAction<GridSpace>((arr, x, y) =>
