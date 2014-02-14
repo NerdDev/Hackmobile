@@ -115,7 +115,7 @@ public class FOWRenderers : MonoBehaviour
                 BigBoss.Levels.Level.Array.DrawAround(pos.x.ToInt(), pos.z.ToInt(), true, (arr, x, y) =>
                 {
                     GridSpace grid = arr[x, y];
-                    if (grid != null && grid.Block == null)
+                    if (grid != null && grid.Blocks == null)
                     {
                         BigBoss.Levels.Builder.Instantiate(grid, x, y);
                     };

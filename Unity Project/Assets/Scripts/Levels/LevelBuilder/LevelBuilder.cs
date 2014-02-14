@@ -29,6 +29,7 @@ public class LevelBuilder : MonoBehaviour
     public void Instantiate(GridSpace space, int x, int y)
     {
         if (space == null || space.Deploys == null) return;
+        space.Blocks = new List<GameObject>(space.Deploys.Count);
         for (int i = 0; i < space.Deploys.Count; i++)
         {
             GridDeploy deploy = space.Deploys[i];
@@ -39,7 +40,7 @@ public class LevelBuilder : MonoBehaviour
                 new Vector3(x + t.position.x + deploy.X, t.position.y, y + t.position.z + deploy.Y)
                 , Quaternion.Euler(new Vector3(t.rotation.x, t.rotation.y + deploy.Rotation, t.rotation.z))) as GameObject;
             obj.transform.parent = holder.transform;
-            space.Block = obj;
+            space.Blocks.Add(obj);
         }
         combineCounter++;
         garbageCollectorCounter++;

@@ -6,7 +6,7 @@ public class GridSpace
 {
     public GridType Type { get; private set; }
     public List<GridDeploy> Deploys;
-    public GameObject Block;
+    public List<GameObject> Blocks;
     public int X { get; protected set; }
     public int Y { get; protected set; }
     public WorldObject RandomContainedObj
@@ -30,14 +30,6 @@ public class GridSpace
         this.Type = type;
         X = x;
         Y = y;
-    }
-
-    public void ColliderTrigger(bool on)
-    {
-        if (Block != null && Block.collider != null)
-        {
-            Block.collider.isTrigger = on;
-        }
     }
 
     #region Accessors
@@ -195,8 +187,13 @@ public class GridSpace
 
     public void SetActive(bool on)
     {
-        if (Block != null)
-            Block.SetActive(on);
+        if (Blocks != null)
+        {
+            foreach (GameObject block in Blocks)
+            {
+                block.SetActive(on);
+            }
+        }
     }
 
     public void WrapObjects(bool wrap)
