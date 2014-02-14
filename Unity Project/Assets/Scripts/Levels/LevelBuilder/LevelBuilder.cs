@@ -116,10 +116,13 @@ public class LevelBuilder : MonoBehaviour
         else if (level.Array.AlternatesCorners(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
         {
             doorDeploy.Rotation = 45;
+            doorDeploy.X = -0.25F;
             if (walkableDir == GridDirection.DIAGTLBR)
             {
                 doorDeploy.Rotation *= -1;
+                doorDeploy.X *= -1;
             }
+            doorDeploy.Z = 0.25F;
         }
     }
 
