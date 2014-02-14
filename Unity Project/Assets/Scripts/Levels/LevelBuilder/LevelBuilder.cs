@@ -80,6 +80,7 @@ public class LevelBuilder : MonoBehaviour
         space.Deploys = new List<GridDeploy>(2);
         GridDeploy doorDeploy = new GridDeploy(level.Theme.Get(GridType.Door));
         space.Deploys.Add(doorDeploy);
+        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
         if (level.Array.AlternatesSides(space.X, space.Y, Draw.WalkableSpace()))
         {
             float neg = level.Random.NextBool() ? -1 : 1;
