@@ -101,7 +101,7 @@ public class LevelManager : MonoBehaviour, IManager
     void Destroy(Level level)
     {
         if (level == null) return;
-        foreach (GridSpace val in level)
+        foreach (GridSpace val in level.GetEnumerateValues())
         {
             val.WrapObjects(false);
             val.SetActive(false);
@@ -111,7 +111,7 @@ public class LevelManager : MonoBehaviour, IManager
     void Deploy(Level level)
     {
         BigBoss.Debug.w(Logs.LevelGenMain, "Deploying " + level);
-        foreach (GridSpace space in level)
+        foreach (GridSpace space in level.GetEnumerateValues())
         {
             space.SetActive(true);
             space.WrapObjects(true);

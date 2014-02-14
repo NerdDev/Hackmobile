@@ -2,11 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Level : IEnumerable<GridSpace>
+public class Level : Container2D<GridSpace>
 {
     protected LevelLayout Layout { get; private set; }
     public bool Populated;
-    public Array2D<GridSpace> Array { get; protected set; }
+    protected Array2D<GridSpace> _array;
     public List<Container2D<GridType>> RoomMaps = new List<Container2D<GridType>>();
     private MultiMap<Container2D<GridType>> roomMapping = new MultiMap<Container2D<GridType>>(); // floor space to roommap
     public Point UpStartPoint;
@@ -17,7 +17,7 @@ public class Level : IEnumerable<GridSpace>
     public Level(LevelLayout layout, Theme theme, System.Random rand)
     {
         Layout = layout;
-        Array = GridSpace.Convert(layout.GetGrid());
+        _array = GridSpace.Convert(layout.GetGrid());
         LoadRoomMaps();
         Theme = theme;
         UpStartPoint = layout.UpStart;
@@ -38,40 +38,101 @@ public class Level : IEnumerable<GridSpace>
         }
     }
 
-    public GridSpace this[int x, int y]
+    #region Container2D
+    public override GridSpace this[int x, int y]
     {
         get
         {
-            if (x < Array.Width && y < Array.Height)
+            if (x < _array.Width && y < _array.Height)
             {
-                GridSpace space = Array[x, y];
+                GridSpace space = _array[x, y];
                 if (space == null)
                 { // Create empty gridspace
                     space = new GridSpace(GridType.NULL, x, y);
-                    Array[x, y] = space;
+                    _array[x, y] = space;
                     return space;
                 }
                 return space;
             }
             return null;
         }
+        set
+        {
+            _array[x, y] = value;
+        }
     }
 
-    public GridSpace this[Point p] { get { return this[p.x, p.y]; } }
+    public override Array2D<GridSpace> Array { get { return _array; } }
 
-    public Point CenterShift()
+    public override bool TryGetValue(int x, int y, out GridSpace val)
     {
-        Bounding bound = new Bounding();
-        Array.DrawAll(
-            Draw.Not(Draw.IsType(GridType.NULL))
-            .IfThen((arr, x, y) =>
-            {
-                GridSpace gs = arr[x, y];
-                bound.Absorb(gs.X, gs.Y);
-                return true;
-            }));
-        return bound.GetCenter();
+        if (_array.InRange(x, y))
+        {
+            val = this[x, y];
+            return true;
+        }
+        else
+        {
+            val = null;
+            return false;
+        }
     }
+
+    public override int Count
+    {
+        get { return _array.Count; }
+    }
+
+    public override Bounding Bounding
+    {
+        get { return _array.Bounding; }
+    }
+
+    public override bool Contains(int x, int y)
+    {
+        return _array.Contains(x, y);
+    }
+
+    public override bool InRange(int x, int y)
+    {
+        return _array.InRange(x, y);
+    }
+
+    public override bool DrawAll(DrawAction<GridSpace> call)
+    {
+        return _array.DrawAll(call);
+    }
+
+    public override void Clear()
+    {
+        _array.Clear();
+    }
+
+    public override Array2DRaw<GridSpace> RawArray(out Point shift)
+    {
+        return _array.RawArray(out shift);
+    }
+
+    public override bool Remove(int x, int y)
+    {
+        return _array.Remove(x, y);
+    }
+
+    public override void Shift(int x, int y)
+    {
+        _array.Shift(x, y);
+    }
+
+    public override IEnumerable<GridSpace> GetEnumerateValues()
+    {
+        return _array.GetEnumerateValues();
+    }
+
+    public override IEnumerator<Value2D<GridSpace>> GetEnumerator()
+    {
+        return _array.GetEnumerator();
+    }
+    #endregion
 
     public void PlacePlayer(bool up)
     {
@@ -86,102 +147,10 @@ public class Level : IEnumerable<GridSpace>
         }
         BigBoss.Debug.w(Logs.Main, "Placing player in position.");
         Value2D<GridSpace> start;
-        this.Array.GetPointAround(startPoint.x, startPoint.y, false, Draw.IsType(GridType.StairPlace), out start);
+        this._array.GetPointAround(startPoint.x, startPoint.y, false, Draw.IsType(GridType.StairPlace), out start);
         BigBoss.PlayerInfo.transform.position = new Vector3(start.x, -.5f, start.y);
         BigBoss.Player.GridSpace = start.val;
         BigBoss.Levels.Builder.Instantiate(start);
         BigBoss.Debug.w(Logs.Main, "Placed player on " + start);
-    }
-
-    #region ConvenienceFunctions
-    public void Put(int x, int y, WorldObject obj)
-    {
-        this[x, y].Put(obj);
-    }
-
-    public void Remove(int x, int y, WorldObject obj)
-    {
-        this[x, y].Remove(obj);
-    }
-
-    public void Move(WorldObject obj, int xFrom, int yFrom, int xTo, int yTo)
-    {
-        Remove(xFrom, yFrom, obj);
-        Put(xTo, yTo, obj);
-    }
-
-    public bool Accept(int x, int y, WorldObject obj)
-    {
-        return this[x, y].Accept(obj);
-    }
-
-    public bool IsBlocked(int x, int y)
-    {
-        return this[x, y].IsBlocked();
-    }
-
-    public bool HasNonBlocking(int x, int y)
-    {
-        return this[x, y].HasNonBlocking();
-    }
-
-    public bool HasObject(int x, int y)
-    {
-        return this[x, y].HasObject();
-    }
-
-    public bool IsEmpty(int x, int y)
-    {
-        return this[x, y].IsEmpty();
-    }
-
-    public List<WorldObject> GetContained(int x, int y)
-    {
-        return this[x, y].GetContained();
-    }
-
-    public List<WorldObject> GetFreeObjects(int x, int y)
-    {
-        return this[x, y].GetFreeObjects();
-    }
-
-    public List<WorldObject> GetBlockingObjects(int x, int y)
-    {
-        return this[x, y].GetBlockingObjects();
-    }
-    #endregion
-
-    public void ToLog(Logs log, params string[] customContent)
-    {
-        if (BigBoss.Debug.logging(log))
-        {
-            Array.ToLog(log, customContent);
-        }
-    }
-
-    public MultiMap<GridSpace> GetArea(Bounding bounds)
-    {
-        MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
-        Bounding inBound = bounds.InBounds(Array);
-        for (int y = inBound.YMin; y < inBound.YMax; y++)
-        {
-            for (int x = inBound.XMin; x < inBound.XMax; x++)
-            {
-                GridSpace space = this[x, y];
-                if (space != null)
-                    ret[x, y] = space;
-            }
-        }
-        return ret;
-    }
-
-    public IEnumerator<GridSpace> GetEnumerator()
-    {
-        return Array.EnumerateValues();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
     }
 }

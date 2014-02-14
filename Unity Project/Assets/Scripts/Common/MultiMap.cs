@@ -218,7 +218,7 @@ public class MultiMap<T> : Container2D<T>
         }
     }
 
-    public override IEnumerator<T> EnumerateValues()
+    public override IEnumerable<T> GetEnumerateValues()
     {
         foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
         {

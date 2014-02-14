@@ -294,9 +294,9 @@ public class LayoutObject : Container2D<GridType>, ILayoutObject
         }
     }
 
-    public override IEnumerator<GridType> EnumerateValues()
+    public override IEnumerable<GridType> GetEnumerateValues()
     {
-        return Grids.EnumerateValues();
+        return Grids.GetEnumerateValues();
     }
 
     #region Container2D

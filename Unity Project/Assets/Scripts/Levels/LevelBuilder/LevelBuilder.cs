@@ -21,6 +21,7 @@ public class LevelBuilder : MonoBehaviour
         _handlers.Add(GridType.Door, HandleDoor);
         _handlers.Add(GridType.StairUp, HandleStairs);
         _handlers.Add(GridType.StairDown, HandleStairs);
+        _handlers.Add(GridType.Wall, HandleWall);
     }
 
     public void Instantiate(Value2D<GridSpace> val)
@@ -60,7 +61,7 @@ public class LevelBuilder : MonoBehaviour
 
     public void GeneratePrototypes(Level level)
     {
-        foreach (GridSpace space in level)
+        foreach (GridSpace space in level.GetEnumerateValues())
         {
             if (space.Type == GridType.NULL) continue;
             Action<Level, GridSpace> action;
@@ -76,6 +77,20 @@ public class LevelBuilder : MonoBehaviour
     }
 
     #region Handlers
+    public static void HandleWall(Level level, GridSpace space)
+    {
+        if (level.DrawAround(space.X, space.Y, true, Draw.FloorTypeSpace()))
+        {
+            space.Deploys = new List<GridDeploy>(2);
+            GridDeploy pillarDeploy = new GridDeploy(level.Theme.Pillar);
+            space.Deploys.Add(pillarDeploy);
+            space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
+            return;
+        }
+        // Normal
+        space.Deploys = new List<GridDeploy>(new [] { new GridDeploy(level.Theme.Get(GridType.Wall)) });
+    }
+
     public static void HandleDoor(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(2);

@@ -266,7 +266,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         throw new NotImplementedException();
     }
 
-    public abstract IEnumerator<T> EnumerateValues();
+    public abstract IEnumerable<T> GetEnumerateValues();
 
     public abstract IEnumerator<Value2D<T>> GetEnumerator();
 

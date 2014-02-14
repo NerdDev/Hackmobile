@@ -117,4 +117,26 @@ public class GridTypeEnum
                 return false;
         }
     }
+
+    public static bool FloorType(GridType t)
+    {
+        switch (t)
+        {
+            case GridType.Floor:
+            case GridType.Path_Horiz:
+            case GridType.Path_Vert:
+            case GridType.Path_LT:
+            case GridType.Path_LB:
+            case GridType.Path_RT:
+            case GridType.Path_RB:
+            case GridType.TrapDoor:
+            case GridType.Trap:
+            case GridType.SmallLoot:
+            case GridType.Chest:
+            case GridType.StairPlace:
+                return true;
+            default:
+                return false;
+        }
+    }
 }

@@ -7,6 +7,7 @@ public class Theme : MonoBehaviour {
     public GameObject Floor;
     public GameObject StairUp;
     public GameObject StairDown;
+    public GameObject Pillar;
 
     public Keywords[] keywords = new Keywords[0];
     private ESFlags<Keywords> keywordFlags;

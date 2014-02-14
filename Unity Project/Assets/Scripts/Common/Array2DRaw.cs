@@ -80,7 +80,7 @@ public class Array2DRaw<T> : Container2D<T>
         }
     }
 
-    public override IEnumerator<T> EnumerateValues()
+    public override IEnumerable<T> GetEnumerateValues()
     {
         for (int y = 0; y < _arr.GetLength(0); y++)
         {

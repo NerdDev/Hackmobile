@@ -43,6 +43,7 @@ MonoBehaviour:
   Floor: {fileID: 100000, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
   StairUp: {fileID: 100000, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
   StairDown: {fileID: 100000, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
+  Pillar: {fileID: 100000, guid: 977e93b9eb682ec41aec8a9bdb2b80bb, type: 2}
   keywords: 
 --- !u!1001 &100100000
 Prefab:

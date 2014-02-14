@@ -111,7 +111,7 @@ public class Array2D<T> : Container2D<T>
         }
     }
 
-    public override IEnumerator<T> EnumerateValues()
+    public override IEnumerable<T> GetEnumerateValues()
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
