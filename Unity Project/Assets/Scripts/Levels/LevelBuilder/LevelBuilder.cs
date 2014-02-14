@@ -19,6 +19,8 @@ public class LevelBuilder : MonoBehaviour
         }
         _handlers = new Dictionary<GridType, Action<Level, GridSpace>>();
         _handlers.Add(GridType.Door, HandleDoor);
+        _handlers.Add(GridType.StairUp, HandleStairs);
+        _handlers.Add(GridType.StairDown, HandleStairs);
     }
 
     public void Instantiate(Value2D<GridSpace> val)
@@ -74,7 +76,6 @@ public class LevelBuilder : MonoBehaviour
     }
 
     #region Handlers
-    #region Doors
     public static void HandleDoor(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(2);
@@ -83,14 +84,42 @@ public class LevelBuilder : MonoBehaviour
         space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
         if (level.Array.AlternatesSides(space.X, space.Y, Draw.WalkableSpace()))
         {
-            float neg = level.Random.NextBool() ? -1 : 1;
+            bool neg = level.Random.NextBool();
             if (GridTypeEnum.Walkable(level.Array[space.X - 1, space.Y].Type))
             { // Horizontal walk
-                doorDeploy.Rotation = 90 * neg;
+                doorDeploy.Rotation = neg ? -90 : 90;
+            }
+            else
+            {
+                doorDeploy.Rotation = 180;
             }
         }
     }
-    #endregion
+
+    public static void HandleStairs(Level level, GridSpace space)
+    {
+        space.Deploys = new List<GridDeploy>(1);
+        GridDeploy stairDeploy = new GridDeploy(level.Theme.Get(space.Type));
+        space.Deploys.Add(stairDeploy);
+        Value2D<GridSpace> val;
+        if (level.Array.GetPointAround(space.X, space.Y, false, Draw.IsType(GridType.StairPlace), out val))
+        {
+            val.x -= space.X;
+            val.y -= space.Y;
+            if (val.x == 1)
+            {
+                stairDeploy.Rotation = 90;
+            }
+            else if (val.x == -1)
+            {
+                stairDeploy.Rotation = -90;
+            }
+            else if (val.y == -1)
+            {
+                stairDeploy.Rotation = 180;
+            }
+        }
+    }
     #endregion
 
     public void Combine()
