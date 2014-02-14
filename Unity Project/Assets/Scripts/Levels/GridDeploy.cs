@@ -10,6 +10,7 @@ public class GridDeploy
     public float Rotation;
     public float X;
     public float Y;
+    public float Z;
 
     public GridDeploy(GameObject go)
     {

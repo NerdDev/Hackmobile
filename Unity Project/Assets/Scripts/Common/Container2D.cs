@@ -567,6 +567,15 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
+    public bool AlternatesCorners(int x, int y, DrawAction<T> action)
+    {
+        bool pass = action(this, x - 1, y - 1);
+        if (pass != action(this, x + 1, y + 1)) return false;
+        if (pass == action(this, x - 1, y + 1)) return false;
+        if (pass == action(this, x + 1, y - 1)) return false;
+        return true;
+    }
+
     /*
      * ___                            __#
      * #__       or with opposing     #__

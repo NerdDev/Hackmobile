@@ -39,7 +39,7 @@ public class LevelBuilder : MonoBehaviour
             Transform t = deploy.GO.transform;
             GameObject obj = Instantiate(
                 deploy.GO,
-                new Vector3(x + t.position.x + deploy.X, t.position.y, y + t.position.z + deploy.Y)
+                new Vector3(x + t.position.x + deploy.X, t.position.y + deploy.Y, y + t.position.z + deploy.Z)
                 , Quaternion.Euler(new Vector3(t.rotation.x, t.rotation.y + deploy.Rotation, t.rotation.z))) as GameObject;
             obj.transform.parent = holder.transform;
             space.Blocks.Add(obj);
@@ -94,6 +94,14 @@ public class LevelBuilder : MonoBehaviour
                 doorDeploy.Rotation = 180;
             }
         }
+        if (level.Array.AlternatesCorners(space.X, space.Y, Draw.WalkableSpace()))
+        {
+            doorDeploy.Rotation = 45;
+            if (GridTypeEnum.Walkable(level.Array[space.X - 1, space.Y + 1]))
+            {
+                doorDeploy.Rotation *= -1;
+            }
+        }
     }
 
     public static void HandleStairs(Level level, GridSpace space)
@@ -118,6 +126,10 @@ public class LevelBuilder : MonoBehaviour
             {
                 stairDeploy.Rotation = 180;
             }
+        }
+        if (space.Type == GridType.StairDown)
+        {
+            stairDeploy.Y = -1;
         }
     }
     #endregion
