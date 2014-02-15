@@ -21,7 +21,13 @@ public class Player : NPC
 
     #region Player Stats (For all the Player-only statistics)
     public float playerSpeed = 1.5f;  //temporarily hard-coded
-    public float PlayerSpeed { get { return playerSpeed; } }
+    public float PlayerSpeed
+    {
+        get
+        {
+            return playerSpeed;
+        }
+    }
 
     public float playerRotationSpeed = .15f;  //temporarily hard-coded
     public float PlayerRotationSpeed { get { return playerRotationSpeed; } }
@@ -167,7 +173,6 @@ public class Player : NPC
                 if (!checkXYPosition(GO.transform.position, new Vector3(GridSpace.X, 0f, GridSpace.Y)))
                 {
                     MoveNPCStepwise(this.GridSpace);
-                    //MovePlayer(lookVectorToOccupiedTile.normalized * 2 * Time.deltaTime, .75f, .25f);
                     isMoving = true;
                 }
                 else
@@ -193,9 +198,11 @@ public class Player : NPC
         GO.transform.position = new Vector3(GridSpace.X, GO.transform.position.y, GridSpace.Y);
     }
 
-    public void MovePlayer()
+    public void MovePlayer(Vector2 magnitude)
     {
-        MovePlayer(playerSpeed, playerRotationSpeed);
+        //MovePlayer(PlayerSpeed * magnitude.sqrMagnitude);
+        v = magnitude.sqrMagnitude * PlayerSpeed;
+        MovePlayer(v);
     }
 
     protected bool UpdateCurrentTileVectors()
@@ -214,9 +221,9 @@ public class Player : NPC
         }
     }
 
-    private void MovePlayer(float playerSpeed, float playerRotationSpeed)
+    private void MovePlayer(float speed)
     {
-        GO.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime, Space.Self);
+        GO.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
     }
 
     //BRAD WHAT DOES THIS DO?!
@@ -236,14 +243,16 @@ public class Player : NPC
         }
         if (isMoving)
         {
-            if (v < playerSpeed)
+            /*
+            if (v < PlayerSpeed)
             {
-                v += .01f;
+                v += .1f;
             }
             else
             {
-                v = playerSpeed;
+                v = PlayerSpeed;
             }
+            */
         }
         else
         {

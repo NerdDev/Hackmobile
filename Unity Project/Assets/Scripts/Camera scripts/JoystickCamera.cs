@@ -21,7 +21,7 @@ public class JoystickCamera : MonoBehaviour
     public int yMinLimit = -80;
     public int yMaxLimit = 80;
     public int zoomRate = 40;
-    public float panSpeed = 0.3f;
+    public float panSpeed = 40f;
     public float zoomDampening = 5.0f;
 
     internal float xDeg = 0.0f;
@@ -61,9 +61,12 @@ public class JoystickCamera : MonoBehaviour
         startRotation = transform.rotation;
         currentRotation = transform.rotation;
         desiredRotation = transform.rotation;
+        //zoom(30f);
 
 #if !UNITY_EDITOR
         useMouse = false;
+        xSpeed = 400;
+        panSpeed = 120f;
 #endif
     }
 
@@ -124,8 +127,6 @@ public class JoystickCamera : MonoBehaviour
         yDeg = ClampAngle(yDeg, yMinLimit, yMaxLimit);
         desiredRotation = Quaternion.Euler(yDeg, xDeg, 0);
         currentRotation = transform.rotation;
-        rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.deltaTime * zoomDampening);
-        transform.rotation = rotation;
     }
 
     public void Reset()
@@ -150,7 +151,7 @@ public class JoystickCamera : MonoBehaviour
         desiredDistance -= f * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance) * .025f;
         if (desiredDistance < maxDistance && desiredDistance > minDistance)
         {
-            Rotate(0, f * (.3f));
+            Rotate(0, f * (.01f * panSpeed));
         }
         else
         {
