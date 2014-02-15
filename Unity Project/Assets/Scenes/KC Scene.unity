@@ -1256,6 +1256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NormalStart: 1
+  ShowStartMenu: 0
 --- !u!1 &362888547
 GameObject:
   m_ObjectHideFlags: 0

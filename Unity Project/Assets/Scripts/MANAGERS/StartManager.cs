@@ -8,6 +8,7 @@ using UnityEngine;
 public class StartManager : MonoBehaviour, IManager
 {
     public bool NormalStart = true;
+    public bool ShowStartMenu = false;
     public bool Initialized { get; set; }
     public void Initialize()
     {
@@ -18,7 +19,14 @@ public class StartManager : MonoBehaviour, IManager
     {
         if (NormalStart)
         {
-            BigBoss.Gooey.OpenMenuGUI();
+            if (ShowStartMenu)
+            {
+                BigBoss.Gooey.OpenMenuGUI();
+            }
+            else
+            {
+                StartCoroutine(StartGame());
+            }
         }
     }
 
