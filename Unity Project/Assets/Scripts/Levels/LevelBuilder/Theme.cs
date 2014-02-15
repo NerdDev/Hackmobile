@@ -8,6 +8,7 @@ public class Theme : MonoBehaviour {
     public GameObject StairUp;
     public GameObject StairDown;
     public GameObject Pillar;
+    public GameObject Chest;
 
     public Keywords[] keywords = new Keywords[0];
     private ESFlags<Keywords> keywordFlags;
@@ -35,6 +36,8 @@ public class Theme : MonoBehaviour {
                 return StairUp;
             case GridType.StairDown:
                 return StairDown;
+            case GridType.Chest:
+                return Chest;
             case GridType.NULL:
                 return null;
             default:

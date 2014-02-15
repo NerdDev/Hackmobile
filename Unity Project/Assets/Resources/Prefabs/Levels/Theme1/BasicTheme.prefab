@@ -44,6 +44,7 @@ MonoBehaviour:
   StairUp: {fileID: 100000, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
   StairDown: {fileID: 100000, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
   Pillar: {fileID: 100000, guid: 977e93b9eb682ec41aec8a9bdb2b80bb, type: 2}
+  Chest: {fileID: 100004, guid: cf5f86fab5dafc247ade51112b4025b2, type: 2}
   keywords: 
 --- !u!1001 &100100000
 Prefab:

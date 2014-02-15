@@ -22,6 +22,7 @@ public class LevelBuilder : MonoBehaviour
         _handlers.Add(GridType.StairUp, HandleStairs);
         _handlers.Add(GridType.StairDown, HandleStairs);
         _handlers.Add(GridType.Wall, HandleWall);
+        _handlers.Add(GridType.Chest, HandleChest);
     }
 
     public void Instantiate(Value2D<GridSpace> val)
@@ -170,6 +171,17 @@ public class LevelBuilder : MonoBehaviour
         {
             stairDeploy.Y = -1;
         }
+    }
+
+    protected static void HandleChest(Level level, GridSpace space)
+    {
+        space.Deploys = new List<GridDeploy>(2);
+        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
+        GridDeploy chestDeploy = new GridDeploy(level.Theme.Get(GridType.Chest));
+        space.Deploys.Add(chestDeploy);
+        chestDeploy.Rotation = (float)(level.Random.NextDouble() * 360);
+        chestDeploy.X = (float)(level.Random.NextDouble() * .5 - .25);
+        chestDeploy.Z = (float)(level.Random.NextDouble() * .5 - .25);
     }
     #endregion
 
