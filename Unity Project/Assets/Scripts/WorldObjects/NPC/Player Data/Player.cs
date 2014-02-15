@@ -141,7 +141,7 @@ public class Player : NPC
         if (GridSpace != null)
         {
             Vector3 lookVectorToOccupiedTile = new Vector3(GridSpace.X, GO.transform.position.y, GridSpace.Y) - GO.transform.position;
-            Debug.DrawLine(GO.transform.position + Vector3.up, new Vector3(GridSpace.X, -.5f, GridSpace.Y), Color.green);
+            Debug.DrawLine(GO.transform.position + Vector3.up, new Vector3(GridSpace.X, 0, GridSpace.Y), Color.green);
 
             //If distance is greater than 1.3 (var), pass turn
             if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
@@ -155,7 +155,7 @@ public class Player : NPC
 
             //Moving toward closest center point if player isn't moving with input:
             resetToGrid();
-            Debug.DrawRay(new Vector3(GridSpace.X, -.5f, GridSpace.Y), Vector3.up, Color.yellow);
+            Debug.DrawRay(new Vector3(GridSpace.X, 0, GridSpace.Y), Vector3.up, Color.yellow);
         }
     }
 

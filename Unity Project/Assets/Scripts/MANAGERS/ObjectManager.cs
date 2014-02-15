@@ -95,6 +95,6 @@ public class ObjectManager : MonoBehaviour, IManager
     // Used by WODictionaries to instantiate their WorldObjects, since they cannot
     public GameObject Instantiate(WorldObject obj, int x, int y)
     {
-        return Instantiate(Resources.Load(obj.Prefab), new Vector3(x, -.5f, y), Quaternion.identity) as GameObject;
+        return Instantiate(Resources.Load(obj.Prefab), new Vector3(x, 0, y), Quaternion.identity) as GameObject;
     }
 }

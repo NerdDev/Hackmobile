@@ -148,7 +148,7 @@ public class Level : Container2D<GridSpace>
         BigBoss.Debug.w(Logs.Main, "Placing player in position.");
         Value2D<GridSpace> start;
         this._array.GetPointAround(startPoint.x, startPoint.y, false, Draw.IsType(GridType.StairPlace), out start);
-        BigBoss.PlayerInfo.transform.position = new Vector3(start.x, -.5f, start.y);
+        BigBoss.PlayerInfo.transform.position = new Vector3(start.x, 0, start.y);
         BigBoss.Player.GridSpace = start.val;
         BigBoss.Levels.Builder.Instantiate(start);
         BigBoss.Debug.w(Logs.Main, "Placed player on " + start);

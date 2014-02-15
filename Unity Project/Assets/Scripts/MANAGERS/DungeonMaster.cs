@@ -29,7 +29,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
             {
                 return arr[x, y].Type == GridType.Floor;
             }, out grid);
-        BigBoss.PlayerInfo.transform.position = new Vector3(grid.x, -.5f, grid.y);
+        BigBoss.PlayerInfo.transform.position = new Vector3(grid.x, 0, grid.y);
     }
 
     void ForcePopulateLevel(Level l)
