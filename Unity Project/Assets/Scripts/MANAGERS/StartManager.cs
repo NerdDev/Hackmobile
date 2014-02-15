@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class StartManager : MonoBehaviour, IManager
 {
-
+    public bool NormalStart = true;
     public bool Initialized { get; set; }
     public void Initialize()
     {
@@ -16,16 +16,15 @@ public class StartManager : MonoBehaviour, IManager
 
     public void Start()
     {
-        BigBoss.Gooey.OpenMenuGUI();
+        if (NormalStart)
+        {
+            BigBoss.Gooey.OpenMenuGUI();
+        }
     }
 
-    public IEnumerator StartGame(List<GameObject> objectsToDestroy)
+    public IEnumerator StartGame()
     {
         BigBoss.Gooey.DisplayLoading();
-        foreach (GameObject go in objectsToDestroy)
-        {
-            Destroy(go);
-        }
         yield return new WaitForSeconds(.01f);
         BigBoss.Gooey.OpenInventoryGUI();
         BigBoss.Levels.SetCurLevel(0);

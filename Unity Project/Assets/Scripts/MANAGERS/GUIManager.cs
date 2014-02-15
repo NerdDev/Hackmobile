@@ -91,7 +91,11 @@ public class GUIManager : MonoBehaviour, IManager
         startButton.transform.localPosition = new Vector3(0f, .5f, 0f);
         startButton.OnSingleClick = new Action(() =>
         {
-            StartCoroutine(BigBoss.Start.StartGame(buttons));
+            StartCoroutine(BigBoss.Start.StartGame());
+            foreach (GameObject go in buttons)
+            {
+                Destroy(go);
+            }
         });
 
         GUIButton startButton2 = CreateButton("Disco Start");
@@ -103,7 +107,11 @@ public class GUIManager : MonoBehaviour, IManager
         {
             light.color = Color.white;
             light.cookie = cookie;
-            StartCoroutine(BigBoss.Start.StartGame(buttons));
+            StartCoroutine(BigBoss.Start.StartGame());
+            foreach (GameObject go in buttons)
+            {
+                Destroy(go);
+            }
         });
     }
 
