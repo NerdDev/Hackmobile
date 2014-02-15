@@ -22,7 +22,6 @@ public class StartManager : MonoBehaviour, IManager
     public IEnumerator StartGame(List<GameObject> objectsToDestroy)
     {
         BigBoss.Gooey.DisplayLoading();
-        PathTree tree = new PathTree();
         foreach (GameObject go in objectsToDestroy)
         {
             Destroy(go);

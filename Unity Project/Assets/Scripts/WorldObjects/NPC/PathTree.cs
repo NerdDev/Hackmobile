@@ -6,7 +6,7 @@ using System.Text;
 
 public class PathTree
 {
-    public static PathTree instance;
+    public static PathTree Instance = new PathTree();
     static Array2D<PathNode> Arr = new Array2D<PathNode>(200, 200);
     //static PathNode[,] Arr = new PathNode[200, 200];
     int terminateDistance;
@@ -15,11 +15,6 @@ public class PathTree
     SortedDictionary<PathNode, PathNode> openNodes = new SortedDictionary<PathNode, PathNode>();
 
     bool pathComplete;
-
-    public PathTree()
-    {
-        instance = this;
-    }
 
     public BetterList<PathNode> getPath(GridSpace start, GridSpace dest)
     {

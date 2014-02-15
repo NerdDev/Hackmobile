@@ -718,7 +718,7 @@ public class NPC : Affectable
 
         public override void Action()
         {
-            PathNode[] nodes = PathTree.instance.getPath(npc.GridSpace, BigBoss.Player.GridSpace, 75).ToArray();
+            PathNode[] nodes = PathTree.Instance.getPath(npc.GridSpace, BigBoss.Player.GridSpace, 75).ToArray();
             if (nodes.Length > 2)
             {
                 GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
