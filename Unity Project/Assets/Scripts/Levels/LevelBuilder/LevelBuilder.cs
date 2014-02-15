@@ -100,20 +100,21 @@ public class LevelBuilder : MonoBehaviour
         space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
         // Normal 
         GridDirection walkableDir;
-        if (level.Array.AlternatesSides(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
+        GridLocation offsetLocation;
+        if (level.AlternatesSides(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
         {
             bool neg = level.Random.NextBool();
             if (walkableDir == GridDirection.HORIZ)
             {
                 doorDeploy.Rotation = neg ? -90 : 90;
             }
-            else
+            else if (neg)
             {
                 doorDeploy.Rotation = 180;
             }
         }
         // Diagonal door
-        else if (level.Array.AlternatesCorners(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
+        else if (level.AlternatesCorners(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
         {
             doorDeploy.Rotation = 45;
             doorDeploy.X = -0.25F;
@@ -123,6 +124,22 @@ public class LevelBuilder : MonoBehaviour
                 doorDeploy.X *= -1;
             }
             doorDeploy.Z = 0.25F;
+        }
+        // Offset alternates
+        else if (level.AlternateSidesOffset(space.X, space.Y, Draw.Not(Draw.WalkableSpace()), out offsetLocation))
+        {
+            switch (offsetLocation)
+            {
+                case GridLocation.LEFT:
+                    doorDeploy.Rotation = 90;
+                    break;
+                case GridLocation.RIGHT:
+                    doorDeploy.Rotation = -90;
+                    break;
+                case GridLocation.TOP:
+                    doorDeploy.Rotation = 180;
+                    break;
+            }
         }
     }
 

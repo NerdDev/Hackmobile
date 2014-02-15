@@ -35,9 +35,9 @@ public class HorizSplitterMod : RoomModifier
                 .And(Draw.Not(Draw.Blocking<GridType>(Draw.Walkable())))
                 // Count floors on line as well as sides
                 .And(Draw.EqualTo(GridType.Floor).IfThen(Draw.Count<GridType>(out floorCount)))
-                .And(Draw.Loc(horizontal ? GridLocation.UP : GridLocation.LEFT,
+                .And(Draw.Loc(horizontal ? GridLocation.TOP : GridLocation.LEFT,
                     Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out side1))))
-                .And(Draw.Loc(horizontal ? GridLocation.DOWN : GridLocation.RIGHT,
+                .And(Draw.Loc(horizontal ? GridLocation.BOTTOM : GridLocation.RIGHT,
                     Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out side2)))))
                 // Has a floor in each
                 && floorCount > 0 && side1 > 0 && side2 > 0

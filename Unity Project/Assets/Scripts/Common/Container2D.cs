@@ -357,7 +357,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             case GridLocation.BOTTOMRIGHT:
                 if (!action(this, x + 1, y - 1)) return false;
                 break;
-            case GridLocation.DOWN:
+            case GridLocation.BOTTOM:
                 if (!action(this, x, y - 1)) return false;
                 break;
             case GridLocation.LEFT:
@@ -372,7 +372,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             case GridLocation.TOPRIGHT:
                 if (!action(this, x + 1, y + 1)) return false;
                 break;
-            case GridLocation.UP:
+            case GridLocation.TOP:
                 if (!action(this, x, y + 1)) return false;
                 break;
         }
@@ -632,6 +632,94 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         bool Ypass = action(this, x, y - 1);
         if (Ypass == action(this, x, y + 1)) return false;
         return !withOpposing || action(this, Xpass ? x + 1 : x - 1, Ypass ? y + 1 : y - 1);
+    }
+
+    public bool AlternateSidesOffset(int x, int y, DrawAction<T> action)
+    {
+        GridLocation loc;
+        return AlternateSidesOffset(x, y, action, out loc);
+    }
+
+    /* __#
+     * _?_
+     * ?#?
+     */
+    public bool AlternateSidesOffset(int x, int y, DrawAction<T> action, out GridLocation loc)
+    {
+        if (action(this, x - 1, y))
+        { // Left pass
+            if (action(this, x, y + 1) || action(this, x, y - 1) || action(this, x + 1, y))
+            { // Top, bottom, right passed too, fail
+                loc = GridLocation.BOTTOMLEFT;
+                return false;
+            }
+            if (action(this, x + 1, y + 1) && !action(this, x + 1, y - 1))
+            {
+                loc = GridLocation.TOP;
+                return true;
+            }
+            if (!action(this, x + 1, y + 1) && action(this, x + 1, y - 1))
+            {
+                loc = GridLocation.BOTTOM;
+                return true;
+            }
+        }
+        else if (action(this, x + 1, y))
+        { // Right pass
+            if (action(this, x, y + 1) || action(this, x, y - 1) || action(this, x - 1, y))
+            { // Top, bottom, left passed too, fail
+                loc = GridLocation.BOTTOMLEFT;
+                return false;
+            }
+            if (action(this, x - 1, y + 1) && !action(this, x - 1, y - 1))
+            {
+                loc = GridLocation.TOP;
+                return true;
+            }
+            if (!action(this, x - 1, y + 1) && action(this, x - 1, y - 1))
+            {
+                loc = GridLocation.BOTTOM;
+                return true;
+            }
+        }
+        else if (action(this, x, y + 1))
+        { // Top pass
+            if (action(this, x - 1, y) || action(this, x + 1, y) || action(this, x, y - 1))
+            { // Left, right, bottom passed too, fail
+                loc = GridLocation.BOTTOMLEFT;
+                return false;
+            }
+            if (action(this, x + 1, y - 1) && !action(this, x - 1, y - 1))
+            {
+                loc = GridLocation.LEFT;
+                return true;
+            }
+            if (!action(this, x + 1, y - 1) && action(this, x - 1, y - 1))
+            {
+                loc = GridLocation.RIGHT;
+                return true;
+            }
+        }
+        else if (action(this, x, y - 1))
+        { // Bottom pass
+            if (action(this, x - 1, y) || action(this, x + 1, y) || action(this, x, y + 1))
+            { // Left, right, top passed too, fail
+                loc = GridLocation.BOTTOMLEFT;
+                return false;
+            }
+            if (action(this, x + 1, y + 1) && !action(this, x - 1, y + 1))
+            {
+                loc = GridLocation.RIGHT;
+                return true;
+            }
+            if (!action(this, x + 1, y + 1) && action(this, x - 1, y + 1))
+            {
+                loc = GridLocation.LEFT;
+                return true;
+            }
+        }
+        loc = GridLocation.BOTTOMLEFT;
+        return false;
     }
     #endregion
     #endregion

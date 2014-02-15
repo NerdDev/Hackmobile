@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public enum GridLocation {
-    UP,
-    DOWN,
+    TOP,
+    BOTTOM,
     LEFT,
     RIGHT,
     TOPRIGHT,

@@ -15,9 +15,9 @@ public static class GridDirectionExt
     {
         switch (loc)
         {
-            case GridLocation.UP:
+            case GridLocation.TOP:
                 return (dir == GridDirection.VERT);
-            case GridLocation.DOWN:
+            case GridLocation.BOTTOM:
                 return (dir == GridDirection.VERT);
             case GridLocation.LEFT:
                 return (dir == GridDirection.HORIZ);
