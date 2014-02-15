@@ -18,7 +18,7 @@ public class LevelGenerator
 
     // Circular Room Size (including walls)
     public static int minRadiusSize { get { return 6; } }
-    public static int maxRadiusSize { get { return 15; } }
+    public static int maxRadiusSize { get { return 10; } }
 
     // Amount to shift rooms
     public static int shiftRange { get { return 10; } } //Max not inclusive
