@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Unity Pro/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Unity Pro/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +181,7 @@
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedLocations.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetMethods\TargetedObjects.cs" />
      <Compile Include="Assets\Scripts\Spells\Targeting\TargetingStyle.cs" />
+     <Compile Include="Assets\Scripts\Spells\Tessst.cs" />
      <Compile Include="Assets\Scripts\Testing\JustinTests.cs" />
      <Compile Include="Assets\Scripts\Testing\KCTesting.cs" />
      <Compile Include="Assets\Scripts\Testing\ProbabilityTesting.cs" />
