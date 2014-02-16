@@ -118,6 +118,17 @@ public class GridTypeEnum
         }
     }
 
+    public static bool WallType(GridType t)
+    {
+        switch (t)
+        {
+            case GridType.Wall:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public static bool FloorType(GridType t)
     {
         switch (t)

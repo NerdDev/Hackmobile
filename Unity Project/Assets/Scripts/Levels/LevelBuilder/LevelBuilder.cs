@@ -179,9 +179,18 @@ public class LevelBuilder : MonoBehaviour
         space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
         GridDeploy chestDeploy = new GridDeploy(level.Theme.Get(GridType.Chest));
         space.Deploys.Add(chestDeploy);
-        chestDeploy.Rotation = (float)(level.Random.NextDouble() * 360);
-        chestDeploy.X = (float)(level.Random.NextDouble() * .5 - .25);
-        chestDeploy.Z = (float)(level.Random.NextDouble() * .5 - .25);
+        Value2D<GridSpace> wall;
+        if (level.GetRandomPointAround(space.X, space.Y, false, level.Random, Draw.WallTypeSpace(), out wall))
+        { // If wall around, make it flush
+            chestDeploy.X
+        }
+        else
+        { // Place randomly in the middle
+            chestDeploy.Rotation = (float)(level.Random.NextDouble() * 360);
+            chestDeploy.X = (float)(level.Random.NextDouble() * .5 - .25);
+            chestDeploy.Z = (float)(level.Random.NextDouble() * .5 - .25);
+        }
+
     }
     #endregion
 

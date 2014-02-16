@@ -390,7 +390,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     #endregion
     #region Around
     // Returns list of points around that satisfy
-    public List<Value2D<T>> GetPointsAround(int x, int y, bool cornered, DrawAction<T> tester)
+    public bool GetPointsAround(int x, int y, bool cornered, DrawAction<T> tester, out List<Value2D<T>> list)
     {
         List<Value2D<T>> ret = new List<Value2D<T>>(cornered ? 9 : 4);
         this.DrawAround(x, y, cornered, (arr, x2, y2) =>
@@ -399,7 +399,8 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                 ret.Add(new Value2D<T>(x2, y2, arr[x2, y2]));
             return true;
         });
-        return ret;
+        list = ret;
+        return list.Count > 0;
     }
 
     // Returns list of values around that satisfy
@@ -478,8 +479,8 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
 
     public bool GetRandomPointAround(int x, int y, bool cornered, System.Random rand, DrawAction<T> tester, out Value2D<T> val)
     {
-        List<Value2D<T>> options = this.GetPointsAround(x, y, cornered, tester);
-        if (options.Count > 0)
+        List<Value2D<T>> options;
+        if (this.GetPointsAround(x, y, cornered, tester, out options))
         {
             val = options.Random(rand);
             return true;

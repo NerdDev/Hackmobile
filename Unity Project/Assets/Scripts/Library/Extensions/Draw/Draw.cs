@@ -381,6 +381,15 @@ public class Draw
         return _floorTypeSpace;
     }
 
+    private static DrawAction<GridSpace> _wallTypeSpace = new DrawAction<GridSpace>((arr, x, y) =>
+    {
+        return GridTypeEnum.WallType(arr[x, y].Type);
+    });
+    public static DrawAction<GridSpace> WallTypeSpace()
+    {
+        return _wallTypeSpace;
+    }
+
     public static DrawAction<GridSpace> IsType(GridType g)
     {
         return new DrawAction<GridSpace>((arr, x, y) =>
