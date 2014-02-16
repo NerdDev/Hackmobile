@@ -158,6 +158,11 @@ public class BigBoss : MonoBehaviour
     {
         BBoss = this;
 
+        foreach (MonoBehaviour manager in this.gameObject.GetMonobehaviorsWithInstanceInChildren<IManager>())
+        {
+            manager.gameObject.SetActive(true);
+        }
+
         foreach (IManager manager in this.gameObject.GetInterfacesInChildren<IManager>())
         {
             if (!manager.Initialized)

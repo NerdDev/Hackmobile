@@ -25,15 +25,23 @@ public static class GameObjectExt
         return gObj.GetInterfacesInChildren<T>().FirstOrDefault();
     }
 
-    public static List<T> GetInterfacesInChildren<T>(this GameObject gObj)
+    public static List<T> GetInterfacesInChildren<T>(this GameObject gObj, bool includeInactive = true)
+    {
+        return new List<T>(GetMonobehaviorsWithInstanceInChildren<T>(gObj, includeInactive).Cast<T>());
+    }
+
+    public static List<MonoBehaviour> GetMonobehaviorsWithInstanceInChildren<T>(this GameObject gObj, bool includeInactive = true)
     {
         if (!typeof(T).IsInterface) throw new SystemException("Specified type is not an interface!");
-        List<T> ret = new List<T>();
+        List<MonoBehaviour> ret = new List<MonoBehaviour>();
         Type t = typeof(T);
-        foreach (MonoBehaviour m in gObj.GetComponentsInChildren<MonoBehaviour>())
-            if (m != null)
-                if (m.GetType().GetInterfaces().Contains(t))
-                    ret.Add((T)(object)m);
+        foreach (MonoBehaviour m in gObj.GetComponentsInChildren<MonoBehaviour>(includeInactive))
+        {
+            if (m != null && m.GetType().GetInterfaces().Contains(t))
+            {
+                ret.Add(m);
+            }
+        }
         return ret;
     }
 
