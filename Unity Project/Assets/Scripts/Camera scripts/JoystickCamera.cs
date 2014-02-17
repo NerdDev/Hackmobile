@@ -21,7 +21,7 @@ public class JoystickCamera : MonoBehaviour
     public int yMinLimit = -80;
     public int yMaxLimit = 80;
     public int zoomRate = 40;
-    public float panSpeed = 40f;
+    public float panSpeed = 120f;
     public float zoomDampening = 5.0f;
 
     internal float xDeg = 0.0f;

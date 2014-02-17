@@ -36,6 +36,7 @@ public class NPC : Affectable
     public AttributesData Attributes = new AttributesData();
     public BodyParts Bodyparts = new BodyParts();
     public Stats Stats = new Stats();
+    public Dictionary<string, Spell> KnownSpells = new Dictionary<string, Spell>();
 
     //public List<Item> inventory = new List<Item>();
     public Inventory Inventory = new Inventory();
@@ -57,10 +58,10 @@ public class NPC : Affectable
     //public Vector3 CurrentOccupiedGridCenterWorldPoint;
     //public Vector3 LastOccupiedGridCenterWorldPoint;
 
-    bool moving; //stores moving condition
+    internal bool moving; //stores moving condition
     protected bool verticalMoving;
     protected bool movingUp;
-    protected float verticalOffset;
+    protected float verticalOffset = -.5f;
     internal Queue<GridSpace> targetGrids = new Queue<GridSpace>();
     internal Vector3 heading; //this is the heading of target minus current location
 
@@ -275,7 +276,7 @@ public class NPC : Affectable
         else
         {
             GridSpace grid = targetGrids.Dequeue();
-            GO.transform.position = new Vector3(grid.X, GO.transform.position.y, grid.Y);
+            GO.transform.position = new Vector3(grid.X, verticalOffset, grid.Y);
 
             if (targetGrids.Count <= 0)
             {
@@ -333,7 +334,7 @@ public class NPC : Affectable
 
     internal void MoveNPCStepwise(GridSpace gridTarget)
     {
-        heading = new Vector3(gridTarget.X - GO.transform.position.x, verticalOffset, gridTarget.Y - GO.transform.position.z);
+        heading = new Vector3(gridTarget.X - GO.transform.position.x, 0f, gridTarget.Y - GO.transform.position.z);
         GO.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
         Quaternion toRot = Quaternion.LookRotation(heading);
         GO.transform.rotation = toRot;
@@ -446,6 +447,16 @@ public class NPC : Affectable
                 AdjustXP(n.getXPfromNPC());
             }
         }
+    }
+
+    public virtual void CastSpell(string spell, params IAffectable[] targets)
+    {
+        KnownSpells[spell].Activate(this, targets);
+    }
+
+    public virtual void CastSpell(Spell spell, params IAffectable[] targets)
+    {
+        spell.Activate(this, targets);
     }
 
     protected int calcHandDamage()
@@ -572,6 +583,16 @@ public class NPC : Affectable
         Stats = x.Select<Stats>("stats");
         Flags = x.Select<ESFlags<NPCFlags>>("flags");
         Keywords = x.Select<ESFlags<Keywords>>("keywords");
+        foreach (XMLNode spell in x.SelectList("spell"))
+        {
+            string spellName = spell.SelectString("name");
+            Spell s = spell.Select<Spell>();
+            KnownSpells.Add(spellName, s);
+            if (this.Name.Equals("player"))
+            {
+                BigBoss.Objects.PlayerSpells.Add(spellName, s);
+            }
+        }
     }
     #endregion
 
@@ -767,12 +788,19 @@ public class NPC : Affectable
     #region Touch Input
     public override void OnClick()
     {
-        if (this.IsNotAFreaking<Player>())
+        if (BigBoss.PlayerInput.defaultPlayerInput)
         {
-            if (this.IsNextToPlayer())
+            if (this.IsNotAFreaking<Player>())
             {
-                BigBoss.Player.attack(this);
+                if (this.IsNextToPlayer())
+                {
+                    BigBoss.Player.attack(this);
+                }
             }
+        }
+        else if (BigBoss.PlayerInput.spellInput)
+        {
+            BigBoss.Gooey.Target(this);
         }
     }
     #endregion

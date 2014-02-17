@@ -51,8 +51,7 @@ public class Spell : IXmlParsable
         foreach (XMLNode targeter in spell.SelectList("targeter"))
         {
             string targeterType = targeter.SelectString("type");
-            AddAspect(BigBoss.Types.Instantiate<ITargeter>(targeterType), 
-                GetEffects(targeter.SelectList("effect")));
+            AddAspect(BigBoss.Types.Instantiate<ITargeter>(targeterType), GetEffects(targeter.SelectList("effect")));
         }
     }
 
@@ -73,6 +72,7 @@ public class Spell : IXmlParsable
             if (BigBoss.Types.TryInstantiate(type, out instance))
             {
                 instance.ParseXML(effect);
+                instance.Name = type;
                 ret.Add(instance);
             }
             else if (BigBoss.Debug.logging(Logs.XML))

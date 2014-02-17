@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 public class PlayerStats
 {
     //
@@ -59,5 +60,11 @@ public class PlayerStats
         player.IsActive = true;
         player.Equipment = new Equipment(player.Bodyparts);
         player.Name = "Kurtis";
+
+        foreach (KeyValuePair<string, Spell> kvp in BigBoss.Objects.PlayerSpells)
+        {
+            player.KnownSpells.Add(kvp.Key, kvp.Value);
+        }
+
     }
 }

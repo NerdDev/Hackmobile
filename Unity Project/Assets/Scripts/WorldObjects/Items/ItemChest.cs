@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-class ItemChest : MonoBehaviour
+public class ItemChest : MonoBehaviour
 {
     public GridSpace Location;
 
@@ -17,7 +17,7 @@ class ItemChest : MonoBehaviour
     {
         if (CheckDistance())
         {
-            BigBoss.Gooey.GenerateGroundItems(this);
+            BigBoss.Gooey.OpenGroundGUI(this);
         }
     }
 

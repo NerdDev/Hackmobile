@@ -67,7 +67,7 @@ public class AppliedEffects : SortedDictionary<string, EffectInstance>, IXmlPars
         }
         if (inst != null)
         {
-            this.Remove(inst.ToString());
+            this.RemoveEffect(inst.ToString());
             return true;
         }
         return false;

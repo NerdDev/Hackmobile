@@ -9,7 +9,7 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
 {
     public int TurnsToProcess { get; protected set; }
     protected IAffectable target;
-    public string Name { get; protected set; }
+    public string Name { get; set; }
     private GenericFlags<EffectIntendedTarget> targetTypes = new GenericFlags<EffectIntendedTarget>();
 
     public EffectInstance()
@@ -176,6 +176,12 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
     #region Turn Management
     public void UpdateTurn()
     {
+        if (target == null)
+        {
+            IsActive = false;
+            BigBoss.Time.RemoveFromUpdateList(this);
+            return;
+        }
         if (checkTurns())
         {
             this.Apply();

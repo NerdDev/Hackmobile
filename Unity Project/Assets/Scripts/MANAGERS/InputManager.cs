@@ -17,6 +17,9 @@ public class InputManager : MonoBehaviour, IManager
     public bool allowMouseInput;
     public bool allowTouchInput;
     internal bool isMovementKeyPressed;//mainly for debugging, will convert this bool when the input class is implemented for mobile
+
+    public bool defaultPlayerInput;
+    public bool spellInput;
     #endregion
 
     #region Mouse variables:
@@ -143,7 +146,7 @@ public class InputManager : MonoBehaviour, IManager
             Debug.DrawRay(BigBoss.PlayerInfo.transform.position,
                 playerConvertedTranslationVector,
                 Color.magenta);
-            BigBoss.Player.MovePlayer(new Vector2(1f, 1f));
+            BigBoss.Player.MovePlayer(new Vector2(1f, 0f));
             Quaternion lookRotFinal = Quaternion.LookRotation(playerConvertedTranslationVector); //calc'ing our look vector
             BigBoss.PlayerInfo.transform.rotation = lookRotFinal;
             BigBoss.PlayerInfo.transform.Rotate(Vector3.up, Rotation_Camera.xDeg, Space.Self);
