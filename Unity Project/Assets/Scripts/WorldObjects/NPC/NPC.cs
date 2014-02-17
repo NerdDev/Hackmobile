@@ -61,7 +61,7 @@ public class NPC : Affectable
     internal bool moving; //stores moving condition
     protected bool verticalMoving;
     protected bool movingUp;
-    protected float verticalOffset = -.5f;
+    protected float verticalOffset = 0f;
     internal Queue<GridSpace> targetGrids = new Queue<GridSpace>();
     internal Vector3 heading; //this is the heading of target minus current location
 

@@ -283,7 +283,10 @@ public class GUIManager : MonoBehaviour, IManager
                 {
                     if (target is NPC)
                     {
-                        ((NPC)target).GridSpace.Block.renderer.sharedMaterial = NormalShaderGridspace;
+                        foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
+                        {
+                            block.renderer.sharedMaterial = NormalShaderGridspace;
+                        }
                     }
                 }
                 spellTargets.Clear();
@@ -313,7 +316,10 @@ public class GUIManager : MonoBehaviour, IManager
         spellTargets.Remove(target);
         if (target is NPC)
         {
-            ((NPC)target).GridSpace.Block.renderer.sharedMaterial = NormalShaderGridspace;
+            foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
+            {
+                block.renderer.sharedMaterial = NormalShaderGridspace;
+            }
         }
     }
 
@@ -322,7 +328,10 @@ public class GUIManager : MonoBehaviour, IManager
         spellTargets.Add(target);
         if (target is NPC)
         {
-            ((NPC)target).GridSpace.Block.renderer.sharedMaterial = GlowShaderGridSpace;
+            foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
+            {
+                block.renderer.sharedMaterial = GlowShaderGridSpace;
+            }
         }
     }
 
