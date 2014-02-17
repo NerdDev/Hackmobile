@@ -37,13 +37,13 @@ public class Player : NPC
     public override void addToInventory(Item item, int count)
     {
         base.addToInventory(item, count);
-        BigBoss.Gooey.RegenInventoryGUI();
+        BigBoss.Gooey.OpenInventoryGUI();
     }
 
     public override void removeFromInventory(Item item, int count)
     {
         base.removeFromInventory(item, count);
-        BigBoss.Gooey.RegenInventoryGUI();
+        BigBoss.Gooey.OpenInventoryGUI();
     }
     #endregion
 
@@ -53,7 +53,7 @@ public class Player : NPC
     public override void OnClick()
     {
         BigBoss.Gooey.displayInventory = !BigBoss.Gooey.displayInventory;
-        BigBoss.Gooey.RegenInventoryGUI();
+        BigBoss.Gooey.OpenInventoryGUI();
     }
     #endregion
 
@@ -115,6 +115,13 @@ public class Player : NPC
         }
         return false;
     }
+
+    public override void CastSpell(string spell, params IAffectable[] targets)
+    {
+        base.CastSpell(spell, targets);
+        CreateTextPop(this.Name + " casts " + spell + ".");
+        BigBoss.Time.PassTurn(60);
+    }
     #endregion
 
     #region Movement and Animation
@@ -133,7 +140,6 @@ public class Player : NPC
     float timePassed = 0;
     float timeVar = 1.5f;
     bool timeSet;
-    bool isMoving;
     #endregion
 
     private void movement()
@@ -172,30 +178,38 @@ public class Player : NPC
             {
                 if (!checkXYPosition(GO.transform.position, new Vector3(GridSpace.X, 0f, GridSpace.Y)))
                 {
-                    MoveNPCStepwise(this.GridSpace);
-                    isMoving = true;
+                    moving = true;
+                    MovePlayerStepWise(this.GridSpace);
                 }
                 else
                 {
                     resetPosition();
-                    isMoving = false;
+                    moving = false;
                 }
             }
             else
             {
-                isMoving = false;
+                moving = false;
             }
         }
         else
         {
-            isMoving = true;
+            moving = true;
             timeSet = false;
         }
     }
 
+    internal void MovePlayerStepWise(GridSpace gridTarget)
+    {
+        heading = new Vector3(gridTarget.X - GO.transform.position.x, 0f, gridTarget.Y - GO.transform.position.z);
+        MovePlayer(new Vector2(.75f, 0f));
+        Quaternion toRot = Quaternion.LookRotation(heading);
+        GO.transform.rotation = toRot;
+    }
+
     private void resetPosition()
     {
-        GO.transform.position = new Vector3(GridSpace.X, GO.transform.position.y, GridSpace.Y);
+        GO.transform.position = new Vector3(GridSpace.X, verticalOffset, GridSpace.Y);
     }
 
     public void MovePlayer(Vector2 magnitude)
@@ -241,7 +255,7 @@ public class Player : NPC
             }
             return;
         }
-        if (isMoving)
+        if (moving)
         {
             /*
             if (v < PlayerSpeed)

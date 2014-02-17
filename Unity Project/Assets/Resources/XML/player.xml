@@ -36,5 +36,37 @@
 			<heads>1</heads>
 			<!-- body is implicitly assumed -->
 		</bodyparts>
+			<spell>
+				<name>Firebolt</name>
+				<targeter>
+					<type>TargetedObjects</type>
+					<effect>
+						<type>DamageFire</type>
+						<strength>12</strength>
+					</effect>
+				</targeter>
+			</spell>
+			<spell>
+				<name>Poison</name>
+				<targeter>
+					<type>TargetedObjects</type>
+					<effect>
+						<type>PoisonDamageEffect</type>
+						<strength>4</strength>
+						<turns>5</turns>
+					</effect>
+				</targeter>
+			</spell>
+			<spell>
+				<name>Levitate</name>
+				<targeter>
+					<type>TargetedObjects</type>
+					<effect>
+						<type>Levitation</type>
+						<strength>.4</strength>
+						<turns>5</turns>
+					</effect>
+				</targeter>
+			</spell>
 	</npc>
 </npcs>

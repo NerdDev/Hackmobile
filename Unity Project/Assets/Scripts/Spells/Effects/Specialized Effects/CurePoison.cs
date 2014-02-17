@@ -11,4 +11,9 @@ public class CurePoison : EffectInstance
     protected override void ParseParams(XMLNode x)
     {
     }
+
+    public override string ToString()
+    {
+        return "CurePoison";
+    }
 }

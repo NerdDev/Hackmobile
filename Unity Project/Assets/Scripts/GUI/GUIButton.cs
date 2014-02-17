@@ -61,4 +61,11 @@ public class GUIButton : UIButton
     {
         OnButtonPress(onPress);
     }
+
+    public void Fix()
+    {
+        this.label.MakePixelPerfect();
+        this.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+    }
 }

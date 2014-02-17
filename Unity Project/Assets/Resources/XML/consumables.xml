@@ -1,6 +1,6 @@
 <items>
 	<consumables>
-		<food name="spoiled bread">
+		<food name="Spoiled Bread">
 			<icon>spoiled bread</icon>
 			<stats>
 				<weight>15</weight>
@@ -17,27 +17,9 @@
 					<type>NutritionEffect</type>
 					<strength>50</strength>
 				</effect>
-				<effect>
-					<type>Levitation</type>
-					<strength>.2</strength>
-					<turns>10</turns>
-				</effect>
 			</OnEatenEffect>
 		</food>
-		<potion name="health potion">
-			<icon>potion1</icon>
-			<stats>
-				<weight>3</weight>
-				<cost>120</cost>
-			</stats>
-			<OnEatenEffect>
-				<effect>
-					<type>addhealth</type>
-					<strength>40</strength>
-				</effect>
-			</OnEatenEffect>
-		</potion>
-		<potion name="health potion 2">
+		<potion name="Health Potion">
 			<icon>potion1</icon>
 			<stats>
 				<weight>3</weight>
@@ -50,7 +32,7 @@
 				</effect>
 			</OnEatenEffect>
 		</potion>
-		<potion name="potion of cure poison">
+		<potion name="Powerful Health Potion">
 			<icon>potion1</icon>
 			<stats>
 				<weight>3</weight>
@@ -58,12 +40,25 @@
 			</stats>
 			<OnEatenEffect>
 				<effect>
-					<type>addhealth</type>
+					<type>AddHealth</type>
+					<strength>80</strength>
+				</effect>
+			</OnEatenEffect>
+		</potion>
+		<potion name="Cure Poison">
+			<icon>potion1</icon>
+			<stats>
+				<weight>3</weight>
+				<cost>120</cost>
+			</stats>
+			<OnEatenEffect>
+				<effect>
+					<type>CurePoison</type>
 					<strength>40</strength>
 				</effect>
 			</OnEatenEffect>
 		</potion>
-		<potion name="potion of levitation">
+		<potion name="Levitation Potion">
 			<icon>potion1</icon>
 			<stats>
 				<weight>3</weight>
@@ -71,8 +66,10 @@
 			</stats>
 			<OnEatenEffect>
 				<effect>
+					<effect>
 					<type>Levitation</type>
 					<strength>.2</strength>
+					<turns>10</turns>
 				</effect>
 			</OnEatenEffect>
 		</potion>

@@ -47,7 +47,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     {
         if (onEaten != null)
         {
-            onEaten.Activate(this, n);
+            onEaten.Activate(n, this);
         }
         n.removeFromInventory(this);
     }

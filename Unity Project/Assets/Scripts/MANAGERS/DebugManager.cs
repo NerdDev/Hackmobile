@@ -18,8 +18,8 @@ public class DebugManager : MonoBehaviour, IManager
 
     #region Editor Properties
     public bool Logging = false;
-    public Logs[] ActiveLogs = new Logs[] { Logs.Main, Logs.LevelGenMain, Logs.NPCs };
-    public DebugFlag[] ActiveFlags = new DebugFlag[0];
+    public Logs[] ActiveLogs = new Logs[] { Logs.Main, Logs.LevelGenMain, Logs.NPCs, Logs.XML, Logs.TypeHarvest, Logs.Items };
+    public DebugFlag[] ActiveFlags = new DebugFlag[] { DebugFlag.GlobalLogging };
     #endregion
 
     #region StringConstants
@@ -75,14 +75,14 @@ public class DebugManager : MonoBehaviour, IManager
         putName(Logs.TypeHarvest, "TypeHarvest");
 
         // Set Logging to be on
-        //#if UNITY_ANDROID
-        //    //Logging = false;
-        //#endif
+        #if !UNITY_EDITOR
+            Logging = false;
+        #endif
         logging(Logging);
         foreach (Logs l in ActiveLogs)
-            logging(l, true);
+            logging(l, Logging);
         foreach (DebugFlag f in ActiveFlags)
-            flags[f] = true;
+            flags[f] = Logging;
 
         // Test output
         if (logging(Logs.Main))

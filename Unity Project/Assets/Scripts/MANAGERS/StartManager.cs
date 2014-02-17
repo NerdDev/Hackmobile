@@ -34,11 +34,13 @@ public class StartManager : MonoBehaviour, IManager
     {
         BigBoss.Gooey.DisplayLoading();
         yield return new WaitForSeconds(.01f);
-        BigBoss.Gooey.OpenInventoryGUI();
         BigBoss.Levels.SetCurLevel(0);
 
         // Temp (will move eventually)
         BigBoss.PlayerInfo.Rendering(true);
+        BigBoss.Gooey.OpenSpellGUI();
+        BigBoss.Gooey.OpenInventoryGUI();
+        BigBoss.Gooey.OpenGroundGUI(null);
         BigBoss.Gooey.CloseLoading();
     }
 }

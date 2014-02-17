@@ -15,6 +15,8 @@ public class ObjectManager : MonoBehaviour, IManager
     public ProfessionTitles PlayerProfessions { get; protected set; }
     public ObjectDictionary<MaterialType> Materials { get; protected set; }
 
+    internal Dictionary<string, Spell> PlayerSpells = new Dictionary<string, Spell>();
+
     public ObjectManager()
     {
     }

@@ -228,6 +228,13 @@ namespace XML
                 t.ParseXML(node);
             return t;
         }
+
+        public T Select<T>() where T : IXmlParsable, new()
+        {
+            T t = new T();
+            t.ParseXML(this);
+            return t;
+        }
         #endregion
 
         /**
@@ -280,7 +287,7 @@ namespace XML
 
         protected void Print(StringBuilder sb, int depth)
         {
-            for(int i = 0 ; i < depth ; i++)
+            for (int i = 0; i < depth; i++)
                 sb.Append("  ");
             sb.Append(Key + ":" + Content);
             depth++;

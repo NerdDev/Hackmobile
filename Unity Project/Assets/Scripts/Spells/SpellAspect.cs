@@ -12,6 +12,6 @@ public class SpellAspect
     {
         foreach (IAffectable target in Targeter.GetTargets(castInfo))
             foreach (EffectInstance effect in Effects)
-                effect.ActivateOnObject(target);
+                target.ApplyEffect(effect); //effect.ActivateOnObject(target);
     }
 }
