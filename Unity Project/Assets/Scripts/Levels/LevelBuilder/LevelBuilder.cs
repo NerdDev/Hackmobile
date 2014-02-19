@@ -232,7 +232,8 @@ public class LevelBuilder : MonoBehaviour
     {
         if (rough)
         {
-            return random.NextFloat() - 0.5F;
+            float range = 1 - buffer * 2;
+            return (random.NextFloat() * range) - (range / 2);
         }
         else
         {
@@ -249,7 +250,7 @@ public class LevelBuilder : MonoBehaviour
         {
             case Axis.X:
                 centerShift = -element.Bounds.center.x;
-                axisValue = (float)(element.Bounds.size.x * Math.Cos(yRotation) + element.Bounds.size.z * Math.Sin(yRotation));
+                axisValue = (float)(Math.Abs(element.Bounds.size.x * Math.Cos(yRotation)) + Math.Abs(element.Bounds.size.z * Math.Sin(yRotation)));
                 break;
             case Axis.Y:
                 axisValue = element.Bounds.size.y;
@@ -257,7 +258,7 @@ public class LevelBuilder : MonoBehaviour
                 break;
             default:
                 centerShift = -element.Bounds.center.z;
-                axisValue = (float)(element.Bounds.size.x * Math.Sin(yRotation) + element.Bounds.size.z * Math.Cos(yRotation));
+                axisValue = (float)(Math.Abs(element.Bounds.size.x * Math.Sin(yRotation)) + Math.Abs(element.Bounds.size.z * Math.Cos(yRotation)));
                 break;
         }
         float remaining = 1 - axisValue - buffer;
