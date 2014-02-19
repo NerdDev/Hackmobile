@@ -5,6 +5,8 @@ using System;
 
 public class LevelBuilder : MonoBehaviour
 {
+    const float _chestBuffer = .10F;
+
     private static GameObject holder;
     public Theme Theme;
     private int combineCounter = 0;
@@ -84,13 +86,13 @@ public class LevelBuilder : MonoBehaviour
         if (level.DrawAround(space.X, space.Y, true, Draw.FloorTypeSpace()))
         {
             space.Deploys = new List<GridDeploy>(2);
-            GridDeploy pillarDeploy = new GridDeploy(level.Theme.Pillar);
+            GridDeploy pillarDeploy = new GridDeploy(level.Theme.PillarElement);
             space.Deploys.Add(pillarDeploy);
             space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
             return;
         }
         // Normal
-        space.Deploys = new List<GridDeploy>(new [] { new GridDeploy(level.Theme.Get(GridType.Wall)) });
+        space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.WallElement) });
     }
 
     public static void HandleDoor(Level level, GridSpace space)
@@ -177,7 +179,8 @@ public class LevelBuilder : MonoBehaviour
     {
         space.Deploys = new List<GridDeploy>(2);
         space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
-        GridDeploy chestDeploy = new GridDeploy(level.Theme.Get(GridType.Chest));
+        ThemeElement chestElement = level.Theme.Get(GridType.Chest);
+        GridDeploy chestDeploy = new GridDeploy(chestElement);
         space.Deploys.Add(chestDeploy);
         Value2D<GridSpace> wall;
         //if (level.GetRandomPointAround(space.X, space.Y, false, level.Random, Draw.WallTypeSpace(), out wall))
@@ -186,13 +189,60 @@ public class LevelBuilder : MonoBehaviour
         //}
         //else
         //{ // Place randomly in the middle
-            chestDeploy.Rotation = (float)(level.Random.NextDouble() * 360);
-            chestDeploy.X = (float)(level.Random.NextDouble() * .5 - .25);
-            chestDeploy.Z = (float)(level.Random.NextDouble() * .5 - .25);
+        PlaceRandomlyInside(level.Random, chestDeploy, _chestBuffer);
         //}
-
     }
     #endregion
+
+    protected static void PlaceRandomlyInside(System.Random random, GridDeploy deploy, float buffer = 0F)
+    {
+        deploy.Rotation = random.NextAngle();
+        deploy.X = RandomInside(random, deploy.Element, Axis.X, buffer, deploy.Rotation);
+        deploy.Z = RandomInside(random, deploy.Element, Axis.Z, buffer, deploy.Rotation);
+    }
+
+    protected static float RandomInside(System.Random random, ThemeElement element, Axis axis, float buffer = 0F, float rotation = float.NaN)
+    {
+        float axisValue;
+        float centerShift;
+        switch (axis)
+        {
+            case Axis.X:
+                centerShift = -element.Bounds.center.x;
+                if (rotation != float.NaN)
+                {
+                    axisValue = element.Bounds.size.x;
+                }
+                else
+                {
+                    axisValue = (float)(element.Bounds.size.x * Math.Cos(rotation) + element.Bounds.size.z * Math.Sin(rotation));
+                }
+                break;
+            case Axis.Y:
+                axisValue = element.Bounds.size.y;
+                centerShift = -element.Bounds.center.y;
+                break;
+            default:
+                axisValue = element.Bounds.size.z;
+                centerShift = -element.Bounds.center.z;
+                if (rotation != float.NaN)
+                {
+                    axisValue = element.Bounds.size.y;
+                }
+                else
+                {
+                    axisValue = (float)(element.Bounds.size.x * Math.Sin(rotation) + element.Bounds.size.z * Math.Cos(rotation));
+                }
+                break;
+        }
+        float remaining = 1 - axisValue - buffer;
+        if (remaining < 0F)
+        {
+            return centerShift;
+        }
+        float ret = centerShift + (remaining * (float)random.NextDouble()) - (remaining / 2);
+        return ret;
+    }
 
     public void Combine()
     {

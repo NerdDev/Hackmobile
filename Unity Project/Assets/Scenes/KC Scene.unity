@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Logging: 1
-  ActiveLogs: 000000000100000002000000
+  ActiveLogs: 00000000010000000200000003000000040000000500000006000000
   ActiveFlags: 00000000
 --- !u!1 &16695338
 GameObject:
@@ -230,6 +230,8 @@ GameObject:
   - 114: {fileID: 26253887}
   - 92: {fileID: 26253886}
   - 114: {fileID: 26253888}
+  - 114: {fileID: 273980318}
+  - 114: {fileID: 1533978709}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -276,7 +278,7 @@ Camera:
     m_Bits: 4294967039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_HDR: 0
+  m_HDR: 1
   m_OcclusionCulling: 1
 --- !u!92 &26253886
 Behaviour:
@@ -345,7 +347,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 28901483}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,7 +373,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 51606962}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -397,7 +399,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 61866579}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -423,7 +425,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 79550759}
-  - 114: {fileID: 79550761}
   - 114: {fileID: 79550760}
   m_Layer: 8
   m_Name: Inventory Grid
@@ -470,13 +471,16 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400010, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 79550758}
-  m_Enabled: 0
+  m_GameObject: {fileID: 115019675}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d35d721694fa0ee48a2d14bddfcbf4a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 965eb67e67e0a0847afaa969cb3d1196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  springStrength: 8
+  GridPanel: {fileID: 0}
+  DragPanel: {fileID: 0}
+  ScrollPanel: {fileID: 0}
+  Grid: {fileID: 0}
 --- !u!1 &109235815
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,7 +641,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ShowStartMenu
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100072, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: m_IsActive
@@ -646,6 +650,50 @@ Prefab:
     - target: {fileID: 100118, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: intensity
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: radius
+      value: .200000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: blurIterations
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: blurFilterDistance
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: downsample
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: rand
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: aoShader
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400108, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400108, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: separableBlurShader
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400108, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: contrastCompositeShader
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
@@ -660,7 +708,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 111873361}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,9 +734,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 115019676}
-  - 114: {fileID: 115019677}
-  m_Layer: 8
-  m_Name: Scroll Bar for Ground List
+  - 114: {fileID: 79550761}
+  m_Layer: 0
+  m_Name: ItemInfoGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -701,10 +749,11 @@ Transform:
   m_PrefabInternal: {fileID: 110083047}
   m_GameObject: {fileID: 115019675}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -400, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 273980317}
+  - {fileID: 2043344565}
+  - {fileID: 955768001}
   m_Father: {fileID: 816597232}
 --- !u!114 &115019677
 MonoBehaviour:
@@ -712,21 +761,16 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400012, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 115019675}
+  m_GameObject: {fileID: 332443272}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Script: {fileID: 11500000, guid: 965eb67e67e0a0847afaa969cb3d1196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  GridPanel: {fileID: 0}
+  DragPanel: {fileID: 0}
+  ScrollPanel: {fileID: 0}
+  Grid: {fileID: 0}
 --- !u!1 &120934303
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,7 +779,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 120934304}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 L Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -762,7 +806,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 130163948}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -791,7 +835,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 134793439}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -817,7 +861,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 164602381}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 R Clavicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -845,7 +889,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 183662948}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RBCollection01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -871,7 +915,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 192819725}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 L Toe0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -897,7 +941,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 222802818}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -926,7 +970,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 226376150}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -953,7 +997,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 273980317}
   - 114: {fileID: 273980319}
-  - 114: {fileID: 273980318}
   m_Layer: 8
   m_Name: UIPanel (Scroll Bar)
   m_TagString: Untagged
@@ -968,33 +1011,31 @@ Transform:
   m_PrefabInternal: {fileID: 110083047}
   m_GameObject: {fileID: 273980316}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -.000183105469, y: -400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 798419432}
   - {fileID: 1872270220}
-  m_Father: {fileID: 115019676}
+  m_Father: {fileID: 1317823461}
 --- !u!114 &273980318
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400014, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 273980316}
-  m_Enabled: 1
+  m_GameObject: {fileID: 26253883}
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Script: {fileID: 11500000, guid: 43d955acba56d47d3be0eb7eef88325c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  intensity: .5
+  radius: .200000003
+  blurIterations: 1
+  blurFilterDistance: 1.25
+  downsample: 0
+  rand: {fileID: 0}
+  aoShader: {fileID: 0}
 --- !u!114 &273980319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1021,7 +1062,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 281018611}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1047,7 +1088,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 285949790}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 R Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1168,9 +1209,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 332443273}
-  - 114: {fileID: 332443274}
-  m_Layer: 8
-  m_Name: Scroll Bar for Item List
+  - 114: {fileID: 115019677}
+  m_Layer: 0
+  m_Name: ItemActionsGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1186,7 +1227,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 667524034}
+  - {fileID: 414324214}
+  - {fileID: 401544516}
   m_Father: {fileID: 816597232}
 --- !u!114 &332443274
 MonoBehaviour:
@@ -1194,21 +1236,16 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400022, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 332443272}
+  m_GameObject: {fileID: 1317823460}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Script: {fileID: 11500000, guid: 965eb67e67e0a0847afaa969cb3d1196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  GridPanel: {fileID: 0}
+  DragPanel: {fileID: 0}
+  ScrollPanel: {fileID: 0}
+  Grid: {fileID: 0}
 --- !u!1 &340622798
 GameObject:
   m_ObjectHideFlags: 0
@@ -1217,7 +1254,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 340622799}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L_Shin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1276,7 +1313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NormalStart: 1
-  ShowStartMenu: 1
+  ShowStartMenu: 0
 --- !u!1 &362888547
 GameObject:
   m_ObjectHideFlags: 0
@@ -1285,7 +1322,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 362888548}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L_Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1312,7 +1349,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 363897161}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1375,9 +1412,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 0}
   mPivot: 1
-  mDepth: 14
+  mDepth: 5
   mAtlas: {fileID: 0}
-  mSpriteName: Button
+  mSpriteName: Beveled Outline
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -1418,9 +1455,8 @@ GameObject:
   - 4: {fileID: 370381524}
   - 114: {fileID: 370381526}
   - 114: {fileID: 370381525}
-  - 114: {fileID: 370381527}
   m_Layer: 8
-  m_Name: Item Information
+  m_Name: SpellListing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1437,7 +1473,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 386308919}
-  m_Father: {fileID: 816597232}
+  m_Father: {fileID: 1647601925}
 --- !u!114 &370381525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1481,7 +1517,7 @@ MonoBehaviour:
   mAlpha: 1
   mDebugInfo: 1
   mClipping: 3
-  mClipRange: {x: 300, y: -400, z: 200, w: 800}
+  mClipRange: {x: 1480, y: -400, z: 240, w: 800}
   mClipSoftness: {x: 10, y: 10}
 --- !u!114 &370381527
 MonoBehaviour:
@@ -1489,14 +1525,16 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400034, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 370381523}
-  m_Enabled: 0
+  m_GameObject: {fileID: 2073752895}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be10cbaaf1096094ca8285024d49002e, type: 3}
+  m_Script: {fileID: 11500000, guid: 965eb67e67e0a0847afaa969cb3d1196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 252.89119, y: 902.000793, z: 0}
-  strength: 13
+  GridPanel: {fileID: 0}
+  DragPanel: {fileID: 0}
+  ScrollPanel: {fileID: 0}
+  Grid: {fileID: 0}
 --- !u!1 &386308918
 GameObject:
   m_ObjectHideFlags: 0
@@ -1505,10 +1543,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 386308919}
-  - 114: {fileID: 386308921}
   - 114: {fileID: 386308920}
   m_Layer: 8
-  m_Name: Item Info Grid
+  m_Name: SpellGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1521,7 +1558,7 @@ Transform:
   m_PrefabInternal: {fileID: 110083047}
   m_GameObject: {fileID: 386308918}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 300, y: -50, z: 0}
+  m_LocalPosition: {x: 1480, y: -50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 370381524}
@@ -1552,13 +1589,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400038, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 386308918}
-  m_Enabled: 0
+  m_GameObject: {fileID: 857305435}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d35d721694fa0ee48a2d14bddfcbf4a4, type: 3}
+  m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  springStrength: 8
 --- !u!1 &393869273
 GameObject:
   m_ObjectHideFlags: 0
@@ -1567,7 +1603,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 393869274}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1596,7 +1632,6 @@ GameObject:
   - 4: {fileID: 401544516}
   - 114: {fileID: 401544519}
   - 114: {fileID: 401544518}
-  - 114: {fileID: 401544517}
   m_Layer: 8
   m_Name: Use Actions
   m_TagString: Untagged
@@ -1611,25 +1646,35 @@ Transform:
   m_PrefabInternal: {fileID: 110083047}
   m_GameObject: {fileID: 401544515}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -.000183105469, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2134117026}
-  m_Father: {fileID: 816597232}
+  m_Father: {fileID: 332443273}
 --- !u!114 &401544517
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400040, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 401544515}
-  m_Enabled: 0
+  m_GameObject: {fileID: 857305435}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be10cbaaf1096094ca8285024d49002e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 252.89119, y: 902.000793, z: 0}
-  strength: 13
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 0}
+  mPivot: 1
+  mDepth: 14
+  mAtlas: {fileID: 0}
+  mSpriteName: Button
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &401544518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1651,8 +1696,8 @@ MonoBehaviour:
   momentumAmount: 35
   relativePositionOnReset: {x: 0, y: 0}
   repositionClipping: 0
-  horizontalScrollBar: {fileID: 1533978708}
-  verticalScrollBar: {fileID: 1533978708}
+  horizontalScrollBar: {fileID: 857305437}
+  verticalScrollBar: {fileID: 857305437}
   showScrollBars: 1
 --- !u!114 &401544519
 MonoBehaviour:
@@ -1683,7 +1728,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 410658817}
-  - 114: {fileID: 410658819}
   - 114: {fileID: 410658818}
   m_Layer: 8
   m_Name: Ground Grid
@@ -1730,13 +1774,16 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400048, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 410658816}
-  m_Enabled: 0
+  m_GameObject: {fileID: 1647601924}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d35d721694fa0ee48a2d14bddfcbf4a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 965eb67e67e0a0847afaa969cb3d1196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  springStrength: 8
+  GridPanel: {fileID: 0}
+  DragPanel: {fileID: 0}
+  ScrollPanel: {fileID: 0}
+  Grid: {fileID: 0}
 --- !u!1 &414324213
 GameObject:
   m_ObjectHideFlags: 0
@@ -1746,7 +1793,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 414324214}
   - 114: {fileID: 414324216}
-  - 114: {fileID: 414324215}
   m_Layer: 8
   m_Name: UIPanel (Scroll Bar)
   m_TagString: Untagged
@@ -1761,33 +1807,24 @@ Transform:
   m_PrefabInternal: {fileID: 110083047}
   m_GameObject: {fileID: 414324213}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 699.999817, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1825234208}
   - {fileID: 1072839383}
-  m_Father: {fileID: 857305436}
+  m_Father: {fileID: 332443273}
 --- !u!114 &414324215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400050, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 414324213}
+  m_GameObject: {fileID: 1440076348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
 --- !u!114 &414324216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1816,7 +1853,7 @@ GameObject:
   - 4: {fileID: 441761154}
   - 33: {fileID: 441761156}
   - 23: {fileID: 441761155}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Object14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1874,7 +1911,7 @@ GameObject:
   - 4: {fileID: 449813619}
   - 137: {fileID: 449813620}
   - 114: {fileID: 449813621}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HeadA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1959,7 +1996,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 466660994}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2020,21 +2057,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayInventory: 0
-  inventoryClip: {fileID: 1273431693}
-  groundClip: {fileID: 1557336233}
-  itemInfoClip: {fileID: 370381526}
-  itemActionClip: {fileID: 401544519}
-  inventoryGrid: {fileID: 79550760}
-  groundGrid: {fileID: 410658818}
-  itemInfoGrid: {fileID: 386308920}
-  itemActionsGrid: {fileID: 2134117027}
+  displaySpells: 1
+  NormalShaderGridspace: {fileID: 2100000, guid: 36ba0ff8c6cd1744abf53be1b6f8fa2f,
+    type: 2}
+  GlowShaderGridSpace: {fileID: 2100000, guid: bfc38c088bf27b2409a70ffe5df807ed, type: 2}
+  InventoryGrid: {fileID: 370381527}
+  ItemActionsGrid: {fileID: 115019677}
+  GroundItemsGrid: {fileID: 332443274}
+  ItemInfoGrid: {fileID: 79550761}
+  SpellCastGrid: {fileID: 410658819}
   InvItemPrefab: {fileID: 100000, guid: b819e8f39001caa4e8fde413f3b67073, type: 2}
   ButtonPrefab: {fileID: 100004, guid: 3deade3808c408c49bdd373de0e1d4e9, type: 2}
   ChestPrefab: {fileID: 100000, guid: 7e43200f971e8cc4ba108181e6494a32, type: 2}
-  inventoryClipDrag: {fileID: 1273431692}
-  groundClipDrag: {fileID: 1557336232}
-  itemInfoClipDrag: {fileID: 370381525}
-  itemActionsClipDrag: {fileID: 401544518}
   font: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
   InventoryLabel: {fileID: 1617325068}
   GroundLabel: {fileID: 667190842}
@@ -2090,9 +2124,9 @@ MonoBehaviour:
   mTex: {fileID: 0}
   mColor: {r: 0, g: 0, b: 0, a: 0}
   mPivot: 1
-  mDepth: 13
+  mDepth: 3
   mAtlas: {fileID: 0}
-  mSpriteName: Highlight - Shadowed
+  mSpriteName: Bright
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -2131,7 +2165,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 536524791}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2204,7 +2238,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 553830285}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 L Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2233,7 +2267,7 @@ GameObject:
   - 4: {fileID: 623311773}
   - 33: {fileID: 623311775}
   - 23: {fileID: 623311774}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Object02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2289,7 +2323,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 628275341}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 R Toe0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2366,7 +2400,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 667524034}
   - 114: {fileID: 667524035}
-  - 114: {fileID: 667524036}
   m_Layer: 8
   m_Name: UIPanel (Scroll Bar)
   m_TagString: Untagged
@@ -2386,7 +2419,7 @@ Transform:
   m_Children:
   - {fileID: 367975434}
   - {fileID: 517187063}
-  m_Father: {fileID: 332443273}
+  m_Father: {fileID: 2073752896}
 --- !u!114 &667524035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2411,21 +2444,24 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400064, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 667524033}
+  m_GameObject: {fileID: 1440076348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 0, g: 0, b: 0, a: 0}
+  mPivot: 1
+  mDepth: 13
+  mAtlas: {fileID: 0}
+  mSpriteName: Highlight - Shadowed
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &711947780
 GameObject:
   m_ObjectHideFlags: 0
@@ -2434,7 +2470,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 711947781}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2460,7 +2496,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 729014440}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CSolver01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2486,7 +2522,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 735607831}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 R Toe0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2512,7 +2548,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 768163760}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2584,7 +2620,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 789713797}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 R Finger0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2688,7 +2724,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 806725139}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Particle View 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2714,7 +2750,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 810617033}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: R_Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2741,7 +2777,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 816597232}
-  - 114: {fileID: 816597233}
   m_Layer: 0
   m_Name: Window Root
   m_TagString: Untagged
@@ -2759,16 +2794,13 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1273431690}
-  - {fileID: 1557336231}
-  - {fileID: 370381524}
-  - {fileID: 1617325069}
-  - {fileID: 667190843}
+  - {fileID: 2073752896}
+  - {fileID: 1317823461}
   - {fileID: 332443273}
   - {fileID: 115019676}
-  - {fileID: 1317823461}
-  - {fileID: 857305436}
-  - {fileID: 401544516}
+  - {fileID: 1617325069}
+  - {fileID: 667190843}
+  - {fileID: 1647601925}
   m_Father: {fileID: 785762425}
 --- !u!114 &816597233
 MonoBehaviour:
@@ -2776,38 +2808,21 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400072, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 816597231}
-  m_Enabled: 0
+  m_GameObject: {fileID: 1540946167}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04d1b7c9e9a19a24ab67123a43c6544b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e334c7742c4b004e9ac93bec1d17a29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  method: 3
-  style: 0
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  ignoreTimeScale: 1
-  delay: 0
-  duration: 1
-  steeperCurves: 0
-  tweenGroup: 0
-  eventReceiver: {fileID: 0}
-  callWhenFinished: 
-  from: {x: 0, y: 0, z: 0}
-  to: {x: 0, y: 0, z: 180}
+  arrangement: 1
+  maxPerLine: 0
+  cellWidth: 200
+  cellHeight: 50
+  repositionNow: 0
+  sorted: 0
+  hideInactive: 1
+  useList: 1
+  gridObjects: []
 --- !u!1 &857305435
 GameObject:
   m_ObjectHideFlags: 0
@@ -2816,14 +2831,16 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 857305436}
-  - 114: {fileID: 857305437}
+  - 114: {fileID: 401544517}
+  - 65: {fileID: 857305438}
+  - 114: {fileID: 386308921}
   m_Layer: 8
-  m_Name: Scroll for Use Actions
+  m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &857305436
 Transform:
   m_ObjectHideFlags: 0
@@ -2831,32 +2848,41 @@ Transform:
   m_PrefabInternal: {fileID: 110083047}
   m_GameObject: {fileID: 857305435}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 700, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 414324214}
-  m_Father: {fileID: 816597232}
+  m_LocalPosition: {x: 0, y: -360, z: 0}
+  m_LocalScale: {x: 22, y: 360, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1533978707}
 --- !u!114 &857305437
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400074, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 857305435}
+  m_GameObject: {fileID: 955768000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c8d596c16f05d949922ef16347e4cc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  mBG: {fileID: 2043030330}
+  mFG: {fileID: 1370140174}
+  mDir: 1
+  mInverted: 0
+  mScroll: 1
+  mSize: .5
+--- !u!65 &857305438
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6500016, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
+    type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  m_GameObject: {fileID: 857305435}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &922237621
 GameObject:
   m_ObjectHideFlags: 0
@@ -2900,7 +2926,7 @@ GameObject:
   - 4: {fileID: 930175548}
   - 33: {fileID: 930175550}
   - 23: {fileID: 930175549}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Helm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2956,7 +2982,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 942821966}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2974,6 +3000,35 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 976561841}
+--- !u!1 &955768000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100230, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 955768001}
+  - 114: {fileID: 857305437}
+  m_Layer: 8
+  m_Name: UIPanel (Scroll Bar)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &955768001
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400230, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  m_GameObject: {fileID: 955768000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 279.999817, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1370140173}
+  - {fileID: 2043030327}
+  m_Father: {fileID: 115019676}
 --- !u!1 &976561840
 GameObject:
   m_ObjectHideFlags: 0
@@ -2987,7 +3042,7 @@ GameObject:
   - 114: {fileID: 976561844}
   - 136: {fileID: 976561843}
   - 54: {fileID: 976561842}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3115,7 +3170,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 997879144}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 HeadNub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3141,7 +3196,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1022838413}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 L Toe0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3168,7 +3223,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1027515742}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 Footsteps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3194,7 +3249,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1037703024}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3387,7 +3442,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1079723282}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3414,7 +3469,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1089824452}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L_Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3441,7 +3496,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1149585732}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3470,7 +3525,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1164051788}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 R Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3570,7 +3625,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1231836799}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 L Clavicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3600,7 +3655,6 @@ GameObject:
   - 4: {fileID: 1273431690}
   - 114: {fileID: 1273431693}
   - 114: {fileID: 1273431692}
-  - 114: {fileID: 1273431691}
   m_Layer: 8
   m_Name: Inventory List
   m_TagString: Untagged
@@ -3619,21 +3673,31 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 79550759}
-  m_Father: {fileID: 816597232}
+  m_Father: {fileID: 2073752896}
 --- !u!114 &1273431691
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400090, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 1273431689}
-  m_Enabled: 0
+  m_GameObject: {fileID: 2043344564}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be10cbaaf1096094ca8285024d49002e, type: 3}
+  m_Script: {fileID: 11500000, guid: d81807633ea807d4c8e3fff7e10c6000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 252.89119, y: 902.000793, z: 0}
-  strength: 13
+  restrictWithinPanel: 1
+  disableDragIfFits: 0
+  dragEffect: 2
+  smoothDragStart: 1
+  scale: {x: 0, y: 1, z: 0}
+  scrollWheelFactor: -2
+  momentumAmount: 35
+  relativePositionOnReset: {x: 0, y: 0}
+  repositionClipping: 0
+  horizontalScrollBar: {fileID: 414324216}
+  verticalScrollBar: {fileID: 414324216}
+  showScrollBars: 2
 --- !u!114 &1273431692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3688,7 +3752,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1296966540}
   - 108: {fileID: 1296966541}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Directional light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3717,8 +3781,8 @@ Light:
   serializedVersion: 3
   m_Type: 2
   m_Color: {r: 1, g: .764705896, b: .490196079, a: 1}
-  m_Intensity: 1.60000002
-  m_Range: 40
+  m_Intensity: 1.70000005
+  m_Range: 28
   m_SpotAngle: 30
   m_CookieSize: 1.20000005
   m_Shadows:
@@ -3750,9 +3814,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1317823461}
-  - 114: {fileID: 1317823462}
-  m_Layer: 8
-  m_Name: Scroll for Item Info
+  - 114: {fileID: 332443274}
+  m_Layer: 0
+  m_Name: GroundList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3765,10 +3829,11 @@ Transform:
   m_PrefabInternal: {fileID: 110083047}
   m_GameObject: {fileID: 1317823460}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 280, y: 0, z: 0}
+  m_LocalPosition: {x: .000183105469, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1533978707}
+  - {fileID: 1557336231}
+  - {fileID: 273980317}
   m_Father: {fileID: 816597232}
 --- !u!114 &1317823462
 MonoBehaviour:
@@ -3776,7 +3841,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400096, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 1317823460}
+  m_GameObject: {fileID: 2043344564}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
@@ -3788,9 +3853,9 @@ MonoBehaviour:
   widgetsAreStatic: 1
   mAlpha: 1
   mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  mClipping: 3
+  mClipRange: {x: 300, y: -400, z: 200, w: 800}
+  mClipSoftness: {x: 10, y: 10}
 --- !u!1 &1370140172
 GameObject:
   m_ObjectHideFlags: 0
@@ -3819,7 +3884,7 @@ Transform:
   m_LocalPosition: {x: 0, y: -360, z: 0}
   m_LocalScale: {x: 22, y: 360, z: 1}
   m_Children: []
-  m_Father: {fileID: 1533978707}
+  m_Father: {fileID: 955768001}
 --- !u!114 &1370140174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3877,7 +3942,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1376457621}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4004,7 +4069,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1408514054}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4030,7 +4095,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1435871899}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: R_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4049,6 +4114,48 @@ Transform:
   m_Children:
   - {fileID: 810617033}
   m_Father: {fileID: 164602381}
+--- !u!1 &1440076348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100226, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1440076349}
+  - 114: {fileID: 667524036}
+  - 65: {fileID: 1440076350}
+  - 114: {fileID: 414324215}
+  m_Layer: 8
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1440076349
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400226, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  m_GameObject: {fileID: 1440076348}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 22, y: 720, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1533978707}
+--- !u!65 &1440076350
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6500018, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
+    type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  m_GameObject: {fileID: 1440076348}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1450289555
 GameObject:
   m_ObjectHideFlags: 0
@@ -4057,7 +4164,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1450289556}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: R_Shin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4084,7 +4191,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1452264053}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4207,7 +4314,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1533978707}
   - 114: {fileID: 1533978708}
-  - 114: {fileID: 1533978709}
   m_Layer: 8
   m_Name: UIPanel (Scroll Bar)
   m_TagString: Untagged
@@ -4225,9 +4331,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1370140173}
-  - {fileID: 2043030327}
-  m_Father: {fileID: 1317823461}
+  - {fileID: 857305436}
+  - {fileID: 1440076349}
+  m_Father: {fileID: 1647601925}
 --- !u!114 &1533978708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4240,8 +4346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c8d596c16f05d949922ef16347e4cc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mBG: {fileID: 2043030330}
-  mFG: {fileID: 1370140174}
+  mBG: {fileID: 667524036}
+  mFG: {fileID: 401544517}
   mDir: 1
   mInverted: 0
   mScroll: 1
@@ -4252,21 +4358,44 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400108, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
     type: 2}
   m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 1533978706}
-  m_Enabled: 1
+  m_GameObject: {fileID: 26253883}
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Script: {fileID: 11500000, guid: e653d08d21ce9453591b1dc2100fdfcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  intensity: .5
+  threshhold: 0
+  blurSpread: 1
+  separableBlurShader: {fileID: 0}
+  contrastCompositeShader: {fileID: 0}
+--- !u!1 &1540946167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100228, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1540946168}
+  - 114: {fileID: 816597233}
+  m_Layer: 8
+  m_Name: Item Info Grid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1540946168
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400228, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  m_GameObject: {fileID: 1540946167}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 300, y: -50, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2043344565}
 --- !u!1 &1554186651
 GameObject:
   m_ObjectHideFlags: 0
@@ -4335,7 +4464,6 @@ GameObject:
   - 4: {fileID: 1557336231}
   - 114: {fileID: 1557336233}
   - 114: {fileID: 1557336232}
-  - 114: {fileID: 1557336234}
   m_Layer: 8
   m_Name: Ground List
   m_TagString: Untagged
@@ -4350,11 +4478,11 @@ Transform:
   m_PrefabInternal: {fileID: 110083047}
   m_GameObject: {fileID: 1557336230}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -.000183105469, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 410658817}
-  m_Father: {fileID: 816597232}
+  m_Father: {fileID: 1317823461}
 --- !u!114 &1557336232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4400,20 +4528,6 @@ MonoBehaviour:
   mClipping: 3
   mClipRange: {x: 100, y: -610, z: 190, w: 375}
   mClipSoftness: {x: 10, y: 10}
---- !u!114 &1557336234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400116, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
-    type: 2}
-  m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 1557336230}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be10cbaaf1096094ca8285024d49002e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {x: 252.89119, y: 902.000793, z: 0}
-  strength: 13
 --- !u!1 &1565202629
 GameObject:
   m_ObjectHideFlags: 0
@@ -4422,7 +4536,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1565202630}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: R_Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4530,6 +4644,35 @@ MonoBehaviour:
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
   mClipSoftness: {x: 40, y: 40}
+--- !u!1 &1647601924
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100224, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1647601925}
+  - 114: {fileID: 410658819}
+  m_Layer: 0
+  m_Name: SpellGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1647601925
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400224, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  m_GameObject: {fileID: 1647601924}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 370381524}
+  - {fileID: 1533978707}
+  m_Father: {fileID: 816597232}
 --- !u!1 &1655911234
 GameObject:
   m_ObjectHideFlags: 0
@@ -4540,7 +4683,7 @@ GameObject:
   - 4: {fileID: 1655911235}
   - 33: {fileID: 1655911237}
   - 23: {fileID: 1655911236}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Object03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4596,7 +4739,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1667323633}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 L Finger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4674,7 +4817,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1698757090}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4700,7 +4843,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1743693857}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 R Finger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4767,7 +4910,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1816778309}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4793,7 +4936,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1817478072}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4821,7 +4964,7 @@ GameObject:
   - 4: {fileID: 1824890829}
   - 137: {fileID: 1824890830}
   - 114: {fileID: 1824890831}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BODY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5149,7 +5292,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 22, y: 720, z: 1}
   m_Children: []
-  m_Father: {fileID: 1533978707}
+  m_Father: {fileID: 955768001}
 --- !u!114 &2043030328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5199,6 +5342,35 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!1 &2043344564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100232, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2043344565}
+  - 114: {fileID: 1317823462}
+  - 114: {fileID: 1273431691}
+  m_Layer: 8
+  m_Name: Item Information
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2043344565
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400232, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  m_GameObject: {fileID: 2043344564}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1540946168}
+  m_Father: {fileID: 115019676}
 --- !u!1 &2056820588
 GameObject:
   m_ObjectHideFlags: 0
@@ -5265,7 +5437,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2056977329}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5285,6 +5457,35 @@ Transform:
   - {fileID: 1027515742}
   - {fileID: 2126964776}
   m_Father: {fileID: 976561841}
+--- !u!1 &2073752895
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100222, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2073752896}
+  - 114: {fileID: 370381527}
+  m_Layer: 0
+  m_Name: InvList
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2073752896
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400222, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+  m_PrefabInternal: {fileID: 110083047}
+  m_GameObject: {fileID: 2073752895}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1273431690}
+  - {fileID: 667524034}
+  m_Father: {fileID: 816597232}
 --- !u!1 &2085350564
 GameObject:
   m_ObjectHideFlags: 0
@@ -5293,7 +5494,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2085350565}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bip01 L Finger0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5354,6 +5555,8 @@ MonoBehaviour:
   allowKeyboardInput: 1
   allowMouseInput: 1
   allowTouchInput: 1
+  defaultPlayerInput: 0
+  spellInput: 0
   horizontalMouseSensitivity: 0
   horizontalMouseAxis: 0
   verticalMouseSensitivity: 0
@@ -5370,7 +5573,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2094886238}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5396,7 +5599,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2126964776}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pelvis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5425,7 +5628,7 @@ GameObject:
   - 4: {fileID: 2131278566}
   - 137: {fileID: 2131278567}
   - 114: {fileID: 2131278568}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MeshBaker0-mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5564,7 +5767,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2134117026}
-  - 114: {fileID: 2134117028}
   - 114: {fileID: 2134117027}
   m_Layer: 8
   m_Name: Item Actions Grid
@@ -5605,19 +5807,6 @@ MonoBehaviour:
   hideInactive: 1
   useList: 1
   gridObjects: []
---- !u!114 &2134117028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400146, guid: d2f95a1aa2c0f2248b2718682e0f7d04,
-    type: 2}
-  m_PrefabInternal: {fileID: 110083047}
-  m_GameObject: {fileID: 2134117025}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d35d721694fa0ee48a2d14bddfcbf4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  springStrength: 8
 --- !u!1 &2141786604
 GameObject:
   m_ObjectHideFlags: 0
@@ -5626,7 +5815,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2141786605}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ragdoll02
   m_TagString: Untagged
   m_Icon: {fileID: 0}

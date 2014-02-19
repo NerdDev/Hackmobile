@@ -36,6 +36,7 @@ public class LevelManager : MonoBehaviour, IManager
         for (int i = 0; i < _maxLevels; i++)
             _levelSeeds[i] = rand.Next();
         LevelBuilder.Initialize();
+        Theme.Init();
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
