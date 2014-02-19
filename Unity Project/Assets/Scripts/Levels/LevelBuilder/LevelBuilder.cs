@@ -183,14 +183,14 @@ public class LevelBuilder : MonoBehaviour
         GridDeploy chestDeploy = new GridDeploy(chestElement.GO);
         space.Deploys.Add(chestDeploy);
         GridLocation wall;
-        //if (level.GetRandomLocationAround(space.X, space.Y, false, level.Random, Draw.WallTypeSpace(), out wall))
-        //{ // If wall around, make it flush
-        //    PlaceFlush(chestDeploy, chestElement, wall, .05F);
-        //}
-        //else
-        //{ // Place randomly in the middle
+        if (level.GetRandomLocationAround(space.X, space.Y, false, level.Random, Draw.WallTypeSpace(), out wall))
+        { // If wall around, make it flush
+            PlaceFlush(chestDeploy, chestElement, wall, _chestBuffer);
+        }
+        else
+        { // Place randomly in the middle
             PlaceRandomlyInside(level.Random, chestDeploy, chestElement, _chestBuffer);
-        //}
+        }
     }
     #endregion
 
