@@ -6,16 +6,15 @@ using UnityEngine;
 
 public class GridDeploy
 {
-    public ThemeElement Element;
-    public GameObject GO { get { return Element.GO; } }
+    public GameObject GO;
     public float Rotation;
     public float X;
     public float Y;
     public float Z;
 
-    public GridDeploy(ThemeElement element)
+    public GridDeploy(GameObject go)
     {
-        this.Element = element;
+        this.GO = go;
     }
 }
 
