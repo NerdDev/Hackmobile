@@ -15,7 +15,7 @@ public abstract class SpawnModifier : ProbabilityItem
 
     public static SpawnModifier GetMod()
     {
-        return mods.Get();
+        return mods.Get(Probability.SpawnRand);
     }
 
     private static void AddMod(SpawnModifier mod)

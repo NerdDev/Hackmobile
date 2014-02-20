@@ -17,9 +17,8 @@ public class PillarMod : RoomModifier
     public override bool Modify(RoomSpec spec)
     {
         Bounding bounds = spec.Room.GetBounding(false);
-        spacingOptions.Rand = spec.Random;
-        int spacingX = spacingOptions.Get();
-        int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get() : spacingX;
+        int spacingX = spacingOptions.Get(spec.Random);
+        int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get(spec.Random) : spacingX;
         Container2D<GridType> arr = spec.Grids;
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {

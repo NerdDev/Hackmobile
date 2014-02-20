@@ -49,8 +49,7 @@ abstract public class RoomModifier : ProbabilityItem
     {
         ProbabilityPool<RoomModifier> pool = Mods[(int)type];
         pool.ClearSkipped();
-        pool.Rand = random;
-        return pool.Get();
+        return pool.Get(random);
     }
 
     public static RoomModifier GetBase(System.Random random)
@@ -58,12 +57,11 @@ abstract public class RoomModifier : ProbabilityItem
         return Get(RoomModType.Base, random);
     }
 
-    public static List<RoomModifier> GetFlexible(int num, System.Random random)
+    public static List<RoomModifier> GetFlexible(System.Random random, int num)
     {
         ProbabilityPool<RoomModifier> pool = Mods[(int)RoomModType.Flexible];
         pool.ClearSkipped();
-        pool.Rand = random;
-        return pool.Get(num);
+        return pool.Get(random, num);
     }
 
     public static RoomModifier GetFinal(System.Random random)

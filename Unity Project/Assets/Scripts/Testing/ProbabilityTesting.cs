@@ -9,12 +9,12 @@ public class ProbabilityTesting : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //ProbabilityList<char> list = new ProbabilityList<char>();
-        //list.Add('A', 1, false);
-        //list.Add('B', 2, false);
-        //list.Add('C', .5, false);
-        //list.Add('Z', .001, false);
-        //Test(list);
+        ProbabilityList<char> list = new ProbabilityList<char>();
+        list.Add('A', 1, false);
+        list.Add('B', 2, false);
+        list.Add('C', .5, false);
+        list.Add('Z', .001, false);
+        Test(list, Max, false);
 
         RoomModifier.RegisterModifiers();
         Test(RoomModifier.Mods[(int)RoomModType.Flexible], Max, false);
@@ -26,11 +26,12 @@ public class ProbabilityTesting : MonoBehaviour
 
     public void Test<T>(ProbabilityPool<T> pool, int max, bool print)
     {
+        System.Random random = new System.Random();
         pool.ClearSkipped();
         Dictionary<T, int> dict = new Dictionary<T, int>();
         for (int i = 0; i < max; i++)
         {
-            T c = pool.Get();
+            T c = pool.Get(random);
             int num;
             if (!dict.TryGetValue(c, out num))
                 num = 0;
@@ -45,7 +46,7 @@ public class ProbabilityTesting : MonoBehaviour
         BigBoss.Debug.w(Logs.Main, "Real probability out of " + max);
         foreach (KeyValuePair<T, int> pair in dict)
         {
-            BigBoss.Debug.w(Logs.Main, "  " + pair.Key + ": " + ((double)pair.Value / max) + " - " + pair.Value);
+            BigBoss.Debug.w(Logs.Main, "  " + pair.Key + ": " + ((double)pair.Value / max * 100d) + " - " + pair.Value);
         }
     }
 }

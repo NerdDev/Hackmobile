@@ -8,15 +8,9 @@ public class LeveledPool<T> : ProbabilityPool<T>
     ProbabilityPool<T> currentPool;
     int curLevel = -1;
 
-    public LeveledPool(System.Random rand, Func<int, float> curve)
-        : base(rand)
+    public LeveledPool(Func<int, float> curve)
     {
         this.levelCurve = curve;
-    }
-
-    public LeveledPool(Func<int, float> curve)
-        : this(Probability.SpawnRand, curve)
-    {
     }
 
     #region Add
@@ -29,7 +23,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
     {
         if (curLevel != -1)
         {
-            currentPool = ProbabilityPool<T>.Create(Rand);
+            currentPool = ProbabilityPool<T>.Create();
             curLevel = -1;
         }
     }
@@ -60,7 +54,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
     {
         if (curLevel == level)
             return;
-        currentPool = ProbabilityPool<T>.Create(Rand);
+        currentPool = ProbabilityPool<T>.Create();
         foreach (ProbContainer prototype in prototypePool)
         {
             float multiplier = levelCurve(prototype.Level);
@@ -72,25 +66,25 @@ public class LeveledPool<T> : ProbabilityPool<T>
     }
 
     #region Get
-    public override bool Get(out T item)
+    public override bool Get(System.Random random, out T item)
     {
-        return Get(out item, BigBoss.Player.Level);
+        return Get(random, out item, BigBoss.Player.Level);
     }
 
-    public bool Get(out T item, int level)
+    public bool Get(System.Random random, out T item, int level)
     {
         SetFor(level);
-        return currentPool.Get(out item);
+        return currentPool.Get(random, out item);
     }
 
-    public List<T> Get(int amount, int level)
+    public List<T> Get(System.Random random, int amount, int level)
     {
         SetFor(level);
         List<T> picks = new List<T>();
         T item;
         for (int i = 0; i < amount; i++)
         {
-            if (currentPool.Get(out item))
+            if (currentPool.Get(random, out item))
                 picks.Add(item);
         }
         return picks;
@@ -99,7 +93,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
 
     public override ProbabilityPool<T> Filter(Func<T, bool> filter)
     {
-        LeveledPool<T> ret = new LeveledPool<T>(Rand, levelCurve);
+        LeveledPool<T> ret = new LeveledPool<T>(levelCurve);
         foreach (ProbContainer cont in prototypePool)
         {
             if (filter(cont.Item))
