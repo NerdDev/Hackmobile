@@ -4,20 +4,22 @@ using UnityEditor;
 
 public class Theme : MonoBehaviour
 {
-    public ThemeElement WallElement;
-    public GameObject Wall;
-    public ThemeElement DoorElement;
-    public GameObject Door;
-    public ThemeElement FloorElement;
-    public GameObject Floor;
-    public ThemeElement StairUpElement;
-    public GameObject StairUp;
-    public ThemeElement StairDownElement;
-    public GameObject StairDown;
-    public ThemeElement PillarElement;
-    public GameObject Pillar;
-    public ThemeElement ChestElement;
-    public GameObject Chest;
+    public bool Scatterable;
+    public bool Chainable;
+    public ThemeElement[] WallElement;
+    public GameObject[] Wall;
+    public ThemeElement[] DoorElement;
+    public GameObject[] Door;
+    public ThemeElement[] FloorElement;
+    public GameObject[] Floor;
+    public ThemeElement[] StairUpElement;
+    public GameObject[] StairUp;
+    public ThemeElement[] StairDownElement;
+    public GameObject[] StairDown;
+    public ThemeElement[] PillarElement;
+    public GameObject[] Pillar;
+    public ThemeElement[] ChestElement;
+    public GameObject[] Chest;
 
     public Keywords[] keywords = new Keywords[0];
     private ESFlags<Keywords> keywordFlags;
@@ -35,40 +37,44 @@ public class Theme : MonoBehaviour
 
     public void Init()
     {
-        DontDestroyOnLoad(Wall);
-        WallElement = new ThemeElement(Wall);
-        DontDestroyOnLoad(Door);
-        DoorElement = new ThemeElement(Door);
-        DontDestroyOnLoad(Floor);
-        FloorElement = new ThemeElement(Floor);
-        DontDestroyOnLoad(StairUp);
-        StairUpElement = new ThemeElement(StairUp);
-        DontDestroyOnLoad(StairDown);
-        StairDownElement = new ThemeElement(StairDown);
-        DontDestroyOnLoad(Pillar);
-        PillarElement = new ThemeElement(Pillar);
-        DontDestroyOnLoad(Chest);
-        ChestElement = new ThemeElement(Chest);
+        WallElement = Generate(Wall);
+        DoorElement = Generate(Door);
+        FloorElement = Generate(Floor);
+        StairUpElement = Generate(StairUp);
+        StairDownElement = Generate(StairDown);
+        PillarElement = Generate(Pillar);
+        ChestElement = Generate(Chest);
     }
 
-    public ThemeElement Get(GridType t)
+    protected ThemeElement[] Generate(GameObject[] objs)
+    {
+        ThemeElement[] ret = new ThemeElement[objs.Length];
+        for (int i = 0; i < objs.Length; i++)
+        {
+            DontDestroyOnLoad(objs[i]);
+            ret[i] = new ThemeElement(objs[i]);
+        }
+        return ret;
+    }
+
+    public ThemeElement Get(GridType t, System.Random rand)
     {
         switch (t)
         {
             case GridType.Door:
-                return DoorElement;
+                return DoorElement.Random(rand);
             case GridType.Wall:
-                return WallElement;
+                return WallElement.Random(rand);
             case GridType.StairUp:
-                return StairUpElement;
+                return StairUpElement.Random(rand);
             case GridType.StairDown:
-                return StairDownElement;
+                return StairDownElement.Random(rand);
             case GridType.Chest:
-                return ChestElement;
+                return ChestElement.Random(rand);
             case GridType.NULL:
                 return null;
             default:
-                return FloorElement;
+                return FloorElement.Random(rand);
         }
     }
 

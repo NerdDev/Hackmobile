@@ -74,7 +74,7 @@ public class LevelBuilder : MonoBehaviour
             }
             else
             {
-                space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.Get(space.Type).GO) });
+                space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.Get(space.Type, level.Random).GO) });
             }
         }
     }
@@ -86,22 +86,22 @@ public class LevelBuilder : MonoBehaviour
         if (level.DrawAround(space.X, space.Y, true, Draw.FloorTypeSpace()))
         {
             space.Deploys = new List<GridDeploy>(2);
-            GridDeploy pillarDeploy = new GridDeploy(level.Theme.Pillar);
+            GridDeploy pillarDeploy = new GridDeploy(level.Theme.Pillar.Random(level.Random));
             space.Deploys.Add(pillarDeploy);
-            space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor).GO));
+            space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor, level.Random).GO));
             return;
         }
         // Normal
-        space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.Get(GridType.Wall).GO) });
+        space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.Get(GridType.Wall, level.Random).GO) });
     }
 
     public static void HandleDoor(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(2);
-        ThemeElement doorElement = level.Theme.Get(GridType.Door);
+        ThemeElement doorElement = level.Theme.Get(GridType.Door, level.Random);
         GridDeploy doorDeploy = new GridDeploy(doorElement.GO);
         space.Deploys.Add(doorDeploy);
-        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor).GO));
+        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor, level.Random).GO));
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
@@ -132,7 +132,7 @@ public class LevelBuilder : MonoBehaviour
     public static void HandleStairs(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(1);
-        GridDeploy stairDeploy = new GridDeploy(level.Theme.Get(space.Type).GO);
+        GridDeploy stairDeploy = new GridDeploy(level.Theme.Get(space.Type, level.Random).GO);
         space.Deploys.Add(stairDeploy);
         Value2D<GridSpace> val;
         if (level.Array.GetPointAround(space.X, space.Y, false, Draw.IsType(GridType.StairPlace), out val))
@@ -161,8 +161,8 @@ public class LevelBuilder : MonoBehaviour
     protected static void HandleChest(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(2);
-        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor).GO));
-        ThemeElement chestElement = level.Theme.Get(GridType.Chest);
+        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor, level.Random).GO));
+        ThemeElement chestElement = level.Theme.Get(GridType.Chest, level.Random);
         GridDeploy chestDeploy = new GridDeploy(chestElement.GO);
         space.Deploys.Add(chestDeploy);
         GridLocation wall;
