@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class SquareRoom : RoomModifier {
-
+public class SquareRoom : BaseRoomMod
+{
+    public override RoomModType ModType { get { return RoomModType.Base; } }
+    public override string Name { get { return "Square Room"; } }
     public override bool Modify(RoomSpec spec)
     {
         #region DEBUG
@@ -33,15 +35,5 @@ public class SquareRoom : RoomModifier {
         }
         #endregion
         return true;
-    }
-
-    public override RoomModType GetType()
-    {
-        return RoomModType.Base;
-    }
-
-    public override string GetName()
-    {
-        return "Square Room";
     }
 }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class TreasureRoomMod : RoomModifier
+class TreasureRoomMod : FlexRoomMod
 {
+    public override RoomModType ModType { get { return RoomModType.Flexible; } }
+    public override string Name { get { return "Treasure Room"; } }
     public override bool Unique { get { return true; } }
 
     public override bool Modify(RoomSpec spec)
@@ -24,15 +26,5 @@ class TreasureRoomMod : RoomModifier
         room.Grids[centerX - 2, centerY] = GridType.Door;
         room.Grids[centerX, centerY] = GridType.Chest;
         return true;
-    }
-
-    public override RoomModType GetType()
-    {
-        return RoomModType.Flexible;
-    }
-
-    public override string GetName()
-    {
-        return "Treasure Room";
     }
 }

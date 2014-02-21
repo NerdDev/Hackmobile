@@ -16,10 +16,6 @@ public class ProbabilityTesting : MonoBehaviour
         list.Add('Z', .001, false); // very rare
         Test(list, Max, false);
 
-        // Some room mods are unique, and will only be picked once.. ruining the projected probability that's printed
-        RoomModifier.RegisterModifiers();
-        Test(RoomModifier.Mods[(int)RoomModType.Flexible], Max, false);
-
         // Make a func that sets customized probability modifiers based on level
         LeveledPool<char> leveled = new LeveledPool<char>((playerLevel, itemLevel) =>
         {

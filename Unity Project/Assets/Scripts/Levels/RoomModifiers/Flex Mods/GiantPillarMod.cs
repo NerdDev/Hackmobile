@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class GiantPillarMod : RoomModifier
+public class GiantPillarMod : FlexRoomMod
 {
+    public override RoomModType ModType { get { return RoomModType.Flexible; } }
+    public override string Name { get { return "Giant Pillar"; } }
+
     public override bool Modify(RoomSpec spec)
     {
         int size = spec.Random.Next(3, 5);
@@ -37,15 +40,5 @@ public class GiantPillarMod : RoomModifier
         // Draw inner square without stroke (stroke was just used to analyze surroundings)
         spec.Grids.DrawSquare(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(GridType.Wall));
         return true;
-    }
-
-    public override RoomModType GetType()
-    {
-        return RoomModType.Flexible;
-    }
-
-    public override string GetName()
-    {
-        return "Giant Pillar";
     }
 }

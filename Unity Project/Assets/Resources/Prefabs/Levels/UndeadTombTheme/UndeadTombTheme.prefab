@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: BasicTheme
+  m_Name: UndeadTombTheme
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,7 +23,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.68247414, y: -8.23894882, z: 2.04966164}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -35,7 +35,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a09421567d6ee843ad7968312c5642f, type: 3}
+  m_Script: {fileID: 11500000, guid: 054305b64babe6643a3c1214e079c78f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Scatterable: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   - {fileID: 100000, guid: 977e93b9eb682ec41aec8a9bdb2b80bb, type: 2}
   Chest:
   - {fileID: 100004, guid: cf5f86fab5dafc247ade51112b4025b2, type: 2}
-  keywords: 
+  Keywords: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

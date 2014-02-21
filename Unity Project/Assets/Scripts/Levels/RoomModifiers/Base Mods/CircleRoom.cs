@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class CircleRoom : RoomModifier
+public class CircleRoom : BaseRoomMod
 {
+    public override RoomModType ModType { get { return RoomModType.Base; } }
+    public override string Name { get { return "Circular Room"; } }
 
     public override bool Modify(RoomSpec spec)
     {
@@ -20,15 +22,5 @@ public class CircleRoom : RoomModifier
                 StrokeAction = Draw.SetTo(GridType.Wall)
             });
         return true;
-    }
-
-    public override RoomModType GetType()
-    {
-        return RoomModType.Base;
-    }
-
-    public override string GetName()
-    {
-        return "Circular Room";
     }
 }

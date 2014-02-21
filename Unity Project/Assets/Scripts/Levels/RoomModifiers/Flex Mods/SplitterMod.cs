@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class HorizSplitterMod : RoomModifier
+public class SplitterMod : FlexRoomMod
 {
+    public override RoomModType ModType { get { return RoomModType.Flexible; } }
+    public override string Name { get { return "Splitter"; } }
 
     public override bool Modify(RoomSpec spec)
     {
@@ -85,15 +87,5 @@ public class HorizSplitterMod : RoomModifier
         }
         #endregion
         return true;
-    }
-
-    public override RoomModType GetType()
-    {
-        return RoomModType.Flexible;
-    }
-
-    public override string GetName()
-    {
-        return "Splitter";
     }
 }

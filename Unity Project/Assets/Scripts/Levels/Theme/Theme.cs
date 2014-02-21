@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using System;
 
 public class Theme : MonoBehaviour
 {
@@ -20,22 +21,13 @@ public class Theme : MonoBehaviour
     public GameObject[] Pillar;
     public ThemeElement[] ChestElement;
     public GameObject[] Chest;
+    public ProbabilityPool<BaseRoomMod> BaseMods = ProbabilityPool<BaseRoomMod>.Create();
+    public ProbabilityPool<FlexRoomMod> FlexMods = ProbabilityPool<FlexRoomMod>.Create();
+    public ProbabilityPool<FinalRoomMod> FinalMods = ProbabilityPool<FinalRoomMod>.Create();
+    public Keywords[] Keywords;
+    public ESFlags<Keywords> KeywordFlags;
 
-    public Keywords[] keywords = new Keywords[0];
-    private ESFlags<Keywords> keywordFlags;
-    public ESFlags<Keywords> Keywords
-    {
-        get
-        {
-            if (keywordFlags == null)
-            {
-                keywordFlags = new ESFlags<Keywords>(keywords);
-            }
-            return keywordFlags;
-        }
-    }
-
-    public void Init()
+    public virtual void Init()
     {
         WallElement = Generate(Wall);
         DoorElement = Generate(Door);
@@ -44,6 +36,23 @@ public class Theme : MonoBehaviour
         StairDownElement = Generate(StairDown);
         PillarElement = Generate(Pillar);
         ChestElement = Generate(Chest);
+        KeywordFlags = (ESFlags<Keywords>)Keywords;
+    }
+
+    protected void AddMod(RoomModifier mod, double multiplier, bool unique = false)
+    {
+        if (mod is BaseRoomMod)
+        {
+            BaseMods.Add((BaseRoomMod)mod, multiplier, unique || mod.Unique);
+        }
+        else if (mod is FlexRoomMod)
+        {
+            FlexMods.Add((FlexRoomMod)mod, multiplier, unique || mod.Unique);
+        }
+        else if (mod is FinalRoomMod)
+        {
+            FinalMods.Add((FinalRoomMod)mod, multiplier, unique || mod.Unique);
+        }
     }
 
     protected ThemeElement[] Generate(GameObject[] objs)

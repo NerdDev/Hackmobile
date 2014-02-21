@@ -2,8 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TrapRoomMod : RoomModifier
+public class TrapRoomMod : FlexRoomMod
 {
+    public override RoomModType ModType { get { return RoomModType.Flexible; } }
+    public override string Name { get { return "Trap Room"; } }
     public override bool Unique { get { return true; } }
     protected static ProbabilityList<int> treasureSizeList = new ProbabilityList<int>();
     static TrapRoomMod()
@@ -67,15 +69,5 @@ public class TrapRoomMod : RoomModifier
         }
         #endregion
         return true;
-    }
-
-    public override RoomModType GetType()
-    {
-        return RoomModType.Flexible;
-    }
-
-    public override string GetName()
-    {
-        return "Trap Room";
     }
 }

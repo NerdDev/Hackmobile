@@ -30,7 +30,6 @@ public class LevelGenerator
 
     // Room modifier probabilies
     public static int maxFlexMod { get { return 5; } } //Max not inclusive
-    public static int chanceNoFinalMod { get { return 40; } }
 
     // Cluster probabilities
     public static int minRoomClusters { get { return 2; } }
@@ -200,7 +199,7 @@ public class LevelGenerator
     protected List<RoomModifier> PickMods()
     {
         List<RoomModifier> mods = new List<RoomModifier>();
-        RoomModifier baseMod = RoomModifier.GetBase(Rand);
+        BaseRoomMod baseMod = Theme.BaseMods.Get(Rand);
         mods.Add(baseMod);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -209,8 +208,8 @@ public class LevelGenerator
         }
         #endregion
         int numFlex = Rand.Next(1, maxFlexMod);
-        List<RoomModifier> flexMods = RoomModifier.GetFlexible(Rand, numFlex);
-        mods.AddRange(flexMods);
+        List<FlexRoomMod> flexMods = Theme.FlexMods.Get(Rand, numFlex);
+        mods.AddRange(flexMods.Cast<RoomModifier>());
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -221,9 +220,9 @@ public class LevelGenerator
             }
         }
         #endregion
-        if (chanceNoFinalMod < Rand.Next(100))
+        FinalRoomMod finalMod;
+        if (Theme.FinalMods.Get(Rand, out finalMod))
         {
-            RoomModifier finalMod = RoomModifier.GetFinal(Rand);
             mods.Add(finalMod);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))

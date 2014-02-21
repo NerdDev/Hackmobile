@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class HiddenRoomMod : RoomModifier
 {
+    public override RoomModType ModType { get { return RoomModType.Flexible; } }
+    public override string Name { get { return "Hidden Room"; } }
+
     public override bool Modify(RoomSpec spec)
     {
         int secretRoomSize = 2;
@@ -38,15 +41,5 @@ public class HiddenRoomMod : RoomModifier
         }
         #endregion
         return true;
-    }
-
-    public override RoomModType GetType()
-    {
-        return RoomModType.Flexible;
-    }
-
-    public override string GetName()
-    {
-        return "Hidden Room";
     }
 }
