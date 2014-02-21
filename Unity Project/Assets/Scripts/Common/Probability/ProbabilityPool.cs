@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-public abstract class ProbabilityPool<T>  
+public abstract class ProbabilityPool<T>
 {
-    static protected int maxProbDiv = 100000;
+    public const double MAX_MULTIPLIER = 100000;
+    public const double MIN_MULTIPLIER = .0000000001;
     public bool Fresh { get; protected set; }
 
     public static ProbabilityPool<T> Create()
@@ -48,10 +49,17 @@ public abstract class ProbabilityPool<T>
 
     public List<T> Get(System.Random random, int amount)
     {
-        if (amount == 1)
-            return new List<T>(new[] {Get(random)});
-        List<T> picks = new List<T>();
         T item;
+        if (amount == 1)
+        {
+            List<T> ret = new List<T>(1);
+            if (Get(random, out item))
+            {
+                ret.Add(item);
+            }
+            return ret;
+        }
+        List<T> picks = new List<T>();
         for (int i = 0; i < amount; i++)
         {
             if (Get(random, out item))

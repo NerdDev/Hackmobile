@@ -110,8 +110,8 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public NPC SpawnNPC(GridSpace g, ESFlags<Keywords> keywords)
     {
         LeveledPool<NPC> pool = GetPool(keywords);
-        NPC n = pool.Get(Probability.SpawnRand);
-        if (n == null)
+        NPC n;
+        if (!pool.Get(Probability.SpawnRand, out n, BigBoss.Player.Level))
         {
             throw new ArgumentException("NPC Pool was empty for keywords: " + keywords);
         }
@@ -138,8 +138,8 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return pool;
     }
 
-    protected float DefaultLevelCurve(int level)
+    protected double DefaultLevelCurve(ushort gravity, ushort entry)
     {
-        return 1F;
+        return 1d;
     }
 }

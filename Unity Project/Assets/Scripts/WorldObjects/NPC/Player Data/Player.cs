@@ -16,7 +16,7 @@ public class Player : NPC
     public PlayerProfessions PlayerChosenProfession;
     //Stored in the stats class
     //public int level = 10; // Just for testing.  'Prolly change this to 1 later.
-    public int Level { get { return Stats.Level; } }
+    public ushort Level { get { return Stats.Level; } }
     #endregion
 
     #region Player Stats (For all the Player-only statistics)
