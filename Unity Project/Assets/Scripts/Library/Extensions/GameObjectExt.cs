@@ -50,4 +50,12 @@ public static class GameObjectExt
         WOWrapper instance = gObj.GetComponent<WOWrapper>();
         return (W)instance.WO;
     }
+
+    public static void MoveStepWise(this GameObject obj, Vector3 target, float speed)
+    {
+        Vector3 heading = new Vector3(target.x - obj.transform.position.x, 0f, target.z - obj.transform.position.z);
+        obj.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
+        Quaternion toRot = Quaternion.LookRotation(heading);
+        obj.transform.rotation = toRot;
+    }
 }

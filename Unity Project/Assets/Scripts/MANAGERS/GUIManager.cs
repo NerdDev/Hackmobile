@@ -21,6 +21,7 @@ public class GUIManager : MonoBehaviour, IManager
 
     internal ItemChest currentChest;
     internal string currentSpell;
+    internal GUIButton selectedButton;
 
     internal bool categoryDisplay = false;
     internal bool displayItem = false;
@@ -73,7 +74,6 @@ public class GUIManager : MonoBehaviour, IManager
 
     public void OpenMenuGUI()
     {
-
         List<GameObject> buttons = new List<GameObject>();
         GUIButton startButton = CreateButton("Start");
         buttons.Add(startButton.gameObject);
@@ -264,6 +264,9 @@ public class GUIManager : MonoBehaviour, IManager
                     BigBoss.PlayerInput.defaultPlayerInput = false;
                     BigBoss.PlayerInput.spellInput = true;
                     currentSpell = spellButton.refObject as string;
+                    spellButton.defaultColor = spellButton.hover;
+                    selectedButton = spellButton;
+                    spellButton.UpdateColor(true, true);
                 });
             }
             GUIButton cancelSpellButton =  CreateButton(grid, "Cancel Spell");
@@ -272,6 +275,9 @@ public class GUIManager : MonoBehaviour, IManager
                     BigBoss.PlayerInput.defaultPlayerInput = true;
                     BigBoss.PlayerInput.spellInput = false;
                     currentSpell = null;
+                    selectedButton.defaultColor = cancelSpellButton.defaultColor;
+                    selectedButton.UpdateColor(true, true);
+
                 });
             GUIButton castSpellButton = CreateButton(grid, "Cast Spell");
             castSpellButton.OnSingleClick = new Action(() =>
@@ -290,6 +296,7 @@ public class GUIManager : MonoBehaviour, IManager
                     }
                 }
                 spellTargets.Clear();
+                currentSpell = null;
             });
             grid.Reposition();
         }

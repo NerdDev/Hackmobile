@@ -44,6 +44,10 @@
 						<type>DamageFire</type>
 						<strength>12</strength>
 					</effect>
+					<effect>
+						<type>FireBallVisual</type>
+						<speed>2</speed>
+					</effect>
 				</targeter>
 			</spell>
 			<spell>

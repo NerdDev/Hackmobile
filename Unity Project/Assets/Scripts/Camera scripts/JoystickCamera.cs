@@ -65,8 +65,8 @@ public class JoystickCamera : MonoBehaviour
 
 #if !UNITY_EDITOR
         useMouse = false;
-        xSpeed = 400;
-        panSpeed = 120f;
+        xSpeed = 350;
+        panSpeed = 80f;
 #endif
     }
 

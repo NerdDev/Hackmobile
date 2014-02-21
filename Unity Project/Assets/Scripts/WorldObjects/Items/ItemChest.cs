@@ -4,7 +4,20 @@ using System.Collections.Generic;
 
 public class ItemChest : MonoBehaviour
 {
-    public GridSpace Location;
+
+    internal GridSpace Location
+    {
+        get
+        {
+            Vector2 currentLoc = new Vector2(gameObject.transform.position.x.Round(), gameObject.transform.position.z.Round());
+            return BigBoss.Levels.Level[currentLoc.x.ToInt(), currentLoc.y.ToInt()];
+        }
+    }
+
+    void Start()
+    {
+        Location._chest = this;
+    }
 
     public void init()
     {

@@ -22,7 +22,7 @@ public class GridSpace
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
     internal Inventory inventory = new Inventory();
-    private ItemChest _chest;
+    internal ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
 
     public GridSpace(GridType type, int x, int y)
@@ -81,7 +81,7 @@ public class GridSpace
         if (_chest == null)
         {
             _chest = (GameObject.Instantiate(BigBoss.Gooey.ChestPrefab) as GameObject).GetComponent<ItemChest>();
-            _chest.Location = this;
+            //_chest.Location = this;
             _chest.init();
         }
         inventory.Add(i);
