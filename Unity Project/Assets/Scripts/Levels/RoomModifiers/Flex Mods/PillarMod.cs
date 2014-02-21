@@ -30,7 +30,7 @@ public class PillarMod : FlexRoomMod
                 {
                     if (!arr.AlternatesSides(x, y, Draw.Walkable()))
                     { // If not blocking a path
-                        arr[x, y] = GridType.Wall;
+                        arr[x, y] = GridType.Pillar;
                     }
                 }
             }
