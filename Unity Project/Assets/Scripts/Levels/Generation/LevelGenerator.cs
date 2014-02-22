@@ -16,10 +16,6 @@ public class LevelGenerator
     public static int minRectSize { get { return 8; } }
     public static int maxRectSize { get { return 15; } }
 
-    // Circular Room Size (including walls)
-    public static int minRadiusSize { get { return 6; } }
-    public static int maxRadiusSize { get { return 10; } }
-
     // Amount to shift rooms
     public static int shiftRange { get { return 10; } } //Max not inclusive
 
@@ -27,9 +23,6 @@ public class LevelGenerator
     public static int doorsMin { get { return 1; } }
     public static int doorsMax { get { return 5; } } //Max not inclusive
     public static int minDoorSpacing { get { return 1; } }
-
-    // Room modifier probabilies
-    public static int maxFlexMod { get { return 5; } } //Max not inclusive
 
     // Cluster probabilities
     public static int minRoomClusters { get { return 2; } }
@@ -204,7 +197,7 @@ public class LevelGenerator
             BigBoss.Debug.w(Logs.LevelGen, "Picked Base Mod: " + baseMod);
         }
         #endregion
-        int numFlex = Rand.Next(1, maxFlexMod);
+        int numFlex = Rand.Next(baseMod.MaxFlexMods, baseMod.MaxFlexMods);
         int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * Rand.NextDouble()));
         int numFill = numFlex - numHeavy;
         List<HeavyRoomMod> heavyMods = Theme.HeavyMods.Get(Rand, numHeavy);
