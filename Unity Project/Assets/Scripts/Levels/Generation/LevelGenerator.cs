@@ -14,7 +14,7 @@ public class LevelGenerator
 
     // Box Room Size (including walls)
     public static int minRectSize { get { return 8; } }
-    public static int maxRectSize { get { return 20; } }
+    public static int maxRectSize { get { return 15; } }
 
     // Circular Room Size (including walls)
     public static int minRadiusSize { get { return 6; } }
@@ -60,10 +60,7 @@ public class LevelGenerator
         float startTime = 0;
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.printHeader(Logs.LevelGenMain, "Generating Level: " + Depth);
-            }
+            BigBoss.Debug.printHeader(Logs.LevelGenMain, "Generating Level: " + Depth);
             startTime = Time.realtimeSinceStartup;
         }
         #endregion
@@ -208,13 +205,27 @@ public class LevelGenerator
         }
         #endregion
         int numFlex = Rand.Next(1, maxFlexMod);
-        List<FlexRoomMod> flexMods = Theme.FlexMods.Get(Rand, numFlex);
-        mods.AddRange(flexMods.Cast<RoomModifier>());
+        int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * Rand.NextDouble()));
+        int numFill = numFlex - numHeavy;
+        List<HeavyRoomMod> heavyMods = Theme.HeavyMods.Get(Rand, numHeavy);
+        mods.AddRange(heavyMods.Cast<RoomModifier>());
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.w(Logs.LevelGen, "Picked " + numFlex + " flex modifiers: ");
-            foreach (RoomModifier mod in flexMods)
+            BigBoss.Debug.w(Logs.LevelGen, "Picked " + numHeavy + " heavy modifiers: ");
+            foreach (RoomModifier mod in heavyMods)
+            {
+                BigBoss.Debug.w(Logs.LevelGen, 1, mod.ToString());
+            }
+        }
+        #endregion
+        List<FillRoomMod> fillMods = Theme.FillMods.Get(Rand, numFill);
+        mods.AddRange(fillMods.Cast<RoomModifier>());
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Picked " + numFill + " fill modifiers: ");
+            foreach (RoomModifier mod in fillMods)
             {
                 BigBoss.Debug.w(Logs.LevelGen, 1, mod.ToString());
             }
@@ -778,7 +789,7 @@ public class LevelGenerator
             {
                 double farthest;
                 double closest;
-                obj.Grids.Bounding.DistanceTo(otherStair, out closest, out farthest);
+                obj.Bounding.DistanceTo(otherStair, out closest, out farthest);
                 if (farthest < MinStairDist)
                 { // Inside or way too close
                     continue;

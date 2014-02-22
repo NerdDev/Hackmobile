@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class GiantPillarMod : FlexRoomMod
+public class GiantPillarMod : HeavyRoomMod
 {
     public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Giant Pillar"; } }
@@ -11,7 +11,7 @@ public class GiantPillarMod : FlexRoomMod
     public override bool Modify(RoomSpec spec)
     {
         int size = spec.Random.Next(3, 5);
-        BigBoss.Debug.w("Size: " + size);
+        BigBoss.Debug.w(Logs.LevelGen, "Size: " + size);
         // Add an extra 2 for stroke width for analysis
         size += 2;
         List<Bounding> locations = spec.Grids.GetSquares(size, size, false, new StrokedAction<GridType>()

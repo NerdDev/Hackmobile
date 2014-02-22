@@ -11,7 +11,7 @@ public class UndeadTombTheme : Theme
         AddMod(new CircleRoom(), .5d);
         AddMod(new RectangularRoom(), 2d);
         AddMod(new SquareRoom(), 1d);
-        AddMod(new GiantPillarMod(), 1.5);
+        AddMod(new GiantPillarMod(), 1);
         AddMod(new HiddenRoomMod(), .5);
         AddMod(new PillarMod(), 1);
         AddMod(new SplitterMod(), 1);

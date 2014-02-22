@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class TreasureRoomMod : FlexRoomMod
+class TreasureRoomMod : HeavyRoomMod
 {
     public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Treasure Room"; } }

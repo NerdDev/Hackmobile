@@ -22,7 +22,8 @@ public class Theme : MonoBehaviour
     public ThemeElement[] ChestElement;
     public GameObject[] Chest;
     public ProbabilityPool<BaseRoomMod> BaseMods = ProbabilityPool<BaseRoomMod>.Create();
-    public ProbabilityPool<FlexRoomMod> FlexMods = ProbabilityPool<FlexRoomMod>.Create();
+    public ProbabilityPool<HeavyRoomMod> HeavyMods = ProbabilityPool<HeavyRoomMod>.Create();
+    public ProbabilityPool<FillRoomMod> FillMods = ProbabilityPool<FillRoomMod>.Create();
     public ProbabilityPool<FinalRoomMod> FinalMods = ProbabilityPool<FinalRoomMod>.Create();
     public Keywords[] Keywords;
     public ESFlags<Keywords> KeywordFlags;
@@ -45,13 +46,21 @@ public class Theme : MonoBehaviour
         {
             BaseMods.Add((BaseRoomMod)mod, multiplier, unique || mod.Unique);
         }
-        else if (mod is FlexRoomMod)
+        else if (mod is HeavyRoomMod)
         {
-            FlexMods.Add((FlexRoomMod)mod, multiplier, unique || mod.Unique);
+            HeavyMods.Add((HeavyRoomMod)mod, multiplier, unique || mod.Unique);
+        }
+        else if (mod is FillRoomMod)
+        {
+            FillMods.Add((FillRoomMod)mod, multiplier, unique || mod.Unique);
         }
         else if (mod is FinalRoomMod)
         {
             FinalMods.Add((FinalRoomMod)mod, multiplier, unique || mod.Unique);
+        }
+        else
+        {
+            throw new ArgumentException("Cannot inherit directly from RoomModifier");
         }
     }
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PillarMod : FlexRoomMod
+public class PillarMod : FillRoomMod
 {
     public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Pillars"; } }

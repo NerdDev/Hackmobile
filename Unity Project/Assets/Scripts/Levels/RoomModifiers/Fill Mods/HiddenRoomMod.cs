@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class HiddenRoomMod : RoomModifier
+public class HiddenRoomMod : FillRoomMod
 {
     public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Hidden Room"; } }

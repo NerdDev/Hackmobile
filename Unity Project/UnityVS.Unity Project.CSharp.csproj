@@ -7,7 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
@@ -118,14 +119,15 @@
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\CircleRoom.cs" />
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\RectangularRoom.cs" />
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\SquareRoom.cs" />
+    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Fill Mods\FillRoomMod.cs" />
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\Final Mods\FinalRoomMod.cs" />
-    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Flex Mods\FlexRoomMod.cs" />
-    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Flex Mods\GiantPillarMod.cs" />
-    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Flex Mods\HiddenRoomMod.cs" />
-    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Flex Mods\PillarMod.cs" />
-    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Flex Mods\SplitterMod.cs" />
-    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Flex Mods\TrapRoomMod.cs" />
-    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Flex Mods\TreasureRoomMod.cs" />
+    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Heavy Mods\HeavyRoomMod.cs" />
+    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Heavy Mods\GiantPillarMod.cs" />
+    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Fill Mods\HiddenRoomMod.cs" />
+    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Fill Mods\PillarMod.cs" />
+    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Heavy Mods\SplitterMod.cs" />
+    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Fill Mods\TrapRoomMod.cs" />
+    <Compile Include="Assets\Scripts\Levels\RoomModifiers\Heavy Mods\TreasureRoomMod.cs" />
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModifier.cs" />
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomModType.cs" />
     <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomSpec.cs" />
@@ -578,5 +580,6 @@
     <None Include="Assets\Tools\AudioToolkit\AudioToolkit\AudioToolkit_FreeVersion.dll" />
     <None Include="Assets\Tools\Cruncher\Scripts\CruncherScripts.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2012\UnityVS.CSharp.targets" />
 </Project>

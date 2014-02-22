@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TrapRoomMod : FlexRoomMod
+public class TrapRoomMod : FillRoomMod
 {
     public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Trap Room"; } }
