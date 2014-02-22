@@ -209,7 +209,7 @@ public class LevelGenerator
         }
         #endregion
         int numFlex = Rand.Next(1, maxFlexMod);
-        List<RoomModifier> flexMods = RoomModifier.GetFlexible(numFlex, Rand);
+        List<RoomModifier> flexMods = RoomModifier.GetFlexible(Rand, numFlex);
         mods.AddRange(flexMods);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -335,7 +335,7 @@ public class LevelGenerator
         obj.Shift(-1, 0); // Shift to overlapping slightly
         MultiMap<bool> visited = new MultiMap<bool>();
         visited[0, 0] = true;
-        ProbabilityList<ClusterInfo> shiftOptions = new ProbabilityList<ClusterInfo>(Rand);
+        ProbabilityList<ClusterInfo> shiftOptions = new ProbabilityList<ClusterInfo>();
         Queue<Point> shiftQueue = new Queue<Point>();
         shiftQueue.Enqueue(new Point());
         Container2D<GridType> clusterGrid = cluster.GetGrid();
@@ -400,7 +400,7 @@ public class LevelGenerator
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
         List<Value2D<GridType>> placed = new List<Value2D<GridType>>(0);
-        while (shiftOptions.Take(out info))
+        while (shiftOptions.Take(Rand, out info))
         {
             clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GridType>(clusterDoorOptions)).Shift(info.Shift));
             #region Debug

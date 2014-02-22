@@ -47,5 +47,20 @@ namespace System
         {
             return rand.Next(2) == 1;
         }
+
+        public static float NextAngle(this System.Random rand)
+        {
+            return (float)(rand.NextDouble() * 360);
+        }
+
+        public static int NextNegative(this System.Random rand)
+        {
+            return rand.NextBool() ? -1 : 1;
+        }
+
+        public static float NextFloat(this System.Random rand)
+        {
+            return (float)rand.NextDouble();
+        }
     }
 }

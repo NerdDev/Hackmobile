@@ -172,6 +172,14 @@ namespace XML
             return defaultVal;
         }
 
+        public ushort SelectUShort(string toParse, ushort defaultVal = 0)
+        {
+            XMLNode x = this.Select(toParse);
+            if (x != null && !string.IsNullOrEmpty(x.Content))
+                return x.Content.ToUShort();
+            return defaultVal;
+        }
+
         public double SelectDouble(string toParse, double defaultVal = 0)
         {
             XMLNode x = this.Select(toParse);

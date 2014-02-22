@@ -101,6 +101,19 @@ public static class Nifty
         }
     }
 
+    static public ushort ToUShort(this string toParse)
+    {
+        ushort temp;
+        if (ushort.TryParse(toParse, out temp))
+        {
+            return temp;
+        }
+        else
+        {
+            throw new ArgumentException("String cannot be parsed to ushort!");
+        }
+    }
+
     static public double ToDouble(this string toParse)
     {
         double temp;

@@ -74,9 +74,8 @@
      <Compile Include="Assets\Scripts\Common\Value2D.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
      <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\ILayoutObject.cs" />
      <Compile Include="Assets\Scripts\GUI\ScrollingGrid.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generation\LayoutCluster.cs" />
+     <Compile Include="Assets\Scripts\Levels\Generation\ILayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LevelGenerator.cs" />
@@ -90,6 +89,7 @@
      <Compile Include="Assets\Scripts\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Levels\LevelBuilder\LevelBuilder.cs" />
      <Compile Include="Assets\Scripts\Levels\LevelBuilder\Theme.cs" />
+     <Compile Include="Assets\Scripts\Levels\LevelBuilder\ThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\CircleRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\RectangularRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\SquareRoom.cs" />
@@ -105,6 +105,7 @@
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\RoomSpec.cs" />
      <Compile Include="Assets\Scripts\Levels\Stairs\StairsDown.cs" />
      <Compile Include="Assets\Scripts\Levels\Stairs\StairsUp.cs" />
+     <Compile Include="Assets\Scripts\Library\Axis.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />

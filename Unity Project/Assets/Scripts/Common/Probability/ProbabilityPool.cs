@@ -3,29 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-public abstract class ProbabilityPool<T>  
+public abstract class ProbabilityPool<T>
 {
-    public System.Random Rand;
-    static protected int maxProbDiv = 100000;
+    public const double MAX_MULTIPLIER = 100000;
+    public const double MIN_MULTIPLIER = .0000000001;
     public bool Fresh { get; protected set; }
 
-    public static ProbabilityPool<T> Create(System.Random rand = null)
+    public static ProbabilityPool<T> Create()
     {
-        return new ProbabilityList<T>(rand);
+        return new ProbabilityList<T>();
     }
 
-    public ProbabilityPool(System.Random rand)
+    public ProbabilityPool()
     {
-        Rand = rand;
-    }
-
-    public ProbabilityPool() : this(Probability.Rand)
-    {
-    }
-
-    public ProbabilityPool(ProbabilityList<T> rhs)
-    {
-        this.Rand = rhs.Rand;
     }
 
     public abstract void Add(T item, double multiplier, bool unique);
@@ -48,24 +38,31 @@ public abstract class ProbabilityPool<T>
         }
     }
 
-    public abstract bool Get(out T item);
+    public abstract bool Get(System.Random random, out T item);
 
-    public T Get()
+    public T Get(System.Random random)
     {
         T item;
-        Get(out item);
+        Get(random, out item);
         return item;
     }
 
-    public List<T> Get(int amount)
+    public List<T> Get(System.Random random, int amount)
     {
-        if (amount == 1)
-            return new List<T>(new[] {Get()});
-        List<T> picks = new List<T>();
         T item;
+        if (amount == 1)
+        {
+            List<T> ret = new List<T>(1);
+            if (Get(random, out item))
+            {
+                ret.Add(item);
+            }
+            return ret;
+        }
+        List<T> picks = new List<T>();
         for (int i = 0; i < amount; i++)
         {
-            if (Get(out item))
+            if (Get(random, out item))
                 picks.Add(item);
         }
         return picks;

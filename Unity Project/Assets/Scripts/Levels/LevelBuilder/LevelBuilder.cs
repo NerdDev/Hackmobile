@@ -5,6 +5,8 @@ using System;
 
 public class LevelBuilder : MonoBehaviour
 {
+    const float _chestBuffer = .05F;
+
     private static GameObject holder;
     public Theme Theme;
     private int combineCounter = 0;
@@ -72,7 +74,7 @@ public class LevelBuilder : MonoBehaviour
             }
             else
             {
-                space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.Get(space.Type)) });
+                space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.Get(space.Type, level.Random).GO) });
             }
         }
     }
@@ -84,21 +86,22 @@ public class LevelBuilder : MonoBehaviour
         if (level.DrawAround(space.X, space.Y, true, Draw.FloorTypeSpace()))
         {
             space.Deploys = new List<GridDeploy>(2);
-            GridDeploy pillarDeploy = new GridDeploy(level.Theme.Pillar);
+            GridDeploy pillarDeploy = new GridDeploy(level.Theme.Pillar.Random(level.Random));
             space.Deploys.Add(pillarDeploy);
-            space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
+            space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor, level.Random).GO));
             return;
         }
         // Normal
-        space.Deploys = new List<GridDeploy>(new [] { new GridDeploy(level.Theme.Get(GridType.Wall)) });
+        space.Deploys = new List<GridDeploy>(new[] { new GridDeploy(level.Theme.Get(GridType.Wall, level.Random).GO) });
     }
 
     public static void HandleDoor(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(2);
-        GridDeploy doorDeploy = new GridDeploy(level.Theme.Get(GridType.Door));
+        ThemeElement doorElement = level.Theme.Get(GridType.Door, level.Random);
+        GridDeploy doorDeploy = new GridDeploy(doorElement.GO);
         space.Deploys.Add(doorDeploy);
-        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
+        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor, level.Random).GO));
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
@@ -107,47 +110,29 @@ public class LevelBuilder : MonoBehaviour
             bool neg = level.Random.NextBool();
             if (walkableDir == GridDirection.HORIZ)
             {
-                doorDeploy.Rotation = neg ? -90 : 90;
+                PlaceFlush(doorDeploy, doorElement, neg ? GridLocation.LEFT : GridLocation.RIGHT);
             }
-            else if (neg)
+            else
             {
-                doorDeploy.Rotation = 180;
+                PlaceFlush(doorDeploy, doorElement, neg ? GridLocation.BOTTOM : GridLocation.TOP);
             }
         }
         // Diagonal door
         else if (level.AlternatesCorners(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
         {
-            doorDeploy.Rotation = 45;
-            doorDeploy.X = -0.25F;
-            if (walkableDir == GridDirection.DIAGTLBR)
-            {
-                doorDeploy.Rotation *= -1;
-                doorDeploy.X *= -1;
-            }
-            doorDeploy.Z = 0.25F;
+            doorDeploy.Rotation = walkableDir == GridDirection.DIAGTLBR ? -45 : 45;
         }
         // Offset alternates
         else if (level.AlternateSidesOffset(space.X, space.Y, Draw.Not(Draw.WalkableSpace()), out offsetLocation))
         {
-            switch (offsetLocation)
-            {
-                case GridLocation.LEFT:
-                    doorDeploy.Rotation = 90;
-                    break;
-                case GridLocation.RIGHT:
-                    doorDeploy.Rotation = -90;
-                    break;
-                case GridLocation.TOP:
-                    doorDeploy.Rotation = 180;
-                    break;
-            }
+            PlaceFlush(doorDeploy, doorElement, offsetLocation);
         }
     }
 
     public static void HandleStairs(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(1);
-        GridDeploy stairDeploy = new GridDeploy(level.Theme.Get(space.Type));
+        GridDeploy stairDeploy = new GridDeploy(level.Theme.Get(space.Type, level.Random).GO);
         space.Deploys.Add(stairDeploy);
         Value2D<GridSpace> val;
         if (level.Array.GetPointAround(space.X, space.Y, false, Draw.IsType(GridType.StairPlace), out val))
@@ -176,21 +161,91 @@ public class LevelBuilder : MonoBehaviour
     protected static void HandleChest(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(2);
-        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor)));
-        GridDeploy chestDeploy = new GridDeploy(level.Theme.Get(GridType.Chest));
+        space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor, level.Random).GO));
+        ThemeElement chestElement = level.Theme.Get(GridType.Chest, level.Random);
+        GridDeploy chestDeploy = new GridDeploy(chestElement.GO);
         space.Deploys.Add(chestDeploy);
-        Value2D<GridSpace> wall;
-        //if (level.GetRandomPointAround(space.X, space.Y, false, level.Random, Draw.WallTypeSpace(), out wall))
-        //{ // If wall around, make it flush
-        //    chestDeploy.X
-        //}
-        //else
-        //{ // Place randomly in the middle
-            chestDeploy.Rotation = (float)(level.Random.NextDouble() * 360);
-            chestDeploy.X = (float)(level.Random.NextDouble() * .5 - .25);
-            chestDeploy.Z = (float)(level.Random.NextDouble() * .5 - .25);
-        //}
+        GridLocation wall;
+        if (level.GetRandomLocationAround(space.X, space.Y, false, level.Random, Draw.WallTypeSpace(), out wall))
+        { // If wall around, make it flush
+            PlaceFlush(chestDeploy, chestElement, wall, _chestBuffer);
+        }
+        else
+        { // Place randomly in the middle
+            PlaceRandomlyInside(level.Random, chestDeploy, chestElement, _chestBuffer);
+        }
+    }
+    #endregion
 
+    #region Helpers
+    protected static void PlaceFlush(GridDeploy deploy, ThemeElement element, GridLocation loc, float buffer = 0F, bool rough = false)
+    {
+        switch (loc)
+        {
+            case GridLocation.TOP:
+                deploy.Rotation = 180;
+                deploy.X = -element.Bounds.center.x;
+                deploy.Z = GetInside(element, Axis.Z, deploy.Rotation, buffer, rough);
+                break;
+            case GridLocation.BOTTOM:
+                deploy.X = -element.Bounds.center.x;
+                deploy.Z = -GetInside(element, Axis.Z, deploy.Rotation, buffer, rough);
+                break;
+            case GridLocation.LEFT:
+                deploy.Rotation = 90;
+                deploy.X = -GetInside(element, Axis.X, deploy.Rotation, buffer, rough);
+                deploy.Z = -element.Bounds.center.z;
+                break;
+            case GridLocation.RIGHT:
+                deploy.Rotation = -90;
+                deploy.X = GetInside(element, Axis.X, deploy.Rotation, buffer, rough);
+                deploy.Z = -element.Bounds.center.z;
+                break;
+        }
+    }
+
+    protected static void PlaceRandomlyInside(System.Random random, GridDeploy deploy, ThemeElement element, float buffer = 0F)
+    {
+        deploy.Rotation = random.NextAngle();
+        deploy.X = RandomInside(random, element, Axis.X, deploy.Rotation, buffer);
+        deploy.Z = RandomInside(random, element, Axis.Z, deploy.Rotation, buffer);
+    }
+
+    protected static float RandomInside(System.Random random, ThemeElement element, Axis axis, float yRotation, float buffer = 0F, bool rough = true)
+    {
+        return GetInside(element, axis, yRotation, buffer, rough) * random.NextNegative() * random.NextFloat();
+    }
+
+    protected static float GetInside(ThemeElement element, Axis axis, float yRotation, float buffer = 0F, bool rough = true)
+    {
+        if (rough)
+        {
+            return .5F - buffer;
+        }
+        else
+        {
+            yRotation += element.GO.transform.rotation.y;
+            double radians = yRotation * Math.PI / 180d;
+            float axisValue;
+            switch (axis)
+            {
+                case Axis.X:
+                    axisValue = (float)(Math.Abs(element.Bounds.extents.x * Math.Cos(radians)) + Math.Abs(element.Bounds.extents.z * Math.Sin(radians)));
+                    break;
+                case Axis.Y:
+                    axisValue = element.Bounds.size.y;
+                    break;
+                default:
+                    axisValue = (float)(Math.Abs(element.Bounds.extents.x * Math.Sin(radians)) + Math.Abs(element.Bounds.extents.z * Math.Cos(radians)));
+                    break;
+            }
+            float remaining = 0.5F - axisValue - buffer;
+            if (remaining < 0F)
+            {
+                return 0;
+            }
+            return remaining;
+        }
     }
     #endregion
 

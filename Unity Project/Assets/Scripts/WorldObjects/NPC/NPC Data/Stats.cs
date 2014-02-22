@@ -10,7 +10,7 @@ public class Stats : IXmlParsable
     public int CurrentPower;
     public float Hunger;
     public float MaxEncumbrance;
-    public int Level;
+    public ushort Level;
     public float CurrentXP;
     public float XPToNextLevel; //needs calc'd on NPC
     public float hungerRate;
@@ -25,7 +25,7 @@ public class Stats : IXmlParsable
     {
         MaxHealth = x.SelectInt("maxhealth");
         MaxPower = x.SelectInt("maxpower");
-        Level = x.SelectInt("level");
+        Level = x.SelectUShort("level");
         initialize();
     }
 

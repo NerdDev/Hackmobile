@@ -20,19 +20,12 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             max = value;
         }
     }
-
-    public ProbabilityList(System.Random rand)
-        : base(rand)
-    {
-    }
-
+    
     public ProbabilityList()
-        : this(Probability.Rand)
     {
     }
 
     public ProbabilityList(ProbabilityList<T> rhs)
-        : base(rhs)
     {
         this.Max = rhs.Max;
         foreach (ProbContainer cont in rhs.itemList)
@@ -77,15 +70,15 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             BigBoss.Debug.w(log, "Percent - Alotted - Item");
             foreach (ProbContainer cont in itemList)
             {
-                BigBoss.Debug.w(log, (cont.Multiplier / max * 100) + "% - " + cont.Multiplier + " - " + cont.Multiplier + " - " + cont.Item);
+                BigBoss.Debug.w(log, (cont.Multiplier / max * 100) + "% - " + cont.Multiplier + " - " + cont.Item);
             }
             BigBoss.Debug.printFooter(log, "Probability List - " + name);
         }
     }
 
-    protected bool Get(out T item, out int resultIndex, bool take)
+    protected bool Get(System.Random random, out T item, out int resultIndex, bool take)
     {
-        double picked = Rand.NextDouble() * Max;
+        double picked = random.NextDouble() * Max;
         resultIndex = 0;
         double curNum = 0;
         foreach (ProbContainer cont in itemList)
@@ -112,32 +105,32 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         Fresh = false;
     }
 
-    public bool Get(out T item, out int resultIndex)
+    public bool Get(System.Random random, out T item, out int resultIndex)
     {
-        return Get(out item, out resultIndex, false);
+        return Get(random, out item, out resultIndex, false);
     }
 
-    public bool Take(out T item, out int resultIndex)
+    public bool Take(System.Random random, out T item, out int resultIndex)
     {
-        return Get(out item, out resultIndex, true);
+        return Get(random, out item, out resultIndex, true);
     }
 
-    public bool Take(out T item)
-    {
-        int num;
-        return Take(out item, out num);
-    }
-
-    public override bool Get(out T item)
+    public bool Take(System.Random random, out T item)
     {
         int num;
-        return Get(out item, out num);
+        return Take(random, out item, out num);
     }
 
-    bool GetRemove(out T item)
+    public override bool Get(System.Random random, out T item)
+    {
+        int num;
+        return Get(random, out item, out num);
+    }
+
+    bool GetRemove(System.Random random, out T item)
     {
         int index;
-        if (Get(out item, out index))
+        if (Get(random, out item, out index))
         {
             itemList.RemoveAt(index);
             return true;
@@ -147,7 +140,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public override ProbabilityPool<T> Filter(System.Func<T, bool> filter)
     {
-        ProbabilityList<T> ret = new ProbabilityList<T>(Rand);
+        ProbabilityList<T> ret = new ProbabilityList<T>();
         List<ProbContainer> filtered = new List<ProbContainer>();
         foreach (ProbContainer cont in itemList)
         {

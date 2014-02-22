@@ -323,6 +323,28 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
+    public IEnumerable<GridLocation> DrawLocationsAround(int x, int y, bool cornered, DrawAction<T> action)
+    {
+        if (!cornered)
+        {
+            if (action(this, x, y + 1)) yield return GridLocation.TOP;
+            if (action(this, x, y - 1)) yield return GridLocation.BOTTOM;
+            if (action(this, x + 1, y)) yield return GridLocation.RIGHT;
+            if (action(this, x - 1, y)) yield return GridLocation.LEFT;
+        }
+        else
+        {
+            if (action(this, x - 1, y - 1)) yield return GridLocation.BOTTOMLEFT; // Bottom left
+            if (action(this, x, y - 1)) yield return GridLocation.BOTTOM; // Bottom
+            if (action(this, x + 1, y - 1)) yield return GridLocation.BOTTOMRIGHT; // Bottom right
+            if (action(this, x + 1, y)) yield return GridLocation.RIGHT; // Right
+            if (action(this, x + 1, y + 1)) yield return GridLocation.TOPRIGHT; // Top Right
+            if (action(this, x, y + 1)) yield return GridLocation.TOP; // Top
+            if (action(this, x - 1, y + 1)) yield return GridLocation.TOPLEFT; // Top Left
+            if (action(this, x - 1, y)) yield return GridLocation.LEFT; // Left
+        }
+    }
+
     public bool DrawDir(int x, int y, GridDirection dir, DrawAction<T> action)
     {
         switch (dir)
@@ -404,7 +426,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     }
 
     // Returns list of values around that satisfy
-    public List<T> GetValuesAllAround(int x, int y, bool cornered, DrawAction<T> tester)
+    public List<T> GetValuesAround(int x, int y, bool cornered, DrawAction<T> tester)
     {
         List<T> ret = new List<T>(cornered ? 9 : 4);
         this.DrawAround(x, y, cornered, (arr, x2, y2) =>
@@ -467,7 +489,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
 
     public bool GetRandomValueAround(int x, int y, bool cornered, System.Random rand, DrawAction<T> tester, out T val)
     {
-        List<T> options = this.GetValuesAllAround(x, y, cornered, tester);
+        List<T> options = this.GetValuesAround(x, y, cornered, tester);
         if (options.Count > 0)
         {
             val = options.Random(rand);
@@ -486,6 +508,28 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             return true;
         }
         val = null;
+        return false;
+    }
+
+    public bool GetLocactionsAround(int x, int y, bool cornered, System.Random rand, DrawAction<T> tester, out List<GridLocation> locs)
+    {
+        locs = new List<GridLocation>(cornered ? 9 : 4);
+        foreach (GridLocation loc in DrawLocationsAround(x, y, cornered, tester))
+        {
+            locs.Add(loc);
+        }
+        return locs.Count > 0;
+    }
+
+    public bool GetRandomLocationAround(int x, int y, bool cornered, System.Random rand, DrawAction<T> tester, out GridLocation loc)
+    {
+        List<GridLocation> locs;
+        if (GetLocactionsAround(x, y, cornered, rand, tester, out locs))
+        {
+            loc = locs.Random(rand);
+            return true;
+        }
+        loc = GridLocation.BOTTOM;
         return false;
     }
     #endregion

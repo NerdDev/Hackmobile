@@ -1,35 +1,30 @@
 using System;
 using System.Collections.Generic;
 
+public delegate double LeveledCurve(ushort gravityLevel, ushort entryLevel);
 public class LeveledPool<T> : ProbabilityPool<T>
 {
     HashSet<ProbContainer> prototypePool = new HashSet<ProbContainer>();
-    Func<int, float> levelCurve;
+    LeveledCurve levelCurve;
     ProbabilityPool<T> currentPool;
     int curLevel = -1;
 
-    public LeveledPool(System.Random rand, Func<int, float> curve)
-        : base(rand)
+    public LeveledPool(LeveledCurve curve)
     {
         this.levelCurve = curve;
     }
 
-    public LeveledPool(Func<int, float> curve)
-        : this(Probability.SpawnRand, curve)
-    {
-    }
-
     #region Add
-    public void Add(T item, double probDiv, bool unique, int level)
+    public void Add(T item, double multiplier, bool unique, ushort level)
     {
-        Add(new ProbContainer(item, probDiv, unique, level));
+        Add(new ProbContainer(item, multiplier, unique, level));
     }
 
     protected void Clear()
     {
         if (curLevel != -1)
         {
-            currentPool = ProbabilityPool<T>.Create(Rand);
+            currentPool = ProbabilityPool<T>.Create();
             curLevel = -1;
         }
     }
@@ -41,7 +36,10 @@ public class LeveledPool<T> : ProbabilityPool<T>
             ProbabilityLevItem p = (ProbabilityLevItem)item;
             Add(item, p.Multiplier, p.Unique, p.Level);
         }
-        base.Add(item);
+        else
+        {
+            base.Add(item);
+        }
     }
 
     public override void Add(T item, double multiplier, bool unique)
@@ -56,41 +54,46 @@ public class LeveledPool<T> : ProbabilityPool<T>
     }
     #endregion
 
-    protected void SetFor(int level)
+    public void SetFor(ushort level)
     {
         if (curLevel == level)
             return;
-        currentPool = ProbabilityPool<T>.Create(Rand);
+        currentPool = ProbabilityPool<T>.Create();
         foreach (ProbContainer prototype in prototypePool)
         {
-            float multiplier = levelCurve(prototype.Level);
-            int probDiv = (int)(prototype.ProbDiv / multiplier);
-            if (probDiv < maxProbDiv)
-                currentPool.Add(prototype.Item, probDiv, prototype.Unique);
+            double multiplier = levelCurve(level, prototype.Level);
+            multiplier = prototype.multiplier * multiplier;
+            if (multiplier < MAX_MULTIPLIER && multiplier > MIN_MULTIPLIER)
+                currentPool.Add(prototype.Item, multiplier, prototype.Unique);
         }
         curLevel = level;
     }
 
     #region Get
-    public override bool Get(out T item)
+    public override bool Get(System.Random random, out T item)
     {
-        return Get(out item, BigBoss.Player.Level);
+        if (curLevel < 0)
+        {
+            item = default(T);
+            return false;
+        }
+        return Get(random, out item, (ushort) curLevel);
     }
 
-    public bool Get(out T item, int level)
+    public bool Get(System.Random random, out T item, ushort level)
     {
         SetFor(level);
-        return currentPool.Get(out item);
+        return currentPool.Get(random, out item);
     }
 
-    public List<T> Get(int amount, int level)
+    public List<T> Get(System.Random random, int amount, ushort level)
     {
         SetFor(level);
         List<T> picks = new List<T>();
         T item;
         for (int i = 0; i < amount; i++)
         {
-            if (currentPool.Get(out item))
+            if (currentPool.Get(random, out item))
                 picks.Add(item);
         }
         return picks;
@@ -99,7 +102,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
 
     public override ProbabilityPool<T> Filter(Func<T, bool> filter)
     {
-        LeveledPool<T> ret = new LeveledPool<T>(Rand, levelCurve);
+        LeveledPool<T> ret = new LeveledPool<T>(levelCurve);
         foreach (ProbContainer cont in prototypePool)
         {
             if (filter(cont.Item))
@@ -110,26 +113,41 @@ public class LeveledPool<T> : ProbabilityPool<T>
 
     public override void ClearSkipped()
     {
-        throw new NotImplementedException();
+        if (curLevel != -1)
+            currentPool.ClearSkipped();
     }
 
     public override void ToLog(Logs log, string name = "")
     {
-        throw new NotImplementedException();
+        if (BigBoss.Debug.logging(log))
+        {
+            BigBoss.Debug.printHeader(log, "LeveledPool");
+            BigBoss.Debug.w(log, "Item - Level - Multiplier - Unique");
+            foreach (ProbContainer cont in prototypePool)
+            {
+                BigBoss.Debug.w(log, cont.Item + " - " + cont.Level + " - " + cont.multiplier + " - " + cont.Unique);
+            }
+            if (curLevel != -1)
+            {
+                BigBoss.Debug.w(log, "Current level is " + curLevel);
+                currentPool.ToLog(log, name);
+            }
+            BigBoss.Debug.printFooter(log, "LeveledPool");
+        }
     }
 
     #region Shell
     protected class ProbContainer
     {
         public T Item;
-        public double ProbDiv;
+        public double multiplier;
         public bool Unique;
-        public int Level;
+        public ushort Level;
 
-        public ProbContainer(T item, double probDiv, bool unique, int level)
+        public ProbContainer(T item, double multiplier, bool unique, ushort level)
         {
             this.Item = item;
-            this.ProbDiv = probDiv;
+            this.multiplier = multiplier;
             this.Unique = unique;
             this.Level = level;
         }
