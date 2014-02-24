@@ -5,10 +5,10 @@ using System.Text;
 
 public static class GridTypeDrawExt
 {
-    public static void DrawPotentialDoors(this Container2D<GridType> arr, DrawAction<GridType> action)
+    public static void DrawPotentialDoors(this Container2D<GridSpace> arr, DrawAction<GridSpace> action)
     {
-        DrawAction<GridType> check = Draw.CanDrawDoor();
-        arr.DrawAll(new DrawAction<GridType>((arr2, x, y) =>
+        DrawAction<GridSpace> check = Draw.CanDrawDoor();
+        arr.DrawAll(new DrawAction<GridSpace>((arr2, x, y) =>
             {
                 if (check(arr2, x, y))
                     action(arr2, x, y);
@@ -16,10 +16,10 @@ public static class GridTypeDrawExt
             }));
     }
 
-    public static void DrawPotentialDoors(this Container2D<GridType> arr, StrokedAction<GridType> action)
+    public static void DrawPotentialDoors(this Container2D<GridSpace> arr, StrokedAction<GridSpace> action)
     {
-        DrawAction<GridType> check = Draw.CanDrawDoor();
-        StrokedAction<GridType> findDoors = new StrokedAction<GridType>();
+        DrawAction<GridSpace> check = Draw.CanDrawDoor();
+        StrokedAction<GridSpace> findDoors = new StrokedAction<GridSpace>();
         if (action.StrokeAction != null)
         {
             findDoors.StrokeAction = (arr2, x, y) =>
@@ -39,28 +39,28 @@ public static class GridTypeDrawExt
                 };
         }
 
-        arr.DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), findDoors);
+        arr.DrawPerimeter(Draw.Not(Draw.IsType(GridType.NULL)), findDoors);
     }
 
-    public static void DrawPotentialExternalDoors(this Container2D<GridType> arr, DrawAction<GridType> action)
+    public static void DrawPotentialExternalDoors(this Container2D<GridSpace> arr, DrawAction<GridSpace> action)
     {
-        DrawPotentialDoors(arr, new StrokedAction<GridType>() { StrokeAction = action });
+        DrawPotentialDoors(arr, new StrokedAction<GridSpace>() { StrokeAction = action });
     }
 
-    public static void DrawPotentialInternalDoors(this Container2D<GridType> arr, DrawAction<GridType> action)
+    public static void DrawPotentialInternalDoors(this Container2D<GridSpace> arr, DrawAction<GridSpace> action)
     {
-        DrawPotentialDoors(arr, new StrokedAction<GridType>() { UnitAction = action });
+        DrawPotentialDoors(arr, new StrokedAction<GridSpace>() { UnitAction = action });
     }
 
     public static ProbabilityList<int> DoorRatioPicker;
-    public static List<Value2D<GridType>> PlaceSomeDoors(this Container2D<GridType> arr, IEnumerable<Point> points, System.Random rand, Point shift = null)
+    public static List<Value2D<GridSpace>> PlaceSomeDoors(this Container2D<GridSpace> arr, IEnumerable<Point> points, System.Random rand, Point shift = null)
     {
-        MultiMap<GridType> acceptablePoints = new MultiMap<GridType>();
+        var acceptablePoints = new MultiMap<GridSpace>();
         Counter numPoints = new Counter();
-        DrawAction<GridType> call = Draw.Count<GridType>(numPoints).And(Draw.CanDrawDoor().IfThen(Draw.AddTo(acceptablePoints)));
+        DrawAction<GridSpace> call = Draw.Count<GridSpace>(numPoints).And(Draw.CanDrawDoor().IfThen(Draw.AddTo(acceptablePoints)));
         if (shift != null)
         {
-            call = call.Shift<GridType>(shift.x, shift.y);
+            call = call.Shift<GridSpace>(shift.x, shift.y);
         }
         arr.DrawPoints(points, call);
         if (DoorRatioPicker == null)
@@ -76,10 +76,10 @@ public static class GridTypeDrawExt
         numDoors += DoorRatioPicker.Get(rand);
         if (numDoors <= 0)
             numDoors = 1;
-        List<Value2D<GridType>> pickedPts = acceptablePoints.Random(rand, numDoors, 1);
+        List<Value2D<GridSpace>> pickedPts = acceptablePoints.GetRandom(rand, numDoors, 1);
         foreach (Point picked in pickedPts)
         {
-            arr[picked] = GridType.Door;
+            arr.SetTo(picked.x, picked.y, GridType.Door);
         }
         return pickedPts;
     }

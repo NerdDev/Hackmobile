@@ -26,8 +26,8 @@ public class TrapRoomMod : FillRoomMod
         }
         #endregion
         Counter floorSpace;
-        RandomPicker<GridType> picker;
-        spec.Grids.DrawAll(Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out floorSpace).And(Draw.PickRandom(out picker))));
+        RandomPicker<GridSpace> picker;
+        spec.Grids.DrawAll(Draw.IsTypeThen(GridType.Floor, Draw.Count<GridSpace>(out floorSpace).And(Draw.PickRandom(out picker))));
         if (floorSpace < 15)
         {
             #region DEBUG
@@ -48,9 +48,9 @@ public class TrapRoomMod : FillRoomMod
         }
         #endregion
 
-        List<Value2D<GridType>> treasureList = picker.Pick(spec.Random, treasureInRoom, 2, true);
-        foreach (Value2D<GridType> val in treasureList)
-            spec.Grids[val.x, val.y] = GridType.Chest;
+        List<Value2D<GridSpace>> treasureList = picker.Pick(spec.Random, treasureInRoom, 2, true);
+        foreach (Value2D<GridSpace> val in treasureList)
+            spec.Grids.SetTo(val.x, val.y, GridType.Chest);
 
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -59,9 +59,9 @@ public class TrapRoomMod : FillRoomMod
         }
         #endregion
 
-        List<Value2D<GridType>> trapList = picker.Pick(spec.Random, trapsInRoom, 0, true);
-        foreach (Value2D<GridType> val in trapList)
-            spec.Grids[val.x, val.y] = GridType.Trap;
+        List<Value2D<GridSpace>> trapList = picker.Pick(spec.Random, trapsInRoom, 0, true);
+        foreach (Value2D<GridSpace> val in trapList)
+            spec.Grids.SetTo(val.x, val.y, GridType.Trap);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

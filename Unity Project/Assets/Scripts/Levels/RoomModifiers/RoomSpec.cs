@@ -4,7 +4,7 @@ using System.Collections;
 public class RoomSpec {
 
     public LayoutObject Room { get; protected set; }
-    public Container2D<GridType> Grids { get; protected set; }
+    public Container2D<GridSpace> Grids { get; protected set; }
     public int Depth { get; protected set; }
     public Theme Theme { get; protected set; }
     public System.Random Random { get; protected set; }

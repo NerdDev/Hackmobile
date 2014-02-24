@@ -7,8 +7,8 @@ public class Level : Container2D<GridSpace>
     protected LevelLayout Layout { get; private set; }
     public bool Populated;
     protected Array2D<GridSpace> _array;
-    public List<Container2D<GridType>> RoomMaps = new List<Container2D<GridType>>();
-    private MultiMap<Container2D<GridType>> roomMapping = new MultiMap<Container2D<GridType>>(); // floor space to roommap
+    public List<Container2D<GridSpace>> RoomMaps = new List<Container2D<GridSpace>>();
+    private MultiMap<Container2D<GridSpace>> roomMapping = new MultiMap<Container2D<GridSpace>>(); // floor space to roommap
     public Point UpStartPoint;
     public Point DownStartPoint;
     public Theme Theme { get; protected set; }
@@ -29,9 +29,9 @@ public class Level : Container2D<GridSpace>
     {
         foreach (LayoutObject room in Layout.Rooms)
         {
-            MultiMap<GridType> roomMap = new MultiMap<GridType>(room.Grids, room.ShiftP);
+            var roomMap = new MultiMap<GridSpace>(room.Grids, room.ShiftP);
             RoomMaps.Add(roomMap);
-            foreach (Value2D<GridType> floor in room.Grids)
+            foreach (Value2D<GridSpace> floor in room.Grids)
             {
                 roomMapping[floor.x + room.ShiftP.x, floor.y + room.ShiftP.y] = room.Grids;
             }

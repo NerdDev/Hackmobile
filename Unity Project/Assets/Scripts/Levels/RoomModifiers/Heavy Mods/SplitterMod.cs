@@ -32,15 +32,15 @@ public class SplitterMod : HeavyRoomMod
             Counter side2;
             if (spec.Grids.DrawLine(from, to, i, horizontal,
                 // If no doors around
-                Draw.Not(Draw.Around(false, Draw.EqualTo(GridType.Door)))
+                Draw.Not(Draw.Around(false, Draw.IsType(GridType.Door)))
                 // Not blocking walking
-                .And(Draw.Not(Draw.Blocking<GridType>(Draw.Walkable())))
+                .And(Draw.Not(Draw.Blocking<GridSpace>(Draw.Walkable())))
                 // Count floors on line as well as sides
-                .And(Draw.EqualTo(GridType.Floor).IfThen(Draw.Count<GridType>(out floorCount)))
+                .And(Draw.IsType(GridType.Floor).IfThen(Draw.Count<GridSpace>(out floorCount)))
                 .And(Draw.Loc(horizontal ? GridLocation.TOP : GridLocation.LEFT,
-                    Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out side1))))
+                    Draw.IsTypeThen(GridType.Floor, Draw.Count<GridSpace>(out side1))))
                 .And(Draw.Loc(horizontal ? GridLocation.BOTTOM : GridLocation.RIGHT,
-                    Draw.EqualThen(GridType.Floor, Draw.Count<GridType>(out side2)))))
+                    Draw.IsTypeThen(GridType.Floor, Draw.Count<GridSpace>(out side2)))))
                 // Has a floor in each
                 && floorCount > 0 && side1 > 0 && side2 > 0
                 )
@@ -52,7 +52,7 @@ public class SplitterMod : HeavyRoomMod
         {
             foreach (int i in options)
             {
-                Container2D<GridType> copy = new Array2D<GridType>(spec.Room.Grids);
+                Container2D<GridSpace> copy = new Array2D<GridSpace>(spec.Room.Grids);
                 copy.DrawLine(from, to, i, horizontal, Draw.SetToIfNotEqual(GridType.NULL, GridType.INTERNAL_RESERVED_BLOCKED));
                 copy.ToLog(Logs.LevelGen);
             }
@@ -71,14 +71,14 @@ public class SplitterMod : HeavyRoomMod
         #endregion
 
         // Draw at least one door
-        RandomPicker<GridType> picker;
+        RandomPicker<GridSpace> picker;
         spec.Grids.DrawLine(from, to, picked, horizontal, 
             Draw.CanDrawDoor().IfThen(Draw.PickRandom(out picker)));
         
         int numDoors = spec.Random.Next(1, 4);
-        List<Value2D<GridType>> doors = picker.Pick(spec.Random, numDoors, 1, false);
-        foreach (Value2D<GridType> door in doors)
-            spec.Grids[door.x, door.y] = GridType.Door;
+        List<Value2D<GridSpace>> doors = picker.Pick(spec.Random, numDoors, 1, false);
+        foreach (Value2D<GridSpace> door in doors)
+            spec.Grids.SetTo(door.x, door.y, GridType.Door);
 
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

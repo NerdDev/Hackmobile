@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class Path : IEnumerable<Value2D<GridType>>
+public class Path : IEnumerable<Value2D<GridSpace>>
 {
     private static HashSet<GridType> _pathTypes = new HashSet<GridType>(new[] {
             GridType.Floor,
@@ -17,17 +17,17 @@ public class Path : IEnumerable<Value2D<GridType>>
             GridType.Path_Vert
     });
     public static HashSet<GridType> PathTypes { get { return _pathTypes; } }
-    List<Value2D<GridType>> List;
+    List<Value2D<GridSpace>> List;
     public bool Valid { get { return List.Count > 2; } }
-    public Value2D<GridType> FirstEnd { get { return List.Count > 0 ? List[0] : null; } }
-    public Value2D<GridType> SecondEnd { get { return List.Count > 0 ? List[List.Count - 1] : null; } }
+    public Value2D<GridSpace> FirstEnd { get { return List.Count > 0 ? List[0] : null; } }
+    public Value2D<GridSpace> SecondEnd { get { return List.Count > 0 ? List[List.Count - 1] : null; } }
 
-    public Path(IEnumerable<Value2D<GridType>> stack)
+    public Path(IEnumerable<Value2D<GridSpace>> stack)
     {
-        List = new List<Value2D<GridType>>(stack);
+        List = new List<Value2D<GridSpace>>(stack);
     }
 
-    public static IEnumerable<Value2D<GridType>> PathPrint(IEnumerable<Point> points)
+    public static IEnumerable<GridSpace> PathPrint(IEnumerable<Point> points)
     {
         Point backward = null;
         Point cur = null;
@@ -41,12 +41,12 @@ public class Path : IEnumerable<Value2D<GridType>>
                 else if (Mathf.Abs(forward.x - backward.x) == 2)
                 {
                     // Horizontal
-                    yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_Horiz);
+                    yield return new GridSpace(GridType.Path_Horiz, cur.x, cur.y);
                 }
                 else if (Mathf.Abs(forward.y - backward.y) == 2)
                 {
                     // Vertical
-                    yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_Vert);
+                    yield return new GridSpace(GridType.Path_Vert, cur.x, cur.y);
                 }
                 else
                 {
@@ -57,22 +57,22 @@ public class Path : IEnumerable<Value2D<GridType>>
                     {
                         if (right)
                         {
-                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_RT);
+                            yield return new GridSpace(GridType.Path_RT, cur.x, cur.y);
                         }
                         else
                         {
-                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_LT);
+                            yield return new GridSpace(GridType.Path_LT, cur.x, cur.y);
                         }
                     }
                     else
                     {
                         if (right)
                         {
-                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_RB);
+                            yield return new GridSpace(GridType.Path_RB, cur.x, cur.y);
                         }
                         else
                         {
-                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_LB);
+                            yield return new GridSpace(GridType.Path_LB, cur.x, cur.y);
                         }
                     }
                 }
@@ -93,7 +93,7 @@ public class Path : IEnumerable<Value2D<GridType>>
         LayoutObject obj = new LayoutObject("Path");
         foreach (var v in PathPrint(List.Cast<Point>()))
         {
-            obj[v] = v.val;
+            obj[v.X, v.Y] = v;
         }
         return obj;
     }
@@ -107,11 +107,11 @@ public class Path : IEnumerable<Value2D<GridType>>
         }
         #endregion
         Bounding bounds = new Bounding();
-        foreach (Value2D<GridType> g in List) bounds.Absorb(g);
+        foreach (Value2D<GridSpace> g in List) bounds.Absorb(g);
         Array2D<int> indexes = new Array2D<int>(bounds);
-        List<Value2D<GridType>> tmp = new List<Value2D<GridType>>(List);
+        List<Value2D<GridSpace>> tmp = new List<Value2D<GridSpace>>(List);
         int index = 0;
-        foreach (Value2D<GridType> val in tmp)
+        foreach (Value2D<GridSpace> val in tmp)
         { // For each point on the path
             int lastDiff = 0;
             Value2D<int> neighbor = null;
@@ -142,8 +142,8 @@ public class Path : IEnumerable<Value2D<GridType>>
                 int fromIndex = neighbor.val + 1;
                 int count = index - neighbor.val - 1;
                 // Set indices to 0
-                List<Value2D<GridType>> toRemove = List.GetRange(fromIndex, count);
-                foreach (Value2D<GridType> r in toRemove)
+                List<Value2D<GridSpace>> toRemove = List.GetRange(fromIndex, count);
+                foreach (Value2D<GridSpace> r in toRemove)
                 {
                     indexes[r.x, r.y] = 0;
                 }
@@ -158,7 +158,7 @@ public class Path : IEnumerable<Value2D<GridType>>
                     MultiMap<GridType> map = new MultiMap<GridType>();
                     foreach (var v in List)
                     {
-                        map[v] = v.val;
+                        map[v] = v.val.Type;
                     }
                     map.ToLog(Logs.LevelGen);
                 }
@@ -175,7 +175,7 @@ public class Path : IEnumerable<Value2D<GridType>>
         #endregion
     }
 
-    public IEnumerator<Value2D<GridType>> GetEnumerator()
+    public IEnumerator<Value2D<GridSpace>> GetEnumerator()
     {
         return List.GetEnumerator();
     }

@@ -341,12 +341,12 @@ public class LevelGenerator
         ProbabilityList<ClusterInfo> shiftOptions = new ProbabilityList<ClusterInfo>();
         Queue<Point> shiftQueue = new Queue<Point>();
         shiftQueue.Enqueue(new Point());
-        Container2D<GridType> clusterGrid = cluster.GetGrid();
-        Container2D<GridType> objGrid = obj.GetGrid();
+        Container2D<GridSpace> clusterGrid = cluster.GetGrid();
+        Container2D<GridSpace> objGrid = obj.GetGrid();
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            MultiMap<GridType> tmp = new MultiMap<GridType>();
+            var tmp = new MultiMap<GridSpace>();
             tmp.PutAll(obj.GetGrid());
             tmp.PutAll(cluster.GetGrid());
             tmp.ToLog(Logs.LevelGen, "Starting placement");
@@ -358,7 +358,7 @@ public class LevelGenerator
             #region Debug
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
-                MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+                var tmpMap = new MultiMap<GridSpace>();
                 tmpMap.PutAll(clusterGrid);
                 tmpMap.PutAll(objGrid, curShift);
                 tmpMap.ToLog(Logs.LevelGen, "Analyzing at shift " + curShift);
@@ -368,9 +368,9 @@ public class LevelGenerator
             List<Point> intersectPoints = new List<Point>();
             if (objGrid.DrawAll((arr, x, y) =>
             {
-                if (GridTypeEnum.EdgeType(arr[x, y]))
+                if (GridTypeEnum.EdgeType(arr[x, y].GetGridType()))
                 {
-                    GridType clusterType = clusterGrid[x + curShift.x, y + curShift.y];
+                    GridType clusterType = clusterGrid[x + curShift.x, y + curShift.y].GetGridType();
                     if (clusterType == GridType.NULL) return true;
                     intersectPoints.Add(new Point(x, y));
                     return GridTypeEnum.EdgeType(clusterType);
@@ -402,23 +402,23 @@ public class LevelGenerator
         #endregion
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
-        List<Value2D<GridType>> placed = new List<Value2D<GridType>>(0);
+        var placed = new List<Value2D<GridSpace>>(0);
         while (shiftOptions.Take(Rand, out info))
         {
-            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GridType>(clusterDoorOptions)).Shift(info.Shift));
+            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GridSpace>(clusterDoorOptions)).Shift(info.Shift));
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.w(Logs.LevelGen, "selected " + info.Shift);
-                MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+                var tmpMap = new MultiMap<GridSpace>();
                 tmpMap.PutAll(clusterGrid);
                 tmpMap.PutAll(objGrid, info.Shift);
-                tmpMap.DrawPoints(info.Intersects, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR).Shift(info.Shift));
+                tmpMap.DrawPoints(info.Intersects, Draw.SetTo(new GridSpace(GridType.INTERNAL_RESERVED_CUR, 0, 0)).Shift(info.Shift));
                 tmpMap.ToLog(Logs.LevelGen, "Intersect Points");
-                tmpMap = new MultiMap<GridType>();
+                tmpMap = new MultiMap<GridSpace>();
                 tmpMap.PutAll(clusterGrid);
                 tmpMap.PutAll(objGrid, info.Shift);
-                tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(GridType.Door));
+                tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(new GridSpace(GridType.Door, 0, 0)));
                 tmpMap.ToLog(Logs.LevelGen, "Cluster door options");
             }
             #endregion
@@ -455,7 +455,7 @@ public class LevelGenerator
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+            var tmpMap = new MultiMap<GridSpace>();
             tmpMap.PutAll(clusterGrid);
             tmpMap.PutAll(obj.GetGrid());
             tmpMap.ToLog(Logs.LevelGen, "Final setup " + info.Shift);
@@ -529,7 +529,7 @@ public class LevelGenerator
                 BigBoss.Debug.printHeader(Logs.LevelGen, "Place Doors on " + room);
             }
             #endregion
-            var potentialDoors = new MultiMap<GridType>();
+            var potentialDoors = new MultiMap<GridSpace>();
             room.Grids.DrawPotentialExternalDoors(Draw.AddTo(potentialDoors));
             int numDoors = Rand.Next(doorsMin, doorsMax);
             #region DEBUG
@@ -539,9 +539,9 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "Number of doors to generate: " + numDoors);
             }
             #endregion
-            foreach (Value2D<GridType> doorSpace in potentialDoors.Random(Rand, numDoors, minDoorSpacing))
+            foreach (Value2D<GridSpace> doorSpace in potentialDoors.GetRandom(Rand, numDoors, minDoorSpacing))
             {
-                room.Grids[doorSpace] = GridType.Door;
+                room.Grids.SetTo(doorSpace.x, doorSpace.y, GridType.Door);
             }
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -568,15 +568,15 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
-        DrawAction<GridType> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.CanDrawDoor());
-        Container2D<GridType> layoutCopy = Layout.GetGrid().Array;
+        DrawAction<GridSpace> passTest = Draw.ContainedIn(Path.PathTypes).Or(Draw.CanDrawDoor());
+        var layoutCopy = Layout.GetGrid().Array;
         List<LayoutObject> rooms = new List<LayoutObject>(Layout.Rooms.Cast<LayoutObject>());
-        Container2D<GridType> runningConnected = Container2D<GridType>.CreateArrayFromBounds(layoutCopy);
+        var runningConnected = Container2D<GridSpace>.CreateArrayFromBounds(layoutCopy);
         // Create initial queue and visited
-        LayoutObject startingRoom = rooms.Take();
+        var startingRoom = rooms.Take();
         startingRoom.GetConnectedGrid().DrawAll(Draw.AddTo(runningConnected));
         Container2D<bool> visited;
-        Queue<Value2D<GridType>> queue;
+        Queue<Value2D<GridSpace>> queue;
         ConstructBFS(startingRoom, out queue, out visited);
         visited = visited.Array;
         LayoutObject fail;
@@ -590,8 +590,8 @@ public class LevelGenerator
                 fail.ToLog(Logs.LevelGen, "Failed to connect to this");
             }
             #endregion
-            Value2D<GridType> startPoint;
-            Value2D<GridType> endPoint;
+            Value2D<GridSpace> startPoint;
+            Value2D<GridSpace> endPoint;
             LayoutObject hit;
             if (!FindNextPathPoints(layoutCopy, runningConnected, out hit, passTest, queue, visited, out startPoint, out endPoint))
             {
@@ -602,18 +602,18 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                layoutCopy[startPoint.x, startPoint.y] = GridType.INTERNAL_RESERVED_CUR;
+                layoutCopy.SetTo(startPoint.x, startPoint.y, GridType.INTERNAL_RESERVED_CUR);
                 layoutCopy.ToLog(Logs.LevelGen, "Largest after putting blocked");
                 BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
             }
             #endregion
-            Container2D<GridType> hitConnected = hit.GetConnectedGrid();
-            List<Value2D<GridType>> stack = layoutCopy.DrawJumpTowardsSearch(
+            var hitConnected = hit.GetConnectedGrid();
+            var stack = layoutCopy.DrawJumpTowardsSearch(
             startPoint.x,
             startPoint.y,
             3,
             5,
-            Draw.EqualTo(GridType.NULL).And(Draw.Inside<GridType>(layoutCopy.Bounding.Expand(5))),
+            Draw.IsType(GridType.NULL).And(Draw.Inside<GridSpace>(layoutCopy.Bounding.Expand(5))),
             passTest.And(Draw.ContainedIn(hitConnected)),
             Rand,
             endPoint,
@@ -634,13 +634,13 @@ public class LevelGenerator
                 LayoutObject pathObj = path.Bake();
                 Layout.ConnectTo(first, pathObj, first, out leaf1, out pathObj);
                 Layout.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
-                if (leaf1[first] == GridType.Wall)
+                if (leaf1[first].Type == GridType.Wall)
                 {
-                    leaf1[first] = GridType.Door;
+                    leaf1.SetTo(first.x, first.y, GridType.Door);
                 }
-                if (leaf2[second] == GridType.Wall)
+                if (leaf2[second].Type == GridType.Wall)
                 {
-                    leaf2[second] = GridType.Door;
+                    leaf2.SetTo(second.x, second.y, GridType.Door);
                 }
                 foreach (var v in pathObj)
                 {
@@ -675,30 +675,30 @@ public class LevelGenerator
     }
 
     protected void ConstructBFS(LayoutObject obj,
-        out Queue<Value2D<GridType>> queue,
+        out Queue<Value2D<GridSpace>> queue,
         out Container2D<bool> visited)
     {
         visited = new MultiMap<bool>();
-        queue = new Queue<Value2D<GridType>>();
-        obj.GetConnectedGrid().DrawPerimeter(Draw.Not(Draw.EqualTo(GridType.NULL)), new StrokedAction<GridType>()
+        queue = new Queue<Value2D<GridSpace>>();
+        obj.GetConnectedGrid().DrawPerimeter(Draw.Not(Draw.IsType(GridType.NULL)), new StrokedAction<GridSpace>()
         {
-            UnitAction = Draw.SetTo<GridType, bool>(visited, true),
-            StrokeAction = Draw.AddTo(queue).And(Draw.SetTo<GridType, bool>(visited, true))
+            UnitAction = Draw.SetTo<GridSpace, bool>(visited, true),
+            StrokeAction = Draw.AddTo(queue).And(Draw.SetTo<GridSpace, bool>(visited, true))
         }, false);
     }
 
-    protected bool FindNextPathPoints(Container2D<GridType> map,
-        Container2D<GridType> runningConnected,
+    protected bool FindNextPathPoints(Container2D<GridSpace> map,
+        Container2D<GridSpace> runningConnected,
         out LayoutObject hit,
-        DrawAction<GridType> pass,
-        Queue<Value2D<GridType>> curQueue,
+        DrawAction<GridSpace> pass,
+        Queue<Value2D<GridSpace>> curQueue,
         Container2D<bool> curVisited,
-        out Value2D<GridType> startPoint,
-        out Value2D<GridType> endPoint)
+        out Value2D<GridSpace> startPoint,
+        out Value2D<GridSpace> endPoint)
     {
         if (!map.DrawBreadthFirstSearch(
             curQueue, curVisited, false,
-            Draw.EqualTo(GridType.NULL),
+            Draw.IsType(GridType.NULL),
             pass,
             out endPoint))
         {
@@ -712,13 +712,13 @@ public class LevelGenerator
             return false;
         }
         Container2D<bool> hitVisited;
-        Queue<Value2D<GridType>> hitQueue;
+        Queue<Value2D<GridSpace>> hitQueue;
         ConstructBFS(hit, out hitQueue, out hitVisited);
         curQueue.Enqueue(hitQueue);
         curVisited.PutAll(hitVisited);
         return map.DrawBreadthFirstSearch(
             hitQueue, hitVisited, false,
-            Draw.EqualTo(GridType.NULL),
+            Draw.IsType(GridType.NULL),
             pass.And(Draw.ContainedIn(runningConnected)),
             out startPoint);
     }
@@ -733,10 +733,10 @@ public class LevelGenerator
         }
         #endregion
         LayoutObject edgeObject = new LayoutObject("Edges");
-        Container2D<GridType> grids = Layout.GetGrid();
-        grids.DrawAll(Draw.Not(Draw.EqualTo(GridType.NULL).Or(Draw.EqualTo(GridType.Wall))).IfThen((arr, x, y) =>
+        var grids = Layout.GetGrid();
+        grids.DrawAll(Draw.Not(Draw.IsType(GridType.NULL).Or(Draw.IsType(GridType.Wall))).IfThen((arr, x, y) =>
             {
-                grids.DrawAround(x, y, true, Draw.EqualTo(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, GridType.Wall)));
+                grids.DrawAround(x, y, true, Draw.IsType(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, GridType.Wall)));
                 return true;
             }));
         Layout.Objects.Add(edgeObject);
@@ -776,8 +776,8 @@ public class LevelGenerator
     {
         foreach (LayoutObject obj in Layout.Flatten().Randomize(Rand))
         {
-            MultiMap<GridType> options = new MultiMap<GridType>();
-            DrawAction<GridType> test = Draw.CanDrawStair();
+            MultiMap<GridSpace> options = new MultiMap<GridSpace>();
+            DrawAction<GridSpace> test = Draw.CanDrawStair();
             if (otherStair != null)
             {
                 double farthest;
@@ -789,22 +789,22 @@ public class LevelGenerator
                 }
                 else if (closest < MinStairDist)
                 { // On the edge.. could have a potential
-                    test = test.And(Draw.Not(Draw.WithinTo<GridType>(MinStairDist, otherStair)));
+                    test = test.And(Draw.Not(Draw.WithinTo<GridSpace>(MinStairDist, otherStair)));
                 }
             }
             obj.Grids.DrawAll(test.IfThen(Draw.AddTo(options)));
 
             // Place stair
-            Value2D<GridType> picked;
-            if (!options.Random(Rand, out picked)) continue;
-            obj.Grids[picked.x, picked.y] = up ? GridType.StairUp : GridType.StairDown;
+            Value2D<GridSpace> picked;
+            if (!options.GetRandom(Rand, out picked)) continue;
+            obj.Grids.SetTo(picked.x, picked.y, up ? GridType.StairUp : GridType.StairDown);
 
             // Place startpoint
-            MultiMap<GridType> startOptions = new MultiMap<GridType>();
-            obj.Grids.DrawAround(picked.x, picked.y, false, Draw.EqualTo(GridType.Floor).IfThen(Draw.AddTo(startOptions)));
-            Value2D<GridType> start;
-            startOptions.Random(Rand, out start);
-            obj.Grids[start] = GridType.StairPlace;
+            MultiMap<GridSpace> startOptions = new MultiMap<GridSpace>();
+            obj.Grids.DrawAround(picked.x, picked.y, false, Draw.IsType(GridType.Floor).IfThen(Draw.AddTo(startOptions)));
+            Value2D<GridSpace> start;
+            startOptions.GetRandom(Rand, out start);
+            obj.Grids.SetTo(start.x, start.y, GridType.StairPlace);
 
             placed = new Point(picked);
             placed.Shift(obj.ShiftP);

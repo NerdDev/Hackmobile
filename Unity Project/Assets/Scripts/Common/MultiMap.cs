@@ -173,7 +173,7 @@ public class MultiMap<T> : Container2D<T>
     }
     #endregion
 
-    public override List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
+    public override List<Value2D<T>> GetRandom(System.Random random, int amount, int distance = 0, bool take = false)
     {
         MultiMap<T> removed = new MultiMap<T>();
         List<Value2D<T>> list = new List<Value2D<T>>();

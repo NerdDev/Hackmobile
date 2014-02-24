@@ -24,7 +24,7 @@ public class RectangularRoom : BaseRoomMod
         Point center = spec.Grids.Center;
         int left = center.x - (width / 2);
         int bottom = center.y - (height / 2);
-        spec.Grids.DrawSquare(left, left + width, bottom, bottom + height, new StrokedAction<GridType>()
+        spec.Grids.DrawSquare(left, left + width, bottom, bottom + height, new StrokedAction<GridSpace>()
             {
                 UnitAction = Draw.SetTo(GridType.Floor),
                 StrokeAction = Draw.SetTo(GridType.Wall)

@@ -23,7 +23,7 @@ public class SquareRoom : BaseRoomMod
         Point center = spec.Grids.Center;
         int left = center.x - (side / 2);
         int bottom = center.y - (side / 2);
-        spec.Grids.DrawSquare(left, left + side, bottom, bottom + side, new StrokedAction<GridType>()
+        spec.Grids.DrawSquare(left, left + side, bottom, bottom + side, new StrokedAction<GridSpace>()
         {
             UnitAction = Draw.SetTo(GridType.Floor),
             StrokeAction = Draw.SetTo(GridType.Wall)

@@ -14,10 +14,10 @@ public class GiantPillarMod : HeavyRoomMod
         BigBoss.Debug.w(Logs.LevelGen, "Size: " + size);
         // Add an extra 2 for stroke width for analysis
         size += 2;
-        List<Bounding> locations = spec.Grids.GetSquares(size, size, false, new StrokedAction<GridType>()
+        List<Bounding> locations = spec.Grids.GetSquares(size, size, false, new StrokedAction<GridSpace>()
             {
-                UnitAction = (arr, x, y) => arr[x, y] == GridType.Floor,
-                StrokeAction = (arr, x, y) => GridTypeEnum.Walkable(arr[x, y])
+                UnitAction = Draw.IsType(GridType.Floor),
+                StrokeAction = Draw.Walkable()
             },
             spec.Room.GetBounding(false));
         if (locations.Count == 0) return false;
@@ -25,8 +25,8 @@ public class GiantPillarMod : HeavyRoomMod
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.w(Logs.LevelGen, locations.Count + " Options: ");
-            MultiMap<GridType> save = new MultiMap<GridType>();
-            Array2D<GridType> copy = new Array2D<GridType>(spec.Room.Grids);
+            var save = new MultiMap<GridSpace>();
+            var copy = new Array2D<GridSpace>(spec.Room.Grids);
             foreach (Bounding r in locations)
             {
                 save.Clear();

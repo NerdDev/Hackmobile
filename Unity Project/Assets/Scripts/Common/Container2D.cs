@@ -249,9 +249,9 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         largest = obj1;
     }
 
-    public bool Random(System.Random random, out Value2D<T> ret, bool take = false)
+    public bool GetRandom(System.Random random, out Value2D<T> ret, bool take = false)
     {
-        List<Value2D<T>> list = Random(random, 1, 0, take);
+        List<Value2D<T>> list = GetRandom(random, 1, 0, take);
         if (list.Count == 0)
         {
             ret = null;
@@ -261,7 +261,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
-    public virtual List<Value2D<T>> Random(System.Random random, int amount, int distance = 0, bool take = false)
+    public virtual List<Value2D<T>> GetRandom(System.Random random, int amount, int distance = 0, bool take = false)
     {
         throw new NotImplementedException();
     }

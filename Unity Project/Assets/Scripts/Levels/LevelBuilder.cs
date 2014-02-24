@@ -104,7 +104,7 @@ public class LevelBuilder : MonoBehaviour
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
-        if (level.AlternatesSides(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
+        if (level.AlternatesSides(space.X, space.Y, Draw.Walkable(), out walkableDir))
         {
             bool neg = level.Random.NextBool();
             if (walkableDir == GridDirection.HORIZ)
@@ -117,12 +117,12 @@ public class LevelBuilder : MonoBehaviour
             }
         }
         // Diagonal door
-        else if (level.AlternatesCorners(space.X, space.Y, Draw.WalkableSpace(), out walkableDir))
+        else if (level.AlternatesCorners(space.X, space.Y, Draw.Walkable(), out walkableDir))
         {
             doorDeploy.Rotation = walkableDir == GridDirection.DIAGTLBR ? -45 : 45;
         }
         // Offset alternates
-        else if (level.AlternateSidesOffset(space.X, space.Y, Draw.Not(Draw.WalkableSpace()), out offsetLocation))
+        else if (level.AlternateSidesOffset(space.X, space.Y, Draw.Not(Draw.Walkable()), out offsetLocation))
         {
             PlaceFlush(doorDeploy, doorElement, offsetLocation);
         }
@@ -165,7 +165,7 @@ public class LevelBuilder : MonoBehaviour
         GridDeploy chestDeploy = new GridDeploy(chestElement.GO);
         space.Deploys.Add(chestDeploy);
         GridLocation wall;
-        if (level.GetRandomLocationAround(space.X, space.Y, false, level.Random, Draw.WallTypeSpace(), out wall))
+        if (level.GetRandomLocationAround(space.X, space.Y, false, level.Random, Draw.WallType(), out wall))
         { // If wall around, make it flush
             PlaceFlush(chestDeploy, chestElement, wall, _chestBuffer);
         }

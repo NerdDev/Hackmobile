@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class Draw
+public static class Draw
 {
     public static DrawAction<T> EqualTo<T>(T t)
     {
@@ -340,73 +340,161 @@ public class Draw
     }
 
     #region GridType
-    private static DrawAction<GridType> _canDrawDoor = new DrawAction<GridType>((arr, x, y) =>
+    private static DrawAction<GridSpace> _canDrawDoor = new DrawAction<GridSpace>((arr, x, y) =>
     {
-        if (arr[x, y] != GridType.Wall)
-            return false;
+        GridSpace space;
+        if (!arr.TryGetValue(x, y, out space)) return false;
+        if (space.GetGridType() != GridType.Wall) return false;
         // Include null to work with levelgen placement
-        if (arr.AlternatesSides(x, y, Draw.EqualTo(GridType.NULL).Or(Draw.Walkable()))) return true;
-        if (arr.HasAround(x, y, false, Draw.Walkable()) && arr.HasAround(x, y, false, Draw.EqualTo(GridType.NULL))) return true;
+        if (arr.AlternatesSides(x, y, Draw.IsType(GridType.NULL).Or(Draw.Walkable()))) return true;
+        if (arr.HasAround(x, y, false, Draw.Walkable()) && arr.HasAround(x, y, false, Draw.IsType(GridType.NULL))) return true;
         return false;
     });
-    public static DrawAction<GridType> CanDrawDoor()
+    public static DrawAction<GridSpace> CanDrawDoor()
     {
         return _canDrawDoor;
     }
 
-    private static DrawAction<GridType> _walkable = new DrawAction<GridType>((arr, x, y) =>
+    private static DrawAction<GridSpace> _walkable = new DrawAction<GridSpace>((arr, x, y) =>
     {
-        return GridTypeEnum.Walkable(arr[x, y]);
+        return GridTypeEnum.Walkable(arr[x, y].GetGridType());
     });
-    public static DrawAction<GridType> Walkable()
+    public static DrawAction<GridSpace> Walkable()
     {
         return _walkable;
     }
 
-    private static DrawAction<GridSpace> _walkableSpace = new DrawAction<GridSpace>((arr, x, y) =>
+    private static DrawAction<GridSpace> _floorType = new DrawAction<GridSpace>((arr, x, y) =>
     {
-        return GridTypeEnum.Walkable(arr[x, y].Type);
+        return GridTypeEnum.FloorType(arr[x, y].GetGridType());
     });
-    public static DrawAction<GridSpace> WalkableSpace()
+    public static DrawAction<GridSpace> FloorType()
     {
-        return _walkableSpace;
+        return _floorType;
     }
 
-    private static DrawAction<GridSpace> _floorTypeSpace = new DrawAction<GridSpace>((arr, x, y) =>
+    private static DrawAction<GridSpace> _wallType = new DrawAction<GridSpace>((arr, x, y) =>
     {
-        return GridTypeEnum.FloorType(arr[x, y].Type);
+        return GridTypeEnum.WallType(arr[x, y].GetGridType());
     });
-    public static DrawAction<GridSpace> FloorTypeSpace()
+    public static DrawAction<GridSpace> WallType()
     {
-        return _floorTypeSpace;
+        return _wallType;
     }
 
-    private static DrawAction<GridSpace> _wallTypeSpace = new DrawAction<GridSpace>((arr, x, y) =>
+    private static DrawAction<GridSpace> _drawStairs = Draw.IsType(GridType.Floor).
+        // If not blocking a path
+                And(Draw.Not(Draw.Blocking(Draw.Walkable()))).
+        // If there's a floor around
+                And(Draw.Around(false, Draw.IsType(GridType.Floor)));
+    public static DrawAction<GridSpace> CanDrawStair()
     {
-        return GridTypeEnum.WallType(arr[x, y].Type);
-    });
-    public static DrawAction<GridSpace> WallTypeSpace()
-    {
-        return _wallTypeSpace;
+        return _drawStairs;
     }
 
     public static DrawAction<GridSpace> IsType(GridType g)
     {
-        return new DrawAction<GridSpace>((arr, x, y) =>
+        return (arr, x, y) =>
         {
-            GridSpace space = arr[x, y];
-            return space != null && space.Type == g;
-        });
+            return arr.IsType(x, y, g);
+        };
+    }
+    public static DrawAction<GridSpace> ContainedIn(ICollection<GridType> col)
+    {
+        return (arr, x, y) =>
+        {
+            return col.Contains(arr[x, y].GetGridType());
+        };
     }
 
-    private static DrawAction<GridType> _drawStairs = Draw.EqualTo(GridType.Floor).
-        // If not blocking a path
-                And(Draw.Not(Draw.Blocking<GridType>(Draw.Walkable()))).
-        // If there's a floor around
-                And(Draw.Around(false, Draw.EqualTo(GridType.Floor)));
-    public static DrawAction<GridType> CanDrawStair()
+    public static DrawAction<GridSpace> SetToIfNotEqual(GridType not, GridType to)
     {
-        return _drawStairs;
+        return (arr, x, y) =>
+        {
+            if (!arr[x, y].Type.Equals(not))
+                SetTo(arr, x, y, to);
+            return true;
+        };
+    }
+
+    public static void SetTo(this Container2D<GridSpace> cont, int x, int y, GridType type)
+    {
+        GridSpace space;
+        if (cont.TryGetValue(x, y, out  space))
+        {
+            space.Type = type;
+        }
+        else
+        {
+            cont[x, y] = new GridSpace(type, x, y);
+        }
+    }
+
+    public static bool IsType(this Container2D<GridSpace> cont, int x, int y, GridType type)
+    {
+        GridSpace space;
+        if (cont.TryGetValue(x, y, out space))
+        {
+            return type.Equals(cont[x, y].GetGridType());
+        }
+        return type == GridType.NULL;
+    }
+
+    public static DrawAction<GridSpace> SetTo(GridType from, GridType to)
+    {
+        return (arr, x, y) =>
+        {
+            GridSpace space;
+            if (arr.TryGetValue(x, y, out space))
+            {
+                if (arr[x, y].Type.Equals(from))
+                    arr.SetTo(x, y, to);
+            }
+            else if (from == GridType.NULL)
+            {
+                arr.SetTo(x, y, to);
+            }
+            return true;
+        };
+    }
+
+    public static DrawAction<GridSpace> SetTo(GridType g)
+    {
+        return (arr, x, y) =>
+        {
+            SetTo(arr, x, y, g);
+            return true;
+        };
+    }
+
+    public static DrawAction<GridSpace> IsTypeThen(GridType item, DrawAction<GridSpace> then, bool not = false)
+    {
+        return (arr, x, y) =>
+        {
+            if (arr.IsType(x, y, item))
+                return then(arr, x, y);
+            return true;
+        };
+    }
+
+    public static DrawAction<GridSpace> SetTo(Container2D<GridSpace> container, GridType g, Point shift = null)
+    {
+        if (shift == null)
+        {
+            return (arr, x, y) =>
+            {
+                container.SetTo(x, y, g);
+                return true;
+            };
+        }
+        else
+        {
+            return (arr, x, y) =>
+            {
+                container.SetTo(x + shift.x, y + shift.y, g);
+                return true;
+            };
+        }
     }
     #endregion
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridSpace
 {
-    public GridType Type { get; private set; }
+    public GridType Type { get; set; }
     public List<GridDeploy> Deploys;
     public List<GameObject> Blocks;
     public int X { get; protected set; }
@@ -213,13 +213,13 @@ public class GridSpace
         }
     }
 
-    public static Array2D<GridSpace> Convert(Container2D<GridType> container)
+    public static Array2D<GridSpace> Convert(Container2D<GridSpace> container)
     {
         Array2D<GridSpace> arrOut = new Array2D<GridSpace>(container.Bounding);
-        foreach (Value2D<GridType> val in container)
+        foreach (Value2D<GridSpace> val in container)
         {
             if (val == null) continue;
-            switch (val.val)
+            switch (val.val.Type)
             {
                 case GridType.Path_Horiz:
                 case GridType.Path_Vert:
@@ -227,17 +227,12 @@ public class GridSpace
                 case GridType.Path_LT:
                 case GridType.Path_LB:
                 case GridType.Path_RB:
-                    val.val = GridType.Floor;
+                    val.val.Type = GridType.Floor;
                     break;
             }
-            arrOut[val.x, val.y] = new GridSpace(val.val, val.x, val.y);
+            arrOut[val.x, val.y] = new GridSpace(val.val.Type, val.x, val.y);
         }
         return arrOut;
-    }
-
-    public static implicit operator GridType(GridSpace space)
-    {
-        return space.Type;
     }
 
     public static implicit operator Point(GridSpace space)
@@ -255,5 +250,14 @@ public class GridSpace
     public override int GetHashCode()
     {
         return X.GetHashCode() ^ Y.GetHashCode();
+    }
+}
+
+public static class GridSpaceExt
+{
+    public static GridType GetGridType(this GridSpace space)
+    {
+        if (space == null) return GridType.NULL;
+        return space.Type;
     }
 }

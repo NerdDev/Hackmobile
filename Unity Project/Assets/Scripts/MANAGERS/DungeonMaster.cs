@@ -35,7 +35,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
     void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
-        foreach (Container2D<GridType> room in l.RoomMaps)
+        foreach (Container2D<GridSpace> room in l.RoomMaps)
         {
             MultiMap<GridSpace> roomMap = new MultiMap<GridSpace>();
             room.DrawAll((arr, x, y) =>
@@ -69,7 +69,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
     public bool PickSpawnableLocation(Level l, out Value2D<GridSpace> pick)
     {
         MultiMap<GridSpace> room = Spawnable(l, l.RoomMaps.Random(Probability.SpawnRand));
-        return room.Random(Probability.SpawnRand, out pick);
+        return room.GetRandom(Probability.SpawnRand, out pick);
     }
 
     public bool PickSpawnableLocation(out Value2D<GridSpace> pick)

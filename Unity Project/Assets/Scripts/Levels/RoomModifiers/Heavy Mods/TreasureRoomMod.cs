@@ -15,16 +15,16 @@ class TreasureRoomMod : HeavyRoomMod
         Bounding bounds = room.GetBounding(true);
         int centerX = (bounds.XMin + bounds.XMax) / 2;
         int centerY = (bounds.YMin + bounds.YMax) / 2;
-        room.Grids.DrawSquare(centerX, centerY, 2, new StrokedAction<GridType>()
+        room.Grids.DrawSquare(centerX, centerY, 2, new StrokedAction<GridSpace>()
         {
             StrokeAction = Draw.SetTo(GridType.Wall),
             UnitAction = Draw.SetTo(GridType.Floor)
         });
-        room.Grids[centerX, centerY + 2] = GridType.Door;
-        room.Grids[centerX, centerY - 2] = GridType.Door;
-        room.Grids[centerX + 2, centerY] = GridType.Door;
-        room.Grids[centerX - 2, centerY] = GridType.Door;
-        room.Grids[centerX, centerY] = GridType.Chest;
+        room.Grids.SetTo(centerX, centerY + 2, GridType.Door);
+        room.Grids.SetTo(centerX, centerY - 2, GridType.Door);
+        room.Grids.SetTo(centerX + 2, centerY, GridType.Door);
+        room.Grids.SetTo(centerX - 2, centerY, GridType.Door);
+        room.Grids.SetTo(centerX, centerY, GridType.Chest);
         return true;
     }
 }
