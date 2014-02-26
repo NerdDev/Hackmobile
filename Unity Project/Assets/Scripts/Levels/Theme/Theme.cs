@@ -21,15 +21,19 @@ public class Theme : MonoBehaviour
     public GameObject[] Pillar;
     public ThemeElement[] ChestElement;
     public GameObject[] Chest;
-    public ProbabilityPool<BaseRoomMod> BaseMods = ProbabilityPool<BaseRoomMod>.Create();
-    public ProbabilityPool<HeavyRoomMod> HeavyMods = ProbabilityPool<HeavyRoomMod>.Create();
-    public ProbabilityPool<FillRoomMod> FillMods = ProbabilityPool<FillRoomMod>.Create();
-    public ProbabilityPool<FinalRoomMod> FinalMods = ProbabilityPool<FinalRoomMod>.Create();
+    public ProbabilityPool<BaseRoomMod> BaseMods;
+    public ProbabilityPool<HeavyRoomMod> HeavyMods;
+    public ProbabilityPool<FillRoomMod> FillMods;
+    public ProbabilityPool<FinalRoomMod> FinalMods;
     public Keywords[] Keywords;
     public ESFlags<Keywords> KeywordFlags;
 
     public virtual void Init()
     {
+        BaseMods = ProbabilityPool<BaseRoomMod>.Create();
+        HeavyMods = ProbabilityPool<HeavyRoomMod>.Create();
+        FillMods = ProbabilityPool<FillRoomMod>.Create();
+        FinalMods = ProbabilityPool<FinalRoomMod>.Create();
         WallElement = Generate(Wall);
         DoorElement = Generate(Door);
         FloorElement = Generate(Floor);

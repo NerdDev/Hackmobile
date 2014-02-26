@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: UndeadTombTheme
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!114 &11400000
+--- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -35,7 +35,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 054305b64babe6643a3c1214e079c78f, type: 3}
+  m_Script: {fileID: 11500000, guid: 616c9262268fd2a46a2c02bf1fc6d11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Scatterable: 0
@@ -43,8 +43,8 @@ MonoBehaviour:
   Wall:
   - {fileID: 100000, guid: 618c602c4db9cfe4ebaaa1d2087c6a22, type: 2}
   Door:
-  - {fileID: 100000, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
   - {fileID: 100000, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
+  - {fileID: 100000, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
   Floor:
   - {fileID: 100000, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
   StairUp:
@@ -55,7 +55,7 @@ MonoBehaviour:
   - {fileID: 100000, guid: 977e93b9eb682ec41aec8a9bdb2b80bb, type: 2}
   Chest:
   - {fileID: 100004, guid: cf5f86fab5dafc247ade51112b4025b2, type: 2}
-  Keywords: 
+  Keywords: 00000000
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

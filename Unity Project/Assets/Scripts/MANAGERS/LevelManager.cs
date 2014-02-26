@@ -22,13 +22,13 @@ public class LevelManager : MonoBehaviour, IManager
     {
         Builder.Theme = Theme;
         _levels = new Level[_maxLevels];
-        ArrayExt.Converters.Add(typeof(GridType), (b) => { return GridTypeEnum.Convert((GridType)b); });
-        ArrayExt.Converters.Add(typeof(GridSpace), (b) =>
+        ArrayExt.Converters[typeof(GridType)] = (b) => { return GridTypeEnum.Convert((GridType)b); };
+        ArrayExt.Converters[typeof(GridSpace)] = (b) =>
         {
             GridSpace s = b as GridSpace;
             if (s == null) return GridTypeEnum.Convert(GridType.NULL);
             return GridTypeEnum.Convert(((GridSpace)b).Type);
-        });
+        };
         if (Seed == -1)
             Seed = Probability.Rand.Next();
         System.Random rand = new System.Random(Seed);
