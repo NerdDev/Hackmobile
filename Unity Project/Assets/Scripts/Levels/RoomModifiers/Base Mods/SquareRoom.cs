@@ -23,10 +23,10 @@ public class SquareRoom : BaseRoomMod
         Point center = spec.Grids.Center;
         int left = center.x - (side / 2);
         int bottom = center.y - (side / 2);
-        spec.Grids.DrawSquare(left, left + side, bottom, bottom + side, new StrokedAction<GridSpace>()
+        spec.Grids.DrawSquare(left, left + side, bottom, bottom + side, new StrokedAction<GenSpace>()
         {
-            UnitAction = Draw.SetTo(GridType.Floor),
-            StrokeAction = Draw.SetTo(GridType.Wall)
+            UnitAction = Draw.SetTo(new GenSpace(GridType.Floor, spec.Theme)),
+            StrokeAction = Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme))
         });
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

@@ -17,21 +17,21 @@ public class HiddenRoomMod : FillRoomMod
         }
         #endregion
 
-        RandomPicker<GridSpace> picker;
+        RandomPicker<GenSpace> picker;
         spec.Grids.DrawPotentialExternalDoors(Draw.PickRandom(out picker));
 
-        Value2D<GridSpace> doorSpace = picker.Pick(spec.Random);
+        Value2D<GenSpace> doorSpace = picker.Pick(spec.Random);
         if (doorSpace != null)
         {
             spec.Grids.DrawSquare(
                 (doorSpace.x - secretRoomSize), (doorSpace.x + secretRoomSize),
                 (doorSpace.y - secretRoomSize), (doorSpace.y + secretRoomSize),
-                new StrokedAction<GridSpace>()
+                new StrokedAction<GenSpace>()
                 {
-                    UnitAction = Draw.SetTo(GridType.NULL, GridType.Floor),
-                    StrokeAction = Draw.SetTo(GridType.NULL, GridType.Wall)
+                    UnitAction = Draw.SetTo(GridType.NULL, new GenSpace(GridType.Floor, spec.Theme)),
+                    StrokeAction = Draw.SetTo(GridType.NULL, new GenSpace(GridType.Wall, spec.Theme))
                 });
-            spec.Grids.SetTo(doorSpace.x, doorSpace.y, GridType.Door);
+            spec.Grids.SetTo(doorSpace.x, doorSpace.y, new GenSpace(GridType.Door, spec.Theme));
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

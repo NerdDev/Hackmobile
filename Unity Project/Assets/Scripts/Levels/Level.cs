@@ -29,11 +29,14 @@ public class Level : Container2D<GridSpace>
     {
         foreach (LayoutObject room in Layout.Rooms)
         {
-            var roomMap = new MultiMap<GridSpace>(room.Grids, room.ShiftP);
+            var roomMap = new MultiMap<GridSpace>();
             RoomMaps.Add(roomMap);
-            foreach (Value2D<GridSpace> floor in room.Grids)
+            foreach (Value2D<GenSpace> floor in room.Grids)
             {
-                roomMapping[floor.x + room.ShiftP.x, floor.y + room.ShiftP.y] = room.Grids;
+                int x = floor.x + room.ShiftP.x;
+                int y = floor.y = room.ShiftP.y;
+                roomMap[x, y] = _array[x, y];
+                roomMapping[x, y] = roomMap;
             }
         }
     }
@@ -147,7 +150,7 @@ public class Level : Container2D<GridSpace>
         }
         BigBoss.Debug.w(Logs.Main, "Placing player in position.");
         Value2D<GridSpace> start;
-        this._array.GetPointAround(startPoint.x, startPoint.y, false, Draw.IsType(GridType.StairPlace), out start);
+        this._array.GetPointAround(startPoint.x, startPoint.y, false, Draw.IsType<GridSpace>(GridType.StairPlace), out start);
         BigBoss.PlayerInfo.transform.position = new Vector3(start.x, 0, start.y);
         BigBoss.Player.GridSpace = start.val;
         BigBoss.Levels.Builder.Instantiate(start);

@@ -5,10 +5,11 @@ using System.Text;
 
 public static class GridTypeDrawExt
 {
-    public static void DrawPotentialDoors(this Container2D<GridSpace> arr, DrawAction<GridSpace> action)
+    public static void DrawPotentialDoors<T>(this Container2D<T> arr, DrawAction<T> action)
+        where T : IGridSpace
     {
-        DrawAction<GridSpace> check = Draw.CanDrawDoor();
-        arr.DrawAll(new DrawAction<GridSpace>((arr2, x, y) =>
+        DrawAction<T> check = Draw.CanDrawDoor<T>();
+        arr.DrawAll(new DrawAction<T>((arr2, x, y) =>
             {
                 if (check(arr2, x, y))
                     action(arr2, x, y);
@@ -16,10 +17,11 @@ public static class GridTypeDrawExt
             }));
     }
 
-    public static void DrawPotentialDoors(this Container2D<GridSpace> arr, StrokedAction<GridSpace> action)
+    public static void DrawPotentialDoors<T>(this Container2D<T> arr, StrokedAction<T> action)
+        where T : IGridSpace
     {
-        DrawAction<GridSpace> check = Draw.CanDrawDoor();
-        StrokedAction<GridSpace> findDoors = new StrokedAction<GridSpace>();
+        DrawAction<T> check = Draw.CanDrawDoor<T>();
+        StrokedAction<T> findDoors = new StrokedAction<T>();
         if (action.StrokeAction != null)
         {
             findDoors.StrokeAction = (arr2, x, y) =>
@@ -39,28 +41,30 @@ public static class GridTypeDrawExt
                 };
         }
 
-        arr.DrawPerimeter(Draw.Not(Draw.IsType(GridType.NULL)), findDoors);
+        arr.DrawPerimeter(Draw.Not(Draw.IsType<T>(GridType.NULL)), findDoors);
     }
 
-    public static void DrawPotentialExternalDoors(this Container2D<GridSpace> arr, DrawAction<GridSpace> action)
+    public static void DrawPotentialExternalDoors<T>(this Container2D<T> arr, DrawAction<T> action)
+        where T : IGridSpace
     {
-        DrawPotentialDoors(arr, new StrokedAction<GridSpace>() { StrokeAction = action });
+        DrawPotentialDoors(arr, new StrokedAction<T>() { StrokeAction = action });
     }
 
-    public static void DrawPotentialInternalDoors(this Container2D<GridSpace> arr, DrawAction<GridSpace> action)
+    public static void DrawPotentialInternalDoors<T>(this Container2D<T> arr, DrawAction<T> action)
+        where T : IGridSpace
     {
-        DrawPotentialDoors(arr, new StrokedAction<GridSpace>() { UnitAction = action });
+        DrawPotentialDoors(arr, new StrokedAction<T>() { UnitAction = action });
     }
 
     public static ProbabilityList<int> DoorRatioPicker;
-    public static List<Value2D<GridSpace>> PlaceSomeDoors(this Container2D<GridSpace> arr, IEnumerable<Point> points, System.Random rand, Point shift = null)
+    public static List<Value2D<GenSpace>> PlaceSomeDoors(this Container2D<GenSpace> arr, IEnumerable<Point> points, Theme theme, System.Random rand, Point shift = null)
     {
-        var acceptablePoints = new MultiMap<GridSpace>();
+        var acceptablePoints = new MultiMap<GenSpace>();
         Counter numPoints = new Counter();
-        DrawAction<GridSpace> call = Draw.Count<GridSpace>(numPoints).And(Draw.CanDrawDoor().IfThen(Draw.AddTo(acceptablePoints)));
+        DrawAction<GenSpace> call = Draw.Count<GenSpace>(numPoints).And(Draw.CanDrawDoor<GenSpace>().IfThen(Draw.AddTo(acceptablePoints)));
         if (shift != null)
         {
-            call = call.Shift<GridSpace>(shift.x, shift.y);
+            call = call.Shift<GenSpace>(shift.x, shift.y);
         }
         arr.DrawPoints(points, call);
         if (DoorRatioPicker == null)
@@ -76,10 +80,10 @@ public static class GridTypeDrawExt
         numDoors += DoorRatioPicker.Get(rand);
         if (numDoors <= 0)
             numDoors = 1;
-        List<Value2D<GridSpace>> pickedPts = acceptablePoints.GetRandom(rand, numDoors, 1);
+        List<Value2D<GenSpace>> pickedPts = acceptablePoints.GetRandom(rand, numDoors, 1);
         foreach (Point picked in pickedPts)
         {
-            arr.SetTo(picked.x, picked.y, GridType.Door);
+            arr.SetTo(picked.x, picked.y, new GenSpace(GridType.Door, theme));
         }
         return pickedPts;
     }

@@ -21,18 +21,18 @@ public class PillarMod : FillRoomMod
         Bounding bounds = spec.Room.GetBounding(false);
         int spacingX = spacingOptions.Get(spec.Random);
         int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get(spec.Random) : spacingX;
-        Container2D<GridSpace> arr = spec.Grids;
+        Container2D<GenSpace> arr = spec.Grids;
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)
             {
-                GridSpace space;
+                GenSpace space;
                 if (arr.TryGetValue(x, y, out space)
                     && GridTypeEnum.Walkable(space.Type)
-                    && !arr.AlternatesSides(x, y, Draw.Walkable()))
+                    && !arr.AlternatesSides(x, y, Draw.Walkable<GenSpace>()))
                 {
                     { // If not blocking a path
-                        arr.SetTo(x, y, GridType.Pillar);
+                        arr.SetTo(x, y, new GenSpace(GridType.Pillar, spec.Theme));
                     }
                 }
             }

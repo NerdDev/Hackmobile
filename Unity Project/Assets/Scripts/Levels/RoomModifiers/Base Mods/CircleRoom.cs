@@ -17,10 +17,10 @@ public class CircleRoom : BaseRoomMod
             BigBoss.Debug.w(Logs.LevelGen, "Radius: " + radius);
         }
         #endregion
-        spec.Grids.DrawCircle(center, center, radius, new StrokedAction<GridSpace>()
+        spec.Grids.DrawCircle(center, center, radius, new StrokedAction<GenSpace>()
             {
-                UnitAction = Draw.SetTo(GridType.Floor),
-                StrokeAction = Draw.SetTo(GridType.Wall)
+                UnitAction = Draw.SetTo(new GenSpace(GridType.Floor, spec.Theme)),
+                StrokeAction = Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme))
             });
         return true;
     }

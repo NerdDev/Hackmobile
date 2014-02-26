@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridSpace
+public class GridSpace : IGridSpace
 {
     public GridType Type { get; set; }
+    public Theme Theme { get; set; }
     public List<GridDeploy> Deploys;
     public List<GameObject> Blocks;
     public int X { get; protected set; }
@@ -213,10 +214,10 @@ public class GridSpace
         }
     }
 
-    public static Array2D<GridSpace> Convert(Container2D<GridSpace> container)
+    public static Array2D<GridSpace> Convert(Container2D<GenSpace> container)
     {
         Array2D<GridSpace> arrOut = new Array2D<GridSpace>(container.Bounding);
-        foreach (Value2D<GridSpace> val in container)
+        foreach (Value2D<GenSpace> val in container)
         {
             if (val == null) continue;
             switch (val.val.Type)
@@ -250,14 +251,5 @@ public class GridSpace
     public override int GetHashCode()
     {
         return X.GetHashCode() ^ Y.GetHashCode();
-    }
-}
-
-public static class GridSpaceExt
-{
-    public static GridType GetGridType(this GridSpace space)
-    {
-        if (space == null) return GridType.NULL;
-        return space.Type;
     }
 }

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public interface ILayoutObject : IEnumerable<Value2D<GridSpace>>
+public interface ILayoutObject : IEnumerable<Value2D<GenSpace>>
 {
     Bounding Bounding { get; }
     bool ContainsPoint(Point pt);
     void Shift(int x, int y);
-    Container2D<GridSpace> GetGrid();
+    Container2D<GenSpace> GetGrid();
     List<LayoutObject> Flatten();
     void ToLog(Logs log, params String[] customContent);
 }
@@ -44,7 +44,7 @@ public static class ILayoutObjectExt
             BigBoss.Debug.w(Logs.LevelGen, "Shifting outside of " + rhs.ToString());
             BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
             BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + obj.Bounding + "  RHS bounds: " + rhs.Bounding);
-            var tmp = new MultiMap<GridSpace>();
+            var tmp = new MultiMap<GenSpace>();
             tmp.PutAll(rhs.GetGrid());
             tmp.PutAll(obj.GetGrid());
             tmp.ToLog(Logs.LevelGen, "Before shifting");
@@ -74,7 +74,7 @@ public static class ILayoutObjectExt
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.w(Logs.LevelGen, "Intersected at " + at);
-                var tmp = new MultiMap<GridSpace>();
+                var tmp = new MultiMap<GenSpace>();
                 tmp.PutAll(rhs.GetGrid());
                 tmp.PutAll(obj.GetGrid());
                 tmp.ToLog(Logs.LevelGen, "After shifting");
@@ -113,7 +113,7 @@ public static class ILayoutObjectExt
             at = hint;
             return true;
         }
-        foreach (Value2D<GridSpace> val in obj)
+        foreach (Value2D<GenSpace> val in obj)
         {
             if (rhs.ContainsPoint(val))
             {

@@ -85,7 +85,9 @@
      <Compile Include="Assets\Scripts\Levels\GridDirection.cs" />
      <Compile Include="Assets\Scripts\Levels\GridLocation.cs" />
      <Compile Include="Assets\Scripts\Levels\GridSpace.cs" />
+     <Compile Include="Assets\Scripts\Levels\GridSpaceBase.cs" />
      <Compile Include="Assets\Scripts\Levels\GridType.cs" />
+     <Compile Include="Assets\Scripts\Levels\IGridSpace.cs" />
      <Compile Include="Assets\Scripts\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Levels\LevelBuilder.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModifiers\Base Mods\BaseRoomMod.cs" />

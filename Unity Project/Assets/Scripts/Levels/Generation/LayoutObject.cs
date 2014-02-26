@@ -3,12 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LayoutObject : Container2D<GridSpace>, ILayoutObject
+public class LayoutObject : Container2D<GenSpace>, ILayoutObject
 {
     public Point ShiftP;
     readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
     private static int _nextId = 0;
-    public virtual Container2D<GridSpace> Grids { get; protected set; }
+    public virtual Container2D<GenSpace> Grids { get; protected set; }
     public override Bounding Bounding
     {
         get
@@ -27,10 +27,10 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
         _name = name;
         Id = _nextId++;
         ShiftP = new Point();
-        Grids = new MultiMap<GridSpace>();
+        Grids = new MultiMap<GenSpace>();
     }
 
-    public override GridSpace this[int x, int y]
+    public override GenSpace this[int x, int y]
     {
         get
         {
@@ -69,7 +69,7 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
     }
     #endregion Bounds
 
-    public Container2D<GridSpace> GetConnectedGrid()
+    public Container2D<GenSpace> GetConnectedGrid()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
@@ -78,7 +78,7 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
         }
         #endregion
         List<LayoutObject> connected = ConnectedToAll();
-        var arrOut = new MultiMap<GridSpace>();
+        var arrOut = new MultiMap<GenSpace>();
         foreach (var obj in connected)
             arrOut.PutAll(obj.Grids, obj.ShiftP);
         #region DEBUG
@@ -284,9 +284,9 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
         return !Equals(left, right);
     }
 
-    public override IEnumerator<Value2D<GridSpace>> GetEnumerator()
+    public override IEnumerator<Value2D<GenSpace>> GetEnumerator()
     {
-        foreach (Value2D<GridSpace> val in Grids)
+        foreach (var val in Grids)
         {
             val.x += ShiftP.x;
             val.y += ShiftP.y;
@@ -294,13 +294,13 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
         }
     }
 
-    public override IEnumerable<GridSpace> GetEnumerateValues()
+    public override IEnumerable<GenSpace> GetEnumerateValues()
     {
         return Grids.GetEnumerateValues();
     }
 
     #region Container2D
-    public override bool TryGetValue(int x, int y, out GridSpace val)
+    public override bool TryGetValue(int x, int y, out GenSpace val)
     {
         return Grids.TryGetValue(x - ShiftP.x, y - ShiftP.y, out val);
     }
@@ -310,7 +310,7 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
         get { return Grids.Count; }
     }
 
-    public override Array2D<GridSpace> Array
+    public override Array2D<GenSpace> Array
     {
         get 
         {
@@ -330,7 +330,7 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
         return Grids.Contains(x - ShiftP.x, y - ShiftP.y);
     }
 
-    public override bool DrawAll(DrawAction<GridSpace> call)
+    public override bool DrawAll(DrawAction<GenSpace> call)
     {
         return Grids.DrawAll(call);
     }
@@ -340,7 +340,7 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
         Grids.Clear();
     }
 
-    public override Array2DRaw<GridSpace> RawArray(out Point shift)
+    public override Array2DRaw<GenSpace> RawArray(out Point shift)
     {
         var ret = Grids.RawArray(out shift);
         shift += ShiftP;
@@ -353,9 +353,9 @@ public class LayoutObject : Container2D<GridSpace>, ILayoutObject
     }
     #endregion
 
-    public Container2D<GridSpace> GetGrid()
+    public Container2D<GenSpace> GetGrid()
     {
-        var map = new MultiMap<GridSpace>();
+        var map = new MultiMap<GenSpace>();
         map.PutAll(Grids, ShiftP);
         return map;
     }

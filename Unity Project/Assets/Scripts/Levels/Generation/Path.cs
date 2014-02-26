@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class Path : IEnumerable<Value2D<GridSpace>>
+public class Path : IEnumerable<Value2D<GenSpace>>
 {
     private static HashSet<GridType> _pathTypes = new HashSet<GridType>(new[] {
             GridType.Floor,
@@ -17,17 +17,17 @@ public class Path : IEnumerable<Value2D<GridSpace>>
             GridType.Path_Vert
     });
     public static HashSet<GridType> PathTypes { get { return _pathTypes; } }
-    List<Value2D<GridSpace>> List;
+    List<Value2D<GenSpace>> List;
     public bool Valid { get { return List.Count > 2; } }
-    public Value2D<GridSpace> FirstEnd { get { return List.Count > 0 ? List[0] : null; } }
-    public Value2D<GridSpace> SecondEnd { get { return List.Count > 0 ? List[List.Count - 1] : null; } }
+    public Value2D<GenSpace> FirstEnd { get { return List.Count > 0 ? List[0] : null; } }
+    public Value2D<GenSpace> SecondEnd { get { return List.Count > 0 ? List[List.Count - 1] : null; } }
 
-    public Path(IEnumerable<Value2D<GridSpace>> stack)
+    public Path(IEnumerable<Value2D<GenSpace>> stack)
     {
-        List = new List<Value2D<GridSpace>>(stack);
+        List = new List<Value2D<GenSpace>>(stack);
     }
 
-    public static IEnumerable<GridSpace> PathPrint(IEnumerable<Point> points)
+    public static IEnumerable<Value2D<GridType>> PathPrint(IEnumerable<Point> points)
     {
         Point backward = null;
         Point cur = null;
@@ -41,12 +41,12 @@ public class Path : IEnumerable<Value2D<GridSpace>>
                 else if (Mathf.Abs(forward.x - backward.x) == 2)
                 {
                     // Horizontal
-                    yield return new GridSpace(GridType.Path_Horiz, cur.x, cur.y);
+                    yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_Horiz);
                 }
                 else if (Mathf.Abs(forward.y - backward.y) == 2)
                 {
                     // Vertical
-                    yield return new GridSpace(GridType.Path_Vert, cur.x, cur.y);
+                    yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_Vert);
                 }
                 else
                 {
@@ -57,22 +57,22 @@ public class Path : IEnumerable<Value2D<GridSpace>>
                     {
                         if (right)
                         {
-                            yield return new GridSpace(GridType.Path_RT, cur.x, cur.y);
+                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_RT);
                         }
                         else
                         {
-                            yield return new GridSpace(GridType.Path_LT, cur.x, cur.y);
+                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_LT);
                         }
                     }
                     else
                     {
                         if (right)
                         {
-                            yield return new GridSpace(GridType.Path_RB, cur.x, cur.y);
+                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_RB);
                         }
                         else
                         {
-                            yield return new GridSpace(GridType.Path_LB, cur.x, cur.y);
+                            yield return new Value2D<GridType>(cur.x, cur.y, GridType.Path_LB);
                         }
                     }
                 }
@@ -88,12 +88,12 @@ public class Path : IEnumerable<Value2D<GridSpace>>
         Prune();
     }
 
-    public LayoutObject Bake()
+    public LayoutObject Bake(Theme theme)
     {
         LayoutObject obj = new LayoutObject("Path");
         foreach (var v in PathPrint(List.Cast<Point>()))
         {
-            obj[v.X, v.Y] = v;
+            obj[v.x, v.y] = new GenSpace(v.val, theme);
         }
         return obj;
     }
@@ -107,11 +107,11 @@ public class Path : IEnumerable<Value2D<GridSpace>>
         }
         #endregion
         Bounding bounds = new Bounding();
-        foreach (Value2D<GridSpace> g in List) bounds.Absorb(g);
+        foreach (Value2D<GenSpace> g in List) bounds.Absorb(g);
         Array2D<int> indexes = new Array2D<int>(bounds);
-        List<Value2D<GridSpace>> tmp = new List<Value2D<GridSpace>>(List);
+        List<Value2D<GenSpace>> tmp = new List<Value2D<GenSpace>>(List);
         int index = 0;
-        foreach (Value2D<GridSpace> val in tmp)
+        foreach (Value2D<GenSpace> val in tmp)
         { // For each point on the path
             int lastDiff = 0;
             Value2D<int> neighbor = null;
@@ -142,8 +142,8 @@ public class Path : IEnumerable<Value2D<GridSpace>>
                 int fromIndex = neighbor.val + 1;
                 int count = index - neighbor.val - 1;
                 // Set indices to 0
-                List<Value2D<GridSpace>> toRemove = List.GetRange(fromIndex, count);
-                foreach (Value2D<GridSpace> r in toRemove)
+                List<Value2D<GenSpace>> toRemove = List.GetRange(fromIndex, count);
+                foreach (Value2D<GenSpace> r in toRemove)
                 {
                     indexes[r.x, r.y] = 0;
                 }
@@ -175,7 +175,7 @@ public class Path : IEnumerable<Value2D<GridSpace>>
         #endregion
     }
 
-    public IEnumerator<Value2D<GridSpace>> GetEnumerator()
+    public IEnumerator<Value2D<GenSpace>> GetEnumerator()
     {
         return List.GetEnumerator();
     }

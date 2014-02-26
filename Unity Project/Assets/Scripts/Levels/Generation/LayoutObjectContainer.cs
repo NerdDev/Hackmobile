@@ -36,11 +36,11 @@ public class LayoutObjectContainer : ILayoutObject
         GetGrid().ToLog(log, customContent);
     }
 
-    public IEnumerator<Value2D<GridSpace>> GetEnumerator()
+    public IEnumerator<Value2D<GenSpace>> GetEnumerator()
     {
         foreach (ILayoutObject obj in Objects)
         {
-            foreach (Value2D<GridSpace> val in obj)
+            foreach (var val in obj)
             {
                 yield return val;
             }
@@ -91,9 +91,9 @@ public class LayoutObjectContainer : ILayoutObject
         return false;
     }
 
-    public Container2D<GridSpace> GetGrid()
+    public Container2D<GenSpace> GetGrid()
     {
-        var map = new MultiMap<GridSpace>();
+        var map = new MultiMap<GenSpace>();
         foreach (ILayoutObject obj in Objects)
         {
             map.PutAll(obj.GetGrid());
