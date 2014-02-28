@@ -198,18 +198,53 @@ namespace XML
 
         public T SelectEnum<T>(string toParse, T defaultVal = default(T))
         {
+            T t;
+            if (!SelectEnum(toParse, out t))
+            {
+                t = defaultVal;
+            }
+            return t;
+        }
+
+        public bool SelectEnum<T>(string toParse, out T t)
+        {
             XMLNode x = this.Select(toParse);
             if (x != null && !string.IsNullOrEmpty(x.Content))
             {
                 try
                 {
-                    return (T)Enum.Parse(typeof(T), x.Content, true);
+                    t = (T)Enum.Parse(typeof(T), x.Content, true);
+                    return true;
                 }
                 catch (ArgumentException)
                 {
                 }
             }
-            return defaultVal;
+            t = default(T);
+            return false;
+        }
+
+        public IEnumerable<T> SelectEnums<T>(string toParse)
+        {
+            XMLNode x = this.Select(toParse);
+            if (x != null)
+            {
+                foreach (XMLNode node in x)
+                {
+                    XMLNode name = node.Select("name");
+                    if (name == null) continue;
+                    T t;
+                    try
+                    {
+                        t = (T)Enum.Parse(typeof(T), name.Content, true);
+                    }
+                    catch (ArgumentException)
+                    {
+                        continue;
+                    }
+                    yield return t;
+                }
+            }
         }
 
         public string SelectString(string node, string defaultVal = "")
@@ -255,18 +290,12 @@ namespace XML
          *  
          * @return The list of XMLNodes associated with the key.
          */
-        public List<XMLNode> SelectList(string key)
+        public IEnumerable<XMLNode> SelectList(string key)
         {
             return this.Where((node) =>
             {
                 return node.Key.Equals(key);
-            }
-            ).ToList<XMLNode>();
-        }
-
-        public List<XMLNode> SelectList()
-        {
-            return this.ToList();
+            });
         }
 
         public override string ToString()

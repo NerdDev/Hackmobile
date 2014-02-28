@@ -11,9 +11,9 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<entry name="undead" />
-		</keywords>
+		<spawnkeywords>
+			<entry name="tomb" />
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -55,9 +55,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -99,9 +98,10 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+			<keyword name="Corpse_Scavenger" />
+      <keyword name="tomb" />
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -143,9 +143,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -187,9 +186,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -231,9 +229,9 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+			<keyword name="tomb" />
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -275,9 +273,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -319,9 +316,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -363,9 +359,9 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+			<keyword name="tomb" />
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -407,9 +403,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -451,9 +446,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -495,9 +489,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -539,9 +532,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -583,9 +575,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>
@@ -627,9 +618,8 @@
 		<properties>
 			<!-- none -->
 		</properties>
-		<keywords>
-			<keyword name="undead" />
-		</keywords>
+		<spawnkeywords>
+		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
 			<maxpower>75</maxpower>

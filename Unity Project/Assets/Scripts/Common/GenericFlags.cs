@@ -22,18 +22,8 @@ using System.Text;
  */
 public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, IConvertible
 {
-    public BitArray ba;
-    public bool Empty
-    {
-        get
-        {
-            foreach (bool b in ba)
-            {
-                if (b) return false;
-            }
-            return true;
-        }
-    }
+    HashSet<T> _set = new HashSet<T>();
+    public bool Empty { get { return _set.Count == 0; } }
 
     public GenericFlags()
     {
@@ -41,44 +31,47 @@ public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, ICo
         {
             throw new ArgumentException("T must be an enumerated type");
         }
-        ba = new BitArray(Enum.GetValues(typeof(T)).Length, false);
     }
 
     public GenericFlags(T e)
         : this()
     {
-        ba.Set(Convert.ToInt32(e), true);
+        this[e] = true;
+    }
+
+    public GenericFlags(IEnumerable<T> keys)
+        : this()
+    {
+        foreach (T t in keys)
+        {
+            this[t] = true;
+        }
     }
 
     public bool this[T index]
     {
         get
         {
-            return ba.Get(Convert.ToInt32(index));
+            return _set.Contains(index);
         }
         set
         {
             if (value)
             {
-                ba.Set(Convert.ToInt32(index), true);
+                _set.Add(index);
             }
             else
             {
-                ba.Set(Convert.ToInt32(index), false);
+                _set.Remove(index);
             }
         }
     }
 
-    public bool get(T index)
-    {
-        return ba.Get(Convert.ToInt32(index));
-    }
-
-    public bool getAnd(params T[] index)
+    public bool GetAnd(params T[] index)
     {
         for (int i = 0; i < index.Length; i++)
         {
-            if (!ba.Get(Convert.ToInt32(index[i])))
+            if (!this[index[i]])
             {
                 return false;
             }
@@ -86,11 +79,11 @@ public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, ICo
         return true;
     }
 
-    public bool getOr(params T[] index)
+    public bool GetOr(params T[] index)
     {
         for (int i = 0; i < index.Length; i++)
         {
-            if (ba.Get(Convert.ToInt32(index[i])))
+            if (this[index[i]])
             {
                 return true;
             }
@@ -100,14 +93,14 @@ public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, ICo
 
     public bool Contains(GenericFlags<T> rhs)
     {
-        return ba.Contains(rhs.ba);
+        return rhs._set.IsSubsetOf(_set);
     }
 
-    public void set(bool val, params T[] index)
+    public void Set(bool val, params T[] index)
     {
         for (int i = 0; i < index.Length; i++)
         {
-            ba.Set(Convert.ToInt32(index[i]), val);
+            this[index[i]] = true;
         }
     }
 
@@ -130,29 +123,42 @@ public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, ICo
         return sb.ToString();
     }
 
-    public static implicit operator T(GenericFlags<T> src)
-    {
-        return src != null ? (T)Enum.ToObject(typeof(T), src.ba) : (T)Enum.ToObject(typeof(T), 0);
-    }
-
-    public static implicit operator GenericFlags<T>(T src)
-    {
-        return new GenericFlags<T>(src);
-    }
-
     public IEnumerator<T> GetEnumerator()
     {
-        for (int i = 0; i < ba.Count; i++)
-        {
-            if (ba[i])
-            {
-                yield return (T)Enum.ToObject(typeof(T), i);
-            }
-        }
+        return _set.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
         return this.GetEnumerator();
+    }
+
+    public override bool Equals(object obj)
+    {
+        GenericFlags<T> rhs = obj as GenericFlags<T>;
+        if (rhs == null) return false;
+        if (_set.Count != rhs._set.Count) return false;
+        return _set.IsSubsetOf(rhs._set);
+    }
+
+    public override int GetHashCode()
+    {
+        int hash = 17;
+        foreach (T t in _set)
+        {
+            hash = hash * 23 + t.GetHashCode();
+        }
+        return hash;
+    }
+
+    public void ToLog(Logs log)
+    {
+        if (BigBoss.Debug.logging(log))
+        {
+            foreach (T t in this)
+            {
+                BigBoss.Debug.w(log, t.ToString());
+            }
+        }
     }
 }

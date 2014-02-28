@@ -29,8 +29,8 @@ public class NPC : Affectable
      * All the properties of the NPC should be contained here.
      */
     #region NPC Properties
-    public ESFlags<NPCFlags> Flags = new ESFlags<NPCFlags>();
-    public ESFlags<Keywords> Keywords = new ESFlags<Keywords>();
+    public GenericFlags<NPCFlags> Flags = new GenericFlags<NPCFlags>();
+    public GenericFlags<SpawnKeywords> SpawnKeywords = new GenericFlags<SpawnKeywords>();
     public Race Race;
     public Role Role;
     public AttributesData Attributes = new AttributesData();
@@ -581,8 +581,8 @@ public class NPC : Affectable
         Attributes = x.Select<AttributesData>("attributes");
         Bodyparts = x.Select<BodyParts>("bodyparts");
         Stats = x.Select<Stats>("stats");
-        Flags = x.Select<ESFlags<NPCFlags>>("flags");
-        Keywords = x.Select<ESFlags<Keywords>>("keywords");
+        Flags = new GenericFlags<NPCFlags>(x.SelectEnums<NPCFlags>("flags"));
+        SpawnKeywords = new GenericFlags<SpawnKeywords>(x.SelectEnums<SpawnKeywords>("spawnkeywords"));
         foreach (XMLNode spell in x.SelectList("spell"))
         {
             string spellName = spell.SelectString("name");

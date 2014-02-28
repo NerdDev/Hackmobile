@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class DungeonMaster : MonoBehaviour, IManager {
+public class DungeonMaster : MonoBehaviour, IManager
+{
 
     public bool Initialized { get; set; }
-    Dictionary<ESFlags<Keywords>, LeveledPool<NPC>> npcPools = new Dictionary<ESFlags<Keywords>, LeveledPool<NPC>>();
+    Dictionary<GenericFlags<SpawnKeywords>, LeveledPool<NPC>> npcPools = new Dictionary<GenericFlags<SpawnKeywords>, LeveledPool<NPC>>();
 
     public void Initialize()
     {
@@ -94,7 +95,7 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return SpawnNPC(g, BigBoss.Objects.NPCs.GetPrototype(npc));
     }
 
-    public NPC SpawnNPC(GridSpace g, Percent variety, params Keywords[] keywords)
+    public NPC SpawnNPC(GridSpace g, Percent variety, params SpawnKeywords[] keywords)
     {
         if (Probability.SpawnRand.Percent(variety))
             return SpawnNPC(g);
@@ -102,12 +103,12 @@ public class DungeonMaster : MonoBehaviour, IManager {
             return SpawnNPC(g, keywords);
     }
 
-    public NPC SpawnNPC(GridSpace g, params Keywords[] keywords)
+    public NPC SpawnNPC(GridSpace g, params SpawnKeywords[] keywords)
     {
-        return SpawnNPC(g, (ESFlags<Keywords>) keywords);
+        return SpawnNPC(g, new GenericFlags<SpawnKeywords>(keywords));
     }
 
-    public NPC SpawnNPC(GridSpace g, ESFlags<Keywords> keywords)
+    public NPC SpawnNPC(GridSpace g, GenericFlags<SpawnKeywords> keywords)
     {
         LeveledPool<NPC> pool = GetPool(keywords);
         NPC n;
@@ -118,22 +119,38 @@ public class DungeonMaster : MonoBehaviour, IManager {
         return SpawnNPC(g, n);
     }
 
-    protected LeveledPool<NPC> GetPool(ESFlags<Keywords> keywords)
+    protected LeveledPool<NPC> GetPool(GenericFlags<SpawnKeywords> keywords)
     {
         LeveledPool<NPC> pool;
-        bool empty = keywords.Empty;
         if (!npcPools.TryGetValue(keywords, out pool))
         {
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.NPCs))
+            {
+                BigBoss.Debug.printHeader(Logs.NPCs, "Get Pool");
+                BigBoss.Debug.w(Logs.NPCs, "Keywords:");
+                BigBoss.Debug.incrementDepth(Logs.NPCs);
+                keywords.ToLog(Logs.NPCs);
+                BigBoss.Debug.decrementDepth(Logs.NPCs);
+            }
+            #endregion
             pool = new LeveledPool<NPC>(DefaultLevelCurve);
             npcPools.Add(keywords, pool);
             foreach (NPC n in BigBoss.Objects.NPCs.Prototypes)
             {
-                if (!empty && n.Keywords.Contains(keywords) // NPC has keywords
-                    || (empty && !n.Flags[NPCFlags.NO_RANDOM_SPAWN])) // If keywords empty
+                if (!keywords.Empty && n.SpawnKeywords.Contains(keywords) // NPC has keywords
+                    || (keywords.Empty && !n.Flags[NPCFlags.NO_RANDOM_SPAWN])) // If keywords empty
                 {
                     pool.Add(n);
                 }
             }
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.NPCs))
+            {
+                pool.ToLog(Logs.NPCs, "NPCs");
+                BigBoss.Debug.printFooter(Logs.NPCs, "Get Pool");
+            }
+            #endregion
         }
         return pool;
     }

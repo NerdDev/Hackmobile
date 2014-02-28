@@ -25,8 +25,8 @@ public class Theme : MonoBehaviour
     public ProbabilityPool<HeavyRoomMod> HeavyMods;
     public ProbabilityPool<FillRoomMod> FillMods;
     public ProbabilityPool<FinalRoomMod> FinalMods;
-    public Keywords[] Keywords;
-    public ESFlags<Keywords> KeywordFlags;
+    public SpawnKeywords[] Keywords;
+    public GenericFlags<SpawnKeywords> KeywordFlags;
 
     public virtual void Init()
     {
@@ -41,7 +41,7 @@ public class Theme : MonoBehaviour
         StairDownElement = Generate(StairDown);
         PillarElement = Generate(Pillar);
         ChestElement = Generate(Chest);
-        KeywordFlags = (ESFlags<Keywords>)Keywords;
+        KeywordFlags = new GenericFlags<SpawnKeywords>(Keywords);
     }
 
     protected void AddMod(RoomModifier mod, double multiplier, bool unique = false)

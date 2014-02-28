@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using XML;
+using System.Linq;
 
 public class ESFlags<T> : IXmlParsable where T : struct, IComparable, IConvertible
 {
@@ -154,7 +155,47 @@ public class ESFlags<T> : IXmlParsable where T : struct, IComparable, IConvertib
 
     public void ParseXML(XMLNode x)
     {
-        foreach (XMLNode node in x.SelectList())
+        foreach (XMLNode node in x)
             this[node.Name] = true;
+    }
+
+    public void ToLog(Logs log)
+    {
+        if (BigBoss.Debug.logging(log))
+        {
+            foreach (T t in flags)
+            {
+                BigBoss.Debug.w(log, t.ToString());
+            }
+            foreach (string s in strings)
+            {
+                BigBoss.Debug.w(log, s);
+            }
+        }
+    }
+
+    public override bool Equals(object obj)
+    {
+        ESFlags<T> rhs = obj as ESFlags<T>;
+        if (rhs == null) return false;
+        if (!flags.Equals(rhs.flags)) return false;
+        foreach (string s in strings)
+        {
+            if (!rhs.strings.Contains(s))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public override int GetHashCode()
+    {
+        int hash = 17;
+        hash = hash * 23 + flags.GetHashCode();
+        //foreach (string s in strings.)
+        throw new NotImplementedException("");
+        hash = hash * 23 + strings.GetHashCode();
+        return hash;
     }
 }

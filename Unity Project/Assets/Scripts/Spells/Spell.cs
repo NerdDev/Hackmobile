@@ -62,7 +62,7 @@ public class Spell : IXmlParsable
         aspects.Add(new SpellAspect() { Targeter = targeter, Effects = effects });
     }
 
-    protected List<EffectInstance> GetEffects(List<XMLNode> effects)
+    protected List<EffectInstance> GetEffects(IEnumerable<XMLNode> effects)
     {
         List<EffectInstance> ret = new List<EffectInstance>();
         foreach (XMLNode effect in effects)

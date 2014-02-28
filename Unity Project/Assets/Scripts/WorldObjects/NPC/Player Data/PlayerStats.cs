@@ -45,9 +45,9 @@ public class PlayerStats
         stats.Hunger = 900;
         player.Stats = stats;
 
-        ESFlags<NPCFlags> flags = new ESFlags<NPCFlags>();
-        flags.Set(true, NPCFlags.NOPOLY);
-        flags.Set(true, NPCFlags.NO_RANDOM_SPAWN);
+        GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
+        flags[NPCFlags.NOPOLY] = true;
+        flags[NPCFlags.NO_RANDOM_SPAWN] = true;
         player.Flags = flags;
 
         BodyParts bp = new BodyParts();
