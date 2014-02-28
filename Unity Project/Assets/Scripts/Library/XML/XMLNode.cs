@@ -240,6 +240,12 @@ namespace XML
                     }
                     catch (ArgumentException)
                     {
+                        #region DEBUG
+                        if (BigBoss.Debug.logging(Logs.XML))
+                        {
+                            BigBoss.Debug.w(Logs.XML, "Error parsing enum " + name.Content + " in " + this);
+                        }
+                        #endregion
                         continue;
                     }
                     yield return t;

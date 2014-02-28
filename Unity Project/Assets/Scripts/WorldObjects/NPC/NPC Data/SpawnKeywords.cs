@@ -4,5 +4,5 @@ using System;
 public enum SpawnKeywords
 {
     TOMB,
-    COMMON_SCAVENGER
+    CORPSE_SCAVENGER
 }

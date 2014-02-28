@@ -210,12 +210,12 @@
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Flags.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Inventory.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\InventoryCategory.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Keywords.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\LeveledItem.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Misc Enums.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Properties.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Races.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Roles.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\SpawnKeywords.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Stats.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPCInstance.cs" />

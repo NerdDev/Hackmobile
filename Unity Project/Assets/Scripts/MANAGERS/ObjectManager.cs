@@ -34,6 +34,12 @@ public class ObjectManager : MonoBehaviour, IManager
         //Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
         foreach (UnityEngine.Object file in files)
         {
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.XML))
+            {
+                BigBoss.Debug.w(Logs.XML, "Parsing " + file.name + ".xml");
+            }
+            #endregion
             ParseXML((file as TextAsset).text);
         }
         
@@ -42,14 +48,15 @@ public class ObjectManager : MonoBehaviour, IManager
     #region Parsing
     private void ParseXML(string file)
     {
-        if (BigBoss.Debug.logging(Logs.XML))
-            BigBoss.Debug.w(Logs.XML, "Parsing " + file);
-
         XMLNode root = new XMLNode(null); // No parent
         root.Parse(file);
-
+        
+        #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.XML_Print) && BigBoss.Debug.logging(Logs.XML))
+        {
             BigBoss.Debug.w(Logs.XML, root.Print());
+        }
+        #endregion
 
         ParseXML(root);
     }

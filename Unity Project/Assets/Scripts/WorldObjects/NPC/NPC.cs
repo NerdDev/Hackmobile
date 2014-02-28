@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System;
 using XML;
 
-
 public class NPC : Affectable
 {
     public override string Prefab { get { return base.Prefab; } set { base.Prefab = "NPCs/" + value; } }
