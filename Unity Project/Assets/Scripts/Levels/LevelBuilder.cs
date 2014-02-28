@@ -89,7 +89,7 @@ public class LevelBuilder : MonoBehaviour
     public static void HandlePillar(Level level, GridSpace space)
     {
         space.Deploys = new List<GridDeploy>(2);
-        GridDeploy pillarDeploy = new GridDeploy(level.Theme.Pillar.Random(level.Random));
+        GridDeploy pillarDeploy = new GridDeploy(level.Theme.Pillar.Random(level.Random).GO);
         space.Deploys.Add(pillarDeploy);
         space.Deploys.Add(new GridDeploy(level.Theme.Get(GridType.Floor, level.Random).GO));
     }

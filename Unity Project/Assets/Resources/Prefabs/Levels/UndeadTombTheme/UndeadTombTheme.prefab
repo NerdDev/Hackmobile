@@ -41,20 +41,20 @@ MonoBehaviour:
   Scatterable: 0
   Chainable: 0
   Wall:
-  - {fileID: 100000, guid: 618c602c4db9cfe4ebaaa1d2087c6a22, type: 2}
+  - {fileID: 11400002, guid: 618c602c4db9cfe4ebaaa1d2087c6a22, type: 2}
   Door:
-  - {fileID: 100000, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
-  - {fileID: 100000, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
+  - {fileID: 11400002, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
+  - {fileID: 11400002, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
   Floor:
-  - {fileID: 100000, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
+  - {fileID: 11400002, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
   StairUp:
-  - {fileID: 100000, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
+  - {fileID: 11400004, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
   StairDown:
-  - {fileID: 100000, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
+  - {fileID: 11400004, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
   Pillar:
-  - {fileID: 100000, guid: 977e93b9eb682ec41aec8a9bdb2b80bb, type: 2}
+  - {fileID: 11400000, guid: 977e93b9eb682ec41aec8a9bdb2b80bb, type: 2}
   Chest:
-  - {fileID: 100004, guid: cf5f86fab5dafc247ade51112b4025b2, type: 2}
+  - {fileID: 11400002, guid: cf5f86fab5dafc247ade51112b4025b2, type: 2}
   Keywords: 00000000
 --- !u!1001 &100100000
 Prefab:

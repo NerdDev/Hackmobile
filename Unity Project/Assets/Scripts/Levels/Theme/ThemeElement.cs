@@ -4,19 +4,26 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class ThemeElement
+public class ThemeElement : MonoBehaviour
 {
-    public GameObject GO;
-    public Bounds Bounds;
-
-    public ThemeElement(GameObject go)
-    {
-        GO = go;
-        Bounds = new Bounds();
-        foreach (Renderer render in go.GetComponentsInChildren<Renderer>(true))
+    public GameObject GO { get { return gameObject; } }
+    private Bounds _bounds;
+    public Bounds Bounds 
+    {  
+        get
         {
-            Bounds.Encapsulate(render.bounds);
+            if (_bounds == null)
+            {
+                _bounds = new Bounds();
+                foreach (Renderer render in GetComponentsInChildren<Renderer>(true))
+                {
+                    Bounds.Encapsulate(render.bounds);
+                }
+            }
+            return _bounds;
         }
     }
+    public byte GridWidth = 1;
+    public byte GridHeight = 1;
 }
 

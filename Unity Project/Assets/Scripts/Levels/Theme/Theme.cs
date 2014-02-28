@@ -7,20 +7,13 @@ public class Theme : MonoBehaviour
 {
     public bool Scatterable;
     public bool Chainable;
-    public ThemeElement[] WallElement;
-    public GameObject[] Wall;
-    public ThemeElement[] DoorElement;
-    public GameObject[] Door;
-    public ThemeElement[] FloorElement;
-    public GameObject[] Floor;
-    public ThemeElement[] StairUpElement;
-    public GameObject[] StairUp;
-    public ThemeElement[] StairDownElement;
-    public GameObject[] StairDown;
-    public ThemeElement[] PillarElement;
-    public GameObject[] Pillar;
-    public ThemeElement[] ChestElement;
-    public GameObject[] Chest;
+    public ThemeElement[] Wall;
+    public ThemeElement[] Door;
+    public ThemeElement[] Floor;
+    public ThemeElement[] StairUp;
+    public ThemeElement[] StairDown;
+    public ThemeElement[] Pillar;
+    public ThemeElement[] Chest;
     public ProbabilityPool<BaseRoomMod> BaseMods;
     public ProbabilityPool<HeavyRoomMod> HeavyMods;
     public ProbabilityPool<FillRoomMod> FillMods;
@@ -34,13 +27,6 @@ public class Theme : MonoBehaviour
         HeavyMods = ProbabilityPool<HeavyRoomMod>.Create();
         FillMods = ProbabilityPool<FillRoomMod>.Create();
         FinalMods = ProbabilityPool<FinalRoomMod>.Create();
-        WallElement = Generate(Wall);
-        DoorElement = Generate(Door);
-        FloorElement = Generate(Floor);
-        StairUpElement = Generate(StairUp);
-        StairDownElement = Generate(StairDown);
-        PillarElement = Generate(Pillar);
-        ChestElement = Generate(Chest);
         KeywordFlags = new GenericFlags<SpawnKeywords>(Keywords);
     }
 
@@ -68,35 +54,24 @@ public class Theme : MonoBehaviour
         }
     }
 
-    protected ThemeElement[] Generate(GameObject[] objs)
-    {
-        ThemeElement[] ret = new ThemeElement[objs.Length];
-        for (int i = 0; i < objs.Length; i++)
-        {
-            DontDestroyOnLoad(objs[i]);
-            ret[i] = new ThemeElement(objs[i]);
-        }
-        return ret;
-    }
-
     public ThemeElement Get(GridType t, System.Random rand)
     {
         switch (t)
         {
             case GridType.Door:
-                return DoorElement.Random(rand);
+                return Door.Random(rand);
             case GridType.Wall:
-                return WallElement.Random(rand);
+                return Wall.Random(rand);
             case GridType.StairUp:
-                return StairUpElement.Random(rand);
+                return StairUp.Random(rand);
             case GridType.StairDown:
-                return StairDownElement.Random(rand);
+                return StairDown.Random(rand);
             case GridType.Chest:
-                return ChestElement.Random(rand);
+                return Chest.Random(rand);
             case GridType.NULL:
                 return null;
             default:
-                return FloorElement.Random(rand);
+                return Floor.Random(rand);
         }
     }
 
