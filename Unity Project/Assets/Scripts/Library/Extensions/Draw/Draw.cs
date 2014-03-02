@@ -453,11 +453,12 @@ public static class Draw
         };
     }
 
-    public static DrawAction<GenSpace> SetTo(GenSpace g)
+    public static DrawAction<GenSpace> SetTo(GridType t, Theme theme)
     {
+        GenSpace space = new GenSpace(t, theme);
         return (arr, x, y) =>
         {
-            SetTo(arr, x, y, g);
+            SetTo(arr, x, y, space);
             return true;
         };
     }

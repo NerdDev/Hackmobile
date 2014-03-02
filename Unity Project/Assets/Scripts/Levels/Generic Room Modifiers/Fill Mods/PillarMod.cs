@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PillarMod : FillRoomMod
 {
-    public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Pillars"; } }
     public override bool Unique { get { return true; } }
     static ProbabilityList<int> spacingOptions = new ProbabilityList<int>();

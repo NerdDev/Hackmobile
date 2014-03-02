@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class TrapRoomMod : FillRoomMod
 {
-    public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Trap Room"; } }
     public override bool Unique { get { return true; } }
     protected static ProbabilityList<int> treasureSizeList = new ProbabilityList<int>();

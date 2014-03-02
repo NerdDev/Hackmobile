@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class HiddenRoomMod : FillRoomMod
 {
-    public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Hidden Room"; } }
 
     public override bool Modify(RoomSpec spec)
@@ -23,7 +22,7 @@ public class HiddenRoomMod : FillRoomMod
         Value2D<GenSpace> doorSpace = picker.Pick(spec.Random);
         if (doorSpace != null)
         {
-            spec.Grids.DrawSquare(
+            spec.Grids.DrawRect(
                 (doorSpace.x - secretRoomSize), (doorSpace.x + secretRoomSize),
                 (doorSpace.y - secretRoomSize), (doorSpace.y + secretRoomSize),
                 new StrokedAction<GenSpace>()

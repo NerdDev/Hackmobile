@@ -5,7 +5,6 @@ using System.Text;
 
 class TreasureRoomMod : HeavyRoomMod
 {
-    public override RoomModType ModType { get { return RoomModType.Flexible; } }
     public override string Name { get { return "Treasure Room"; } }
     public override bool Unique { get { return true; } }
 
@@ -15,7 +14,7 @@ class TreasureRoomMod : HeavyRoomMod
         Bounding bounds = room.GetBounding(true);
         int centerX = (bounds.XMin + bounds.XMax) / 2;
         int centerY = (bounds.YMin + bounds.YMax) / 2;
-        room.Grids.DrawSquare(centerX, centerY, 2, new StrokedAction<GenSpace>()
+        room.Grids.DrawRect(centerX, centerY, 2, new StrokedAction<GenSpace>()
         {
             StrokeAction = Draw.SetTo<GenSpace>(new GenSpace(GridType.Wall, spec.Theme)),
             UnitAction = Draw.SetTo<GenSpace>(new GenSpace(GridType.Floor, spec.Theme))

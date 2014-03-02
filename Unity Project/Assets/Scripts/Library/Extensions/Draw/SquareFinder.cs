@@ -73,7 +73,7 @@ public class SquareFinder<T>
             foreach (Bounding b in retTmp)
             {
                 b.Expand(1);
-                if (_arr.DrawSquare(b.XMin, b.XMax, b.YMin, b.YMax, strokeTest))
+                if (_arr.DrawRect(b.XMin, b.XMax, b.YMin, b.YMax, strokeTest))
                 {
                     ret.Add(b);
                 }
@@ -100,7 +100,7 @@ public class SquareFinder<T>
         while (_y <= _scope.YMax)
         { // In range vertically
             // Try to draw a square that passes the user's test
-            if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, _tester))
+            if (_arr.DrawRect(_x, _x + _width - 1, _y, _y + _height - 1, _tester))
             { // Found a square
                 Bounding b = new Bounding() { XMin = _x, YMin = _y, XMax = _x + _width - 1, YMax = _y + _height - 1 };
                 ret.Add(b);
@@ -122,7 +122,7 @@ public class SquareFinder<T>
         while (_y <= _scope.YMax)
         { // In range vertically
             // Try to draw a square that passes the user's test
-            if (_arr.DrawSquare(_x, _x + _width - 1, _y, _y + _height - 1, _tester))
+            if (_arr.DrawRect(_x, _x + _width - 1, _y, _y + _height - 1, _tester))
             { // Found a square
                 if (_lastPassedX == _lastTestedX)
                 { // Accept all previous squares
@@ -170,7 +170,7 @@ public class SquareFinder<T>
     {
         for (int _tmpX = _lastTestedX + 1; _tmpX <= to; _tmpX++)
         {
-            if (_arr.DrawSquare(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
+            if (_arr.DrawRect(_tmpX, _tmpX + _width - 1, _y, _y + _height - 1, _tester))
             {
                 ret.Add(new Bounding() { XMin = _tmpX, YMin = _y, XMax = _tmpX + _width - 1, YMax = _y + _height - 1 });
                 HandleYSquares(ret, _tmpX, true);
@@ -188,7 +188,7 @@ public class SquareFinder<T>
     {
         for (int _tmpY = _lastTestedY + 1; _tmpY <= _y - 1; _tmpY++)
         {
-            if ((xPassed && _lastPassedXArr[atX - xShift]) || _arr.DrawSquare(atX, atX + _width - 1, _tmpY, _tmpY + _height - 1, _tester))
+            if ((xPassed && _lastPassedXArr[atX - xShift]) || _arr.DrawRect(atX, atX + _width - 1, _tmpY, _tmpY + _height - 1, _tester))
             {
                 ret.Add(new Bounding() { XMin = atX, YMin = _tmpY, XMax = atX + _width - 1, YMax = _tmpY + _height - 1 });
             }

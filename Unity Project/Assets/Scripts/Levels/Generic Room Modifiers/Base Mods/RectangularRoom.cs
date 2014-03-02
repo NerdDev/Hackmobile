@@ -3,7 +3,6 @@ using System.Collections;
 
 public class RectangularRoom : BaseRoomMod
 {
-    public override RoomModType ModType { get { return RoomModType.Base; } }
     public override string Name { get { return "Rectangular Room"; } }
     public override bool Modify(RoomSpec spec)
     {
@@ -24,7 +23,7 @@ public class RectangularRoom : BaseRoomMod
         Point center = spec.Grids.Center;
         int left = center.x - (width / 2);
         int bottom = center.y - (height / 2);
-        spec.Grids.DrawSquare(left, left + width, bottom, bottom + height, new StrokedAction<GenSpace>()
+        spec.Grids.DrawRect(left, left + width, bottom, bottom + height, new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.SetTo(new GenSpace(GridType.Floor, spec.Theme)),
                 StrokeAction = Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme))

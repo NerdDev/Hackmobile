@@ -55,9 +55,12 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     public override void ClearSkipped()
     {
-        foreach (ProbContainer cont in itemList)
-            cont.Skip = false;
-        uniqueTmpMax = max;
+        if (!Fresh)
+        {
+            foreach (ProbContainer cont in itemList)
+                cont.Skip = false;
+            uniqueTmpMax = max;
+        }
         Fresh = true;
     }
 

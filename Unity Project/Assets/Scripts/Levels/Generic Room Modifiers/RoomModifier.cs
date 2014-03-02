@@ -7,7 +7,6 @@ abstract public class RoomModifier : ProbabilityItem
 {
     public virtual double Multiplier { get { return 1; } }
     public virtual bool Unique { get { return false; } }
-    public abstract RoomModType ModType { get; }
     public abstract string Name { get; }
 
     public RoomModifier()

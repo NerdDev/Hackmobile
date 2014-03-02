@@ -70,6 +70,7 @@
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityLevItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityList.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityPool.cs" />
+     <Compile Include="Assets\Scripts\Common\Rotation.cs" />
      <Compile Include="Assets\Scripts\Common\StringStream.cs" />
      <Compile Include="Assets\Scripts\Common\Value2D.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
@@ -83,8 +84,10 @@
      <Compile Include="Assets\Scripts\Levels\Generation\Path.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\BaseRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\CircleRoom.cs" />
+     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\PrimitiveCombiner.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\RectangularRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\SquareRoom.cs" />
+     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\TRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\FillRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\HiddenRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\PillarMod.cs" />
@@ -106,6 +109,7 @@
      <Compile Include="Assets\Scripts\Levels\IGridSpace.cs" />
      <Compile Include="Assets\Scripts\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Levels\LevelBuilder.cs" />
+     <Compile Include="Assets\Scripts\Levels\RoomModTester.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeCustomizer.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeElement.cs" />

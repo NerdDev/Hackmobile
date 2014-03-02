@@ -5,7 +5,6 @@ public class CircleRoom : BaseRoomMod
 {
     const int minRadiusSize = 6;
     const int maxRadiusSize = 10;
-    public override RoomModType ModType { get { return RoomModType.Base; } }
     public override string Name { get { return "Circular Room"; } }
     public override bool Modify(RoomSpec spec)
     {

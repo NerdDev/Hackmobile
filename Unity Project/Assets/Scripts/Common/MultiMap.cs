@@ -272,4 +272,65 @@ public class MultiMap<T> : Container2D<T>
             this.multimap = rhs.multimap;
         }
     }
+
+    public override void Rotate(Rotation rotate)
+    {
+        if (rotate == Rotation.None) return;
+        MultiMap<T> rhs = new MultiMap<T>();
+        if (rotate == Rotation.ClockWise)
+        {
+            foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+            {
+                foreach (KeyValuePair<int, T> column in row.Value)
+                {
+                    rhs[row.Key, -column.Key] = column.Value;
+                }
+            }
+        }
+        else if (rotate == Rotation.CounterClockWise)
+        {
+            foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+            {
+                foreach (KeyValuePair<int, T> column in row.Value)
+                {
+                    rhs[-row.Key, column.Key] = column.Value;
+                }
+            }
+        }
+        else if (rotate == Rotation.MirrorHoriz)
+        {
+            foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+            {
+                Dictionary<int, T> rowRhs = new Dictionary<int, T>();
+                foreach (KeyValuePair<int, T> column in row.Value)
+                {
+                    rowRhs.Add(-column.Key, column.Value);
+                }
+                rhs.multimap.Add(row.Key, rowRhs);
+            }
+        }
+        else if (rotate == Rotation.MirrorVert)
+        {
+            foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+            {
+                rhs.multimap.Add(-row.Key, row.Value);
+            }
+        }
+        else if (rotate == Rotation.OneEighty)
+        {
+            foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
+            {
+                Dictionary<int, T> rowRhs = new Dictionary<int, T>();
+                foreach (KeyValuePair<int, T> column in row.Value)
+                {
+                    rowRhs.Add(-column.Key, column.Value);
+                }
+                rhs.multimap.Add(-row.Key, rowRhs);
+            }
+        }
+        this.multimap = rhs.multimap;
+        _bounding = null;
+        _arr = null;
+        _validCount = false;
+    }
 }

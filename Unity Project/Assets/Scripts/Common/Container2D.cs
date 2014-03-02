@@ -66,6 +66,10 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     {
         return InRange(p.x, p.y);
     }
+    public virtual void Rotate(Rotation rotate)
+    {
+        throw new NotImplementedException("");
+    }
 
     public Value2D<T> GetNth(int n)
     {
@@ -885,11 +889,11 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
     #endregion
-    #region Squares
-    public bool DrawSquare(int xl, int xr, int yb, int yt, StrokedAction<T> action)
+    #region Rectangles
+    public bool DrawRect(int xl, int xr, int yb, int yt, StrokedAction<T> action)
     {
         if (action.StrokeAction == null)
-            return DrawSquareNoStroke(xl, xr, yb, yt, action);
+            return DrawRectNoStroke(xl, xr, yb, yt, action);
 
         if (xl == xr && yb == yt)
             return action.StrokeAction(this, xl, yb);
@@ -903,11 +907,11 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         xl++;
         xr--;
         if (action.UnitAction != null)
-            if (!this.DrawSquareNoStroke(xl, xr, yb, yt, action.UnitAction)) return false;
+            if (!this.DrawRectNoStroke(xl, xr, yb, yt, action.UnitAction)) return false;
         return true;
     }
 
-    public bool DrawSquareNoStroke(int xl, int xr, int yb, int yt, StrokedAction<T> action)
+    protected bool DrawRectNoStroke(int xl, int xr, int yb, int yt, StrokedAction<T> action)
     {
         if (xl == xr && yb == yt)
             return action.UnitAction(this, xl, yb);
@@ -917,9 +921,9 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
-    public bool DrawSquare(int x, int y, int radius, StrokedAction<T> action)
+    public bool DrawRect(int x, int y, int radius, StrokedAction<T> action)
     {
-        return this.DrawSquare(x - radius, x + radius, y - radius, y + radius, action);
+        return this.DrawRect(x - radius, x + radius, y - radius, y + radius, action);
     }
     #endregion
     #region Expand

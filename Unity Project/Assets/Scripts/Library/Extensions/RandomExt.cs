@@ -62,5 +62,20 @@ namespace System
         {
             return (float)rand.NextDouble();
         }
+
+        public static Rotation NextRotation(this System.Random rand)
+        {
+            switch (rand.Next(4))
+            {
+                case 0:
+                    return Rotation.ClockWise;
+                case 1:
+                    return Rotation.CounterClockWise;
+                case 2:
+                    return Rotation.OneEighty;
+                default:
+                    return Rotation.None;
+            }
+        }
     }
 }
