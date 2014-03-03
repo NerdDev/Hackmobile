@@ -28,11 +28,12 @@ public class GUIManager : MonoBehaviour, IManager
     internal string category = "";
     public bool displayInventory;
     public bool displaySpells;
+    internal bool DisplayChatGrid = false;
 
     public Material NormalShaderGridspace;
     public Material GlowShaderGridSpace;
 
-    internal List<IAffectable> spellTargets = new List<IAffectable>();
+    internal HashSet<IAffectable> spellTargets = new HashSet<IAffectable>();
     #endregion
 
     #region Publicly populated variables from scene
@@ -41,11 +42,13 @@ public class GUIManager : MonoBehaviour, IManager
     public ScrollingGrid GroundItemsGrid;
     public ScrollingGrid ItemInfoGrid;
     public ScrollingGrid SpellCastGrid;
+    public TextGrid ChatGrid;
 
     //Prefabs
     public GameObject InvItemPrefab;
     public GameObject ButtonPrefab;
     public GameObject ChestPrefab;
+    public GameObject LabelPrefab;
 
     public UIFont font;
 
@@ -213,8 +216,24 @@ public class GUIManager : MonoBehaviour, IManager
 
     public void CreateTextPop(Vector3 worldPosition, string message, Color col)
     {
-        TextPop text = new TextPop(message, worldPosition, col);
-        textPopList.Enqueue(text);
+        //TextPop text = new TextPop(message, worldPosition, col);
+        //textPopList.Enqueue(text);
+
+        GameObject button = Instantiate(LabelPrefab) as GameObject;
+        GUILabel label = button.GetComponent<GUILabel>();
+        label.Text = message;
+        label.UIDragPanel.draggablePanel = ChatGrid.DragPanel;
+        ChatGrid.AddLabel(label);
+        try
+        {
+            ChatGrid.Reposition();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+            Debug.Log(e.Source);
+            Debug.Log(e.StackTrace);
+        }
     }
 
     void DisplayTextPops()
@@ -297,6 +316,8 @@ public class GUIManager : MonoBehaviour, IManager
                 }
                 spellTargets.Clear();
                 currentSpell = null;
+				selectedButton.defaultColor = cancelSpellButton.defaultColor;
+				selectedButton.UpdateColor(true, true);
             });
             grid.Reposition();
         }
@@ -368,9 +389,6 @@ public class GUIManager : MonoBehaviour, IManager
                 }
                 CreateBackLabel(grid);
             }
-            //this.inventoryClipDrag.ResetPosition();
-            //inventoryClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-            //inventoryClip.clipRange = new Vector4(100, -210, 200, 325);
             grid.Reposition();
         }
         else
@@ -389,8 +407,6 @@ public class GUIManager : MonoBehaviour, IManager
             Inventory inv = chest.Location.inventory;
             GroundLabel.SetActive(true);
             grid.gameObject.SetActive(true);
-            //ItemInfoGrid.gameObject.SetActive(true);
-            //ItemActionsGrid.gameObject.SetActive(true);
             grid.Clear();
             foreach (InventoryCategory ic in inv.Values)
             {
@@ -401,8 +417,6 @@ public class GUIManager : MonoBehaviour, IManager
             }
             CreateCloseLabel(grid);
             grid.ResetPosition();
-            //groundClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-            //groundClip.clipRange = new Vector4(100, -610, 190, 375);
             grid.Reposition();
         }
         else
@@ -424,13 +438,14 @@ public class GUIManager : MonoBehaviour, IManager
             BigBoss.Gooey.displayItem = false;
             BigBoss.Gooey.RegenItemInfoGUI(null);
         });
-        button.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     internal void RegenItemInfoGUI(Item item)
     {
         if (displayInventory)
         {
+			ItemInfoGrid.gameObject.SetActive(true);
+			ItemActionsGrid.gameObject.SetActive(true);
             ItemInfoGrid.Clear();
             ItemActionsGrid.Clear();
             if (displayItem && item != null && item.Count > 0)
@@ -443,6 +458,8 @@ public class GUIManager : MonoBehaviour, IManager
                 OpenInventoryGUI();
                 ItemInfoGrid.Clear();
                 ItemActionsGrid.Clear();
+				ItemInfoGrid.gameObject.SetActive(false);
+				ItemActionsGrid.gameObject.SetActive(false);
             }
         }
     }
@@ -461,6 +478,7 @@ public class GUIManager : MonoBehaviour, IManager
     {
         if (buttonText == null) buttonText = buttonName;
         GUIButton button = CreateButton(buttonName, buttonText);
+        button.UIDragPanel.draggablePanel = grid.DragPanel;
         grid.AddButton(button);
         return button.GetComponent<GUIButton>();
     }
@@ -483,7 +501,6 @@ public class GUIManager : MonoBehaviour, IManager
             BigBoss.Gooey.displayItem = false;
             BigBoss.Gooey.RegenItemInfoGUI(null);
         });
-        button.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     void CreateItemButton(Item item, ScrollingGrid grid)
@@ -505,7 +522,6 @@ public class GUIManager : MonoBehaviour, IManager
                 BigBoss.Gooey.RegenItemInfoGUI(itemButton.refObject as Item);
             }
         });
-        itemButton.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     void CreateCategoryButton(InventoryCategory ic, ScrollingGrid grid)
@@ -517,7 +533,6 @@ public class GUIManager : MonoBehaviour, IManager
             BigBoss.Gooey.category = (categoryButton.refObject as InventoryCategory).id;
             BigBoss.Gooey.OpenInventoryGUI();
         });
-        categoryButton.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     void GenerateItemInfo(Item item, ScrollingGrid grid)
@@ -526,12 +541,10 @@ public class GUIManager : MonoBehaviour, IManager
         {
             foreach (KeyValuePair<string, string> kvp in item.GetGUIDisplays())
             {
-                //CreateTextButton(kvp.Key + ": " + kvp.Value, itemInfoGrid, itemInfoClipDrag);
+                //display the info on the item
             }
             CreateBackLabel(grid);
             grid.ResetPosition();
-            //itemInfoClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-            //itemInfoClip.clipRange = new Vector4(300, -400, 200, 800);
             grid.Reposition();
         }
     }
@@ -577,7 +590,6 @@ public class GUIManager : MonoBehaviour, IManager
             BigBoss.Player.equipItem(i);
             BigBoss.Gooey.RegenItemInfoGUI(i);
         });
-        itemButton.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     void CreateUnEquipButton(Item item, ScrollingGrid grid)
@@ -593,7 +605,6 @@ public class GUIManager : MonoBehaviour, IManager
                 BigBoss.Gooey.RegenItemInfoGUI(itemAlreadyEquipped);
             }
         });
-        itemButton.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     void CreateUseButton(Item item, ScrollingGrid grid)
@@ -606,7 +617,6 @@ public class GUIManager : MonoBehaviour, IManager
             BigBoss.Gooey.RegenItemInfoGUI(i);
             BigBoss.Gooey.OpenInventoryGUI();
         });
-        itemButton.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     void CreateDropButton(Item item, ScrollingGrid grid)
@@ -619,7 +629,6 @@ public class GUIManager : MonoBehaviour, IManager
             BigBoss.Gooey.OpenInventoryGUI();
             BigBoss.Gooey.OpenGroundGUI(currentChest);
         });
-        itemButton.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     void CreatePickUpButton(Item item, ScrollingGrid grid)
@@ -632,7 +641,6 @@ public class GUIManager : MonoBehaviour, IManager
             BigBoss.Gooey.OpenGroundGUI(currentChest);
             BigBoss.Gooey.OpenInventoryGUI();
         });
-        itemButton.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     void CreateEatButton(Item item, ScrollingGrid grid)
@@ -648,7 +656,6 @@ public class GUIManager : MonoBehaviour, IManager
                 BigBoss.Gooey.RegenItemInfoGUI(i);
             }
         });
-        itemButton.UIDragPanel.draggablePanel = grid.DragPanel;
     }
 
     internal void CheckChestDistance()

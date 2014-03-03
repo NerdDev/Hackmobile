@@ -16,7 +16,7 @@ public class AppliedEffects : SortedDictionary<string, EffectInstance>, IXmlPars
     {
     }
 
-    public virtual void ApplyEffect(EffectInstance effect)
+    public virtual void ApplyEffect(IAffectable caster, EffectInstance effect)
     {
         if (effect.TurnsToProcess != 0)
         {
@@ -26,12 +26,12 @@ public class AppliedEffects : SortedDictionary<string, EffectInstance>, IXmlPars
             }
             else
             {
-                this.Add(effect.Name, effect.ActivateOnObject(owner));
+                this.Add(effect.Name, effect.ActivateOnObject(caster, owner));
             }
         }
         else
         {
-            effect.ActivateOnObject(owner);
+            effect.ActivateOnObject(caster, owner);
         }
     }
 

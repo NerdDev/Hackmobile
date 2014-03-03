@@ -7,8 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <NoConfig>true</NoConfig>
@@ -100,8 +99,10 @@
     <Compile Include="Assets\Scripts\Common\StringStream.cs" />
     <Compile Include="Assets\Scripts\Common\Value2D.cs" />
     <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
+    <Compile Include="Assets\Scripts\GUI\GUILabel.cs" />
     <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
     <Compile Include="Assets\Scripts\GUI\ScrollingGrid.cs" />
+    <Compile Include="Assets\Scripts\GUI\TextGrid.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\ILayoutObject.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Assets\Scripts\Library\Extensions\EnumerableExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\EnumExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\HashSetExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ListExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\QueueExt.cs" />
@@ -228,6 +230,8 @@
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemStats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\ItemChest.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\Items\ItemHolder.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\Items\LeveledItemList.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
@@ -242,6 +246,7 @@
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Properties.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Races.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Roles.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Spells.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Stats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPCInstance.cs" />
@@ -452,6 +457,7 @@
     <Compile Include="Assets\Tools\NGUI\Scripts\UI\UIViewport.cs" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Resources\XML\consumables.xml" />
+    <None Include="Assets\Resources\XML\leveledlists.xml" />
     <None Include="Assets\Resources\XML\materials.xml" />
     <None Include="Assets\Resources\XML\npcs.xml" />
     <None Include="Assets\Resources\XML\player.xml" />

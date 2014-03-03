@@ -14,11 +14,13 @@ public class ObjectManager : MonoBehaviour, IManager
     public Dictionary<string, string> Strings { get; protected set; }
     public ProfessionTitles PlayerProfessions { get; protected set; }
     public ObjectDictionary<MaterialType> Materials { get; protected set; }
+	public ObjectDictionary<LeveledItemList> LeveledItems { get; protected set; }
 
     internal Dictionary<string, Spell> PlayerSpells = new Dictionary<string, Spell>();
 
     public ObjectManager()
     {
+
     }
 
     public void Initialize()
@@ -29,6 +31,7 @@ public class ObjectManager : MonoBehaviour, IManager
         Materials = new ObjectDictionary<MaterialType>();
         PlayerProfessions = new ProfessionTitles();
         Strings = new Dictionary<string, string>();
+		LeveledItems = new ObjectDictionary<LeveledItemList> ();
 
         UnityEngine.Object[] files = Resources.LoadAll("XML", typeof(TextAsset));
         //Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
@@ -74,6 +77,9 @@ public class ObjectManager : MonoBehaviour, IManager
             case "TITLES":
                 PlayerProfessions.ParseXML(root);
                 break;
+            case "LEVELEDITEMS":
+				LeveledItems.Parse (root);
+				break;
             default:
                 if (BigBoss.Debug.logging(Logs.XML))
                     BigBoss.Debug.w(Logs.XML, "Basenode key " + root.Key + " did not exist as an option to parse.  Node: " + root);

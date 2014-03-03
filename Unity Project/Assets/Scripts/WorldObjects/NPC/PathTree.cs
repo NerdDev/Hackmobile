@@ -23,6 +23,12 @@ public class PathTree
 
     public BetterList<PathNode> getPath(GridSpace start, GridSpace dest, int terminateDistance)
     {
+        BigBoss.Debug.printHeader(Logs.Pathfinding, "Starting Path");
+        BigBoss.Debug.log(Logs.Pathfinding, "Starting Grid: (" + start.X + ", " + start.Y + ")");
+        BigBoss.Debug.log(Logs.Pathfinding, "Destination Grid: (" + dest.X + ", " + dest.Y + ")");
+        float startTime = UnityEngine.Time.realtimeSinceStartup;
+        BigBoss.Debug.log(Logs.Pathfinding, "Initial Time: " + startTime);
+
         this.start = start;
         this.dest = dest;
         listONodes.Clear();
@@ -36,6 +42,13 @@ public class PathTree
             checkValidNodes();
         }
         Clear();
+
+        float finishTime = UnityEngine.Time.realtimeSinceStartup;
+        BigBoss.Debug.log(Logs.Pathfinding, "Finish Time: " + finishTime);
+        BigBoss.Debug.log(Logs.Pathfinding, "Time Elapsed (ms): " + (finishTime - startTime) * 1000);
+        BigBoss.Debug.log(Logs.Pathfinding, "Path Length: " + listONodes.size);
+        BigBoss.Debug.printFooter(Logs.Pathfinding, "Path Complete");
+
         return listONodes;
     }
 

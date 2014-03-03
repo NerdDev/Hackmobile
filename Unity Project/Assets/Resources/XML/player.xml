@@ -36,6 +36,7 @@
 			<heads>1</heads>
 			<!-- body is implicitly assumed -->
 		</bodyparts>
+		<spells>
 			<spell>
 				<name>Firebolt</name>
 				<targeter>
@@ -72,5 +73,6 @@
 					</effect>
 				</targeter>
 			</spell>
+		</spells>
 	</npc>
 </npcs>

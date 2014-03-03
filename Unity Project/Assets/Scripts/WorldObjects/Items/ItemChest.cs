@@ -17,11 +17,15 @@ public class ItemChest : MonoBehaviour
     void Start()
     {
         Location._chest = this;
+		LeveledItemList itemList = BigBoss.Objects.LeveledItems.GetPrototype ("potions");
+		ItemHolder ih = itemList.Get (new System.Random (), 1, BigBoss.Player.Level)[0];
+		Item i = ih.Get ();
+		Location.inventory.Add (i);
     }
 
     public void init()
     {
-        this.transform.localPosition = new Vector3(Location.X + .3f, 0.5f, Location.Y + .3f);
+        this.transform.localPosition = new Vector3(Location.X + .3f, 0f, Location.Y + .3f);
         this.transform.Rotate(Vector3.up, 45f);
     }
 

@@ -5,9 +5,13 @@ public delegate double LeveledCurve(ushort gravityLevel, ushort entryLevel);
 public class LeveledPool<T> : ProbabilityPool<T>
 {
     HashSet<ProbContainer> prototypePool = new HashSet<ProbContainer>();
-    LeveledCurve levelCurve;
+    internal LeveledCurve levelCurve;
     ProbabilityPool<T> currentPool;
     int curLevel = -1;
+
+	public LeveledPool() {
+
+		}
 
     public LeveledPool(LeveledCurve curve)
     {

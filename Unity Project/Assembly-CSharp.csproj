@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Unity Pro/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Unity432/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Unity Pro/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Unity432/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -73,8 +73,10 @@
      <Compile Include="Assets\Scripts\Common\StringStream.cs" />
      <Compile Include="Assets\Scripts\Common\Value2D.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
+     <Compile Include="Assets\Scripts\GUI\GUILabel.cs" />
      <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
      <Compile Include="Assets\Scripts\GUI\ScrollingGrid.cs" />
+     <Compile Include="Assets\Scripts\GUI\TextGrid.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\ILayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
      <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
@@ -121,11 +123,13 @@
      <Compile Include="Assets\Scripts\Library\Extensions\EnumExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\EnumerableExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\HashSetExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ListExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\QueueExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\RandomExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Vector3Ext.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
      <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />
@@ -171,6 +175,9 @@
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\ShockResistance.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\SeeInvisibleEffect.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\TelepathyEffect.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\FireballVisual.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveTowards.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedDestruction.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellAspect.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellCastInfo.cs" />
@@ -197,6 +204,8 @@
      <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemStats.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\Item.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\ItemChest.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\Items\ItemHolder.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\Items\LeveledItemList.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
@@ -211,6 +220,7 @@
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Properties.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Races.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Roles.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Spells.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Stats.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPCInstance.cs" />
@@ -538,6 +548,7 @@
      <None Include="Assets\Resources\XML\npcs.xml" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SimpleClear.shader" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
+     <None Include="Assets\Resources\XML\leveledlists.xml" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\FXAA3Console.shader" />
      <None Include="Assets\Tools\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\Tools\Fog of War\ReadMe.txt" />

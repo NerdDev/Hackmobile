@@ -80,7 +80,9 @@ public class GridSpace
     {
         if (_chest == null)
         {
-            _chest = (GameObject.Instantiate(BigBoss.Gooey.ChestPrefab) as GameObject).GetComponent<ItemChest>();
+            _chest = (GameObject.Instantiate(BigBoss.Gooey.ChestPrefab, 
+                (Blocks[0].transform.position + BigBoss.Gooey.ChestPrefab.transform.position), 
+                BigBoss.Gooey.ChestPrefab.transform.localRotation) as GameObject).GetComponent<ItemChest>();
             //_chest.Location = this;
             _chest.init();
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-
 public class GUIButton : UIButton
 {
     public UILabel label;
@@ -59,6 +58,7 @@ public class GUIButton : UIButton
     }
     void OnPress(bool onPress)
     {
+        base.OnPress(onPress);
         OnButtonPress(onPress);
     }
 

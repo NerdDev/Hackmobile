@@ -1,0 +1,42 @@
+<leveleditems>
+	<list name="potions">
+		<entry>
+			<item>Levitation Potion</item>
+			<probability>2</probability>
+			<count>1</count>
+			<level>2</level>
+		</entry>
+		<entry>
+			<item>Health Potion</item>
+			<probability>1</probability>
+			<count>2</count>
+			<level>1</level>
+		</entry>
+		<entry>
+			<item>Cure Poison</item>
+			<probability>.5</probability>
+			<count>1</count>
+			<level>4</level>
+		</entry>
+	</list>
+	<list name="weapons">
+		<entry>
+			<item>axe2</item>
+			<probability>2</probability>
+			<count>1</count>
+			<level>1</level>
+		</entry>
+		<entry>
+			<item>sword1</item>
+			<probability>1</probability>
+			<count>2</count>
+			<level>3</level>
+		</entry>
+		<entry>
+			<item>sword2</item>
+			<probability>.5</probability>
+			<count>1</count>
+			<level>5</level>
+		</entry>
+	</list>
+ </leveleditems>

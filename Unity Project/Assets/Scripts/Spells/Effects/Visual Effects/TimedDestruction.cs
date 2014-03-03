@@ -7,18 +7,23 @@ class TimedDestruction : MonoBehaviour
 {
     float startTime;
     float finishTime;
-    float time;
+    public float TimeTillDestruction;
 
     public void init(float time)
     {
         finishTime = time + Time.time;
     }
 
+    public void Start()
+    {
+        finishTime = TimeTillDestruction + Time.time;
+    }
+
     void Update()
     {
         if (Time.time > finishTime)
         {
-            Destroy(this.gameObject);
+            if (this.gameObject != null) Destroy(this.gameObject);
             Destroy(this);
         }
     }

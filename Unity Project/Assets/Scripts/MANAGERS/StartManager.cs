@@ -33,7 +33,7 @@ public class StartManager : MonoBehaviour, IManager
     public IEnumerator StartGame()
     {
         BigBoss.Gooey.DisplayLoading();
-        yield return new WaitForSeconds(.01f);
+        yield return new WaitForSeconds(.01f); //used to force the game to enter the next frame and render the load screen
         BigBoss.Levels.SetCurLevel(0);
 
         // Temp (will move eventually)

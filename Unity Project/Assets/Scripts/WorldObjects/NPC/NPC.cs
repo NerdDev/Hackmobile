@@ -23,6 +23,16 @@ public class NPC : Affectable
             GridSpace = BigBoss.Levels.Level[currentPos.x.ToInt(), currentPos.y.ToInt()];
         }
         InitAI();
+
+        List<ItemHolder> ih = StartingItems.Get(new System.Random(), 3, BigBoss.Player.Level);
+        if (ih.Count > 0)
+        {
+            foreach (ItemHolder i in ih)
+            {
+                Debug.Log("Adding item: " + i.id);
+                addToInventory(i.Get());
+            }
+        }
     }
 
     /**
@@ -36,7 +46,8 @@ public class NPC : Affectable
     public AttributesData Attributes = new AttributesData();
     public BodyParts Bodyparts = new BodyParts();
     public Stats Stats = new Stats();
-    public Dictionary<string, Spell> KnownSpells = new Dictionary<string, Spell>();
+    public Spells KnownSpells = new Spells();
+    public LeveledItemList StartingItems = new LeveledItemList();
 
     //public List<Item> inventory = new List<Item>();
     public Inventory Inventory = new Inventory();
@@ -475,6 +486,21 @@ public class NPC : Affectable
         {
             CreateTextPop(Name + " is dead!", Color.red);
             Debug.Log(this.Name + " was killed!");
+            //time effects need cleared
+            List<Item> itemsToDrop = new List<Item>();
+            foreach (InventoryCategory ic in Inventory.Values)
+            {
+                foreach (Item i in ic.Values)
+                {
+                    Debug.Log("Adding to drop list: " + i.Name);
+                    itemsToDrop.Add(i);
+                }
+            }
+            foreach (Item i in itemsToDrop)
+            {
+                Debug.Log("Dropping item: " + i.Name);
+                this.dropItem(i, GridSpace);
+            }
             Destroy();
         }
         else
@@ -511,17 +537,6 @@ public class NPC : Affectable
         {
             //do nothing, the item isn't there
         }
-    }
-
-    public float getCurrentInventoryWeight()
-    {
-        float tempWeight = 0;
-        //foreach (Item kvp in inventory)
-        //{
-        //    tempWeight += kvp.props.Weight;
-        //}
-
-        return tempWeight;
     }
 
     public float getMaxInventoryWeight()//Should only be calc'd when weight changes or attribute on player is affected
@@ -571,6 +586,8 @@ public class NPC : Affectable
     {
         return Inventory.TransferFrom(i, space);
     }
+
+
     #endregion
 
     #region NPC Data Management for Instances
@@ -584,16 +601,8 @@ public class NPC : Affectable
         Stats = x.Select<Stats>("stats");
         Flags = x.Select<ESFlags<NPCFlags>>("flags");
         Keywords = x.Select<ESFlags<Keywords>>("keywords");
-        foreach (XMLNode spell in x.SelectList("spell"))
-        {
-            string spellName = spell.SelectString("name");
-            Spell s = spell.Select<Spell>();
-            KnownSpells.Add(spellName, s);
-            if (this.Name.Equals("player"))
-            {
-                BigBoss.Objects.PlayerSpells.Add(spellName, s);
-            }
-        }
+        KnownSpells = x.Select<Spells>("spells");
+        StartingItems = x.Select<LeveledItemList>("startingitems");
     }
     #endregion
 
@@ -679,6 +688,7 @@ public class NPC : Affectable
     {
         actions.Add(new Attack(this));
         actions.Add(new Move(this));
+        actions.Add(new CastDamageSpell(this));
     }
     public abstract class AIAction : IComparable<AIAction>
     {
@@ -730,6 +740,39 @@ public class NPC : Affectable
             }
         }
     }
+    internal class CastDamageSpell : AIAction
+    {
+        int turnsSinceLastCast = 0;
+        Spell spell;
+
+        public CastDamageSpell(NPC n)
+            : base(n)
+        {
+            Cost = 60;
+        }
+
+        public override void Action()
+        {
+            if (npc.KnownSpells.ContainsKey("Firebolt"))
+            {
+                Spell spellToCast = npc.KnownSpells["Firebolt"];
+                if (npc.DistanceToPlayer() < spellToCast.range)
+                {
+                    npc.CastSpell(spellToCast, BigBoss.Player);
+                    turnsSinceLastCast = 0;
+                }
+            }
+        }
+
+        public override void CalcWeighting()
+        {
+            if (npc.Role == Role.MAGE && npc.KnownSpells.ContainsKey("Firebolt") && turnsSinceLastCast > 5)
+                Weight = 60;
+            else
+                turnsSinceLastCast++;
+                Weight = 0;
+        }
+    }
     internal class Move : AIAction
     {
         public Move(NPC n)
@@ -740,7 +783,7 @@ public class NPC : Affectable
 
         public override void Action()
         {
-            PathNode[] nodes = PathTree.Instance.getPath(npc.GridSpace, BigBoss.Player.GridSpace, 75).ToArray();
+            PathNode[] nodes = PathTree.Instance.getPath(npc.GridSpace, BigBoss.Player.GridSpace, 600).ToArray();
             if (nodes.Length > 2)
             {
                 GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
@@ -769,6 +812,13 @@ public class NPC : Affectable
         {
             return this.GridSpace.X == x && this.GridSpace.Y == y;
         }, out space);
+    }
+
+    int DistanceToPlayer()
+    {
+        GridSpace playerSpace = BigBoss.Player.GridSpace;
+        PathNode[] nodes = PathTree.Instance.getPath(this.GridSpace, BigBoss.Player.GridSpace, 50).ToArray();
+        return nodes.Length;
     }
 
     void DecideWhatToDo()

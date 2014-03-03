@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   m_Layer: 0
-  m_Name: BrickBlock
+  m_Name: Pillar4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,9 +23,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 80, y: 80, z: 80}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!23 &2300000
@@ -40,7 +40,9 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: edffe04704bf4224ebfe4e8e8325659f, type: 2}
+  - {fileID: 2100000, guid: cf877481a973e2248b425901eb2a30f9, type: 2}
+  - {fileID: 2100000, guid: cf877481a973e2248b425901eb2a30f9, type: 2}
+  - {fileID: 2100000, guid: cf877481a973e2248b425901eb2a30f9, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -55,7 +57,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: bf79bb2035b242f4bbb54ace0f350a91, type: 3}
+  m_Mesh: {fileID: 4300000, guid: b24672e031a6d074783f4b4fb3871d5b, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

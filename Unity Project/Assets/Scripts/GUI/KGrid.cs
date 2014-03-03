@@ -29,6 +29,8 @@ public class KGrid : MonoBehaviour
     public bool sorted = false;
     public bool hideInactive = true;
 
+    public bool ReverseList = false;
+
     public bool useList = true;
     public List<Transform> gridObjects = new List<Transform>();
 
@@ -68,19 +70,40 @@ public class KGrid : MonoBehaviour
         int x = 0;
         int y = 0;
 
-        foreach (Transform t in gridObjects)
+        if (ReverseList)
         {
-            if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
-
-            float depth = t.localPosition.z;
-            t.localPosition = (arrangement == Arrangement.Horizontal) ?
-                new Vector3(cellWidth * x, -cellHeight * y, depth) :
-                new Vector3(cellWidth * y, -cellHeight * x, depth);
-
-            if (++x >= maxPerLine && maxPerLine > 0)
+            for (int i = gridObjects.Count; i-- > 0; )
             {
-                x = 0;
-                ++y;
+                if (!NGUITools.GetActive(gridObjects[i].gameObject) && hideInactive) continue;
+
+                float depth = gridObjects[i].localPosition.z;
+                gridObjects[i].localPosition = (arrangement == Arrangement.Horizontal) ?
+                    new Vector3(cellWidth * x, -cellHeight * y, depth) :
+                    new Vector3(cellWidth * y, -cellHeight * x, depth);
+
+                if (++x >= maxPerLine && maxPerLine > 0)
+                {
+                    x = 0;
+                    ++y;
+                }
+            }
+        }
+        else
+        {
+            foreach (Transform t in gridObjects)
+            {
+                if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
+
+                float depth = t.localPosition.z;
+                t.localPosition = (arrangement == Arrangement.Horizontal) ?
+                    new Vector3(cellWidth * x, -cellHeight * y, depth) :
+                    new Vector3(cellWidth * y, -cellHeight * x, depth);
+
+                if (++x >= maxPerLine && maxPerLine > 0)
+                {
+                    x = 0;
+                    ++y;
+                }
             }
         }
 
@@ -94,12 +117,23 @@ public class KGrid : MonoBehaviour
         button.transform.parent = this.transform;
     }
 
+    public void AddLabel(GUILabel label)
+    {
+        gridObjects.Add(label.transform);
+        label.transform.parent = this.transform;
+    }
+
     public void Clear()
     {
         foreach (Transform t in gridObjects)
         {
             Destroy(t.gameObject);
         }
+        gridObjects.Clear();
+    }
+
+    public void ClearList()
+    {
         gridObjects.Clear();
     }
 }

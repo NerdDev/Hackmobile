@@ -6,6 +6,7 @@ using XML;
 public class Spell : IXmlParsable
 {
     SpellCastInfo info;
+    internal int range;
     protected SpellCastInfo CastInfo
     {
         get
@@ -15,7 +16,7 @@ public class Spell : IXmlParsable
             return info;
         }
     }
-    List<SpellAspect> aspects = new List<SpellAspect>();
+    internal List<SpellAspect> aspects = new List<SpellAspect>();
 
     public void Activate(IAffectable caster)
     {
@@ -45,6 +46,7 @@ public class Spell : IXmlParsable
 
     public void ParseXML(XMLNode spell)
     {
+        range = spell.SelectInt("range");
         // If no targeter specified, assume self
         AddAspect(new Self(), GetEffects(spell.SelectList("effect")));
 

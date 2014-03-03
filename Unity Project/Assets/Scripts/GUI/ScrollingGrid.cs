@@ -8,6 +8,7 @@ public class ScrollingGrid : MonoBehaviour
     public UIDraggablePanel DragPanel;
     public UIScrollBar ScrollPanel;
     public KGrid Grid;
+    public bool InitiallyActive = false;
 
     void Awake()
     {
@@ -20,7 +21,7 @@ public class ScrollingGrid : MonoBehaviour
 
     void Start()
     {
-        this.gameObject.SetActive(false);
+        this.gameObject.SetActive(InitiallyActive);
     }
 
     public void Clear()
@@ -28,7 +29,7 @@ public class ScrollingGrid : MonoBehaviour
         this.Grid.Clear();
     }
 
-    public void Reposition()
+    public virtual void Reposition()
     {
         this.Grid.Reposition();
     }
