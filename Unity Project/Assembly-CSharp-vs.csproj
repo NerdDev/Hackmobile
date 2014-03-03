@@ -89,6 +89,7 @@
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\RectangularRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\SquareRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\TRoomMod.cs" />
+     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Defining Mods\BlankDefiningRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Defining Mods\DefiningRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\FillRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\HiddenRoomMod.cs" />
@@ -117,6 +118,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeCustomizer.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\GrandTombRoom.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\MassTombRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\UndeadTombTheme.cs" />
      <Compile Include="Assets\Scripts\Library\Axis.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />

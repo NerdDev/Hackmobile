@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class GrandTombRoom : BaseRoomMod
+public class BlankDefiningRoomMod : DefiningRoomMod
 {
     public override bool Modify(RoomSpec spec)
     {
-        int numTombs = spec.Random.Next(2, 5) * 2;
-        //bool 
-        //List<Bounding> largestRects = spec.Grids.FindLargestRectangles(false, )
-        return false;
+        return true;
     }
 
     public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()

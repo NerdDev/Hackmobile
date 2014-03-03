@@ -972,6 +972,61 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return finder.Find();
     }
 
+    /*
+     * Finds the optimized maximum amount of options of rectangles that aren't overlapping.
+     */
+    public List<List<Bounding>> FindRectanglesMaximized(int width, int height, bool tryFlipped, StrokedAction<T> tester, Bounding scope = null)
+    {
+        List<Bounding> options = FindRectangles(width, height, false, tester, scope);
+        var ret = new List<List<Bounding>>();
+        while (options.Count > 0)
+        {
+            List<Bounding> tmpList = new List<Bounding>();
+            Bounding baseBound = options.Take();
+            tmpList.Add(baseBound);
+            for (int i = 0; i < options.Count; i++)
+            {
+                Bounding bound = options[i];
+                int xDiff = baseBound.XMin - bound.XMin;
+                int yDiff = baseBound.YMin - bound.YMin;
+                if (xDiff % baseBound.Width == 0
+                    && yDiff % baseBound.Height == 0)
+                {
+                    options.RemoveAt(i--);
+                    tmpList.Add(bound);
+                }
+            }
+            if (ret.Count == 0)
+            {
+                ret.Add(tmpList);
+            }
+            else if (tmpList.Count >= ret[0].Count)
+            {
+                if (tmpList.Count > ret[0].Count)
+                {
+                    ret.Clear();
+                }
+                ret.Add(tmpList);
+            }
+        }
+        if (tryFlipped)
+        {
+            List<List<Bounding>> flipped = FindRectanglesMaximized(height, width, false, tester, scope);
+            if (flipped.Count > 0)
+            {
+                if (ret.Count == 0 || flipped[0].Count > ret[0].Count)
+                {
+                    return flipped;
+                }
+                else if (flipped[0].Count == ret[0].Count)
+                {
+                    ret.AddRange(flipped);
+                }
+            }
+        }
+        return ret;
+    }
+
     private static List<Point> largestToSmallestRects;
     public List<Bounding> FindLargestRectangles(bool square, StrokedAction<T> tester, Bounding scope = null)
     {

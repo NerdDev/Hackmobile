@@ -5,6 +5,11 @@ using System.Text;
 
 public static class Draw
 {
+    public static DrawAction<T> Nothing<T>()
+    {
+        return (arr, x, y) => { return true; };
+    }
+
     public static DrawAction<T> EqualTo<T>(T t)
     {
         return (arr, x, y) =>
