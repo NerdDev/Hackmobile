@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-public abstract class ProbabilityPool<T>
+public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>
 {
     public const double MAX_MULTIPLIER = 100000;
     public const double MIN_MULTIPLIER = .0000000001;
@@ -20,6 +20,8 @@ public abstract class ProbabilityPool<T>
 
     public abstract void Add(T item, double multiplier, bool unique);
 
+    public abstract void AddAll(ProbabilityPool<T> rhs);
+
     public void Add(T item, double multiplier)
     {
         Add(item, multiplier, false);
@@ -27,9 +29,9 @@ public abstract class ProbabilityPool<T>
 
     public virtual void Add(T item)
     {
-        if (item is ProbabilityItem)
+        if (item is IProbabilityItem)
         {
-            ProbabilityItem p = (ProbabilityItem)item;
+            IProbabilityItem p = (IProbabilityItem)item;
             Add(item, p.Multiplier, p.Unique);
         }
         else
@@ -74,4 +76,10 @@ public abstract class ProbabilityPool<T>
 
     public abstract void ToLog(Logs log, string name = "");
 
+    public abstract IEnumerator<ProbabilityItem<T>> GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
+    }
 }

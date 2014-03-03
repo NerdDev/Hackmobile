@@ -9,15 +9,19 @@ public class UndeadTombTheme : Theme
     public override void Init()
     {
         base.Init();
-        AddMod(new CircleRoom(), .5d);
-        AddMod(new RectangularRoom(), 2d);
-        AddMod(new SquareRoom(), 1d);
-        AddMod(new GiantPillarMod(), 1);
-        AddMod(new HiddenRoomMod(), .5);
-        AddMod(new PillarMod(), 1);
-        AddMod(new SplitterMod(), 1);
-        AddMod(new TrapRoomMod(), .2d);
-        AddMod(new TreasureRoomMod(), .3d);
+        // Base
+        RoomMods.AddMod(new CircleRoom(), .5d);
+        RoomMods.AddMod(new RectangularRoom(), 2d);
+        RoomMods.AddMod(new SquareRoom(), 1d);
+        RoomMods.AddMod(new TRoomMod(), 1d);
+        //RoomMods.AddMod(new GrandTombRoom(), 2, true);
+        // Flex
+        RoomMods.AddMod(new GiantPillarMod(), 1);
+        RoomMods.AddMod(new HiddenRoomMod(), .5);
+        RoomMods.AddMod(new PillarMod(), 1);
+        RoomMods.AddMod(new SplitterMod(), 1);
+        RoomMods.AddMod(new TrapRoomMod(), .2d);
+        RoomMods.AddMod(new TreasureRoomMod(), .3d);
     }
 }
 

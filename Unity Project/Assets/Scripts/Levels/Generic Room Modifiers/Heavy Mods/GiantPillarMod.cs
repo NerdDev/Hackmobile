@@ -5,15 +5,13 @@ using System;
 
 public class GiantPillarMod : HeavyRoomMod
 {
-    public override string Name { get { return "Giant Pillar"; } }
-
     public override bool Modify(RoomSpec spec)
     {
         int size = spec.Random.Next(3, 5);
         BigBoss.Debug.w(Logs.LevelGen, "Size: " + size);
         // Add an extra 2 for stroke width for analysis
         size += 2;
-        List<Bounding> locations = spec.Grids.GetSquares(size, size, false, new StrokedAction<GenSpace>()
+        List<Bounding> locations = spec.Grids.FindRectangles(size, size, false, new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.IsType<GenSpace>(GridType.Floor),
                 StrokeAction = Draw.Walkable<GenSpace>()
@@ -39,5 +37,10 @@ public class GiantPillarMod : HeavyRoomMod
         // Draw inner square without stroke (stroke was just used to analyze surroundings)
         spec.Grids.DrawRect(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme)));
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

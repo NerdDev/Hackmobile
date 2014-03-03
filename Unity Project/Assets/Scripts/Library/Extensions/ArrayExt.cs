@@ -55,7 +55,8 @@ public static class ArrayExt
         if (converter == null)
         {
             Func<object, char> conv;
-            if (!Converters.TryGetValue(typeof(T), out conv))
+            Type type = typeof(T);
+            if (!Converters.TryGetValue(type, out conv))
             {
                 converter = new Func<T, char>((t) =>
                     {

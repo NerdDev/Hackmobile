@@ -3,11 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class RoomModifier : ProbabilityItem
+abstract public class RoomModifier : IProbabilityItem
 {
     public virtual double Multiplier { get { return 1; } }
     public virtual bool Unique { get { return false; } }
-    public abstract string Name { get; }
 
     public RoomModifier()
     {
@@ -15,11 +14,13 @@ abstract public class RoomModifier : ProbabilityItem
 
     public override string ToString()
     {
-        return Name;
+        return GetType().Name;
     }
 
     // Inherited Functions
     public abstract bool Modify(RoomSpec spec);
+
+    public abstract List<ProbabilityItem<RoomModifier>> GetChainedModifiers();
 
     public override bool Equals(object obj)
     {

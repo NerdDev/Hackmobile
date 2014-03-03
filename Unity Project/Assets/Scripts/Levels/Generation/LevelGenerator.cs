@@ -146,7 +146,7 @@ public class LevelGenerator
             }
             #endregion
             RoomSpec spec = new RoomSpec(room, Depth, Theme, Rand);
-            foreach (RoomModifier mod in PickMods())
+            foreach (RoomModifier mod in Theme.RoomMods.PickMods(Rand))
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGenMain))
@@ -176,6 +176,10 @@ public class LevelGenerator
                 BigBoss.Debug.printFooter(Logs.LevelGen, "Modding " + room);
             }
             #endregion
+            if (!ValidateRoom(room))
+            {
+                throw new ArgumentException(room + " is not valid.");
+            }
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
@@ -186,56 +190,9 @@ public class LevelGenerator
         #endregion
     }
 
-    protected List<RoomModifier> PickMods()
+    protected bool ValidateRoom(LayoutObject room)
     {
-        List<RoomModifier> mods = new List<RoomModifier>();
-        BaseRoomMod baseMod = Theme.BaseMods.Get(Rand);
-        mods.Add(baseMod);
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Picked Base Mod: " + baseMod);
-        }
-        #endregion
-        int numFlex = Rand.Next(baseMod.MaxFlexMods, baseMod.MaxFlexMods);
-        int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * Rand.NextDouble()));
-        int numFill = numFlex - numHeavy;
-        List<HeavyRoomMod> heavyMods = Theme.HeavyMods.Get(Rand, numHeavy);
-        mods.AddRange(heavyMods.Cast<RoomModifier>());
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Picked " + numHeavy + " heavy modifiers: ");
-            foreach (RoomModifier mod in heavyMods)
-            {
-                BigBoss.Debug.w(Logs.LevelGen, 1, mod.ToString());
-            }
-        }
-        #endregion
-        List<FillRoomMod> fillMods = Theme.FillMods.Get(Rand, numFill);
-        mods.AddRange(fillMods.Cast<RoomModifier>());
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Picked " + numFill + " fill modifiers: ");
-            foreach (RoomModifier mod in fillMods)
-            {
-                BigBoss.Debug.w(Logs.LevelGen, 1, mod.ToString());
-            }
-        }
-        #endregion
-        FinalRoomMod finalMod;
-        if (Theme.FinalMods.Get(Rand, out finalMod))
-        {
-            mods.Add(finalMod);
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "Picked Final Mod: " + finalMod);
-            }
-            #endregion
-        }
-        return mods;
+        return room.Bounding.IsValid();
     }
 
     #region Clustering

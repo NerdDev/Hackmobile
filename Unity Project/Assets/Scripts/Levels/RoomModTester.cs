@@ -14,8 +14,7 @@ public class RoomModTester : MonoBehaviour
             try
             {
                 LayoutObject obj = new LayoutObject("Room Test " + i);
-                UndeadTombTheme theme = new UndeadTombTheme();
-                RoomSpec spec = new RoomSpec(obj, 1, theme, rand);
+                RoomSpec spec = new RoomSpec(obj, 1, null, rand);
                 TRoomMod troom = new TRoomMod();
                 troom.Modify(spec);
                 spec.Room.ToLog(Logs.LevelGenMain, "Test TRoom " + i);

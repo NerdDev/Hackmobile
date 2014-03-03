@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SquareRoom : BaseRoomMod
 {
-    public override string Name { get { return "Square Room"; } }
     public override bool Modify(RoomSpec spec)
     {
         #region DEBUG
@@ -34,5 +34,10 @@ public class SquareRoom : BaseRoomMod
         }
         #endregion
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

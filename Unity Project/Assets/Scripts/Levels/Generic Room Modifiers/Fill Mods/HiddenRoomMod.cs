@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class HiddenRoomMod : FillRoomMod
 {
-    public override string Name { get { return "Hidden Room"; } }
-
     public override bool Modify(RoomSpec spec)
     {
         int secretRoomSize = 2;
@@ -40,5 +38,10 @@ public class HiddenRoomMod : FillRoomMod
         }
         #endregion
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

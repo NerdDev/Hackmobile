@@ -5,11 +5,6 @@ using System.Text;
 
 public class TRoomMod : BaseRoomMod
 {
-    public override string Name
-    {
-        get { return "T Room"; }
-    }
-
     const int shortMin = 4;
     const int shortMax = 7;
     const int longMin = 10;
@@ -55,6 +50,11 @@ public class TRoomMod : BaseRoomMod
 
         spec.Grids.Rotate(spec.Random.NextRotation());
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }
 

@@ -37,7 +37,9 @@ public class ProbabilityList<T> : ProbabilityPool<T>
     protected void Add(IEnumerable<ProbContainer> conts)
     {
         foreach (ProbContainer cont in conts)
+        {
             Add(cont);
+        }
     }
 
     public override void Add(T item, double multiplier, bool unique = false)
@@ -154,26 +156,38 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         return ret;
     }
 
-    protected class ProbContainer
+    protected class ProbContainer : ProbabilityItem<T>
     {
-        public T Item;
         public bool Skip;
-        public double Multiplier;
-        public bool Unique;
 
         public ProbContainer(T item, double multiplier, bool unique)
+            : base(item, multiplier, unique)
         {
-            this.Item = item;
-            this.Multiplier = multiplier;
-            this.Unique = unique;
         }
 
         public ProbContainer(ProbContainer rhs)
+            : base(rhs.Item, rhs.Multiplier, rhs.Unique)
         {
-            this.Item = rhs.Item;
             this.Skip = rhs.Skip;
-            this.Multiplier = rhs.Multiplier;
-            this.Unique = rhs.Unique;
+        }
+    }
+
+    public override void AddAll(ProbabilityPool<T> rhs)
+    {
+        foreach (ProbabilityItem<T> p in rhs)
+        {
+            Add(p.Item, p.Multiplier, p.Unique);
+        }
+    }
+
+    public override IEnumerator<ProbabilityItem<T>> GetEnumerator()
+    {
+        foreach (ProbContainer cont in itemList)
+        {
+            if (!cont.Skip)
+            {
+                yield return cont;
+            }
         }
     }
 }

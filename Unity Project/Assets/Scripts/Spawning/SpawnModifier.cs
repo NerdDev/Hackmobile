@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public abstract class SpawnModifier : ProbabilityItem
+public abstract class SpawnModifier : IProbabilityItem
 {
     public virtual double Multiplier { get { return 1; } }
     public virtual bool Unique { get { return false; } }

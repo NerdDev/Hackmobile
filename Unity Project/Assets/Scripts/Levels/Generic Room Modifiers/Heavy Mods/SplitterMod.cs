@@ -5,8 +5,6 @@ using System;
 
 public class SplitterMod : HeavyRoomMod
 {
-    public override string Name { get { return "Splitter"; } }
-
     public override bool Modify(RoomSpec spec)
     {
         #region Debug
@@ -86,5 +84,10 @@ public class SplitterMod : HeavyRoomMod
         }
         #endregion
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 abstract public class Container2D<T> : IEnumerable<Value2D<T>>
 {
@@ -965,10 +966,53 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     }
     #endregion
     #region Find Options
-    public List<Bounding> GetSquares(int width, int height, bool tryFlipped, StrokedAction<T> tester, Bounding scope = null)
+    public List<Bounding> FindRectangles(int width, int height, bool tryFlipped, StrokedAction<T> tester, Bounding scope = null)
     {
         SquareFinder<T> finder = new SquareFinder<T>(this, width, height, tryFlipped, tester, scope);
         return finder.Find();
+    }
+
+    private static List<Point> largestToSmallestRects;
+    public List<Bounding> FindLargestRectangles(bool square, StrokedAction<T> tester, Bounding scope = null)
+    {
+        foreach (Point p in GetLargestToSmallestRects())
+        {
+            List<Bounding> list = FindRectangles(p.x, p.y, false, tester, scope);
+            if (list.Count > 1)
+            {
+                return list;
+            }
+        }
+        return new List<Bounding>(0);
+    }
+
+    const int largestRect = 50;
+    protected List<Point> GetLargestToSmallestRects()
+    {
+        if (largestToSmallestRects == null)
+        {
+            var largestSorter = new SortedDictionary<int, List<Point>>();
+            for (int x = 1; x < largestRect; x++)
+            {
+                for (int y = 1; y < largestRect; y++)
+                {
+                    int area = x * y;
+                    List<Point> list;
+                    if (!largestSorter.TryGetValue(area, out list))
+                    {
+                        list = new List<Point>();
+                        largestSorter.Add(area, list);
+                    }
+                    list.Add(new Point(x, y));
+                }
+            }
+            largestToSmallestRects = new List<Point>(largestRect * largestRect);
+            foreach (List<Point> list in largestSorter.Values.Reverse())
+            {
+                largestToSmallestRects.AddRange(list);
+            }
+        }
+        return largestToSmallestRects;
     }
     #endregion
     #region Searches

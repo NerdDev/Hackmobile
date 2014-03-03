@@ -33,6 +33,10 @@ public class LevelManager : MonoBehaviour, IManager
         {
             return GridTypeEnum.Convert(((GenSpace)b).Type);
         };
+        ArrayExt.Converters[typeof(IGridSpace)] = (b) =>
+        {
+            return GridTypeEnum.Convert(((GenSpace)b).Type);
+        };
         if (Seed == -1)
             Seed = Probability.Rand.Next();
         System.Random rand = new System.Random(Seed);

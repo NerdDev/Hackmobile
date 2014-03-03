@@ -64,10 +64,11 @@
      <Compile Include="Assets\Scripts\Common\Nifty.cs" />
      <Compile Include="Assets\Scripts\Common\Percent.cs" />
      <Compile Include="Assets\Scripts\Common\Point.cs" />
+     <Compile Include="Assets\Scripts\Common\Probability\IProbabilityItem.cs" />
+     <Compile Include="Assets\Scripts\Common\Probability\IProbabilityLevItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\LeveledPool.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\Probability.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityItem.cs" />
-     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityLevItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityList.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityPool.cs" />
      <Compile Include="Assets\Scripts\Common\Rotation.cs" />
@@ -88,6 +89,7 @@
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\RectangularRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\SquareRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\TRoomMod.cs" />
+     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Defining Mods\DefiningRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\FillRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\HiddenRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\PillarMod.cs" />
@@ -109,10 +111,12 @@
      <Compile Include="Assets\Scripts\Levels\IGridSpace.cs" />
      <Compile Include="Assets\Scripts\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Levels\LevelBuilder.cs" />
+     <Compile Include="Assets\Scripts\Levels\RoomModCollection.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModTester.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeCustomizer.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeElement.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\GrandTombRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\UndeadTombTheme.cs" />
      <Compile Include="Assets\Scripts\Library\Axis.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class TrapRoomMod : FillRoomMod
 {
-    public override string Name { get { return "Trap Room"; } }
     public override bool Unique { get { return true; } }
     protected static ProbabilityList<int> treasureSizeList = new ProbabilityList<int>();
     static TrapRoomMod()
@@ -68,5 +67,10 @@ public class TrapRoomMod : FillRoomMod
         }
         #endregion
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

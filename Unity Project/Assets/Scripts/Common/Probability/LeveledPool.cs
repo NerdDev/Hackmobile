@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public delegate double LeveledCurve(ushort gravityLevel, ushort entryLevel);
@@ -31,9 +32,9 @@ public class LeveledPool<T> : ProbabilityPool<T>
 
     public override void Add(T item)
     {
-        if (item is ProbabilityLevItem)
+        if (item is IProbabilityLevItem)
         {
-            ProbabilityLevItem p = (ProbabilityLevItem)item;
+            IProbabilityLevItem p = (IProbabilityLevItem)item;
             Add(item, p.Multiplier, p.Unique, p.Level);
         }
         else
@@ -45,12 +46,21 @@ public class LeveledPool<T> : ProbabilityPool<T>
     public override void Add(T item, double multiplier, bool unique)
     {
         Add(item, multiplier, unique, 1);
+        Clear();
     }
 
     protected void Add(ProbContainer cont)
     {
         prototypePool.Add(cont);
         Clear();
+    }
+
+    public override void AddAll(ProbabilityPool<T> rhs)
+    {
+        foreach (var v in rhs)
+        {
+
+        }
     }
     #endregion
 
@@ -62,7 +72,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
         foreach (ProbContainer prototype in prototypePool)
         {
             double multiplier = levelCurve(level, prototype.Level);
-            multiplier = prototype.multiplier * multiplier;
+            multiplier = prototype.Multiplier * multiplier;
             if (multiplier < MAX_MULTIPLIER && multiplier > MIN_MULTIPLIER)
                 currentPool.Add(prototype.Item, multiplier, prototype.Unique);
         }
@@ -125,7 +135,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
             BigBoss.Debug.w(log, "Item - Level - Multiplier - Unique");
             foreach (ProbContainer cont in prototypePool)
             {
-                BigBoss.Debug.w(log, cont.Item + " - " + cont.Level + " - " + cont.multiplier + " - " + cont.Unique);
+                BigBoss.Debug.w(log, cont.Item + " - " + cont.Level + " - " + cont.Multiplier + " - " + cont.Unique);
             }
             if (curLevel != -1)
             {
@@ -137,20 +147,27 @@ public class LeveledPool<T> : ProbabilityPool<T>
     }
 
     #region Shell
-    protected class ProbContainer
+    protected class ProbContainer : ProbabilityItem<T>
     {
-        public T Item;
-        public double multiplier;
-        public bool Unique;
         public ushort Level;
 
         public ProbContainer(T item, double multiplier, bool unique, ushort level)
+            : base(item, multiplier, unique)
         {
-            this.Item = item;
-            this.multiplier = multiplier;
-            this.Unique = unique;
             this.Level = level;
         }
     }
     #endregion
+
+    public override IEnumerator<ProbabilityItem<T>> GetEnumerator()
+    {
+        if (curLevel != -1)
+        {
+            return currentPool.GetEnumerator();
+        }
+        else
+        {
+            return prototypePool.Cast<ProbabilityItem<T>>().GetEnumerator();
+        }
+    }
 }

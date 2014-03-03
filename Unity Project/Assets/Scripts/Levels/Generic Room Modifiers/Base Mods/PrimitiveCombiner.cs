@@ -23,11 +23,6 @@ public class PrimitiveCombiner : BaseRoomMod
     private ProbabilityPool<BaseRoomMod> _primitives;
     private ProbabilityPool<byte> _amounts;
 
-    public override string Name
-    {
-        get { return "Primitive Combiner"; }
-    }
-
     #region Ctor
     public PrimitiveCombiner(ProbabilityPool<BaseRoomMod> roomPool, ProbabilityPool<byte> amountPool)
     {
@@ -57,6 +52,12 @@ public class PrimitiveCombiner : BaseRoomMod
         _primitives.ClearSkipped();
         byte amount = _amounts.Get(spec.Random);
         List<BaseRoomMod> mods = _primitives.Get(spec.Random, amount);
+        throw new NotImplementedException("");
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        throw new NotImplementedException();
     }
 }

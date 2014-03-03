@@ -7,5 +7,6 @@ public abstract class BaseRoomMod : RoomModifier
 {
     public virtual int MinFlexMods { get { return 3; } }
     public virtual int MaxFlexMods { get { return 6; } }
+    public virtual bool AllowDefiningMod { get { return true; } }
 }
 

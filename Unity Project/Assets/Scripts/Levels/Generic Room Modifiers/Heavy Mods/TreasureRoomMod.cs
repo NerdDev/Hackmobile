@@ -5,7 +5,6 @@ using System.Text;
 
 class TreasureRoomMod : HeavyRoomMod
 {
-    public override string Name { get { return "Treasure Room"; } }
     public override bool Unique { get { return true; } }
 
     public override bool Modify(RoomSpec spec)
@@ -25,5 +24,10 @@ class TreasureRoomMod : HeavyRoomMod
         room.Grids.SetTo(centerX - 2, centerY, new GenSpace(GridType.Door, spec.Theme));
         room.Grids.SetTo(centerX, centerY, new GenSpace(GridType.Chest, spec.Theme));
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

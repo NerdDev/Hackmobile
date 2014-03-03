@@ -19,7 +19,6 @@ public class SquareFinder<T>
     int _lastPassedX;
     int _lastTestedY;
     int xShift;
-    bool[] previousLastPassedX;
     bool[] _lastPassedXArr;
     Counter counter = new Counter();
 

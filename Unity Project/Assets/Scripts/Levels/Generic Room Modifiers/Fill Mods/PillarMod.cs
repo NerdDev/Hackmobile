@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PillarMod : FillRoomMod
 {
-    public override string Name { get { return "Pillars"; } }
     public override bool Unique { get { return true; } }
     static ProbabilityList<int> spacingOptions = new ProbabilityList<int>();
     static PillarMod()
@@ -38,5 +38,10 @@ public class PillarMod : FillRoomMod
         }
 
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CircleRoom : BaseRoomMod
 {
     const int minRadiusSize = 6;
     const int maxRadiusSize = 10;
-    public override string Name { get { return "Circular Room"; } }
     public override bool Modify(RoomSpec spec)
     {
         int radius = spec.Random.Next(minRadiusSize, maxRadiusSize);
@@ -22,5 +22,10 @@ public class CircleRoom : BaseRoomMod
                 StrokeAction = Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme))
             });
         return true;
+    }
+
+    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
+    {
+        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }
