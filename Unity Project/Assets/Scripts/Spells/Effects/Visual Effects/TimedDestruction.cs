@@ -7,7 +7,7 @@ class TimedDestruction : MonoBehaviour
 {
     float startTime;
     float finishTime;
-    public float TimeTillDestruction;
+    public float TimeTillDestruction = 500;
 
     public void init(float time)
     {
@@ -16,7 +16,7 @@ class TimedDestruction : MonoBehaviour
 
     public void Start()
     {
-        finishTime = TimeTillDestruction + Time.time;
+        if (finishTime == 0) finishTime = TimeTillDestruction + Time.time;
     }
 
     void Update()
