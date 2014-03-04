@@ -58,7 +58,8 @@ public class SplitterMod : HeavyRoomMod
 
         // Draw selected splitter
         int picked = options.Random(spec.Random);
-        spec.Grids.DrawLine(from, to, picked, horizontal, Draw.SetToIfNotEqual(GridType.NULL, new GenSpace(GridType.Wall, spec.Theme)));
+        List<Point> walls = new List<Point>();
+        spec.Grids.DrawLine(from, to, picked, horizontal, Draw.Not(Draw.IsType<GenSpace>(GridType.NULL)).IfThen(Draw.SetTo(GridType.Wall, spec.Theme).And(Draw.AddTo<GenSpace>(walls))));
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -67,16 +68,7 @@ public class SplitterMod : HeavyRoomMod
         }
         #endregion
 
-        // Draw at least one door
-        RandomPicker<GenSpace> picker;
-        spec.Grids.DrawLine(from, to, picked, horizontal,
-            Draw.CanDrawDoor<GenSpace>().IfThen(Draw.PickRandom(out picker)));
-
-        int numDoors = spec.Random.Next(1, 4);
-        List<Value2D<GenSpace>> doors = picker.Pick(spec.Random, numDoors, 1, false);
-        foreach (Value2D<GenSpace> door in doors)
-            spec.Grids.SetTo(door.x, door.y, new GenSpace(GridType.Door, spec.Theme));
-
+        spec.Grids.PlaceSomeDoors(walls, spec.Theme, spec.Random, 5);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

@@ -9,21 +9,44 @@ class TreasureRoomMod : HeavyRoomMod
 
     public override bool Modify(RoomSpec spec)
     {
-        LayoutObject room = spec.Room;
-        Bounding bounds = room.GetBounding(true);
-        int centerX = (bounds.XMin + bounds.XMax) / 2;
-        int centerY = (bounds.YMin + bounds.YMax) / 2;
-        room.Grids.DrawRect(centerX, centerY, 2, new StrokedAction<GenSpace>()
+        List<Bounding> options = spec.Grids.FindRectangles(5, 5, false, new StrokedAction<GenSpace>()
+            {
+                UnitAction = Draw.Walkable<GenSpace>(),
+                StrokeAction = Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>())).And(Draw.IsType<GenSpace>(GridType.Floor).Or(Draw.WallType<GenSpace>()))
+            }, spec.Grids.Bounding);
+        while (options.Count > 0)
         {
-            StrokeAction = Draw.SetTo<GenSpace>(new GenSpace(GridType.Wall, spec.Theme)),
-            UnitAction = Draw.SetTo<GenSpace>(new GenSpace(GridType.Floor, spec.Theme))
-        });
-        room.Grids.SetTo(centerX, centerY + 2, new GenSpace(GridType.Door, spec.Theme));
-        room.Grids.SetTo(centerX, centerY - 2, new GenSpace(GridType.Door, spec.Theme));
-        room.Grids.SetTo(centerX + 2, centerY, new GenSpace(GridType.Door, spec.Theme));
-        room.Grids.SetTo(centerX - 2, centerY, new GenSpace(GridType.Door, spec.Theme));
-        room.Grids.SetTo(centerX, centerY, new GenSpace(GridType.Chest, spec.Theme));
+            Bounding bounding = options.RandomTake(spec.Random);
+            Point center = bounding.GetCenter();
+            if (spec.Grids[center].Type != GridType.Floor) return false;
+            List<Point> doors = new List<Point>();
+            HandleDoor(bounding.XMin, center.y, doors, spec);
+            HandleDoor(bounding.XMin, center.y, doors, spec);
+            HandleDoor(center.x, bounding.YMin, doors, spec);
+            HandleDoor(center.x, bounding.YMax, doors, spec);
+            if (doors.Count == 0) return false;
+            // Draw it
+            spec.Grids.DrawRect(bounding.XMin, bounding.XMax, bounding.YMin, bounding.YMax, new StrokedAction<GenSpace>()
+            {
+                StrokeAction = Draw.SetTo<GenSpace>(new GenSpace(GridType.Wall, spec.Theme)),
+                UnitAction = Draw.SetTo<GenSpace>(new GenSpace(GridType.Floor, spec.Theme))
+            });
+            foreach (var door in doors)
+            {
+                spec.Grids[door] = new GenSpace(GridType.Door, spec.Theme);
+            }
+            spec.Grids[center] = new GenSpace(GridType.Chest, spec.Theme);
+            return true;
+        }
         return true;
+    }
+
+    protected void HandleDoor(int x, int y, List<Point> doorOptions, RoomSpec spec)
+    {
+        if (spec.Grids.DrawDir(x, y, GridDirection.HORIZ, Draw.Walkable<GenSpace>()))
+        {
+            doorOptions.Add(new Point(x, y));
+        }
     }
 
     public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()

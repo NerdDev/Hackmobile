@@ -57,8 +57,12 @@ public static class GridTypeDrawExt
     }
 
     public static ProbabilityList<int> DoorRatioPicker;
-    public static List<Value2D<GenSpace>> PlaceSomeDoors(this Container2D<GenSpace> arr, IEnumerable<Point> points, Theme theme, System.Random rand, Point shift = null)
+    public static List<Value2D<GenSpace>> PlaceSomeDoors(this Container2D<GenSpace> arr, IEnumerable<Point> points, Theme theme, System.Random rand, int desiredWallToDoorRatio = -1, Point shift = null)
     {
+        if (desiredWallToDoorRatio < 0)
+        {
+            desiredWallToDoorRatio = LevelGenerator.desiredWallToDoorRatio;
+        }
         var acceptablePoints = new MultiMap<GenSpace>();
         Counter numPoints = new Counter();
         DrawAction<GenSpace> call = Draw.Count<GenSpace>(numPoints).And(Draw.CanDrawDoor<GenSpace>().IfThen(Draw.AddTo(acceptablePoints)));
@@ -76,7 +80,7 @@ public static class GridTypeDrawExt
             DoorRatioPicker.Add(1, .5);
             DoorRatioPicker.Add(2, .25);
         }
-        int numDoors = numPoints / LevelGenerator.desiredWallToDoorRatio;
+        int numDoors = numPoints / desiredWallToDoorRatio;
         numDoors += DoorRatioPicker.Get(rand);
         if (numDoors <= 0)
             numDoors = 1;
