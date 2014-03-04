@@ -12,12 +12,12 @@ public class FireBallVisual : EffectInstance
     {
         Vector3 vector = this.caster.Self.GO.transform.position;
         Vector3 pos = new Vector3(vector.x, vector.y + .5f, vector.z);
-        //Vector3 pos = new Vector3(BigBoss.Player.GO.transform.position.x, BigBoss.Player.GO.transform.position.y + .5f, BigBoss.Player.GO.transform.position.z);
         fireball = GameObject.Instantiate(Resources.Load("FX/Fireball"), pos, Quaternion.identity) as GameObject;
         MoveTowards script = fireball.AddComponent<MoveTowards>();
-        script.initialize(n.GO, speed, new Action(() => 
+        script.initialize(n.GO, speed, new Action<Vector3>((Vector3 loc) => 
         {
-            (GameObject.Instantiate(Resources.Load("FX/FireballExplosion"), n.GO.transform.position, Quaternion.identity) as GameObject).AddComponent<TimedDestruction>().init(.5f);
+            GameObject go = GameObject.Instantiate(Resources.Load("FX/FireballExplosion"), loc, Quaternion.identity) as GameObject;
+            go.AddComponent<TimedDestruction>().init(.5f);
         }));
     }
 
