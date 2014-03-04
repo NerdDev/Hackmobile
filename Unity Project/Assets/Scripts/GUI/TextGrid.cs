@@ -63,7 +63,7 @@ public class TextGrid : ScrollingGrid
         }
          */
         int counter = 0;
-        for (int i = labels.Count; i-- > 0; )
+        for (int i = labels.Count; i--> 0 ;)
         {
             if (counter > displayLimit) break;
             counter++;
