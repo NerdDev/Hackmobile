@@ -17,7 +17,7 @@ public class RoomModTester : MonoBehaviour
                 RoomSpec spec = new RoomSpec(obj, 1, null, rand);
                 TRoomMod troom = new TRoomMod();
                 troom.Modify(spec);
-                spec.Room.ToLog(Logs.LevelGenMain, "Test TRoom " + i);
+                spec.Grids.ToLog(Logs.LevelGenMain, "Test TRoom " + i);
             }
             catch (Exception ex)
             {

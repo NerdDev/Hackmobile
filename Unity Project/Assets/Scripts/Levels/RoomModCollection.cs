@@ -5,6 +5,26 @@ using System.Text;
 
 public class RoomModCollection
 {
+    private bool _allowDefiningMod = true;
+    public bool AllowDefiningMod
+    {
+        get
+        {
+            return _allowDefiningMod && DefiningMods.Count > 0;
+        }
+        set { _allowDefiningMod = value; }
+    }
+    private bool _allowFinalMod = true;
+    public bool AllowFinalMod
+    {
+        get
+        {
+            return _allowFinalMod && FinalMods.Count > 0;
+        }
+        set { _allowFinalMod = value; }
+    }
+    public int MinFlexMods = 3;
+    public int MaxFlexMods = 6;
     public ProbabilityPool<BaseRoomMod> BaseMods = ProbabilityPool<BaseRoomMod>.Create();
     public ProbabilityPool<DefiningRoomMod> DefiningMods = ProbabilityPool<DefiningRoomMod>.Create();
     public ProbabilityPool<HeavyRoomMod> HeavyMods = ProbabilityPool<HeavyRoomMod>.Create();
@@ -50,82 +70,6 @@ public class RoomModCollection
         {
             throw new ArgumentException("Cannot inherit directly from RoomModifier");
         }
-    }
-
-    protected List<R> PickAndIntegrate<R>(ProbabilityPool<R> pool, int number, System.Random Rand)
-        where R : RoomModifier
-    {
-        List<R> ret = new List<R>(number);
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            pool.ToLog(Logs.LevelGen, typeof(R).ToString() + " Probability");
-        }
-        #endregion
-        ret.AddRange(pool.Get(Rand, number));
-        foreach (R r in ret)
-        {
-            foreach (ProbabilityItem<RoomModifier> chained in r.GetChainedModifiers())
-            {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    BigBoss.Debug.w(Logs.LevelGen, "Chained: " + chained);
-                }
-                #endregion
-                AddMod(chained.Item, chained.Multiplier, chained.Unique);
-            }
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Picked: ");
-            foreach (R r in ret)
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "  " + r.ToString());
-            }
-        }
-        #endregion
-        return ret;
-    }
-
-    protected bool PickAndIntegrate<R>(ProbabilityPool<R> pool, System.Random Rand, out R picked)
-        where R : RoomModifier
-    {
-        List<R> list = PickAndIntegrate(pool, 1, Rand);
-        if (list.Count > 0)
-        {
-            picked = list[0];
-            return true;
-        }
-        picked = null;
-        return false;
-    }
-
-    public List<RoomModifier> PickMods(System.Random Rand)
-    {
-        RoomModCollection tmp = new RoomModCollection(this);
-        List<RoomModifier> mods = new List<RoomModifier>();
-        // Base Mod
-        BaseRoomMod baseMod;
-        PickAndIntegrate(tmp.BaseMods, Rand, out baseMod);
-        mods.Add(baseMod);
-        // Definining Mod
-        if (baseMod.AllowDefiningMod)
-        {
-            mods.AddRange(PickAndIntegrate(tmp.DefiningMods, 1, Rand).Cast<RoomModifier>());
-        }
-        // Flex Mods
-        int numFlex = Rand.Next(baseMod.MaxFlexMods, baseMod.MaxFlexMods);
-        int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * Rand.NextDouble()));
-        int numFill = numFlex - numHeavy;
-        // Heavy Mods
-        mods.AddRange(PickAndIntegrate(tmp.HeavyMods, numHeavy, Rand).Cast<RoomModifier>());
-        // Fill Mods
-        mods.AddRange(PickAndIntegrate(tmp.FillMods, numFill, Rand).Cast<RoomModifier>());
-        // Final Mods
-        mods.AddRange(PickAndIntegrate(tmp.FinalMods, 1, Rand).Cast<RoomModifier>());
-        return mods;
     }
 }
 

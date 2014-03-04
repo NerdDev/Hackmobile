@@ -20,8 +20,6 @@ abstract public class RoomModifier : IProbabilityItem
     // Inherited Functions
     public abstract bool Modify(RoomSpec spec);
 
-    public abstract List<ProbabilityItem<RoomModifier>> GetChainedModifiers();
-
     public override bool Equals(object obj)
     {
         RoomModifier rhs = obj as RoomModifier;

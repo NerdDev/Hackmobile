@@ -52,10 +52,5 @@ public class MassTombRoom : HeavyRoomMod
         }
         return false;
     }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
-    }
 }
 

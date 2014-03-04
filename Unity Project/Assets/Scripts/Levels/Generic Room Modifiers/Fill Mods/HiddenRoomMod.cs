@@ -47,15 +47,10 @@ public class HiddenRoomMod : FillRoomMod
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            spec.Room.ToLog(Logs.LevelGen, "Final Room After placing doors");
+            spec.Grids.ToLog(Logs.LevelGen, "Final Room After placing doors");
             BigBoss.Debug.printFooter(Logs.LevelGen, "Hidden Room Mod");
         }
         #endregion
         return true;
-    }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

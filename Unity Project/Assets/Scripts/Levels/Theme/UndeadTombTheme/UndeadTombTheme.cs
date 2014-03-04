@@ -10,21 +10,21 @@ public class UndeadTombTheme : Theme
     {
         base.Init();
         // Base
-        RoomMods.AddMod(new CircleRoom(), .5d);
-        RoomMods.AddMod(new RectangularRoom(), 2d);
-        RoomMods.AddMod(new SquareRoom(), 1d);
-        RoomMods.AddMod(new TRoomMod(), 1d);
+        _roomMods.AddMod(new CircleRoom(), .5d);
+        _roomMods.AddMod(new RectangularRoom(), 2d);
+        _roomMods.AddMod(new SquareRoom(), 1d);
+        _roomMods.AddMod(new TRoomMod(), 1d);
+        //_roomMods.AddMod(new GrandTombRoom(), 2, true);
         // Defining
-        RoomMods.AddMod(new BlankDefiningRoomMod(), 1);
-        //RoomMods.AddMod(new GrandTombRoom(), 2, true);
+        _roomMods.AddMod(new BlankDefiningRoomMod(), 1);
         // Flex
-        RoomMods.AddMod(new MassTombRoom(), 1, true);
-        RoomMods.AddMod(new GiantPillarMod(), 1);
-        RoomMods.AddMod(new HiddenRoomMod(), .5);
-        RoomMods.AddMod(new PillarMod(), 1);
-        RoomMods.AddMod(new SplitterMod(), 1);
-        RoomMods.AddMod(new TrapRoomMod(), .2d);
-        RoomMods.AddMod(new TreasureRoomMod(), .3d);
+        _roomMods.AddMod(new MassTombRoom(), 1, true);
+        _roomMods.AddMod(new GiantPillarMod(), 1);
+        _roomMods.AddMod(new HiddenRoomMod(), .5);
+        _roomMods.AddMod(new PillarMod(), 1);
+        _roomMods.AddMod(new SplitterMod(), 1);
+        _roomMods.AddMod(new TrapRoomMod(), .2d);
+        _roomMods.AddMod(new TreasureRoomMod(), .3d);
     }
 }
 

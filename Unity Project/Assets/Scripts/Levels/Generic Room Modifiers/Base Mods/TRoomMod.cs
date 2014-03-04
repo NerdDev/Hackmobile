@@ -5,15 +5,24 @@ using System.Text;
 
 public class TRoomMod : BaseRoomMod
 {
-    const int shortMin = 4;
-    const int shortMax = 7;
-    const int longMin = 10;
-    const int longMax = 16;
+    public int ShortMin = 4;
+    public int ShortMax = 7;
+    public int LongMin = 10;
+    public int LongMax = 16;
+
+    public TRoomMod()
+    {
+    }
+
     public override bool Modify(RoomSpec spec)
     {
+        ShortMax = (int)(ShortMax * Scale);
+        ShortMin = (int)(ShortMin * Scale);
+        LongMin = (int)(LongMin * Scale);
+        LongMax = (int)(LongMax * Scale);
         // First Rect
-        int shortSide = spec.Random.Next(shortMin, shortMax);
-        int longSide = spec.Random.Next(longMin, longMax);
+        int shortSide = spec.Random.Next(ShortMin, ShortMax);
+        int longSide = spec.Random.Next(LongMin, LongMax);
         spec.Grids.DrawRect(0, shortSide, 0, longSide, new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.SetTo(GridType.Floor, spec.Theme),
@@ -21,8 +30,8 @@ public class TRoomMod : BaseRoomMod
             });
 
         // Second rect
-        int otherLongSide = spec.Random.Next(shortMin, longMax - shortSide);
-        int otherShortSide = spec.Random.Next(shortMin, Math.Min(longSide - 2, shortMax));
+        int otherLongSide = spec.Random.Next(ShortMin, LongMax - shortSide);
+        int otherShortSide = spec.Random.Next(ShortMin, Math.Min(longSide - 2, ShortMax));
         bool center = spec.Random.NextBool();
         int yStart;
         if (center)
@@ -50,11 +59,6 @@ public class TRoomMod : BaseRoomMod
 
         spec.Grids.Rotate(spec.Random.NextRotation());
         return true;
-    }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }
 

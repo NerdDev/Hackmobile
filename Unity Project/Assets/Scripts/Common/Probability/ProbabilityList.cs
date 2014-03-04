@@ -20,6 +20,10 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             max = value;
         }
     }
+    public override int Count
+    {
+        get { return itemList.Count; }
+    }
     
     public ProbabilityList()
     {

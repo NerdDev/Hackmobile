@@ -4,12 +4,17 @@ using System.Collections.Generic;
 
 public class CircleRoom : BaseRoomMod
 {
-    const int minRadiusSize = 6;
-    const int maxRadiusSize = 10;
+    public int MinRadius = 6;
+    public int MaxRadius = 10;
+
+    public CircleRoom ()
+    {
+    }
+
     public override bool Modify(RoomSpec spec)
     {
-        int radius = spec.Random.Next(minRadiusSize, maxRadiusSize);
-        int center = spec.Room.Grids.Width / 2;
+        int radius = spec.Random.Next((int)(MinRadius * Scale), (int)(MaxRadius * Scale));
+        int center = spec.Grids.Width / 2;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -22,10 +27,5 @@ public class CircleRoom : BaseRoomMod
                 StrokeAction = Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme))
             });
         return true;
-    }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

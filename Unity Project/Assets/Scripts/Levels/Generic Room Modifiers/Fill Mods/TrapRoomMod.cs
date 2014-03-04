@@ -16,7 +16,6 @@ public class TrapRoomMod : FillRoomMod
 
     public override bool Modify(RoomSpec spec)
     {
-        LayoutObject room = spec.Room;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -53,7 +52,7 @@ public class TrapRoomMod : FillRoomMod
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            room.ToLog(Logs.LevelGen, "After picking treasure");
+            spec.Grids.ToLog(Logs.LevelGen, "After picking treasure");
         }
         #endregion
 
@@ -67,10 +66,5 @@ public class TrapRoomMod : FillRoomMod
         }
         #endregion
         return true;
-    }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

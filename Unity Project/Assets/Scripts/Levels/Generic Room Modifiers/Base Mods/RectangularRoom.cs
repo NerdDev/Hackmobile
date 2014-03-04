@@ -4,6 +4,22 @@ using System.Collections.Generic;
 
 public class RectangularRoom : BaseRoomMod
 {
+    const int minRectSize = 8;
+    const int maxRectSize = 15;
+    private int _minSize;
+    private int _maxSize;
+
+    public RectangularRoom ()
+        : this(minRectSize, maxRectSize)
+    {
+    }
+
+    public RectangularRoom(int min, int max)
+    {
+        this._minSize = min;
+        this._maxSize = max;
+    }
+
     public override bool Modify(RoomSpec spec)
     {
         #region DEBUG
@@ -12,8 +28,8 @@ public class RectangularRoom : BaseRoomMod
             BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
-        int height = spec.Random.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
-        int width = spec.Random.Next(LevelGenerator.minRectSize, LevelGenerator.maxRectSize);
+        int height = spec.Random.Next((int)(_minSize * Scale), (int)(_maxSize * Scale));
+        int width = spec.Random.Next((int)(_minSize * Scale), (int)(_maxSize * Scale));
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -35,10 +51,5 @@ public class RectangularRoom : BaseRoomMod
         }
         #endregion
         return true;
-    }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

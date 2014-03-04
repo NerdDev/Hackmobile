@@ -9,10 +9,5 @@ public class BlankDefiningRoomMod : DefiningRoomMod
     {
         return true;
     }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
-    }
 }
 

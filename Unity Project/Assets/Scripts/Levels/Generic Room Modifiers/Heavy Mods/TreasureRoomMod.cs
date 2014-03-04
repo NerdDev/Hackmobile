@@ -48,9 +48,4 @@ class TreasureRoomMod : HeavyRoomMod
             doorOptions.Add(new Point(x, y));
         }
     }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
-    }
 }

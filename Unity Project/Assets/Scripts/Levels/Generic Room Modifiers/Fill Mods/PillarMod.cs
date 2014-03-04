@@ -17,7 +17,7 @@ public class PillarMod : FillRoomMod
 
     public override bool Modify(RoomSpec spec)
     {
-        Bounding bounds = spec.Room.GetBounding(false);
+        Bounding bounds = spec.Grids.Bounding;
         int spacingX = spacingOptions.Get(spec.Random);
         int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get(spec.Random) : spacingX;
         Container2D<GenSpace> arr = spec.Grids;
@@ -34,10 +34,5 @@ public class PillarMod : FillRoomMod
         }
 
         return true;
-    }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

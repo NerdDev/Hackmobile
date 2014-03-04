@@ -13,7 +13,7 @@ public class SplitterMod : HeavyRoomMod
             BigBoss.Debug.printHeader(Logs.LevelGen, "Splitter Mod");
         }
         #endregion
-        Bounding bounds = spec.Room.GetBounding(false);
+        Bounding bounds = spec.Grids.Bounding;
         List<int> options = new List<int>();
         bool horizontal = spec.Random.NextBool();
         int from = bounds.GetMin(horizontal);
@@ -49,7 +49,7 @@ public class SplitterMod : HeavyRoomMod
         {
             foreach (int i in options)
             {
-                Container2D<GenSpace> copy = new Array2D<GenSpace>(spec.Room.Grids);
+                Container2D<GenSpace> copy = new Array2D<GenSpace>(spec.Grids);
                 copy.DrawLine(from, to, i, horizontal, Draw.SetToIfNotEqual(GridType.NULL, new GenSpace(GridType.INTERNAL_RESERVED_BLOCKED, spec.Theme)));
                 copy.ToLog(Logs.LevelGen);
             }
@@ -64,7 +64,7 @@ public class SplitterMod : HeavyRoomMod
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.w(Logs.LevelGen, "Picked splitter:");
-            spec.Room.ToLog(Logs.LevelGen);
+            spec.Grids.ToLog(Logs.LevelGen);
         }
         #endregion
 
@@ -76,10 +76,5 @@ public class SplitterMod : HeavyRoomMod
         }
         #endregion
         return true;
-    }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

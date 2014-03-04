@@ -12,10 +12,6 @@ public class LevelGenerator
     public static int minRooms { get { return 8; } }
     public static int maxRooms { get { return 16; } } //Max not inclusive
 
-    // Box Room Size (including walls)
-    public static int minRectSize { get { return 8; } }
-    public static int maxRectSize { get { return 15; } }
-
     // Amount to shift rooms
     public static int shiftRange { get { return 10; } } //Max not inclusive
 
@@ -133,7 +129,7 @@ public class LevelGenerator
         foreach (LayoutObject room in Objects)
         {
             #region DEBUG
-            double stepTime = 0, time = 0;
+            double time = 0;
             if (BigBoss.Debug.logging(Logs.LevelGenMain))
             {
                 BigBoss.Debug.w(Logs.LevelGenMain, "Mods for " + room);
@@ -146,28 +142,29 @@ public class LevelGenerator
             }
             #endregion
             RoomSpec spec = new RoomSpec(room, Depth, Theme, Rand);
-            foreach (RoomModifier mod in Theme.RoomMods.PickMods(Rand))
+            // Base Mod
+            ApplyMod(spec, spec.RoomModifiers.BaseMods.Get(spec.Random));
+            // Definining Mod
+            if (spec.RoomModifiers.AllowDefiningMod)
             {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGenMain))
-                {
-                    BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
-                }
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    stepTime = Time.realtimeSinceStartup;
-                    BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
-                }
-                #endregion
-                mod.Modify(spec);
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    spec.Room.ToLog(Logs.LevelGen);
-                    BigBoss.Debug.w(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.  Total time: " + (Time.realtimeSinceStartup - time));
-                }
-                #endregion
+                ApplyMod(spec, spec.RoomModifiers.DefiningMods.Get(spec.Random));
             }
+            // Flex Mods
+            int numFlex = Rand.Next(spec.RoomModifiers.MinFlexMods, spec.RoomModifiers.MaxFlexMods);
+            int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * Rand.NextDouble()));
+            int numFill = numFlex - numHeavy;
+            // Heavy Mods
+            for (int i = 0; i < numHeavy; i++ )
+            {
+                ApplyMod(spec, spec.RoomModifiers.HeavyMods.Get(spec.Random));
+            }
+            // Fill Mods
+            for (int i = 0; i < numFill; i++)
+            {
+                ApplyMod(spec, spec.RoomModifiers.FillMods.Get(spec.Random));
+            }
+            // Final Mods
+            ApplyMod(spec, spec.RoomModifiers.FinalMods.Get(spec.Random));
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -186,6 +183,31 @@ public class LevelGenerator
         {
             foreach (LayoutObject room in Objects)
                 room.ToLog(Logs.LevelGenMain);
+        }
+        #endregion
+    }
+
+    protected void ApplyMod(RoomSpec spec, RoomModifier mod)
+    {
+        if (mod == null) return;
+        #region DEBUG
+        float stepTime = 0;
+        if (BigBoss.Debug.logging(Logs.LevelGenMain))
+        {
+            BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
+        }
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            stepTime = Time.realtimeSinceStartup;
+            BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
+        }
+        #endregion
+        mod.Modify(spec);
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            spec.Grids.ToLog(Logs.LevelGen);
+            BigBoss.Debug.w(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
         }
         #endregion
     }

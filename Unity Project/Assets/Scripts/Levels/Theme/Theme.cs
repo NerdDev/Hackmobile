@@ -14,13 +14,13 @@ public class Theme : MonoBehaviour
     public ThemeElement[] StairDown;
     public ThemeElement[] Pillar;
     public ThemeElement[] Chest;
-    public RoomModCollection RoomMods;
+    protected RoomModCollection _roomMods;
     public SpawnKeywords[] Keywords;
     public GenericFlags<SpawnKeywords> KeywordFlags;
 
     public virtual void Init()
     {
-        RoomMods = new RoomModCollection();
+        _roomMods = new RoomModCollection();
         KeywordFlags = new GenericFlags<SpawnKeywords>(Keywords);
     }
 
@@ -45,4 +45,8 @@ public class Theme : MonoBehaviour
         }
     }
 
+    public RoomModCollection GetRoomMods()
+    {
+        return new RoomModCollection(_roomMods);
+    }
 }

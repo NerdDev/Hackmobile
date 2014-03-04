@@ -16,14 +16,14 @@ public class GiantPillarMod : HeavyRoomMod
                 UnitAction = Draw.IsType<GenSpace>(GridType.Floor),
                 StrokeAction = Draw.Walkable<GenSpace>()
             },
-            spec.Room.GetBounding(false));
+            spec.Grids.Bounding);
         if (locations.Count == 0) return false;
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
             BigBoss.Debug.w(Logs.LevelGen, locations.Count + " Options: ");
             var save = new MultiMap<GenSpace>();
-            var copy = new Array2D<GenSpace>(spec.Room.Grids);
+            var copy = new Array2D<GenSpace>(spec.Grids);
             foreach (Bounding r in locations)
             {
                 save.Clear();
@@ -37,10 +37,5 @@ public class GiantPillarMod : HeavyRoomMod
         // Draw inner square without stroke (stroke was just used to analyze surroundings)
         spec.Grids.DrawRect(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme)));
         return true;
-    }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        return new List<ProbabilityItem<RoomModifier>>(0);
     }
 }

@@ -55,9 +55,4 @@ public class PrimitiveCombiner : BaseRoomMod
         throw new NotImplementedException("");
         return true;
     }
-
-    public override List<ProbabilityItem<RoomModifier>> GetChainedModifiers()
-    {
-        throw new NotImplementedException();
-    }
 }

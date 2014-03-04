@@ -8,6 +8,7 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>
     public const double MAX_MULTIPLIER = 100000;
     public const double MIN_MULTIPLIER = .0000000001;
     public bool Fresh { get; protected set; }
+    public abstract int Count { get; }
 
     public static ProbabilityPool<T> Create()
     {

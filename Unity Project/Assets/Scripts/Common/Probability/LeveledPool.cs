@@ -9,6 +9,14 @@ public class LeveledPool<T> : ProbabilityPool<T>
     LeveledCurve levelCurve;
     ProbabilityPool<T> currentPool;
     int curLevel = -1;
+    public override int Count
+    {
+        get 
+        { 
+            if (curLevel == -1) return 0;
+            return currentPool.Count;
+        }
+    }
 
     public LeveledPool(LeveledCurve curve)
     {
