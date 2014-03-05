@@ -14,7 +14,7 @@ public class UndeadTombTheme : Theme
         _roomMods.AddMod(new RectangularRoom(), 2d);
         _roomMods.AddMod(new SquareRoom(), 1d);
         _roomMods.AddMod(new TRoomMod(), 1d);
-        //_roomMods.AddMod(new GrandTombRoom(), 2, true);
+        _roomMods.AddMod(new GrandTombRoom(), 2, true);
         // Defining
         _roomMods.AddMod(new BlankDefiningRoomMod(), 1);
         // Flex

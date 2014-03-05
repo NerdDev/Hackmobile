@@ -26,6 +26,12 @@ public class LeveledPool<T> : ProbabilityPool<T>
     #region Add
     public void Add(T item, double multiplier, bool unique, ushort level)
     {
+        Clear();
+        AddInternal(item, multiplier, unique, level);
+    }
+
+    private void AddInternal(T item, double multiplier, bool unique, ushort level)
+    {
         Add(new ProbContainer(item, multiplier, unique, level));
     }
 
@@ -51,10 +57,28 @@ public class LeveledPool<T> : ProbabilityPool<T>
         }
     }
 
+    public override int Remove(T item, bool all)
+    {
+        Clear();
+        List<ProbContainer> toRemove = new List<ProbContainer>();
+        foreach (var v in prototypePool)
+        {
+            if (item.Equals(v.Item))
+            {
+                toRemove.Add(v);
+                if (!all) break;
+            }
+        }
+        foreach (var p in toRemove)
+        {
+            prototypePool.Remove(p);
+        }
+        return toRemove.Count;
+    }
+
     public override void Add(T item, double multiplier, bool unique)
     {
         Add(item, multiplier, unique, 1);
-        Clear();
     }
 
     protected void Add(ProbContainer cont)
@@ -65,10 +89,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
 
     public override void AddAll(ProbabilityPool<T> rhs)
     {
-        foreach (var v in rhs)
-        {
-
-        }
+        throw new NotImplementedException("");
     }
     #endregion
 

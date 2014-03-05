@@ -14,12 +14,12 @@ public class TRoomMod : BaseRoomMod
     {
     }
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec, double scale)
     {
-        ShortMax = (int)(ShortMax * Scale);
-        ShortMin = (int)(ShortMin * Scale);
-        LongMin = (int)(LongMin * Scale);
-        LongMax = (int)(LongMax * Scale);
+        ShortMax = (int)(ShortMax * scale);
+        ShortMin = (int)(ShortMin * scale);
+        LongMin = (int)(LongMin * scale);
+        LongMax = (int)(LongMax * scale);
         // First Rect
         int shortSide = spec.Random.Next(ShortMin, ShortMax);
         int longSide = spec.Random.Next(LongMin, LongMax);

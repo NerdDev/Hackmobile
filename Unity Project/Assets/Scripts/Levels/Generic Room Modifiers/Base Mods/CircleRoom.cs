@@ -11,9 +11,9 @@ public class CircleRoom : BaseRoomMod
     {
     }
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec, double scale)
     {
-        int radius = spec.Random.Next((int)(MinRadius * Scale), (int)(MaxRadius * Scale));
+        int radius = spec.Random.Next((int)(MinRadius * scale), (int)(MaxRadius * scale));
         int center = spec.Grids.Width / 2;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

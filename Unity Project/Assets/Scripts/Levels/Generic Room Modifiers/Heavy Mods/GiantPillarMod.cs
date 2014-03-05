@@ -5,7 +5,7 @@ using System;
 
 public class GiantPillarMod : HeavyRoomMod
 {
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec)
     {
         int size = spec.Random.Next(3, 5);
         BigBoss.Debug.w(Logs.LevelGen, "Size: " + size);

@@ -5,7 +5,7 @@ using System;
 
 public class SplitterMod : HeavyRoomMod
 {
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec)
     {
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))

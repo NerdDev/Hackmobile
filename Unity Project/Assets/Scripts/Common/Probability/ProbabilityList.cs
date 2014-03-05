@@ -51,6 +51,22 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         Add(new ProbContainer(item, multiplier, unique));
     }
 
+    public override int Remove(T item, bool all = true)
+    {
+        int count = 0;
+        for (int i = 0 ; i < itemList.Count ; i++)
+        {
+            if (item.Equals(itemList[i].Item))
+            {
+                itemList.RemoveAt(i);
+                if (!all) return 1;
+                i--;
+                count++;
+            }
+        }
+        return count;
+    }
+
     protected void Add(ProbContainer cont)
     {
         if (cont.Multiplier < 0)

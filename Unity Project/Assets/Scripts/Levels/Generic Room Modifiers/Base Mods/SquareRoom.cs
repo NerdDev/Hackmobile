@@ -11,7 +11,7 @@ public class SquareRoom : BaseRoomMod
     {
     }
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec, double scale)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -19,7 +19,9 @@ public class SquareRoom : BaseRoomMod
             BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
-        int side = spec.Random.Next((int)(MinSize * Scale), (int)(MaxSize * Scale));
+        int min = (int)(MinSize * scale);
+        int max = (int)(MaxSize * scale);
+        int side = spec.Random.Next(min, max);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

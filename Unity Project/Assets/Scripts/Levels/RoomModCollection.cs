@@ -71,5 +71,33 @@ public class RoomModCollection
             throw new ArgumentException("Cannot inherit directly from RoomModifier");
         }
     }
+
+    public void RemoveMod(RoomModifier mod, bool all = true)
+    {
+        if (mod is BaseRoomMod)
+        {
+            BaseMods.Remove((BaseRoomMod)mod, all);
+        }
+        else if (mod is DefiningRoomMod)
+        {
+            DefiningMods.Remove((DefiningRoomMod)mod, all);
+        }
+        else if (mod is HeavyRoomMod)
+        {
+            HeavyMods.Remove((HeavyRoomMod)mod, all);
+        }
+        else if (mod is FillRoomMod)
+        {
+            FillMods.Remove((FillRoomMod)mod, all);
+        }
+        else if (mod is FinalRoomMod)
+        {
+            FinalMods.Remove((FinalRoomMod)mod, all);
+        }
+        else
+        {
+            throw new ArgumentException("Cannot inherit directly from RoomModifier");
+        }
+    }
 }
 

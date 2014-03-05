@@ -5,7 +5,7 @@ using System.Text;
 
 public class BlankDefiningRoomMod : DefiningRoomMod
 {
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec)
     {
         return true;
     }

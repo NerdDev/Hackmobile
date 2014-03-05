@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class HiddenRoomMod : FillRoomMod
 {
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec)
     {
         int secretRoomSize = 2;
         #region DEBUG

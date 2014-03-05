@@ -15,7 +15,7 @@ public class PillarMod : FillRoomMod
     }
     const int differingSpacingChance = 15;
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec)
     {
         Bounding bounds = spec.Grids.Bounding;
         int spacingX = spacingOptions.Get(spec.Random);

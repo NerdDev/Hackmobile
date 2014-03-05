@@ -21,6 +21,8 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>
 
     public abstract void Add(T item, double multiplier, bool unique);
 
+    public abstract int Remove(T item, bool all);
+
     public abstract void AddAll(ProbabilityPool<T> rhs);
 
     public void Add(T item, double multiplier)

@@ -7,7 +7,7 @@ class TreasureRoomMod : HeavyRoomMod
 {
     public override bool Unique { get { return true; } }
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec)
     {
         List<Bounding> options = spec.Grids.FindRectangles(5, 5, false, new StrokedAction<GenSpace>()
             {

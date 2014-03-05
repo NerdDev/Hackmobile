@@ -20,7 +20,7 @@ public class RectangularRoom : BaseRoomMod
         this._maxSize = max;
     }
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec, double scale)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -28,8 +28,8 @@ public class RectangularRoom : BaseRoomMod
             BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
         }
         #endregion
-        int height = spec.Random.Next((int)(_minSize * Scale), (int)(_maxSize * Scale));
-        int width = spec.Random.Next((int)(_minSize * Scale), (int)(_maxSize * Scale));
+        int height = spec.Random.Next((int)(_minSize * scale), (int)(_maxSize * scale));
+        int width = spec.Random.Next((int)(_minSize * scale), (int)(_maxSize * scale));
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

@@ -17,8 +17,12 @@ abstract public class RoomModifier : IProbabilityItem
         return GetType().Name;
     }
 
-    // Inherited Functions
-    public abstract bool Modify(RoomSpec spec);
+    public bool Modify(RoomSpec spec)
+    {
+        return ModifyInternal(spec);
+    }
+
+    protected abstract bool ModifyInternal(RoomSpec spec);
 
     public override bool Equals(object obj)
     {

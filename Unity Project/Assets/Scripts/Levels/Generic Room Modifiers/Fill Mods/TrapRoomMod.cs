@@ -14,7 +14,7 @@ public class TrapRoomMod : FillRoomMod
         treasureSizeList.Add(3, .10, false);
     }
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

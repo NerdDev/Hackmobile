@@ -46,7 +46,7 @@ public class PrimitiveCombiner : BaseRoomMod
     }
     #endregion
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec, double scale)
     {
         _amounts.ClearSkipped();
         _primitives.ClearSkipped();

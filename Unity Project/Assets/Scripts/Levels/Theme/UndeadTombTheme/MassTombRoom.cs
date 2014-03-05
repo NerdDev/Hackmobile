@@ -7,7 +7,7 @@ public class MassTombRoom : HeavyRoomMod
 {
     const int MIN_TOMBS = 3;
 
-    public override bool Modify(RoomSpec spec)
+    protected override bool ModifyInternal(RoomSpec spec)
     {
         List<List<Bounding>> options = spec.Grids.FindRectanglesMaximized(5, 3, true, new StrokedAction<GenSpace>()
             {

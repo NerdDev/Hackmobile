@@ -891,6 +891,11 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     }
     #endregion
     #region Rectangles
+    public bool DrawRect(Bounding bounds, StrokedAction<T> action)
+    {
+        return DrawRect(bounds.XMin, bounds.XMax, bounds.YMin, bounds.YMax, action);
+    }
+
     public bool DrawRect(int xl, int xr, int yb, int yt, StrokedAction<T> action)
     {
         if (action.StrokeAction == null)
@@ -1033,7 +1038,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         foreach (Point p in GetLargestToSmallestRects())
         {
             List<Bounding> list = FindRectangles(p.x, p.y, false, tester, scope);
-            if (list.Count > 1)
+            if (list.Count > 0)
             {
                 return list;
             }
