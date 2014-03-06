@@ -18,7 +18,7 @@ public class DebugManager : MonoBehaviour, IManager
 
     #region Editor Properties
     public bool Logging = false;
-    public Logs[] ActiveLogs = new Logs[] { Logs.Main, Logs.LevelGenMain, Logs.NPCs, Logs.XML, Logs.TypeHarvest, Logs.Items };
+    public Logs[] ActiveLogs = new Logs[] { Logs.Main, Logs.LevelGenMain, Logs.NPCs, Logs.XML, Logs.TypeHarvest, Logs.Items, Logs.Pathfinding };
     public DebugFlag[] ActiveFlags = new DebugFlag[] { DebugFlag.GlobalLogging };
     #endregion
 
@@ -73,6 +73,7 @@ public class DebugManager : MonoBehaviour, IManager
         putName(Logs.NPCs, "NPCs");
         putName(Logs.XML, "Xml");
         putName(Logs.TypeHarvest, "TypeHarvest");
+        putName(Logs.Pathfinding, "Pathfinding");
 
         // Set Logging to be on
         #if !UNITY_EDITOR
@@ -441,5 +442,6 @@ public enum Logs
     Items,
     NPCs,
     XML,
-    TypeHarvest
+    TypeHarvest,
+    Pathfinding,
 };

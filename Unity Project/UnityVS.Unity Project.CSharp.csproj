@@ -10,6 +10,8 @@
     <RootNamespace>
     </RootNamespace>
     <AssemblyName>Assembly-CSharp</AssemblyName>
+    <RootNamespace></RootNamespace>
+    <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
@@ -17,6 +19,11 @@
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
     <CompilerResponseFile>
     </CompilerResponseFile>
+    <MonoProfile>unity</MonoProfile>
+    <UnityPath>C:\Unity432</UnityPath>
+    <MonoPath>$(UnityPath)\Data\Mono</MonoPath>
+    <LibraryAssembly>Assembly-CSharp.dll</LibraryAssembly>
+    <TargetFrameworkDirectory>$(MonoPath)\lib\mono\$(MonoProfile)</TargetFrameworkDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -24,7 +31,7 @@
     <OutputPath>Temp\UnityVS_bin\Debug\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,7 +39,7 @@
     <OutputPath>Temp\UnityVS_bin\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -95,8 +102,10 @@
     <Compile Include="Assets\Scripts\Common\StringStream.cs" />
     <Compile Include="Assets\Scripts\Common\Value2D.cs" />
     <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
+    <Compile Include="Assets\Scripts\GUI\GUILabel.cs" />
     <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
     <Compile Include="Assets\Scripts\GUI\ScrollingGrid.cs" />
+    <Compile Include="Assets\Scripts\GUI\TextGrid.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\ILayoutObject.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\LayoutObject.cs" />
     <Compile Include="Assets\Scripts\Levels\Generation\LayoutObjectContainer.cs" />
@@ -156,11 +165,13 @@
     <Compile Include="Assets\Scripts\Library\Extensions\EnumerableExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\EnumExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\GameObjectExt.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\HashSetExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ListExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ObjectExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\QueueExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\RandomExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\Vector3Ext.cs" />
     <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
     <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
     <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />
@@ -206,6 +217,9 @@
     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\ShockResistance.cs" />
     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\SeeInvisibleEffect.cs" />
     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\TelepathyEffect.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\FireballVisual.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveTowards.cs" />
+    <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedDestruction.cs" />
     <Compile Include="Assets\Scripts\Spells\Spell.cs" />
     <Compile Include="Assets\Scripts\Spells\SpellAspect.cs" />
     <Compile Include="Assets\Scripts\Spells\SpellCastInfo.cs" />
@@ -232,6 +246,8 @@
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemStats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\ItemChest.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\Items\ItemHolder.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\Items\LeveledItemList.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
@@ -246,6 +262,7 @@
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Races.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Roles.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\SpawnKeywords.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Spells.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Stats.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPCInstance.cs" />
@@ -456,6 +473,7 @@
     <Compile Include="Assets\Tools\NGUI\Scripts\UI\UIViewport.cs" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Resources\XML\consumables.xml" />
+    <None Include="Assets\Resources\XML\leveledlists.xml" />
     <None Include="Assets\Resources\XML\materials.xml" />
     <None Include="Assets\Resources\XML\npcs.xml" />
     <None Include="Assets\Resources\XML\player.xml" />
@@ -584,4 +602,6 @@
     <None Include="Assets\Tools\Cruncher\Scripts\CruncherScripts.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
+</Project>
+  <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2012\UnityVS.CSharp.targets" />
 </Project>

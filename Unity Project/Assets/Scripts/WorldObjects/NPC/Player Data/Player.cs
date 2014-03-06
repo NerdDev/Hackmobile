@@ -52,8 +52,11 @@ public class Player : NPC
 
     public override void OnClick()
     {
-        BigBoss.Gooey.displayInventory = !BigBoss.Gooey.displayInventory;
-        BigBoss.Gooey.OpenInventoryGUI();
+        if (BigBoss.PlayerInput.defaultPlayerInput)
+        {
+            BigBoss.Gooey.displayInventory = !BigBoss.Gooey.displayInventory;
+            BigBoss.Gooey.OpenInventoryGUI();
+        }
     }
     #endregion
 

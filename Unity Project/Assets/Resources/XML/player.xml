@@ -36,6 +36,7 @@
 			<heads>1</heads>
 			<!-- body is implicitly assumed -->
 		</bodyparts>
+		<spells>
 			<spell>
 				<name>Firebolt</name>
 				<targeter>
@@ -43,6 +44,10 @@
 					<effect>
 						<type>DamageFire</type>
 						<strength>12</strength>
+					</effect>
+					<effect>
+						<type>FireBallVisual</type>
+						<speed>2</speed>
 					</effect>
 				</targeter>
 			</spell>
@@ -68,5 +73,6 @@
 					</effect>
 				</targeter>
 			</spell>
+		</spells>
 	</npc>
 </npcs>

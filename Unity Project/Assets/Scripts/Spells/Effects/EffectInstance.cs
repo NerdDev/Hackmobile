@@ -9,6 +9,7 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
 {
     public int TurnsToProcess { get; protected set; }
     protected IAffectable target;
+    protected IAffectable caster;
     public string Name { get; set; }
     private GenericFlags<EffectIntendedTarget> targetTypes = new GenericFlags<EffectIntendedTarget>();
 
@@ -74,18 +75,19 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
         }
     }
 
-    public EffectInstance NewInstance(IAffectable target = null)
+    public EffectInstance NewInstance(IAffectable caster, IAffectable target = null)
     {
         EffectInstance instance = this.Copy<EffectInstance>();
         instance.IsActive = true;
         instance.target = target;
+        instance.caster = caster;
         instance.initialize();
         return instance;
     }
 
-    public EffectInstance ActivateOnObject(IAffectable o)
+    public EffectInstance ActivateOnObject(IAffectable caster, IAffectable o)
     {
-        EffectInstance instance = NewInstance(o);
+        EffectInstance instance = NewInstance(caster, o);
         return instance;
     }
 

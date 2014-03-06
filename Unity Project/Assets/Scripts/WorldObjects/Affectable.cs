@@ -14,9 +14,14 @@ public class Affectable : WorldObject, IAffectable
     }
 
     #region IAffectable
-    public void ApplyEffect(EffectInstance effect)
+    //public void ApplyEffect(EffectInstance effect)
+    //{
+    //    Effects.ApplyEffect(effect);
+    //}
+
+    public void ApplyEffect(IAffectable caster, EffectInstance effect)
     {
-        Effects.ApplyEffect(effect);
+        Effects.ApplyEffect(caster, effect);
     }
 
     public void RemoveEffect(string effect)

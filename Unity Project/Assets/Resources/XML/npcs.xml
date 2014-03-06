@@ -605,6 +605,43 @@
 			<heads>1</heads>
 			<!-- body is implicitly assumed -->
 		</bodyparts>
+		<spells>
+			<spell>
+				<name>Firebolt</name>
+				<range>5</range>
+				<targeter>
+					<type>TargetedObjects</type>
+          <effect>
+            <type>FireBallVisual</type>
+            <speed>2</speed>
+          </effect>
+					<effect>
+						<type>DamageFire</type>
+						<strength>12</strength>
+					</effect>
+				</targeter>
+			</spell>
+		</spells>
+		<startingitems>
+			<entry>
+				<item>sword1</item>
+				<probability>2</probability>
+				<count>1</count>
+				<level>2</level>
+			</entry>
+			<entry>
+				<item>Health Potion</item>
+				<probability>1</probability>
+				<count>2</count>
+				<level>1</level>
+			</entry>
+			<entry>
+				<item>Cure Poison</item>
+				<probability>.5</probability>
+				<count>1</count>
+				<level>4</level>
+			</entry>
+		</startingitems>
 	</npc>
 	<npc name="Golem">
 		<model> </model>
