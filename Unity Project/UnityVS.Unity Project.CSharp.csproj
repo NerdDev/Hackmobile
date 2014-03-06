@@ -7,23 +7,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AAC8DBB-04FC-1399-ECF9-1DE1930E2505}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>
-    </RootNamespace>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
     <RootNamespace></RootNamespace>
-    <AssemblyName>UnityVS.Unity Project.CSharp</AssemblyName>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
-    <MonoProfile>unity</MonoProfile>
-    <UnityPath>C:\Unity432</UnityPath>
-    <MonoPath>$(UnityPath)\Data\Mono</MonoPath>
-    <LibraryAssembly>Assembly-CSharp.dll</LibraryAssembly>
-    <TargetFrameworkDirectory>$(MonoPath)\lib\mono\$(MonoProfile)</TargetFrameworkDirectory>
+    <CompilerResponseFile></CompilerResponseFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,7 +22,7 @@
     <OutputPath>Temp\UnityVS_bin\Debug\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,7 +30,7 @@
     <OutputPath>Temp\UnityVS_bin\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -91,10 +82,10 @@
     <Compile Include="Assets\Scripts\Common\Nifty.cs" />
     <Compile Include="Assets\Scripts\Common\Percent.cs" />
     <Compile Include="Assets\Scripts\Common\Point.cs" />
-    <Compile Include="Assets\Scripts\Common\Probability\LeveledPool.cs" />
-    <Compile Include="Assets\Scripts\Common\Probability\Probability.cs" />
     <Compile Include="Assets\Scripts\Common\Probability\IProbabilityItem.cs" />
     <Compile Include="Assets\Scripts\Common\Probability\IProbabilityLevItem.cs" />
+    <Compile Include="Assets\Scripts\Common\Probability\LeveledPool.cs" />
+    <Compile Include="Assets\Scripts\Common\Probability\Probability.cs" />
     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityItem.cs" />
     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityList.cs" />
     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityPool.cs" />
@@ -119,6 +110,7 @@
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\SquareRoom.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\TRoomMod.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Defining Mods\BlankDefiningRoomMod.cs" />
+    <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Defining Mods\DefiningRoomMod.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\FillRoomMod.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\HiddenRoomMod.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\PillarMod.cs" />
@@ -128,7 +120,6 @@
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Heavy Mods\HeavyRoomMod.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Heavy Mods\SplitterMod.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Heavy Mods\TreasureRoomMod.cs" />
-    <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Defining Mods\DefiningRoomMod.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\RoomModifier.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\RoomModType.cs" />
     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\RoomSpec.cs" />
@@ -602,6 +593,4 @@
     <None Include="Assets\Tools\Cruncher\Scripts\CruncherScripts.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
-</Project>
-  <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2012\UnityVS.CSharp.targets" />
 </Project>

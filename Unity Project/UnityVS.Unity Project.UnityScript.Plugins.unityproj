@@ -82,6 +82,7 @@
     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Vignetting.js" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Resources\XML\consumables.xml" />
+    <None Include="Assets\Resources\XML\leveledlists.xml" />
     <None Include="Assets\Resources\XML\materials.xml" />
     <None Include="Assets\Resources\XML\npcs.xml" />
     <None Include="Assets\Resources\XML\player.xml" />
