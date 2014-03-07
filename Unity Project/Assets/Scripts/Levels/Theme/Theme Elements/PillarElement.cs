@@ -5,9 +5,9 @@ using System.Text;
 
 public class PillarElement : ThemeElement
 {
-    public override void PreDeployTweaks(ThemeElementSpec spec)
+    public override List<GenDeploy> PreDeployTweaks(ThemeElementSpec spec)
     {
-        base.PreDeployTweaks(spec);
-        spec.Space.Deploys.Add(new GridDeploy(spec.Theme.Floor.Random(spec.Random).GO));
+        GenDeploy floorDeploy = new GenDeploy(spec.Theme.Floor.Random(spec.Random));
+        return new List<GenDeploy>(new[] { floorDeploy });
     }
 }

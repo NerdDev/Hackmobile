@@ -5,8 +5,7 @@ using System.Text;
 
 public class ThemeElementSpec
 {
-    public GenSpace GenSpace;
-    public GridSpace Space;
+    public GridType Type;
     public Theme Theme;
     public GenDeploy GenDeploy;
     public Container2D<GenSpace> Grid;

@@ -73,25 +73,36 @@ public class LevelBuilder : MonoBehaviour
             space.Deploys = new List<GridDeploy>(gen.val.Deploys.Count);
             ret[gen] = space;
             spec.Theme = gen.val.Theme;
-            spec.GenSpace = gen.val;
+            spec.Type = gen.val.Type;
             spec.X = gen.x;
             spec.Y = gen.y;
-            spec.Space = space;
             foreach (GenDeploy genDeploy in gen.val.Deploys)
             {
-                spec.GenDeploy = genDeploy;
-                genDeploy.Element.PreDeployTweaks(spec);
-                GridDeploy deploy = new GridDeploy(genDeploy.Element.GO)
-                {
-                    Rotation = genDeploy.Rotation,
-                    X = genDeploy.X,
-                    Y = genDeploy.Y,
-                    Z = genDeploy.Z
-                };
-                space.Deploys.Add(deploy);
+                Deploy(genDeploy, spec, space);
             }
         }
         return ret;
+    }
+
+    protected void Deploy(GenDeploy genDeploy, ThemeElementSpec spec, GridSpace space)
+    {
+        spec.GenDeploy = genDeploy;
+        List<GenDeploy> additional = genDeploy.Element.PreDeployTweaks(spec);
+        GridDeploy deploy = new GridDeploy(genDeploy.Element.GO)
+        {
+            Rotation = genDeploy.Rotation,
+            X = genDeploy.X,
+            Y = genDeploy.Y,
+            Z = genDeploy.Z
+        };
+        space.Deploys.Add(deploy);
+        if (additional != null)
+        {
+            foreach (GenDeploy additionalDeploy in additional)
+            {
+                Deploy(additionalDeploy, spec, space);
+            }
+        }
     }
 
     protected bool HandleEmptyDeploy(GenSpace space, System.Random rand)

@@ -5,9 +5,8 @@ using System.Text;
 
 public class DoorElement : ThemeElement
 {
-    public override void PreDeployTweaks(ThemeElementSpec spec)
+    public override List<GenDeploy> PreDeployTweaks(ThemeElementSpec spec)
     {
-        spec.Space.Deploys.Add(new GridDeploy(spec.Theme.Floor.Random(spec.Random).GO));
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
@@ -33,6 +32,8 @@ public class DoorElement : ThemeElement
         {
             PlaceFlush(spec.GenDeploy, offsetLocation);
         }
+        GenDeploy floorDeploy = new GenDeploy(spec.Theme.Floor.Random(spec.Random));
+        return new List<GenDeploy>(new[] { floorDeploy });
     }
 }
 

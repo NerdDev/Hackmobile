@@ -28,8 +28,9 @@ public class ThemeElement : MonoBehaviour
     public byte GridHeight = 1;
     public char PrintChar = '?';
 
-    public virtual void PreDeployTweaks(ThemeElementSpec spec)
+    public virtual List<GenDeploy> PreDeployTweaks(ThemeElementSpec spec)
     {
+        return null;
     }
 
     protected void PlaceFlush(ITransform deploy, GridLocation loc, float buffer = 0F, bool rough = false)
