@@ -36,6 +36,7 @@ public class LevelGenerator
     public System.Random Rand;
     public int Depth;
     protected LevelLayout Layout;
+    protected LayoutObjectContainer Container;
     protected List<ILayoutObject> Objects;
     private int _debugNum = 0;
 
@@ -53,7 +54,8 @@ public class LevelGenerator
             startTime = Time.realtimeSinceStartup;
         }
         #endregion
-        Layout = new LevelLayout();
+        Layout = new LevelLayout() { Random = Rand };
+        Container = new LayoutObjectContainer();
         Log("Mod Rooms", false, GenerateRoomShells, ModRooms);
         Log("Place Clusters", true, ClusterRooms);
         Log("Place Rooms", true, PlaceRooms);
@@ -64,10 +66,11 @@ public class LevelGenerator
         if (BigBoss.Debug.logging())
         {
             BigBoss.Debug.w(Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
-            Layout.ToLog(Logs.LevelGenMain);
+            Container.ToLog(Logs.LevelGenMain);
             BigBoss.Debug.printFooter(Logs.LevelGenMain, "Generating Level: " + Depth);
         }
         #endregion
+        Layout.Grids.PutAll(Container.GetGrid());
         return Layout;
     }
 
@@ -457,7 +460,7 @@ public class LevelGenerator
         if (unplacedRooms.Count > 0)
         { // Add seed
             ILayoutObject seed = unplacedRooms.Take();
-            Layout.Objects.Add(seed);
+            Container.Objects.Add(seed);
             placedRooms.Add(seed);
         }
         foreach (ILayoutObject room in unplacedRooms)
@@ -478,11 +481,11 @@ public class LevelGenerator
             #endregion
             room.ShiftOutside(placedRooms, shiftMagn);
             placedRooms.Add(room);
-            Layout.Objects.Add(room);
+            Container.Objects.Add(room);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                Layout.ToLog(Logs.LevelGen, "Layout after placing room at: " + room.Bounding);
+                Container.ToLog(Logs.LevelGen, "Layout after placing room at: " + room.Bounding);
                 BigBoss.Debug.printBreakers(Logs.LevelGen, 4);
             }
             #endregion
@@ -548,7 +551,7 @@ public class LevelGenerator
         }
         #endregion
         DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor<GenSpace>());
-        var layoutCopy = Layout.GetGrid().Array;
+        var layoutCopy = Container.GetGrid().Array;
         List<LayoutObject> rooms = new List<LayoutObject>(Layout.Rooms.Cast<LayoutObject>());
         var runningConnected = Container2D<GenSpace>.CreateArrayFromBounds(layoutCopy);
         // Create initial queue and visited
@@ -611,8 +614,8 @@ public class LevelGenerator
                 Point second = path.SecondEnd;
                 LayoutObject leaf1, leaf2;
                 LayoutObject pathObj = path.Bake(Theme);
-                Layout.ConnectTo(first, pathObj, first, out leaf1, out pathObj);
-                Layout.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
+                Container.ConnectTo(first, pathObj, first, out leaf1, out pathObj);
+                Container.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
                 if (leaf1[first].Type == GridType.Wall)
                 {
                     leaf1.SetTo(first.x, first.y, new GenSpace(GridType.Door, Theme));
@@ -631,12 +634,12 @@ public class LevelGenerator
                     }
                     visited[v] = true;
                 }
-                Layout.Objects.Add(pathObj);
+                Container.Objects.Add(pathObj);
                 hitConnected.DrawAll(Draw.AddTo(runningConnected));
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    Layout.ToLog(Logs.LevelGen, "Final Connection");
+                    Container.ToLog(Logs.LevelGen, "Final Connection");
                 }
                 #endregion
             }
@@ -685,7 +688,7 @@ public class LevelGenerator
             startPoint = null;
             return false;
         }
-        if (!Layout.GetObjAt(endPoint, out hit))
+        if (!Container.GetObjAt(endPoint, out hit))
         {
             startPoint = null;
             return false;
@@ -708,22 +711,22 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Edges");
-            Layout.ToLog(Logs.LevelGen, "Pre Confirm Edges");
+            Container.ToLog(Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
         LayoutObject edgeObject = new LayoutObject("Edges");
-        var grids = Layout.GetGrid();
+        var grids = Container.GetGrid();
         grids.DrawAll(Draw.Not(Draw.IsType<GenSpace>(GridType.NULL).Or(Draw.IsType<GenSpace>(GridType.Wall))).IfThen((arr, x, y) =>
             {
                 grids.DrawAround(x, y, true, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, new GenSpace(GridType.Wall, Theme))));
                 return true;
             }));
-        Layout.Objects.Add(edgeObject);
+        Container.Objects.Add(edgeObject);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             edgeObject.ToLog(Logs.LevelGen, "Edge Object");
-            Layout.ToLog(Logs.LevelGen, "Post Confirm Edges");
+            Container.ToLog(Logs.LevelGen, "Post Confirm Edges");
             BigBoss.Debug.printFooter(Logs.LevelGen, "Confirm Edges");
         }
         #endregion
@@ -753,7 +756,7 @@ public class LevelGenerator
 
     protected bool PlaceMissingStair(bool up, Point otherStair, out Point placed)
     {
-        foreach (LayoutObject obj in Layout.Flatten().Randomize(Rand))
+        foreach (LayoutObject obj in Container.Flatten().Randomize(Rand))
         {
             MultiMap<GenSpace> options = new MultiMap<GenSpace>();
             DrawAction<GenSpace> test = Draw.CanDrawStair<GenSpace>();
@@ -792,7 +795,7 @@ public class LevelGenerator
             {
                 options.ToLog(Logs.LevelGen, "Stair Options");
                 obj.ToLog(Logs.LevelGen, "Placed stairs");
-                Layout.ToLog(Logs.LevelGen, "Layout");
+                Container.ToLog(Logs.LevelGen, "Layout");
             }
             #endregion
             return true;

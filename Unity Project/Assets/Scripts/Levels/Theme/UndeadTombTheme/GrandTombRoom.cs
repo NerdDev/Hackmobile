@@ -44,7 +44,7 @@ public class GrandTombRoom : BaseRoomMod
         int buffer = spec.Random.NextBool() ? 1 : 2;
         int pillarSize = 3;
         // Place pillars
-        spec.Grids.DrawRect(bound.XMin + buffer, bound.XMin + pillarSize + buffer - 1, bound.YMin + buffer, bound.YMin + pillarSize + buffer - 1, Draw.SetTo(GridType.Pillar, spec.Theme));
+        //spec.Grids.DrawRect(bound.XMin + buffer, bound.XMin + pillarSize + buffer - 1, bound.YMin + buffer, bound.YMin + pillarSize + buffer - 1, Draw.SetTo(GridType.Pillar, spec.Theme));
         //spec.Grids.DrawRect(bound.XMax - 3, bound.XMin + 3, bound.YMin, bound.YMin + 3, Draw.SetTo(GridType.Pillar, spec.Theme));
         //spec.Grids.DrawRect(bound.XMin, bound.XMin + 3, bound.YMin, bound.YMin + 3, Draw.SetTo(GridType.Pillar, spec.Theme));
         //spec.Grids.DrawRect(bound.XMin, bound.XMin + 3, bound.YMin, bound.YMin + 3, Draw.SetTo(GridType.Pillar, spec.Theme));

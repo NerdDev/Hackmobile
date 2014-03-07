@@ -4,30 +4,26 @@ using System.Collections.Generic;
 
 public class Level : Container2D<GridSpace>
 {
-    protected LevelLayout Layout { get; private set; }
     public bool Populated;
     protected Array2D<GridSpace> _array;
     public List<Container2D<GridSpace>> RoomMaps = new List<Container2D<GridSpace>>();
     private MultiMap<Container2D<GridSpace>> roomMapping = new MultiMap<Container2D<GridSpace>>(); // floor space to roommap
     public Point UpStartPoint;
     public Point DownStartPoint;
-    public Theme Theme { get; protected set; }
     public System.Random Random { get; protected set; }
 
-    public Level(LevelLayout layout, Theme theme, System.Random rand)
+    public Level(Container2D<GridSpace> spaces, LevelLayout layout, Theme theme, System.Random rand)
     {
-        Layout = layout;
-        _array = GridSpace.Convert(layout.GetGrid());
-        LoadRoomMaps();
-        Theme = theme;
+        _array = spaces.Array;
+        LoadRoomMaps(layout);
         UpStartPoint = layout.UpStart;
         DownStartPoint = layout.DownStart;
         Random = rand;
     }
 
-    private void LoadRoomMaps()
+    private void LoadRoomMaps(LevelLayout layout)
     {
-        foreach (LayoutObject room in Layout.Rooms)
+        foreach (LayoutObject room in layout.Rooms)
         {
             var roomMap = new MultiMap<GridSpace>();
             RoomMaps.Add(roomMap);

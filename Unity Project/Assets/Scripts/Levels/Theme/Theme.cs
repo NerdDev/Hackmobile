@@ -12,7 +12,6 @@ public class Theme : MonoBehaviour
     public ThemeElement[] Floor;
     public ThemeElement[] StairUp;
     public ThemeElement[] StairDown;
-    public ThemeElement[] Pillar;
     public ThemeElement[] Chest;
     protected RoomModCollection _roomMods;
     public SpawnKeywords[] Keywords;

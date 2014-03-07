@@ -44,7 +44,7 @@ public class DungeonMaster : MonoBehaviour, IManager
                     roomMap[x, y] = l[x, y];
                     return true;
                 });
-            SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, l.Theme, roomMap);
+            SpawnSpec spec = new SpawnSpec(Probability.SpawnRand, roomMap);
             SpawnModifier mod = SpawnModifier.GetMod();
             mod.Modify(spec);
         }

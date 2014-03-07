@@ -13,6 +13,7 @@ public class HiddenRoomMod : FillRoomMod
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Hidden Room Mod");
+            spec.Grids.ToLog(Logs.LevelGen, "Final Room After placing doors");
         }
         #endregion
 

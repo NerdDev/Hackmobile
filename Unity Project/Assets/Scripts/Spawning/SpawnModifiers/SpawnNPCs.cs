@@ -10,7 +10,7 @@ public class SpawnNPCs : SpawnModifier {
         spec.Room.DrawAll(Draw.If<GridSpace>((g) => g.Spawnable).IfThen(Draw.AddTo(spawnable)));
         Value2D<GridSpace> space;
         if (!spawnable.GetRandom(spec.Random, out space)) return false;
-        BigBoss.DungeonMaster.SpawnNPC(space.val, spec.Theme.Keywords);
+        BigBoss.DungeonMaster.SpawnNPC(space.val, space.val.Theme.Keywords);
         return true;
     }
 

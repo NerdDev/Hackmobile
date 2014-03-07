@@ -20,7 +20,6 @@ public class LevelManager : MonoBehaviour, IManager
 
     public void Initialize()
     {
-        Builder.Theme = Theme;
         _levels = new Level[_maxLevels];
         ArrayExt.Converters[typeof(GridType)] = (b) => { return GridTypeEnum.Convert((GridType)b); };
         ArrayExt.Converters[typeof(GridSpace)] = (b) =>
@@ -31,11 +30,15 @@ public class LevelManager : MonoBehaviour, IManager
         };
         ArrayExt.Converters[typeof(GenSpace)] = (b) =>
         {
-            return GridTypeEnum.Convert(((GenSpace)b).Type);
+            GenSpace s = b as GenSpace;
+            if (s == null) return GridTypeEnum.Convert(GridType.NULL);
+            return GridTypeEnum.Convert(s.Type);
         };
         ArrayExt.Converters[typeof(IGridSpace)] = (b) =>
         {
-            return GridTypeEnum.Convert(((GenSpace)b).Type);
+            IGridSpace s = b as IGridSpace;
+            if (s == null) return GridTypeEnum.Convert(GridType.NULL);
+            return GridTypeEnum.Convert(s.Type);
         };
         if (Seed == -1)
             Seed = Probability.Rand.Next();
@@ -141,8 +144,9 @@ public class LevelManager : MonoBehaviour, IManager
         gen.Theme = GetTheme();
         gen.Depth = depth;
         gen.Rand = new System.Random(_levelSeeds[depth]);
-        Level level = new Level(gen.Generate(), gen.Theme, gen.Rand);
-        Builder.GeneratePrototypes(level);
+        LevelLayout layout = gen.Generate();
+        Container2D<GridSpace> spaces = Builder.GeneratePrototypes(layout);
+        Level level = new Level(spaces, layout, gen.Theme, gen.Rand);
         _levels[depth] = level;
     }
 

@@ -24,8 +24,8 @@ public static class ArrayExt
 
     public static T Random<T>(this T[] arr, System.Random rand)
     {
-        if (arr.Length > 0)
-            return arr[rand.Next(arr.Length)];
+        if (arr.Length == 1) return arr[0];
+        if (arr.Length > 0) return arr[rand.Next(arr.Length)];
         return default(T);
     }
 

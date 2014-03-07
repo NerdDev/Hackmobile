@@ -3,23 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public struct GenSpace : IGridSpace 
+public class GenSpace : IGridSpace 
 {
     private GridType _type;
     public GridType Type { get { return _type; } set { _type = value; } }
     private Theme _theme;
     public Theme Theme { get { return _theme; } set { _theme = value; } }
+    public List<GenDeploy> Deploys;
 
     public GenSpace(GridType type, Theme theme)
     {
         _type = type;
         _theme = theme;
+        Deploys = null;
     }
 
     public GenSpace(GenSpace rhs)
         : this (rhs._type, rhs._theme)
     {
+    }
 
+    public void AddDeploy(GenDeploy elem)
+    {
+        if (Deploys == null)
+        {
+            Deploys = new List<GenDeploy>(3);
+        }
+        elem.Spaces.Add(this);
+        Deploys.Add(elem);
     }
 }
 

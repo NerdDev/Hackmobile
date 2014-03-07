@@ -8,7 +8,6 @@ public enum GridType
 
     Floor,
     Wall,
-    Pillar,
     Door,
     TrapDoor,
     StairUp,
@@ -51,8 +50,6 @@ public class GridTypeEnum
                 return ':';
             case GridType.SmallLoot:
                 return '$';
-            case GridType.Pillar:
-                return 'O';
             case GridType.Chest:
                 return (char)227;
             case GridType.Wall:
@@ -126,7 +123,6 @@ public class GridTypeEnum
         switch (t)
         {
             case GridType.Wall:
-            case GridType.Pillar:
                 return true;
             default:
                 return false;

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class UndeadTombTheme : Theme
+public class UndeadTombTheme : Theme, IPillarTheme
 {
+    public ThemeElement[] Pillars;
+
     public override void Init()
     {
         base.Init();
@@ -14,7 +16,7 @@ public class UndeadTombTheme : Theme
         _roomMods.AddMod(new RectangularRoom(), 2d);
         _roomMods.AddMod(new SquareRoom(), 1d);
         _roomMods.AddMod(new TRoomMod(), 1d);
-        _roomMods.AddMod(new GrandTombRoom(), 2, true);
+        _roomMods.AddMod(new GrandTombRoom(), 0.5d, true);
         // Defining
         _roomMods.AddMod(new BlankDefiningRoomMod(), 1);
         // Flex
@@ -26,5 +28,9 @@ public class UndeadTombTheme : Theme
         _roomMods.AddMod(new TrapRoomMod(), .2d);
         _roomMods.AddMod(new TreasureRoomMod(), .3d);
     }
-}
 
+    public ThemeElement[] GetPillars()
+    {
+        return Pillars;
+    }
+}
