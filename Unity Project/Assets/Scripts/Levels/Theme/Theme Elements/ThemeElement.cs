@@ -8,17 +8,18 @@ public class ThemeElement : MonoBehaviour
 {
     public GameObject GO { get { return gameObject; } }
     private Bounds _bounds;
+    private bool _bounded = false;
     public Bounds Bounds 
     {  
         get
         {
-            if (_bounds == null)
+            if (!_bounded)
             {
-                _bounds = new Bounds();
                 foreach (Renderer render in GetComponentsInChildren<Renderer>(true))
                 {
-                    Bounds.Encapsulate(render.bounds);
+                    _bounds.Encapsulate(render.bounds);
                 }
+                _bounded = true;
             }
             return _bounds;
         }
