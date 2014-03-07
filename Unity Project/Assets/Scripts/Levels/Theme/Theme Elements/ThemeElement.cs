@@ -26,6 +26,7 @@ public class ThemeElement : MonoBehaviour
     }
     public byte GridWidth = 1;
     public byte GridHeight = 1;
+    public char PrintChar = '?';
 
     public virtual void PreDeployTweaks(ThemeElementSpec spec)
     {

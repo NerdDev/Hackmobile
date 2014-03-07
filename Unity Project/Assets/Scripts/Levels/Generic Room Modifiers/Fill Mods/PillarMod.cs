@@ -20,7 +20,7 @@ public class PillarMod : FillRoomMod
     {
         IPillarTheme pillarTheme = spec.Theme as IPillarTheme;
         if (pillarTheme == null) throw new ArgumentException("Theme must be IPillarTheme");
-        ThemeElement pillarElement = pillarTheme.GetPillars().Random(spec.Random);
+        ThemeElementCollection pillarCollection = pillarTheme.GetPillars().Random(spec.Random);
         Bounding bounds = spec.Grids.Bounding;
         int spacingX = spacingOptions.Get(spec.Random);
         int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get(spec.Random) : spacingX;
@@ -33,8 +33,7 @@ public class PillarMod : FillRoomMod
             {
                 if (pass(arr, x, y))
                 {
-                    GenSpace space = new GenSpace(GridType.Wall, spec.Theme);
-                    space.AddDeploy(new GenDeploy(pillarElement));
+                    spec.MergeIn(x, y, pillarCollection.Elements.Random(spec.Random), GridType.Wall);
                 }
             }
         }

@@ -139,10 +139,12 @@
     <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\IPillarTheme.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\DoorElement.cs" />
+    <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\PillarElement.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\StairElement.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElement.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElementSpec.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\Theme.cs" />
+    <Compile Include="Assets\Scripts\Levels\Theme\ThemeElementCollection.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\GrandTombRoom.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\MassTombRoom.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\UndeadTombTheme.cs" />

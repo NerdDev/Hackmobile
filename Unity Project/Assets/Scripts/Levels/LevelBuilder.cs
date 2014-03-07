@@ -122,6 +122,10 @@ public class LevelBuilder : MonoBehaviour
             default:
                 return false;
         }
+        if (element == null)
+        {
+            throw new ArgumentException("Theme " + space.Theme.GetType() + " had no elements for type: " + space.Type);
+        }
         GenDeploy deploy = new GenDeploy(element);
         space.AddDeploy(deploy);
         return true;

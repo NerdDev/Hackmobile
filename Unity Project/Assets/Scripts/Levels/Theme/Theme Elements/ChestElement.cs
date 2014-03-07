@@ -8,7 +8,7 @@ public class ChestElement : ThemeElement
     const float _chestBuffer = .05F;
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
-        spec.Space.Deploys.Add(new GridDeploy(spec.Theme.Get(GridType.Floor, spec.Random).GO));
+        spec.Space.Deploys.Add(new GridDeploy(spec.Theme.Floor.Random(spec.Random).GO));
         GridLocation wall;
         if (spec.Grid.GetRandomLocationAround(spec.X, spec.Y, false, spec.Random, Draw.WallType<GenSpace>(), out wall))
         { // If wall around, make it flush

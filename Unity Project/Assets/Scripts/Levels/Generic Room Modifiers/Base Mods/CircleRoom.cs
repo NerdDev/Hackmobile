@@ -23,8 +23,8 @@ public class CircleRoom : BaseRoomMod
         #endregion
         spec.Grids.DrawCircle(center, center, radius, new StrokedAction<GenSpace>()
             {
-                UnitAction = Draw.SetTo(new GenSpace(GridType.Floor, spec.Theme)),
-                StrokeAction = Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme))
+                UnitAction = Draw.SetTo(GridType.Floor, spec.Theme),
+                StrokeAction = Draw.SetTo(GridType.Wall, spec.Theme)
             });
         return true;
     }

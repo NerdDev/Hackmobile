@@ -7,7 +7,6 @@ public class GenDeploy : ITransform
 {
     public ThemeElement Element;
     public List<GenSpace> Spaces;
-    public char PrintChar = 'D';
     public float Rotation { get; set; }
     public float X { get; set; }
     public float Y { get; set; }

@@ -448,7 +448,9 @@ public static class Draw
             if (arr.TryGetValue(x, y, out space))
             {
                 if (arr[x, y].Type.Equals(from))
+                {
                     arr.SetTo(x, y, to);
+                }
             }
             else if (from == GridType.NULL)
             {
@@ -460,10 +462,9 @@ public static class Draw
 
     public static DrawAction<GenSpace> SetTo(GridType t, Theme theme)
     {
-        GenSpace space = new GenSpace(t, theme);
         return (arr, x, y) =>
         {
-            SetTo(arr, x, y, space);
+            SetTo(arr, x, y, new GenSpace(t, theme));
             return true;
         };
     }

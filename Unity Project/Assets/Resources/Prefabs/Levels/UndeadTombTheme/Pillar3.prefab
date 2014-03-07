@@ -10,8 +10,8 @@ GameObject:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
-  - 114: {fileID: 11400000}
   - 136: {fileID: 13600000}
+  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: Pillar3
   m_TagString: Untagged
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87ff60bb178df2d47bad10de9e7a347d, type: 3}
+  m_Script: {fileID: 11500000, guid: c93b558749d63cb42af2e6cf26031345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   GridWidth: 1

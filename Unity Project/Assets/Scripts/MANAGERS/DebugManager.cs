@@ -385,6 +385,7 @@ public class DebugManager : MonoBehaviour, IManager
         public void writeInternal(string line)
         {
             writer.WriteLine(line);
+            writer.Flush();
         }
 
         public string getExtraDepth(int val)

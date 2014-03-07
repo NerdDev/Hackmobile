@@ -23,27 +23,6 @@ public class Theme : MonoBehaviour
         KeywordFlags = new GenericFlags<SpawnKeywords>(Keywords);
     }
 
-    public ThemeElement Get(GridType t, System.Random rand)
-    {
-        switch (t)
-        {
-            case GridType.Door:
-                return Door.Random(rand);
-            case GridType.Wall:
-                return Wall.Random(rand);
-            case GridType.StairUp:
-                return StairUp.Random(rand);
-            case GridType.StairDown:
-                return StairDown.Random(rand);
-            case GridType.Chest:
-                return Chest.Random(rand);
-            case GridType.NULL:
-                return null;
-            default:
-                return Floor.Random(rand);
-        }
-    }
-
     public RoomModCollection GetRoomMods()
     {
         return new RoomModCollection(_roomMods);

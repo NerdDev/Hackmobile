@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public interface IPillarTheme
+[Serializable]
+public class ThemeElementCollection
 {
-    ThemeElementCollection[] GetPillars();
+    public ThemeElement[] Elements;
 }
-

@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class UndeadTombTheme : Theme, IPillarTheme
 {
-    public ThemeElement[] Pillars;
+    public ThemeElementCollection[] Pillars;
+    public ThemeElementCollection[] Tombs;
 
     public override void Init()
     {
@@ -16,7 +17,7 @@ public class UndeadTombTheme : Theme, IPillarTheme
         _roomMods.AddMod(new RectangularRoom(), 2d);
         _roomMods.AddMod(new SquareRoom(), 1d);
         _roomMods.AddMod(new TRoomMod(), 1d);
-        _roomMods.AddMod(new GrandTombRoom(), 0.5d, true);
+        //_roomMods.AddMod(new GrandTombRoom(), 0.5d, true);
         // Defining
         _roomMods.AddMod(new BlankDefiningRoomMod(), 1);
         // Flex
@@ -29,7 +30,7 @@ public class UndeadTombTheme : Theme, IPillarTheme
         _roomMods.AddMod(new TreasureRoomMod(), .3d);
     }
 
-    public ThemeElement[] GetPillars()
+    public ThemeElementCollection[] GetPillars()
     {
         return Pillars;
     }
