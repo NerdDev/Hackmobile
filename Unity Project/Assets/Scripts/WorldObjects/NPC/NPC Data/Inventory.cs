@@ -48,8 +48,22 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
         return null;
     }
 
+    public bool ModifyItem(Item i, Action<Item> mod)
+    {
+        Item newItem = GetForTransfer(i);
+        if (newItem != null)
+        {
+            Remove(i, 1);
+            mod(newItem);
+            this.Add(newItem);
+            return true;
+        }
+        return false;
+    }
+
     public bool TransferTo(Item i, Inventory inv, int count = 1)
     {
+        count = CountCheck(i, count);
         Item newItem = GetForTransfer(i);
         if (newItem != null)
         {
@@ -95,7 +109,7 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
         return count;
     }
 
-    public bool TryGetValue(string category, string item, out Item list)
+    public bool TryGetValue(string category, int item, out Item list)
     {
         InventoryCategory cate;
         if (TryGetValue(category, out cate))
@@ -104,7 +118,7 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
         return false;
     }
 
-    public bool Contains(string category, string item)
+    public bool Contains(string category, int item)
     {
         InventoryCategory cate;
         if (TryGetValue(category, out cate))
@@ -112,7 +126,7 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
         return false;
     }
 
-    public bool Contains(string item)
+    public bool Contains(int item)
     {
         foreach (InventoryCategory ic in Values)
             if (ic.Contains(item))
@@ -123,7 +137,6 @@ public class Inventory : SortedDictionary<string, InventoryCategory>, IXmlParsab
     public bool Contains(Item i)
     {
         InventoryCategory cata;
-        string t = i.Type;
         if (TryGetValue(i.Type, out cata))
             return cata.Contains(i);
         return false;

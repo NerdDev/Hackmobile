@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class InventoryCategory : SortedDictionary<string, Item>
+public class InventoryCategory : SortedDictionary<int, Item>
 {
     public string id;
 
@@ -15,9 +15,9 @@ public class InventoryCategory : SortedDictionary<string, Item>
     public void Add(Item i)
     {
         Item item;
-        if (!this.TryGetValue(i.Name, out item))
+        if (!this.TryGetValue(i.GetHashCode(), out item))
         {
-            this.Add(i.Name, i);
+            this.Add(i.GetHashCode(), i);
         }
         else
         {
@@ -27,17 +27,17 @@ public class InventoryCategory : SortedDictionary<string, Item>
                 i.Destroy();
             }
         }
-        this[i.Name].OnGround = false;
+        this[i.GetHashCode()].OnGround = false;
     }
 
     public bool Remove(Item i)
     {
         Item item;
-        if (TryGetValue(i.Name, out item))
+        if (TryGetValue(i.GetHashCode(), out item))
         {
             if (item.RemoveItem())
             {
-                this.Remove(item.Name);
+                this.Remove(item.GetHashCode());
             }
             return true;
         }
@@ -47,7 +47,7 @@ public class InventoryCategory : SortedDictionary<string, Item>
     public Item GetForTransfer(Item i)
     {
         Item item;
-        if (TryGetValue(i.Name, out item))
+        if (TryGetValue(i.GetHashCode(), out item))
         {
             Item newItem = item.GetForTransfer();
             if (newItem != null)
@@ -58,7 +58,7 @@ public class InventoryCategory : SortedDictionary<string, Item>
         return null;
     }
 
-    public bool Contains(string item)
+    public bool Contains(int item)
     {
         Item i;
         if (TryGetValue(item, out i))
@@ -69,7 +69,7 @@ public class InventoryCategory : SortedDictionary<string, Item>
     public bool Contains(Item i)
     {
         Item list;
-        if (TryGetValue(i.Name, out list))
+        if (TryGetValue(i.GetHashCode(), out list))
             return true;
         return false;
     }

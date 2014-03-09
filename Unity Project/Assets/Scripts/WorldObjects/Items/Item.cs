@@ -41,6 +41,11 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         _count = count;
     }
 
+    public void ModifyItem(Inventory container, Action<Item> mod)
+    {
+        container.ModifyItem(this, mod);
+    }
+
     #region Usage:
 
     public void onEatenEvent(NPC n)

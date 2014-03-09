@@ -64,6 +64,11 @@ public class Player : NPC
     {
         PlayerStats.Load(this, Role.ARCHAELOGIST, Race.HUMAN);
         calcStats();
+        BigBoss.Gooey.UpdateMaxHealth(this.Stats.MaxHealth);
+        BigBoss.Gooey.UpdateHealthBar(this.Stats.MaxHealth);
+
+        BigBoss.Gooey.UpdateMaxPower(this.Stats.MaxPower);
+        BigBoss.Gooey.UpdatePowerBar(this.Stats.MaxPower);
     }
 
     // Update is called once per frame
@@ -121,9 +126,16 @@ public class Player : NPC
 
     public override void CastSpell(string spell, params IAffectable[] targets)
     {
-        base.CastSpell(spell, targets);
-        CreateTextPop(this.Name + " casts " + spell + ".");
-        BigBoss.Time.PassTurn(60);
+        if (this.KnownSpells[spell].cost > this.Stats.CurrentPower)
+        {
+            CreateTextPop("Not enough power to cast " + spell + "!");
+        }
+        else
+        {
+            base.CastSpell(spell, targets);
+            CreateTextPop(this.Name + " casts " + spell + ".");
+            BigBoss.Time.PassTurn(60);
+        }
     }
     #endregion
 
@@ -387,12 +399,25 @@ public class Player : NPC
         //Update GUI here
     }
 
-    public override void AdjustHealth(int amount)
+    public override bool AdjustHealth(int amount)
     {
-        base.AdjustHealth(amount);
+        if (base.AdjustHealth(amount))
+        {
+            BigBoss.Gooey.UpdateHealthBar(0);
+            return true; //player died
+        }
+        else
+        {
+            //Do all GUI updates here
+            BigBoss.Gooey.UpdateHealthBar(this.Stats.CurrentHealth);
+            return false; //player still lives!
+        }
+    }
 
-        //Do all GUI updates here
-        BigBoss.Gooey.UpdateHealthBar();
+    public override void AdjustPower(int amount)
+    {
+        base.AdjustPower(amount);
+        BigBoss.Gooey.UpdatePowerBar(this.Stats.CurrentPower);
     }
 
     public override void AdjustMaxHealth(int amount)
@@ -400,6 +425,15 @@ public class Player : NPC
         base.AdjustMaxHealth(amount);
 
         //GUI updates
+        BigBoss.Gooey.UpdateMaxHealth(this.Stats.MaxHealth);
+    }
+
+    public override void AdjustMaxPower(int amount)
+    {
+        base.AdjustMaxPower(amount);
+
+        //GUI updates
+        BigBoss.Gooey.UpdateMaxPower(this.Stats.MaxPower);
     }
 
     public override void AdjustXP(float amount)

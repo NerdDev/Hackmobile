@@ -13,7 +13,7 @@ public class Spells : SortedDictionary<string, Spell>, IXmlParsable
             string spellName = node.SelectString("name");
             Spell s = node.Select<Spell>();
             this.Add(spellName, s);
-            if (!BigBoss.Objects.PlayerSpells.ContainsKey(spellName))
+            if (!BigBoss.Objects.PlayerSpells.ContainsKey(spellName)) //this is givin' us every spell for the time being, should be removed when Player is properly parsed
             {
                 BigBoss.Objects.PlayerSpells.Add(spellName, s);
             }

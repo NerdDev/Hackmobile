@@ -18,6 +18,12 @@
 			<count>1</count>
 			<level>4</level>
 		</entry>
+		<entry>
+			<item>Blinding Potion</item>
+			<probability>1.2</probability>
+			<count>1</count>
+			<level>3</level>
+		</entry>
 	</list>
 	<list name="weapons">
 		<entry>

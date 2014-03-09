@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using System.ArrayExtensions;
+using System.Collections;
 
 namespace System
 {
     public static class ObjectExtensions
     {
         private static readonly MethodInfo CloneMethod = typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo DictGetItemMethod = typeof(Dictionary<,>).GetMethod("get_Item", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo DictAddMethod = typeof(Dictionary<,>).GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static bool IsPrimitive(this Type type)
         {
@@ -25,6 +28,22 @@ namespace System
             if (IsPrimitive(typeToReflect)) return originalObject;
             if (visited.ContainsKey(originalObject)) return visited[originalObject];
             var cloneObject = CloneMethod.Invoke(originalObject, null);
+            if (typeToReflect.IsGenericType && typeToReflect.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            {
+                
+                Type keyType = typeToReflect.GetGenericArguments()[0];
+                Type valueType = typeToReflect.GetGenericArguments()[1];
+                Type dictType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
+                var dict = Activator.CreateInstance(dictType);
+
+                IEnumerable keys = (IEnumerable)dictType.GetProperty("Keys").GetValue(originalObject, null);
+                foreach (object key in keys)
+                {
+                    object value = DictGetItemMethod.Invoke(originalObject, new object[] { key });
+                    DictAddMethod.Invoke(dict, new object[] { key, value });
+                }
+                
+            }
             if (typeToReflect.IsArray)
             {
                 var arrayType = typeToReflect.GetElementType();

@@ -32,5 +32,8 @@ public class KCTesting : MonoBehaviour
 
         Item potion4 = BigBoss.Objects.Items.Instantiate("Levitation Potion");
         BigBoss.Player.addToInventory(potion4, 3);
+
+        Item potion5 = BigBoss.Objects.Items.Instantiate("Blinding Potion");
+        BigBoss.Player.addToInventory(potion5, 3);
     }
 }

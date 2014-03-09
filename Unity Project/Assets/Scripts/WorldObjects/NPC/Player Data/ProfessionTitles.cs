@@ -5,7 +5,6 @@ using XML;
 public class ProfessionTitles : IXmlParsable
 {
     Titles[] titles = new Titles[EnumExt.Length<PlayerProfessions>()];
-    public bool isParsed = false;
 
     public void ParseXML(XMLNode x)
     {

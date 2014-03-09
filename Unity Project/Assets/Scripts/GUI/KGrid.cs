@@ -65,8 +65,6 @@ public class KGrid : MonoBehaviour
             return;
         }
 
-        Transform myTrans = transform;
-
         int x = 0;
         int y = 0;
 

@@ -43,6 +43,8 @@ public class GUIManager : MonoBehaviour, IManager
     public ScrollingGrid ItemInfoGrid;
     public ScrollingGrid SpellCastGrid;
     public TextGrid ChatGrid;
+    public GUIProgressBar HealthBar;
+    public GUIProgressBar ManaBar;
 
     //Prefabs
     public GameObject InvItemPrefab;
@@ -57,9 +59,11 @@ public class GUIManager : MonoBehaviour, IManager
     public GameObject GroundLabel;
     public GameObject debugText;
     public GameObject textPopPrefab;
-    public Light light;
+    public Light DiscoLight;
     public Texture cookie;
     public GUITexture LoadImage;
+
+    public Shader InvisibilityShader;
 
     //Cameras
     public Camera GUICam;
@@ -99,8 +103,8 @@ public class GUIManager : MonoBehaviour, IManager
         startButton2.transform.localPosition = new Vector3(0f, -.5f, 0f);
         startButton2.OnSingleClick = new Action(() =>
         {
-            light.color = Color.white;
-            light.cookie = cookie;
+            DiscoLight.color = Color.white;
+            DiscoLight.cookie = cookie;
             StartCoroutine(BigBoss.Start.StartGame());
             foreach (GameObject go in buttons)
             {
@@ -160,10 +164,24 @@ public class GUIManager : MonoBehaviour, IManager
     */
 
     #region GUI
-    public void UpdateHealthBar()
+    public void UpdateHealthBar(int val)
     {
-        //		HUDplayerHealthBar.sliderValue = (float)BigBoss.PlayerInfo.stats.CurrentHealth/(float)BigBoss.PlayerInfo.stats.MaxHealth;	
-        //		HUDHealthBarNumberLabel.text = BigBoss.PlayerInfo.stats.CurrentHealth + " / " + BigBoss.PlayerInfo.stats.MaxHealth;
+        HealthBar.UpdateValue(val);
+    }
+
+    public void UpdateMaxHealth(int val)
+    {
+        HealthBar.SetMaxValue(val);
+    }
+
+    public void UpdatePowerBar(int val)
+    {
+        ManaBar.UpdateValue(val);
+    }
+
+    public void UpdateMaxPower(int val)
+    {
+        ManaBar.SetMaxValue(val);
     }
 
     public void UpdateHungerText(Color theCol)
@@ -280,12 +298,20 @@ public class GUIManager : MonoBehaviour, IManager
                 GUIButton spellButton = CreateObjectButton(key, grid, key);
                 spellButton.OnSingleClick = new Action(() =>
                 {
-                    BigBoss.PlayerInput.defaultPlayerInput = false;
-                    BigBoss.PlayerInput.spellInput = true;
                     currentSpell = spellButton.refObject as string;
-                    spellButton.defaultColor = spellButton.hover;
-                    selectedButton = spellButton;
-                    spellButton.UpdateColor(true, true);
+                    if (BigBoss.Player.Stats.CurrentPower > GetCurrentSpellCost())
+                    {
+                        BigBoss.PlayerInput.defaultPlayerInput = false;
+                        BigBoss.PlayerInput.spellInput = true;
+                        spellButton.defaultColor = spellButton.hover;
+                        selectedButton = spellButton;
+                        spellButton.UpdateColor(true, true);
+                    }
+                    else
+                    {
+                        CreateTextPop(BigBoss.PlayerInfo.transform.position, "You do not have enough power to cast " + currentSpell + "!");
+                        currentSpell = null;
+                    }
                 });
             }
             GUIButton cancelSpellButton =  CreateButton(grid, "Cancel Spell");
@@ -361,6 +387,24 @@ public class GUIManager : MonoBehaviour, IManager
                 block.renderer.sharedMaterial = GlowShaderGridSpace;
             }
         }
+    }
+
+    public int GetCurrentSpellRange()
+    {
+        if (BigBoss.Player.KnownSpells.ContainsKey(currentSpell))
+        {
+            return BigBoss.Player.KnownSpells[currentSpell].range;
+        }
+        return 0;
+    }
+
+    public int GetCurrentSpellCost()
+    {
+        if (BigBoss.Player.KnownSpells.ContainsKey(currentSpell))
+        {
+            return BigBoss.Player.KnownSpells[currentSpell].cost;
+        }
+        return 0;
     }
 
     internal void RegenInventoryGUI(ScrollingGrid grid)
