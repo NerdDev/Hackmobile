@@ -393,14 +393,14 @@ public class LevelGenerator
             {
                 BigBoss.Debug.w(Logs.LevelGen, "selected " + info.Shift);
                 var tmpMap = new MultiMap<GenSpace>();
-                tmpMap.PutAll(clusterGrid);
-                tmpMap.PutAll(objGrid, info.Shift);
-                tmpMap.DrawPoints(info.Intersects, Draw.SetTo(new GenSpace(GridType.INTERNAL_RESERVED_CUR, Theme)).Shift(info.Shift));
+                clusterGrid.DrawAll(Draw.CopyTo(tmpMap));
+                objGrid.DrawAll(Draw.CopyTo(tmpMap, info.Shift));
+                tmpMap.DrawPoints(info.Intersects, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, Theme).Shift(info.Shift));
                 tmpMap.ToLog(Logs.LevelGen, "Intersect Points");
                 tmpMap = new MultiMap<GenSpace>();
-                tmpMap.PutAll(clusterGrid);
-                tmpMap.PutAll(objGrid, info.Shift);
-                tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(new GenSpace(GridType.Door, Theme)));
+                clusterGrid.DrawAll(Draw.CopyTo(tmpMap));
+                objGrid.DrawAll(Draw.CopyTo(tmpMap, info.Shift));
+                tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(GridType.Door, Theme));
                 tmpMap.ToLog(Logs.LevelGen, "Cluster door options");
             }
             #endregion
@@ -523,7 +523,7 @@ public class LevelGenerator
             #endregion
             foreach (Value2D<GenSpace> doorSpace in potentialDoors.GetRandom(Rand, numDoors, minDoorSpacing))
             {
-                room.Grids.SetTo(doorSpace.x, doorSpace.y, new GenSpace(GridType.Door, Theme));
+                room.Grids.SetTo(doorSpace, GridType.Door, Theme);
             }
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -584,7 +584,7 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                layoutCopy.SetTo(startPoint.x, startPoint.y, new GenSpace(GridType.INTERNAL_RESERVED_CUR, Theme));
+                layoutCopy.SetTo(startPoint, GridType.INTERNAL_RESERVED_CUR, Theme);
                 layoutCopy.ToLog(Logs.LevelGen, "Largest after putting blocked");
                 BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
             }
@@ -618,11 +618,11 @@ public class LevelGenerator
                 Container.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
                 if (leaf1[first].Type == GridType.Wall)
                 {
-                    leaf1.SetTo(first.x, first.y, new GenSpace(GridType.Door, Theme));
+                    leaf1.SetTo(first, GridType.Door, Theme);
                 }
                 if (leaf2[second].Type == GridType.Wall)
                 {
-                    leaf2.SetTo(second.x, second.y, new GenSpace(GridType.Door, Theme));
+                    leaf2.SetTo(second, GridType.Door, Theme);
                 }
                 foreach (var v in pathObj)
                 {
@@ -718,7 +718,7 @@ public class LevelGenerator
         var grids = Container.GetGrid();
         grids.DrawAll(Draw.Not(Draw.IsType<GenSpace>(GridType.NULL).Or(Draw.IsType<GenSpace>(GridType.Wall))).IfThen((arr, x, y) =>
             {
-                grids.DrawAround(x, y, true, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, new GenSpace(GridType.Wall, Theme))));
+                grids.DrawAround(x, y, true, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, GridType.Wall, Theme)));
                 return true;
             }));
         Container.Objects.Add(edgeObject);
@@ -779,14 +779,14 @@ public class LevelGenerator
             // Place stair
             Value2D<GenSpace> picked;
             if (!options.GetRandom(Rand, out picked)) continue;
-            obj.Grids.SetTo(picked.x, picked.y, new GenSpace(up ? GridType.StairUp : GridType.StairDown, Theme));
+            obj.Grids.SetTo(picked, up ? GridType.StairUp : GridType.StairDown, Theme);
 
             // Place startpoint
             MultiMap<GenSpace> startOptions = new MultiMap<GenSpace>();
             obj.Grids.DrawAround(picked.x, picked.y, false, Draw.IsType<GenSpace>(GridType.Floor).IfThen(Draw.AddTo(startOptions)));
             Value2D<GenSpace> start;
             startOptions.GetRandom(Rand, out start);
-            obj.Grids.SetTo(start.x, start.y, new GenSpace(GridType.StairPlace, Theme));
+            obj.Grids.SetTo(start, GridType.StairPlace, Theme);
 
             placed = new Point(picked);
             placed.Shift(obj.ShiftP);

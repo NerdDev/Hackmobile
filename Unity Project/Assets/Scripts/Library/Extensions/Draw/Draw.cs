@@ -414,21 +414,6 @@ public static class Draw
         };
     }
 
-    public static DrawAction<GenSpace> SetToIfNotEqual(GridType not, GenSpace to)
-    {
-        return (arr, x, y) =>
-        {
-            if (!arr[x, y].Type.Equals(not))
-                SetTo(arr, x, y, to);
-            return true;
-        };
-    }
-
-    public static void SetTo(this Container2D<GenSpace> cont, int x, int y, GenSpace to)
-    {
-        cont[x, y] = new GenSpace(to);
-    }
-
     public static bool IsType<T>(this Container2D<T> cont, int x, int y, GridType type)
         where T : IGridSpace
     {
@@ -438,35 +423,6 @@ public static class Draw
             return type.Equals(cont[x, y].GetGridType());
         }
         return type == GridType.NULL;
-    }
-
-    public static DrawAction<GenSpace> SetTo(GridType from, GenSpace to)
-    {
-        return (arr, x, y) =>
-        {
-            GenSpace space;
-            if (arr.TryGetValue(x, y, out space))
-            {
-                if (arr[x, y].Type.Equals(from))
-                {
-                    arr.SetTo(x, y, to);
-                }
-            }
-            else if (from == GridType.NULL)
-            {
-                arr.SetTo(x, y, to);
-            }
-            return true;
-        };
-    }
-
-    public static DrawAction<GenSpace> SetTo(GridType t, Theme theme)
-    {
-        return (arr, x, y) =>
-        {
-            SetTo(arr, x, y, new GenSpace(t, theme));
-            return true;
-        };
     }
 
     public static DrawAction<T> IsTypeThen<T>(GridType item, DrawAction<T> then, bool not = false)
@@ -480,6 +436,100 @@ public static class Draw
         };
     }
 
+    #endregion
+
+    #region GenSpace
+    public static void SetTo(this Container2D<GenSpace> cont, Point p, GridType type, Theme theme)
+    {
+        SetTo(cont, p.x, p.y, type, theme);
+    }
+
+    public static void SetTo(this Container2D<GenSpace> cont, int x, int y, GridType type, Theme theme)
+    {
+        cont[x, y] = new GenSpace(type, theme, x, y);
+    }
+
+    public static DrawAction<GenSpace> SetTo(GridType type, Theme theme)
+    {
+        return (arr, x, y) =>
+        {
+            arr.SetTo(x, y, type, theme);
+            return true;
+        };
+    }
+
+    public static DrawAction<GenSpace> SetTo(Container2D<GenSpace> cont, GridType type, Theme theme)
+    {
+        return (arr, x, y) =>
+        {
+            cont.SetTo(x, y, type, theme);
+            return true;
+        };
+    }
+
+    public static DrawAction<GenSpace> CopyTo(Container2D<GenSpace> cont, Point shift = null)
+    {
+        if (shift == null)
+        {
+            return (arr, x, y) =>
+            {
+                GenSpace space;
+                if (arr.TryGetValue(x, y, out space))
+                {
+                    cont.SetTo(x, y, space.Type, space.Theme);
+                }
+                return true;
+            };
+        }
+        else
+        {
+            return (arr, x, y) =>
+            {
+                GenSpace space;
+                if (arr.TryGetValue(x, y, out space))
+                {
+                    cont.SetTo(x + shift.x, y + shift.y, space.Type, space.Theme);
+                }
+                return true;
+            };
+        }
+    }
+
+    public static DrawAction<GenSpace> MergeIn(ThemeElement element, Theme theme, GridType type = GridType.Floor, bool typeOnlyDefault = true, bool themeOnlyDefault = false)
+    {
+        return MergeIn(new GenDeploy(element), theme, type, typeOnlyDefault, themeOnlyDefault);
+    }
+
+    public static DrawAction<GenSpace> MergeIn(ThemeElement[] elements, System.Random random, Theme theme, GridType type = GridType.Floor, bool typeOnlyDefault = true, bool themeOnlyDefault = true)
+    {
+        return MergeIn(elements.Random(random), theme, type, typeOnlyDefault, themeOnlyDefault);
+    }
+
+    public static DrawAction<GenSpace> MergeIn(GenDeploy deploy, Theme theme, GridType type = GridType.Floor, bool typeOnlyDefault = true, bool themeOnlyDefault = false)
+    {
+        return (arr, x, y) =>
+        {
+            GenSpace space;
+            if (!arr.TryGetValue(x, y, out space))
+            {
+                space = new GenSpace(type, theme, x, y);
+                arr[x, y] = space;
+            }
+            else
+            {
+                if (!themeOnlyDefault)
+                {
+                    space.Theme = theme;
+                }
+                if (!typeOnlyDefault)
+                {
+                    space.Type = type;
+                }
+            }
+            space.AddDeploy(deploy);
+            return true;
+        };
+    }
     #endregion
 }
 

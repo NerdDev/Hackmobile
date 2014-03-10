@@ -29,7 +29,7 @@ public class HiddenRoomMod : FillRoomMod
             new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.IsTypeThen(GridType.NULL, Draw.SetTo(GridType.Floor, spec.Theme).And(Draw.AddTo(floors))),
-                StrokeAction = Draw.SetTo(GridType.NULL, new GenSpace(GridType.Wall, spec.Theme))
+                StrokeAction = Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(GridType.Wall, spec.Theme))
             });
         bool chest = spec.Random.Percent(.75d);
         if (chest)
@@ -38,13 +38,13 @@ public class HiddenRoomMod : FillRoomMod
             spec.Grids.DrawPoints(floors.Cast<Point>(), 
                 Draw.Not(Draw.HasAround(false, Draw.IsType<GenSpace>(GridType.Door)))
                 .IfThen(Draw.AddTo(chestOptions)));
-            spec.Grids[chestOptions.Random(spec.Random)] = new GenSpace(GridType.Chest, spec.Theme);
+            spec.Grids.SetTo(chestOptions.Random(spec.Random), GridType.Chest, spec.Theme);
         }
         else
         {
-            spec.Grids[floors.Random(spec.Random)] = new GenSpace(GridType.SmallLoot, spec.Theme);
+            spec.Grids.SetTo(floors.Random(spec.Random), GridType.SmallLoot, spec.Theme);
         }
-        spec.Grids.SetTo(doorSpace.x, doorSpace.y, new GenSpace(GridType.Door, spec.Theme));
+        spec.Grids.SetTo(doorSpace, GridType.Door, spec.Theme);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

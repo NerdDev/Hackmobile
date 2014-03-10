@@ -32,7 +32,7 @@ public class GrandTombRoom : BaseRoomMod
                 MultiMap<GenSpace> tmp = new MultiMap<GenSpace>(spec.Grids);
                 tmp.DrawRect(bounds, new StrokedAction<GenSpace>()
                     {
-                        UnitAction = Draw.SetTo(new GenSpace(GridType.INTERNAL_RESERVED_BLOCKED, spec.Theme))
+                        UnitAction = Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED, spec.Theme)
                     });
                 tmp.ToLog(Logs.LevelGen);
             }

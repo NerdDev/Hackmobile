@@ -20,21 +20,19 @@ public class PillarMod : FillRoomMod
     {
         IPillarTheme pillarTheme = spec.Theme as IPillarTheme;
         if (pillarTheme == null) throw new ArgumentException("Theme must be IPillarTheme");
-        ThemeElementCollection pillarCollection = pillarTheme.GetPillars().Random(spec.Random);
+        ThemeElement[] pillarCollection = pillarTheme.GetPillars().Random(spec.Random).Elements;
         Bounding bounds = spec.Grids.Bounding;
         int spacingX = spacingOptions.Get(spec.Random);
         int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get(spec.Random) : spacingX;
         Container2D<GenSpace> arr = spec.Grids;
-        var pass = Draw.IsType<GenSpace>(GridType.Floor).And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>())));
+        var call = Draw.IsType<GenSpace>(GridType.Floor).And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>())))
+            .IfThen(Draw.MergeIn(pillarCollection, spec.Random, spec.Theme, GridType.Wall, false));
 
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)
             {
-                if (pass(arr, x, y))
-                {
-                    spec.MergeIn(x, y, pillarCollection.Elements.Random(spec.Random), GridType.Wall);
-                }
+                call(arr, x, y);
             }
         }
 

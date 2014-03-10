@@ -93,7 +93,7 @@ public class Path : IEnumerable<Value2D<GenSpace>>
         LayoutObject obj = new LayoutObject("Path");
         foreach (var v in PathPrint(List.Cast<Point>()))
         {
-            obj[v.x, v.y] = new GenSpace(v.val, theme);
+            obj.SetTo(v, v.val, theme);
         }
         return obj;
     }

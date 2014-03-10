@@ -50,7 +50,7 @@ public class SplitterMod : HeavyRoomMod
             foreach (int i in options)
             {
                 Container2D<GenSpace> copy = new Array2D<GenSpace>(spec.Grids);
-                copy.DrawLine(from, to, i, horizontal, Draw.SetToIfNotEqual(GridType.NULL, new GenSpace(GridType.INTERNAL_RESERVED_BLOCKED, spec.Theme)));
+                copy.DrawLine(from, to, i, horizontal, Draw.IsType<GenSpace>(GridType.NULL).IfNotThen(Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED, spec.Theme)));
                 copy.ToLog(Logs.LevelGen);
             }
         }

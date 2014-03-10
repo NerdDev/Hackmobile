@@ -27,7 +27,7 @@ public class GiantPillarMod : HeavyRoomMod
             foreach (Bounding r in locations)
             {
                 save.Clear();
-                copy.DrawRect(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, Draw.AddTo(save).And(Draw.SetTo(new GenSpace(GridType.Path_Vert, spec.Theme))));
+                copy.DrawRect(r.XMin + 1, r.XMax - 1, r.YMin + 1, r.YMax - 1, Draw.AddTo(save).And(Draw.SetTo(GridType.Path_Vert, spec.Theme)));
                 copy.ToLog(Logs.LevelGen);
                 copy.PutAll(save);
             }
@@ -35,7 +35,7 @@ public class GiantPillarMod : HeavyRoomMod
         #endregion
         Bounding l = locations.Random(spec.Random);
         // Draw inner square without stroke (stroke was just used to analyze surroundings)
-        spec.Grids.DrawRect(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(new GenSpace(GridType.Wall, spec.Theme)));
+        spec.Grids.DrawRect(l.XMin + 1, l.XMax - 1, l.YMin + 1, l.YMax - 1, Draw.SetTo(GridType.Wall, spec.Theme));
         return true;
     }
 }

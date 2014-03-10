@@ -87,7 +87,7 @@ public static class GridTypeDrawExt
         List<Value2D<GenSpace>> pickedPts = acceptablePoints.GetRandom(rand, numDoors, 1);
         foreach (Point picked in pickedPts)
         {
-            arr.SetTo(picked.x, picked.y, new GenSpace(GridType.Door, theme));
+            arr.SetTo(picked, GridType.Door, theme);
         }
         return pickedPts;
     }

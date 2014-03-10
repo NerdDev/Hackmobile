@@ -47,7 +47,7 @@ public class TrapRoomMod : FillRoomMod
 
         List<Value2D<GenSpace>> treasureList = picker.Pick(spec.Random, treasureInRoom, 2, true);
         foreach (Value2D<GenSpace> val in treasureList)
-            spec.Grids.SetTo(val.x, val.y, new GenSpace(GridType.Chest, spec.Theme));
+            spec.Grids.SetTo(val, GridType.Chest, spec.Theme);
 
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -58,7 +58,7 @@ public class TrapRoomMod : FillRoomMod
 
         List<Value2D<GenSpace>> trapList = picker.Pick(spec.Random, trapsInRoom, 0, true);
         foreach (Value2D<GenSpace> val in trapList)
-            spec.Grids.SetTo(val.x, val.y, new GenSpace(GridType.Trap, spec.Theme));
+            spec.Grids.SetTo(val, GridType.Trap, spec.Theme);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

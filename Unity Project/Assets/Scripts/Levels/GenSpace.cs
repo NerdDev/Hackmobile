@@ -10,17 +10,16 @@ public class GenSpace : IGridSpace
     private Theme _theme;
     public Theme Theme { get { return _theme; } set { _theme = value; } }
     public List<GenDeploy> Deploys;
+    public int X { get; protected set; }
+    public int Y { get; protected set; }
 
-    public GenSpace(GridType type, Theme theme)
+    public GenSpace(GridType type, Theme theme, int x, int y)
     {
         _type = type;
         _theme = theme;
         Deploys = null;
-    }
-
-    public GenSpace(GenSpace rhs)
-        : this (rhs._type, rhs._theme)
-    {
+        this.X = x;
+        this.Y = y;
     }
 
     public void AddDeploy(GenDeploy elem)

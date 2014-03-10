@@ -28,14 +28,14 @@ class TreasureRoomMod : HeavyRoomMod
             // Draw it
             spec.Grids.DrawRect(bounding.XMin, bounding.XMax, bounding.YMin, bounding.YMax, new StrokedAction<GenSpace>()
             {
-                StrokeAction = Draw.SetTo<GenSpace>(new GenSpace(GridType.Wall, spec.Theme)),
-                UnitAction = Draw.SetTo<GenSpace>(new GenSpace(GridType.Floor, spec.Theme))
+                StrokeAction = Draw.SetTo(GridType.Wall, spec.Theme),
+                UnitAction = Draw.SetTo(GridType.Floor, spec.Theme)
             });
             foreach (var door in doors)
             {
-                spec.Grids[door] = new GenSpace(GridType.Door, spec.Theme);
+                spec.Grids.SetTo(door, GridType.Door, spec.Theme);
             }
-            spec.Grids[center] = new GenSpace(GridType.Chest, spec.Theme);
+            spec.Grids.SetTo(center, GridType.Chest, spec.Theme);
             return true;
         }
         return true;
