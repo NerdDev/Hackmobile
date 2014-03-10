@@ -6,13 +6,13 @@ using UnityEngine;
 
 public class Invisibility : EffectInstance
 {
-    Dictionary<Renderer, Shader[]> originalShaders = new Dictionary<Renderer,Shader[]>();
-    Dictionary<Renderer, Color[]> originalColors = new Dictionary<Renderer,Color[]>();
+    Dictionary<Renderer, Shader[]> originalShaders;
+    Dictionary<Renderer, Color[]> originalColors;
 
     public override void Init(NPC n)
     {
-        //originalShaders = new Dictionary<Renderer, Shader[]>();
-        //originalColors = new Dictionary<Renderer, Color[]>();
+        originalShaders = new Dictionary<Renderer, Shader[]>();
+        originalColors = new Dictionary<Renderer, Color[]>();
         if (n.IsNotAFreaking<Player>())
         {
             //--npc

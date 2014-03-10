@@ -25,9 +25,10 @@ namespace System
             var typeToReflect = originalObject.GetType();
             if (IsPrimitive(typeToReflect)) return originalObject;
             if (visited.ContainsKey(originalObject)) return visited[originalObject];
-            object cloneObject = null;
+            var cloneObject = CloneMethod.Invoke(originalObject, null);
             
             visited.Add(originalObject, cloneObject);
+            /*
             //this doesn't detect classes that extend dictionary (I tried other methods, and a couple worked but then broke other aspects)
             if (typeToReflect.IsGenericType && typeToReflect.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
@@ -54,7 +55,8 @@ namespace System
                 cloneObject = dict; //reroutes the visited reference to this and continues for base private fields
                 
             }
-            else if (typeToReflect.IsArray) // this grabs arrays and copies the elements into a new one
+            */
+            if (typeToReflect.IsArray) // this grabs arrays and copies the elements into a new one
             {
                 var arrayType = typeToReflect.GetElementType();
                 if (IsPrimitive(arrayType) == false)
@@ -70,7 +72,6 @@ namespace System
             }
             else //generic method for copying data on non-dictionarys and non-arrays
             {
-                cloneObject = CloneMethod.Invoke(originalObject, null);
                 CopyFields(originalObject, visited, cloneObject, typeToReflect);
             }
             RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
