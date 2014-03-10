@@ -12,6 +12,27 @@ public class KCTesting : MonoBehaviour
 
     private void KurtisMethod()
     {
+        Dictionary<int, string> dict2 = new Dictionary<int, string>();
+        dict2.Add(5, "5");
+        dict2.Add(4, "4");
+        Dictionary<int, string> dict2Copy = dict2.Copy();
+        Debug.Log(dict2Copy[4]);
+        if (dict2Copy.ContainsKey(4))
+        {
+            Debug.Log("contains it 2");
+        }
+        
+        Spells dict = new Spells();
+        dict.Add("5", new Spell());
+        dict.Add("4", new Spell());
+        Spells dictCopy = dict.Copy();
+        Debug.Log(dictCopy["4"]);
+        if (dictCopy.ContainsKey("4"))
+        {
+            Debug.Log("contains it");
+        }
+        
+        
         //Input checks
         BigBoss.PlayerInput.allowKeyboardInput = true;
         BigBoss.PlayerInput.allowMouseInput = true;

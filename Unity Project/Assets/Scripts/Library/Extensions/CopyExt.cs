@@ -8,8 +8,6 @@ namespace System
     public static class ObjectExtensions
     {
         private static readonly MethodInfo CloneMethod = typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly MethodInfo DictGetItemMethod = typeof(Dictionary<,>).GetMethod("get_Item", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly MethodInfo DictAddMethod = typeof(Dictionary<,>).GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static bool IsPrimitive(this Type type)
         {
@@ -27,41 +25,54 @@ namespace System
             var typeToReflect = originalObject.GetType();
             if (IsPrimitive(typeToReflect)) return originalObject;
             if (visited.ContainsKey(originalObject)) return visited[originalObject];
-            var cloneObject = CloneMethod.Invoke(originalObject, null);
+            object cloneObject = null;
+            
+            visited.Add(originalObject, cloneObject);
+            //this doesn't detect classes that extend dictionary (I tried other methods, and a couple worked but then broke other aspects)
             if (typeToReflect.IsGenericType && typeToReflect.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
-                
-                Type keyType = typeToReflect.GetGenericArguments()[0];
-                Type valueType = typeToReflect.GetGenericArguments()[1];
-                Type dictType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
-                var dict = Activator.CreateInstance(dictType);
+                //was test code creating a separate generic type
+                //Type keyType = typeToReflect.GetGenericArguments()[0];
+                //Type valueType = typeToReflect.GetGenericArguments()[1];
+                //Type dictType = typeToReflect.MakeGenericType(keyType, valueType);
 
-                IEnumerable keys = (IEnumerable)dictType.GetProperty("Keys").GetValue(originalObject, null);
+                var dict = Activator.CreateInstance(typeToReflect);
+
+                MethodInfo GetItem = typeToReflect.GetMethod("get_Item");
+                MethodInfo Add = typeToReflect.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance);
+
+                IEnumerable keys = (IEnumerable)typeToReflect.GetProperty("Keys").GetValue(originalObject, null);
                 foreach (object key in keys)
                 {
-                    object value = DictGetItemMethod.Invoke(originalObject, new object[] { key });
-                    DictAddMethod.Invoke(dict, new object[] { key, value });
+                    object[] arguments = new object[] { key };
+                    object value = GetItem.Invoke(originalObject, arguments);
+                    if (value != null)
+                    {
+                        Add.Invoke(dict, new object[] { InternalCopy(key, visited), InternalCopy(value, visited) });
+                    }
                 }
+                cloneObject = dict; //reroutes the visited reference to this and continues for base private fields
                 
             }
-            if (typeToReflect.IsArray)
+            else if (typeToReflect.IsArray) // this grabs arrays and copies the elements into a new one
             {
                 var arrayType = typeToReflect.GetElementType();
                 if (IsPrimitive(arrayType) == false)
                 {
                     Array arrayObject = (Array)(originalObject);
-                    //Array clonedArray = (Array)cloneObject;
                     Array temp = Array.CreateInstance(arrayType, arrayObject.Length);
                     for (int i = 0; i < arrayObject.Length; ++i)
                     {
                         temp.SetValue(InternalCopy(arrayObject.GetValue(i), visited), i);
                     }
-                    //clonedArray.ForEach((array, indices) => array.SetValue(InternalCopy(clonedArray.GetValue(indices), visited), indices));
-                    cloneObject = temp;
+                    cloneObject = temp; //reroutes the visited reference to this and continues for base private fields
                 }
             }
-            visited.Add(originalObject, cloneObject);
-            CopyFields(originalObject, visited, cloneObject, typeToReflect);
+            else //generic method for copying data on non-dictionarys and non-arrays
+            {
+                cloneObject = CloneMethod.Invoke(originalObject, null);
+                CopyFields(originalObject, visited, cloneObject, typeToReflect);
+            }
             RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
             return cloneObject;
         }
