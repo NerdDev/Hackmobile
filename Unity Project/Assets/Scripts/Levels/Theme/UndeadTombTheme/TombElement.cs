@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class TombElement : ThemeElement
+public class TombElement : FloorDoodadElement
 {
+    public TombElement()
+    {
+        SetChar((char)(240));
+    }
 }
 

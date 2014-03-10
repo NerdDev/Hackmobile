@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class GenSpace : IGridSpace 
+public class GenSpace : IGridSpace
 {
     private GridType _type;
     public GridType Type { get { return _type; } set { _type = value; } }
@@ -30,6 +30,21 @@ public class GenSpace : IGridSpace
         }
         elem.Spaces.Add(this);
         Deploys.Add(elem);
+    }
+
+    public char GetChar()
+    {
+        if (Deploys != null)
+        {
+            foreach (GenDeploy d in Deploys)
+            {
+                if (!string.IsNullOrEmpty(d.Element.PrintChar))
+                {
+                    return d.Element.PrintChar[0];
+                }
+            }
+        }
+        return GridTypeEnum.Convert(Type);
     }
 }
 

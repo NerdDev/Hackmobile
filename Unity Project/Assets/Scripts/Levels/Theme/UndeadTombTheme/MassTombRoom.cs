@@ -9,7 +9,11 @@ public class MassTombRoom : HeavyRoomMod
 
     protected override bool ModifyInternal(RoomSpec spec)
     {
-        List<List<Bounding>> options = spec.Grids.FindRectanglesMaximized(5, 3, true, new StrokedAction<GenSpace>()
+        UndeadTombTheme undeadTheme = spec.Theme as UndeadTombTheme;
+        if (undeadTheme == null) throw new ArgumentException("Theme needs to be undead themed.");
+        ThemeElement[] tombCollection = undeadTheme.Tombs.Random(spec.Random).Elements;
+        ThemeElement tombProto = tombCollection[0];
+        List<List<Bounding>> options = spec.Grids.FindRectanglesMaximized(tombProto.GridWidth + 2, tombProto.GridHeight + 2, true, new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.IsType<GenSpace>(GridType.Floor),
                 StrokeAction = Draw.Walkable<GenSpace>()
@@ -41,9 +45,10 @@ public class MassTombRoom : HeavyRoomMod
             {
                 foreach (Bounding tombBound in set)
                 {
+                    GenDeploy tomb = new GenDeploy(tombCollection.Random(spec.Random));
                     spec.Grids.DrawRect(tombBound.XMin, tombBound.XMax, tombBound.YMin, tombBound.YMax, new StrokedAction<GenSpace>()
                         {
-                            UnitAction = Draw.SetTo(GridType.Wall, spec.Theme),
+                            UnitAction = Draw.MergeIn(tomb, spec.Theme, GridType.Wall, false),
                             StrokeAction = Draw.Nothing<GenSpace>()
                         });
                 }

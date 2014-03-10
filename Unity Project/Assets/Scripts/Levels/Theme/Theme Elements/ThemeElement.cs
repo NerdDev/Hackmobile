@@ -26,11 +26,21 @@ public class ThemeElement : MonoBehaviour
     }
     public byte GridWidth = 1;
     public byte GridHeight = 1;
-    public char PrintChar = '?';
+    public string PrintChar = string.Empty;
 
     public virtual List<GenDeploy> PreDeployTweaks(ThemeElementSpec spec)
     {
         return null;
+    }
+
+    public List<GenDeploy> PlaceFloors(ThemeElementSpec spec)
+    {
+        List<GenDeploy> ret = new List<GenDeploy>(spec.GenDeploy.Spaces.Count);
+        foreach (GenSpace space in spec.GenDeploy.Spaces)
+        {
+            ret.Add(new GenDeploy(spec.Theme.Floor.Random(spec.Random)));
+        }
+        return ret;
     }
 
     protected void PlaceFlush(ITransform deploy, GridLocation loc, float buffer = 0F, bool rough = false)
@@ -101,6 +111,11 @@ public class ThemeElement : MonoBehaviour
             }
             return remaining;
         }
+    }
+
+    protected void SetChar(char c)
+    {
+        PrintChar = c.ToString();
     }
 }
 

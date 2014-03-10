@@ -121,6 +121,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\IPillarTheme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\DoorElement.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\FloorDoodadElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\PillarElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\StairElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElement.cs" />

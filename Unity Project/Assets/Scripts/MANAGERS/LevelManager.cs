@@ -32,12 +32,16 @@ public class LevelManager : MonoBehaviour, IManager
         {
             GenSpace s = b as GenSpace;
             if (s == null) return GridTypeEnum.Convert(GridType.NULL);
-            return GridTypeEnum.Convert(s.Type);
+            return s.GetChar();
         };
         ArrayExt.Converters[typeof(IGridSpace)] = (b) =>
         {
             IGridSpace s = b as IGridSpace;
             if (s == null) return GridTypeEnum.Convert(GridType.NULL);
+            if (s is GenSpace)
+            {
+                return ((GenSpace)s).GetChar();
+            }
             return GridTypeEnum.Convert(s.Type);
         };
         if (Seed == -1)

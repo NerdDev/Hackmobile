@@ -70,22 +70,25 @@ public class LevelBuilder : MonoBehaviour
             {
                 Theme = gen.val.Theme
             };
-            space.Deploys = new List<GridDeploy>(gen.val.Deploys.Count);
             ret[gen] = space;
+            space.Deploys = new List<GridDeploy>(gen.val.Deploys.Count);
+            List<GenDeploy> tmp = new List<GenDeploy>(gen.val.Deploys);
+            foreach (GenDeploy genDeploy in tmp)
+            {
+                Deploy(genDeploy, spec, space);
+            }
             spec.Theme = gen.val.Theme;
             spec.Type = gen.val.Type;
             spec.X = gen.x;
             spec.Y = gen.y;
-            foreach (GenDeploy genDeploy in gen.val.Deploys)
-            {
-                Deploy(genDeploy, spec, space);
-            }
         }
         return ret;
     }
 
     protected void Deploy(GenDeploy genDeploy, ThemeElementSpec spec, GridSpace space)
     {
+        if (genDeploy.Deployed) return;
+        genDeploy.Deployed = true;
         spec.GenDeploy = genDeploy;
         List<GenDeploy> additional = genDeploy.Element.PreDeployTweaks(spec);
         GridDeploy deploy = new GridDeploy(genDeploy.Element.GO)
@@ -114,10 +117,6 @@ public class LevelBuilder : MonoBehaviour
             case GridType.Wall:
                 element = space.Theme.Wall.Random(rand);
                 break;
-            case GridType.StairPlace:
-            case GridType.Floor:
-                element = space.Theme.Floor.Random(rand);
-                break;
             case GridType.Door:
                 element = space.Theme.Door.Random(rand);
                 break;
@@ -130,8 +129,14 @@ public class LevelBuilder : MonoBehaviour
             case GridType.Chest:
                 element = space.Theme.Chest.Random(rand);
                 break;
-            default:
+            case GridType.NULL:
                 return false;
+            case GridType.StairPlace:
+            case GridType.Floor:
+            case GridType.SmallLoot:
+            default:
+                element = space.Theme.Floor.Random(rand);
+                break;
         }
         if (element == null)
         {

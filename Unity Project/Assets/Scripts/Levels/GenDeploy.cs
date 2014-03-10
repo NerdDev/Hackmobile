@@ -11,6 +11,7 @@ public class GenDeploy : ITransform
     public float X { get; set; }
     public float Y { get; set; }
     public float Z { get; set; }
+    public bool Deployed = false;
     
     public GenDeploy(ThemeElement element)
     {

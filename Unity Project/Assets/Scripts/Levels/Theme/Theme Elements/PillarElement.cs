@@ -5,6 +5,11 @@ using System.Text;
 
 public class PillarElement : ThemeElement
 {
+    public PillarElement()
+    {
+        PrintChar = "O";
+    }
+
     public override List<GenDeploy> PreDeployTweaks(ThemeElementSpec spec)
     {
         GenDeploy floorDeploy = new GenDeploy(spec.Theme.Floor.Random(spec.Random));

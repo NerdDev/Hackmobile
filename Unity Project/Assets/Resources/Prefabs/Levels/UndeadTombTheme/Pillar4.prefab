@@ -85,6 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridWidth: 1
   GridHeight: 1
+  PrintChar: O
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

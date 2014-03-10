@@ -68,7 +68,8 @@ MonoBehaviour:
   - Elements:
     - {fileID: 11400000, guid: d674f9f2a64553c4ebb096ff41817cfc, type: 2}
   Tombs:
-  - Elements: []
+  - Elements:
+    - {fileID: 11400000, guid: 15956c11fce589d43aebadac16ff9dd6, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
