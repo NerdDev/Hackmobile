@@ -7,6 +7,7 @@ public class FloorDoodadElement : ThemeElement
 {
     public override MultiMap<List<GenDeploy>> PreDeployTweaks(ThemeElementSpec spec)
     {
+        CenterDoodad(spec);
         return PlaceFloors(spec);
     }
 }

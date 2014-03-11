@@ -9,8 +9,8 @@ public class ThemeElement : MonoBehaviour
     public GameObject GO { get { return gameObject; } }
     private Bounds _bounds;
     private bool _bounded = false;
-    public Bounds Bounds 
-    {  
+    public Bounds Bounds
+    {
         get
         {
             if (!_bounded)
@@ -36,12 +36,10 @@ public class ThemeElement : MonoBehaviour
     public MultiMap<List<GenDeploy>> PlaceFloors(ThemeElementSpec spec)
     {
         var ret = new MultiMap<List<GenDeploy>>();
-        foreach (var space in spec.GenDeploy)
+        foreach (var space in spec)
         {
             GenDeploy deploy = new GenDeploy(spec.Theme.Floor.Random(spec.Random));
             deploy.AddSpace(space.val, space.x, space.y);
-            space.x += spec.X;
-            space.y += spec.Y;
             List<GenDeploy> list;
             if (!ret.TryGetValue(space, out list))
             {
@@ -51,6 +49,32 @@ public class ThemeElement : MonoBehaviour
             list.Add(deploy);
         }
         return ret;
+    }
+
+    protected void CenterDoodad(ThemeElementSpec spec)
+    {
+        if (spec.GenDeploy.Element.GridHeight == 1
+            && spec.GenDeploy.Element.GridWidth == 1) return;
+        Bounding bounds = spec.GetBounds();
+        Point center = bounds.GetCenter();
+        center.x -= spec.X;
+        center.y -= spec.Y;
+        spec.GenDeploy.X += center.x / 2f;
+        spec.GenDeploy.Z += center.y / 2f;
+        Rotation rot;
+        if (center.y == center.x)
+        { // Rotate randomly
+            rot = spec.Random.NextRotation();
+        }
+        else if (center.y > center.x)
+        {
+            rot = spec.Random.NextBool() ? Rotation.ClockWise : Rotation.CounterClockWise;
+        }
+        else
+        {
+            rot = spec.Random.NextBool() ? Rotation.OneEighty : Rotation.None;
+        }
+        spec.GenDeploy.Rotate(rot);
     }
 
     protected void PlaceFlush(ITransform deploy, GridLocation loc, float buffer = 0F, bool rough = false)
