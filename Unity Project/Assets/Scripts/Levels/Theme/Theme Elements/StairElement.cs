@@ -5,13 +5,13 @@ using System.Text;
 
 public class StairElement : ThemeElement
 {
-    public override MultiMap<List<GenDeploy>> PreDeployTweaks(ThemeElementSpec spec)
+    public override void PreDeployTweaks(ThemeElementSpec spec)
     {
         Value2D<GenSpace> val;
-        if (spec.GenGrid.GetPointAround(spec.X, spec.Y, false, Draw.IsType<GenSpace>(GridType.StairPlace), out val))
+        if (spec.GenGrid.GetPointAround(spec.DeployX, spec.DeployY, false, Draw.IsType<GenSpace>(GridType.StairPlace), out val))
         {
-            val.x -= spec.X;
-            val.y -= spec.Y;
+            val.x -= spec.DeployX;
+            val.y -= spec.DeployY;
             if (val.x == 1)
             {
                 spec.GenDeploy.Rotation = 90;
@@ -30,7 +30,6 @@ public class StairElement : ThemeElement
             spec.GenDeploy.Y = -1;
             spec.GenDeploy.Rotation += 180;
         }
-        return null;
     }
 }
 

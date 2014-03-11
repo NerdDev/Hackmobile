@@ -6,10 +6,10 @@ using System.Text;
 public class ChestElement : ThemeElement
 {
     const float _chestBuffer = .05F;
-    public override MultiMap<List<GenDeploy>> PreDeployTweaks(ThemeElementSpec spec)
+    public override void PreDeployTweaks(ThemeElementSpec spec)
     {
         GridLocation wall;
-        if (spec.GenGrid.GetRandomLocationAround(spec.X, spec.Y, false, spec.Random, Draw.WallType<GenSpace>(), out wall))
+        if (spec.GenGrid.GetRandomLocationAround(spec.DeployX, spec.DeployY, false, spec.Random, Draw.WallType<GenSpace>(), out wall))
         { // If wall around, make it flush
             PlaceFlush(spec.GenDeploy, wall, _chestBuffer);
         }
@@ -17,7 +17,7 @@ public class ChestElement : ThemeElement
         { // Place randomly in the middle
             PlaceRandomlyInside(spec.Random, spec.GenDeploy, _chestBuffer);
         }
-        return PlaceFloors(spec);
+        PlaceFloors(spec);
     }
 }
 

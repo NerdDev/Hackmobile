@@ -28,9 +28,8 @@ public class ThemeElement : MonoBehaviour
     public byte GridHeight = 1;
     public string PrintChar = string.Empty;
 
-    public virtual MultiMap<List<GenDeploy>> PreDeployTweaks(ThemeElementSpec spec)
+    public virtual void PreDeployTweaks(ThemeElementSpec spec)
     {
-        return null;
     }
 
     public MultiMap<List<GenDeploy>> PlaceFloors(ThemeElementSpec spec)
@@ -38,15 +37,7 @@ public class ThemeElement : MonoBehaviour
         var ret = new MultiMap<List<GenDeploy>>();
         foreach (var space in spec)
         {
-            GenDeploy deploy = new GenDeploy(spec.Theme.Floor.Random(spec.Random));
-            deploy.AddSpace(space.val, space.x, space.y);
-            List<GenDeploy> list;
-            if (!ret.TryGetValue(space, out list))
-            {
-                list = new List<GenDeploy>(1);
-                ret[space] = list;
-            }
-            list.Add(deploy);
+            spec.AddAdditional(new GenDeploy(spec.Theme.Floor.Random(spec.Random)), space.x, space.y);
         }
         return ret;
     }
@@ -57,8 +48,8 @@ public class ThemeElement : MonoBehaviour
             && spec.GenDeploy.Element.GridWidth == 1) return;
         Bounding bounds = spec.GetBounds();
         Point center = bounds.GetCenter();
-        center.x -= spec.X;
-        center.y -= spec.Y;
+        center.x -= spec.DeployX;
+        center.y -= spec.DeployY;
         spec.GenDeploy.X += center.x / 2f;
         spec.GenDeploy.Z += center.y / 2f;
         Rotation rot;

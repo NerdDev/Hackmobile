@@ -5,10 +5,10 @@ using System.Text;
 
 public class FloorDoodadElement : ThemeElement
 {
-    public override MultiMap<List<GenDeploy>> PreDeployTweaks(ThemeElementSpec spec)
+    public override void PreDeployTweaks(ThemeElementSpec spec)
     {
         CenterDoodad(spec);
-        return PlaceFloors(spec);
+        PlaceFloors(spec);
     }
 }
 

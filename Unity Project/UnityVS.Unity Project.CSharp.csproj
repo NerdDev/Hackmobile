@@ -149,6 +149,7 @@
     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\GrandTombRoom.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\MassTombRoom.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\TombElement.cs" />
+    <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\TombTopElement.cs" />
     <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\UndeadTombTheme.cs" />
     <Compile Include="Assets\Scripts\Library\Axis.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\ArrayExt.cs" />

@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,8 +81,8 @@ public class LevelBuilder : MonoBehaviour
             spec.Space = space;
             spec.Theme = gen.val.Theme;
             spec.Type = gen.val.Type;
-            spec.X = gen.x;
-            spec.Y = gen.y;
+            spec.DeployX = gen.x;
+            spec.DeployY = gen.y;
             List<GenDeploy> tmp = new List<GenDeploy>(gen.val.Deploys);
             foreach (GenDeploy genDeploy in tmp)
             {
@@ -95,8 +96,9 @@ public class LevelBuilder : MonoBehaviour
     protected void Deploy(ThemeElementSpec spec)
     {
         if (spec.GenDeploy.Deployed) return;
+        spec.Additional = new MultiMap<List<GenDeploy>>();
         spec.GenDeploy.Deployed = true;
-        MultiMap<List<GenDeploy>> additional = spec.GenDeploy.Element.PreDeployTweaks(spec);
+        spec.GenDeploy.Element.PreDeployTweaks(spec);
         GridDeploy deploy = new GridDeploy(spec.GenDeploy.Element.GO)
         {
             Rotation = spec.GenDeploy.Rotation,
@@ -105,28 +107,27 @@ public class LevelBuilder : MonoBehaviour
             Z = spec.GenDeploy.Z
         };
         spec.Space.Deploys.Add(deploy);
-        if (additional != null)
+        if (spec.Additional.Count == 0) return;
+        MultiMap<List<GenDeploy>> additional = spec.Additional;
+        foreach (var d in additional)
         {
-            foreach (var d in additional)
+            GridSpace space;
+            if (!spec.Grid.TryGetValue(d, out space))
             {
-                GridSpace space;
-                if (!spec.Grid.TryGetValue(d, out space))
+                space = new GridSpace(spec.Type, spec.DeployX, spec.DeployY)
                 {
-                    space = new GridSpace(spec.Type, spec.X, spec.Y)
-                    {
-                        Theme = spec.Theme
-                    };
-                    space.Deploys = new List<GridDeploy>();
-                    spec.Grid[d] = space;
-                }
-                spec.Space = space;
-                spec.X = d.x;
-                spec.Y = d.y;
-                foreach (GenDeploy d2 in d.val)
-                {
-                    spec.GenDeploy = d2;
-                    Deploy(spec);
-                }
+                    Theme = spec.Theme
+                };
+                space.Deploys = new List<GridDeploy>();
+                spec.Grid[d] = space;
+            }
+            spec.Space = space;
+            spec.DeployX = d.x;
+            spec.DeployY = d.y;
+            foreach (GenDeploy d2 in d.val)
+            {
+                spec.GenDeploy = d2;
+                Deploy(spec);
             }
         }
     }
