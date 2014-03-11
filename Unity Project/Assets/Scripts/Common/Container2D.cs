@@ -50,6 +50,10 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
     }
     public abstract bool TryGetValue(int x, int y, out T val);
+    public bool TryGetValue(Point p, out T val)
+    {
+        return TryGetValue(p.x, p.y, out val);
+    }
     public bool IsEmpty { get { return Count == 0; } }
     public abstract int Count { get; }
     public abstract Bounding Bounding { get; }

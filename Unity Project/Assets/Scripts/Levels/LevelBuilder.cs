@@ -57,53 +57,76 @@ public class LevelBuilder : MonoBehaviour
         MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
         ThemeElementSpec spec = new ThemeElementSpec()
         {
-            Grid = layout.Grids,
-            Random = layout.Random
+            GenGrid = layout.Grids,
+            Random = layout.Random,
+            Grid = ret
         };
-        foreach (Value2D<GenSpace> gen in layout.Grids)
+        foreach (Value2D<GenSpace> gen in spec.GenGrid)
         {
             if (gen.val.Deploys == null)
             {
                 HandleEmptyDeploy(gen.val, spec.Random);
             }
-            GridSpace space = new GridSpace(gen.val.Type, gen.x, gen.y)
+            GridSpace space;
+            if (!ret.TryGetValue(gen, out space))
             {
-                Theme = gen.val.Theme
-            };
-            ret[gen] = space;
-            space.Deploys = new List<GridDeploy>(gen.val.Deploys.Count);
-            List<GenDeploy> tmp = new List<GenDeploy>(gen.val.Deploys);
-            foreach (GenDeploy genDeploy in tmp)
-            {
-                Deploy(genDeploy, spec, space);
+                space = new GridSpace(gen.val.Type, gen.x, gen.y)
+                {
+                    Theme = gen.val.Theme
+                };
+                space.Deploys = new List<GridDeploy>(gen.val.Deploys.Count);
+                ret[gen] = space;
             }
+            spec.Space = space;
             spec.Theme = gen.val.Theme;
             spec.Type = gen.val.Type;
             spec.X = gen.x;
             spec.Y = gen.y;
+            List<GenDeploy> tmp = new List<GenDeploy>(gen.val.Deploys);
+            foreach (GenDeploy genDeploy in tmp)
+            {
+                spec.GenDeploy = genDeploy;
+                Deploy(spec);
+            }
         }
         return ret;
     }
 
-    protected void Deploy(GenDeploy genDeploy, ThemeElementSpec spec, GridSpace space)
+    protected void Deploy(ThemeElementSpec spec)
     {
-        if (genDeploy.Deployed) return;
-        genDeploy.Deployed = true;
-        spec.GenDeploy = genDeploy;
-        List<GenDeploy> additional = genDeploy.Element.PreDeployTweaks(spec);
-        GridDeploy deploy = new GridDeploy(genDeploy.Element.GO)
+        if (spec.GenDeploy.Deployed) return;
+        spec.GenDeploy.Deployed = true;
+        MultiMap<List<GenDeploy>> additional = spec.GenDeploy.Element.PreDeployTweaks(spec);
+        GridDeploy deploy = new GridDeploy(spec.GenDeploy.Element.GO)
         {
-            Rotation = genDeploy.Rotation,
-            X = genDeploy.X,
-            Y = genDeploy.Y,
-            Z = genDeploy.Z
+            Rotation = spec.GenDeploy.Rotation,
+            X = spec.GenDeploy.X,
+            Y = spec.GenDeploy.Y,
+            Z = spec.GenDeploy.Z
         };
-        space.Deploys.Add(deploy);
+        spec.Space.Deploys.Add(deploy);
         if (additional != null)
         {
-            foreach (GenDeploy additionalDeploy in additional)
+            foreach (var d in additional)
             {
-                Deploy(additionalDeploy, spec, space);
+                GridSpace space;
+                if (!spec.Grid.TryGetValue(d, out space))
+                {
+                    space = new GridSpace(spec.Type, spec.X, spec.Y)
+                    {
+                        Theme = spec.Theme
+                    };
+                    space.Deploys = new List<GridDeploy>();
+                    spec.Grid[d] = space;
+                }
+                spec.Space = space;
+                spec.X = d.x;
+                spec.Y = d.y;
+                foreach (GenDeploy d2 in d.val)
+                {
+                    spec.GenDeploy = d2;
+                    Deploy(spec);
+                }
             }
         }
     }
@@ -143,7 +166,7 @@ public class LevelBuilder : MonoBehaviour
             throw new ArgumentException("Theme " + space.Theme.GetType() + " had no elements for type: " + space.Type);
         }
         GenDeploy deploy = new GenDeploy(element);
-        space.AddDeploy(deploy);
+        space.AddDeploy(deploy, 0, 0);
         return true;
     }
 

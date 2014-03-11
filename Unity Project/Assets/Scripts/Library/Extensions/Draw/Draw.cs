@@ -521,7 +521,7 @@ public static class Draw
                     space.Type = type;
                 }
             }
-            space.AddDeploy(new GenDeploy(elements.Random(random)));
+            space.AddDeploy(new GenDeploy(elements.Random(random)), x, y);
             return true;
         };
     }
@@ -547,7 +547,7 @@ public static class Draw
                     space.Type = type;
                 }
             }
-            space.AddDeploy(deploy);
+            space.AddDeploy(deploy, x, y);
             return true;
         };
     }

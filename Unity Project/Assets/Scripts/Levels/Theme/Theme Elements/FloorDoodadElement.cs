@@ -5,7 +5,7 @@ using System.Text;
 
 public class FloorDoodadElement : ThemeElement
 {
-    public override List<GenDeploy> PreDeployTweaks(ThemeElementSpec spec)
+    public override MultiMap<List<GenDeploy>> PreDeployTweaks(ThemeElementSpec spec)
     {
         return PlaceFloors(spec);
     }

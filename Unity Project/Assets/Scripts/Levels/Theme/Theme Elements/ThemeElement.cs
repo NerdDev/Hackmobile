@@ -28,17 +28,27 @@ public class ThemeElement : MonoBehaviour
     public byte GridHeight = 1;
     public string PrintChar = string.Empty;
 
-    public virtual List<GenDeploy> PreDeployTweaks(ThemeElementSpec spec)
+    public virtual MultiMap<List<GenDeploy>> PreDeployTweaks(ThemeElementSpec spec)
     {
         return null;
     }
 
-    public List<GenDeploy> PlaceFloors(ThemeElementSpec spec)
+    public MultiMap<List<GenDeploy>> PlaceFloors(ThemeElementSpec spec)
     {
-        List<GenDeploy> ret = new List<GenDeploy>(spec.GenDeploy.Spaces.Count);
-        foreach (GenSpace space in spec.GenDeploy.Spaces)
+        var ret = new MultiMap<List<GenDeploy>>();
+        foreach (var space in spec.GenDeploy)
         {
-            ret.Add(new GenDeploy(spec.Theme.Floor.Random(spec.Random)));
+            GenDeploy deploy = new GenDeploy(spec.Theme.Floor.Random(spec.Random));
+            deploy.AddSpace(space.val, space.x, space.y);
+            space.x += spec.X;
+            space.y += spec.Y;
+            List<GenDeploy> list;
+            if (!ret.TryGetValue(space, out list))
+            {
+                list = new List<GenDeploy>(1);
+                ret[space] = list;
+            }
+            list.Add(deploy);
         }
         return ret;
     }

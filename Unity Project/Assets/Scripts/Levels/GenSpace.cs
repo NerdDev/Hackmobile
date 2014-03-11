@@ -22,14 +22,18 @@ public class GenSpace : IGridSpace
         this.Y = y;
     }
 
-    public void AddDeploy(GenDeploy elem)
+    public void AddDeploy(GenDeploy elem, int x, int y)
     {
         if (Deploys == null)
         {
             Deploys = new List<GenDeploy>(3);
         }
-        elem.Spaces.Add(this);
         Deploys.Add(elem);
+        if (elem.OriginPt == null)
+        {
+            elem.OriginPt = new Point(x, y);
+        }
+        elem.Spaces[x, y] = this;
     }
 
     public char GetChar()
