@@ -14,24 +14,22 @@ public class NPC : Affectable
     public override void Init()
     {
         calcStats();
-        Equipment = new Equipment(this.Bodyparts);
         //IsActive = true;
         if (IsActive)
         {
             Vector2 currentPos = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
             GridSpace = BigBoss.Levels.Level[currentPos.x.ToInt(), currentPos.y.ToInt()];
         }
-        InitAI();
 
         List<ItemHolder> ih = StartingItems.Get(new System.Random(), 3, BigBoss.Player.Level);
         if (ih.Count > 0)
         {
             foreach (ItemHolder i in ih)
             {
-                Debug.Log("Adding item: " + i.id);
                 addToInventory(i.Get());
             }
         }
+        master = new AICore(this, Role.MAGE);
     }
 
     /**
@@ -40,18 +38,17 @@ public class NPC : Affectable
     #region NPC Properties
     public GenericFlags<NPCFlags> Flags = new GenericFlags<NPCFlags>();
     public GenericFlags<SpawnKeywords> SpawnKeywords = new GenericFlags<SpawnKeywords>();
-    public Race Race;
-    public Role Role;
     public AttributesData Attributes = new AttributesData();
     public BodyParts Bodyparts = new BodyParts();
     public Stats Stats = new Stats();
     public Spells KnownSpells = new Spells();
     public LeveledItemList StartingItems = new LeveledItemList();
+    AICore master;
 
     //public List<Item> inventory = new List<Item>();
     public Inventory Inventory = new Inventory();
     protected List<Item> EquippedItems = new List<Item>();
-    public Equipment Equipment = null;
+    public Equipment Equipment = new Equipment();
     #endregion
 
     /**
@@ -82,7 +79,6 @@ public class NPC : Affectable
 
     public NPC()
     {
-        Equipment = new Equipment(Bodyparts);
         Stats.MaxEncumbrance = getMaxInventoryWeight();
         Stats.CurrentHealth = Stats.MaxHealth;
         Stats.CurrentPower = Stats.MaxPower;
@@ -179,43 +175,80 @@ public class NPC : Affectable
         calcStats();
     }
 
-    public virtual void AdjustHealth(int amount)
+    public virtual bool AdjustHealth(int amount) //returns true if NPC dies from health gain
     {
-        if (amount < 0)
+        if (amount <= 0) //if amount is < 0 it's damage
         {
-            damage(-amount);
+            amount = -amount; //flips it for below calculations to make sense as a subtraction of health
+            if (Stats.CurrentHealth - amount > 0)
+            {
+                Stats.CurrentHealth = Stats.CurrentHealth - amount;
+                CreateTextPop(this.Name + " took " + amount + " damage!", Color.red);
+                return false;
+            }
+            else
+            {
+                this.killThisNPC(); //NPC is now dead!
+                return true;
+            }
         }
+        //health is positive gain here, but gain is more than max health... so we cap it
         else if (Stats.CurrentHealth + amount > Stats.MaxHealth)
         {
             Stats.CurrentHealth = Stats.MaxHealth;
             CreateTextPop(this.Name + " gained " + amount + " in health.");
+            return false;
         }
-        else
+        else // health is positive gain but doesn't go over max, so it works normally
         {
             Stats.CurrentHealth = Stats.CurrentHealth + amount;
             CreateTextPop(this.Name + " gained " + amount + " in health.");
+            return false;
         }
     }
 
-    public virtual bool damage(int amount)
+    public virtual void AdjustPower(int amount)
     {
-        if (Stats.CurrentHealth - amount > 0)
+        if (amount <= 0)
         {
-            Stats.CurrentHealth = Stats.CurrentHealth - amount;
-            //Debug.Log(this.Name + " was damaged for " + amount + "!");
-            CreateTextPop("Damaged for " + amount + "!", Color.red);
-            return false;
+            amount = -amount;
+            if (Stats.CurrentPower - amount > 0)
+            {
+                Stats.CurrentPower = Stats.CurrentPower - amount;
+            }
+            else
+            {
+                this.Stats.CurrentPower = 0;
+            }
+        }
+        else if (Stats.CurrentPower + amount > Stats.MaxPower)
+        {
+            Stats.CurrentPower = Stats.MaxPower;
         }
         else
         {
-            this.killThisNPC(); //NPC is now dead!
-            return true;
+            Stats.CurrentPower = Stats.CurrentPower + amount;
         }
+    }
+
+    public virtual bool damage(int amount) //returns positive if NPC dies
+    {
+        //this 'damages' for a positive number, sending it as a negative adjustment
+        return AdjustHealth(-amount);
     }
 
     public virtual void AdjustMaxHealth(int amount)
     {
         Stats.MaxHealth += amount;
+        if (Stats.MaxHealth <= 0)
+        {
+            killThisNPC();
+        }
+    }
+
+    public virtual void AdjustMaxPower(int amount)
+    {
+        Stats.MaxPower += amount;
     }
 
     public virtual void AdjustXP(float amount)
@@ -315,8 +348,6 @@ public class NPC : Affectable
         //GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
         if (!node.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
         {
-            int xmove = GridSpace.X - node.X;
-            int ymove = GridSpace.Y - node.Y;
             GridSpace = node;
             move(node);
         }
@@ -417,9 +448,10 @@ public class NPC : Affectable
 
     public virtual void attack(NPC n)
     {
-        if (Equipment.getItems(EquipTypes.HAND) != null)
+        bool b = false;
+        if (b)
         {
-            List<Item> weapons = Equipment.getItems(EquipTypes.HAND);
+            List<Item> weapons = new List<Item>();
             if (weapons.Count > 0)
             {
                 foreach (Item i in weapons)
@@ -462,12 +494,13 @@ public class NPC : Affectable
 
     public virtual void CastSpell(string spell, params IAffectable[] targets)
     {
-        KnownSpells[spell].Activate(this, targets);
+        CastSpell(KnownSpells[spell], targets);
     }
 
     public virtual void CastSpell(Spell spell, params IAffectable[] targets)
     {
         spell.Activate(this, targets);
+        AdjustPower(-spell.cost);
     }
 
     protected int calcHandDamage()
@@ -593,15 +626,15 @@ public class NPC : Affectable
     public override void ParseXML(XMLNode x)
     {
         base.ParseXML(x);
-        Race = x.SelectEnum<Race>("race");
-        Role = x.SelectEnum<Role>("role");
+        //Race = x.SelectEnum<Race>("race");
+        //Role = x.SelectEnum<Role>("role");
         Attributes = x.Select<AttributesData>("attributes");
-        Bodyparts = x.Select<BodyParts>("bodyparts");
         Stats = x.Select<Stats>("stats");
         Flags = new GenericFlags<NPCFlags>(x.SelectEnums<NPCFlags>("flags"));
         SpawnKeywords = new GenericFlags<SpawnKeywords>(x.SelectEnums<SpawnKeywords>("spawnkeywords"));
         KnownSpells = x.Select<Spells>("spells");
         StartingItems = x.Select<LeveledItemList>("startingitems");
+        Equipment = x.Select<Equipment>("equipslots");
     }
     #endregion
 
@@ -631,7 +664,7 @@ public class NPC : Affectable
             {
                 if (this.IsNotAFreaking<Player>())
                 {
-                    DecideWhatToDo();
+                    master.DecideWhatToDo();
                 }
             }
             catch (Exception e)
@@ -681,156 +714,26 @@ public class NPC : Affectable
 
     #region AI
 
-    internal List<AIAction> actions = new List<AIAction>();
-
-    void InitAI()
+    public bool IsNextToTarget(GridSpace targetSpace)
     {
-        actions.Add(new Attack(this));
-        actions.Add(new Move(this));
-        actions.Add(new CastDamageSpell(this));
-    }
-    public abstract class AIAction : IComparable<AIAction>
-    {
-        private AIAction() { }
-        public AIAction(NPC n)
-        {
-            this.npc = n;
-        }
-        internal NPC npc;
-        public int Cost { get; set; }
-        internal int Weight { get; set; }
-        public abstract void Action();
-        public abstract void CalcWeighting();
-        public int CompareTo(AIAction other)
-        {
-            if (this.Weight < other.Weight)
-            {
-                return -1;
-            }
-            else if (this.Weight == other.Weight)
-            {
-                return 0;
-            }
-            return 1;
-        }
-    }
-    internal class Attack : AIAction
-    {
-        public Attack(NPC n)
-            : base(n)
-        {
-            Cost = 60;
-        }
-
-        public override void Action()
-        {
-            npc.attack(BigBoss.Player);
-        }
-
-        public override void CalcWeighting()
-        {
-            if (npc.IsNextToPlayer())
-            {
-                Weight = 50;
-            }
-            else
-            {
-                Weight = 0;
-            }
-        }
-    }
-    internal class CastDamageSpell : AIAction
-    {
-        int turnsSinceLastCast = 0;
-        Spell spell;
-
-        public CastDamageSpell(NPC n)
-            : base(n)
-        {
-            Cost = 60;
-        }
-
-        public override void Action()
-        {
-            if (npc.KnownSpells.ContainsKey("Firebolt"))
-            {
-                Spell spellToCast = npc.KnownSpells["Firebolt"];
-                if (npc.DistanceToPlayer() < spellToCast.range)
-                {
-                    npc.CastSpell(spellToCast, BigBoss.Player);
-                    turnsSinceLastCast = 0;
-                }
-            }
-        }
-
-        public override void CalcWeighting()
-        {
-            if (npc.Role == Role.MAGE && npc.KnownSpells.ContainsKey("Firebolt") && turnsSinceLastCast > 5)
-                Weight = 60;
-            else
-                turnsSinceLastCast++;
-                Weight = 0;
-        }
-    }
-    internal class Move : AIAction
-    {
-        public Move(NPC n)
-            : base(n)
-        {
-            Cost = 60;
-        }
-
-        public override void Action()
-        {
-            PathNode[] nodes = PathTree.Instance.getPath(npc.GridSpace, BigBoss.Player.GridSpace, 600).ToArray();
-            if (nodes.Length > 2)
-            {
-                GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
-                npc.MoveNPC(nodeToMove);
-            }
-        }
-
-        public override void CalcWeighting()
-        {
-            if (npc.IsNextToPlayer())
-            {
-                Weight = 0;
-            }
-            else
-            {
-                Weight = 50;
-            }
-        }
-    }
-
-    bool IsNextToPlayer()
-    {
-        GridSpace playerSpace = BigBoss.Player.GridSpace;
         Value2D<GridSpace> space;
-        return BigBoss.Levels.Level.Array.GetPointAround(playerSpace.X, playerSpace.Y, true, (arr, x, y) =>
+        return BigBoss.Levels.Level.Array.GetPointAround(targetSpace.X, targetSpace.Y, true, (arr, x, y) =>
         {
             return this.GridSpace.X == x && this.GridSpace.Y == y;
         }, out space);
     }
 
-    int DistanceToPlayer()
+    public bool IsNextToTarget(NPC n)
     {
-        GridSpace playerSpace = BigBoss.Player.GridSpace;
-        PathNode[] nodes = PathTree.Instance.getPath(this.GridSpace, BigBoss.Player.GridSpace, 50).ToArray();
-        return nodes.Length;
+        GridSpace targetSpace = n.GridSpace;
+        return IsNextToTarget(targetSpace);
     }
 
-    void DecideWhatToDo()
+    public int GridDistanceToTarget(NPC n)
     {
-        foreach (AIAction action in actions)
-        {
-            action.CalcWeighting();
-        }
-        actions.Sort();
-        if (actions[actions.Count - 1].Weight > 0)
-        {
-            actions[actions.Count - 1].Action();
-        }
+        GridSpace targetSpace = n.GridSpace;
+        PathNode[] nodes = PathTree.Instance.getPath(this.GridSpace, targetSpace, 50).ToArray();
+        return nodes.Length;
     }
 
     #endregion
@@ -842,7 +745,7 @@ public class NPC : Affectable
         {
             if (this.IsNotAFreaking<Player>())
             {
-                if (this.IsNextToPlayer())
+                if (this.IsNextToTarget(BigBoss.Player))
                 {
                     BigBoss.Player.attack(this);
                 }
@@ -850,7 +753,14 @@ public class NPC : Affectable
         }
         else if (BigBoss.PlayerInput.spellInput)
         {
-            BigBoss.Gooey.Target(this);
+            if (this.GridDistanceToTarget(BigBoss.Player) > BigBoss.Gooey.GetCurrentSpellRange())
+            {
+                CreateTextPop(this.Name + " is too far away to cast this spell!");
+            }
+            else
+            {
+                BigBoss.Gooey.Target(this);
+            }
         }
     }
     #endregion

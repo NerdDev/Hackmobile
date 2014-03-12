@@ -17,4 +17,9 @@ public static class StringExt {
             return false;
         }
     }
+
+    public static int GetHash(this string str)
+    {
+        return str.GetHashCode();
+    }
 }

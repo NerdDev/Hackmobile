@@ -9,4 +9,9 @@ public static class EnumerableExt
     {
         return e.OrderBy<T, int>((item) => rand.Next());
     }
+
+    public static Type GetEnumeratedType<T>(this IEnumerable<T> _)
+    {
+        return typeof(T);
+    }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+
 public class PlayerStats
 {
     //
@@ -7,8 +8,6 @@ public class PlayerStats
 
     public static void Load(Player player, Role role, Race race)
     {
-        player.Role = role;
-        player.Race = race;
         LoadBasicStats(player);
         LoadStatModRole(player, role);
         LoadStatModRace(player, race);
@@ -58,7 +57,18 @@ public class PlayerStats
 
         player.PlayerTitle = BigBoss.Objects.PlayerProfessions.getTitle(player.PlayerChosenProfession, player.Stats.Level);
         player.IsActive = true;
-        player.Equipment = new Equipment(player.Bodyparts);
+
+        Equipment equipment = new Equipment();
+        player.Equipment = equipment;
+        equipment.AddSlot(EquipType.BODY);
+        equipment.AddSlot(EquipType.FEET);
+        equipment.AddSlot(EquipType.HAND, 2);
+        equipment.AddSlot(EquipType.HEAD);
+        equipment.AddSlot(EquipType.LEGS);
+        equipment.AddSlot(EquipType.NECK);
+        equipment.AddSlot(EquipType.RING, 2);
+        equipment.AddSlot(EquipType.SHIRT);
+
         player.Name = "Kurtis";
 
         foreach (KeyValuePair<string, Spell> kvp in BigBoss.Objects.PlayerSpells)

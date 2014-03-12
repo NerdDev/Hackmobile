@@ -1,8 +1,5 @@
-using UnityEngine;
 using System;
-using System.Collections;
 using XML;
-using System.Collections.Generic;
 
 public class Item : Affectable, PassesTurns, IXmlParsable
 {
@@ -22,9 +19,9 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     public ItemStats stats = new ItemStats();
 
     //effects
-    protected Spell onEaten = new Spell();
-    protected Spell onEquip = new Spell();
-    protected Spell onUse = new Spell();
+    public Spell onEaten = new Spell();
+    public Spell onEquip = new Spell();
+    public Spell onUse = new Spell();
 
     //Count
     private int _count; //uneditable except from inside this class
@@ -39,6 +36,11 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     public Item(int count)
     {
         _count = count;
+    }
+
+    public void ModifyItem(Inventory container, Action<Item> mod)
+    {
+        container.ModifyItem(this, mod);
     }
 
     #region Usage:

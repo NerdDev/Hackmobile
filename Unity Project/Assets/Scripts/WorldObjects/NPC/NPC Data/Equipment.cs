@@ -1,90 +1,43 @@
 using System;
 using System.Collections.Generic;
+using XML;
 
 public class Equipment : IXmlParsable
 {
-    List<EquipSlot>[] equipSlots = new List<EquipSlot>[(int)EquipTypes.LAST];
+    internal Dictionary<EquipType, EquipSlot> equipSlots = new Dictionary<EquipType, EquipSlot>();
+    internal HashSet<EquipType> filterSlots = new HashSet<EquipType>();
 
-    public Equipment(BodyParts bp)
+    public Equipment()
     {
-        for (int i = 0; i < equipSlots.Length; i++)
+    }
+
+    public void AddSlot(EquipType et, int slots = 1)
+    {
+        if (!equipSlots.ContainsKey(et))
         {
-            equipSlots[i] = new List<EquipSlot>();
-        }
-        equipSlots[(int)EquipTypes.BODY].Add(new EquipSlot());
-        equipSlots[(int)EquipTypes.SHIRT].Add(new EquipSlot());
-        if (bp.Arms > 0)
-        {
-            for (int i = 0; i < bp.Arms; i++)
-            {
-                equipSlots[(int)EquipTypes.RING].Add(new EquipSlot());
-                equipSlots[(int)EquipTypes.HAND].Add(new EquipSlot());
-            }
-        }
-        if (bp.Legs > 0)
-        {
-            if (bp.Legs == 2)
-            {
-                equipSlots[(int)EquipTypes.LEGS].Add(new EquipSlot());
-            }
-            if (bp.Legs % 2 == 0 && bp.Legs >= 2)
-            {
-                for (int i = 2; i <= bp.Legs; i += 2)
-                {
-                    equipSlots[(int)EquipTypes.FEET].Add(new EquipSlot());
-                }
-            }
-        }
-        if (bp.Heads > 0)
-        {
-            for (int i = 0; i < bp.Heads; i++)
-            {
-                equipSlots[(int)EquipTypes.HEAD].Add(new EquipSlot());
-                equipSlots[(int)EquipTypes.NECK].Add(new EquipSlot());
-            }
+            equipSlots.Add(et, new EquipSlot(slots));
+            filterSlots.Add(et);
         }
     }
 
     //Public accessors
 
-    public bool isFreeSlot(EquipTypes et)
+    public bool isFreeSlot(EquipType et)
     {
-        switch (et)
+        if (filter(et)) return false;
+        if (!equipSlots.ContainsKey(et))
         {
-            case EquipTypes.LEFT_RING:
-                if (equipSlots[(int)EquipTypes.RING].Count == 2) //if the count isn't 2, they have an odd number of hands, so left/right makes no sense
-                {
-                    return equipSlots[(int)EquipTypes.RING][0].isFree();
-                }
-                else
-                {
-                    return false;
-                }
-            case EquipTypes.RIGHT_RING:
-                if (equipSlots[(int)EquipTypes.RING].Count == 2) //if the count isn't 2, they have an odd number of hands, so left/right makes no sense
-                {
-                    return equipSlots[(int)EquipTypes.RING][1].isFree();
-                }
-                else
-                {
-                    return false;
-                }
-            default:
-                return isFree(equipSlots[(int)et]); //this returns an ArrayOutOfBounds if EquipTypes.NONE is passed
+            equipSlots.Add(et, new EquipSlot());
         }
-
-    }
-
-    public List<Item> getItems(EquipTypes et)
-    {
-        return getItemsIE(et);
+        return isFree(et);
     }
 
     public bool equipItem(Item i)
     {
-        if (isFreeSlot(i.props.EquipType))
+        EquipType et = i.props.EquipType;
+        if (isFreeSlot(et))
         {
-            EquipSlot es = getFreeSlot(i.props.EquipType);
+            EquipSlot es = equipSlots[et];
             es.equipItem(i);
             return true;
         }
@@ -96,154 +49,68 @@ public class Equipment : IXmlParsable
 
     public bool removeItem(Item i)
     {
-        EquipTypes et = i.props.EquipType;
-        switch (et)
+        EquipType et = i.props.EquipType;
+        if (!isFreeSlot(et)) //if it's free, there's no item for that type
         {
-            case EquipTypes.LEFT_RING:
-                if (equipSlots[(int)EquipTypes.RING].Count == 2) //if the count isn't 2, they have an odd number of hands, so left/right makes no sense
-                {
-                    return equipSlots[(int)EquipTypes.RING][0].removeItem(i);
-                }
-                else
-                {
-                    return false;
-                }
-            case EquipTypes.RIGHT_RING:
-                if (equipSlots[(int)EquipTypes.RING].Count == 2) //if the count isn't 2, they have an odd number of hands, so left/right makes no sense
-                {
-                    return equipSlots[(int)EquipTypes.RING][1].removeItem(i);
-                }
-                else
-                {
-                    return false;
-                }
-            default:
-                return removeItem(i, equipSlots[(int)et]);
-        }
-    }
-
-    /// Private functions
-
-    private List<Item> getItemsIE(EquipTypes et)
-    {
-        List<Item> list = new List<Item>();
-        foreach (EquipSlot es in equipSlots[(int)et])
-        {
-            if (!es.isFree())
-            {
-                list.Add(es.getItem());
-            }
-        }
-        return list;
-    }
-
-    private EquipSlot getFreeSlot(EquipTypes et)
-    {
-        switch (et)
-        {
-            case EquipTypes.LEFT_RING:
-                if (equipSlots[(int)EquipTypes.RING].Count == 2 && equipSlots[(int)EquipTypes.RING][0].isFree()) //if the count isn't 2, they have an odd number of hands, so left/right makes no sense
-                {
-                    return equipSlots[(int)EquipTypes.RING][0];
-                }
-                else
-                {
-                    return null;
-                }
-            case EquipTypes.RIGHT_RING:
-                if (equipSlots[(int)EquipTypes.RING].Count == 2 && equipSlots[(int)EquipTypes.RING][1].isFree()) //if the count isn't 2, they have an odd number of hands, so left/right makes no sense
-                {
-                    return equipSlots[(int)EquipTypes.RING][1];
-                }
-                else
-                {
-                    return null;
-                }
-            default:
-                return getEmptySlot(equipSlots[(int)et]);
-        }
-    }
-
-    /**
-     * Only call this AFTER checking isFree(List<EquipSlot> list)
-     *  to prevent any null exceptions.
-     */
-    private EquipSlot getEmptySlot(List<EquipSlot> list)
-    {
-        foreach (EquipSlot e in list)
-        {
-            if (e.isFree())
-            {
-                return e;
-            }
-        }
-        return null;
-    }
-
-    private bool isFree(List<EquipSlot> list)
-    {
-        foreach (EquipSlot e in list)
-        {
-            if (e.isFree())
-            {
-                return true;
-            }
+            return equipSlots[et].removeItem(i);
         }
         return false;
     }
 
-    private bool isFree(EquipSlot es)
+    public bool isFree(EquipType et)
     {
-        if (es != null)
+        if (equipSlots[et] == null)
         {
-            return es.isFree();
+            equipSlots[et] = new EquipSlot();
         }
-        return false;
+        return equipSlots[et].isFree();
     }
 
-    private bool removeItem(Item i, List<EquipSlot> slots)
+    private bool filter(EquipType et)
     {
-        foreach (EquipSlot es in slots)
+        if (filterSlots.Contains(et))
         {
-            if (es.removeItem(i))
-            {
-                return true;
-            }
+            return false;
         }
-        return false;
+        return true;
     }
 
     internal class EquipSlot
     {
-        Item equipped;
+        List<Item> equipped = new List<Item>();
+        int numSlots;
 
         public EquipSlot()
         {
-            equipped = null;
+            numSlots = 1;
+        }
+
+        public EquipSlot(int slots)
+        {
+            numSlots = slots;
         }
 
         public bool isFree()
         {
-            return (equipped == null);
+            return (equipped.Count == 0);
         }
 
         public void equipItem(Item i)
         {
-            this.equipped = i;
-            i.itemFlags[ItemFlags.IS_EQUIPPED] = true;
-        }
-
-        public void removeItem()
-        {
-            this.equipped.itemFlags[ItemFlags.IS_EQUIPPED] = false;
-            this.equipped = null;
+            if (canEquip(i))
+            {
+                equipped.Add(i);
+                numSlots -= i.props.NumberOfSlots;
+                i.itemFlags[ItemFlags.IS_EQUIPPED] = true;
+            }
         }
 
         public bool removeItem(Item i)
         {
-            if (i.Equals(equipped))
+            if (equipped.Contains(i))
             {
-                removeItem();
+                numSlots += i.props.NumberOfSlots;
+                equipped.Remove(i);
                 return true;
             }
             else
@@ -252,24 +119,25 @@ public class Equipment : IXmlParsable
             }
         }
 
-        public Item getItem()
+        private bool canEquip(Item i)
         {
-            return this.equipped;
-        }
-    }
-
-    public void setNull()
-    {
-        for (int i = 0; i < equipSlots.Length; i++)
-        {
-            if (equipSlots[i] != null)
+            if (numSlots >= i.props.NumberOfSlots)
             {
-                equipSlots[i] = null;
+                return true;
             }
+            return false;
         }
     }
 
     public void ParseXML(XML.XMLNode x)
     {
+        List<XMLNode> nodes = x.SelectList("equiptype");
+        foreach (XMLNode node in nodes)
+        {
+            EquipType et = node.SelectEnum<EquipType>("type");
+            int slots = node.SelectInt("slots", 1);
+            equipSlots.Add(et, new EquipSlot(slots));
+            filterSlots.Add(et);
+        }
     }
 }

@@ -102,7 +102,7 @@ public class TimeManager : MonoBehaviour, IManager
     #endregion
 
     #region Objects to Update
-    public List<PassesTurns> TotalObjectList = new List<PassesTurns>();
+    public HashSet<PassesTurns> TotalObjectList = new HashSet<PassesTurns>();
     internal Queue<PassesTurns> updateList = new Queue<PassesTurns>();
 
     public void RegisterToUpdateList<T>(T obj) where T : PassesTurns
@@ -133,7 +133,11 @@ public class TimeManager : MonoBehaviour, IManager
         {
             if (updateList.Count > 0)
             {
-                runUpdate(updateList.Dequeue());
+                PassesTurns obj = updateList.Dequeue();
+                if (TotalObjectList.Contains(obj))
+                {
+                    runUpdate(obj);
+                }
             }
             else
             {

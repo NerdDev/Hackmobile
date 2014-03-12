@@ -76,6 +76,7 @@
      <Compile Include="Assets\Scripts\Common\Value2D.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
      <Compile Include="Assets\Scripts\GUI\GUILabel.cs" />
+     <Compile Include="Assets\Scripts\GUI\GUIProgressBar.cs" />
      <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
      <Compile Include="Assets\Scripts\GUI\ScrollingGrid.cs" />
      <Compile Include="Assets\Scripts\GUI\TextGrid.cs" />
@@ -155,8 +156,10 @@
      <Compile Include="Assets\Scripts\Library\Extensions\QueueExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\RandomExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\TypeExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Vector3Ext.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
+     <Compile Include="Assets\Scripts\Library\Interfaces\NotHashable.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
      <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />
      <Compile Include="Assets\Scripts\MANAGERS\AudioManager.cs" />
@@ -233,9 +236,14 @@
      <Compile Include="Assets\Scripts\WorldObjects\Items\ItemHolder.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\LeveledItemList.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIAction.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIAttack.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AICastDamageSpell.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AICore.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIMove.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\EquipTypes.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\EquipType.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Equipment.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Flags.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Inventory.cs" />

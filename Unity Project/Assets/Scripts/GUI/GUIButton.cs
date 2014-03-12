@@ -56,7 +56,7 @@ public class GUIButton : UIButton
         get { if (_OnPress == null) _OnPress = new Action<bool>((b) => { }); return _OnPress; }
         set { _OnPress = value; }
     }
-    void OnPress(bool onPress)
+    public override void OnPress(bool onPress)
     {
         base.OnPress(onPress);
         OnButtonPress(onPress);

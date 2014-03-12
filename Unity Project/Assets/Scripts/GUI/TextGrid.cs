@@ -51,19 +51,8 @@ public class TextGrid : ScrollingGrid
             g.gameObject.SetActive(false);
         }
         Grid.ClearList();
-        /*
         int counter = 0;
-        foreach (GUILabel label in labels)
-        {
-            if (counter > displayLimit) break;
-            counter++;
-            label.gameObject.SetActive(true);
-            Grid.AddLabel(label);
-            label.Fix();
-        }
-         */
-        int counter = 0;
-        for (int i = labels.Count; i--> 0 ;)
+        for (int i = labels.Count; i--> 0; )
         {
             if (counter > displayLimit) break;
             counter++;
@@ -71,10 +60,6 @@ public class TextGrid : ScrollingGrid
             Grid.AddLabel(labels[i]);
             labels[i].Fix();
         }
-        //for (int i = labels.Count - 1, j = 0; i > 0 && j < displayLimit; i--, j++)
-        //{
-        //    Grid.AddLabel(labels[i]);
-        //}
         GridPanel.transform.localPosition = Vector3.zero;
         Grid.Reposition();
         GridPanel.transform.localPosition = Vector3.zero;

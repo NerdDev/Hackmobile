@@ -72,5 +72,18 @@
 				</effect>
 			</OnEatenEffect>
 		</potion>
+		<potion name="Blinding Potion">
+			<icon>potion1</icon>
+			<stats>
+				<weight>3</weight>
+				<cost>120</cost>
+			</stats>
+			<OnEatenEffect>
+				<effect>
+					<type>Blindness</type>
+					<turns>5</turns>
+				</effect>
+			</OnEatenEffect>
+		</potion>
 	</consumables>
  </items>

@@ -7,6 +7,7 @@ public class Spell : IXmlParsable
 {
     SpellCastInfo info;
     internal int range;
+    internal int cost;
     protected SpellCastInfo CastInfo
     {
         get
@@ -47,6 +48,7 @@ public class Spell : IXmlParsable
     public void ParseXML(XMLNode spell)
     {
         range = spell.SelectInt("range");
+        cost = spell.SelectInt("cost");
         // If no targeter specified, assume self
         AddAspect(new Self(), GetEffects(spell.SelectList("effect")));
 

@@ -4,38 +4,23 @@ using XML;
 public class ItemProperties : IXmlParsable
 {
     //Properties
-    private BUC buc;
-    public BUC BUC
-    {
-        get { return buc; }
-        set { this.buc = value; }
-    }
-    private int size;
-    public int Size
-    {
-        get
-        {
-            return size;
-        }
-        set
-        {
-            this.size = value;
-        }
-    }
+    public BUC BUC { get; set; }
+    public int Size { get; set; }
     private float weight;
     public float Weight
     {
         get
         {
-            if (Material != null && Size != 0) {
+            if (Material != null && Size != 0)
+            {
                 return (Size * Material.Density) / 1000;
-            } else {
+            }
+            else
+            {
                 return weight;
             }
         }
     }
-
-    //These map to existing values upon a dictionary stored in ItemMaster
     private string damage;
     public Dice Damage
     {
@@ -45,27 +30,25 @@ public class ItemProperties : IXmlParsable
     private string mat = "";
     public MaterialType Material
     {
-        get {
-            return BigBoss.Objects.Materials.GetPrototype(mat); }
+        get
+        {
+            return BigBoss.Objects.Materials.GetPrototype(mat);
+        }
         set
         {
             if (value != null) { this.mat = value.Name; }
             else { this.mat = ""; }
         }
     }
-
-    private EquipTypes equipType;
-    public EquipTypes EquipType
-    {
-        get { return equipType; }
-        set { this.equipType = value; }
-    }
+    public EquipType EquipType { get; set; }
+    public int NumberOfSlots { get; set; }
 
     public void ParseXML(XMLNode x)
     {
         damage = x.SelectString("damage");
         mat = x.SelectString("material");
         if (this.mat.Equals("")) { this.weight = x.SelectInt("weight"); }
-        EquipType = x.SelectEnum<EquipTypes>("equiptype");
+        EquipType = x.SelectEnum<EquipType>("equiptype");
+        NumberOfSlots = x.SelectInt("slots", 1);
     }
 }

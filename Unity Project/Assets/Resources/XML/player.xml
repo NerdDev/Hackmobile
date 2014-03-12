@@ -39,6 +39,8 @@
 		<spells>
 			<spell>
 				<name>Firebolt</name>
+				<range>5</range>
+				<cost>15</cost>
 				<targeter>
 					<type>TargetedObjects</type>
 					<effect>
@@ -53,6 +55,8 @@
 			</spell>
 			<spell>
 				<name>Poison</name>
+				<range>5</range>
+				<cost>30</cost>
 				<targeter>
 					<type>TargetedObjects</type>
 					<effect>
@@ -64,11 +68,25 @@
 			</spell>
 			<spell>
 				<name>Levitate</name>
+				<range>2</range>
+				<cost>5</cost>
 				<targeter>
 					<type>TargetedObjects</type>
 					<effect>
 						<type>Levitation</type>
 						<strength>.4</strength>
+						<turns>5</turns>
+					</effect>
+				</targeter>
+			</spell>
+			<spell>
+				<name>Invisibility</name>
+				<range>4</range>
+				<cost>5</cost>
+				<targeter>
+					<type>TargetedObjects</type>
+					<effect>
+						<type>Invisibility</type>
 						<turns>5</turns>
 					</effect>
 				</targeter>
