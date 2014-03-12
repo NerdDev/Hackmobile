@@ -131,8 +131,7 @@ public class Equipment : IXmlParsable
 
     public void ParseXML(XML.XMLNode x)
     {
-        List<XMLNode> nodes = x.SelectList("equiptype");
-        foreach (XMLNode node in nodes)
+        foreach (XMLNode node in x.SelectList("equiptype"))
         {
             EquipType et = node.SelectEnum<EquipType>("type");
             int slots = node.SelectInt("slots", 1);
