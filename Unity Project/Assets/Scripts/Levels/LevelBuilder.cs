@@ -9,6 +9,7 @@ public class LevelBuilder : MonoBehaviour
     private static GameObject holder;
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
+    private int gridCreationCounter = 0;
 
     public static void Initialize()
     {
@@ -41,6 +42,7 @@ public class LevelBuilder : MonoBehaviour
         }
         combineCounter++;
         garbageCollectorCounter++;
+        gridCreationCounter++;
         if (garbageCollectorCounter > 300)
         {
             System.GC.Collect();
@@ -50,6 +52,12 @@ public class LevelBuilder : MonoBehaviour
         {
             combineCounter = 0;
             Combine();
+        }
+        if (gridCreationCounter > 50)
+        {
+            //temp
+            BigBoss.Gooey.RecreateFOW();
+            gridCreationCounter = 0;
         }
     }
 

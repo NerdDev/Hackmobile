@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Threading;
 
@@ -154,6 +155,12 @@ public class FOWSystem : MonoBehaviour
 
 	public float blendFactor { get { return mBlendFactor; } }
 
+    /// <summary>
+    /// Does the grid need re-created for a dynamic level?
+    /// </summary>
+
+    public bool reCreateGrid = false;
+
 	/// <summary>
 	/// Create a new fog revealer.
 	/// </summary>
@@ -250,6 +257,12 @@ public class FOWSystem : MonoBehaviour
 		{
 			UpdateTexture();
 		}
+
+        if (reCreateGrid)
+        {
+            ReCreateGrid();
+            reCreateGrid = false;
+        }
 	}
 
 	float mElapsed = 0f;
@@ -383,6 +396,40 @@ public class FOWSystem : MonoBehaviour
 			}
 		}
 	}
+
+    protected virtual void ModifyGrid(Vector3 pos)
+    {
+        pos.y += mSize.y;
+        float texToWorld = (float)worldSize / textureSize;
+        bool useSphereCast = raycastRadius > 0f;
+
+        for (int z = (int)pos.z - 1; z < (int)pos.z + 1; z++)
+        {
+            pos.z = mOrigin.z + z * texToWorld;
+
+            for (int x = (int)pos.x - 1; x < (int)pos.x + 1; ++x)
+            {
+                pos.x = mOrigin.x + x * texToWorld;
+
+                RaycastHit hit;
+
+                if (useSphereCast)
+                {
+                    if (Physics.SphereCast(new Ray(pos, Vector3.down), raycastRadius, out hit, mSize.y, raycastMask))
+                    {
+                        mHeights[x, z] = WorldToGridHeight(pos.y - hit.distance - raycastRadius);
+                        continue;
+                    }
+                }
+                else if (Physics.Raycast(new Ray(pos, Vector3.down), out hit, mSize.y, raycastMask))
+                {
+                    mHeights[x, z] = WorldToGridHeight(pos.y - hit.distance);
+                    continue;
+                }
+                mHeights[x, z] = 0;
+            }
+        }
+    }
 
 	/// <summary>
 	/// Update the fog of war's visibility.
@@ -843,4 +890,15 @@ public class FOWSystem : MonoBehaviour
 		cy = Mathf.Clamp(cy, 0, textureSize - 1);
 		return mBuffer0[cx + cy * textureSize].g > 0;
 	}
+
+    /// <summary>
+    /// Re-create the height-map grid post-level-generation.
+    /// </summary>
+
+    public void ReCreateGrid()
+    {
+        CreateGrid();
+        UpdateBuffer();
+        UpdateTexture();
+    }
 }
