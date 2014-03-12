@@ -11,11 +11,6 @@ namespace System
 {
     public static class ObjectExt
     {
-        public static Type GetEnumeratedType<T>(this IEnumerable<T> _)
-        {
-            return typeof(T);
-        }
-
         public static Type GetEnumeratedType<T>(this IComparable<T> _)
         {
             return typeof(T);
@@ -44,6 +39,66 @@ namespace System
         public static IEnumerable<KeyValuePair<string, string>> GetGUIDisplays(this Object o)
         { // Not implemented
             return new List<KeyValuePair<string, string>>();
+        }
+
+        public static int GetHash(this Object o) 
+        {
+            Type type = o.GetType();
+            if (IsPrimitive(type)) return o.GetHashCode();
+            else return RecursiveHashFields(o, type);
+        }
+
+        private static int RecursiveHashFields(object originalObject, Type typeToReflect)
+        {
+            int hash = 3;
+            if (typeToReflect.BaseType != null && typeToReflect.BaseType != typeof(Object))
+            {
+                hash += RecursiveHashFields(originalObject, typeToReflect.BaseType);
+            }
+            hash += GetInternalHash(originalObject, typeToReflect, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy, info => !info.IsPrivate);
+            return hash;
+        }
+
+        private static int GetInternalHash(object originalObject, Type typeToReflect, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null)
+        {
+            int hash = 7;
+            int[] hashMultipliers = { 2, 3, 5, 7, 9, 13, 17 };
+                int i = 0;
+            foreach (FieldInfo fieldInfo in typeToReflect.GetFields(bindingFlags))
+            {
+                if (fieldInfo.IsDefined(typeof(NotHashable), true)) continue;
+                if (filter != null && filter(fieldInfo) == false) continue;
+                
+                if (!IsPrimitive(fieldInfo.FieldType))
+                {
+                    var originalFieldValue = fieldInfo.GetValue(originalObject);
+                    if (originalFieldValue == null) continue;
+                    hash += originalFieldValue.GetHash() * hashMultipliers[i];
+                }
+                else
+                {
+                    var originalFieldValue = fieldInfo.GetValue(originalObject);
+                    if (originalFieldValue == null) continue;
+                    hash += originalFieldValue.GetHashCode() * hashMultipliers[i];
+                }
+                i++;
+                if (i >= hashMultipliers.Length) i = 0;
+            }
+            //finish property stuff
+            foreach (PropertyInfo propInfo in typeToReflect.GetProperties(bindingFlags))
+            {
+
+
+                i++;
+                if (i >= hashMultipliers.Length) i = 0;
+            }
+            return hash;
+        }
+
+        public static bool IsPrimitive(this Type type)
+        {
+            if (type == typeof(String)) return true;
+            return (type.IsValueType & type.IsPrimitive);
         }
     }
 

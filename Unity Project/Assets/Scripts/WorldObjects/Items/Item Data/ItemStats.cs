@@ -3,25 +3,25 @@ using XML;
 
 public class ItemStats : IXmlParsable
 {
-    private int cost;
+    protected int cost;
     public int Cost
     {
         get { return cost; }
         set { this.cost = value; }
     }
-    private int weight;
+    protected int weight;
     public int Weight
     {
         get { return weight; }
         set { this.weight = value; }
     }
-    private int nutrition;
+    protected int nutrition;
     public int Nutrition
     {
         get { return nutrition; }
         set { this.nutrition = value; }
     }
-    private Size size;
+    protected Size size;
     public Size Size
     {
         get { return size; }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class Spells : SortedDictionary<string, Spell>, IXmlParsable
+public class Spells : Dictionary<string, Spell>, IXmlParsable
 {
     //public Dictionary<string, Spell> spells = new Dictionary<string, Spell>();
 

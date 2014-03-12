@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class InventoryCategory : SortedDictionary<int, Item>
+public class InventoryCategory : Dictionary<int, Item>
 {
-    public string id;
+    public string id = "";
+
+    public InventoryCategory()
+    {
+    }
 
     public InventoryCategory(string id)
     {
@@ -15,9 +19,10 @@ public class InventoryCategory : SortedDictionary<int, Item>
     public void Add(Item i)
     {
         Item item;
-        if (!this.TryGetValue(i.GetHashCode(), out item))
+        int hash = i.GetHashCode();
+        if (!this.TryGetValue(hash, out item))
         {
-            this.Add(i.GetHashCode(), i);
+            this.Add(hash, i);
         }
         else
         {
@@ -27,17 +32,18 @@ public class InventoryCategory : SortedDictionary<int, Item>
                 i.Destroy();
             }
         }
-        this[i.GetHashCode()].OnGround = false;
+        this[hash].OnGround = false;
     }
 
     public bool Remove(Item i)
     {
         Item item;
-        if (TryGetValue(i.GetHashCode(), out item))
+        int hash = i.GetHashCode();
+        if (TryGetValue(hash, out item))
         {
             if (item.RemoveItem())
             {
-                this.Remove(item.GetHashCode());
+                this.Remove(hash);
             }
             return true;
         }

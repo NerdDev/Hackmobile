@@ -156,8 +156,10 @@
     <Compile Include="Assets\Scripts\Library\Extensions\QueueExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\RandomExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
+    <Compile Include="Assets\Scripts\Library\Extensions\TypeExt.cs" />
     <Compile Include="Assets\Scripts\Library\Extensions\Vector3Ext.cs" />
     <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
+    <Compile Include="Assets\Scripts\Library\Interfaces\NotHashable.cs" />
     <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />
     <Compile Include="Assets\Scripts\Library\XML\XMLNode.cs" />
     <Compile Include="Assets\Scripts\MANAGERS\AudioManager.cs" />
