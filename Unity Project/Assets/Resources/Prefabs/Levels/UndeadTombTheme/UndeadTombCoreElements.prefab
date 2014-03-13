@@ -49,8 +49,8 @@ MonoBehaviour:
   CornerWall:
   - {fileID: 11400004, guid: 65e3f77b505eafc4fb4d903e4faa7d76, type: 2}
   Door:
-  - {fileID: 11400002, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
-  - {fileID: 11400002, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
+  - {fileID: 11400006, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
+  - {fileID: 11400006, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
   Floor:
   - {fileID: 11400002, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
   StairUp:

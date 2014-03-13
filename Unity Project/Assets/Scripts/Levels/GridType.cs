@@ -8,6 +8,7 @@ public enum GridType
 
     Floor,
     Wall,
+    Doodad,
     Door,
     TrapDoor,
     StairUp,

@@ -5,6 +5,11 @@ using System.Text;
 
 public class DoorElement : ThemeElement
 {
+    public DoorElement()
+    {
+        Walkable = true;
+    }
+
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
         // Normal 

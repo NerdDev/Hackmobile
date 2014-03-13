@@ -12,8 +12,9 @@ GameObject:
   - 23: {fileID: 2300000}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400004}
   m_Layer: 12
-  m_Name: Brick Thin Wall
+  m_Name: Brick Wall Thin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,9 +47,10 @@ GameObject:
   - 33: {fileID: 3300002}
   - 23: {fileID: 2300002}
   - 65: {fileID: 6500002}
-  - 114: {fileID: 11400004}
+  - 114: {fileID: 11400006}
+  - 114: {fileID: 11400008}
   m_Layer: 12
-  m_Name: Brick Thin Wall
+  m_Name: Brick Wall Thin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,8 +63,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: .707106829, z: 0, w: .707106829}
-  m_LocalPosition: {x: -1.03098822, y: -.0512034893, z: 0}
-  m_LocalScale: {x: 1, y: 1.29999995, z: .330000013}
+  m_LocalPosition: {x: 0, y: 1.10000002, z: 0}
+  m_LocalScale: {x: .330000013, y: 2.20000005, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
 --- !u!4 &400002
@@ -72,11 +74,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.03098822, y: .701203465, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400004}
   - {fileID: 400000}
+  - {fileID: 400004}
   m_Father: {fileID: 0}
 --- !u!4 &400004
 Transform:
@@ -85,8 +87,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.03098822, y: -.0512034893, z: 0}
-  m_LocalScale: {x: 1, y: 1.29999995, z: .330000013}
+  m_LocalPosition: {x: 0, y: 1.10000002, z: 0}
+  m_LocalScale: {x: .330000013, y: 2.20000005, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
 --- !u!23 &2300000
@@ -193,8 +195,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridWidth: 1
   GridHeight: 1
-  PrintChar: 
+  Walkable: 0
+  PrintChar: '#'
+  PlaceFloor: 1
 --- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GridWidth: 1
+  GridHeight: 1
+  Walkable: 0
+  PrintChar: 
+  PlaceFloor: 1
+--- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -205,6 +225,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11400008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GridWidth: 1
+  GridHeight: 1
+  Walkable: 0
+  PrintChar: 
+  PlaceFloor: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

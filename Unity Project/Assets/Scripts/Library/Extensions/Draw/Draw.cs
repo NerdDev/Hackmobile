@@ -500,7 +500,7 @@ public static class Draw
         return MergeIn(new GenDeploy(element), theme, type, typeOnlyDefault, themeOnlyDefault);
     }
 
-    public static DrawAction<GenSpace> MergeIn(ThemeElement[] elements, System.Random random, Theme theme, GridType type = GridType.Floor, bool typeOnlyDefault = true, bool themeOnlyDefault = true)
+    public static DrawAction<GenSpace> MergeIn(ThemeElement[] elements, System.Random random, Theme theme, GridType type = GridType.Doodad, bool typeOnlyDefault = false, bool themeOnlyDefault = false)
     {
         return (arr, x, y) =>
         {

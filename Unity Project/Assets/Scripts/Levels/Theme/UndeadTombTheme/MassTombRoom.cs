@@ -48,7 +48,7 @@ public class MassTombRoom : HeavyRoomMod
                     GenDeploy tomb = new GenDeploy(tombCollection.Random(spec.Random));
                     spec.Grids.DrawRect(tombBound.XMin, tombBound.XMax, tombBound.YMin, tombBound.YMax, new StrokedAction<GenSpace>()
                         {
-                            UnitAction = Draw.MergeIn(tomb, spec.Theme, GridType.Wall, false),
+                            UnitAction = Draw.MergeIn(tomb, spec.Theme),
                             StrokeAction = Draw.Nothing<GenSpace>()
                         });
                 }
