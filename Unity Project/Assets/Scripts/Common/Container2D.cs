@@ -332,6 +332,16 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
+    public GridLocationResults DrawLocationsAroundResults(int x, int y, bool cornered, DrawAction<T> action)
+    {
+        GridLocationResults results = new GridLocationResults();
+        foreach (GridLocation g in DrawLocationsAround(x, y, cornered, action))
+        {
+            results[g] = true;
+        }
+        return results;
+    }
+
     public IEnumerable<GridLocation> DrawLocationsAround(int x, int y, bool cornered, DrawAction<T> action)
     {
         if (!cornered)
@@ -541,6 +551,42 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         loc = GridLocation.BOTTOM;
         return false;
     }
+
+    public bool TShape(int x, int y, DrawAction<T> tester, out GridLocation loc)
+    {
+        bool left = tester(this, x - 1, y);
+        bool right = tester(this, x + 1, y);
+        bool top = tester(this, x, y + 1);
+        bool bottom = tester(this, x, y - 1);
+        if (left && right)
+        {
+            if (top)
+            {
+                loc = GridLocation.TOP;
+                return true;
+            }
+            else if (bottom)
+            {
+                loc = GridLocation.BOTTOM;
+                return true;
+            }
+        }
+        else if (top && bottom)
+        {
+            if (left)
+            {
+                loc = GridLocation.LEFT;
+                return true;
+            }
+            else if (right)
+            {
+                loc = GridLocation.RIGHT;
+                return true;
+            }
+        }
+        loc = GridLocation.BOTTOM;
+        return false;
+    }
     #endregion
     #region Get Direction
     public List<Value2D<T>> GetPointsOn(int x, int y, GridDirection dir, DrawAction<T> tester)
@@ -623,23 +669,23 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
 
     public bool AlternatesSides(int x, int y, DrawAction<T> action, out GridDirection passDir)
     {
-        bool horizPass = action(this, x - 1, y);
-        if (horizPass != action(this, x + 1, y))
+        bool leftPass = action(this, x - 1, y);
+        if (leftPass != action(this, x + 1, y))
         {
             passDir = GridDirection.HORIZ;
             return false;
         }
-        if (horizPass == action(this, x, y + 1))
+        if (leftPass == action(this, x, y + 1))
         {
             passDir = GridDirection.HORIZ;
             return false;
         }
-        if (horizPass == action(this, x, y - 1))
+        if (leftPass == action(this, x, y - 1))
         {
             passDir = GridDirection.HORIZ;
             return false;
         }
-        passDir = horizPass ? GridDirection.HORIZ : GridDirection.VERT;
+        passDir = leftPass ? GridDirection.HORIZ : GridDirection.VERT;
         return true;
     }
 
@@ -686,6 +732,50 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         bool Ypass = action(this, x, y - 1);
         if (Ypass == action(this, x, y + 1)) return false;
         return !withOpposing || action(this, Xpass ? x + 1 : x - 1, Ypass ? y + 1 : y - 1);
+    }
+
+    public bool Cornered(int x, int y, DrawAction<T> action, out GridLocation loc, bool withOpposing = false)
+    {
+        bool leftPass = action(this, x - 1, y);
+        if (leftPass == action(this, x + 1, y))
+        {
+            loc = GridLocation.RIGHT;
+            return false;
+        }
+        bool bottomPass = action(this, x, y - 1);
+        if (bottomPass == action(this, x, y + 1))
+        {
+            loc = GridLocation.RIGHT;
+            return false;
+        }
+        if (withOpposing &&  !action(this, leftPass ? x + 1 : x - 1, bottomPass ? y + 1 : y - 1))
+        {
+            loc = GridLocation.RIGHT;
+            return false;
+        }
+        if (leftPass)
+        {
+            if (bottomPass)
+            {
+                loc = GridLocation.BOTTOMLEFT;
+            }
+            else
+            {
+                loc = GridLocation.TOPLEFT;
+            }
+        }
+        else
+        {
+            if (bottomPass)
+            {
+                loc = GridLocation.BOTTOMRIGHT;
+            }
+            else
+            {
+                loc = GridLocation.TOPRIGHT;
+            }
+        }
+        return true;
     }
 
     public bool AlternateSidesOffset(int x, int y, DrawAction<T> action)

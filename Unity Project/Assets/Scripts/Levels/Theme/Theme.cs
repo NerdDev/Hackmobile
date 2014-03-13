@@ -7,12 +7,7 @@ public class Theme : MonoBehaviour
 {
     public bool Scatterable;
     public bool Chainable;
-    public ThemeElement[] Wall;
-    public ThemeElement[] Door;
-    public ThemeElement[] Floor;
-    public ThemeElement[] StairUp;
-    public ThemeElement[] StairDown;
-    public ThemeElement[] Chest;
+    public CoreElements Core;
     protected RoomModCollection _roomMods;
     public SpawnKeywords[] Keywords;
     public GenericFlags<SpawnKeywords> KeywordFlags;

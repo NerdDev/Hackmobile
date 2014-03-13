@@ -30,4 +30,64 @@ public static class ITransformExt
                 break;
         }
     }
+
+    public static void RotateToPoint(this ITransform trans, GridDirection dir, System.Random rand)
+    {
+        switch (dir)
+        {
+            case GridDirection.HORIZ:
+                trans.Rotation = rand.NextBool() ? 90 : -90;
+                break;
+            case GridDirection.VERT:
+                trans.Rotation = rand.NextBool() ? 180 : 0;
+                break;
+            case GridDirection.DIAGTLBR:
+                trans.Rotation = rand.NextBool() ? -45 : 135;
+                break;
+            case GridDirection.DIAGBLTR:
+                trans.Rotation = rand.NextBool() ? 45 : -135;
+                break;
+        }
+    }
+
+    public static void RotateToPoint(this ITransform trans, GridLocation loc)
+    {
+        switch (loc)
+        {
+            case GridLocation.RIGHT:
+            case GridLocation.TOPRIGHT:
+                trans.Rotation = 90;
+                break;
+            case GridLocation.BOTTOMRIGHT:
+            case GridLocation.BOTTOM:
+                trans.Rotation = 180;
+                break;
+            case GridLocation.LEFT:
+            case GridLocation.BOTTOMLEFT:
+                trans.Rotation = -90;
+                break;
+            default:
+                trans.Rotation = 0;
+                break;
+        }
+    }
+
+    public static void RotateToPoint(this ITransform trans, GridLocation loc, System.Random rand)
+    {
+        switch (loc)
+        {
+            case GridLocation.RIGHT:
+            case GridLocation.TOPRIGHT:
+            case GridLocation.LEFT:
+            case GridLocation.BOTTOMLEFT:
+                trans.Rotation = rand.NextBool() ? -90 : 90;
+                break;
+            case GridLocation.BOTTOMRIGHT:
+            case GridLocation.BOTTOM:
+            case GridLocation.TOPLEFT:
+            case GridLocation.TOP:
+                trans.Rotation = rand.NextBool() ? 0 : 180;
+                break;
+        }
+    }
 }

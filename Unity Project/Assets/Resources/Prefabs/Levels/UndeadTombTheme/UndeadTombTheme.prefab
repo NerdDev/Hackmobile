@@ -40,23 +40,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Scatterable: 0
   Chainable: 0
-  Wall:
-  - {fileID: 11400002, guid: 618c602c4db9cfe4ebaaa1d2087c6a22, type: 2}
-  Door:
-  - {fileID: 11400002, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
-  - {fileID: 11400002, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
-  Floor:
-  - {fileID: 11400002, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
-  StairUp:
-  - {fileID: 11400002, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
-  - {fileID: 11400000, guid: 43ed3b340b7b64847b393972d3e8a30f, type: 2}
-  - {fileID: 11400000, guid: 28b6b22debd110847916bf1b3be86af0, type: 2}
-  StairDown:
-  - {fileID: 11400002, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
-  - {fileID: 11400000, guid: 43ed3b340b7b64847b393972d3e8a30f, type: 2}
-  - {fileID: 11400000, guid: 28b6b22debd110847916bf1b3be86af0, type: 2}
-  Chest:
-  - {fileID: 11400002, guid: cf5f86fab5dafc247ade51112b4025b2, type: 2}
+  Core: {fileID: 11400000, guid: f43df275c14cf3648bf4e387d0ee71f6, type: 2}
   Keywords: 00000000
   Pillars:
   - Elements:

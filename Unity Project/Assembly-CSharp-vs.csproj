@@ -109,8 +109,6 @@
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\RoomModifier.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\RoomSpec.cs" />
      <Compile Include="Assets\Scripts\Levels\GridDeploy.cs" />
-     <Compile Include="Assets\Scripts\Levels\GridDirection.cs" />
-     <Compile Include="Assets\Scripts\Levels\GridLocation.cs" />
      <Compile Include="Assets\Scripts\Levels\GridSpace.cs" />
      <Compile Include="Assets\Scripts\Levels\GridType.cs" />
      <Compile Include="Assets\Scripts\Levels\IGridSpace.cs" />
@@ -119,6 +117,7 @@
      <Compile Include="Assets\Scripts\Levels\LevelBuilder.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModCollection.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModTester.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\CoreElements.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\IPillarTheme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\DoorElement.cs" />
@@ -127,6 +126,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\StairElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElementSpec.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\WallElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeElementCollection.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\GrandTombRoom.cs" />
@@ -142,7 +142,10 @@
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\Counter.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\Draw.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawActionExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Draw\GridDirection.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\GridDrawExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Draw\GridLocation.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Draw\GridLocationResults.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\JumpTowardsSearcher.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\RandomPicker.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\SquareFinder.cs" />
