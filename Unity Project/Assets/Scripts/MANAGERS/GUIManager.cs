@@ -68,6 +68,8 @@ public class GUIManager : MonoBehaviour, IManager
     //Cameras
     public Camera GUICam;
     public Camera HeroCam;
+
+    public FOWSystem fow;
     #endregion
 
     void Start()
@@ -137,6 +139,11 @@ public class GUIManager : MonoBehaviour, IManager
     public void CloseLoading()
     {
         LoadImage.enabled = false;
+    }
+
+    public void RecreateFOW()
+    {
+        fow.reCreateGrid = true;
     }
 
     /*
