@@ -314,9 +314,11 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
     {
         get 
         {
+            Point tmp = new Point(ShiftP);
             Grids.Shift(ShiftP);
-            ShiftP = new Point();
-            return Grids.Array;
+            var arr = Grids.Array;
+            Grids.Shift(-tmp);
+            return arr;
         }
     }
 

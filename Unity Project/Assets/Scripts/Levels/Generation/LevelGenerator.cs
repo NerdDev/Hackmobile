@@ -57,7 +57,7 @@ public class LevelGenerator
         Layout = new LevelLayout() { Random = Rand };
         Container = new LayoutObjectContainer();
         Log("Mod Rooms", false, GenerateRoomShells, ModRooms);
-        Log("Place Clusters", true, ClusterRooms);
+        Log("Cluster", true, ClusterRooms);
         Log("Place Rooms", true, PlaceRooms);
         Log("Confirm Connection", true, ConfirmConnection);
         Log("Confirm Edges", true, ConfirmEdges);
@@ -579,7 +579,6 @@ public class LevelGenerator
             {
                 throw new ArgumentException("Cannot find path to fail room");
             }
-
             // Connect
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -756,8 +755,21 @@ public class LevelGenerator
 
     protected bool PlaceMissingStair(bool up, Point otherStair, out Point placed)
     {
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Placing missing stair");
+            BigBoss.Debug.w(Logs.LevelGen, "Up: " + up + ", other stair " + otherStair);
+        }
+        #endregion
         foreach (LayoutObject obj in Container.Flatten().Randomize(Rand))
         {
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "Trying in " + obj);
+            }
+            #endregion
             MultiMap<GenSpace> options = new MultiMap<GenSpace>();
             DrawAction<GenSpace> test = Draw.CanDrawStair<GenSpace>();
             if (otherStair != null)
@@ -765,20 +777,57 @@ public class LevelGenerator
                 double farthest;
                 double closest;
                 obj.Bounding.DistanceTo(otherStair, out closest, out farthest);
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "Farthest: " + farthest + ", closest: " + closest);
+                }
+                #endregion
                 if (farthest < MinStairDist)
                 { // Inside or way too close
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        BigBoss.Debug.w(Logs.LevelGen, "Skipping due to distance to other stair.");
+                    }
+                    #endregion
                     continue;
                 }
                 else if (closest < MinStairDist)
                 { // On the edge.. could have a potential
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        BigBoss.Debug.w(Logs.LevelGen, "Close to the other staircase");
+                    }
+                    #endregion
                     test = test.And(Draw.Not(Draw.WithinTo<GenSpace>(MinStairDist, otherStair)));
                 }
             }
             obj.Grids.DrawAll(test.IfThen(Draw.AddTo(options)));
 
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                tmp.PutAll(obj.Grids);
+                options.DrawAll(Draw.SetTo(tmp, GridType.INTERNAL_RESERVED_CUR, null));
+                tmp.ToLog("Stair Options.");
+            }
+            #endregion
+
             // Place stair
             Value2D<GenSpace> picked;
-            if (!options.GetRandom(Rand, out picked)) continue;
+            if (!options.GetRandom(Rand, out picked))
+            {
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "Skipping due to no options.");
+                }
+                #endregion
+                continue;
+            }
             obj.Grids.SetTo(picked, up ? GridType.StairUp : GridType.StairDown, Theme);
 
             // Place startpoint
@@ -793,14 +842,21 @@ public class LevelGenerator
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                options.ToLog(Logs.LevelGen, "Stair Options");
+                BigBoss.Debug.w(Logs.LevelGen, "Picked " + picked);
                 obj.ToLog(Logs.LevelGen, "Placed stairs");
                 Container.ToLog(Logs.LevelGen, "Layout");
+                BigBoss.Debug.printFooter("Placing Missing Stair");
             }
             #endregion
             return true;
         }
         placed = null;
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printFooter("Placing Missing Stair");
+        }
+        #endregion
         return false;
     }
 
