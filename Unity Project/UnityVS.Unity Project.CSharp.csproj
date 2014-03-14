@@ -64,8 +64,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Fog of War\Examples\Scripts\TSClickToMove.cs" />
-    <Compile Include="Assets\Fog of War\Examples\Scripts\TSMoveWithMouse.cs" />
     <Compile Include="Assets\Scripts\Camera scripts\HeroCam.cs" />
     <Compile Include="Assets\Scripts\Camera scripts\JoystickCamera.cs" />
     <Compile Include="Assets\Scripts\Camera scripts\MasterCamera.cs" />
@@ -483,7 +481,6 @@
     <Compile Include="Assets\Tools\NGUI\Scripts\UI\UITiledSprite.cs" />
     <Compile Include="Assets\Tools\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\Tools\NGUI\Scripts\UI\UIViewport.cs" />
-    <None Include="Assets\Fog of War\Examples\Shaders\Untextured.shader" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Resources\XML\consumables.xml" />
     <None Include="Assets\Resources\XML\leveledlists.xml" />

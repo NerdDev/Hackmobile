@@ -77,6 +77,14 @@ public class GUIManager : MonoBehaviour, IManager
         StartCoroutine(Display());
     }
 
+    void Update()
+    {
+        if (Time.time % 20 == 0)
+        {
+            GC.Collect();
+        }
+    }
+
     public void Initialize()
     {
     }
@@ -141,9 +149,9 @@ public class GUIManager : MonoBehaviour, IManager
         LoadImage.enabled = false;
     }
 
-    public void RecreateFOW()
+    public void RecreateFOW(Vector3 pos, int height)
     {
-        fow.reCreateGrid = true;
+        fow.ModifyGrid(pos, height);
     }
 
     /*

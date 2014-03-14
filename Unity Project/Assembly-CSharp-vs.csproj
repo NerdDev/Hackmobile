@@ -46,8 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Fog of War\Examples\Scripts\TSClickToMove.cs" />
-     <Compile Include="Assets\Fog of War\Examples\Scripts\TSMoveWithMouse.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\HeroCam.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\JoystickCamera.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\MasterCamera.cs" />
@@ -499,7 +497,6 @@
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\Contrast Stretch\MinMaxReduction.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\SSAA.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\RadialBlur.shader" />
-     <None Include="Assets\Fog of War\Examples\Shaders\Untextured.shader" />
      <None Include="Assets\Tools\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\DepthOfFieldDX11.shader" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />

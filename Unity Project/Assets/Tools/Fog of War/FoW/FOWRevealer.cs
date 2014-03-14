@@ -21,7 +21,7 @@ public class FOWRevealer : MonoBehaviour
     /// <summary>
     /// Radius of the area being occluded.
     /// </summary>
-    public float RevealDistance = 55;
+    public float RevealDistance = 75;
 
 	/// <summary>
 	/// What kind of line of sight checks will be performed.

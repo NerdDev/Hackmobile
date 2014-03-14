@@ -17,6 +17,13 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
     {
     }
 
+    public int GetHash()
+    {
+        int hash = 13;
+        hash += Name.GetHashCode() * 5;
+        return hash;
+    }
+
     // Called by parseXML when the "prototypes" are being created
     private void InitTargetTypes()
     {

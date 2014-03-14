@@ -35,4 +35,14 @@ public class ItemStats : IXmlParsable
         Nutrition = x.SelectInt("nutrition");
         Size = x.SelectEnum<Size>("equipsize");
     }
+
+    public int GetHash()
+    {
+        int hash = 5;
+        hash += Weight.GetHashCode() * 3;
+        hash += Nutrition.GetHashCode() * 5;
+        hash += Size.GetHashCode() * 7;
+        hash += Cost.GetHashCode() * 11;
+        return hash;
+    }
 }

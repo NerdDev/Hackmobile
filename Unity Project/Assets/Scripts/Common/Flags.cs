@@ -64,4 +64,9 @@ public class Flags<T> where T : IComparable, IConvertible
     {
         flags = 0;
     }
+
+    public int GetHash()
+    {
+        return flags.GetHashCode() * 3;
+    }
 }

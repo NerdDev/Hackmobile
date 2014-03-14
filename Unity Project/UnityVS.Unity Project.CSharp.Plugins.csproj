@@ -67,7 +67,6 @@
     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\SSAOEffect.cs" />
     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\TwirlEffect.cs" />
     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\VortexEffect.cs" />
-    <None Include="Assets\Fog of War\Examples\Shaders\Untextured.shader" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Resources\XML\consumables.xml" />
     <None Include="Assets\Resources\XML\leveledlists.xml" />
