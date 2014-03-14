@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400000}
+  - 114: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: UndeadTombCoreElements
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.03098822, y: .701203465, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec134d4abde5c8488c11208745273f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Wall:
+  - {fileID: 11400002, guid: 618c602c4db9cfe4ebaaa1d2087c6a22, type: 2}
+  ThinWall:
+  - {fileID: 11400002, guid: 17d6664179b5ea844a45f161a62cd462, type: 2}
+  TWall:
+  - {fileID: 11400008, guid: 07321256b18bb2245b9a0c63454274da, type: 2}
+  QuadWall:
+  - {fileID: 11400002, guid: addf2908381feb745bc81b70185ed557, type: 2}
+  CornerWall:
+  - {fileID: 11400004, guid: 65e3f77b505eafc4fb4d903e4faa7d76, type: 2}
+  Door:
+  - {fileID: 11400006, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
+  - {fileID: 11400006, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
+  Floor:
+  - {fileID: 11400002, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
+  StairUp:
+  - {fileID: 11400002, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
+  - {fileID: 11400000, guid: 43ed3b340b7b64847b393972d3e8a30f, type: 2}
+  - {fileID: 11400000, guid: 28b6b22debd110847916bf1b3be86af0, type: 2}
+  StairDown:
+  - {fileID: 11400002, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
+  - {fileID: 11400000, guid: 43ed3b340b7b64847b393972d3e8a30f, type: 2}
+  - {fileID: 11400000, guid: 28b6b22debd110847916bf1b3be86af0, type: 2}
+  Chest:
+  - {fileID: 11400002, guid: cf5f86fab5dafc247ade51112b4025b2, type: 2}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 100000}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1

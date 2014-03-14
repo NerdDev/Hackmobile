@@ -147,19 +147,19 @@ public class LevelBuilder : MonoBehaviour
         switch (space.Type)
         {
             case GridType.Wall:
-                element = space.Theme.Wall.Random(rand);
+                element = space.Theme.Core.Wall.Random(rand);
                 break;
             case GridType.Door:
-                element = space.Theme.Door.Random(rand);
+                element = space.Theme.Core.Door.Random(rand);
                 break;
             case GridType.StairDown:
-                element = space.Theme.StairDown.Random(rand);
+                element = space.Theme.Core.StairDown.Random(rand);
                 break;
             case GridType.StairUp:
-                element = space.Theme.StairUp.Random(rand);
+                element = space.Theme.Core.StairUp.Random(rand);
                 break;
             case GridType.Chest:
-                element = space.Theme.Chest.Random(rand);
+                element = space.Theme.Core.Chest.Random(rand);
                 break;
             case GridType.NULL:
                 return false;
@@ -167,7 +167,7 @@ public class LevelBuilder : MonoBehaviour
             case GridType.Floor:
             case GridType.SmallLoot:
             default:
-                element = space.Theme.Floor.Random(rand);
+                element = space.Theme.Core.Floor.Random(rand);
                 break;
         }
         if (element == null)

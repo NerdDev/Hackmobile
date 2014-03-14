@@ -26,6 +26,7 @@ public class ThemeElement : MonoBehaviour
     }
     public byte GridWidth = 1;
     public byte GridHeight = 1;
+    public bool Walkable;
     public string PrintChar = string.Empty;
 
     public virtual void PreDeployTweaks(ThemeElementSpec spec)
@@ -37,7 +38,7 @@ public class ThemeElement : MonoBehaviour
         var ret = new MultiMap<List<GenDeploy>>();
         foreach (var space in spec)
         {
-            spec.AddAdditional(new GenDeploy(spec.Theme.Floor.Random(spec.Random)), space.x, space.y);
+            spec.AddAdditional(new GenDeploy(spec.Theme.Core.Floor.Random(spec.Random)), space.x, space.y);
         }
         return ret;
     }

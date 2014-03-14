@@ -5,6 +5,11 @@ using System.Text;
 
 public class DoorElement : ThemeElement
 {
+    public DoorElement()
+    {
+        Walkable = true;
+    }
+
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
         // Normal 
@@ -15,11 +20,12 @@ public class DoorElement : ThemeElement
             bool neg = spec.Random.NextBool();
             if (walkableDir == GridDirection.HORIZ)
             {
-                PlaceFlush(spec.GenDeploy, neg ? GridLocation.LEFT : GridLocation.RIGHT);
+                //PlaceFlush(spec.GenDeploy, neg ? GridLocation.LEFT : GridLocation.RIGHT);
+                spec.GenDeploy.Rotate(spec.Random.NextClockwise());
             }
             else
             {
-                PlaceFlush(spec.GenDeploy, neg ? GridLocation.BOTTOM : GridLocation.TOP);
+                //PlaceFlush(spec.GenDeploy, neg ? GridLocation.BOTTOM : GridLocation.TOP);
             }
         }
         // Diagonal door
@@ -34,5 +40,7 @@ public class DoorElement : ThemeElement
         }
         PlaceFloors(spec);
     }
+
+
 }
 

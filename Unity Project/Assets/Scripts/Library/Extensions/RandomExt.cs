@@ -77,5 +77,27 @@ namespace System
                     return Rotation.None;
             }
         }
+
+        public static Rotation NextClockwise(this System.Random rand)
+        {
+            switch (rand.Next(2))
+            {
+                case 0:
+                    return Rotation.ClockWise;
+                default:
+                    return Rotation.CounterClockWise;
+            }
+        }
+
+        public static Rotation NextFlip(this System.Random rand)
+        {
+            switch (rand.Next(2))
+            {
+                case 0:
+                    return Rotation.None;
+                default:
+                    return Rotation.OneEighty;
+            }
+        }
     }
 }
