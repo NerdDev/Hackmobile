@@ -14,4 +14,14 @@ public class SpellAspect
             foreach (EffectInstance effect in Effects)
                 target.ApplyEffect(castInfo.Caster, effect); //effect.ActivateOnObject(target);
     }
+
+    public int GetHash()
+    {
+        int hash = 3;
+        foreach (EffectInstance effect in Effects)
+        {
+            hash += effect.GetHash() * 5;
+        }
+        return hash;
+    }
 }

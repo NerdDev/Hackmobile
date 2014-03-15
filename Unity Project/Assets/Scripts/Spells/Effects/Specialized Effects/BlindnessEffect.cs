@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Blindness : EffectInstance
 {
+    private FOWRevealer fow;
+    private Vector2 originalRange;
     public override void Init(NPC n)
     {
         base.Apply(n);
@@ -13,8 +15,9 @@ public class Blindness : EffectInstance
         {
             Player p = n as Player;
 
-            FOWRevealer rev = p.GO.GetComponent<FOWRevealer>();
-            rev.range = new Vector2(1.2f, 1.2f);
+            fow = p.GO.GetComponentInChildren<FOWRevealer>();
+            originalRange = fow.range;
+            fow.range = new Vector2(0f, .3f);
             n.CreateTextPop("You feel yourself going blind...");
         }
     }
@@ -24,10 +27,8 @@ public class Blindness : EffectInstance
         base.Remove(n);
         if (n is Player)
         {
-            Player p = n as Player;
-
-            FOWRevealer rev = p.GO.GetComponent<FOWRevealer>();
-            rev.range = new Vector2(4f, 4f);
+            if (fow != null && originalRange != null)
+                fow.range = originalRange;
             n.CreateTextPop("You feel your vision return.");
         }
     }

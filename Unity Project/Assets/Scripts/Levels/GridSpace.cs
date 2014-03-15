@@ -25,6 +25,7 @@ public class GridSpace : IGridSpace
     internal Inventory inventory = new Inventory();
     internal ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
+    public bool IsVisible { get; set; }
 
     public GridSpace(GridType type, int x, int y)
     {

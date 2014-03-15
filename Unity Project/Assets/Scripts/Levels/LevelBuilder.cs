@@ -9,7 +9,6 @@ public class LevelBuilder : MonoBehaviour
     private static GameObject holder;
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
-    private int gridCreationCounter = 0;
 
     public static void Initialize()
     {
@@ -40,9 +39,16 @@ public class LevelBuilder : MonoBehaviour
             obj.transform.parent = holder.transform;
             space.Blocks.Add(obj);
         }
+
+        //fog of war
+        Vector3 pos = new Vector3(x, 0f, y);
+        int height = 0;
+        if (space.Type == GridType.Wall) height = 80; 
+        BigBoss.Gooey.RecreateFOW(pos, height);
+
+        //combination, GC
         combineCounter++;
         garbageCollectorCounter++;
-        gridCreationCounter++;
         if (garbageCollectorCounter > 300)
         {
             System.GC.Collect();
@@ -52,12 +58,6 @@ public class LevelBuilder : MonoBehaviour
         {
             combineCounter = 0;
             Combine();
-        }
-        if (gridCreationCounter > 50)
-        {
-            //temp
-            BigBoss.Gooey.RecreateFOW();
-            gridCreationCounter = 0;
         }
     }
 

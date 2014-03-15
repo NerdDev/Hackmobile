@@ -41,6 +41,7 @@ namespace System
             return new List<KeyValuePair<string, string>>();
         }
 
+        /*
         public static int GetHash(this Object o) 
         {
             Type type = o.GetType();
@@ -55,11 +56,11 @@ namespace System
             {
                 hash += RecursiveHashFields(originalObject, typeToReflect.BaseType);
             }
-            hash += GetInternalHash(originalObject, typeToReflect, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy, info => !info.IsPrivate);
+            hash += GetInternalHash(originalObject, typeToReflect, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, info => !info.IsPrivate);
             return hash;
         }
 
-        private static int GetInternalHash(object originalObject, Type typeToReflect, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null)
+        private static int GetInternalHash(object originalObject, Type typeToReflect, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null, Func<PropertyInfo, bool> propFilter = null)
         {
             int hash = 7;
             int[] hashMultipliers = { 2, 3, 5, 7, 9, 13, 17 };
@@ -84,11 +85,23 @@ namespace System
                 i++;
                 if (i >= hashMultipliers.Length) i = 0;
             }
-            //finish property stuff
             foreach (PropertyInfo propInfo in typeToReflect.GetProperties(bindingFlags))
             {
+                if (propInfo.IsDefined(typeof(NotHashable), true)) continue;
+                if (propFilter != null && propFilter(propInfo) == false) continue;
 
-
+                if (!IsPrimitive(propInfo.PropertyType))
+                {
+                    var originalFieldValue = propInfo.GetValue(originalObject, null);
+                    if (originalFieldValue == null) continue;
+                    hash += originalFieldValue.GetHash() * hashMultipliers[i];
+                }
+                else
+                {
+                    var originalFieldValue = propInfo.GetValue(originalObject, null);
+                    if (originalFieldValue == null) continue;
+                    hash += originalFieldValue.GetHashCode() * hashMultipliers[i];
+                }
                 i++;
                 if (i >= hashMultipliers.Length) i = 0;
             }
@@ -100,6 +113,8 @@ namespace System
             if (type == typeof(String)) return true;
             return (type.IsValueType & type.IsPrimitive);
         }
+
+        */
     }
 
     public class ObjDump
