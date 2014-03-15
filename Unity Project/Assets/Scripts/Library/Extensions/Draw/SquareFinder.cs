@@ -20,7 +20,6 @@ public class SquareFinder<T>
     int _lastTestedY;
     int xShift;
     bool[] _lastPassedXArr;
-    Counter counter = new Counter();
 
     public SquareFinder(Container2D<T> arr, int width, int height, bool tryFlipped, StrokedAction<T> tester, Bounding scope = null)
     {
@@ -31,16 +30,17 @@ public class SquareFinder<T>
         _tester = tester;
         _scope = scope;
         if (scope == null) _scope = arr.Bounding;
-        if (_tester.StrokeAction != null)
-            _tester.StrokeAction = Draw.Count<T>(counter).And(_tester.StrokeAction);
-        if (_tester.UnitAction != null)
-            _tester.UnitAction = Draw.Count<T>(counter).And(_tester.UnitAction);
     }
 
     public List<Bounding> Find()
     {
         List<Bounding> ret = new List<Bounding>();
         if (_width >= _arr.Width || _height >= _arr.Height) return ret;
+
+        if (_width == 1 && _height == 1)
+        {
+            return SingleFind();
+        }
 
         // Initialize
         _x = _scope.XMin;
@@ -192,5 +192,24 @@ public class SquareFinder<T>
                 ret.Add(new Bounding() { XMin = atX, YMin = _tmpY, XMax = atX + _width - 1, YMax = _tmpY + _height - 1 });
             }
         }
+    }
+
+    protected List<Bounding> SingleFind()
+    {
+        List<Value2D<T>> list = new List<Value2D<T>>();
+        DrawAction<T> action;
+        if (_tester.StrokeAction != null)
+            action = _tester.StrokeAction.IfThen(Draw.AddTo(list));
+        else if (_tester.UnitAction != null)
+            action = _tester.UnitAction.IfThen(Draw.AddTo(list));
+        else
+            return new List<Bounding>(0);
+        _arr.DrawRect(_scope, action);
+        List<Bounding> ret = new List<Bounding>();
+        foreach (var v in list)
+        {
+            ret.Add(new Bounding(v.x, v.x, v.y, v.y));
+        }
+        return ret;
     }
 }

@@ -196,6 +196,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridWidth: 1
   GridHeight: 1
+  Walkable: 0
+  PrintChar: /
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
