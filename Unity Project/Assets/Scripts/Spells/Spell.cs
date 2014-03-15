@@ -5,9 +5,9 @@ using XML;
 
 public class Spell : IXmlParsable
 {
-    SpellCastInfo info;
-    internal int range;
-    internal int cost;
+    protected SpellCastInfo info;
+    public int range = 0;
+    public int cost = 0;
     protected SpellCastInfo CastInfo
     {
         get
@@ -17,7 +17,7 @@ public class Spell : IXmlParsable
             return info;
         }
     }
-    internal List<SpellAspect> aspects = new List<SpellAspect>();
+    protected List<SpellAspect> aspects = new List<SpellAspect>();
 
     public void Activate(IAffectable caster)
     {
@@ -83,5 +83,17 @@ public class Spell : IXmlParsable
                 BigBoss.Debug.log(Logs.XML, "Effect didn't exist: " + type + " on node " + effect);
         }
         return ret;
+    }
+    
+    public int GetHash()
+    {
+        int hash = 5;
+        hash += range.GetHashCode() * 3;
+        hash += cost.GetHashCode() * 4;
+        foreach (SpellAspect aspect in aspects)
+        {
+            hash += aspect.GetHash();
+        }
+        return hash;
     }
 }

@@ -19,7 +19,8 @@ public class InventoryCategory : Dictionary<int, Item>
     public void Add(Item i)
     {
         Item item;
-        int hash = i.GetHashCode();
+        i.OnGround = false;
+        int hash = i.GetHash();
         if (!this.TryGetValue(hash, out item))
         {
             this.Add(hash, i);
@@ -32,13 +33,12 @@ public class InventoryCategory : Dictionary<int, Item>
                 i.Destroy();
             }
         }
-        this[hash].OnGround = false;
     }
 
     public bool Remove(Item i)
     {
         Item item;
-        int hash = i.GetHashCode();
+        int hash = i.GetHash();
         if (TryGetValue(hash, out item))
         {
             if (item.RemoveItem())
@@ -53,7 +53,7 @@ public class InventoryCategory : Dictionary<int, Item>
     public Item GetForTransfer(Item i)
     {
         Item item;
-        if (TryGetValue(i.GetHashCode(), out item))
+        if (TryGetValue(i.GetHash(), out item))
         {
             Item newItem = item.GetForTransfer();
             if (newItem != null)
@@ -75,7 +75,7 @@ public class InventoryCategory : Dictionary<int, Item>
     public bool Contains(Item i)
     {
         Item list;
-        if (TryGetValue(i.GetHashCode(), out list))
+        if (TryGetValue(i.GetHash(), out list))
             return true;
         return false;
     }

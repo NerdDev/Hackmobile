@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class KCTesting : MonoBehaviour
@@ -11,22 +12,8 @@ public class KCTesting : MonoBehaviour
 
     private void KurtisMethod()
     {
-        /*
-        A a = new A(1, 2, 3, "fire", "ice");
-        A b = new A(1, 2, 4, "fire", "ice2");
-        A c = new A(2, 3, 4, "fire1", "ice1");
+        Dictionary<int, Item> dict = new Dictionary<int, Item>();
 
-        Debug.Log(a.GetHashCode());
-        Debug.Log(b.GetHashCode());
-        Debug.Log(c.GetHashCode());
-
-        Debug.Log(a.GetHash());
-        Debug.Log(b.GetHash());
-        Debug.Log(c.GetHash());
-
-        A d = a.Copy();
-        Debug.Log("d hash: " + d.GetHash());
-         * */
         //Input checks
         BigBoss.PlayerInput.allowKeyboardInput = true;
         BigBoss.PlayerInput.allowMouseInput = true;
@@ -37,21 +24,23 @@ public class KCTesting : MonoBehaviour
         BigBoss.Player.addToInventory(ii);
 
         Item food = BigBoss.Objects.Items.Instantiate("Spoiled Bread");
+        dict.Add(4, food);
         BigBoss.Player.addToInventory(food, 5);
 
+        Dictionary<int, Item> dict2 = dict.Copy();
+        Debug.Log(dict[4].GetHashCode());
+        Debug.Log(dict2[4].GetHashCode());
+
         Item potion = BigBoss.Objects.Items.Instantiate("Health Potion");
-        //potion.Icon = "icon1";
-       // Debug.Log(potion.onEaten.GetHash());
+        Debug.Log(potion.GetHash());
         BigBoss.Player.addToInventory(potion, 3);
 
         Item potion3 = BigBoss.Objects.Items.Instantiate("Cure Poison");
-        //potion3.Icon = "icon3";
-        //Debug.Log(potion3.onEaten.GetHash());
+        Debug.Log(potion3.GetHash());
         BigBoss.Player.addToInventory(potion3, 3);
 
         Item potion4 = BigBoss.Objects.Items.Instantiate("Levitation Potion");
-        //potion4.Icon = "icon4";
-        //Debug.Log(potion4.onEaten.GetHash());
+        Debug.Log(potion4.GetHash());
         BigBoss.Player.addToInventory(potion4, 3);
 
         Item potion5 = BigBoss.Objects.Items.Instantiate("Blinding Potion");

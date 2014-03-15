@@ -14,4 +14,12 @@ public class TargetedObjects : ITargeter
     {
         return new HashSet<IAffectable>(castInfo.TargetObjects);
     }
+
+    public int GetHash()
+    {
+        int hash = 5;
+        hash += Style.GetHashCode() * 13;
+        hash += MaxTargets.GetHashCode() * 3;
+        return hash;
+    }
 }

@@ -5,7 +5,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
 {
     #region Properties of Items
     //Properties
-    public override string Prefab { get { return Prefab; } set { base.Prefab = value + "Items/"; } }
+    public override string Prefab { get { return base.Prefab; } set { base.Prefab = value + "Items/"; } }
     public string Type;
     public string Icon;
     public ItemProperties props = new ItemProperties();
@@ -41,6 +41,22 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     public void ModifyItem(Inventory container, Action<Item> mod)
     {
         container.ModifyItem(this, mod);
+    }
+
+    public int GetHash()
+    {
+        int hash = 17;
+        hash += Name.GetHashCode() * 5;
+        hash += Type.GetHashCode() * 3;
+        hash += Icon.GetHashCode() * 5;
+        hash += Prefab.GetHashCode() * 7;
+        hash += props.GetHash() * 11;
+        hash += itemFlags.GetHash() * 13;
+        hash += stats.GetHash() * 17;
+        hash += onEquip.GetHash() * 3;
+        hash += onUse.GetHash() * 5;
+        hash += onEaten.GetHash() * 7;
+        return hash;
     }
 
     #region Usage:
@@ -139,7 +155,10 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         Item newItem;
         if (Count > 0)
         {
+            //newItem = BigBoss.Objects.Items.Instantiate(this.Name);
+            //UnityEngine.Debug.Log(newItem.Dump());
             newItem = this.Copy();
+            //UnityEngine.Debug.Log(newItem.Dump());
             newItem._count = 1;
         }
         else  { newItem = null; }

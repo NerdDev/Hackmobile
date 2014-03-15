@@ -16,7 +16,11 @@ namespace System
 
         public static Object Copy(this Object originalObject)
         {
-            return InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
+            //float startTime = UnityEngine.Time.realtimeSinceStartup;
+            Object o = InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
+           // float finishTime = UnityEngine.Time.realtimeSinceStartup;
+            //UnityEngine.Debug.Log("Total time: " + (finishTime - startTime));
+            return o;
         }
         private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)
         {
@@ -24,25 +28,24 @@ namespace System
             var typeToReflect = originalObject.GetType();
             if (IsPrimitive(typeToReflect)) return originalObject;
             if (visited.ContainsKey(originalObject)) return visited[originalObject];
-            var cloneObject = CloneMethod.Invoke(originalObject, null);
-
-            visited.Add(originalObject, cloneObject);
-
-            //this doesn't detect classes that extend dictionary (I tried other methods, and a couple worked but then broke other aspects)
+            
             if ((typeToReflect.IsGenericType && typeToReflect.GetGenericTypeDefinition() == typeof(Dictionary<,>)))
             {
-                cloneObject = CopyDictionary(originalObject, visited, typeToReflect);
+                var cloneObject = CopyDictionary(originalObject, visited, typeToReflect);
+                visited.Add(originalObject, cloneObject);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
+
                 return cloneObject;
             }
             else if (typeToReflect.IsSubclassOfGeneric(typeof(Dictionary<,>)))
             {
-                cloneObject = CopyDictionary(originalObject, visited, typeToReflect);
+                var cloneObject = CopyDictionary(originalObject, visited, typeToReflect);;
+                visited.Add(originalObject, cloneObject);
                 CopyFields(originalObject, visited, cloneObject, typeToReflect);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
                 return cloneObject;
             }
-            if (typeToReflect.IsArray) // this grabs arrays and copies the elements into a new one
+            else if (typeToReflect.IsArray) // this grabs arrays and copies the elements into a new one
             {
                 var arrayType = typeToReflect.GetElementType();
                 if (IsPrimitive(arrayType) == false)
@@ -53,13 +56,29 @@ namespace System
                     {
                         temp.SetValue(InternalCopy(arrayObject.GetValue(i), visited), i);
                     }
-                    cloneObject = temp; //reroutes the visited reference to this and continues for base private fields
+                    var cloneObject = temp;
+                    visited.Add(originalObject, cloneObject);
+                    CopyFields(originalObject, visited, cloneObject, typeToReflect);
+                    RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
+                    return cloneObject;
+                }
+                else
+                {
+                    var cloneObject = CloneMethod.Invoke(originalObject, null);
+                    visited.Add(originalObject, cloneObject);
+                    CopyFields(originalObject, visited, cloneObject, typeToReflect);
+                    RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
+                    return cloneObject;
                 }
             }
-            CopyFields(originalObject, visited, cloneObject, typeToReflect);
-            RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
-
-            return cloneObject;
+            else
+            {
+                var cloneObject = CloneMethod.Invoke(originalObject, null);
+                visited.Add(originalObject, cloneObject);
+                CopyFields(originalObject, visited, cloneObject, typeToReflect);
+                RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
+                return cloneObject;
+            }
         }
 
         private static object CopyDictionary(Object originalObject, IDictionary<Object, Object> visited, Type typeToReflect)
@@ -67,17 +86,30 @@ namespace System
             var dict = Activator.CreateInstance(typeToReflect);
             Type[] types = GetDictionaryTypes(typeToReflect);
 
-            MethodInfo GetItem = typeToReflect.GetMethod("get_Item", new Type[] { types[0] });
+            ParameterModifier p = new ParameterModifier(1);
+            p[0] = true;
+            ParameterModifier[] mods = { p };
+
+            MethodInfo GetItem = typeToReflect.GetMethod("get_Item", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { types[0] }, mods);
             MethodInfo Add = typeToReflect.GetMethod("Add", new Type[] { types[0], types[1] });
 
             IEnumerable keys = (IEnumerable)typeToReflect.GetProperty("Keys").GetValue(originalObject, null);
             foreach (object key in keys)
             {
                 object[] arguments = new object[] { key };
-                object value = GetItem.Invoke(originalObject, arguments);
-                if (value != null)
+                try
                 {
-                    Add.Invoke(dict, new object[] { InternalCopy(key, visited), InternalCopy(value, visited) });
+                    object value = GetItem.Invoke(originalObject, arguments);
+                    if (value != null)
+                    {
+                        Add.Invoke(dict, new object[] { InternalCopy(key, visited), InternalCopy(value, visited) });
+                    }
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.Log(typeToReflect.ToString());
+                    UnityEngine.Debug.Log(e.StackTrace);
+                    UnityEngine.Debug.Log(e.InnerException.ToString());
                 }
             }
             return dict;
@@ -110,6 +142,11 @@ namespace System
             {
                 if (filter != null && filter(fieldInfo) == false) continue;
                 if (IsPrimitive(fieldInfo.FieldType)) continue;
+                if (fieldInfo.FieldType.IsGenericType)
+                {
+                    Type genericType = fieldInfo.FieldType.GetGenericTypeDefinition();
+                    if (genericType == typeof(Action<>) || genericType == typeof(Func<,>)) continue;
+                }
                 var originalFieldValue = fieldInfo.GetValue(originalObject);
                 var clonedFieldValue = originalFieldValue == null ? null : InternalCopy(originalFieldValue, visited);
                 fieldInfo.SetValue(cloneObject, clonedFieldValue);
