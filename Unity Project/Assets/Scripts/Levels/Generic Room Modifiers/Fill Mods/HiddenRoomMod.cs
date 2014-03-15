@@ -20,8 +20,8 @@ public class HiddenRoomMod : FillRoomMod
         RandomPicker<GenSpace> picker;
         spec.Grids.DrawPotentialExternalDoors(Draw.PickRandom(out picker));
 
-        Value2D<GenSpace> doorSpace = picker.Pick(spec.Random);
-        if (doorSpace == null) return false;
+        Value2D<GenSpace> doorSpace;
+        if (!picker.Pick(spec.Random, out doorSpace)) return false;
         var floors = new List<Value2D<GenSpace>>();
         spec.Grids.DrawRect(
             (doorSpace.x - secretRoomSize), (doorSpace.x + secretRoomSize),

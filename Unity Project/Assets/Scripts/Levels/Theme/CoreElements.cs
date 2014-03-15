@@ -13,8 +13,8 @@ public class CoreElements : MonoBehaviour
     public WallElement[] CornerWall = new WallElement[1];
     public ThemeElement[] Door = new ThemeElement[1];
     public ThemeElement[] Floor = new ThemeElement[1];
-    public ThemeElement[] StairUp = new ThemeElement[1];
-    public ThemeElement[] StairDown = new ThemeElement[1];
+    public StairElement[] StairUp = new StairElement[1];
+    public StairElement[] StairDown = new StairElement[1];
     public ThemeElement[] Chest = new ThemeElement[1];
 }
 

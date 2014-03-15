@@ -905,6 +905,29 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
         return true;
     }
+
+    public bool DrawEdge(Bounding bounds, GridLocation loc, DrawAction<T> action, bool corners = true)
+    {
+        int shift = corners ? 0 : 1;
+        switch (loc)
+        {
+            case GridLocation.TOP:
+                return DrawRow(bounds.XMin + shift, bounds.XMax - shift, bounds.YMax, action);
+                break;
+            case GridLocation.BOTTOM:
+                return DrawRow(bounds.XMin + shift, bounds.XMax - shift, bounds.YMin, action);
+                break;
+            case GridLocation.LEFT:
+                return DrawCol(bounds.YMin + shift, bounds.YMax - shift, bounds.XMin, action);
+                break;
+            case GridLocation.RIGHT:
+                return DrawCol(bounds.YMin + shift, bounds.YMax - shift, bounds.XMax, action);
+                break;
+            default:
+                return false;
+                break;
+        }
+    }
     #endregion
     #region Circles
     /*

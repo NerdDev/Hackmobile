@@ -23,11 +23,16 @@ public class RandomPicker<T>
         return _options.GetRandom(rand, amount, radius, take);
     }
 
-    public Value2D<T> Pick(System.Random rand, bool take = false)
+    public bool Pick(System.Random rand, out Value2D<T> ret, bool take = false)
     {
         List<Value2D<T>> list = Pick(rand, 1, 0, take);
-        if (list.Count == 0) return null;
-        return list[0];
+        if (list.Count == 0)
+        {
+            ret = null;
+            return false;
+        }
+        ret = list[0];
+        return true;
     }
 
     public void ToLog(Logs logs, Container2D<T> orig, params string[] customContent)
