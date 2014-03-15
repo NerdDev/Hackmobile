@@ -206,7 +206,7 @@ public class FOWSystem : MonoBehaviour
         mBuffer2 = new Color32[size];
 
         // Create the height grid
-        CreateGrid();
+        //CreateGrid();
 
         // Update the fog of war's visibility so that it's updated right away
         UpdateBuffer();
