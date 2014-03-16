@@ -387,16 +387,6 @@ public static class Draw
         });
     }
 
-    public static DrawAction<T> CanDrawStair<T>()
-        where T : IGridSpace
-    {
-        return Draw.IsType<T>(GridType.Floor).
-                // If not blocking a path
-                And(Draw.Not(Draw.Blocking(Draw.Walkable<T>()))).
-                // If there's a floor around
-                And(Draw.Around(false, Draw.IsType<T>(GridType.Floor)));
-    }
-
     public static DrawAction<T> IsType<T>(GridType g)
         where T : IGridSpace
     {

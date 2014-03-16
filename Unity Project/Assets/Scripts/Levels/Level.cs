@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Level : Container2D<GridSpace>
 {
@@ -8,8 +9,8 @@ public class Level : Container2D<GridSpace>
     protected Array2D<GridSpace> _array;
     public List<Container2D<GridSpace>> RoomMaps = new List<Container2D<GridSpace>>();
     private MultiMap<Container2D<GridSpace>> roomMapping = new MultiMap<Container2D<GridSpace>>(); // floor space to roommap
-    public Point UpStartPoint;
-    public Point DownStartPoint;
+    public Bounding UpStartPoint;
+    public Bounding DownStartPoint;
     public System.Random Random { get; protected set; }
 
     public Level(Container2D<GridSpace> spaces, LevelLayout layout, Theme theme, System.Random rand)
@@ -135,18 +136,23 @@ public class Level : Container2D<GridSpace>
 
     public void PlacePlayer(bool up)
     {
-        Point startPoint;
+        Bounding startBounding;
         if (up)
         {
-            startPoint = UpStartPoint;
+            startBounding = UpStartPoint;
         }
         else
         {
-            startPoint = DownStartPoint;
+            startBounding = DownStartPoint;
         }
         BigBoss.Debug.w(Logs.Main, "Placing player in position.");
+        RandomPicker<GridSpace> picker;
+        this._array.DrawRect(startBounding, Draw.IsType<GridSpace>(GridType.StairPlace).IfThen(Draw.PickRandom(out picker)));
         Value2D<GridSpace> start;
-        this._array.GetPointAround(startPoint.x, startPoint.y, false, Draw.IsType<GridSpace>(GridType.StairPlace), out start);
+        if (!picker.Pick(Random, out start))
+        {
+            throw new ArgumentException("Cannot place player");
+        }
         BigBoss.PlayerInfo.transform.position = new Vector3(start.x, 0, start.y);
         BigBoss.Player.GridSpace = start.val;
         BigBoss.Levels.Builder.Instantiate(start);
