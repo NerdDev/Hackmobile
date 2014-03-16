@@ -52,6 +52,12 @@ public class Bounding
         : this(rhs.XMin, rhs.XMax, rhs.YMin, rhs.YMax)
     {
     }
+
+    public Bounding(Bounding rhs, int expand)
+        : this(rhs)
+    {
+        Expand(expand);
+    }
     #endregion Ctors
 
     public bool IsValid()

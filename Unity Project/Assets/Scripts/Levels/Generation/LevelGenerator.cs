@@ -755,6 +755,7 @@ public class LevelGenerator
 
     protected bool PlaceMissingStair(bool up, Bounding otherStair, out Bounding placed)
     {
+        Container2D<GenSpace> layout = Container.GetGrid();
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -793,7 +794,7 @@ public class LevelGenerator
                 stair = Theme.Core.StairDown.Random(Rand);
             }
 
-            if (!stair.Place(obj, Theme, Rand, out placed))
+            if (!stair.Place(layout, obj, Theme, Rand, out placed))
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))

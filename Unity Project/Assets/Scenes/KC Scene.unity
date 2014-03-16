@@ -115,7 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Logging: 1
   ActiveLogs: 000000000200000001000000
-  ActiveFlags: 00000000
+  ActiveFlags: 0000000002000000
 --- !u!1 &16695338
 GameObject:
   m_ObjectHideFlags: 0
@@ -6819,6 +6819,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: ActiveFlags.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 400040, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6851,6 +6855,10 @@ Prefab:
       propertyPath: m_CustomSkybox
       value: 
       objectReference: {fileID: 2100000, guid: d46457a5db9393a46b971c1b18e482c5, type: 2}
+    - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: ActiveFlags.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
   m_RootGameObject: {fileID: 302515056}

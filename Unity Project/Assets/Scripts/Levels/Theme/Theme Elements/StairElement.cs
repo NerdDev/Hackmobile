@@ -10,6 +10,6 @@ public abstract class StairElement : ThemeElement
         SetChar('/');
     }
 
-    public abstract bool Place(LayoutObject obj, Theme theme, System.Random rand, out Bounding placed);
+    public abstract bool Place(Container2D<GenSpace> grid, LayoutObject obj, Theme theme, System.Random rand, out Bounding placed);
 }
 

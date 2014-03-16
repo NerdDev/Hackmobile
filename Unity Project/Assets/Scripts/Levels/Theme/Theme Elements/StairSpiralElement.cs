@@ -5,12 +5,10 @@ using System.Text;
 
 public class StairSpiralElement : StairElement
 {
-    private static DrawAction<GenSpace> strokeTest = Draw.IsType<GenSpace>(GridType.Floor).
-        // If not blocking a path
-                And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>()))).
-        // If there's a floor around
-                And(Draw.Around(false, Draw.IsType<GenSpace>(GridType.Floor)));
-    private static DrawAction<GenSpace> unitTest = Draw.IsType<GenSpace>(GridType.Floor);
+    private static DrawAction<GenSpace> strokeTest = Draw.IsType<GenSpace>(GridType.Floor);
+    private static DrawAction<GenSpace> unitTest = Draw.IsType<GenSpace>(GridType.Floor).
+                // If not blocking a path
+                And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>())));
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
@@ -39,18 +37,46 @@ public class StairSpiralElement : StairElement
         }
     }
 
-    public override bool Place(LayoutObject obj, Theme theme, System.Random rand, out Bounding placed)
+    public override bool Place(Container2D<GenSpace> grid, LayoutObject obj, Theme theme, System.Random rand, out Bounding placed)
     {
-        List<Bounding> options = obj.FindRectangles(GridWidth, GridHeight, true, new StrokedAction<GenSpace>()
+        List<Bounding> options = obj.FindRectangles(GridWidth, GridHeight, true, unitTest);
+        options = new List<Bounding>(options.Filter((bounds) =>
         {
-            UnitAction = unitTest,
-            StrokeAction = strokeTest
-        });
+            Counter counter = new Counter();
+            grid.DrawRect(new Bounding(bounds, 1), strokeTest.IfThen(Draw.Count<GenSpace>(counter)));
+            return counter > 0;
+        }));
         if (options.Count == 0)
         {
             placed = null;
             return false;
         }
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Options:");
+            if (GridWidth == 1 && GridHeight == 1)
+            {
+                MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                tmp.PutAll(obj);
+                foreach (Bounding bounds in options)
+                {
+                    tmp.DrawRect(bounds, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, theme));
+                }
+                tmp.ToLog(Logs.LevelGen);
+            }
+            else
+            {
+                foreach (Bounding bounds in options)
+                {
+                    MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                    tmp.PutAll(obj);
+                    tmp.DrawRect(bounds, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, theme));
+                    tmp.ToLog(Logs.LevelGen);
+                }
+            }
+        }
+        #endregion
         // Place startpoints
         placed = options.Random(rand);
         placed.Expand(1);
