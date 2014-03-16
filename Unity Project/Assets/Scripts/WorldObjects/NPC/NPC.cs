@@ -304,7 +304,8 @@ public class NPC : Affectable
     protected float calcXPForNextLevel()
     {
         //do calc here
-        return (100 + ((Mathf.Pow(Stats.Level, 2f) / 2)));
+        return Stats.Level * 15;
+        //return (100 + ((Mathf.Pow(Stats.Level, 2f) / 2)));
     }
 
     protected void getHungerLevel(float hunger)
