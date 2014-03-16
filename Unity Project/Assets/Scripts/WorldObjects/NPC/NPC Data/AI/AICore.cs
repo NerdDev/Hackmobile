@@ -10,9 +10,12 @@ class AICore
     public Role role;
 
     //initialization parameters
+    public AICore()
+    {
+    }
     public AICore(NPC n)
     {
-        //do nothin'
+        InitAI(n);
     }
     public AICore(NPC n, params AIAction[] aiParams)
     {
@@ -26,17 +29,17 @@ class AICore
     {
         InitAI(n, role);
     }
-    void InitAI(NPC n, params AIAction[] aiParams)
+    public void InitAI(NPC n, params AIAction[] aiParams)
     {
         this.npc = n;
         actions.AddRange(aiParams);
     }
-    void InitAI(NPC n, List<AIAction> aiParams)
+    public void InitAI(NPC n, List<AIAction> aiParams)
     {
         this.npc = n;
         actions.AddRange(aiParams);
     }
-    void InitAI(NPC n, Role role)
+    public void InitAI(NPC n, Role role)
     {
         this.npc = n;
         //if the NPC has a role, we've got a default AI setup
@@ -49,8 +52,16 @@ class AICore
 
                 break;
             default:
+                InitAI(n);
                 break;
         }
+    }
+
+    public void InitAI(NPC n)
+    {
+        this.npc = n;
+        actions.Add(new AIAttack(n));
+        actions.Add(new AIMove(n));
     }
 
     public void DecideWhatToDo()

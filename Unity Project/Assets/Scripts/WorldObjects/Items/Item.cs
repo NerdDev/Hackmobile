@@ -116,7 +116,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
 
     public int getDamage()
     {
-        return this.props.Damage.getValue();
+        return this.stats.damage.GetDamage();
     }
 
     #endregion
@@ -126,7 +126,6 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     {
         base.ParseXML(x);
         Type = x.Key;
-        props = x.Select<ItemProperties>("properties");
         onEquip = x.Select<Spell>("OnEquipEffect");
         onUse = x.Select<Spell>("OnUseEffect");
         onEaten = x.Select<Spell>("OnEatenEffect");
@@ -155,10 +154,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         Item newItem;
         if (Count > 0)
         {
-            //newItem = BigBoss.Objects.Items.Instantiate(this.Name);
-            //UnityEngine.Debug.Log(newItem.Dump());
             newItem = this.Copy();
-            //UnityEngine.Debug.Log(newItem.Dump());
             newItem._count = 1;
         }
         else  { newItem = null; }

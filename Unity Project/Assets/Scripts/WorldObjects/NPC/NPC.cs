@@ -13,23 +13,28 @@ public class NPC : Affectable
      */
     public override void Init()
     {
-        calcStats();
-        //IsActive = true;
+        //initalize AI
+        Master.InitAI(this);
+
+        //calculate any stats that need set on start
+        CalcInitialStats();
+
+        //get current grid position
         if (IsActive)
         {
             Vector2 currentPos = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
             GridSpace = BigBoss.Levels.Level[currentPos.x.ToInt(), currentPos.y.ToInt()];
         }
 
-        List<ItemHolder> ih = StartingItems.Get(new System.Random(), 3, BigBoss.Player.Level);
-        if (ih.Count > 0)
+        //conversion of leveled items => items
+        List<ItemHolder> ih = StartingItems.Get(new System.Random(), 1, BigBoss.Player.Level);
+        if (ih.Count > 0) //temp random check
         {
             foreach (ItemHolder i in ih)
             {
                 addToInventory(i.Get());
             }
         }
-        master = new AICore(this, Role.MAGE);
     }
 
     /**
@@ -43,12 +48,12 @@ public class NPC : Affectable
     public Stats Stats = new Stats();
     public Spells KnownSpells = new Spells();
     public LeveledItemList StartingItems = new LeveledItemList();
-    AICore master;
+    private AICore Master = new AICore();
 
-    //public List<Item> inventory = new List<Item>();
     public Inventory Inventory = new Inventory();
     protected List<Item> EquippedItems = new List<Item>();
     public Equipment Equipment = new Equipment();
+    public Item NaturalWeapon { get; set; }
     #endregion
 
     /**
@@ -172,7 +177,7 @@ public class NPC : Affectable
     {
         Stats.Level++;
         //do level up stuff here
-        calcStats();
+        CalcStats();
     }
 
     public virtual bool AdjustHealth(int amount) //returns true if NPC dies from health gain
@@ -263,22 +268,43 @@ public class NPC : Affectable
     public virtual void AdjustAttribute(Attributes attr, int amount)
     {
         Attributes.set(attr, Attributes.get(attr) + amount);
-        calcStats();
+        CalcStats();
     }
     #endregion
 
     #region Stat Calculations
     //Use this for a re-calc on level up or any attribute changes.
-    protected void calcStats()
+    protected void CalcStats()
     {
+        //need to define level changes to stats, percentages on NPC's, maybe?
+        NPC proto = BigBoss.Objects.NPCs.GetPrototype(this.Name);
+        if (proto != null)
+        {
+            AdjustMaxHealth((int)(Stats.Level * Attributes.Constitution * .01f * proto.Stats.MaxHealth));
+        }
+        else
+        {
+            AdjustMaxHealth((int)(Stats.Level * Attributes.Constitution * .1f));
+        }
+
+        //these need adjusted to virtual functions so Player can update GUI
         Stats.MaxEncumbrance = getMaxInventoryWeight();
         Stats.XPToNextLevel = calcXPForNextLevel();
+    }
+
+    protected void CalcInitialStats()
+    {
+        CalcStats();
+        Stats.CurrentHealth = Stats.MaxHealth;
+        Stats.CurrentPower = Stats.MaxPower;
+        Stats.CurrentXP = 0;
+        Stats.hungerRate = 1;
     }
 
     protected float calcXPForNextLevel()
     {
         //do calc here
-        return (100 + ((Mathf.Pow(Stats.Level, 3f) / 2)));
+        return (100 + ((Mathf.Pow(Stats.Level, 2f) / 2)));
     }
 
     protected void getHungerLevel(float hunger)
@@ -448,31 +474,13 @@ public class NPC : Affectable
 
     public virtual void attack(NPC n)
     {
-        bool b = false;
-        if (b)
+        List<Item> weapons = Equipment.GetWeapons();
+        if (weapons.Count > 0)
         {
-            List<Item> weapons = new List<Item>();
-            if (weapons.Count > 0)
+            foreach (Item i in weapons)
             {
-                foreach (Item i in weapons)
-                {
-                    CreateTextPop("The " + this.Name + " swings with his " + i.Name + "!");
-                    if (!n.damage(i.getDamage()))
-                    {
-                    }
-                    else
-                    {
-                        AdjustXP(n.getXPfromNPC());
-                    }
-                }
-            }
-            else
-            {
-                CreateTextPop("The " + this.Name + " swings with his bare hands!");
-                if (!n.damage(calcHandDamage()))
-                {
-                }
-                else
+                CreateTextPop("The " + this.Name + " swings with his " + i.Name + "!");
+                if (n.damage(i.getDamage()))
                 {
                     AdjustXP(n.getXPfromNPC());
                 }
@@ -481,11 +489,7 @@ public class NPC : Affectable
         else
         {
             CreateTextPop("The " + this.Name + " swings with his bare hands!");
-            //attacking with bare hands
-            if (!n.damage(calcHandDamage()))
-            {
-            }
-            else
+            if (n.damage(CalcNaturalDamage()))
             {
                 AdjustXP(n.getXPfromNPC());
             }
@@ -503,8 +507,12 @@ public class NPC : Affectable
         AdjustPower(-spell.cost);
     }
 
-    protected int calcHandDamage()
+    protected int CalcNaturalDamage()
     {
+        if (NaturalWeapon != null)
+        {
+            return NaturalWeapon.getDamage();
+        }
         return (new System.Random()).Next(0, Attributes.Strength);
     }
 
@@ -626,8 +634,6 @@ public class NPC : Affectable
     public override void ParseXML(XMLNode x)
     {
         base.ParseXML(x);
-        //Race = x.SelectEnum<Race>("race");
-        //Role = x.SelectEnum<Role>("role");
         Attributes = x.Select<AttributesData>("attributes");
         Stats = x.Select<Stats>("stats");
         Flags = new GenericFlags<NPCFlags>(x.SelectEnums<NPCFlags>("flags"));
@@ -635,6 +641,7 @@ public class NPC : Affectable
         KnownSpells = x.Select<Spells>("spells");
         StartingItems = x.Select<LeveledItemList>("startingitems");
         Equipment = x.Select<Equipment>("equipslots");
+        NaturalWeapon = x.Select<Item>("naturalweapon");
     }
     #endregion
 
@@ -664,7 +671,7 @@ public class NPC : Affectable
             {
                 if (this.IsNotAFreaking<Player>())
                 {
-                    master.DecideWhatToDo();
+                    Master.DecideWhatToDo();
                 }
             }
             catch (Exception e)

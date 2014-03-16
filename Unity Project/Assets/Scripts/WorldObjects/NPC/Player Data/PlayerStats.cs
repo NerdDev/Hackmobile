@@ -32,7 +32,6 @@ public class PlayerStats
         attr.Dexterity = 17;
         attr.Intelligence = 16;
         attr.Strength = 16;
-        attr.Difficulty = 1;
         attr.Size = Size.MEDIUM;
         player.Attributes = attr;
 
@@ -48,12 +47,6 @@ public class PlayerStats
         flags[NPCFlags.NOPOLY] = true;
         flags[NPCFlags.NO_RANDOM_SPAWN] = true;
         player.Flags = flags;
-
-        BodyParts bp = new BodyParts();
-        bp.Arms = 2;
-        bp.Legs = 2;
-        bp.Heads = 1;
-        player.Bodyparts = bp;
 
         player.PlayerTitle = BigBoss.Objects.PlayerProfessions.getTitle(player.PlayerChosenProfession, player.Stats.Level);
         player.IsActive = true;

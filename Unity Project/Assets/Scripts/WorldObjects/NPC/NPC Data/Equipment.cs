@@ -34,7 +34,7 @@ public class Equipment : IXmlParsable
 
     public bool equipItem(Item i)
     {
-        EquipType et = i.props.EquipType;
+        EquipType et = i.stats.EquipType;
         if (isFreeSlot(et))
         {
             EquipSlot es = equipSlots[et];
@@ -49,7 +49,7 @@ public class Equipment : IXmlParsable
 
     public bool removeItem(Item i)
     {
-        EquipType et = i.props.EquipType;
+        EquipType et = i.stats.EquipType;
         if (!isFreeSlot(et)) //if it's free, there's no item for that type
         {
             return equipSlots[et].removeItem(i);
@@ -64,6 +64,15 @@ public class Equipment : IXmlParsable
             equipSlots[et] = new EquipSlot();
         }
         return equipSlots[et].isFree();
+    }
+
+    public List<Item> GetWeapons()
+    {
+        if (equipSlots.ContainsKey(EquipType.HAND))
+        {
+            return equipSlots[EquipType.HAND].GetEquipped();
+        }
+        return new List<Item>();
     }
 
     private bool filter(EquipType et)
@@ -100,7 +109,7 @@ public class Equipment : IXmlParsable
             if (canEquip(i))
             {
                 equipped.Add(i);
-                numSlots -= i.props.NumberOfSlots;
+                numSlots -= i.stats.NumberOfSlots;
                 i.itemFlags[ItemFlags.IS_EQUIPPED] = true;
             }
         }
@@ -109,7 +118,7 @@ public class Equipment : IXmlParsable
         {
             if (equipped.Contains(i))
             {
-                numSlots += i.props.NumberOfSlots;
+                numSlots += i.stats.NumberOfSlots;
                 equipped.Remove(i);
                 return true;
             }
@@ -121,11 +130,16 @@ public class Equipment : IXmlParsable
 
         private bool canEquip(Item i)
         {
-            if (numSlots >= i.props.NumberOfSlots)
+            if (numSlots >= i.stats.NumberOfSlots)
             {
                 return true;
             }
             return false;
+        }
+
+        public List<Item> GetEquipped()
+        {
+            return equipped;
         }
     }
 

@@ -40,12 +40,6 @@ public class AttributesData : IXmlParsable
         get { return constitution; }
         set { this.constitution = value; }
     }
-    private int difficulty;
-    public int Difficulty
-    {
-        get { return difficulty; }
-        set { this.difficulty = value; }
-    }
     private Size size;
     public Size Size
     {
@@ -107,7 +101,6 @@ public class AttributesData : IXmlParsable
         Wisdom = x.SelectInt("wisdom");
         Dexterity = x.SelectInt("dexterity");
         Constitution = x.SelectInt("constitution");
-        Difficulty = x.SelectInt("difficulty");
         Size = x.SelectEnum<Size>("size");
     }
 }

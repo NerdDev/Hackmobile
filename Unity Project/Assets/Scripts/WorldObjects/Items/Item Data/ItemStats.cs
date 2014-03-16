@@ -21,19 +21,19 @@ public class ItemStats : IXmlParsable
         get { return nutrition; }
         set { this.nutrition = value; }
     }
-    protected Size size;
-    public Size Size
-    {
-        get { return size; }
-        set { this.size = value; }
-    }
+
+    public EquipType EquipType { get; set; }
+    public int NumberOfSlots { get; set; }
+    public Damage damage { get; set; }
 
     public void ParseXML(XMLNode x)
     {
         Weight = x.SelectInt("weight");
         Cost = x.SelectInt("cost");
         Nutrition = x.SelectInt("nutrition");
-        Size = x.SelectEnum<Size>("equipsize");
+        damage = x.Select<Damage>("damage");
+        EquipType = x.SelectEnum<EquipType>("equiptype");
+        NumberOfSlots = x.SelectInt("slots", 1);
     }
 
     public int GetHash()
@@ -41,8 +41,9 @@ public class ItemStats : IXmlParsable
         int hash = 5;
         hash += Weight.GetHashCode() * 3;
         hash += Nutrition.GetHashCode() * 5;
-        hash += Size.GetHashCode() * 7;
         hash += Cost.GetHashCode() * 11;
+        hash += EquipType.GetHashCode() * 17;
+        hash += NumberOfSlots.GetHashCode() * 13;
         return hash;
     }
 }

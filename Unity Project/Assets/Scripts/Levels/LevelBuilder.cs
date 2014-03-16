@@ -43,7 +43,7 @@ public class LevelBuilder : MonoBehaviour
         //fog of war
         Vector3 pos = new Vector3(x, 0f, y);
         int height = 0;
-        if (space.Type == GridType.Wall) height = 80; 
+        if (space.Type == GridType.Wall) height = 0; 
         BigBoss.Gooey.RecreateFOW(pos, height);
 
         //combination, GC

@@ -8,9 +8,6 @@
 		<flags>
 			<flag name="nopoly" />
 		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
 		<spawnkeywords>
 			<entry name="tomb" />
 		</spawnkeywords>
@@ -26,24 +23,43 @@
 			<dexterity>7</dexterity>
 			<intelligence>17</intelligence>
 			<strength>4</strength>
-			<difficulty>2</difficulty>
 			<size>medium</size>
 		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
+		<spells>
+			<spell>
+				<name>Fireball</name>
+				<range>5</range>
+				<targeter>
+					<type>TargetedObjects</type>
+					<effect>
+						<type>FireBallVisual</type>
+						<speed>2</speed>
+					</effect>
+					<effect>
+						<type>DamageFire</type>
+						<strength>10</strength>
+					</effect>
+				</targeter>
+			</spell>
+		</spells>
+		<startingitems>
+			<entry>
+				<item>Health Potion</item>
+				<probability>.2</probability>
+				<count>1</count>
+				<level>1</level>
+			</entry>
+		</startingitems>
+		<naturalweapon name="fist">
+			<stats>
+				<damage>
+					<min>4</min>
+					<max>16</max>
+				</damage>
+			</stats>
+		</naturalweapon>
 	</npc>
-	<npc name="giant_spider">
+	<npc name="Giant Spider">
 		<model> </model>
 		<modeltexture> </modeltexture>
 		<prefab>Giant_Spider</prefab>
@@ -86,7 +102,7 @@
 			<!-- body is implicitly assumed -->
 		</bodyparts>
 	</npc>
-	<npc name="giant_rat">
+	<npc name="Giant Rat">
 		<model> </model>
 		<modeltexture> </modeltexture>
 		<prefab>GIANT_RAT</prefab>
@@ -131,7 +147,7 @@
 			<!-- body is implicitly assumed -->
 		</bodyparts>
 	</npc>
-	<npc name="CHIMERA">
+	<npc name="Chimera">
 		<model> </model>
 		<modeltexture> </modeltexture>
 		<prefab>CHIMERA</prefab>

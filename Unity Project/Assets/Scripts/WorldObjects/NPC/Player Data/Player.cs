@@ -63,7 +63,7 @@ public class Player : NPC
     public override void Init()
     {
         PlayerStats.Load(this, Role.ARCHAELOGIST, Race.HUMAN);
-        calcStats();
+        CalcStats();
         BigBoss.Gooey.UpdateMaxHealth(this.Stats.MaxHealth);
         BigBoss.Gooey.UpdateHealthBar(this.Stats.MaxHealth);
 

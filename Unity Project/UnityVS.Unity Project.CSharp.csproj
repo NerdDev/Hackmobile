@@ -238,6 +238,7 @@
     <Compile Include="Assets\Scripts\WorldObjects\Affectable.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\INamed.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\ItemDictionary.cs" />
+    <Compile Include="Assets\Scripts\WorldObjects\Items\Damage.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\BUC.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemFlags.cs" />
     <Compile Include="Assets\Scripts\WorldObjects\Items\Item Data\ItemProperties.cs" />
