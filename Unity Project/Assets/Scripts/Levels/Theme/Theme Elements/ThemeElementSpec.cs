@@ -8,22 +8,30 @@ public class ThemeElementSpec : IEnumerable<Value2D<GenSpace>>
     public GridType Type;
     public Theme Theme;
     public GenDeploy GenDeploy;
+    public GenSpace GenSpace;
     public GridSpace Space;
     public Container2D<GenSpace> GenGrid;
     public Container2D<GridSpace> Grid;
+    public MultiMap<GenSpace> DeployGrid = new MultiMap<GenSpace>();
     public System.Random Random;
     public int DeployX;
     public int DeployY;
     public MultiMap<List<GenDeploy>> Additional = new MultiMap<List<GenDeploy>>();
-
-    public Bounding GetBounds()
+    private Bounding _bounding;
+    public Bounding Bounding
     {
-        Bounding bounds = new Bounding();
-        foreach (var v in this)
+        get
         {
-            bounds.Absorb(v);
+            if (_bounding == null)
+            {
+                _bounding = new Bounding();
+                foreach (var v in this)
+                {
+                    _bounding.Absorb(v);
+                }
+            }
+            return _bounding;
         }
-        return bounds;
     }
 
     public void AddAdditional(GenDeploy deploy, int x, int y)
@@ -35,6 +43,12 @@ public class ThemeElementSpec : IEnumerable<Value2D<GenSpace>>
             Additional[x, y] = list;
         }
         list.Add(deploy);
+    }
+
+    public void Reset()
+    {
+        _bounding = null;
+        Additional.Clear();
     }
 
     public IEnumerator<Value2D<GenSpace>> GetEnumerator()

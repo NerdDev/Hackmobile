@@ -287,83 +287,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     #region Draw Functions
     #region Point
     #region Draws
-    public IEnumerable<T> DrawAround(int x, int y, bool cornered)
-    {
-        if (!cornered)
-        {
-            yield return this[x, y + 1];
-            yield return this[x, y - 1];
-            yield return this[x + 1, y];
-            yield return this[x - 1, y];
-        }
-        else
-        {
-            yield return this[x - 1, y - 1]; // bottom left
-            yield return this[x, y - 1]; // bottom
-            yield return this[x + 1, y - 1]; // bottom right
-            yield return this[x + 1, y]; // Right
-            yield return this[x + 1, y + 1]; // Top Right
-            yield return this[x, y + 1]; // Top
-            yield return this[x - 1, y + 1]; // Top Left
-            yield return this[x - 1, y]; // Left
-        }
-    }
-
-    public bool DrawAround(int x, int y, bool cornered, DrawAction<T> action)
-    {
-        if (!cornered)
-        {
-            if (!action(this, x, y + 1)) return false;
-            if (!action(this, x, y - 1)) return false;
-            if (!action(this, x + 1, y)) return false;
-            if (!action(this, x - 1, y)) return false;
-        }
-        else
-        {
-            if (!action(this, x - 1, y - 1)) return false; // Bottom left
-            if (!action(this, x, y - 1)) return false; // Bottom
-            if (!action(this, x + 1, y - 1)) return false; // Bottom right
-            if (!action(this, x + 1, y)) return false; // Right
-            if (!action(this, x + 1, y + 1)) return false; // Top Right
-            if (!action(this, x, y + 1)) return false; // Top
-            if (!action(this, x - 1, y + 1)) return false; // Top Left
-            if (!action(this, x - 1, y)) return false; // Left
-        }
-        return true;
-    }
-
-    public GridLocationResults DrawLocationsAroundResults(int x, int y, bool cornered, DrawAction<T> action)
-    {
-        GridLocationResults results = new GridLocationResults();
-        foreach (GridLocation g in DrawLocationsAround(x, y, cornered, action))
-        {
-            results[g] = true;
-        }
-        return results;
-    }
-
-    public IEnumerable<GridLocation> DrawLocationsAround(int x, int y, bool cornered, DrawAction<T> action)
-    {
-        if (!cornered)
-        {
-            if (action(this, x, y + 1)) yield return GridLocation.TOP;
-            if (action(this, x, y - 1)) yield return GridLocation.BOTTOM;
-            if (action(this, x + 1, y)) yield return GridLocation.RIGHT;
-            if (action(this, x - 1, y)) yield return GridLocation.LEFT;
-        }
-        else
-        {
-            if (action(this, x - 1, y - 1)) yield return GridLocation.BOTTOMLEFT; // Bottom left
-            if (action(this, x, y - 1)) yield return GridLocation.BOTTOM; // Bottom
-            if (action(this, x + 1, y - 1)) yield return GridLocation.BOTTOMRIGHT; // Bottom right
-            if (action(this, x + 1, y)) yield return GridLocation.RIGHT; // Right
-            if (action(this, x + 1, y + 1)) yield return GridLocation.TOPRIGHT; // Top Right
-            if (action(this, x, y + 1)) yield return GridLocation.TOP; // Top
-            if (action(this, x - 1, y + 1)) yield return GridLocation.TOPLEFT; // Top Left
-            if (action(this, x - 1, y)) yield return GridLocation.LEFT; // Left
-        }
-    }
-
     public bool DrawDir(int x, int y, GridDirection dir, DrawAction<T> action)
     {
         switch (dir)
@@ -552,40 +475,81 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return false;
     }
 
-    public bool TShape(int x, int y, DrawAction<T> tester, out GridLocation loc)
+    public IEnumerable<T> DrawAround(int x, int y, bool cornered)
     {
-        bool left = tester(this, x - 1, y);
-        bool right = tester(this, x + 1, y);
-        bool top = tester(this, x, y + 1);
-        bool bottom = tester(this, x, y - 1);
-        if (left && right)
+        if (!cornered)
         {
-            if (top)
-            {
-                loc = GridLocation.TOP;
-                return true;
-            }
-            else if (bottom)
-            {
-                loc = GridLocation.BOTTOM;
-                return true;
-            }
+            yield return this[x, y + 1];
+            yield return this[x, y - 1];
+            yield return this[x + 1, y];
+            yield return this[x - 1, y];
         }
-        else if (top && bottom)
+        else
         {
-            if (left)
-            {
-                loc = GridLocation.LEFT;
-                return true;
-            }
-            else if (right)
-            {
-                loc = GridLocation.RIGHT;
-                return true;
-            }
+            yield return this[x - 1, y - 1]; // bottom left
+            yield return this[x, y - 1]; // bottom
+            yield return this[x + 1, y - 1]; // bottom right
+            yield return this[x + 1, y]; // Right
+            yield return this[x + 1, y + 1]; // Top Right
+            yield return this[x, y + 1]; // Top
+            yield return this[x - 1, y + 1]; // Top Left
+            yield return this[x - 1, y]; // Left
         }
-        loc = GridLocation.BOTTOM;
-        return false;
+    }
+
+    public bool DrawAround(int x, int y, bool cornered, DrawAction<T> action)
+    {
+        if (!cornered)
+        {
+            if (!action(this, x, y + 1)) return false;
+            if (!action(this, x, y - 1)) return false;
+            if (!action(this, x + 1, y)) return false;
+            if (!action(this, x - 1, y)) return false;
+        }
+        else
+        {
+            if (!action(this, x - 1, y - 1)) return false; // Bottom left
+            if (!action(this, x, y - 1)) return false; // Bottom
+            if (!action(this, x + 1, y - 1)) return false; // Bottom right
+            if (!action(this, x + 1, y)) return false; // Right
+            if (!action(this, x + 1, y + 1)) return false; // Top Right
+            if (!action(this, x, y + 1)) return false; // Top
+            if (!action(this, x - 1, y + 1)) return false; // Top Left
+            if (!action(this, x - 1, y)) return false; // Left
+        }
+        return true;
+    }
+
+    public GridLocationResults DrawLocationsAroundResults(int x, int y, bool cornered, DrawAction<T> action)
+    {
+        GridLocationResults results = new GridLocationResults();
+        foreach (GridLocation g in DrawLocationsAround(x, y, cornered, action))
+        {
+            results[g] = true;
+        }
+        return results;
+    }
+
+    public IEnumerable<GridLocation> DrawLocationsAround(int x, int y, bool cornered, DrawAction<T> action)
+    {
+        if (!cornered)
+        {
+            if (action(this, x, y + 1)) yield return GridLocation.TOP;
+            if (action(this, x, y - 1)) yield return GridLocation.BOTTOM;
+            if (action(this, x + 1, y)) yield return GridLocation.RIGHT;
+            if (action(this, x - 1, y)) yield return GridLocation.LEFT;
+        }
+        else
+        {
+            if (action(this, x - 1, y - 1)) yield return GridLocation.BOTTOMLEFT; // Bottom left
+            if (action(this, x, y - 1)) yield return GridLocation.BOTTOM; // Bottom
+            if (action(this, x + 1, y - 1)) yield return GridLocation.BOTTOMRIGHT; // Bottom right
+            if (action(this, x + 1, y)) yield return GridLocation.RIGHT; // Right
+            if (action(this, x + 1, y + 1)) yield return GridLocation.TOPRIGHT; // Top Right
+            if (action(this, x, y + 1)) yield return GridLocation.TOP; // Top
+            if (action(this, x - 1, y + 1)) yield return GridLocation.TOPLEFT; // Top Left
+            if (action(this, x - 1, y)) yield return GridLocation.LEFT; // Left
+        }
     }
     #endregion
     #region Get Direction
@@ -748,7 +712,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             loc = GridLocation.RIGHT;
             return false;
         }
-        if (withOpposing &&  !action(this, leftPass ? x + 1 : x - 1, bottomPass ? y + 1 : y - 1))
+        if (withOpposing && !action(this, leftPass ? x + 1 : x - 1, bottomPass ? y + 1 : y - 1))
         {
             loc = GridLocation.RIGHT;
             return false;
@@ -913,21 +877,25 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         {
             case GridLocation.TOP:
                 return DrawRow(bounds.XMin + shift, bounds.XMax - shift, bounds.YMax, action);
-                break;
             case GridLocation.BOTTOM:
                 return DrawRow(bounds.XMin + shift, bounds.XMax - shift, bounds.YMin, action);
-                break;
             case GridLocation.LEFT:
                 return DrawCol(bounds.YMin + shift, bounds.YMax - shift, bounds.XMin, action);
-                break;
             case GridLocation.RIGHT:
                 return DrawCol(bounds.YMin + shift, bounds.YMax - shift, bounds.XMax, action);
-                break;
+            case GridLocation.BOTTOMLEFT:
+                return action(this, bounds.XMin, bounds.YMin);
+            case GridLocation.BOTTOMRIGHT:
+                return action(this, bounds.XMax, bounds.YMin);
+            case GridLocation.TOPLEFT:
+                return action(this, bounds.XMin, bounds.YMax);
+            case GridLocation.TOPRIGHT:
+                return action(this, bounds.XMax, bounds.YMax);
             default:
                 return false;
-                break;
         }
     }
+
     #endregion
     #region Circles
     /*
@@ -1047,6 +1015,43 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     public bool DrawRect(int x, int y, int radius, StrokedAction<T> action)
     {
         return this.DrawRect(x - radius, x + radius, y - radius, y + radius, action);
+    }
+    #endregion
+    #region Other
+    public bool TShape(int x, int y, DrawAction<T> tester, out GridLocation loc)
+    {
+        bool left = tester(this, x - 1, y);
+        bool right = tester(this, x + 1, y);
+        bool top = tester(this, x, y + 1);
+        bool bottom = tester(this, x, y - 1);
+        if (left && right)
+        {
+            if (top)
+            {
+                loc = GridLocation.TOP;
+                return true;
+            }
+            else if (bottom)
+            {
+                loc = GridLocation.BOTTOM;
+                return true;
+            }
+        }
+        else if (top && bottom)
+        {
+            if (left)
+            {
+                loc = GridLocation.LEFT;
+                return true;
+            }
+            else if (right)
+            {
+                loc = GridLocation.RIGHT;
+                return true;
+            }
+        }
+        loc = GridLocation.BOTTOM;
+        return false;
     }
     #endregion
     #region Expand
@@ -1191,6 +1196,69 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
         return largestToSmallestRects;
     }
+
+    public IEnumerable<GridLocation> FindEdges(Bounding bounds, DrawAction<T> action, bool corners = true)
+    {
+        foreach (GridLocation loc in GridLocationExt.Dirs())
+        {
+            if (DrawEdge(bounds, loc, action, corners))
+            {
+                yield return loc;
+            }
+        }
+    }
+
+    public IEnumerable<Boxing> FindBoxes(int width, int height, GridLocation frontLoc, BoxedAction<T> action, bool tryFlipped = true, bool tryTurned = true, Bounding scope = null)
+    {
+        int insideWidth = width - 2;
+        int insideHeight = height - 2;
+        List<Bounding> boundOptions;
+        if (insideHeight > 0 && insideWidth > 0)
+        {
+            boundOptions = new List<Bounding>(FindRectangles(insideWidth, insideHeight, false, action.UnitAction, scope).Filter((b) =>
+                {
+                    b.Expand(1);
+                    return true;
+                }));
+        }
+        else
+        {
+            boundOptions = FindRectangles(width, height, false, Draw.True<T>(), scope);
+        }
+        foreach (Bounding bounds in boundOptions)
+        {
+            if ((action.FrontAction == null || DrawEdge(bounds, frontLoc, action.FrontAction, false))
+                && (action.BackAction == null || DrawEdge(bounds, frontLoc.Opposite(), action.BackAction, false))
+                && (action.LeftAction == null || DrawEdge(bounds, frontLoc.CounterClockwise90(), action.LeftAction, false))
+                && (action.RightAction == null || DrawEdge(bounds, frontLoc.Clockwise90(), action.RightAction, false))
+                && (action.FrontLeftAction == null || DrawEdge(bounds, frontLoc.CounterClockwise(), action.FrontLeftAction, false))
+                && (action.FrontRightAction == null || DrawEdge(bounds, frontLoc.Clockwise(), action.FrontRightAction, false))
+                && (action.BackLeftAction == null || DrawEdge(bounds, frontLoc.Opposite().Clockwise(), action.BackLeftAction, false))
+                && (action.BackRightAction == null || DrawEdge(bounds, frontLoc.Opposite().CounterClockwise(), action.BackRightAction, false)))
+            {
+                yield return new Boxing(bounds, frontLoc);
+            }
+            if (tryFlipped
+                && (action.FrontAction == null || DrawEdge(bounds, frontLoc.Opposite(), action.FrontAction, false))
+                && (action.BackAction == null || DrawEdge(bounds, frontLoc, action.BackAction, false))
+                && (action.LeftAction == null || DrawEdge(bounds, frontLoc.Clockwise90(), action.LeftAction, false))
+                && (action.RightAction == null || DrawEdge(bounds, frontLoc.CounterClockwise90(), action.RightAction, false))
+                && (action.FrontLeftAction == null || DrawEdge(bounds, frontLoc.Opposite().CounterClockwise(), action.FrontLeftAction, false))
+                && (action.FrontRightAction == null || DrawEdge(bounds, frontLoc.Opposite().Clockwise(), action.FrontRightAction, false))
+                && (action.BackLeftAction == null || DrawEdge(bounds, frontLoc.Clockwise(), action.BackLeftAction, false))
+                && (action.BackRightAction == null || DrawEdge(bounds, frontLoc.CounterClockwise(), action.BackRightAction, false)))
+            {
+                yield return new Boxing(bounds, frontLoc.Opposite());
+            }
+        }
+        if (tryTurned)
+        {
+            foreach (var ret in FindBoxes(height, width, frontLoc.Clockwise90(), action, true, false, scope))
+            {
+                yield return ret;
+            }
+        }
+    }
     #endregion
     #region Searches
     public Stack<Value2D<T>> DrawDepthFirstSearch(int x, int y,
@@ -1275,6 +1343,15 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
         #endregion
         return pathTaken;
+    }
+
+    public bool DrawBreadthFirstFill(int x, int y,
+        bool cornered,
+        DrawAction<T> shouldQueue)
+    {
+        Queue<Value2D<T>> q;
+        Container2D<bool> f;
+        return DrawBreadthFirstFill(x, y, cornered, shouldQueue, null, out q, out f);
     }
 
     public bool DrawBreadthFirstFill(int x, int y,

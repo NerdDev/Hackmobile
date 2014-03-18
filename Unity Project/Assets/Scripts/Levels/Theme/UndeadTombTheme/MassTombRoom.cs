@@ -13,7 +13,7 @@ public class MassTombRoom : HeavyRoomMod
         if (undeadTheme == null) throw new ArgumentException("Theme needs to be undead themed.");
         ThemeElement[] tombCollection = undeadTheme.Tombs.Random(spec.Random).Elements;
         ThemeElement tombProto = tombCollection[0];
-        List<List<Bounding>> options = spec.Grids.FindRectanglesMaximized(tombProto.GridWidth + 2, tombProto.GridHeight + 2, true, new StrokedAction<GenSpace>()
+        List<List<Bounding>> options = spec.Grids.FindRectanglesMaximized(tombProto.GridWidth + 2, tombProto.GridLength + 2, true, new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.IsType<GenSpace>(GridType.Floor),
                 StrokeAction = Draw.Walkable<GenSpace>()
@@ -30,7 +30,7 @@ public class MassTombRoom : HeavyRoomMod
                     tmp.DrawRect(bound.XMin, bound.XMax, bound.YMin, bound.YMax, new StrokedAction<GenSpace>()
                     {
                         UnitAction = Draw.SetTo(GridType.Wall, spec.Theme),
-                        StrokeAction = Draw.Nothing<GenSpace>()
+                        StrokeAction = Draw.True<GenSpace>()
                     });
                 }
                 tmp.ToLog(Logs.LevelGen, "Option " + i);
@@ -49,7 +49,7 @@ public class MassTombRoom : HeavyRoomMod
                     spec.Grids.DrawRect(tombBound.XMin, tombBound.XMax, tombBound.YMin, tombBound.YMax, new StrokedAction<GenSpace>()
                         {
                             UnitAction = Draw.MergeIn(tomb, spec.Theme),
-                            StrokeAction = Draw.Nothing<GenSpace>()
+                            StrokeAction = Draw.True<GenSpace>()
                         });
                 }
                 return true;

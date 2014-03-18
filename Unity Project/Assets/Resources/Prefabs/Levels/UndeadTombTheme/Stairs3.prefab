@@ -197,7 +197,7 @@ MonoBehaviour:
   GridWidth: 1
   GridHeight: 1
   Walkable: 0
-  PrintChar: /
+  PrintChar: 
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

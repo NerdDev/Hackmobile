@@ -25,7 +25,7 @@ public class ThemeElement : MonoBehaviour
         }
     }
     public byte GridWidth = 1;
-    public byte GridHeight = 1;
+    public byte GridLength = 1;
     public bool Walkable;
     public string PrintChar = string.Empty;
 
@@ -43,30 +43,50 @@ public class ThemeElement : MonoBehaviour
         return ret;
     }
 
+    protected void CenterAndRotateDoodad(ThemeElementSpec spec)
+    {
+        HandleDoodad(spec, true, true);
+    }
+
     protected void CenterDoodad(ThemeElementSpec spec)
     {
-        if (spec.GenDeploy.Element.GridHeight == 1
-            && spec.GenDeploy.Element.GridWidth == 1) return;
-        Bounding bounds = spec.GetBounds();
-        Point center = bounds.GetCenter();
-        center.x -= spec.DeployX;
-        center.y -= spec.DeployY;
-        spec.GenDeploy.X += center.x / 2f;
-        spec.GenDeploy.Z += center.y / 2f;
-        Rotation rot;
-        if (center.y == center.x)
-        { // Rotate randomly
-            rot = spec.Random.NextRotation();
-        }
-        else if (center.y > center.x)
+        HandleDoodad(spec, true, false);
+    }
+
+    protected void RotateDoodad(ThemeElementSpec spec)
+    {
+        HandleDoodad(spec, false, true);
+    }
+
+    private void HandleDoodad(ThemeElementSpec spec, bool centerB, bool rotateB)
+    {
+        Point center = spec.Bounding.GetCenter();
+        if (centerB
+            && (spec.GenDeploy.Element.GridLength > 1
+                || spec.GenDeploy.Element.GridWidth > 1))
         {
-            rot = spec.Random.NextBool() ? Rotation.ClockWise : Rotation.CounterClockWise;
+            center.x -= spec.DeployX;
+            center.y -= spec.DeployY;
+            spec.GenDeploy.X += center.x / 2f;
+            spec.GenDeploy.Z += center.y / 2f;
         }
-        else
+        if (rotateB)
         {
-            rot = spec.Random.NextBool() ? Rotation.OneEighty : Rotation.None;
+            Rotation rot;
+            if (center.y == center.x)
+            { // Rotate randomly
+                rot = spec.Random.NextRotation();
+            }
+            else if (center.y > center.x)
+            {
+                rot = spec.Random.NextBool() ? Rotation.ClockWise : Rotation.CounterClockWise;
+            }
+            else
+            {
+                rot = spec.Random.NextBool() ? Rotation.OneEighty : Rotation.None;
+            }
+            spec.GenDeploy.Rotate(rot);
         }
-        spec.GenDeploy.Rotate(rot);
     }
 
     protected void PlaceFlush(ITransform deploy, GridLocation loc, float buffer = 0F, bool rough = false)

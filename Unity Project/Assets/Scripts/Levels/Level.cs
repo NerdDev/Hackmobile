@@ -147,7 +147,7 @@ public class Level : Container2D<GridSpace>
         }
         BigBoss.Debug.w(Logs.Main, "Placing player in position.");
         RandomPicker<GridSpace> picker;
-        this._array.DrawRect(startBounding, Draw.IsType<GridSpace>(GridType.StairPlace).IfThen(Draw.PickRandom(out picker)));
+        this._array.DrawRect(new Bounding(startBounding).Expand(1), Draw.IsType<GridSpace>(GridType.StairPlace).IfThen(Draw.PickRandom(out picker)));
         Value2D<GridSpace> start;
         if (!picker.Pick(Random, out start))
         {
