@@ -60,18 +60,19 @@ public class ThemeElement : MonoBehaviour
 
     private void HandleDoodad(ThemeElementSpec spec, bool centerB, bool rotateB)
     {
-        Point center = spec.Bounding.GetCenter();
         if (centerB
             && (spec.GenDeploy.Element.GridLength > 1
                 || spec.GenDeploy.Element.GridWidth > 1))
         {
+            Vector2 center = spec.Bounding.GetRealCenter();
             center.x -= spec.DeployX;
             center.y -= spec.DeployY;
-            spec.GenDeploy.X += center.x / 2f;
-            spec.GenDeploy.Z += center.y / 2f;
+            spec.GenDeploy.X += center.x;
+            spec.GenDeploy.Z += center.y;
         }
         if (rotateB)
         {
+            Point center = spec.Bounding.GetCenter();
             Rotation rot;
             if (center.y == center.x)
             { // Rotate randomly

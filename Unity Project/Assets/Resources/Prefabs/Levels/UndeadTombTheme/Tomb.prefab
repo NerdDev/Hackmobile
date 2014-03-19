@@ -83,8 +83,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69127fa36f73f6f4bbddcffe3777e547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 2
-  GridHeight: 1
+  GridWidth: 1
+  GridLength: 2
+  Walkable: 0
   PrintChar: "\xF0"
   TombTop:
   - {fileID: 11400000, guid: c05e1b50c2dab374a811dc86015aad5a, type: 2}

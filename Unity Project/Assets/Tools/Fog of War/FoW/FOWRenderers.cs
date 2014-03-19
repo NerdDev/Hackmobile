@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -36,7 +37,7 @@ public class FOWRenderers : MonoBehaviour
     void Start()
     {
         mTrans = transform;
-        mNextUpdate = 0.2f + (Random.value + Random.value) * .05f;
+        mNextUpdate = 0.2f + (UnityEngine.Random.value + UnityEngine.Random.value) * .05f;
         wfs = new WaitForSeconds(mNextUpdate);
         mRenderers = GetComponentsInChildren<Renderer>();
         StartCoroutine(UpdateRendering());
@@ -85,7 +86,7 @@ public class FOWRenderers : MonoBehaviour
 
     IEnumerator UpdateRendering()
     {
-        float mFirstUpdate = Random.value * .1f;
+        float mFirstUpdate = UnityEngine.Random.value * .1f;
         yield return new WaitForSeconds(mFirstUpdate);
         while (enabled)
         {
@@ -111,17 +112,25 @@ public class FOWRenderers : MonoBehaviour
             }
             if (visible && !instantiated)
             {
-                Vector3 pos = gameObject.transform.position;
-                BigBoss.Levels.Level.Array.DrawAround(pos.x.ToInt(), pos.z.ToInt(), true, (arr, x, y) =>
+                try
                 {
-                    GridSpace grid = arr[x, y];
-                    if (grid != null && grid.Blocks == null)
+                    Vector3 pos = gameObject.transform.position;
+                    BigBoss.Levels.Level.Array.DrawAround(pos.x.ToInt(), pos.z.ToInt(), true, (arr, x, y) =>
                     {
-                        BigBoss.Levels.Builder.Instantiate(grid, x, y);
-                    };
-                    return true;
-                });
-                instantiated = true;
+                        GridSpace grid = arr[x, y];
+                        if (grid != null && grid.Blocks == null)
+                        {
+                            BigBoss.Levels.Builder.Instantiate(grid, x, y);
+                        };
+                        return true;
+                    });
+                    instantiated = true;
+                } catch (Exception ex)
+                {
+                    int wer = 23;
+                    wer++;
+                    throw ex;
+                }
             }
             yield return wfs;
         }

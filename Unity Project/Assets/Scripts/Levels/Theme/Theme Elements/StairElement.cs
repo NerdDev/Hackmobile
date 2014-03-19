@@ -16,7 +16,7 @@ public abstract class StairElement : ThemeElement
     }
     public virtual DrawAction<GenSpace> FrontTest { get { return Draw.IsType<GenSpace>(GridType.Floor); } }
     public virtual DrawAction<GenSpace> BackTest { get { return Draw.True<GenSpace>(); } }
-    public int GridHeight;
+    public float StairHeight;
 
     public StairElement()
     {

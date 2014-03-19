@@ -13,9 +13,10 @@ public class StairWallElement : StairElement
     {
         GridLocation loc = spec.GenGrid.FindEdges(spec.Bounding, Draw.HasAround(false, Draw.IsType<GenSpace>(GridType.StairPlace)), true).First();
         CenterDoodad(spec);
+        spec.GenDeploy.RotateToPoint(loc);
         if (spec.Type == GridType.StairDown)
         {
-            spec.GenDeploy.Y = -1;
+            spec.GenDeploy.Y -= StairHeight;
             spec.GenDeploy.Rotation += 180;
         }
     }
