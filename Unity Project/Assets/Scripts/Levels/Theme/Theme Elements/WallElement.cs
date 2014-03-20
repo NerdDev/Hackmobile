@@ -24,7 +24,7 @@ public class WallElement : ThemeElement
         else if (spec.GenGrid.Cornered(spec.DeployX, spec.DeployY, _test, out loc, false))
         {
             spec.GenDeploy.Element = spec.Theme.Core.CornerWall.Random(spec.Random);
-            spec.GenDeploy.RotateToPoint(loc);
+            spec.GenDeploy.RotateToPoint(loc.Clockwise());
         }
         else if (spec.GenGrid.TShape(spec.DeployX, spec.DeployY, _test, out loc))
         {

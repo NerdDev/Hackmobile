@@ -55,17 +55,27 @@ public static class ITransformExt
         switch (loc)
         {
             case GridLocation.RIGHT:
-            case GridLocation.TOPRIGHT:
                 trans.Rotation = 90;
                 break;
+            case GridLocation.TOPRIGHT:
+                trans.Rotation = 45;
+                break;
             case GridLocation.BOTTOMRIGHT:
+                trans.Rotation = 135;
+                break;
             case GridLocation.BOTTOM:
                 trans.Rotation = 180;
                 break;
             case GridLocation.LEFT:
-            case GridLocation.BOTTOMLEFT:
                 trans.Rotation = -90;
                 break;
+            case GridLocation.BOTTOMLEFT:
+                trans.Rotation = -135;
+                break;
+            case GridLocation.TOPLEFT:
+                trans.Rotation = -45;
+                break;
+            case GridLocation.TOP:
             default:
                 trans.Rotation = 0;
                 break;
@@ -77,14 +87,18 @@ public static class ITransformExt
         switch (loc)
         {
             case GridLocation.RIGHT:
-            case GridLocation.TOPRIGHT:
             case GridLocation.LEFT:
-            case GridLocation.BOTTOMLEFT:
                 trans.Rotation = rand.NextBool() ? -90 : 90;
                 break;
+            case GridLocation.TOPRIGHT:
+            case GridLocation.BOTTOMLEFT:
+                trans.Rotation = rand.NextBool() ? 45 : -135;
+                break;
             case GridLocation.BOTTOMRIGHT:
-            case GridLocation.BOTTOM:
             case GridLocation.TOPLEFT:
+                trans.Rotation = rand.NextBool() ? -45 : 135;
+                break;
+            case GridLocation.BOTTOM:
             case GridLocation.TOP:
                 trans.Rotation = rand.NextBool() ? 0 : 180;
                 break;
