@@ -17,7 +17,7 @@ public class StairWallElement : StairElement
         if (spec.Type == GridType.StairDown)
         {
             spec.GenDeploy.Y -= StairHeight;
-            spec.GenDeploy.Rotation += 180;
+            spec.GenDeploy.YRotation += 180;
         }
     }
 

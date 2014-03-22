@@ -19,25 +19,14 @@ public class GridLocationResults
         }
     }
 
-    //public bool this[GridDirection dir]
-    //{
-    //    get
-    //    {
-    //        switch (dir)
-    //        {
-    //            case GridDirection.HORIZ:
-    //                return this[GridLocation.LEFT] && this[GridLocation.RIGHT];
-    //            case GridDirection.VERT:
-    //                break;
-    //                return this[GridLocation.LEFT] && this[GridLocation.RIGHT];
-    //            case GridDirection.DIAGTLBR:
-    //                break;
-    //            case GridDirection.DIAGBLTR:
-    //                break;
-    //            default:
-    //                break;
-    //        }
-    //    }
-    //}
+    public static GridLocationResults operator !(GridLocationResults results)
+    {
+        GridLocationResults ret = new GridLocationResults();
+        for (int i = 0 ; i < results.arr.Length ; i++)
+        {
+            ret.arr[i] = !results.arr[i];
+        }
+        return ret;
+    }
 }
 

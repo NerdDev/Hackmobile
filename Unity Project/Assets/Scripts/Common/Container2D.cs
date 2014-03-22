@@ -453,7 +453,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return false;
     }
 
-    public bool GetLocactionsAround(int x, int y, bool cornered, System.Random rand, DrawAction<T> tester, out List<GridLocation> locs)
+    public bool GetLocationsAround(int x, int y, bool cornered, System.Random rand, DrawAction<T> tester, out List<GridLocation> locs)
     {
         locs = new List<GridLocation>(cornered ? 9 : 4);
         foreach (GridLocation loc in DrawLocationsAround(x, y, cornered, tester))
@@ -466,7 +466,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     public bool GetRandomLocationAround(int x, int y, bool cornered, System.Random rand, DrawAction<T> tester, out GridLocation loc)
     {
         List<GridLocation> locs;
-        if (GetLocactionsAround(x, y, cornered, rand, tester, out locs))
+        if (GetLocationsAround(x, y, cornered, rand, tester, out locs))
         {
             loc = locs.Random(rand);
             return true;
@@ -550,6 +550,67 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             if (action(this, x - 1, y + 1)) yield return GridLocation.TOPLEFT; // Top Left
             if (action(this, x - 1, y)) yield return GridLocation.LEFT; // Left
         }
+    }
+
+    public bool DrawCorners(int x, int y, DrawAction<T> action)
+    {
+        if (!action(this, x + 1, y + 1)) return false;
+        if (!action(this, x + 1, y - 1)) return false;
+        if (!action(this, x - 1, y - 1)) return false;
+        if (!action(this, x - 1, y + 1)) return false;
+        return true;
+    }
+
+    public bool GetCorner(int x, int y, DrawAction<T> action, out GridLocation loc)
+    {
+        if (action(this, x + 1, y + 1))
+        {
+            loc = GridLocation.TOPRIGHT;
+            return true;
+        }
+        if (action(this, x + 1, y - 1))
+        {
+            loc = GridLocation.BOTTOMRIGHT;
+            return true;
+        }
+        if (action(this, x - 1, y - 1))
+        {
+            loc = GridLocation.BOTTOMLEFT;
+            return true;
+        }
+        if (action(this, x + 1, y + 1))
+        {
+            loc = GridLocation.TOPLEFT;
+            return true;
+        }
+        loc = GridLocation.CENTER;
+        return false;
+    }
+
+    public bool GetCorner(GridLocationResults results, out GridLocation loc)
+    {
+        if (results[GridLocation.TOPRIGHT])
+        {
+            loc = GridLocation.TOPRIGHT;
+            return true;
+        }
+        if (results[GridLocation.BOTTOMRIGHT])
+        {
+            loc = GridLocation.BOTTOMRIGHT;
+            return true;
+        }
+        if (results[GridLocation.BOTTOMLEFT])
+        {
+            loc = GridLocation.BOTTOMLEFT;
+            return true;
+        }
+        if (results[GridLocation.TOPLEFT])
+        {
+            loc = GridLocation.TOPLEFT;
+            return true;
+        }
+        loc = GridLocation.CENTER;
+        return false;
     }
     #endregion
     #region Get Direction
@@ -653,6 +714,27 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
+    public bool AlternatesSides(GridLocationResults results, out GridDirection passDir)
+    {
+        if (results[GridLocation.LEFT] != results[GridLocation.RIGHT])
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        if (results[GridLocation.LEFT] == results[GridLocation.TOP])
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        if (results[GridLocation.LEFT] == results[GridLocation.BOTTOM])
+        {
+            passDir = GridDirection.HORIZ;
+            return false;
+        }
+        passDir = results[GridLocation.LEFT] ? GridDirection.HORIZ : GridDirection.VERT;
+        return true;
+    }
+
     public bool AlternatesCorners(int x, int y, DrawAction<T> action)
     {
         bool pass = action(this, x - 1, y - 1);
@@ -738,6 +820,48 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             {
                 loc = GridLocation.TOPRIGHT;
             }
+        }
+        return true;
+    }
+
+    public bool Cornered(GridLocationResults results, out GridLocation loc, bool withOpposing = false)
+    {
+        if (results[GridLocation.LEFT] == results[GridLocation.RIGHT])
+        {
+            loc = GridLocation.RIGHT;
+            return false;
+        }
+        if (results[GridLocation.BOTTOM] == results[GridLocation.TOP])
+        {
+            loc = GridLocation.RIGHT;
+            return false;
+        }
+        if (results[GridLocation.LEFT])
+        {
+            if (results[GridLocation.BOTTOM])
+            {
+                loc = GridLocation.BOTTOMLEFT;
+            }
+            else
+            {
+                loc = GridLocation.TOPLEFT;
+            }
+        }
+        else
+        {
+            if (results[GridLocation.BOTTOM])
+            {
+                loc = GridLocation.BOTTOMRIGHT;
+            }
+            else
+            {
+                loc = GridLocation.TOPRIGHT;
+            }
+        }
+        if (withOpposing && !results[loc.Opposite()])
+        {
+            loc = GridLocation.RIGHT;
+            return false;
         }
         return true;
     }
@@ -1020,34 +1144,47 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     #region Other
     public bool TShape(int x, int y, DrawAction<T> tester, out GridLocation loc)
     {
-        bool left = tester(this, x - 1, y);
-        bool right = tester(this, x + 1, y);
-        bool top = tester(this, x, y + 1);
-        bool bottom = tester(this, x, y - 1);
-        if (left && right)
+        return TShape(DrawLocationsAroundResults(x, y, false, tester), out loc);
+    }
+
+    public bool TShape(GridLocationResults results, out GridLocation loc)
+    {
+        if (results[GridLocation.LEFT] && results[GridLocation.RIGHT])
         {
-            if (top)
+            if (results[GridLocation.TOP])
             {
-                loc = GridLocation.TOP;
-                return true;
+                if (!results[GridLocation.BOTTOM])
+                {
+                    loc = GridLocation.TOP;
+                    return true;
+                }
             }
-            else if (bottom)
+            else if (results[GridLocation.BOTTOM])
             {
-                loc = GridLocation.BOTTOM;
-                return true;
+                if (!results[GridLocation.TOP])
+                {
+                    loc = GridLocation.BOTTOM;
+                    return true;
+                }
             }
         }
-        else if (top && bottom)
+        else if (results[GridLocation.TOP] && results[GridLocation.BOTTOM])
         {
-            if (left)
+            if (results[GridLocation.LEFT])
             {
-                loc = GridLocation.LEFT;
-                return true;
+                if (!results[GridLocation.RIGHT])
+                {
+                    loc = GridLocation.LEFT;
+                    return true;
+                }
             }
-            else if (right)
+            else if (results[GridLocation.RIGHT])
             {
-                loc = GridLocation.RIGHT;
-                return true;
+                if (!results[GridLocation.LEFT])
+                {
+                    loc = GridLocation.RIGHT;
+                    return true;
+                }
             }
         }
         loc = GridLocation.BOTTOM;
@@ -1430,11 +1567,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                         #region DEBUG
                         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                         {
-                            if (x2 == 45 && y2 == 22)
-                            {
-                                int wer = 23;
-                                wer++;
-                            }
                             BigBoss.Debug.w(Logs.LevelGen, "Stopping early at " + x2 + " " + y2);
                         }
                         #endregion

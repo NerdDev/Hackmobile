@@ -112,25 +112,17 @@ public class FOWRenderers : MonoBehaviour
             }
             if (visible && !instantiated)
             {
-                try
+                Vector3 pos = gameObject.transform.position;
+                BigBoss.Levels.Level.Array.DrawAround(pos.x.ToInt(), pos.z.ToInt(), true, (arr, x, y) =>
                 {
-                    Vector3 pos = gameObject.transform.position;
-                    BigBoss.Levels.Level.Array.DrawAround(pos.x.ToInt(), pos.z.ToInt(), true, (arr, x, y) =>
+                    GridSpace grid = arr[x, y];
+                    if (grid != null && grid.Blocks == null)
                     {
-                        GridSpace grid = arr[x, y];
-                        if (grid != null && grid.Blocks == null)
-                        {
-                            BigBoss.Levels.Builder.Instantiate(grid, x, y);
-                        };
-                        return true;
-                    });
-                    instantiated = true;
-                } catch (Exception ex)
-                {
-                    int wer = 23;
-                    wer++;
-                    throw ex;
-                }
+                        BigBoss.Levels.Builder.Instantiate(grid, x, y);
+                    };
+                    return true;
+                });
+                instantiated = true;
             }
             yield return wfs;
         }

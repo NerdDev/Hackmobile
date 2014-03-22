@@ -76,6 +76,14 @@ public static class Draw
         };
     }
 
+    public static DrawAction<T> Exists<T>()
+    {
+        return (arr, x, y) =>
+        {
+            return arr.Contains(x, y);
+        };
+    }
+
     public static DrawAction<T> Around<T>(bool cornered, DrawAction<T> call)
     {
         return (arr, x, y) =>

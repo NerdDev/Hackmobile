@@ -5,26 +5,44 @@ using System.Text;
 
 public interface ITransform
 {
-    float Rotation { get; set; }
+    float XRotation { get; set; }
+    float YRotation { get; set; }
+    float ZRotation { get; set; }
     float X { get; set; }
     float Y { get; set; }
     float Z { get; set; }
+    float XScale { get; set; }
+    float YScale { get; set; }
+    float ZScale { get; set; }
 }
 
 public static class ITransformExt
 {
+    public static void CopyFrom(this ITransform trans, ITransform rhs)
+    {
+        trans.X = rhs.X;
+        trans.Y = rhs.Y;
+        trans.Z = rhs.Z;
+        trans.XRotation = rhs.XRotation;
+        trans.YRotation = rhs.YRotation;
+        trans.ZRotation = rhs.ZRotation;
+        trans.XScale = rhs.XScale;
+        trans.YScale = rhs.YScale;
+        trans.ZScale = rhs.ZScale;
+    }
+
     public static void Rotate(this ITransform trans, Rotation rot)
     {
         switch (rot)
         {
             case Rotation.ClockWise:
-                trans.Rotation += 90;
+                trans.YRotation += 90;
                 break;
             case Rotation.CounterClockWise:
-                trans.Rotation -= 90;
+                trans.YRotation -= 90;
                 break;
             case Rotation.OneEighty:
-                trans.Rotation += 180;
+                trans.YRotation += 180;
                 break;
             default:
                 break;
@@ -36,16 +54,16 @@ public static class ITransformExt
         switch (dir)
         {
             case GridDirection.HORIZ:
-                trans.Rotation = rand.NextBool() ? 90 : -90;
+                trans.YRotation = rand.NextBool() ? 90 : -90;
                 break;
             case GridDirection.VERT:
-                trans.Rotation = rand.NextBool() ? 180 : 0;
+                trans.YRotation = rand.NextBool() ? 180 : 0;
                 break;
             case GridDirection.DIAGTLBR:
-                trans.Rotation = rand.NextBool() ? -45 : 135;
+                trans.YRotation = rand.NextBool() ? -45 : 135;
                 break;
             case GridDirection.DIAGBLTR:
-                trans.Rotation = rand.NextBool() ? 45 : -135;
+                trans.YRotation = rand.NextBool() ? 45 : -135;
                 break;
         }
     }
@@ -55,29 +73,29 @@ public static class ITransformExt
         switch (loc)
         {
             case GridLocation.RIGHT:
-                trans.Rotation = 90;
+                trans.YRotation = 90;
                 break;
             case GridLocation.TOPRIGHT:
-                trans.Rotation = 45;
+                trans.YRotation = 45;
                 break;
             case GridLocation.BOTTOMRIGHT:
-                trans.Rotation = 135;
+                trans.YRotation = 135;
                 break;
             case GridLocation.BOTTOM:
-                trans.Rotation = 180;
+                trans.YRotation = 180;
                 break;
             case GridLocation.LEFT:
-                trans.Rotation = -90;
+                trans.YRotation = -90;
                 break;
             case GridLocation.BOTTOMLEFT:
-                trans.Rotation = -135;
+                trans.YRotation = -135;
                 break;
             case GridLocation.TOPLEFT:
-                trans.Rotation = -45;
+                trans.YRotation = -45;
                 break;
             case GridLocation.TOP:
             default:
-                trans.Rotation = 0;
+                trans.YRotation = 0;
                 break;
         }
     }
@@ -88,19 +106,19 @@ public static class ITransformExt
         {
             case GridLocation.RIGHT:
             case GridLocation.LEFT:
-                trans.Rotation = rand.NextBool() ? -90 : 90;
+                trans.YRotation = rand.NextBool() ? -90 : 90;
                 break;
             case GridLocation.TOPRIGHT:
             case GridLocation.BOTTOMLEFT:
-                trans.Rotation = rand.NextBool() ? 45 : -135;
+                trans.YRotation = rand.NextBool() ? 45 : -135;
                 break;
             case GridLocation.BOTTOMRIGHT:
             case GridLocation.TOPLEFT:
-                trans.Rotation = rand.NextBool() ? -45 : 135;
+                trans.YRotation = rand.NextBool() ? -45 : 135;
                 break;
             case GridLocation.BOTTOM:
             case GridLocation.TOP:
-                trans.Rotation = rand.NextBool() ? 0 : 180;
+                trans.YRotation = rand.NextBool() ? 0 : 180;
                 break;
         }
     }

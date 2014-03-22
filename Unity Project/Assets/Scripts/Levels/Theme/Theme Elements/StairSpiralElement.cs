@@ -20,21 +20,21 @@ public class StairSpiralElement : StairElement
             val.y -= spec.DeployY;
             if (val.x == 1)
             {
-                spec.GenDeploy.Rotation = 90;
+                spec.GenDeploy.YRotation = 90;
             }
             else if (val.x == -1)
             {
-                spec.GenDeploy.Rotation = -90;
+                spec.GenDeploy.YRotation = -90;
             }
             else if (val.y == -1)
             {
-                spec.GenDeploy.Rotation = 180;
+                spec.GenDeploy.YRotation = 180;
             }
         }
         if (spec.Type == GridType.StairDown)
         {
             spec.GenDeploy.Y = -1;
-            spec.GenDeploy.Rotation += 180;
+            spec.GenDeploy.YRotation += 180;
         }
     }
 

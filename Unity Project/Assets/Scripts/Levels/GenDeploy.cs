@@ -7,10 +7,15 @@ public class GenDeploy : ITransform, IEnumerable<Value2D<GenSpace>>
 {
     public ThemeElement Element;
     public MultiMap<GenSpace> Spaces;
-    public float Rotation { get; set; }
+    public float XRotation { get; set; }
+    public float YRotation { get; set; }
+    public float ZRotation { get; set; }
     public float X { get; set; }
     public float Y { get; set; }
     public float Z { get; set; }
+    public float XScale { get; set; }
+    public float YScale { get; set; }
+    public float ZScale { get; set; }
     public bool Deployed = false;
     public Point OriginPt;
     
@@ -18,6 +23,9 @@ public class GenDeploy : ITransform, IEnumerable<Value2D<GenSpace>>
     {
         Element = element;
         Spaces = new MultiMap<GenSpace>();
+        XScale = 1F;
+        YScale = 1F;
+        ZScale = 1F;
     }
 
     public void AddSpace(GenSpace space, int x, int y)

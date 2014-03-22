@@ -5,10 +5,8 @@ using System.Text;
 
 public class GenSpace : IGridSpace
 {
-    private GridType _type;
-    public GridType Type { get { return _type; } set { _type = value; } }
-    private Theme _theme;
-    public Theme Theme { get { return _theme; } set { _theme = value; } }
+    public GridType Type { get; set; }
+    public Theme Theme { get; set; }
     public List<GenDeploy> Deploys;
     public List<GenDeploy> MainDeploys;
     public int X { get; protected set; }
@@ -16,8 +14,8 @@ public class GenSpace : IGridSpace
 
     public GenSpace(GridType type, Theme theme, int x, int y)
     {
-        _type = type;
-        _theme = theme;
+        Type = type;
+        Theme = theme;
         Deploys = null;
         this.X = x;
         this.Y = y;
@@ -25,11 +23,6 @@ public class GenSpace : IGridSpace
 
     public void AddDeploy(GenDeploy elem, int x, int y)
     {
-        if (elem.Element is StairWallElement)
-        {
-            int wer = 23;
-            wer++;
-        }
         if (Deploys == null)
         {
             Deploys = new List<GenDeploy>(3);

@@ -94,22 +94,22 @@ public class ThemeElement : MonoBehaviour
         switch (loc)
         {
             case GridLocation.TOP:
-                deploy.Rotation = 180;
+                deploy.YRotation = 180;
                 deploy.X = -this.Bounds.center.x;
-                deploy.Z = GetInside(Axis.Z, deploy.Rotation, buffer, rough);
+                deploy.Z = GetInside(Axis.Z, deploy.YRotation, buffer, rough);
                 break;
             case GridLocation.BOTTOM:
                 deploy.X = -this.Bounds.center.x;
-                deploy.Z = -GetInside(Axis.Z, deploy.Rotation, buffer, rough);
+                deploy.Z = -GetInside(Axis.Z, deploy.YRotation, buffer, rough);
                 break;
             case GridLocation.LEFT:
-                deploy.Rotation = 90;
-                deploy.X = -GetInside(Axis.X, deploy.Rotation, buffer, rough);
+                deploy.YRotation = 90;
+                deploy.X = -GetInside(Axis.X, deploy.YRotation, buffer, rough);
                 deploy.Z = -this.Bounds.center.z;
                 break;
             case GridLocation.RIGHT:
-                deploy.Rotation = -90;
-                deploy.X = GetInside(Axis.X, deploy.Rotation, buffer, rough);
+                deploy.YRotation = -90;
+                deploy.X = GetInside(Axis.X, deploy.YRotation, buffer, rough);
                 deploy.Z = -this.Bounds.center.z;
                 break;
         }
@@ -117,9 +117,9 @@ public class ThemeElement : MonoBehaviour
 
     protected void PlaceRandomlyInside(System.Random random, ITransform deploy, float buffer = 0F)
     {
-        deploy.Rotation = random.NextAngle();
-        deploy.X = RandomInside(random, Axis.X, deploy.Rotation, buffer);
-        deploy.Z = RandomInside(random, Axis.Z, deploy.Rotation, buffer);
+        deploy.YRotation = random.NextAngle();
+        deploy.X = RandomInside(random, Axis.X, deploy.YRotation, buffer);
+        deploy.Z = RandomInside(random, Axis.Z, deploy.YRotation, buffer);
     }
 
     protected float RandomInside(System.Random random, Axis axis, float yRotation, float buffer = 0F, bool rough = true)
