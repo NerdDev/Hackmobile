@@ -87,7 +87,6 @@ public class NPC : Affectable
         Stats.MaxEncumbrance = getMaxInventoryWeight();
         Stats.CurrentHealth = Stats.MaxHealth;
         Stats.CurrentPower = Stats.MaxPower;
-        Stats.XPToNextLevel = calcXPForNextLevel();
         Stats.CurrentXP = 0;
         Stats.hungerRate = 1;
     }
@@ -180,7 +179,7 @@ public class NPC : Affectable
         CalcStats();
     }
 
-    public virtual bool AdjustHealth(int amount) //returns true if NPC dies from health gain
+    public virtual bool AdjustHealth(int amount, bool report = true) //returns true if NPC dies from health gain
     {
         if (amount <= 0) //if amount is < 0 it's damage
         {
@@ -188,7 +187,7 @@ public class NPC : Affectable
             if (Stats.CurrentHealth - amount > 0)
             {
                 Stats.CurrentHealth = Stats.CurrentHealth - amount;
-                CreateTextPop(this.Name + " took " + amount + " damage!", Color.red);
+                if (report) CreateTextPop(this.Name + " took " + amount + " damage!", Color.red);
                 return false;
             }
             else
@@ -201,15 +200,25 @@ public class NPC : Affectable
         else if (Stats.CurrentHealth + amount > Stats.MaxHealth)
         {
             Stats.CurrentHealth = Stats.MaxHealth;
-            CreateTextPop(this.Name + " gained " + amount + " in health.");
+            if (report) CreateTextPop(this.Name + " gained " + amount + " in health.");
             return false;
         }
         else // health is positive gain but doesn't go over max, so it works normally
         {
             Stats.CurrentHealth = Stats.CurrentHealth + amount;
-            CreateTextPop(this.Name + " gained " + amount + " in health.");
+            if (report) CreateTextPop(this.Name + " gained " + amount + " in health.");
             return false;
         }
+    }
+
+    public virtual bool SetHealth(int amount)
+    {
+        if (amount > Stats.MaxHealth)
+        {
+            return SetHealth(Stats.MaxHealth);
+        }
+        amount = amount - Stats.CurrentHealth;
+        return AdjustHealth(amount, false);
     }
 
     public virtual void AdjustPower(int amount)
@@ -242,13 +251,22 @@ public class NPC : Affectable
         return AdjustHealth(-amount);
     }
 
-    public virtual void AdjustMaxHealth(int amount)
+    public virtual bool AdjustMaxHealth(int amount)
     {
         Stats.MaxHealth += amount;
         if (Stats.MaxHealth <= 0)
         {
             killThisNPC();
+            return true;
         }
+        if (this.IsNotAFreaking<Player>()) SetHealth(Stats.MaxHealth);
+        return false;
+    }
+
+    public virtual bool SetMaxHealth(int amount)
+    {
+        amount = amount - Stats.MaxHealth;
+        return AdjustMaxHealth(amount);
     }
 
     public virtual void AdjustMaxPower(int amount)
@@ -259,7 +277,7 @@ public class NPC : Affectable
     public virtual void AdjustXP(float amount)
     {
         Stats.CurrentXP += amount;
-        if (Stats.CurrentXP > Stats.XPToNextLevel)
+        if (Stats.CurrentXP > calcXPForNextLevel())
         {
             AddLevel();
         }
@@ -280,22 +298,21 @@ public class NPC : Affectable
         NPC proto = BigBoss.Objects.NPCs.GetPrototype(this.Name);
         if (proto != null)
         {
-            AdjustMaxHealth((int)(Stats.Level * Attributes.Constitution * .01f * proto.Stats.MaxHealth));
+            SetMaxHealth((int)(Stats.Level * Attributes.Constitution * .01f + proto.Stats.MaxHealth));
         }
         else
         {
-            AdjustMaxHealth((int)(Stats.Level * Attributes.Constitution * .1f));
+            SetMaxHealth((int)(50 + Stats.Level * Attributes.Constitution * .2f));
         }
 
         //these need adjusted to virtual functions so Player can update GUI
         Stats.MaxEncumbrance = getMaxInventoryWeight();
-        Stats.XPToNextLevel = calcXPForNextLevel();
     }
 
     protected void CalcInitialStats()
     {
         CalcStats();
-        Stats.CurrentHealth = Stats.MaxHealth;
+        AdjustHealth(Stats.MaxHealth - Stats.CurrentHealth, false);
         Stats.CurrentPower = Stats.MaxPower;
         Stats.CurrentXP = 0;
         Stats.hungerRate = 1;
@@ -643,6 +660,7 @@ public class NPC : Affectable
         StartingItems = x.Select<LeveledItemList>("startingitems");
         Equipment = x.Select<Equipment>("equipslots");
         NaturalWeapon = x.Select<Item>("naturalweapon");
+        //parse AI packages
     }
     #endregion
 

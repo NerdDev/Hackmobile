@@ -7,8 +7,6 @@ using XML;
 
 public class Spells : Dictionary<string, Spell>, IXmlParsable
 {
-    //public Dictionary<string, Spell> spells = new Dictionary<string, Spell>();
-
     public void ParseXML(XML.XMLNode x)
     {
         foreach (XMLNode node in x.SelectList("spell"))

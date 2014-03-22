@@ -64,6 +64,7 @@ public class GUIManager : MonoBehaviour, IManager
     public GUITexture LoadImage;
 
     public Shader InvisibilityShader;
+    public GameObject InvisibleObject;
 
     //Cameras
     public Camera GUICam;
@@ -177,6 +178,17 @@ public class GUIManager : MonoBehaviour, IManager
         isInventoryOpen = false;
     }
     */
+
+    #region Misc Graphical
+
+    public GameObject SpawnShadowCaster(Vector3 pos, Vector3 scale)
+    {
+        GameObject go = GameObject.Instantiate(InvisibleObject, pos, Quaternion.identity) as GameObject;
+        go.transform.localScale = scale;
+        return go;
+    }
+
+    #endregion
 
     #region GUI
     public void UpdateHealthBar(int val)

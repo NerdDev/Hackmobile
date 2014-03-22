@@ -162,6 +162,8 @@ public class FOWSystem : MonoBehaviour
 
     public bool reCreateGrid = false;
 
+    private bool reCreateGridSection = false;
+
     /// <summary>
     /// Create a new fog revealer.
     /// </summary>
@@ -261,7 +263,7 @@ public class FOWSystem : MonoBehaviour
 
         if (reCreateGrid)
         {
-            ReCreateGrid();
+            //ReCreateGrid();
             reCreateGrid = false;
         }
     }
@@ -402,7 +404,7 @@ public class FOWSystem : MonoBehaviour
         }
     }
 
-    public void ModifyGrid(Vector3 pos, int extraHeight)
+    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 1, float raycastRadius = .1f)
     {
         bool useSphereCast = raycastRadius > 0f;
 
@@ -415,10 +417,10 @@ public class FOWSystem : MonoBehaviour
         float texToWorld = (float)worldSize / textureSize;
 
         // Coordinates we'll be dealing with
-        int xmin = Mathf.RoundToInt((pos.x - 1) * worldToTex);
-        int ymin = Mathf.RoundToInt((pos.z - 1) * worldToTex);
-        int xmax = Mathf.RoundToInt((pos.x + 1) * worldToTex);
-        int ymax = Mathf.RoundToInt((pos.z + 1) * worldToTex);
+        int xmin = Mathf.RoundToInt((pos.x - steps) * worldToTex);
+        int ymin = Mathf.RoundToInt((pos.z - steps) * worldToTex);
+        int xmax = Mathf.RoundToInt((pos.x + steps) * worldToTex);
+        int ymax = Mathf.RoundToInt((pos.z + steps) * worldToTex);
 
         for (int y = ymin; y < ymax; ++y)
         {

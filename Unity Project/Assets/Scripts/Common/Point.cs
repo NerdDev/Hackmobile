@@ -32,8 +32,8 @@ public class Point
 
     public Point(float x, float y)
     {
-        this.x = (int)Math.Round(x);
-        this.y = (int)Math.Round(y);
+        this.x = Mathf.RoundToInt(x);
+        this.y = Mathf.RoundToInt(y);
     }
 
     public Point(Vector2 vect)

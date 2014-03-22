@@ -6,14 +6,14 @@ public class PlayerStats
     // All this will need refactoring later
     //
 
-    public static void Load(Player player, Role role, Race race)
+    public static void Load(Player player, Role role, NPCFlags race)
     {
         LoadBasicStats(player);
         LoadStatModRole(player, role);
         LoadStatModRace(player, race);
     }
 
-    private static void LoadStatModRace(Player player, Race race)
+    private static void LoadStatModRace(Player player, NPCFlags race)
     {
         //do nothing atm
     }
@@ -36,7 +36,7 @@ public class PlayerStats
         player.Attributes = attr;
 
         Stats stats = new Stats();
-        stats.MaxHealth = 100;
+        //stats.MaxHealth = 100;
         stats.MaxPower = 50;
         stats.Level = 1;
         stats.initialize();

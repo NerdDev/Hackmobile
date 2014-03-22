@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
 {
+    public List<string> refs = new List<string>();
+    internal bool refsResolved = false;
+
 	public string Name {
 				get;
 				set;
@@ -24,6 +28,27 @@ public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
 		this.levelCurve = curve;
 	}
 
+    public override List<ItemHolder> Get(Random random, int amount, ushort level)
+    {
+        if (!refsResolved)
+        {
+            if (refs.Count > 0)
+            {
+                UnityEngine.Debug.Log(refs.Count) ;
+                UnityEngine.Debug.Log(refs[0]);
+            }
+            foreach (string str in refs)
+            {
+                if (BigBoss.Objects.LeveledItems.ContainsKey(str))
+                {
+                    this.AddAll(BigBoss.Objects.LeveledItems[str]);
+                }
+            }
+            refsResolved = true;
+        }
+        return base.Get(random, amount, level);
+    }
+
 	public void ParseXML(XML.XMLNode node)
 	{
 		Name = node.SelectString ("name");
@@ -36,5 +61,9 @@ public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
 			ItemHolder ih = new ItemHolder(item, count);
 			Add(ih, probability, false, (ushort) level);
 		}
+        foreach (XML.XMLNode x in node.SelectList("ref"))
+        {
+            refs.Add(x.SelectString("name"));
+        }
 	}
 }

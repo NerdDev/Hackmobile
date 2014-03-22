@@ -20,7 +20,7 @@ public class ItemChest : MonoBehaviour
 		LeveledItemList itemList = BigBoss.Objects.LeveledItems.GetPrototype ("potions");
 		ItemHolder ih = itemList.Get (new System.Random (), 1, BigBoss.Player.Level)[0];
 		Item i = ih.Get ();
-		Location.inventory.Add (i);
+		//Location.inventory.Add (i);
     }
 
     public void init()

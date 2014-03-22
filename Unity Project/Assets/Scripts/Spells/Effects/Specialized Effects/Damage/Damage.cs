@@ -4,10 +4,10 @@ using XML;
 
 public abstract class DamageEffect : EffectInstance
 {
-    protected int strength;
+    protected Damage strength;
 
     protected override void ParseParams(XMLNode node)
     {
-        strength = node.SelectInt("strength");
+        strength = node.Select<Damage>("strength");
     }
 }

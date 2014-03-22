@@ -13,4 +13,13 @@ public enum NPCFlags
     NOPOLY, //player can't turn into one of these
     GREEDY,
     NO_RANDOM_SPAWN, // Won't be picked if a random NPC should be spawned
+
+    //races
+    DEMON,
+    UNDEAD,
+    HUMAN,
+    ELF,
+    REPTILE,
+    ORC,
+    BEHOLDER,
 }

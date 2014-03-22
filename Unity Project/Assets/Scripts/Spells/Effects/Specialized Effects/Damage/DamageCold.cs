@@ -10,7 +10,7 @@ public class DamageCold : DamageEffect
         base.Apply(n);
         if (!n.HasEffect<ColdResistance>())
         {
-            n.AdjustHealth(Convert.ToInt32(-strength));
+            n.AdjustHealth(Convert.ToInt32(-strength.GetDamage()));
         }
     }
 }

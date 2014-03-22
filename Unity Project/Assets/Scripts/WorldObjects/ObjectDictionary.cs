@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using XML;
 
-public class ObjectDictionary<O>  where O : IXmlParsable, INamed, new()
+public class ObjectDictionary<O> where O : IXmlParsable, INamed, new()
 {
     protected Dictionary<string, O> prototypes = new Dictionary<string, O>();
     public IEnumerable<O> Prototypes { get { return prototypes.Values; } }
@@ -32,6 +32,21 @@ public class ObjectDictionary<O>  where O : IXmlParsable, INamed, new()
         get { return prototypes[str]; }
     }
 
+    public bool ContainsKey(string str)
+    {
+        if (prototypes.ContainsKey(str))
+        {
+            return true;
+        }
+        else
+        {
+            if (BigBoss.Debug.logging(Logs.XML))
+            {
+                BigBoss.Debug.w(Logs.XML, this.ToString() + " does not contain the string " + str + ".");
+            }
+            return false;
+        }
+    }
     public virtual void Parse(XMLNode baseNode)
     {
         foreach (XMLNode node in baseNode)

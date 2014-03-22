@@ -62,10 +62,10 @@ public class Player : NPC
 
     public override void Init()
     {
-        PlayerStats.Load(this, Role.ARCHAELOGIST, Race.HUMAN);
+        PlayerStats.Load(this, Role.ARCHAELOGIST, NPCFlags.HUMAN);
         CalcStats();
-        BigBoss.Gooey.UpdateMaxHealth(this.Stats.MaxHealth);
-        BigBoss.Gooey.UpdateHealthBar(this.Stats.MaxHealth);
+        //BigBoss.Gooey.UpdateMaxHealth(this.Stats.MaxHealth);
+        //BigBoss.Gooey.UpdateHealthBar(this.Stats.MaxHealth);
 
         BigBoss.Gooey.UpdateMaxPower(this.Stats.MaxPower);
         BigBoss.Gooey.UpdatePowerBar(this.Stats.MaxPower);
@@ -399,9 +399,9 @@ public class Player : NPC
         //Update GUI here
     }
 
-    public override bool AdjustHealth(int amount)
+    public override bool AdjustHealth(int amount, bool report = true)
     {
-        if (base.AdjustHealth(amount))
+        if (base.AdjustHealth(amount, report))
         {
             BigBoss.Gooey.UpdateHealthBar(0);
             return true; //player died
@@ -420,12 +420,20 @@ public class Player : NPC
         BigBoss.Gooey.UpdatePowerBar(this.Stats.CurrentPower);
     }
 
-    public override void AdjustMaxHealth(int amount)
+    public override bool AdjustMaxHealth(int amount)
     {
-        base.AdjustMaxHealth(amount);
+        if (base.AdjustMaxHealth(amount))
+        {
+            return true;
+        }
+        else
+        {
+            //GUI updates
+            BigBoss.Gooey.UpdateMaxHealth(this.Stats.MaxHealth);
+            BigBoss.Gooey.UpdateHealthBar(this.Stats.CurrentHealth);
+            return false;
+        }
 
-        //GUI updates
-        BigBoss.Gooey.UpdateMaxHealth(this.Stats.MaxHealth);
     }
 
     public override void AdjustMaxPower(int amount)

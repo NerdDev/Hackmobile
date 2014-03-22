@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class GUIProgressBar : MonoBehaviour
 {
-    public int maxValue { get; set; }
+    private int maxv;
+    public int maxValue { get { return maxv; } set { maxv = value; } }
     public int curValue { get; set; }
 
     private float ratio;
@@ -41,7 +42,10 @@ public class GUIProgressBar : MonoBehaviour
     internal void UpdateBar()
     {
         if (maxValue != 0) ratio = ((float)curValue) / ((float)maxValue);
-        else throw new DivideByZeroException("Max value of the progress bar was 0!");
+        else
+        {
+            throw new DivideByZeroException("Max value of the progress bar was 0!");
+        }
 
         Init();
         slider.sliderValue = ratio;

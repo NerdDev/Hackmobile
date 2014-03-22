@@ -10,7 +10,7 @@ public class DamageFire : DamageEffect
         base.Apply(n);
         if (!n.HasEffect<FireResistance>())
         {
-            n.AdjustHealth(Convert.ToInt32(-strength));
+            n.AdjustHealth(Convert.ToInt32(- strength.GetDamage()));
         }
     }
 }

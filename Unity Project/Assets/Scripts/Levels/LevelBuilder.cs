@@ -57,7 +57,7 @@ public class LevelBuilder : MonoBehaviour
         if (combineCounter > 20)
         {
             combineCounter = 0;
-            Combine();
+            //Combine();
         }
     }
 

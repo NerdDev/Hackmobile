@@ -229,6 +229,7 @@
      <Compile Include="Assets\Scripts\Testing\ProbabilityTesting.cs" />
      <Compile Include="Assets\Scripts\Testing\SpellTesting.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Affectable.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\Door.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\INamed.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\ItemDictionary.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\Damage.cs" />
@@ -256,7 +257,6 @@
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\LeveledItem.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Misc Enums.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Properties.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Races.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Roles.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\SpawnKeywords.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Spells.cs" />
@@ -272,6 +272,7 @@
      <Compile Include="Assets\Scripts\WorldObjects\NPCDictionary.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\ObjectDictionary.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Size.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\Stairs.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\WODictionary.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\WOWrapper.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\WorldObject.cs" />
@@ -483,6 +484,7 @@
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
      <None Include="Assets\Tools\Fog of War\FoW\FOW.shader" />
      <None Include="Assets\Tools\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+     <None Include="Assets\Scripts\Shaders\InvisibleShadowCaster.shader" />
      <None Include="Assets\Tools\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\Scripts\Library\XML\XMLReadme.txt" />
      <None Include="Assets\Resources\XML\strings.xml" />

@@ -5,10 +5,17 @@ using System.Text;
 
 public class NPCInstance : WOWrapper
 {
+    public bool DestroyThisNPC = false;
+
     void Update()
     {
         if (WO == null) return;
         WO.Update();
+
+        if (DestroyThisNPC)
+        {
+            WO.Destroy();
+        }
     }
 
     void FixedUpdate()

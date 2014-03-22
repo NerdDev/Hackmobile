@@ -18,7 +18,7 @@ namespace System
         {
             //float startTime = UnityEngine.Time.realtimeSinceStartup;
             Object o = InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
-           // float finishTime = UnityEngine.Time.realtimeSinceStartup;
+            // float finishTime = UnityEngine.Time.realtimeSinceStartup;
             //UnityEngine.Debug.Log("Total time: " + (finishTime - startTime));
             return o;
         }
@@ -28,7 +28,7 @@ namespace System
             var typeToReflect = originalObject.GetType();
             if (IsPrimitive(typeToReflect)) return originalObject;
             if (visited.ContainsKey(originalObject)) return visited[originalObject];
-            
+
             if ((typeToReflect.IsGenericType && typeToReflect.GetGenericTypeDefinition() == typeof(Dictionary<,>)))
             {
                 var cloneObject = CopyDictionary(originalObject, visited, typeToReflect);
@@ -39,7 +39,7 @@ namespace System
             }
             else if (typeToReflect.IsSubclassOfGeneric(typeof(Dictionary<,>)))
             {
-                var cloneObject = CopyDictionary(originalObject, visited, typeToReflect);;
+                var cloneObject = CopyDictionary(originalObject, visited, typeToReflect); ;
                 visited.Add(originalObject, cloneObject);
                 CopyFields(originalObject, visited, cloneObject, typeToReflect);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
@@ -48,28 +48,17 @@ namespace System
             else if (typeToReflect.IsArray) // this grabs arrays and copies the elements into a new one
             {
                 var arrayType = typeToReflect.GetElementType();
-                if (IsPrimitive(arrayType) == false)
+                Array arrayObject = (Array)(originalObject);
+                Array temp = Array.CreateInstance(arrayType, arrayObject.Length);
+                for (int i = 0; i < arrayObject.Length; ++i)
                 {
-                    Array arrayObject = (Array)(originalObject);
-                    Array temp = Array.CreateInstance(arrayType, arrayObject.Length);
-                    for (int i = 0; i < arrayObject.Length; ++i)
-                    {
-                        temp.SetValue(InternalCopy(arrayObject.GetValue(i), visited), i);
-                    }
-                    var cloneObject = temp;
-                    visited.Add(originalObject, cloneObject);
-                    CopyFields(originalObject, visited, cloneObject, typeToReflect);
-                    RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
-                    return cloneObject;
+                    temp.SetValue(InternalCopy(arrayObject.GetValue(i), visited), i);
                 }
-                else
-                {
-                    var cloneObject = CloneMethod.Invoke(originalObject, null);
-                    visited.Add(originalObject, cloneObject);
-                    CopyFields(originalObject, visited, cloneObject, typeToReflect);
-                    RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
-                    return cloneObject;
-                }
+                var cloneObject = temp;
+                visited.Add(originalObject, cloneObject);
+                CopyFields(originalObject, visited, cloneObject, typeToReflect);
+                RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
+                return cloneObject;
             }
             else
             {
@@ -82,6 +71,40 @@ namespace System
         }
 
         private static object CopyDictionary(Object originalObject, IDictionary<Object, Object> visited, Type typeToReflect)
+        {
+            var dict = Activator.CreateInstance(typeToReflect);
+            Type[] types = GetDictionaryTypes(typeToReflect);
+
+            ParameterModifier p = new ParameterModifier(1);
+            p[0] = true;
+            ParameterModifier[] mods = { p };
+
+            MethodInfo GetItem = typeToReflect.GetMethod("get_Item", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { types[0] }, mods);
+            MethodInfo Add = typeToReflect.GetMethod("Add", new Type[] { types[0], types[1] });
+
+            IEnumerable keys = (IEnumerable)typeToReflect.GetProperty("Keys").GetValue(originalObject, null);
+            foreach (object key in keys)
+            {
+                object[] arguments = new object[] { key };
+                try
+                {
+                    object value = GetItem.Invoke(originalObject, arguments);
+                    if (value != null)
+                    {
+                        Add.Invoke(dict, new object[] { InternalCopy(key, visited), InternalCopy(value, visited) });
+                    }
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.Log(typeToReflect.ToString());
+                    UnityEngine.Debug.Log(e.StackTrace);
+                    UnityEngine.Debug.Log(e.InnerException.ToString());
+                }
+            }
+            return dict;
+        }
+
+        private static object CopyList(Object originalObject, IDictionary<Object, Object> visited, Type typeToReflect)
         {
             var dict = Activator.CreateInstance(typeToReflect);
             Type[] types = GetDictionaryTypes(typeToReflect);

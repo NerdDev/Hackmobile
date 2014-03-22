@@ -12,8 +12,6 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     protected static uint nextID = 0;
     public uint ID { get; protected set; }
     public GameObject GO { get { return _instance.gameObject; } }
-    public string Model;
-    public string ModelTexture;
     public string Name { get; set; }
     private string _prefab;
     public virtual string Prefab { get { return _prefab; } set { _prefab = "Prefabs/" + value; } }
@@ -105,8 +103,6 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     public virtual void ParseXML(XMLNode x)
     {
         Name = x.SelectString("name", "NONAME!");
-        Model = x.SelectString("model");
-        ModelTexture = x.SelectString("modeltexture");
         Prefab = x.SelectString("prefab");
     }
     #endregion

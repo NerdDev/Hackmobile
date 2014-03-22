@@ -10,7 +10,7 @@ public class DamageShock : DamageEffect
         base.Apply(n);
         if (!n.HasEffect<ShockResistance>())
         {
-            n.AdjustHealth(Convert.ToInt32(-strength));
+            n.AdjustHealth(Convert.ToInt32(-strength.GetDamage()));
         }
     }
 }
