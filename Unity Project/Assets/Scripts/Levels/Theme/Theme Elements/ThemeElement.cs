@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class ThemeElement : MonoBehaviour
+public class ThemeElement : FOWRenderers
 {
     public GameObject GO { get { return gameObject; } }
     private Bounds _bounds;
