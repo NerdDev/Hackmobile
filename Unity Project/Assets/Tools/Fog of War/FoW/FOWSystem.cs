@@ -263,7 +263,7 @@ public class FOWSystem : MonoBehaviour
 
         if (reCreateGrid)
         {
-            //ReCreateGrid();
+            ReCreateGrid();
             reCreateGrid = false;
         }
     }
