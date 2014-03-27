@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
      <Compile Include="Assets\Scripts\Common\Array2DRaw.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
+     <Compile Include="Assets\Scripts\Common\Boxing.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\IXmlParsable.cs" />
      <Compile Include="Assets\Scripts\Common\Dice.cs" />
@@ -125,6 +126,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\PillarElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\StairElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\StairSpiralElement.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\StairWallElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElementSpec.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\WallElement.cs" />
@@ -140,6 +142,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\BitArrayExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\CopyExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\DoubleExt.cs" />
+     <Compile Include="Assets\Scripts\Library\Extensions\Draw\BoxedAction.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\Counter.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\Draw.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Draw\DrawActionExt.cs" />

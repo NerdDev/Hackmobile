@@ -5,7 +5,31 @@ using System.Text;
 
 public static class Draw
 {
-    public static DrawAction<T> Nothing<T>()
+    public static DrawAction<T> And<T>(params DrawAction<T>[] actions)
+    {
+        return (arr, x, y) =>
+        {
+            for (int i = 0; i < actions.Length; i++)
+            {
+                if (!actions[i](arr, x, y)) return false;
+            }
+            return true;
+        };
+    }
+
+    public static DrawAction<T> Or<T>(params DrawAction<T>[] actions)
+    {
+        return (arr, x, y) =>
+        {
+            for (int i = 0; i < actions.Length; i++)
+            {
+                if (actions[i](arr, x, y)) return true;
+            }
+            return false;
+        };
+    }
+
+    public static DrawAction<T> True<T>()
     {
         return (arr, x, y) => { return true; };
     }
@@ -52,6 +76,14 @@ public static class Draw
         };
     }
 
+    public static DrawAction<T> Exists<T>()
+    {
+        return (arr, x, y) =>
+        {
+            return arr.Contains(x, y);
+        };
+    }
+
     public static DrawAction<T> Around<T>(bool cornered, DrawAction<T> call)
     {
         return (arr, x, y) =>
@@ -64,7 +96,7 @@ public static class Draw
     {
         return (arr, x, y) =>
             {
-                return !arr.DrawAround(x, y, cornered, Draw.Not<T>(call));
+                return arr.HasAround(x, y, cornered, call);
             };
     }
 

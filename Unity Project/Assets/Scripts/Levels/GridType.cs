@@ -56,9 +56,9 @@ public class GridTypeEnum
             case GridType.Wall:
                 return (char)178;
             case GridType.StairUp:
-                return (char)207;
+                return '/';
             case GridType.StairDown:
-                return (char)209;
+                return '\\';
             case GridType.StairPlace:
                 return (char)167;
             case GridType.NULL:

@@ -1,8 +1,8 @@
-
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class LevelBuilder : MonoBehaviour
 {
@@ -35,8 +35,12 @@ public class LevelBuilder : MonoBehaviour
             GameObject obj = Instantiate(
                 deploy.GO,
                 new Vector3(x + t.position.x + deploy.X, t.position.y + deploy.Y, y + t.position.z + deploy.Z)
-                , Quaternion.Euler(new Vector3(t.rotation.x, t.rotation.y + deploy.Rotation, t.rotation.z))) as GameObject;
+                , Quaternion.Euler(new Vector3(t.rotation.x + deploy.XRotation, t.rotation.y + deploy.YRotation, t.rotation.z + deploy.ZRotation))) as GameObject;
             obj.transform.parent = holder.transform;
+            obj.transform.localScale = new Vector3(
+                deploy.XScale * obj.transform.localScale.x,
+                deploy.YScale * obj.transform.localScale.y,
+                deploy.ZScale * obj.transform.localScale.z);
             space.Blocks.Add(obj);
         }
 
@@ -86,12 +90,13 @@ public class LevelBuilder : MonoBehaviour
                 space.Deploys = new List<GridDeploy>(gen.val.Deploys.Count);
                 ret[gen] = space;
             }
+            spec.GenSpace = gen.val;
             spec.Space = space;
             spec.Theme = gen.val.Theme;
             spec.Type = gen.val.Type;
             spec.DeployX = gen.x;
             spec.DeployY = gen.y;
-            List<GenDeploy> tmp = new List<GenDeploy>(gen.val.Deploys);
+            List<GenDeploy> tmp = new List<GenDeploy>(gen.val.MainDeploys);
             foreach (GenDeploy genDeploy in tmp)
             {
                 spec.GenDeploy = genDeploy;
@@ -104,21 +109,15 @@ public class LevelBuilder : MonoBehaviour
     protected void Deploy(ThemeElementSpec spec)
     {
         if (spec.GenDeploy.Deployed) return;
-        spec.Additional = new MultiMap<List<GenDeploy>>();
         spec.GenDeploy.Deployed = true;
+        spec.Reset();
         spec.GenDeploy.Element.PreDeployTweaks(spec);
-        GridDeploy deploy = new GridDeploy(spec.GenDeploy.Element.GO)
-        {
-            Rotation = spec.GenDeploy.Rotation,
-            X = spec.GenDeploy.X,
-            Y = spec.GenDeploy.Y,
-            Z = spec.GenDeploy.Z
-        };
+        GridDeploy deploy = new GridDeploy(spec.GenDeploy.Element.GO);
+        deploy.CopyFrom(spec.GenDeploy);
         
         spec.Space.Deploys.Add(deploy);
         if (spec.Additional.Count == 0) return;
-        MultiMap<List<GenDeploy>> additional = spec.Additional;
-        foreach (var d in additional)
+        foreach (var d in spec.Additional.ToList())
         {
             GridSpace space;
             if (!spec.Grid.TryGetValue(d, out space))

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class ThemeElement : MonoBehaviour
+public class ThemeElement : FOWRenderers
 {
     public GameObject GO { get { return gameObject; } }
     private Bounds _bounds;
@@ -25,7 +25,7 @@ public class ThemeElement : MonoBehaviour
         }
     }
     public byte GridWidth = 1;
-    public byte GridHeight = 1;
+    public byte GridLength = 1;
     public bool Walkable;
     public string PrintChar = string.Empty;
 
@@ -43,30 +43,50 @@ public class ThemeElement : MonoBehaviour
         return ret;
     }
 
+    protected void CenterAndRotateDoodad(ThemeElementSpec spec)
+    {
+        HandleDoodad(spec, true, true);
+    }
+
     protected void CenterDoodad(ThemeElementSpec spec)
     {
-        if (spec.GenDeploy.Element.GridHeight == 1
-            && spec.GenDeploy.Element.GridWidth == 1) return;
-        Bounding bounds = spec.GetBounds();
-        Point center = bounds.GetCenter();
-        center.x -= spec.DeployX;
-        center.y -= spec.DeployY;
-        spec.GenDeploy.X += center.x / 2f;
-        spec.GenDeploy.Z += center.y / 2f;
-        Rotation rot;
-        if (center.y == center.x)
-        { // Rotate randomly
-            rot = spec.Random.NextRotation();
-        }
-        else if (center.y > center.x)
+        HandleDoodad(spec, true, false);
+    }
+
+    protected void RotateDoodad(ThemeElementSpec spec)
+    {
+        HandleDoodad(spec, false, true);
+    }
+
+    private void HandleDoodad(ThemeElementSpec spec, bool centerB, bool rotateB)
+    {
+        Vector2 center = spec.Bounding.GetRealCenter();
+        if (centerB
+            && (spec.GenDeploy.Element.GridLength > 1
+                || spec.GenDeploy.Element.GridWidth > 1))
         {
-            rot = spec.Random.NextBool() ? Rotation.ClockWise : Rotation.CounterClockWise;
+            center.x -= spec.DeployX;
+            center.y -= spec.DeployY;
+            spec.GenDeploy.X += center.x;
+            spec.GenDeploy.Z += center.y;
         }
-        else
+        if (rotateB)
         {
-            rot = spec.Random.NextBool() ? Rotation.OneEighty : Rotation.None;
+            Rotation rot;
+            if (spec.GenDeploy.Element.GridLength == spec.GenDeploy.Element.GridWidth)
+            { // Rotate randomly
+                rot = spec.Random.NextRotation();
+            }
+            else if (center.y > center.x)
+            {
+                rot = spec.Random.NextBool() ? Rotation.ClockWise : Rotation.CounterClockWise;
+            }
+            else
+            {
+                rot = spec.Random.NextBool() ? Rotation.OneEighty : Rotation.None;
+            }
+            spec.GenDeploy.Rotate(rot);
         }
-        spec.GenDeploy.Rotate(rot);
     }
 
     protected void PlaceFlush(ITransform deploy, GridLocation loc, float buffer = 0F, bool rough = false)
@@ -74,22 +94,22 @@ public class ThemeElement : MonoBehaviour
         switch (loc)
         {
             case GridLocation.TOP:
-                deploy.Rotation = 180;
+                deploy.YRotation = 180;
                 deploy.X = -this.Bounds.center.x;
-                deploy.Z = GetInside(Axis.Z, deploy.Rotation, buffer, rough);
+                deploy.Z = GetInside(Axis.Z, deploy.YRotation, buffer, rough);
                 break;
             case GridLocation.BOTTOM:
                 deploy.X = -this.Bounds.center.x;
-                deploy.Z = -GetInside(Axis.Z, deploy.Rotation, buffer, rough);
+                deploy.Z = -GetInside(Axis.Z, deploy.YRotation, buffer, rough);
                 break;
             case GridLocation.LEFT:
-                deploy.Rotation = 90;
-                deploy.X = -GetInside(Axis.X, deploy.Rotation, buffer, rough);
+                deploy.YRotation = 90;
+                deploy.X = -GetInside(Axis.X, deploy.YRotation, buffer, rough);
                 deploy.Z = -this.Bounds.center.z;
                 break;
             case GridLocation.RIGHT:
-                deploy.Rotation = -90;
-                deploy.X = GetInside(Axis.X, deploy.Rotation, buffer, rough);
+                deploy.YRotation = -90;
+                deploy.X = GetInside(Axis.X, deploy.YRotation, buffer, rough);
                 deploy.Z = -this.Bounds.center.z;
                 break;
         }
@@ -97,9 +117,9 @@ public class ThemeElement : MonoBehaviour
 
     protected void PlaceRandomlyInside(System.Random random, ITransform deploy, float buffer = 0F)
     {
-        deploy.Rotation = random.NextAngle();
-        deploy.X = RandomInside(random, Axis.X, deploy.Rotation, buffer);
-        deploy.Z = RandomInside(random, Axis.Z, deploy.Rotation, buffer);
+        deploy.YRotation = random.NextAngle();
+        deploy.X = RandomInside(random, Axis.X, deploy.YRotation, buffer);
+        deploy.Z = RandomInside(random, Axis.Z, deploy.YRotation, buffer);
     }
 
     protected float RandomInside(System.Random random, Axis axis, float yRotation, float buffer = 0F, bool rough = true)

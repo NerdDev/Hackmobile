@@ -4,7 +4,6 @@ using System;
 
 public class Bounding
 {
-
     private static int max = Int32.MaxValue / 2;
     private static int min = Int32.MinValue / 2;
     public int XMin;
@@ -52,6 +51,12 @@ public class Bounding
         : this(rhs.XMin, rhs.XMax, rhs.YMin, rhs.YMax)
     {
     }
+
+    public Bounding(Bounding rhs, int expand)
+        : this(rhs)
+    {
+        Expand(expand);
+    }
     #endregion Ctors
 
     public bool IsValid()
@@ -65,6 +70,18 @@ public class Bounding
             return new Point(XMin + Width / 2, YMin + Height / 2);
         else
             return new Point();
+    }
+
+    public Vector2 GetRealCenter()
+    {
+        if (IsValid())
+        {
+            return new Vector2(XMin + (Width - 1) / 2F, YMin + (Height - 1) / 2F);
+        }
+        else
+        {
+            return new Vector2(0, 0);
+        }
     }
 
     #region Absorbs

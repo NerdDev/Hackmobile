@@ -11,7 +11,6 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   - 65: {fileID: 6500000}
-  - 114: {fileID: 11400004}
   m_Layer: 12
   m_Name: Brick Wall Thin
   m_TagString: Untagged
@@ -33,7 +32,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!1 &100004
 GameObject:
@@ -46,7 +45,6 @@ GameObject:
   - 33: {fileID: 3300002}
   - 23: {fileID: 2300002}
   - 65: {fileID: 6500002}
-  - 114: {fileID: 11400008}
   m_Layer: 12
   m_Name: Brick Wall Thin
   m_TagString: Untagged
@@ -181,41 +179,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridWidth: 1
-  GridHeight: 1
+  GridLength: 1
   Walkable: 0
   PrintChar: '#'
-  PlaceFloor: 1
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridHeight: 1
-  Walkable: 0
-  PrintChar: 
-  PlaceFloor: 1
---- !u!114 &11400008
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridHeight: 1
-  Walkable: 0
-  PrintChar: 
   PlaceFloor: 1
 --- !u!1001 &100100000
 Prefab:

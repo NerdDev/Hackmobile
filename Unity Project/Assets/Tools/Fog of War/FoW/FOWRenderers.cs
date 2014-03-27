@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -36,7 +37,7 @@ public class FOWRenderers : MonoBehaviour
     void Start()
     {
         mTrans = transform;
-        mNextUpdate = 0.2f + (Random.value + Random.value) * .05f;
+        mNextUpdate = 0.2f + (UnityEngine.Random.value + UnityEngine.Random.value) * .05f;
         wfs = new WaitForSeconds(mNextUpdate);
         mRenderers = GetComponentsInChildren<Renderer>();
         StartCoroutine(UpdateRendering());
@@ -85,7 +86,7 @@ public class FOWRenderers : MonoBehaviour
 
     IEnumerator UpdateRendering()
     {
-        float mFirstUpdate = Random.value * .1f;
+        float mFirstUpdate = UnityEngine.Random.value * .1f;
         yield return new WaitForSeconds(mFirstUpdate);
         while (enabled)
         {

@@ -44,23 +44,33 @@ MonoBehaviour:
   - {fileID: 11400002, guid: 17d6664179b5ea844a45f161a62cd462, type: 2}
   TWall:
   - {fileID: 11400008, guid: 07321256b18bb2245b9a0c63454274da, type: 2}
+  TEdgeWall:
+  - {fileID: 11400008, guid: 73f910e2acd57d94cad9f42979eccf93, type: 2}
+  EdgeWall:
+  - {fileID: 11400002, guid: 663dcf84eabf52a4d86b20763803909b, type: 2}
+  PWall:
+  - {fileID: 11400008, guid: eeb833f287aa8d44498dbb7942c4ce92, type: 2}
   QuadWall:
   - {fileID: 11400002, guid: addf2908381feb745bc81b70185ed557, type: 2}
   CornerWall:
   - {fileID: 11400004, guid: 65e3f77b505eafc4fb4d903e4faa7d76, type: 2}
+  DualInverseCornerWall:
+  - {fileID: 11400004, guid: 2c90762fcfdc4734d85363617e5f8a37, type: 2}
+  TriWall:
+  - {fileID: 11400004, guid: 3acd3feda0268af44aa1b3b84955f68c, type: 2}
+  InverseCornerWall:
+  - {fileID: 11400000, guid: d0d212fd178e9ee43a6dd0bb488e26c9, type: 2}
+  CornerWallFilled:
+  - {fileID: 11400002, guid: d9d5323a488d0f144af8c64f032b88f3, type: 2}
   Door:
   - {fileID: 11400006, guid: a84a9a2365a0b6d49948507c379e0ed9, type: 2}
   - {fileID: 11400006, guid: e176930cddf10e14e95abb00eaff9d22, type: 2}
   Floor:
   - {fileID: 11400002, guid: a2615bb7091f6d34591cdb8b8075203e, type: 2}
   StairUp:
-  - {fileID: 11400002, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
-  - {fileID: 11400000, guid: 43ed3b340b7b64847b393972d3e8a30f, type: 2}
-  - {fileID: 11400000, guid: 28b6b22debd110847916bf1b3be86af0, type: 2}
+  - {fileID: 11400048, guid: b7d591435aed4c848918acc728344a48, type: 2}
   StairDown:
-  - {fileID: 11400002, guid: 8366375d580e7374a8465813ceda1b91, type: 2}
-  - {fileID: 11400000, guid: 43ed3b340b7b64847b393972d3e8a30f, type: 2}
-  - {fileID: 11400000, guid: 28b6b22debd110847916bf1b3be86af0, type: 2}
+  - {fileID: 11400048, guid: b7d591435aed4c848918acc728344a48, type: 2}
   Chest:
   - {fileID: 11400002, guid: cf5f86fab5dafc247ade51112b4025b2, type: 2}
 --- !u!1001 &100100000

@@ -11,16 +11,17 @@ public class LeveledPool<T> : ProbabilityPool<T>
     int curLevel = -1;
     public override int Count
     {
-        get 
-        { 
+        get
+        {
             if (curLevel == -1) return 0;
             return currentPool.Count;
         }
     }
 
-	public LeveledPool() {
+    public LeveledPool()
+    {
 
-		}
+    }
 
     public LeveledPool(LeveledCurve curve)
     {
@@ -93,7 +94,23 @@ public class LeveledPool<T> : ProbabilityPool<T>
 
     public override void AddAll(ProbabilityPool<T> rhs)
     {
-        throw new NotImplementedException("");
+        LeveledPool<T> lrhs = rhs as LeveledPool<T>;
+        if (lrhs == null)
+        {
+            foreach (ProbabilityItem<T> p in rhs)
+            {
+                AddInternal(p.Item, p.Multiplier, p.Unique, 1);
+            }
+        }
+        else
+        {
+            foreach (ProbabilityItem<T> p in rhs)
+            {
+                ProbContainer cont = (ProbContainer)p;
+                AddInternal(cont.Item, cont.Multiplier, cont.Unique, cont.Level);
+            }
+        }
+        Clear();
     }
     #endregion
 
@@ -120,7 +137,7 @@ public class LeveledPool<T> : ProbabilityPool<T>
             item = default(T);
             return false;
         }
-        return Get(random, out item, (ushort) curLevel);
+        return Get(random, out item, (ushort)curLevel);
     }
 
     public bool Get(System.Random random, out T item, ushort level)

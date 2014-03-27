@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: Floor
@@ -58,17 +57,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Mesh: {fileID: 4300000, guid: 3ce442f739e79744eac93d03154465fe, type: 2}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -81,7 +69,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridWidth: 1
-  GridHeight: 1
+  GridLength: 1
+  Walkable: 0
+  PrintChar: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

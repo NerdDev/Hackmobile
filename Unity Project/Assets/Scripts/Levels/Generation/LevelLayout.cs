@@ -4,8 +4,8 @@ using System;
 
 public class LevelLayout : LayoutObject
 {
-    public Bounding UpStart;
-    public Bounding DownStart;
+    public Boxing UpStart;
+    public Boxing DownStart;
     public List<LayoutObject> Rooms = new List<LayoutObject>();
     public System.Random Random;
 

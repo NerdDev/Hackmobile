@@ -5,18 +5,17 @@ using System.Text;
 
 public class GenSpace : IGridSpace
 {
-    private GridType _type;
-    public GridType Type { get { return _type; } set { _type = value; } }
-    private Theme _theme;
-    public Theme Theme { get { return _theme; } set { _theme = value; } }
+    public GridType Type { get; set; }
+    public Theme Theme { get; set; }
     public List<GenDeploy> Deploys;
+    public List<GenDeploy> MainDeploys;
     public int X { get; protected set; }
     public int Y { get; protected set; }
 
     public GenSpace(GridType type, Theme theme, int x, int y)
     {
-        _type = type;
-        _theme = theme;
+        Type = type;
+        Theme = theme;
         Deploys = null;
         this.X = x;
         this.Y = y;
@@ -28,11 +27,16 @@ public class GenSpace : IGridSpace
         {
             Deploys = new List<GenDeploy>(3);
         }
-        Deploys.Add(elem);
+        if (MainDeploys == null)
+        {
+            MainDeploys = new List<GenDeploy>(3);
+        }
         if (elem.OriginPt == null)
         {
             elem.OriginPt = new Point(x, y);
+            MainDeploys.Add(elem);
         }
+        Deploys.Add(elem);
         elem.Spaces[x, y] = this;
     }
 

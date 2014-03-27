@@ -60,8 +60,8 @@ public class LevelGenerator
         Log("Cluster", true, ClusterRooms);
         Log("Place Rooms", true, PlaceRooms);
         Log("Confirm Connection", true, ConfirmConnection);
-        Log("Confirm Edges", true, ConfirmEdges);
         Log("Place Stairs", true, PlaceStairs);
+        Log("Confirm Edges", true, ConfirmEdges);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
@@ -753,8 +753,9 @@ public class LevelGenerator
         #endregion
     }
 
-    protected bool PlaceMissingStair(bool up, Bounding otherStair, out Bounding placed)
+    protected bool PlaceMissingStair(bool up, Bounding otherStair, out Boxing placed)
     {
+        Container2D<GenSpace> layout = Container.GetGrid();
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -793,7 +794,7 @@ public class LevelGenerator
                 stair = Theme.Core.StairDown.Random(Rand);
             }
 
-            if (!stair.Place(obj, Theme, Rand, out placed))
+            if (!stair.Place(layout, obj, Theme, Rand, out placed))
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -803,11 +804,7 @@ public class LevelGenerator
                 #endregion
                 continue;
             }
-            obj.DrawRect(placed, new StrokedAction<GenSpace>()
-                {
-                    UnitAction = Draw.SetTo(up ? GridType.StairUp : GridType.StairDown, Theme),
-                    StrokeAction = Draw.Nothing<GenSpace>()
-                });
+            obj.DrawRect(placed, Draw.SetTo(up ? GridType.StairUp : GridType.StairDown, Theme).And(Draw.MergeIn(stair, Theme)));
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {

@@ -5,12 +5,11 @@ using System.Text;
 
 public class StairSpiralElement : StairElement
 {
-    private static DrawAction<GenSpace> strokeTest = Draw.IsType<GenSpace>(GridType.Floor).
-        // If not blocking a path
-                And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>()))).
-        // If there's a floor around
-                And(Draw.Around(false, Draw.IsType<GenSpace>(GridType.Floor)));
-    private static DrawAction<GenSpace> unitTest = Draw.IsType<GenSpace>(GridType.Floor);
+    public virtual DrawAction<GenSpace> UnitTest { get { return Draw.IsType<GenSpace>(GridType.Floor).
+                // If not blocking a path
+                And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>()))); } }
+    public virtual DrawAction<GenSpace> FrontTest { get { return Draw.IsType<GenSpace>(GridType.Floor); } }
+    public virtual DrawAction<GenSpace> BackTest { get { return Draw.True<GenSpace>(); } }
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
@@ -21,43 +20,73 @@ public class StairSpiralElement : StairElement
             val.y -= spec.DeployY;
             if (val.x == 1)
             {
-                spec.GenDeploy.Rotation = 90;
+                spec.GenDeploy.YRotation = 90;
             }
             else if (val.x == -1)
             {
-                spec.GenDeploy.Rotation = -90;
+                spec.GenDeploy.YRotation = -90;
             }
             else if (val.y == -1)
             {
-                spec.GenDeploy.Rotation = 180;
+                spec.GenDeploy.YRotation = 180;
             }
         }
         if (spec.Type == GridType.StairDown)
         {
             spec.GenDeploy.Y = -1;
-            spec.GenDeploy.Rotation += 180;
+            spec.GenDeploy.YRotation += 180;
         }
     }
 
-    public override bool Place(LayoutObject obj, Theme theme, System.Random rand, out Bounding placed)
+    public override bool Place(Container2D<GenSpace> grid, LayoutObject obj, Theme theme, System.Random rand, out Boxing placed)
     {
-        List<Bounding> options = obj.FindRectangles(GridWidth, GridHeight, true, new StrokedAction<GenSpace>()
+        List<Bounding> options = obj.FindRectangles(GridWidth, GridLength, true, UnitTest);
+        options = new List<Bounding>(options.Filter((bounds) =>
         {
-            UnitAction = unitTest,
-            StrokeAction = strokeTest
-        });
+            Counter counter = new Counter();
+            grid.DrawRect(new Bounding(bounds, 1), FrontTest.IfThen(Draw.Count<GenSpace>(counter)));
+            return counter > 0;
+        }));
         if (options.Count == 0)
         {
             placed = null;
             return false;
         }
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Options:");
+            if (GridWidth == 1 && GridLength == 1)
+            {
+                MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                tmp.PutAll(obj);
+                foreach (Bounding bounds in options)
+                {
+                    tmp.DrawRect(bounds, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, theme));
+                }
+                tmp.ToLog(Logs.LevelGen);
+            }
+            else
+            {
+                foreach (Bounding bounds in options)
+                {
+                    MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                    tmp.PutAll(obj);
+                    tmp.DrawRect(bounds, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, theme));
+                    tmp.ToLog(Logs.LevelGen);
+                }
+            }
+        }
+        #endregion
         // Place startpoints
-        placed = options.Random(rand);
+        placed = null;
+        return false;
+        //placed = options.Random(rand);
         placed.Expand(1);
         GridLocation side = GridLocation.BOTTOMRIGHT;
         foreach (GridLocation loc in GridLocationExt.Dirs().Randomize(rand))
         {
-            if (obj.DrawEdge(placed, loc, unitTest, false))
+            if (obj.DrawEdge(placed, loc, UnitTest, false))
             {
                 side = loc;
                 break;

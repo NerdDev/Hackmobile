@@ -14,4 +14,15 @@ public static class EnumerableExt
     {
         return typeof(T);
     }
+
+    public static IEnumerable<T> Filter<T>(this IEnumerable<T> rhs, Func<T, bool> filter)
+    {
+        foreach (T t in rhs)
+        {
+            if (filter(t))
+            {
+                yield return t;
+            }
+        }
+    }
 }

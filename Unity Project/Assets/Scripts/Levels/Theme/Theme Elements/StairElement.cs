@@ -5,11 +5,23 @@ using System.Text;
 
 public abstract class StairElement : ThemeElement
 {
+    public virtual DrawAction<GenSpace> UnitTest
+    {
+        get
+        {
+            return Draw.IsType<GenSpace>(GridType.Floor).
+                // If not blocking a path
+                And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>())));
+        }
+    }
+    public virtual DrawAction<GenSpace> FrontTest { get { return Draw.IsType<GenSpace>(GridType.Floor); } }
+    public virtual DrawAction<GenSpace> BackTest { get { return Draw.True<GenSpace>(); } }
+    public float StairHeight;
+
     public StairElement()
     {
-        SetChar('/');
     }
 
-    public abstract bool Place(LayoutObject obj, Theme theme, System.Random rand, out Bounding placed);
+    public abstract bool Place(Container2D<GenSpace> grid, LayoutObject obj, Theme theme, System.Random rand, out Boxing placed);
 }
 

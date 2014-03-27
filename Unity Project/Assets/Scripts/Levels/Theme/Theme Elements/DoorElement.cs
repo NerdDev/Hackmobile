@@ -31,7 +31,7 @@ public class DoorElement : ThemeElement
         // Diagonal door
         else if (spec.GenGrid.AlternatesCorners(spec.DeployX, spec.DeployY, Draw.Walkable<GenSpace>(), out walkableDir))
         {
-            spec.GenDeploy.Rotation = walkableDir == GridDirection.DIAGTLBR ? -45 : 45;
+            spec.GenDeploy.YRotation = walkableDir == GridDirection.DIAGTLBR ? -45 : 45;
         }
         // Offset alternates
         else if (spec.GenGrid.AlternateSidesOffset(spec.DeployX, spec.DeployY, Draw.Not(Draw.Walkable<GenSpace>()), out offsetLocation))
