@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400004}
   m_Layer: 0
-  m_Name: Dual Inverse Corner Wall
+  m_Name: Brick Dual Inverse Corner Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

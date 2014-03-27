@@ -35,15 +35,7 @@ public class Door : MonoBehaviour
 
             transform.Rotate(Vector3.up, RotationAngle);
             transform.position += OpenPosition;
-
-            if (ObjectsToDisable != null && ObjectsToDisable.Count > 0)
-            {
-                foreach (GameObject go in ObjectsToDisable)
-                {
-                    go.gameObject.layer = 12;
-                }
-            }
-            FOWSystem.instance.ModifyGrid(new Vector3(doorLoc.x, 0f, doorLoc.y), 0, 2, 0);
+            FOWSystem.instance.ModifyGrid(new Vector3(doorLoc.x, 0f, doorLoc.y), 100, 2, 0);
         }
         else
         {
