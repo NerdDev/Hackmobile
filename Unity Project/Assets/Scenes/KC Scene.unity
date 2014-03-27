@@ -2605,6 +2605,30 @@ Prefab:
       propertyPath: raycastRadius
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11400110, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: mColor.r
+      value: .617647111
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400110, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: mColor.g
+      value: .158953294
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400110, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: mColor.b
+      value: .158953294
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400140, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: mColor.r
+      value: .617647111
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400140, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: mColor.g
+      value: .158953294
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400140, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: mColor.b
+      value: .158953294
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
   m_RootGameObject: {fileID: 302515056}
@@ -5209,7 +5233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: 0, g: .832167625, b: 1, a: 1}
+  mColor: {r: .617647111, g: .158953294, b: .158953294, a: 1}
   mPivot: 4
   mDepth: 2
   mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
@@ -6456,7 +6480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMat: {fileID: 0}
   mTex: {fileID: 0}
-  mColor: {r: 0, g: .832167625, b: 1, a: 1}
+  mColor: {r: .617647111, g: .158953294, b: .158953294, a: 1}
   mPivot: 4
   mDepth: 2
   mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}

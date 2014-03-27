@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
-  mColor: {r: 0, g: .739014506, b: .888059676, a: 1}
+  mColor: {r: .691176474, g: .193122864, b: .193122864, a: 1}
   mPivot: 4
   mDepth: 1
   mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}

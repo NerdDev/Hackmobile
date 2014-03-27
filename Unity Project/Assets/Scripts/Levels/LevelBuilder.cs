@@ -114,6 +114,7 @@ public class LevelBuilder : MonoBehaviour
             Y = spec.GenDeploy.Y,
             Z = spec.GenDeploy.Z
         };
+        
         spec.Space.Deploys.Add(deploy);
         if (spec.Additional.Count == 0) return;
         MultiMap<List<GenDeploy>> additional = spec.Additional;

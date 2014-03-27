@@ -361,10 +361,6 @@ public class FOWSystem : MonoBehaviour
         return Mathf.Clamp(val, 0, 255);
     }
 
-
-    Dictionary<int, int> WorldToTextureX = new Dictionary<int, int>();
-    Dictionary<int, int> WorldToTextureY = new Dictionary<int, int>();
-
     /// <summary>
     /// Create the heightmap grid using the default technique (raycasting).
     /// </summary>

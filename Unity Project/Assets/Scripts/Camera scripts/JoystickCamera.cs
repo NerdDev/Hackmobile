@@ -151,7 +151,7 @@ public class JoystickCamera : MonoBehaviour
         desiredDistance -= f * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance) * .025f;
         if (desiredDistance < maxDistance && desiredDistance > minDistance)
         {
-            Rotate(0, f * (.01f * panSpeed));
+            Rotate(0, f * panSpeed * Time.deltaTime);
         }
         else
         {
