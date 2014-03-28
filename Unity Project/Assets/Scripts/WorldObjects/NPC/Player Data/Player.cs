@@ -92,14 +92,14 @@ public class Player : NPC
     public override void eatItem(Item i)
     {
         base.eatItem(i);
-        CreateTextPop(this.Name + " eats the " + i.Name + ".");
+        CreateTextMessage(this.Name + " eats the " + i.Name + ".");
         BigBoss.Time.PassTurn(60);
     }
 
     public override void useItem(Item i)
     {
         base.useItem(i);
-        CreateTextPop(this.Name + " uses the " + i.Name + ".");
+        CreateTextMessage(this.Name + " uses the " + i.Name + ".");
         BigBoss.Time.PassTurn(60);
     }
 
@@ -107,10 +107,10 @@ public class Player : NPC
     {
         if (base.equipItem(i))
         {
-            CreateTextPop("Item " + i.Name + " equipped.");
+            CreateTextMessage("Item " + i.Name + " equipped.");
             return true;
         }
-        CreateTextPop("Item not equipped.");
+        CreateTextMessage("Item not equipped.");
         return false;
     }
 
@@ -118,7 +118,7 @@ public class Player : NPC
     {
         if (base.unequipItem(i))
         {
-            CreateTextPop("Item " + i.Name + " uneqipped.");
+            CreateTextMessage("Item " + i.Name + " uneqipped.");
             return true;
         }
         return false;
@@ -128,12 +128,12 @@ public class Player : NPC
     {
         if (this.KnownSpells[spell].cost > this.Stats.CurrentPower)
         {
-            CreateTextPop("Not enough power to cast " + spell + "!");
+            CreateTextMessage("Not enough power to cast " + spell + "!");
         }
         else
         {
             base.CastSpell(spell, targets);
-            CreateTextPop(this.Name + " casts " + spell + ".");
+            CreateTextMessage(this.Name + " casts " + spell + ".");
             BigBoss.Time.PassTurn(60);
         }
     }

@@ -33,8 +33,13 @@ public class ObjectManager : MonoBehaviour, IManager
         Strings = new Dictionary<string, string>();
 		LeveledItems = new ObjectDictionary<LeveledItemList> ();
 
-        UnityEngine.Object[] files = Resources.LoadAll("XML", typeof(TextAsset));
-        //Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
+        List<UnityEngine.Object> files = new List<UnityEngine.Object>();
+        files.AddRange(Resources.LoadAll("XML", typeof(TextAsset)));
+        files.AddRange(Resources.LoadAll("XML/NPCs", typeof(TextAsset)));
+        files.AddRange(Resources.LoadAll("XML/Strings", typeof(TextAsset)));
+        files.AddRange(Resources.LoadAll("XML/Items", typeof(TextAsset)));
+        files.AddRange(Resources.LoadAll("XML/LeveledLists", typeof(TextAsset)));
+
         foreach (UnityEngine.Object file in files)
         {
             #region DEBUG

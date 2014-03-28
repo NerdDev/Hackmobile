@@ -5,6 +5,8 @@ public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
 {
     public List<string> refs = new List<string>();
     internal bool refsResolved = false;
+    private int minNumItems;
+    private int maxNumItems;
 
 	public string Name {
 				get;
@@ -32,26 +34,51 @@ public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
     {
         if (!refsResolved)
         {
-            if (refs.Count > 0)
-            {
-                UnityEngine.Debug.Log(refs.Count) ;
-                UnityEngine.Debug.Log(refs[0]);
-            }
-            foreach (string str in refs)
-            {
-                if (BigBoss.Objects.LeveledItems.ContainsKey(str))
-                {
-                    this.AddAll(BigBoss.Objects.LeveledItems[str]);
-                }
-            }
-            refsResolved = true;
+            ResolveListReferences();
         }
         return base.Get(random, amount, level);
+    }
+
+    public override List<ItemHolder> Get(Random random, int min, int max, ushort level)
+    {
+        if (!refsResolved)
+        {
+            ResolveListReferences();
+        }
+        return base.Get(random, min, max, level);
+    }
+
+    public List<ItemHolder> Get(ushort level)
+    {
+        if (!refsResolved)
+        {
+            ResolveListReferences();
+        }
+        return base.Get(new System.Random(), minNumItems, maxNumItems, level);
+    }
+
+    private void ResolveListReferences()
+    {
+        if (refs.Count > 0)
+        {
+            UnityEngine.Debug.Log(refs.Count);
+            UnityEngine.Debug.Log(refs[0]);
+        }
+        foreach (string str in refs)
+        {
+            if (BigBoss.Objects.LeveledItems.ContainsKey(str))
+            {
+                this.AddAll(BigBoss.Objects.LeveledItems[str]);
+            }
+        }
+        refsResolved = true;
     }
 
 	public void ParseXML(XML.XMLNode node)
 	{
 		Name = node.SelectString ("name");
+        minNumItems = node.SelectInt("min", 0);
+        maxNumItems = node.SelectInt("max", 1);
 
 		foreach (XML.XMLNode x in node.SelectList("entry")) {
 			string item = x.SelectString("item");
@@ -66,4 +93,15 @@ public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
             refs.Add(x.SelectString("name"));
         }
 	}
+
+    public List<Item> GetItems(ushort level)
+    {
+        List<Item> picks = new List<Item>();
+        List<ItemHolder> holders = Get(level);
+        foreach (ItemHolder holder in holders)
+        {
+            picks.Add(holder.Get());
+        }
+        return picks;
+    }
 }

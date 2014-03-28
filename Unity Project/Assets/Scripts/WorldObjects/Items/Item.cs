@@ -22,6 +22,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     public Spell onEaten = new Spell();
     public Spell onEquip = new Spell();
     public Spell onUse = new Spell();
+    public Spell onHit = new Spell();
 
     //Count
     private int _count; //uneditable except from inside this class
@@ -56,6 +57,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         hash += onEquip.GetHash() * 3;
         hash += onUse.GetHash() * 5;
         hash += onEaten.GetHash() * 7;
+        hash += onHit.GetHash() * 9;
         return hash;
     }
 
@@ -86,6 +88,14 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         //if usage needs restricted, change that here
     }
 
+    public void onHitEvent(NPC n)
+    {
+        if (onHit != null)
+        {
+            onHit.Activate(n);
+        }
+    }
+
     public bool isUnEquippable()
     {
         if (props.BUC != BUC.CURSED)
@@ -114,9 +124,15 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         }
     }
 
-    public int getDamage()
+    private int getDamage()
     {
         return this.stats.damage.GetDamage();
+    }
+
+    public bool Damage(NPC n)
+    {
+        onHitEvent(n);
+        return n.damage(getDamage());
     }
 
     #endregion
@@ -129,6 +145,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         onEquip = x.Select<Spell>("OnEquipEffect");
         onUse = x.Select<Spell>("OnUseEffect");
         onEaten = x.Select<Spell>("OnEatenEffect");
+        onHit = x.Select<Spell>("OnHitEffect");
         stats = x.Select<ItemStats>("stats");
         Icon = x.SelectString("icon");
     }

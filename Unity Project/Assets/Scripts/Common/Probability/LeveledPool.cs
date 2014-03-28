@@ -149,13 +149,14 @@ public class LeveledPool<T> : ProbabilityPool<T>
     public virtual List<T> Get(System.Random random, int amount, ushort level)
     {
         SetFor(level);
-        List<T> picks = new List<T>();
-        T item;
-        for (int i = 0; i < amount; i++)
-        {
-            if (currentPool.Get(random, out item))
-                picks.Add(item);
-        }
+        List<T> picks = currentPool.Get(random, amount);
+        return picks;
+    }
+
+    public virtual List<T> Get(System.Random random, int min, int max, ushort level)
+    {
+        SetFor(level);
+        List<T> picks = currentPool.Get(random, min, max);
         return picks;
     }
     #endregion

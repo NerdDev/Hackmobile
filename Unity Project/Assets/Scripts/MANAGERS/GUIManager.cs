@@ -251,7 +251,7 @@ public class GUIManager : MonoBehaviour, IManager
                 break;
         }
         BigBoss.Gooey.UpdateHungerText(color);
-        BigBoss.Gooey.CreateTextPop(this.gameObject.transform.position + Vector3.up * .75f, hunger.ToString() + "!", color);
+        BigBoss.Gooey.CreateTextMessage(hunger.ToString() + "!", color);
     }
 
     public void CreateTextPop(Vector3 worldPosition, string message) //no color arg version
@@ -259,11 +259,8 @@ public class GUIManager : MonoBehaviour, IManager
         CreateTextPop(worldPosition, message, Color.white);
     }
 
-    public void CreateTextPop(Vector3 worldPosition, string message, Color col)
+    public void CreateTextMessage(string message, Color col)
     {
-        //TextPop text = new TextPop(message, worldPosition, col);
-        //textPopList.Enqueue(text);
-
         GameObject button = Instantiate(LabelPrefab) as GameObject;
         GUILabel label = button.GetComponent<GUILabel>();
         label.Text = message;
@@ -279,6 +276,12 @@ public class GUIManager : MonoBehaviour, IManager
             Debug.Log(e.Source);
             Debug.Log(e.StackTrace);
         }
+    }
+
+    public void CreateTextPop(Vector3 worldPosition, string message, Color col)
+    {
+        TextPop text = new TextPop(message, worldPosition, col);
+        textPopList.Enqueue(text);
     }
 
     void DisplayTextPops()

@@ -1,72 +1,4 @@
 <npcs>
-	<npc name="skeleton_knight">
-		<prefab>Skeleton_Knight</prefab>
-		<flags>
-			<flag name="nopoly" />
-			<flag name="Undead" />
-		</flags>
-		<spawnkeywords>
-			<entry name="tomb" />
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<size>medium</size>
-		</attributes>
-		<spells>
-			<spell>
-				<name>Fireball</name>
-				<range>5</range>
-				<targeter>
-					<type>TargetedObjects</type>
-					<effect>
-						<type>FireBallVisual</type>
-						<speed>2</speed>
-					</effect>
-					<effect>
-						<type>DamageFire</type>
-						<strength>
-							<min>6</min>
-							<max>12</max>
-						</strength>
-					</effect>
-				</targeter>
-			</spell>
-		</spells>
-		<startingitems>
-			<entry>
-				<item>Health Potion</item>
-				<probability>.2</probability>
-				<count>1</count>
-				<level>1</level>
-			</entry>
-		</startingitems>
-		<naturalweapon name="fist">
-			<stats>
-				<damage>
-					<min>4</min>
-					<max>12</max>
-				</damage>
-			</stats>
-		</naturalweapon>
-		<equipslots>
-			<equiptype>
-				<type>HAND</type>
-				<slots>2</slots>
-			</equiptype>
-		</equipslots>
-		<aipackages>
-		</aipackages>
-	</npc>
 	<npc name="Giant Spider">
 		<model> </model>
 		<modeltexture> </modeltexture>
@@ -80,51 +12,6 @@
 			<!-- none -->
 		</properties>
 		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-	</npc>
-	<npc name="Giant Rat">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>GIANT_RAT</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-			<keyword name="Corpse_Scavenger" />
-      <keyword name="tomb" />
 		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>
@@ -241,50 +128,6 @@
 			<!-- body is implicitly assumed -->
 		</bodyparts>
 	</npc>
-	<npc name="Ghoul">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Ghoul</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-			<keyword name="tomb" />
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-	</npc>
 	<npc name="Hydra">
 		<model> </model>
 		<modeltexture> </modeltexture>
@@ -341,50 +184,6 @@
 			<!-- none -->
 		</properties>
 		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-	</npc>
-	<npc name="Mummy">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Mummy</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-			<keyword name="tomb" />
 		</spawnkeywords>
 		<stats>
 			<maxhealth>25</maxhealth>

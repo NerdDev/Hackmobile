@@ -27,14 +27,7 @@ public class NPC : Affectable
         }
 
         //conversion of leveled items => items
-        List<ItemHolder> ih = StartingItems.Get(new System.Random(), 1, BigBoss.Player.Level);
-        if (ih.Count > 0) //temp random check
-        {
-            foreach (ItemHolder i in ih)
-            {
-                addToInventory(i.Get());
-            }
-        }
+        addToInventory(StartingItems.GetItems(Stats.Level));
     }
 
     /**
@@ -47,7 +40,7 @@ public class NPC : Affectable
     public BodyParts Bodyparts = new BodyParts();
     public Stats Stats = new Stats();
     public Spells KnownSpells = new Spells();
-    public LeveledItemList StartingItems = new LeveledItemList();
+    public StartingItems StartingItems = new StartingItems();
     private AICore Master = new AICore();
 
     public Inventory Inventory = new Inventory();
@@ -138,14 +131,14 @@ public class NPC : Affectable
         }
     }
 
-    public void CreateTextPop(string str)
+    public void CreateTextMessage(string str)
     {
-        BigBoss.Gooey.CreateTextPop(GO.transform.position, str);
+        CreateTextMessage(str, Color.white);
     }
 
-    public void CreateTextPop(string str, Color col)
+    public void CreateTextMessage(string str, Color col)
     {
-        BigBoss.Gooey.CreateTextPop(GO.transform.position, str, col);
+        BigBoss.Gooey.CreateTextMessage(str, col);
     }
 
     public override void Wrap()
@@ -167,7 +160,7 @@ public class NPC : Affectable
     public virtual float AdjustHunger(float amount)
     {
         Stats.Hunger += amount;
-        CreateTextPop("Gained " + amount + " of nutrition.");
+        CreateTextMessage("Gained " + amount + " of nutrition.");
         getHungerLevel(Stats.Hunger);
         return Stats.Hunger;
     }
@@ -187,7 +180,7 @@ public class NPC : Affectable
             if (Stats.CurrentHealth - amount > 0)
             {
                 Stats.CurrentHealth = Stats.CurrentHealth - amount;
-                if (report) CreateTextPop(this.Name + " took " + amount + " damage!", Color.red);
+                if (report) CreateTextMessage(this.Name + " took " + amount + " damage!", Color.red);
                 return false;
             }
             else
@@ -200,13 +193,13 @@ public class NPC : Affectable
         else if (Stats.CurrentHealth + amount > Stats.MaxHealth)
         {
             Stats.CurrentHealth = Stats.MaxHealth;
-            if (report) CreateTextPop(this.Name + " gained " + amount + " in health.");
+            if (report) CreateTextMessage(this.Name + " gained " + amount + " in health.");
             return false;
         }
         else // health is positive gain but doesn't go over max, so it works normally
         {
             Stats.CurrentHealth = Stats.CurrentHealth + amount;
-            if (report) CreateTextPop(this.Name + " gained " + amount + " in health.");
+            if (report) CreateTextMessage(this.Name + " gained " + amount + " in health.");
             return false;
         }
     }
@@ -497,8 +490,8 @@ public class NPC : Affectable
         {
             foreach (Item i in weapons)
             {
-                CreateTextPop("The " + this.Name + " swings with his " + i.Name + "!");
-                if (n.damage(i.getDamage()))
+                CreateTextMessage("The " + this.Name + " swings with his " + i.Name + "!");
+                if (i.Damage(n))
                 {
                     AdjustXP(n.getXPfromNPC());
                 }
@@ -506,8 +499,8 @@ public class NPC : Affectable
         }
         else
         {
-            CreateTextPop("The " + this.Name + " swings with his bare hands!");
-            if (n.damage(CalcNaturalDamage()))
+            CreateTextMessage("The " + this.Name + " swings with his bare hands!");
+            if (NaturalDamage(n))
             {
                 AdjustXP(n.getXPfromNPC());
             }
@@ -525,12 +518,18 @@ public class NPC : Affectable
         AdjustPower(-spell.cost);
     }
 
-    protected int CalcNaturalDamage()
+    protected bool NaturalDamage(NPC n)
     {
         if (NaturalWeapon != null)
         {
-            return NaturalWeapon.getDamage();
+            return NaturalWeapon.Damage(n);
         }
+        else 
+            return n.damage(CalcHandDamage());
+    }
+
+    protected int CalcHandDamage()
+    {
         return (new System.Random()).Next(0, Attributes.Strength);
     }
 
@@ -542,7 +541,7 @@ public class NPC : Affectable
 
         if (this.IsNotAFreaking<Player>())
         {
-            CreateTextPop(Name + " is dead!", Color.red);
+            CreateTextMessage(Name + " is dead!", Color.red);
             Debug.Log(this.Name + " was killed!");
             //time effects need cleared
             List<Item> itemsToDrop = new List<Item>();
@@ -572,6 +571,17 @@ public class NPC : Affectable
     public void addToInventory(Item item)
     {
         this.addToInventory(item, 1);
+    }
+
+    public void addToInventory(List<Item> items)
+    {
+        if (items.Count > 0)
+        {
+            foreach (Item item in items)
+            {
+                this.addToInventory(item, 1);
+            }
+        }
     }
 
     public virtual void addToInventory(Item item, int count)
@@ -657,7 +667,7 @@ public class NPC : Affectable
         Flags = new GenericFlags<NPCFlags>(x.SelectEnums<NPCFlags>("flags"));
         SpawnKeywords = new GenericFlags<SpawnKeywords>(x.SelectEnums<SpawnKeywords>("spawnkeywords"));
         KnownSpells = x.Select<Spells>("spells");
-        StartingItems = x.Select<LeveledItemList>("startingitems");
+        StartingItems = x.Select<StartingItems>("startingitems");
         Equipment = x.Select<Equipment>("equipslots");
         NaturalWeapon = x.Select<Item>("naturalweapon");
         //parse AI packages
@@ -781,7 +791,7 @@ public class NPC : Affectable
         {
             if (this.GridDistanceToTarget(BigBoss.Player) > BigBoss.Gooey.GetCurrentSpellRange())
             {
-                CreateTextPop(this.Name + " is too far away to cast this spell!");
+                CreateTextMessage(this.Name + " is too far away to cast this spell!");
             }
             else
             {

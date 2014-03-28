@@ -73,6 +73,14 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>
         return picks;
     }
 
+    public List<T> Get(System.Random random, int min, int max)
+    {
+        int num = random.Next(min, max + 1);
+        if (num == 0) return new List<T>();
+
+        return Get(random, num);
+    }
+
     public abstract ProbabilityPool<T> Filter(Func<T, bool> filter);
 
     public abstract void ClearSkipped();

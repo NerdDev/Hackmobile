@@ -18,7 +18,7 @@ public class Blindness : EffectInstance
             fow = p.GO.GetComponentInChildren<FOWRevealer>();
             originalRange = fow.range;
             fow.range = new Vector2(0f, .3f);
-            n.CreateTextPop("You feel yourself going blind...");
+            n.CreateTextMessage("You feel yourself going blind...");
         }
     }
 
@@ -29,7 +29,7 @@ public class Blindness : EffectInstance
         {
             if (fow != null && originalRange != null)
                 fow.range = originalRange;
-            n.CreateTextPop("You feel your vision return.");
+            n.CreateTextMessage("You feel your vision return.");
         }
     }
 
