@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 [Serializable]
-public class ThemeElementCollection
+public class ThemeElementCollection : PrefabProbabilityPool<ThemeElementBundle>
 {
-    public ThemeElement[] Elements;
 }

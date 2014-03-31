@@ -2,8 +2,9 @@ using UnityEngine;
 using System.Collections;
 using UnityEditor;
 using System;
+using System.Collections.Generic;
 
-public class Theme : MonoBehaviour
+public class Theme : ScriptableObject, IInitializable
 {
     public bool Scatterable;
     public bool Chainable;

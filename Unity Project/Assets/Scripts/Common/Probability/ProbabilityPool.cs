@@ -75,7 +75,7 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>
 
     public abstract ProbabilityPool<T> Filter(Func<T, bool> filter);
 
-    public abstract void ClearSkipped();
+    public abstract void Freshen();
 
     public abstract void ToLog(Logs log, string name = "");
 

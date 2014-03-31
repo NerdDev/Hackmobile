@@ -75,7 +75,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         Max += cont.Multiplier;
     }
 
-    public override void ClearSkipped()
+    public override void Freshen()
     {
         if (!Fresh)
         {

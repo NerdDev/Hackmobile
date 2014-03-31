@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public interface IPillarTheme
+public interface IInitializable
 {
-    ThemeElementCollection GetPillars();
+    void Init();
 }

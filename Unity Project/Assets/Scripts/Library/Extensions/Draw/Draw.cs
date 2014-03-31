@@ -524,28 +524,13 @@ public static class Draw
 
     public static DrawAction<GenSpace> MergeIn(ThemeElement[] elements, System.Random random, Theme theme, GridType type = GridType.Doodad, bool typeOnlyDefault = false, bool themeOnlyDefault = false)
     {
-        return (arr, x, y) =>
-        {
-            GenSpace space;
-            if (!arr.TryGetValue(x, y, out space))
-            {
-                space = new GenSpace(type, theme, x, y);
-                arr[x, y] = space;
-            }
-            else
-            {
-                if (!themeOnlyDefault)
-                {
-                    space.Theme = theme;
-                }
-                if (!typeOnlyDefault)
-                {
-                    space.Type = type;
-                }
-            }
-            space.AddDeploy(new GenDeploy(elements.Random(random)), x, y);
-            return true;
-        };
+        return MergeIn(elements.Random(random), theme, type, typeOnlyDefault, themeOnlyDefault);
+    }
+
+    public static DrawAction<GenSpace> MergeIn<T>(ProbabilityPool<T> elements, System.Random random, Theme theme, GridType type = GridType.Doodad, bool typeOnlyDefault = false, bool themeOnlyDefault = false)
+        where T : ThemeElement
+    {
+        return MergeIn(elements.Get(random), theme, type, typeOnlyDefault, themeOnlyDefault);
     }
 
     public static DrawAction<GenSpace> MergeIn(GenDeploy deploy, Theme theme, GridType type = GridType.Floor, bool typeOnlyDefault = true, bool themeOnlyDefault = false)

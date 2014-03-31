@@ -6,17 +6,9 @@ using System.Linq;
 
 public class LevelBuilder : MonoBehaviour
 {
-    private static GameObject holder;
+    public static GameObject Holder;
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
-
-    public static void Initialize()
-    {
-        if (holder == null)
-        {
-            holder = new GameObject("Level Block Holder");
-        }
-    }
 
     public void Instantiate(Value2D<GridSpace> val)
     {
@@ -25,11 +17,6 @@ public class LevelBuilder : MonoBehaviour
 
     public void Instantiate(GridSpace space, int x, int y)
     {
-        if (x == 7 && y == -4)
-        {
-            int wer = 23;
-            wer++;
-        }
         if (space == null || space.Deploys == null) return;
         space.Blocks = new List<GameObject>(space.Deploys.Count);
         for (int i = 0; i < space.Deploys.Count; i++)
@@ -41,7 +28,7 @@ public class LevelBuilder : MonoBehaviour
                 deploy.GO,
                 new Vector3(x + t.position.x + deploy.X, t.position.y + deploy.Y, y + t.position.z + deploy.Z)
                 , Quaternion.Euler(new Vector3(t.rotation.x + deploy.XRotation, t.rotation.y + deploy.YRotation, t.rotation.z + deploy.ZRotation))) as GameObject;
-            obj.transform.parent = holder.transform;
+            obj.transform.parent = Holder.transform;
             obj.transform.localScale = new Vector3(
                 deploy.XScale * obj.transform.localScale.x,
                 deploy.YScale * obj.transform.localScale.y,
@@ -185,6 +172,6 @@ public class LevelBuilder : MonoBehaviour
 
     public void Combine()
     {
-        StaticBatchingUtility.Combine(holder);
+        StaticBatchingUtility.Combine(Holder);
     }
 }

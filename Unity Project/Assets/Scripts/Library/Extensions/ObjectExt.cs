@@ -115,6 +115,34 @@ namespace System
         }
 
         */
+
+        public static IEnumerable<T> GetAllInterfaces<T>(this Object obj)
+        {
+            foreach (T t in GetAllInterfaces<T>(obj, typeof(T), new HashSet<object>(new ReferenceEqualityComparer())))
+            {
+                yield return t;
+            }
+        }
+
+        private static IEnumerable<T> GetAllInterfaces<T>(Object obj, Type target, HashSet<Object> set)
+        {
+            Type objType = obj.GetType();
+            if (!objType.IsPrimitive() && set.Add(obj))
+            {
+                BigBoss.Debug.w(Logs.Main, objType.ToString());
+                if (objType.GetInterfaces().Contains(target))
+                {
+                    yield return (T)obj;
+                }
+                foreach (var field in objType.GetFields())
+                {
+                    foreach (T t in GetAllInterfaces<T>(field.GetValue(obj), target, set))
+                    {
+                        yield return t;
+                    }
+                }
+            }
+        }
     }
 
     public class ObjDump
@@ -196,7 +224,7 @@ namespace System
                     {
                         Write("null");
                     }
-                    
+
                 }
                 else
                 {
@@ -221,7 +249,7 @@ namespace System
                         else
                         {
                             type = propertyInfo.PropertyType;
-                            try 
+                            try
                             {
                                 value = propertyInfo.GetValue(element, null);
                             }
@@ -230,7 +258,7 @@ namespace System
                                 //Write("null");
                             }
                         }
-                        
+
                         //type = fieldInfo != null ? fieldInfo.FieldType : propertyInfo.PropertyType;
                         //object value = fieldInfo != null
                         //                   ? fieldInfo.GetValue(element)
@@ -318,4 +346,5 @@ namespace System
             return ("{ }");
         }
     }
+
 }

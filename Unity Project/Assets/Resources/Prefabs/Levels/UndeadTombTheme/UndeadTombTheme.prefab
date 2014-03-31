@@ -40,20 +40,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Scatterable: 0
   Chainable: 0
-  Core: {fileID: 11400000, guid: f43df275c14cf3648bf4e387d0ee71f6, type: 2}
-  Keywords: 00000000
+  Core: {fileID: 0}
+  Keywords: 
   Pillars:
-  - Elements:
-    - {fileID: 11400000, guid: 977e93b9eb682ec41aec8a9bdb2b80bb, type: 2}
-  - Elements:
-    - {fileID: 11400000, guid: f037dcb8b95f0a944947684fa6cf353c, type: 2}
-  - Elements:
-    - {fileID: 11400000, guid: 88452558fcff0a04286ac51904470c22, type: 2}
-  - Elements:
-    - {fileID: 11400000, guid: d674f9f2a64553c4ebb096ff41817cfc, type: 2}
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 100000, guid: 848c790b8ff5be04a88d7835fa459b9e, type: 2}
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 100000, guid: b66abe9a30819ce40931ba058f4a08c4, type: 2}
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 100000, guid: f353a1325679d524b9b9233007d0ec8f, type: 2}
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 100000, guid: a9599c1780bcdb14da4d13a9c54af8e1, type: 2}
   Tombs:
-  - Elements:
-    - {fileID: 11400000, guid: 15956c11fce589d43aebadac16ff9dd6, type: 2}
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 100000, guid: be60f9543ac77014ba9e59df9a34b560, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -154,10 +154,12 @@ public class LeveledPool<T> : ProbabilityPool<T>
         return ret;
     }
 
-    public override void ClearSkipped()
+    public override void Freshen()
     {
         if (curLevel != -1)
-            currentPool.ClearSkipped();
+        {
+            currentPool.Freshen();
+        }
     }
 
     public override void ToLog(Logs log, string name = "")

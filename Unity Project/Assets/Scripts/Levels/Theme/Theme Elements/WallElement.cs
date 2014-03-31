@@ -26,21 +26,21 @@ public class WallElement : ThemeElement
         SetChar('#');
     }
 
+    protected virtual void HandleAlternateSides(ThemeElementSpec spec, GridDirection dir)
+    {
+        spec.GenDeploy.Element = spec.Theme.Core.ThinWall.Random(spec.Random);
+        spec.GenDeploy.RotateToPoint(dir, spec.Random);
+    }
+
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
-        if (spec.DeployX == 18 && spec.DeployY == -7)
-        {
-            int wer = 23;
-            wer++;
-        }
         GridLocationResults results = spec.GenGrid.DrawLocationsAroundResults(spec.DeployX, spec.DeployY, true, _test);
         GridDirection dir;
         GridLocation loc;
         bool placeFloor = PlaceFloor;
         if (spec.GenGrid.AlternatesSides(results, out dir))
         {
-            spec.GenDeploy.Element = spec.Theme.Core.ThinWall.Random(spec.Random);
-            spec.GenDeploy.RotateToPoint(dir, spec.Random);
+            HandleAlternateSides(spec, dir);
         }
         else if (spec.GenGrid.Cornered(results, out loc, false))
         {

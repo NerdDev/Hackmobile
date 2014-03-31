@@ -48,7 +48,7 @@ GameObject:
   - 4: {fileID: 400006}
   - 114: {fileID: 11400004}
   m_Layer: 0
-  m_Name: Tri Wall
+  m_Name: Brick Wall Tri
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\Common\Exceptions\InfiniteLoopException.cs" />
      <Compile Include="Assets\Scripts\Common\Flags.cs" />
      <Compile Include="Assets\Scripts\Common\GenericFlags.cs" />
+     <Compile Include="Assets\Scripts\Common\IInitializable.cs" />
      <Compile Include="Assets\Scripts\Common\Loom.cs" />
      <Compile Include="Assets\Scripts\Common\MultiMap.cs" />
      <Compile Include="Assets\Scripts\Common\Nifty.cs" />
@@ -68,6 +69,8 @@
      <Compile Include="Assets\Scripts\Common\Probability\IProbabilityItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\IProbabilityLevItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\LeveledPool.cs" />
+     <Compile Include="Assets\Scripts\Common\Probability\PrefabProbabilityContainer.cs" />
+     <Compile Include="Assets\Scripts\Common\Probability\PrefabProbabilityPool.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\Probability.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityList.cs" />
@@ -131,6 +134,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElementSpec.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\WallElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\ThemeElementBundle.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeElementCollection.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\GrandTombRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\MassTombRoom.cs" />
@@ -502,6 +506,7 @@
      <None Include="Assets\Tools\NGUI\Examples\Other\French.txt" />
      <None Include="Assets\Tools\B2M_2.1\Script\BatchApply_README.txt" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
+     <None Include="Assets\Resources\XML\themes.xml" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
      <None Include="Assets\Resources\XML\materials.xml" />
      <None Include="Assets\Tools\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
