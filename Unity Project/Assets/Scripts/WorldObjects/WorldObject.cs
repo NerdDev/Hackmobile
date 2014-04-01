@@ -69,6 +69,19 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
             OnDestroy(this);
     }
 
+    public virtual void JustDestroy()
+    {
+        Unwrap();
+        
+    }
+    public virtual void JustUnregister()
+    {
+        Unregister();
+        if (GridSpace != null) GridSpace.Remove(this);
+        if (OnDestroy != null)
+            OnDestroy(this);
+    }
+
     public void Unwrap()
     {
         if (Instance != null) //maybe the item isn't tied to a gameobject?

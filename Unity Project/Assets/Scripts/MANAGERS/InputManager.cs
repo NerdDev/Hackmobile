@@ -112,6 +112,7 @@ public class InputManager : MonoBehaviour, IManager
         Vector3 euler = lookRotFinal.eulerAngles;
         euler = new Vector3(euler.x, euler.y + Rotation_Camera.xDeg, euler.z);
         BigBoss.PlayerInfo.transform.rotation = Quaternion.Euler(euler);
+        BigBoss.PlayerInfo.GetComponent<CharacterController>().transform.rotation = Quaternion.Euler(euler);
         BigBoss.Player.MovePlayer(joystickLeft.JoystickAxis);
     }
 

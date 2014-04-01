@@ -70,8 +70,15 @@ public class NPC : Affectable
     internal Queue<GridSpace> targetGrids = new Queue<GridSpace>();
     internal Vector3 heading; //this is the heading of target minus current location
 
-    Animator animator;
+    internal Animator animator;
     float velocity;
+
+    static int idleState = Animator.StringToHash("Base Layer.idle");
+    static int moveState = Animator.StringToHash("Base Layer.Locomotion_Tree");
+    static public int attackState1 = Animator.StringToHash("Base Layer.attack 1");
+    static public int attackState2 = Animator.StringToHash("Base Layer.attack 2");
+    static int attackState3 = Animator.StringToHash("Base Layer.attack 3");
+    static int deathState = Animator.StringToHash("Base Layer.death");
 
     #endregion
 
@@ -128,6 +135,28 @@ public class NPC : Affectable
         else
         {
             animator.SetFloat("runSpeed", velocity);
+        }
+    }
+
+    internal void SetAttackAnimation(GameObject target)
+    {
+        float testVal = UnityEngine.Random.value;
+        GO.transform.LookAt(target.transform);
+        if (this is Player)
+        {
+            //GO.transform.Rotate(Vector3.up, 45f);
+        }
+        if (testVal < .333)
+        {
+            animator.Play(attackState1);
+        }
+        else if (testVal < .666)
+        {
+            animator.Play(attackState2);
+        }
+        else
+        {
+            animator.Play(attackState3);
         }
     }
 
@@ -491,6 +520,7 @@ public class NPC : Affectable
             foreach (Item i in weapons)
             {
                 CreateTextMessage("The " + this.Name + " swings with his " + i.Name + "!");
+                SetAttackAnimation(n.GO);
                 if (i.Damage(n))
                 {
                     AdjustXP(n.getXPfromNPC());
@@ -500,6 +530,7 @@ public class NPC : Affectable
         else
         {
             CreateTextMessage("The " + this.Name + " swings with his bare hands!");
+            SetAttackAnimation(n.GO);
             if (NaturalDamage(n))
             {
                 AdjustXP(n.getXPfromNPC());
@@ -558,7 +589,9 @@ public class NPC : Affectable
                 Debug.Log("Dropping item: " + i.Name);
                 this.dropItem(i, GridSpace);
             }
-            Destroy();
+            JustUnregister();
+            animator.Play(deathState);
+            GO.AddComponent<TimedAction>().init(1.5f, new Action(() => { JustDestroy(); }));
         }
         else
         {

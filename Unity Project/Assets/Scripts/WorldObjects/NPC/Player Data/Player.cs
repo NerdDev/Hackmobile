@@ -71,6 +71,10 @@ public class Player : NPC
         BigBoss.Gooey.UpdatePowerBar(this.Stats.MaxPower);
     }
 
+    public override void Start()
+    {
+        animator = GO.GetComponent<Animator>() as Animator;
+    }
     // Update is called once per frame
     public override void Update()
     {
@@ -142,7 +146,7 @@ public class Player : NPC
     #region Movement and Animation
 
     #region Movement/Animation Properties
-    private Animator anim;							// a reference to the animator on the character
+    //private Animator anim;							// a reference to the animator on the character
     private AnimatorStateInfo currentBaseState;			// a reference to the current state of the animator, used for base layer
     private AnimatorStateInfo layer2CurrentState;	// a reference to the current state of the animator, used for layer 2
     ///static int idleState = Animator.StringToHash("Base Layer.Idle");
@@ -229,7 +233,6 @@ public class Player : NPC
 
     public void MovePlayer(Vector2 magnitude)
     {
-        //MovePlayer(PlayerSpeed * magnitude.sqrMagnitude);
         v = magnitude.sqrMagnitude * PlayerSpeed;
         MovePlayer(v);
     }
@@ -252,44 +255,36 @@ public class Player : NPC
 
     private void MovePlayer(float speed)
     {
-        GO.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
+        Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
+        GO.GetComponent<CharacterController>().Move(moveDir * speed * Time.deltaTime);
+        //GO.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
     }
 
     //BRAD WHAT DOES THIS DO?!
     float v;
+
     public override void FixedUpdate()
     {
-        if (anim == null)
+        if (animator == null)
         {
             try
             {
-                anim = GO.GetComponent<Animator>() as Animator;
+                animator = GO.GetComponent<Animator>() as Animator;
             }
             catch (Exception)
             {
             }
             return;
         }
-        if (moving)
-        {
-            /*
-            if (v < PlayerSpeed)
-            {
-                v += .1f;
-            }
-            else
-            {
-                v = PlayerSpeed;
-            }
-            */
-        }
-        else
+        if (!moving)
         {
             v = 0;
         }
-        anim.SetFloat("runSpeed", v);							// set our animator's float parameter 'Speed' equal to the vertical input axis
-        currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
+        animator.SetFloat("runSpeed", v);							// set our animator's float parameter 'runSpeed' to the speed of the NPC
+        currentBaseState = animator.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
     }
+
+    
 
     #region MECANIM EXAMPLE SCRIPT
     //	using UnityEngine;

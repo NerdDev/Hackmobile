@@ -213,6 +213,7 @@
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\TelepathyEffect.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\FireballVisual.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveTowards.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedAction.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedDestruction.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellAspect.cs" />

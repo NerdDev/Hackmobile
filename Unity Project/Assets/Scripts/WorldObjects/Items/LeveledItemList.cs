@@ -59,11 +59,6 @@ public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
 
     private void ResolveListReferences()
     {
-        if (refs.Count > 0)
-        {
-            UnityEngine.Debug.Log(refs.Count);
-            UnityEngine.Debug.Log(refs[0]);
-        }
         foreach (string str in refs)
         {
             if (BigBoss.Objects.LeveledItems.ContainsKey(str))

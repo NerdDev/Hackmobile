@@ -7,6 +7,7 @@ using System.Linq;
 public class LevelBuilder : MonoBehaviour
 {
     private static GameObject holder;
+    private static GameObject doorHolder;
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
 
@@ -15,6 +16,7 @@ public class LevelBuilder : MonoBehaviour
         if (holder == null)
         {
             holder = new GameObject("Level Block Holder");
+            doorHolder = new GameObject("Door Block Holder");
         }
     }
 
@@ -36,7 +38,8 @@ public class LevelBuilder : MonoBehaviour
                 deploy.GO,
                 new Vector3(x + t.position.x + deploy.X, t.position.y + deploy.Y, y + t.position.z + deploy.Z)
                 , Quaternion.Euler(new Vector3(t.rotation.x + deploy.XRotation, t.rotation.y + deploy.YRotation, t.rotation.z + deploy.ZRotation))) as GameObject;
-            obj.transform.parent = holder.transform;
+            if (space.Type != GridType.Door) obj.transform.parent = holder.transform;
+            else obj.transform.parent = doorHolder.transform;
             obj.transform.localScale = new Vector3(
                 deploy.XScale * obj.transform.localScale.x,
                 deploy.YScale * obj.transform.localScale.y,
@@ -61,7 +64,7 @@ public class LevelBuilder : MonoBehaviour
         if (combineCounter > 20)
         {
             combineCounter = 0;
-            //Combine();
+            Combine();
         }
     }
 
