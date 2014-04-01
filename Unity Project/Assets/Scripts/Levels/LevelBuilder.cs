@@ -68,6 +68,11 @@ public class LevelBuilder : MonoBehaviour
         };
         foreach (Value2D<GenSpace> gen in spec.GenGrid)
         {
+            if (gen.x == -44 && gen.y == -16)
+            {
+                int wer = 23;
+                wer++;
+            }
             if (gen.val.Deploys == null)
             {
                 HandleEmptyDeploy(gen.val, spec.Random);

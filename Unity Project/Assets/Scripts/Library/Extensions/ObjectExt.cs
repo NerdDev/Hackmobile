@@ -126,19 +126,22 @@ namespace System
 
         private static IEnumerable<T> GetAllInterfaces<T>(Object obj, Type target, HashSet<Object> set)
         {
-            Type objType = obj.GetType();
-            if (!objType.IsPrimitive() && set.Add(obj))
+            if (obj != null)
             {
-                BigBoss.Debug.w(Logs.Main, objType.ToString());
-                if (objType.GetInterfaces().Contains(target))
+                Type objType = obj.GetType();
+                if (!objType.IsPrimitive() && set.Add(obj))
                 {
-                    yield return (T)obj;
-                }
-                foreach (var field in objType.GetFields())
-                {
-                    foreach (T t in GetAllInterfaces<T>(field.GetValue(obj), target, set))
+                    BigBoss.Debug.w(Logs.Main, objType.ToString());
+                    if (objType.GetInterfaces().Contains(target))
                     {
-                        yield return t;
+                        yield return (T)obj;
+                    }
+                    foreach (var field in objType.GetFields())
+                    {
+                        foreach (T t in GetAllInterfaces<T>(field.GetValue(obj), target, set))
+                        {
+                            yield return t;
+                        }
                     }
                 }
             }

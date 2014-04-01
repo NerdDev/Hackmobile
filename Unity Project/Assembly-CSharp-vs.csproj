@@ -123,6 +123,7 @@
      <Compile Include="Assets\Scripts\Levels\RoomModTester.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\CoreElements.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\IPillarTheme.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\SmartThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\DoorElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\FloorDoodadElement.cs" />
@@ -135,7 +136,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\WallElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeElementBundle.cs" />
-     <Compile Include="Assets\Scripts\Levels\Theme\ThemeElementCollection.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\ThemeQualitySet.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\GrandTombRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\MassTombRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\UndeadTombTheme\TombElement.cs" />

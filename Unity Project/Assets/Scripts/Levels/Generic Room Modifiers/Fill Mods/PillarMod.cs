@@ -27,12 +27,17 @@ public class PillarMod : FillRoomMod
         Container2D<GenSpace> arr = spec.Grids;
         var pillarSet = pillarTheme.GetPillars().Get(spec.Random);
         var call = Draw.IsType<GenSpace>(GridType.Floor).And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>())))
-            .IfThen(Draw.MergeIn(pillarSet.Get(spec.Random), spec.Theme));
+            .IfThen(Draw.MergeIn(pillarSet, spec.Random, spec.Theme));
 
         for (int x = bounds.XMin; x < bounds.XMax; x = x + spacingX)
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)
             {
+                if (x == 0 && y == -1)
+                {
+                    int wer = 23;
+                    wer++;
+                }
                 call(arr, x, y);
             }
         }

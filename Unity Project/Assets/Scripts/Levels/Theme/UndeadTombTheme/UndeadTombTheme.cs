@@ -9,8 +9,8 @@ using UnityEngine;
 
 public class UndeadTombTheme : Theme, IPillarTheme
 {
-    public ThemeElementCollection Pillars;
-    public ThemeElementCollection Tombs;
+    public ThemeElementBundle Pillars;
+    public ThemeElementBundle Tombs;
 
     public override void Init()
     {
@@ -33,7 +33,7 @@ public class UndeadTombTheme : Theme, IPillarTheme
         _roomMods.AddMod(new TreasureRoomMod(), .3d);
     }
 
-    public ThemeElementCollection GetPillars()
+    public ThemeElementBundle GetPillars()
     {
         return Pillars;
     }

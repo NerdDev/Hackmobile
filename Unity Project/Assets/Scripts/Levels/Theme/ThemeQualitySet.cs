@@ -2,30 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 [Serializable]
-public class PrefabProbabilityPool<T> : ProbabilityPool<T>, IInitializable
-    where T : UnityEngine.Component
+public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable
 {
-    private ProbabilityPool<T> _pool;
-    public PrefabProbabilityContainer[] Elements;
+    private ProbabilityPool<ThemeElement> _pool;
+    public List<PrefabProbabilityContainer> Elements;
+
+    [Serializable]
+    public class PrefabProbabilityContainer
+    {
+        public float Multiplier = 1f;
+        public bool Unique;
+        public ThemeElement Item;
+    }
 
     public void Init()
     {
-        _pool = ProbabilityPool<T>.Create();
+        _pool = ProbabilityPool<ThemeElement>.Create();
         foreach (PrefabProbabilityContainer cont in Elements)
         {
             if (cont.Item == null)
             {
                 throw new ArgumentException("Prefab has to be not null");
             }
-            T t = cont.Item.GetComponentInChildren<T>();
-            if (t == null)
-            {
-                throw new ArgumentException("Prefab of type " + cont.Item.GetType() + " has to be of type " + typeof(T));
-            }
-            _pool.Add(t, cont.Multiplier, cont.Unique);
+            _pool.Add(cont.Item, cont.Multiplier, cont.Unique);
         }
     }
 
@@ -35,27 +36,27 @@ public class PrefabProbabilityPool<T> : ProbabilityPool<T>, IInitializable
         get { return _pool.Count; }
     }
 
-    public override void Add(T item, double multiplier, bool unique)
+    public override void Add(ThemeElement item, double multiplier, bool unique)
     {
         _pool.Add(item, multiplier, unique);
     }
 
-    public override int Remove(T item, bool all)
+    public override int Remove(ThemeElement item, bool all)
     {
         return _pool.Remove(item, all);
     }
 
-    public override void AddAll(ProbabilityPool<T> rhs)
+    public override void AddAll(ProbabilityPool<ThemeElement> rhs)
     {
         _pool.AddAll(rhs);
     }
 
-    public override bool Get(System.Random random, out T item)
+    public override bool Get(System.Random random, out ThemeElement item)
     {
         return _pool.Get(random, out item);
     }
 
-    public override ProbabilityPool<T> Filter(Func<T, bool> filter)
+    public override ProbabilityPool<ThemeElement> Filter(Func<ThemeElement, bool> filter)
     {
         return _pool.Filter(filter);
     }
@@ -70,7 +71,7 @@ public class PrefabProbabilityPool<T> : ProbabilityPool<T>, IInitializable
         _pool.ToLog(log, name);
     }
 
-    public override IEnumerator<ProbabilityItem<T>> GetEnumerator()
+    public override IEnumerator<ProbabilityItem<ThemeElement>> GetEnumerator()
     {
         return _pool.GetEnumerator();
     }

@@ -5,5 +5,5 @@ using System.Text;
 
 public interface IPillarTheme
 {
-    ThemeElementCollection GetPillars();
+    ThemeElementBundle GetPillars();
 }

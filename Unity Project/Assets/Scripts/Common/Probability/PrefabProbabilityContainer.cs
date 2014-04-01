@@ -10,7 +10,7 @@ public class PrefabProbabilityContainer
 {
     public float Multiplier = 1f;
     public bool Unique;
-    public UnityEngine.Object Item;
+    public GameObject Item;
 }
 
 //[CustomPropertyDrawer(typeof(PrefabProbabilityContainer))]
