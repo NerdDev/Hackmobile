@@ -157,7 +157,7 @@ public class Player : NPC
     public float tileMovementTolerance = .85f;  //radius
 
     float timePassed = 0;
-    float timeVar = 1.5f;
+    float timeVar = 20f;
     bool timeSet;
     #endregion
 
