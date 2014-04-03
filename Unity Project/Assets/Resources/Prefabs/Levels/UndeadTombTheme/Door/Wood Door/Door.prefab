@@ -256,6 +256,7 @@ MonoBehaviour:
   GridLength: 1
   Walkable: 1
   PrintChar: 
+  Dynamic: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -6,17 +6,20 @@ using System.Linq;
 
 public class LevelBuilder : MonoBehaviour
 {
-    private static GameObject holder;
-    private static GameObject doorHolder;
+    private static GameObject staticHolder;
+    private static GameObject dynamicHolder;
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
 
     public static void Initialize()
     {
-        if (holder == null)
+        if (staticHolder == null)
         {
-            holder = new GameObject("Level Block Holder");
-            doorHolder = new GameObject("Door Block Holder");
+            staticHolder = new GameObject("Static Block Holder");
+            dynamicHolder = new GameObject("Dynamic Block Holder");
+            var gameObj = new GameObject("Block Holder");
+            staticHolder.transform.parent = dynamicHolder.transform;
+            dynamicHolder.transform.parent = staticHolder.transform;
         }
     }
 
@@ -38,8 +41,14 @@ public class LevelBuilder : MonoBehaviour
                 deploy.GO,
                 new Vector3(x + t.position.x + deploy.X, t.position.y + deploy.Y, y + t.position.z + deploy.Z)
                 , Quaternion.Euler(new Vector3(t.rotation.x + deploy.XRotation, t.rotation.y + deploy.YRotation, t.rotation.z + deploy.ZRotation))) as GameObject;
-            if (space.Type != GridType.Door) obj.transform.parent = holder.transform;
-            else obj.transform.parent = doorHolder.transform;
+            if (deploy.Static)
+            {
+                obj.transform.parent = staticHolder.transform;
+            }
+            else
+            {
+                obj.transform.parent = dynamicHolder.transform;
+            }
             obj.transform.localScale = new Vector3(
                 deploy.XScale * obj.transform.localScale.x,
                 deploy.YScale * obj.transform.localScale.y,
@@ -50,7 +59,7 @@ public class LevelBuilder : MonoBehaviour
         //fog of war
         Vector3 pos = new Vector3(x, 0f, y);
         int height = 0;
-        if (space.Type == GridType.Wall) height = 0; 
+        if (space.Type == GridType.Wall) height = 0;
         BigBoss.Gooey.RecreateFOW(pos, height);
 
         //combination, GC
@@ -115,9 +124,8 @@ public class LevelBuilder : MonoBehaviour
         spec.GenDeploy.Deployed = true;
         spec.Reset();
         spec.GenDeploy.Element.PreDeployTweaks(spec);
-        GridDeploy deploy = new GridDeploy(spec.GenDeploy.Element.GO);
-        deploy.CopyFrom(spec.GenDeploy);
-        
+        GridDeploy deploy = new GridDeploy(spec.GenDeploy);
+
         spec.Space.Deploys.Add(deploy);
         if (spec.Additional.Count == 0) return;
         foreach (var d in spec.Additional.ToList())
@@ -178,6 +186,6 @@ public class LevelBuilder : MonoBehaviour
 
     public void Combine()
     {
-        StaticBatchingUtility.Combine(holder);
+        StaticBatchingUtility.Combine(staticHolder);
     }
 }

@@ -28,6 +28,7 @@ public class ThemeElement : FOWRenderers
     public byte GridLength = 1;
     public bool Walkable;
     public string PrintChar = string.Empty;
+    public bool Dynamic;
 
     public virtual void PreDeployTweaks(ThemeElementSpec spec)
     {
