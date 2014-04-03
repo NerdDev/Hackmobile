@@ -37,7 +37,6 @@ public class NPC : Affectable
     public GenericFlags<NPCFlags> Flags = new GenericFlags<NPCFlags>();
     public GenericFlags<SpawnKeywords> SpawnKeywords = new GenericFlags<SpawnKeywords>();
     public AttributesData Attributes = new AttributesData();
-    public BodyParts Bodyparts = new BodyParts();
     public Stats Stats = new Stats();
     public Spells KnownSpells = new Spells();
     public StartingItems StartingItems = new StartingItems();
