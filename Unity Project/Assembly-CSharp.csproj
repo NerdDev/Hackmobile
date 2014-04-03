@@ -217,8 +217,9 @@
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Resistances\ShockResistance.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\SeeInvisibleEffect.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\TelepathyEffect.cs" />
-     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\FireballVisual.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveTowards.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\OnObject.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TargetedObject.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedAction.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedDestruction.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
