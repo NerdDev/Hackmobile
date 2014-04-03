@@ -5,7 +5,7 @@ using System.Text;
 
 public class StairWallElement : StairElement
 {
-    public bool Out = true;
+    public bool InwardStairs = true;
     private static DrawAction<GenSpace> frontTest = Draw.IsType<GenSpace>(GridType.Wall);
     private static DrawAction<GenSpace> unitTest = Draw.IsType<GenSpace>(GridType.NULL);
 

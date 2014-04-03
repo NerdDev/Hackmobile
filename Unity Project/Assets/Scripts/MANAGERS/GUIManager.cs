@@ -100,7 +100,7 @@ public class GUIManager : MonoBehaviour, IManager
         startButton.transform.localPosition = new Vector3(0f, .5f, 0f);
         startButton.OnSingleClick = new Action(() =>
         {
-            StartCoroutine(BigBoss.Start.StartGame());
+            StartCoroutine(BigBoss.Starter.StartGame());
             foreach (GameObject go in buttons)
             {
                 Destroy(go);
@@ -116,7 +116,7 @@ public class GUIManager : MonoBehaviour, IManager
         {
             DiscoLight.color = Color.white;
             DiscoLight.cookie = cookie;
-            StartCoroutine(BigBoss.Start.StartGame());
+            StartCoroutine(BigBoss.Starter.StartGame());
             foreach (GameObject go in buttons)
             {
                 Destroy(go);

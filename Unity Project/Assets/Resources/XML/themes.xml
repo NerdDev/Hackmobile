@@ -1,0 +1,20 @@
+<themes>
+  <theme name="UndeadTomb">
+    <roommods>
+      <roommod multiplier=".5">CircleRoom</roommod>
+      <roommod multiplier="2">RectangularRoom</roommod>
+      <roommod>SquareRoom</roommod>
+      <roommod>TRoomRoom</roommod>
+      <roommod unique="true">MassTomb</roommod>
+      <roommod>GiantPillar</roommod>
+      <roommod multiplier=".5">HiddenRoom</roommod>
+      <roommod unique="true">Pillars</roommod>
+      <roommod>Splitter</roommod>
+      <roommod multiplier=".2">Traps</roommod>
+      <roommod multiplier=".3">TreasureRoom</roommod>
+    </roommods>
+    <elements>
+
+    </elements>
+  </theme>
+</themes>

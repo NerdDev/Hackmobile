@@ -84,7 +84,7 @@ public class InputManager : MonoBehaviour, IManager
         if (EasyTouch.GetTouchCount() >= 5)
         {
             Application.LoadLevel(Application.loadedLevelName);
-            BigBoss.Start.Start();
+            BigBoss.Starter.Start();
         }
         if (joystickLeft.JoystickAxis.x != 0 || joystickLeft.JoystickAxis.y != 0)
         {

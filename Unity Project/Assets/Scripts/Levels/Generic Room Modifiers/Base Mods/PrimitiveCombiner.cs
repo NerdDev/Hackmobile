@@ -48,8 +48,8 @@ public class PrimitiveCombiner : BaseRoomMod
 
     protected override bool ModifyInternal(RoomSpec spec, double scale)
     {
-        _amounts.ClearSkipped();
-        _primitives.ClearSkipped();
+        _amounts.Freshen();
+        _primitives.Freshen();
         byte amount = _amounts.Get(spec.Random);
         List<BaseRoomMod> mods = _primitives.Get(spec.Random, amount);
         throw new NotImplementedException("");

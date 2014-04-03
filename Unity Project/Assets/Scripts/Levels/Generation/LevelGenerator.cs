@@ -144,6 +144,7 @@ public class LevelGenerator
                 time = Time.realtimeSinceStartup;
             }
             #endregion
+            Theme.ChooseAllSmartObjects(Rand);
             RoomSpec spec = new RoomSpec(room, Depth, Theme, Rand);
             // Base Mod
             ApplyMod(spec, spec.RoomModifiers.BaseMods.Get(spec.Random));
@@ -784,15 +785,7 @@ public class LevelGenerator
                     continue;
                 }
             }
-            StairElement stair;
-            if (up)
-            {
-                stair = Theme.Core.StairUp.Random(Rand);
-            }
-            else
-            {
-                stair = Theme.Core.StairDown.Random(Rand);
-            }
+            StairElement stair = Theme.Stair.SmartElement.Get(Rand) as StairElement;
 
             if (!stair.Place(layout, obj, Theme, Rand, out placed))
             {

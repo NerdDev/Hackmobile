@@ -11,8 +11,8 @@ public class MassTombRoom : HeavyRoomMod
     {
         UndeadTombTheme undeadTheme = spec.Theme as UndeadTombTheme;
         if (undeadTheme == null) throw new ArgumentException("Theme needs to be undead themed.");
-        ThemeElement[] tombCollection = undeadTheme.Tombs.Random(spec.Random).Elements;
-        ThemeElement tombProto = tombCollection[0];
+        var tombCollection = undeadTheme.Tombs.SmartElement;
+        ThemeElement tombProto = tombCollection.Proto;
         List<List<Bounding>> options = spec.Grids.FindRectanglesMaximized(tombProto.GridWidth + 2, tombProto.GridLength + 2, true, new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.IsType<GenSpace>(GridType.Floor),
@@ -45,7 +45,7 @@ public class MassTombRoom : HeavyRoomMod
             {
                 foreach (Bounding tombBound in set)
                 {
-                    GenDeploy tomb = new GenDeploy(tombCollection.Random(spec.Random));
+                    GenDeploy tomb = new GenDeploy(tombCollection.Get(spec.Random));
                     spec.Grids.DrawRect(tombBound.XMin, tombBound.XMax, tombBound.YMin, tombBound.YMax, new StrokedAction<GenSpace>()
                         {
                             UnitAction = Draw.MergeIn(tomb, spec.Theme),

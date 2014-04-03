@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>
+public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>, IEnsureType
 {
     public const double MAX_MULTIPLIER = 100000;
     public const double MIN_MULTIPLIER = .0000000001;
@@ -42,6 +42,8 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>
             Add(item, 1, false);
         }
     }
+
+    public abstract bool Take(System.Random random, out T item);
 
     public abstract bool Get(System.Random random, out T item);
 
@@ -83,9 +85,16 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>
 
     public abstract ProbabilityPool<T> Filter(Func<T, bool> filter);
 
-    public abstract void ClearSkipped();
+    public abstract void Freshen();
+        public abstract void ToLog(Logs log, string name = "");
 
-    public abstract void ToLog(Logs log, string name = "");
+    public void EnsureType(Type target)
+    {
+        foreach (var item in this)
+        {
+            this.EnsureType(target, item);
+        }
+    }
 
     public abstract IEnumerator<ProbabilityItem<T>> GetEnumerator();
 
