@@ -11,7 +11,7 @@ public class MassTombRoom : HeavyRoomMod
     {
         UndeadTombTheme undeadTheme = spec.Theme as UndeadTombTheme;
         if (undeadTheme == null) throw new ArgumentException("Theme needs to be undead themed.");
-        var tombCollection = undeadTheme.Tombs.Get(spec.Random);
+        var tombCollection = undeadTheme.Tombs.SmartElement;
         ThemeElement tombProto = tombCollection.Proto;
         List<List<Bounding>> options = spec.Grids.FindRectanglesMaximized(tombProto.GridWidth + 2, tombProto.GridLength + 2, true, new StrokedAction<GenSpace>()
             {

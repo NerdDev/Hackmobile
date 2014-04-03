@@ -68,11 +68,6 @@ public class LevelBuilder : MonoBehaviour
         };
         foreach (Value2D<GenSpace> gen in spec.GenGrid)
         {
-            if (gen.x == -44 && gen.y == -16)
-            {
-                int wer = 23;
-                wer++;
-            }
             if (gen.val.Deploys == null)
             {
                 HandleEmptyDeploy(gen.val, spec.Random);
@@ -143,19 +138,13 @@ public class LevelBuilder : MonoBehaviour
         switch (space.Type)
         {
             case GridType.Wall:
-                element = space.Theme.Core.Wall.Random(rand);
+                element = space.Theme.Wall.SmartElement.Get(rand);
                 break;
             case GridType.Door:
-                element = space.Theme.Core.Door.Random(rand);
-                break;
-            case GridType.StairDown:
-                element = space.Theme.Core.StairDown.Random(rand);
-                break;
-            case GridType.StairUp:
-                element = space.Theme.Core.StairUp.Random(rand);
+                element = space.Theme.Door.SmartElement.Get(rand);
                 break;
             case GridType.Chest:
-                element = space.Theme.Core.Chest.Random(rand);
+                element = space.Theme.Chest.SmartElement.Get(rand);
                 break;
             case GridType.NULL:
                 return false;
@@ -163,7 +152,7 @@ public class LevelBuilder : MonoBehaviour
             case GridType.Floor:
             case GridType.SmallLoot:
             default:
-                element = space.Theme.Core.Floor.Random(rand);
+                element = space.Theme.Floor.SmartElement.Get(rand);
                 break;
         }
         if (element == null)

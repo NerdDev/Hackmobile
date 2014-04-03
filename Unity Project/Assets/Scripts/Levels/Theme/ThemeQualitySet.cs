@@ -4,9 +4,20 @@ using System.Linq;
 using System.Text;
 
 [Serializable]
-public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable
+public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IEnsureType
 {
     private ProbabilityPool<ThemeElement> _pool;
+    private ProbabilityPool<ThemeElement> pool
+    {
+        get
+        {
+            if (_pool == null)
+            {
+                Init();
+            }
+            return _pool;
+        }
+    }
     public List<PrefabProbabilityContainer> Elements;
 
     [Serializable]
@@ -26,6 +37,10 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable
             {
                 throw new ArgumentException("Prefab has to be not null");
             }
+            if (cont.Multiplier <= 0)
+            {
+                cont.Multiplier = 1f;
+            }
             _pool.Add(cont.Item, cont.Multiplier, cont.Unique);
         }
     }
@@ -33,47 +48,52 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable
     #region Probability Pool
     public override int Count
     {
-        get { return _pool.Count; }
+        get { return pool.Count; }
     }
 
     public override void Add(ThemeElement item, double multiplier, bool unique)
     {
-        _pool.Add(item, multiplier, unique);
+        pool.Add(item, multiplier, unique);
     }
 
     public override int Remove(ThemeElement item, bool all)
     {
-        return _pool.Remove(item, all);
+        return pool.Remove(item, all);
     }
 
     public override void AddAll(ProbabilityPool<ThemeElement> rhs)
     {
-        _pool.AddAll(rhs);
+        pool.AddAll(rhs);
     }
 
     public override bool Get(System.Random random, out ThemeElement item)
     {
-        return _pool.Get(random, out item);
+        return pool.Get(random, out item);
     }
 
     public override ProbabilityPool<ThemeElement> Filter(Func<ThemeElement, bool> filter)
     {
-        return _pool.Filter(filter);
+        return pool.Filter(filter);
     }
 
     public override void Freshen()
     {
-        _pool.Freshen();
+        pool.Freshen();
     }
 
     public override void ToLog(Logs log, string name = "")
     {
-        _pool.ToLog(log, name);
+        pool.ToLog(log, name);
     }
 
     public override IEnumerator<ProbabilityItem<ThemeElement>> GetEnumerator()
     {
-        return _pool.GetEnumerator();
+        return pool.GetEnumerator();
+    }
+
+    public override bool Take(Random random, out ThemeElement item)
+    {
+        return pool.Take(random, out item);
     }
     #endregion
 }

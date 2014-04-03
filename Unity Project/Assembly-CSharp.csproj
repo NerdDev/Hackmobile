@@ -121,9 +121,8 @@
      <Compile Include="Assets\Scripts\Levels\LevelBuilder.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModCollection.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModTester.cs" />
-     <Compile Include="Assets\Scripts\Levels\Theme\CoreElements.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\IPillarTheme.cs" />
-     <Compile Include="Assets\Scripts\Levels\Theme\SmartThemeElement.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\Smart Theme Elements\SmartThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\DoorElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\FloorDoodadElement.cs" />
@@ -134,6 +133,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ThemeElementSpec.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\WallElement.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\WallElementExplicit.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeElementBundle.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\ThemeQualitySet.cs" />
@@ -170,6 +170,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\StringExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\TypeExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Vector3Ext.cs" />
+     <Compile Include="Assets\Scripts\Library\Interfaces\IEnsureType.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\NotHashable.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\PassesTurns.cs" />

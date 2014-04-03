@@ -74,5 +74,10 @@ public class PrefabProbabilityPool<T> : ProbabilityPool<T>, IInitializable
     {
         return _pool.GetEnumerator();
     }
+
+    public override bool Take(System.Random random, out T item)
+    {
+        return _pool.Take(random, out item);
+    }
     #endregion
 }

@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour, IManager
         for (int i = 0; i < _maxLevels; i++)
             _levelSeeds[i] = rand.Next();
         LevelBuilder.Holder = new GameObject("Level Block Holder");
-        foreach (IInitializable init in this.GetAllInterfaces<IInitializable>())
+        foreach (IInitializable init in this.FindAllDerivedObjects<IInitializable>())
         {
             init.Init();
         }

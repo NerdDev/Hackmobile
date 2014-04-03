@@ -25,7 +25,7 @@ public class PillarMod : FillRoomMod
         int spacingX = spacingOptions.Get(spec.Random);
         int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get(spec.Random) : spacingX;
         Container2D<GenSpace> arr = spec.Grids;
-        var pillarSet = pillarTheme.GetPillars().Get(spec.Random);
+        var pillarSet = pillarTheme.GetPillars().SmartElement;
         var call = Draw.IsType<GenSpace>(GridType.Floor).And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>())))
             .IfThen(Draw.MergeIn(pillarSet, spec.Random, spec.Theme));
 
@@ -33,11 +33,6 @@ public class PillarMod : FillRoomMod
         {
             for (int y = bounds.YMin; y < bounds.YMax; y = y + spacingY)
             {
-                if (x == 0 && y == -1)
-                {
-                    int wer = 23;
-                    wer++;
-                }
                 call(arr, x, y);
             }
         }

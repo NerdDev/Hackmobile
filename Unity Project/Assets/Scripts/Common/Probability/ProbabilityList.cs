@@ -140,7 +140,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         return Get(random, out item, out resultIndex, true);
     }
 
-    public bool Take(System.Random random, out T item)
+    public override bool Take(System.Random random, out T item)
     {
         int num;
         return Take(random, out item, out num);

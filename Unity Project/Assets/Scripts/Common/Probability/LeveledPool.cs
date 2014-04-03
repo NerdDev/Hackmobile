@@ -141,6 +141,17 @@ public class LeveledPool<T> : ProbabilityPool<T>
         }
         return picks;
     }
+
+    public override bool Take(Random random, out T item)
+    {
+        return currentPool.Take(random, out item);
+    }
+
+    public bool Take(Random random, out T item, ushort level)
+    {
+        SetFor(level);
+        return Take(random, out item);
+    }
     #endregion
 
     public override ProbabilityPool<T> Filter(Func<T, bool> filter)

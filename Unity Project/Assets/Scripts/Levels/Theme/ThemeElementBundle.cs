@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 
 [Serializable]
-public class ThemeElementBundle : ProbabilityPool<SmartThemeElement>, IInitializable
+public class ThemeElementBundle : IInitializable, IThemeElementBundle
 {
     private ProbabilityPool<SmartThemeElement> _pool;
     public List<PrefabProbabilityContainer> Elements;
+    public SmartThemeElement SmartElement { get; set; }
 
     [Serializable]
     public class PrefabProbabilityContainer
     {
         public float Multiplier = 1f;
-        public bool Unique;
         public SmartThemeElement Item;
     }
 
@@ -27,54 +27,30 @@ public class ThemeElementBundle : ProbabilityPool<SmartThemeElement>, IInitializ
                 throw new ArgumentException("Prefab has to be not null");
             }
             cont.Item.Init();
-            _pool.Add(cont.Item, cont.Multiplier, cont.Unique);
+            if (cont.Multiplier <= 0)
+            {
+                cont.Multiplier = 1f;
+            }
+            _pool.Add(cont.Item, cont.Multiplier);
         }
     }
 
-    #region Probability Pool
-    public override int Count
+    public SmartThemeElement Select(System.Random rand)
     {
-        get { return _pool.Count; }
+        SmartElement = _pool.Get(rand);
+        return SmartElement;
     }
 
-    public override void Add(SmartThemeElement item, double multiplier, bool unique)
+    public void EnsureType(Type target)
     {
-        _pool.Add(item, multiplier, unique);
+        foreach (PrefabProbabilityContainer cont in Elements)
+        {
+            cont.Item.EnsureType(target);
+        }
     }
+}
 
-    public override int Remove(SmartThemeElement item, bool all)
-    {
-        return _pool.Remove(item, all);
-    }
-
-    public override void AddAll(ProbabilityPool<SmartThemeElement> rhs)
-    {
-        _pool.AddAll(rhs);
-    }
-
-    public override bool Get(System.Random random, out SmartThemeElement item)
-    {
-        return _pool.Get(random, out item);
-    }
-
-    public override ProbabilityPool<SmartThemeElement> Filter(Func<SmartThemeElement, bool> filter)
-    {
-        return _pool.Filter(filter);
-    }
-
-    public override void Freshen()
-    {
-        _pool.Freshen();
-    }
-
-    public override void ToLog(Logs log, string name = "")
-    {
-        _pool.ToLog(log, name);
-    }
-
-    public override IEnumerator<ProbabilityItem<SmartThemeElement>> GetEnumerator()
-    {
-        return _pool.GetEnumerator();
-    }
-    #endregion
+public interface IThemeElementBundle
+{
+    SmartThemeElement SmartElement { get; }
 }

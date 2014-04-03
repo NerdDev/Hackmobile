@@ -6,6 +6,7 @@ using System.Collections;
 using UnityEngine;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 
 namespace System
 {
@@ -116,35 +117,50 @@ namespace System
 
         */
 
-        public static IEnumerable<T> GetAllInterfaces<T>(this Object obj)
+        public static List<T> FindAllDerivedObjects<T>(this Object obj, bool recursive = true)
         {
-            foreach (T t in GetAllInterfaces<T>(obj, typeof(T), new HashSet<object>(new ReferenceEqualityComparer())))
-            {
-                yield return t;
-            }
-        }
-
-        private static IEnumerable<T> GetAllInterfaces<T>(Object obj, Type target, HashSet<Object> set)
-        {
+            List<T> ret = new List<T>();
             if (obj != null)
             {
                 Type objType = obj.GetType();
-                if (!objType.IsPrimitive() && set.Add(obj))
+                if (!objType.IsPrimitive())
                 {
-                    BigBoss.Debug.w(Logs.Main, objType.ToString());
-                    if (objType.GetInterfaces().Contains(target))
+                    Type target = typeof(T);
+                    var hashSet = new HashSet<object>(new ReferenceEqualityComparer());
+                    hashSet.Add(obj);
+                    if (target.IsAssignableFrom(objType))
                     {
-                        yield return (T)obj;
+                        ret.Add((T)obj);
                     }
-                    foreach (var field in objType.GetFields())
+                    ret.AddRange(FindAllDerivedObjects<T>(obj, obj.GetType(), target, hashSet, recursive));
+                }
+            }
+            return ret;
+        }
+
+        private static List<T> FindAllDerivedObjects<T>(Object obj, Type objType, Type target, HashSet<Object> set, bool recursive)
+        {
+            List<T> ret = new List<T>();
+            foreach (var field in objType.GetFields())
+            {
+                Type fieldType = field.FieldType;
+                if (!fieldType.IsPrimitive())
+                {
+                    object fieldObj = field.GetValue(obj);
+                    if (fieldObj == null) continue;
+                    fieldType = fieldObj.GetType();
+                    set.Add(obj);
+                    if (target.IsAssignableFrom(fieldType))
                     {
-                        foreach (T t in GetAllInterfaces<T>(field.GetValue(obj), target, set))
-                        {
-                            yield return t;
-                        }
+                        ret.Add((T)fieldObj);
+                    }
+                    if (recursive)
+                    {
+                        ret.AddRange(FindAllDerivedObjects<T>(fieldObj, fieldType, target, set, true));
                     }
                 }
             }
+            return ret;
         }
     }
 
