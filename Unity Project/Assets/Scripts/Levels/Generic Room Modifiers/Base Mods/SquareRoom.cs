@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class SquareRoom : BaseRoomMod
 {
-    public int MinSize = 8;
-    public int MaxSize = 15;
+    public int MinSize = 10;
+    public int MaxSize = 20;
 
     public SquareRoom()
     {

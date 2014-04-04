@@ -1334,19 +1334,27 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return largestToSmallestRects;
     }
 
-    public IEnumerable<GridLocation> FindEdges(Bounding bounds, DrawAction<T> action, bool corners = true)
+    public List<GridLocation> FindEdges(Bounding bounds, DrawAction<T> action, bool corners = true, bool orEval = false)
     {
+        List<GridLocation> ret = new List<GridLocation>(4);
+        if (orEval)
+        {
+            Counter counter = new Counter();
+            action = action.IfThen(Draw.Stop<T>());
+        }
         foreach (GridLocation loc in GridLocationExt.Dirs())
         {
-            if (DrawEdge(bounds, loc, action, corners))
+            if (DrawEdge(bounds, loc, action, corners) == !orEval)
             {
-                yield return loc;
+                ret.Add(loc);
             }
         }
+        return ret;
     }
 
-    public IEnumerable<Boxing> FindBoxes(int width, int height, GridLocation frontLoc, BoxedAction<T> action, bool tryFlipped = true, bool tryTurned = true, Bounding scope = null)
+    public List<Boxing> FindBoxes(int width, int height, GridLocation frontLoc, BoxedAction<T> action, bool tryFlipped = true, bool tryTurned = true, Bounding scope = null)
     {
+        List<Boxing> ret = new List<Boxing>();
         int insideWidth = width - 2;
         int insideHeight = height - 2;
         List<Bounding> boundOptions;
@@ -1373,7 +1381,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                 && (action.BackLeftAction == null || DrawEdge(bounds, frontLoc.Opposite().Clockwise(), action.BackLeftAction, false))
                 && (action.BackRightAction == null || DrawEdge(bounds, frontLoc.Opposite().CounterClockwise(), action.BackRightAction, false)))
             {
-                yield return new Boxing(bounds, frontLoc);
+                ret.Add(new Boxing(bounds, frontLoc));
             }
             if (tryFlipped
                 && (action.FrontAction == null || DrawEdge(bounds, frontLoc.Opposite(), action.FrontAction, false))
@@ -1385,16 +1393,14 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                 && (action.BackLeftAction == null || DrawEdge(bounds, frontLoc.Clockwise(), action.BackLeftAction, false))
                 && (action.BackRightAction == null || DrawEdge(bounds, frontLoc.CounterClockwise(), action.BackRightAction, false)))
             {
-                yield return new Boxing(bounds, frontLoc.Opposite());
+                ret.Add(new Boxing(bounds, frontLoc.Opposite()));
             }
         }
         if (tryTurned)
         {
-            foreach (var ret in FindBoxes(height, width, frontLoc.Clockwise90(), action, true, false, scope))
-            {
-                yield return ret;
-            }
+            ret.AddRange(FindBoxes(height, width, frontLoc.Clockwise90(), action, true, false, scope));
         }
+        return ret;
     }
     #endregion
     #region Searches

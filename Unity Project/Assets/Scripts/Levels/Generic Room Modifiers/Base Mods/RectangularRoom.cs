@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class RectangularRoom : BaseRoomMod
 {
-    const int minRectSize = 8;
-    const int maxRectSize = 15;
+    const int minRectSize = 10;
+    const int maxRectSize = 20;
     private int _minSize;
     private int _maxSize;
 

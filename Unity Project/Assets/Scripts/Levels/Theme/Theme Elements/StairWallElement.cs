@@ -11,7 +11,7 @@ public class StairWallElement : StairElement
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
-        GridLocation loc = spec.GenGrid.FindEdges(spec.Bounding, Draw.HasAround(false, Draw.IsType<GenSpace>(GridType.StairPlace)), true).First();
+        GridLocation loc = spec.GenGrid.FindEdges(spec.Bounding, Draw.HasAround(false, Draw.IsType<GenSpace>(GridType.StairPlace)), true, true).First();
         CenterDoodad(spec);
         spec.GenDeploy.RotateToPoint(loc);
         if (spec.Type == GridType.StairDown)
