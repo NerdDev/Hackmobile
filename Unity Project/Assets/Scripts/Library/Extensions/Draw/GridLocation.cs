@@ -197,7 +197,7 @@ public static class GridLocationExt
                 }
                 break;
             case GridLocation.TOPRIGHT:
-                switch (loc)
+                switch (rhs)
                 {
                     case GridLocation.TOPRIGHT:
                         return GridLocation.TOPRIGHT;
@@ -208,7 +208,7 @@ public static class GridLocationExt
                 }
                 break;
             case GridLocation.BOTTOMRIGHT:
-                switch (loc)
+                switch (rhs)
                 {
                     case GridLocation.TOPRIGHT:
                         return GridLocation.RIGHT;
@@ -219,7 +219,7 @@ public static class GridLocationExt
                 }
                 break;
             case GridLocation.TOPLEFT:
-                switch (loc)
+                switch (rhs)
                 {
                     case GridLocation.TOPRIGHT:
                         return GridLocation.TOP;
@@ -230,7 +230,7 @@ public static class GridLocationExt
                 }
                 break;
             case GridLocation.BOTTOMLEFT:
-                switch (loc)
+                switch (rhs)
                 {
                     case GridLocation.BOTTOMRIGHT:
                         return GridLocation.BOTTOM;

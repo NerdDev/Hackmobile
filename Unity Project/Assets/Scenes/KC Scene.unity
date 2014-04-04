@@ -1516,8 +1516,8 @@ MonoBehaviour:
   NormalStart: 1
   ShowStartMenu: 0
   PlacePlayerManually: 0
-  PlacePlayerX: -39
-  PlacePlayerY: 0
+  PlacePlayerX: -1
+  PlacePlayerY: -9
 --- !u!1 &362888547
 GameObject:
   m_ObjectHideFlags: 0
@@ -4079,11 +4079,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: PlacePlayerX
-      value: -39
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: PlacePlayerY
-      value: 0
+      value: -9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}

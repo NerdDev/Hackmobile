@@ -34,6 +34,11 @@ public class WallElementExplicit : WallElement
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
+        if (spec.DeployX == 8 && spec.DeployY == 24)
+        {
+            int wer = 23;
+            wer++;
+        }
         GridLocationResults results = spec.GenGrid.DrawLocationsAroundResults(spec.DeployX, spec.DeployY, true, _test);
         GridDirection dir;
         GridLocation loc;
@@ -104,7 +109,7 @@ public class WallElementExplicit : WallElement
                     else
                     {
                         spec.GenDeploy.Element = TEdgeWall.Get(spec.Random);
-                        spec.GenDeploy.RotateToPoint(loc2.Opposite().CounterClockwise());
+                        spec.GenDeploy.RotateToPoint(loc2.Opposite());
                     }
                     break;
                 case 3:
