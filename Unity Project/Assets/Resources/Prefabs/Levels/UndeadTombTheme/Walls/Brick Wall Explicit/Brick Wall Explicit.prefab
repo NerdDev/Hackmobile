@@ -26,8 +26,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.10000002, z: 0}
-  m_LocalScale: {x: 1, y: 2.20000005, z: 1}
+  m_LocalPosition: {x: 0, y: 1.29999995, z: 0}
+  m_LocalScale: {x: 1, y: 2.5999999, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!23 &2300000
@@ -85,6 +85,7 @@ MonoBehaviour:
   GridLength: 1
   Walkable: 0
   PrintChar: 
+  Dynamic: 0
   PlaceFloor: 1
   ThinWall:
     Elements:
@@ -128,17 +129,17 @@ MonoBehaviour:
       Item: {fileID: 11400004, guid: 2c90762fcfdc4734d85363617e5f8a37, type: 2}
   TriWall:
     Elements:
-    - Multiplier: 0
+    - Multiplier: 1
       Unique: 0
       Item: {fileID: 11400004, guid: 3acd3feda0268af44aa1b3b84955f68c, type: 2}
   InverseCornerWall:
     Elements:
-    - Multiplier: 0
+    - Multiplier: 1
       Unique: 0
       Item: {fileID: 11400000, guid: d0d212fd178e9ee43a6dd0bb488e26c9, type: 2}
   CornerWallFilled:
     Elements:
-    - Multiplier: 0
+    - Multiplier: 1
       Unique: 0
       Item: {fileID: 11400002, guid: d9d5323a488d0f144af8c64f032b88f3, type: 2}
 --- !u!1001 &100100000

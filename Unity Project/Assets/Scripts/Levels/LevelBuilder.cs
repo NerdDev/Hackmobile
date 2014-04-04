@@ -23,12 +23,7 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
-    public void Instantiate(Value2D<GridSpace> val)
-    {
-        Instantiate(val.val, val.x, val.y);
-    }
-
-    public void Instantiate(GridSpace space, int x, int y)
+    public void Instantiate(GridSpace space)
     {
         if (space == null || space.Deploys == null) return;
         space.Blocks = new List<GameObject>(space.Deploys.Count);
@@ -39,7 +34,7 @@ public class LevelBuilder : MonoBehaviour
             Transform t = deploy.GO.transform;
             GameObject obj = Instantiate(
                 deploy.GO,
-                new Vector3(x + t.position.x + deploy.X, t.position.y + deploy.Y, y + t.position.z + deploy.Z)
+                new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
                 , Quaternion.Euler(new Vector3(t.rotation.x + deploy.XRotation, t.rotation.y + deploy.YRotation, t.rotation.z + deploy.ZRotation))) as GameObject;
             if (deploy.Static)
             {
@@ -57,7 +52,7 @@ public class LevelBuilder : MonoBehaviour
         }
 
         //fog of war
-        Vector3 pos = new Vector3(x, 0f, y);
+        Vector3 pos = new Vector3(space.X, 0f, space.Y);
         int height = 0;
         if (space.Type == GridType.Wall) height = 0;
         BigBoss.Gooey.RecreateFOW(pos, height);

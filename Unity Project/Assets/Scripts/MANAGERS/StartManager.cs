@@ -9,6 +9,9 @@ public class StartManager : MonoBehaviour, IManager
 {
     public bool NormalStart = true;
     public bool ShowStartMenu = false;
+    public bool PlacePlayerManually = false;
+    public int PlacePlayerX = 0;
+    public int PlacePlayerY = 0;
     public bool Initialized { get; set; }
     public void Initialize()
     {
@@ -35,6 +38,11 @@ public class StartManager : MonoBehaviour, IManager
         BigBoss.Gooey.DisplayLoading();
         yield return new WaitForSeconds(.01f); //used to force the game to enter the next frame and render the load screen
         BigBoss.Levels.SetCurLevel(0);
+
+        if (PlacePlayerManually)
+        {
+            BigBoss.Levels.Level.PlacePlayer(PlacePlayerX, PlacePlayerY);
+        }
 
         // Temp (will move eventually)
         BigBoss.PlayerInfo.Rendering(true);

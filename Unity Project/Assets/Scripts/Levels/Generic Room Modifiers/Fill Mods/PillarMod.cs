@@ -9,8 +9,8 @@ public class PillarMod : FillRoomMod
     static ProbabilityList<int> spacingOptions = new ProbabilityList<int>();
     static PillarMod()
     {
-        spacingOptions.Add(2, .4, false);
-        spacingOptions.Add(3, 1, false);
+        //spacingOptions.Add(2, .15, false);
+        spacingOptions.Add(3, .5, false);
         spacingOptions.Add(4, 1, false);
         spacingOptions.Add(5, .6, false);
         spacingOptions.Add(6, .4, false);

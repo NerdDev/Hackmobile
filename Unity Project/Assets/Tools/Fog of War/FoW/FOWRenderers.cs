@@ -118,7 +118,7 @@ public class FOWRenderers : MonoBehaviour
                     GridSpace grid = arr[x, y];
                     if (grid != null && grid.Blocks == null)
                     {
-                        BigBoss.Levels.Builder.Instantiate(grid, x, y);
+                        BigBoss.Levels.Builder.Instantiate(grid);
                     };
                     return true;
                 });
