@@ -125,6 +125,8 @@ public class LevelBuilder : MonoBehaviour
         if (spec.Additional.Count == 0) return;
         foreach (var d in spec.Additional.ToList())
         {
+            spec.DeployX = d.x;
+            spec.DeployY = d.y;
             GridSpace space;
             if (!spec.Grid.TryGetValue(d, out space))
             {
@@ -136,8 +138,6 @@ public class LevelBuilder : MonoBehaviour
                 spec.Grid[d] = space;
             }
             spec.Space = space;
-            spec.DeployX = d.x;
-            spec.DeployY = d.y;
             foreach (GenDeploy d2 in d.val)
             {
                 spec.GenDeploy = d2;
