@@ -1515,7 +1515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NormalStart: 1
   ShowStartMenu: 0
-  PlacePlayerManually: 1
+  PlacePlayerManually: 0
   PlacePlayerX: -34
   PlacePlayerY: 14
 --- !u!1 &362888547
@@ -4075,7 +4075,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: PlacePlayerManually
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: PlacePlayerX
