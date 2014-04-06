@@ -40,20 +40,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Scatterable: 0
   Chainable: 0
-  Core: {fileID: 11400000, guid: f43df275c14cf3648bf4e387d0ee71f6, type: 2}
-  Keywords: 00000000
+  Wall:
+    Elements:
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: 6157600ca4f1e4e459b1996eddfd6978, type: 2}
+  Door:
+    Elements:
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: f1509eb84a15fd4459af7062c4aef0a9, type: 2}
+    - Multiplier: .5
+      Item: {fileID: 11400000, guid: 226299dbcf62db340a51dafc621c6449, type: 2}
+  Floor:
+    Elements:
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: a6530169c6aa59241bf35081d2ff5cc8, type: 2}
+  Stair:
+    Elements:
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: 9141794adfd8b1e45ae2fc883b228ed8, type: 2}
+  Chest:
+    Elements:
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: 76f4b9464e81a35429e0dc4787f0a2fc, type: 2}
+  Keywords: 
   Pillars:
-  - Elements:
-    - {fileID: 11400000, guid: 977e93b9eb682ec41aec8a9bdb2b80bb, type: 2}
-  - Elements:
-    - {fileID: 11400000, guid: f037dcb8b95f0a944947684fa6cf353c, type: 2}
-  - Elements:
-    - {fileID: 11400000, guid: 88452558fcff0a04286ac51904470c22, type: 2}
-  - Elements:
-    - {fileID: 11400000, guid: d674f9f2a64553c4ebb096ff41817cfc, type: 2}
+    Elements:
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: 848c790b8ff5be04a88d7835fa459b9e, type: 2}
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: b66abe9a30819ce40931ba058f4a08c4, type: 2}
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: f353a1325679d524b9b9233007d0ec8f, type: 2}
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: a9599c1780bcdb14da4d13a9c54af8e1, type: 2}
   Tombs:
-  - Elements:
-    - {fileID: 11400000, guid: 15956c11fce589d43aebadac16ff9dd6, type: 2}
+    Elements:
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: be60f9543ac77014ba9e59df9a34b560, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

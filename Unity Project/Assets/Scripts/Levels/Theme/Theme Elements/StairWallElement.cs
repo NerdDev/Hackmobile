@@ -5,13 +5,13 @@ using System.Text;
 
 public class StairWallElement : StairElement
 {
-    public bool Out = true;
+    public bool InwardStairs = true;
     private static DrawAction<GenSpace> frontTest = Draw.IsType<GenSpace>(GridType.Wall);
     private static DrawAction<GenSpace> unitTest = Draw.IsType<GenSpace>(GridType.NULL);
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
-        GridLocation loc = spec.GenGrid.FindEdges(spec.Bounding, Draw.HasAround(false, Draw.IsType<GenSpace>(GridType.StairPlace)), true).First();
+        GridLocation loc = spec.GenGrid.FindEdges(spec.Bounding.Expand(1), Draw.IsType<GenSpace>(GridType.StairPlace), false, true).First();
         CenterDoodad(spec);
         spec.GenDeploy.RotateToPoint(loc);
         if (spec.Type == GridType.StairDown)

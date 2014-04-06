@@ -522,28 +522,21 @@ public static class Draw
         return MergeIn(new GenDeploy(element), theme, type, typeOnlyDefault, themeOnlyDefault);
     }
 
-    public static DrawAction<GenSpace> MergeIn(ThemeElement[] elements, System.Random random, Theme theme, GridType type = GridType.Doodad, bool typeOnlyDefault = false, bool themeOnlyDefault = false)
+    public static DrawAction<GenSpace> MergeIn(SmartThemeElement elements, System.Random random, Theme theme, GridType type = GridType.Doodad, bool typeOnlyDefault = false, bool themeOnlyDefault = false)
     {
         return (arr, x, y) =>
         {
-            GenSpace space;
-            if (!arr.TryGetValue(x, y, out space))
-            {
-                space = new GenSpace(type, theme, x, y);
-                arr[x, y] = space;
-            }
-            else
-            {
-                if (!themeOnlyDefault)
-                {
-                    space.Theme = theme;
-                }
-                if (!typeOnlyDefault)
-                {
-                    space.Type = type;
-                }
-            }
-            space.AddDeploy(new GenDeploy(elements.Random(random)), x, y);
+            MergeIn(arr, x, y, new GenDeploy(elements.Get(random)), theme, type, typeOnlyDefault, themeOnlyDefault);
+            return true;
+        };
+    }
+
+    public static DrawAction<GenSpace> MergeIn<T>(ProbabilityPool<T> elements, System.Random random, Theme theme, GridType type = GridType.Doodad, bool typeOnlyDefault = false, bool themeOnlyDefault = false)
+        where T : ThemeElement
+    {
+        return (arr, x, y) =>
+        {
+            MergeIn(arr, x, y, new GenDeploy(elements.Get(random)), theme, type, typeOnlyDefault, themeOnlyDefault);
             return true;
         };
     }
@@ -552,26 +545,31 @@ public static class Draw
     {
         return (arr, x, y) =>
         {
-            GenSpace space;
-            if (!arr.TryGetValue(x, y, out space))
-            {
-                space = new GenSpace(type, theme, x, y);
-                arr[x, y] = space;
-            }
-            else
-            {
-                if (!themeOnlyDefault)
-                {
-                    space.Theme = theme;
-                }
-                if (!typeOnlyDefault)
-                {
-                    space.Type = type;
-                }
-            }
-            space.AddDeploy(deploy, x, y);
+            MergeIn(arr, x, y, deploy, theme, type, typeOnlyDefault, themeOnlyDefault);
             return true;
         };
+    }
+
+    public static void MergeIn(this Container2D<GenSpace> arr, int x, int y, GenDeploy deploy, Theme theme, GridType type = GridType.Floor, bool typeOnlyDefault = true, bool themeOnlyDefault = false)
+    {
+        GenSpace space;
+        if (!arr.TryGetValue(x, y, out space))
+        {
+            space = new GenSpace(type, theme, x, y);
+            arr[x, y] = space;
+        }
+        else
+        {
+            if (!themeOnlyDefault)
+            {
+                space.Theme = theme;
+            }
+            if (!typeOnlyDefault)
+            {
+                space.Type = type;
+            }
+        }
+        space.AddDeploy(deploy, x, y);
     }
     #endregion
 }

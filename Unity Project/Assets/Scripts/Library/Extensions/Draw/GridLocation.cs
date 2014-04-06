@@ -17,12 +17,10 @@ public enum GridLocation
 
 public static class GridLocationExt
 {
-    public static IEnumerable<GridLocation> Dirs()
+    private static GridLocation[] dirs = new[] { GridLocation.TOP, GridLocation.RIGHT, GridLocation.BOTTOM, GridLocation.LEFT };
+    public static GridLocation[] Dirs()
     {
-        yield return GridLocation.TOP;
-        yield return GridLocation.RIGHT;
-        yield return GridLocation.BOTTOM;
-        yield return GridLocation.LEFT;
+        return dirs;
     }
 
     public static GridLocation Opposite(this GridLocation loc)
@@ -199,7 +197,7 @@ public static class GridLocationExt
                 }
                 break;
             case GridLocation.TOPRIGHT:
-                switch (loc)
+                switch (rhs)
                 {
                     case GridLocation.TOPRIGHT:
                         return GridLocation.TOPRIGHT;
@@ -210,7 +208,7 @@ public static class GridLocationExt
                 }
                 break;
             case GridLocation.BOTTOMRIGHT:
-                switch (loc)
+                switch (rhs)
                 {
                     case GridLocation.TOPRIGHT:
                         return GridLocation.RIGHT;
@@ -221,7 +219,7 @@ public static class GridLocationExt
                 }
                 break;
             case GridLocation.TOPLEFT:
-                switch (loc)
+                switch (rhs)
                 {
                     case GridLocation.TOPRIGHT:
                         return GridLocation.TOP;
@@ -232,7 +230,7 @@ public static class GridLocationExt
                 }
                 break;
             case GridLocation.BOTTOMLEFT:
-                switch (loc)
+                switch (rhs)
                 {
                     case GridLocation.BOTTOMRIGHT:
                         return GridLocation.BOTTOM;

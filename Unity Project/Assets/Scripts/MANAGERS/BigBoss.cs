@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class BigBoss : MonoBehaviour
 {
@@ -76,16 +77,16 @@ public class BigBoss : MonoBehaviour
             return (Player)PlayerInfo.WO;
         }
     }
-    private static StartManager start;
-    public static StartManager Start
+    private static StartManager starter;
+    public static StartManager Starter
     {
         get
         {
-            if (start == null)
+            if (starter == null)
             {
-                BBoss.Instantiate<StartManager>(out start);
+                BBoss.Instantiate<StartManager>(out starter);
             }
-            return start;
+            return starter;
         }
     }
     private static DungeonMaster dungeonMaster;
@@ -147,31 +148,34 @@ public class BigBoss : MonoBehaviour
             ret.transform.parent = this.transform;
             ret.name = ret.GetType().Name;
         }
-        if (!ret.Initialized)
-        {
-            ret.Initialize();
-            ret.Initialized = true;
-        }
+        Initialize(ret);
     }
 
-    void Awake()
+    void Start()
     {
         BBoss = this;
 
-        foreach (MonoBehaviour manager in this.gameObject.GetMonobehaviorsWithInstanceInChildren<IManager>())
+        foreach (MonoBehaviour manager in this.GetMonobehaviorsWithInstanceInChildren<IManager>())
         {
             manager.gameObject.SetActive(true);
         }
 
-        foreach (IManager manager in this.gameObject.GetInterfacesInChildren<IManager>())
+        foreach (IManager manager in this.GetInterfacesInChildren<IManager>())
         {
-            if (!manager.Initialized)
-                manager.Initialize();
-            manager.Initialized = true;
+            Initialize(manager);
         }
 
         //Make this game object persistent
         DontDestroyOnLoad(gameObject);
+    }
+
+    protected void Initialize(IManager manager)
+    {
+        if (!manager.Initialized)
+        {
+            manager.Initialize();
+            manager.Initialized = true;
+        }
     }
 
     public static void Log(string input)

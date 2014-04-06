@@ -7,6 +7,7 @@ using UnityEngine;
 public class GridDeploy : ITransform
 {
     public GameObject GO;
+    public bool Static;
     public float XRotation { get; set; }
     public float YRotation { get; set; }
     public float ZRotation { get; set; }
@@ -17,12 +18,11 @@ public class GridDeploy : ITransform
     public float YScale { get; set; }
     public float ZScale { get; set; }
 
-    public GridDeploy(GameObject go)
+    public GridDeploy(GenDeploy genDeploy)
     {
-        this.GO = go;
-        XScale = 1F;
-        YScale = 1F;
-        ZScale = 1F;
+        this.GO = genDeploy.Element.GO;
+        this.Static = !genDeploy.Element.Dynamic;
+        ITransformExt.CopyFrom(this, genDeploy);
     }
 }
 

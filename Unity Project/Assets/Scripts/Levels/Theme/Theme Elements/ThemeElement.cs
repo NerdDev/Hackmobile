@@ -28,6 +28,7 @@ public class ThemeElement : FOWRenderers
     public byte GridLength = 1;
     public bool Walkable;
     public string PrintChar = string.Empty;
+    public bool Dynamic;
 
     public virtual void PreDeployTweaks(ThemeElementSpec spec)
     {
@@ -38,7 +39,7 @@ public class ThemeElement : FOWRenderers
         var ret = new MultiMap<List<GenDeploy>>();
         foreach (var space in spec)
         {
-            spec.AddAdditional(new GenDeploy(spec.Theme.Core.Floor.Random(spec.Random)), space.x, space.y);
+            spec.AddAdditional(new GenDeploy(spec.Theme.Floor.SmartElement.Get(spec.Random)), space.x, space.y);
         }
         return ret;
     }

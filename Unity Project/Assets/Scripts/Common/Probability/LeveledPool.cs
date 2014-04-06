@@ -159,6 +159,17 @@ public class LeveledPool<T> : ProbabilityPool<T>
         List<T> picks = currentPool.Get(random, min, max);
         return picks;
     }
+
+    public override bool Take(Random random, out T item)
+    {
+        return currentPool.Take(random, out item);
+    }
+
+    public bool Take(Random random, out T item, ushort level)
+    {
+        SetFor(level);
+        return Take(random, out item);
+    }
     #endregion
 
     public override ProbabilityPool<T> Filter(Func<T, bool> filter)
@@ -172,10 +183,12 @@ public class LeveledPool<T> : ProbabilityPool<T>
         return ret;
     }
 
-    public override void ClearSkipped()
+    public override void Freshen()
     {
         if (curLevel != -1)
-            currentPool.ClearSkipped();
+        {
+            currentPool.Freshen();
+        }
     }
 
     public override void ToLog(Logs log, string name = "")

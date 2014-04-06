@@ -38,7 +38,7 @@ public class ProbabilityTesting : MonoBehaviour
     public void Test<T>(ProbabilityPool<T> pool, int max, bool print)
     {
         System.Random random = new System.Random();
-        pool.ClearSkipped();
+        pool.Freshen();
         Dictionary<T, int> dict = new Dictionary<T, int>();
         for (int i = 0; i < max; i++)
         {

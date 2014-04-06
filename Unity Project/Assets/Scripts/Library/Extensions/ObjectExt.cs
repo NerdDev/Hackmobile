@@ -6,6 +6,7 @@ using System.Collections;
 using UnityEngine;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 
 namespace System
 {
@@ -115,6 +116,52 @@ namespace System
         }
 
         */
+
+        public static List<T> FindAllDerivedObjects<T>(this Object obj, bool recursive = true)
+        {
+            List<T> ret = new List<T>();
+            if (obj != null)
+            {
+                Type objType = obj.GetType();
+                if (!objType.IsPrimitive())
+                {
+                    Type target = typeof(T);
+                    var hashSet = new HashSet<object>(new ReferenceEqualityComparer());
+                    hashSet.Add(obj);
+                    if (target.IsAssignableFrom(objType))
+                    {
+                        ret.Add((T)obj);
+                    }
+                    ret.AddRange(FindAllDerivedObjects<T>(obj, obj.GetType(), target, hashSet, recursive));
+                }
+            }
+            return ret;
+        }
+
+        private static List<T> FindAllDerivedObjects<T>(Object obj, Type objType, Type target, HashSet<Object> set, bool recursive)
+        {
+            List<T> ret = new List<T>();
+            foreach (var field in objType.GetFields())
+            {
+                Type fieldType = field.FieldType;
+                if (!fieldType.IsPrimitive())
+                {
+                    object fieldObj = field.GetValue(obj);
+                    if (fieldObj == null) continue;
+                    fieldType = fieldObj.GetType();
+                    set.Add(obj);
+                    if (target.IsAssignableFrom(fieldType))
+                    {
+                        ret.Add((T)fieldObj);
+                    }
+                    if (recursive)
+                    {
+                        ret.AddRange(FindAllDerivedObjects<T>(fieldObj, fieldType, target, set, true));
+                    }
+                }
+            }
+            return ret;
+        }
     }
 
     public class ObjDump
@@ -196,7 +243,7 @@ namespace System
                     {
                         Write("null");
                     }
-                    
+
                 }
                 else
                 {
@@ -221,7 +268,7 @@ namespace System
                         else
                         {
                             type = propertyInfo.PropertyType;
-                            try 
+                            try
                             {
                                 value = propertyInfo.GetValue(element, null);
                             }
@@ -230,7 +277,7 @@ namespace System
                                 //Write("null");
                             }
                         }
-                        
+
                         //type = fieldInfo != null ? fieldInfo.FieldType : propertyInfo.PropertyType;
                         //object value = fieldInfo != null
                         //                   ? fieldInfo.GetValue(element)
@@ -318,4 +365,5 @@ namespace System
             return ("{ }");
         }
     }
+
 }

@@ -153,9 +153,19 @@ public class Level : Container2D<GridSpace>
         {
             throw new ArgumentException("Cannot place player");
         }
-        BigBoss.PlayerInfo.transform.position = new Vector3(start.x, 0, start.y);
-        BigBoss.Player.GridSpace = start.val;
-        BigBoss.Levels.Builder.Instantiate(start);
+        PlacePlayer(start.val);
         BigBoss.Debug.w(Logs.Main, "Placed player on " + start);
+    }
+
+    public void PlacePlayer(int x, int y)
+    {
+        PlacePlayer(this[x, y]);
+    }
+
+    public void PlacePlayer(GridSpace space)
+    {
+        BigBoss.PlayerInfo.transform.position = new Vector3(space.X, 0, space.Y);
+        BigBoss.Player.GridSpace = space;
+        BigBoss.Levels.Builder.Instantiate(space);
     }
 }

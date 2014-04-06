@@ -6,26 +6,24 @@ using System.Linq;
 
 public class LevelBuilder : MonoBehaviour
 {
-    private static GameObject holder;
-    private static GameObject doorHolder;
+    private static GameObject staticHolder;
+    private static GameObject dynamicHolder;
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
 
     public static void Initialize()
     {
-        if (holder == null)
+        if (staticHolder == null)
         {
-            holder = new GameObject("Level Block Holder");
-            doorHolder = new GameObject("Door Block Holder");
+            staticHolder = new GameObject("Static Block Holder");
+            dynamicHolder = new GameObject("Dynamic Block Holder");
+            var gameObj = new GameObject("Block Holder");
+            staticHolder.transform.parent = dynamicHolder.transform;
+            dynamicHolder.transform.parent = staticHolder.transform;
         }
     }
 
-    public void Instantiate(Value2D<GridSpace> val)
-    {
-        Instantiate(val.val, val.x, val.y);
-    }
-
-    public void Instantiate(GridSpace space, int x, int y)
+    public void Instantiate(GridSpace space)
     {
         if (space == null || space.Deploys == null) return;
         space.Blocks = new List<GameObject>(space.Deploys.Count);
@@ -36,10 +34,16 @@ public class LevelBuilder : MonoBehaviour
             Transform t = deploy.GO.transform;
             GameObject obj = Instantiate(
                 deploy.GO,
-                new Vector3(x + t.position.x + deploy.X, t.position.y + deploy.Y, y + t.position.z + deploy.Z)
+                new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
                 , Quaternion.Euler(new Vector3(t.rotation.x + deploy.XRotation, t.rotation.y + deploy.YRotation, t.rotation.z + deploy.ZRotation))) as GameObject;
-            if (space.Type != GridType.Door) obj.transform.parent = holder.transform;
-            else obj.transform.parent = doorHolder.transform;
+            if (deploy.Static)
+            {
+                obj.transform.parent = staticHolder.transform;
+            }
+            else
+            {
+                obj.transform.parent = dynamicHolder.transform;
+            }
             obj.transform.localScale = new Vector3(
                 deploy.XScale * obj.transform.localScale.x,
                 deploy.YScale * obj.transform.localScale.y,
@@ -48,9 +52,9 @@ public class LevelBuilder : MonoBehaviour
         }
 
         //fog of war
-        Vector3 pos = new Vector3(x, 0f, y);
+        Vector3 pos = new Vector3(space.X, 0f, space.Y);
         int height = 0;
-        if (space.Type == GridType.Wall) height = 0; 
+        if (space.Type == GridType.Wall) height = 0;
         BigBoss.Gooey.RecreateFOW(pos, height);
 
         //combination, GC
@@ -115,13 +119,14 @@ public class LevelBuilder : MonoBehaviour
         spec.GenDeploy.Deployed = true;
         spec.Reset();
         spec.GenDeploy.Element.PreDeployTweaks(spec);
-        GridDeploy deploy = new GridDeploy(spec.GenDeploy.Element.GO);
-        deploy.CopyFrom(spec.GenDeploy);
-        
+        GridDeploy deploy = new GridDeploy(spec.GenDeploy);
+
         spec.Space.Deploys.Add(deploy);
         if (spec.Additional.Count == 0) return;
         foreach (var d in spec.Additional.ToList())
         {
+            spec.DeployX = d.x;
+            spec.DeployY = d.y;
             GridSpace space;
             if (!spec.Grid.TryGetValue(d, out space))
             {
@@ -133,8 +138,6 @@ public class LevelBuilder : MonoBehaviour
                 spec.Grid[d] = space;
             }
             spec.Space = space;
-            spec.DeployX = d.x;
-            spec.DeployY = d.y;
             foreach (GenDeploy d2 in d.val)
             {
                 spec.GenDeploy = d2;
@@ -150,19 +153,13 @@ public class LevelBuilder : MonoBehaviour
         switch (space.Type)
         {
             case GridType.Wall:
-                element = space.Theme.Core.Wall.Random(rand);
+                element = space.Theme.Wall.SmartElement.Get(rand);
                 break;
             case GridType.Door:
-                element = space.Theme.Core.Door.Random(rand);
-                break;
-            case GridType.StairDown:
-                element = space.Theme.Core.StairDown.Random(rand);
-                break;
-            case GridType.StairUp:
-                element = space.Theme.Core.StairUp.Random(rand);
+                element = space.Theme.Door.SmartElement.Get(rand);
                 break;
             case GridType.Chest:
-                element = space.Theme.Core.Chest.Random(rand);
+                element = space.Theme.Chest.SmartElement.Get(rand);
                 break;
             case GridType.NULL:
                 return false;
@@ -170,7 +167,7 @@ public class LevelBuilder : MonoBehaviour
             case GridType.Floor:
             case GridType.SmallLoot:
             default:
-                element = space.Theme.Core.Floor.Random(rand);
+                element = space.Theme.Floor.SmartElement.Get(rand);
                 break;
         }
         if (element == null)
@@ -184,6 +181,6 @@ public class LevelBuilder : MonoBehaviour
 
     public void Combine()
     {
-        StaticBatchingUtility.Combine(holder);
+        StaticBatchingUtility.Combine(staticHolder);
     }
 }

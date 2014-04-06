@@ -1519,6 +1519,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NormalStart: 1
   ShowStartMenu: 0
+  PlacePlayerManually: 0
+  PlacePlayerX: -1
+  PlacePlayerY: -9
 --- !u!1 &362888547
 GameObject:
   m_ObjectHideFlags: 0
@@ -3583,7 +3586,7 @@ Transform:
   m_GameObject: {fileID: 976561840}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 2056977329}
   - {fileID: 1824890829}
@@ -3624,13 +3627,13 @@ CharacterController:
   m_PrefabInternal: {fileID: 1497766244}
   m_GameObject: {fileID: 976561840}
   serializedVersion: 2
-  m_Height: 1.5
-  m_Radius: .300000012
+  m_Height: 1.35000002
+  m_Radius: .25
   m_SlopeLimit: 0
   m_StepOffset: 0
   m_SkinWidth: .0500000007
   m_MinMoveDistance: 0
-  m_Center: {x: 0, y: .800000012, z: 0}
+  m_Center: {x: 0, y: .675000012, z: 0}
 --- !u!95 &976561845
 Animator:
   serializedVersion: 2
@@ -3855,7 +3858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Theme: {fileID: 11400002, guid: 631dbf33a897fc14f88db2d53201f711, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: 0
+  Seed: 55
 --- !u!1 &1064103705
 GameObject:
   m_ObjectHideFlags: 0
@@ -3981,6 +3984,58 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0, y: 0, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
+    - target: {fileID: 400118, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400118, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400118, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100118, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 13600000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_Center.y
+      value: .699999988
+      objectReference: {fileID: 0}
+    - target: {fileID: 14300000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_Radius
+      value: .25
+      objectReference: {fileID: 0}
+    - target: {fileID: 14300000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_Height
+      value: 1.35000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 14300000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_Center.y
+      value: .675000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 13600000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_Height
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400080, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: Seed
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: PlacePlayerManually
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: PlacePlayerX
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: PlacePlayerY
+      value: -9
+      objectReference: {fileID: 0}
 --- !u!1 &1079723281
 GameObject:
   m_ObjectHideFlags: 0
