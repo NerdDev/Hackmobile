@@ -621,15 +621,15 @@ public class LevelGenerator
             #endregion
             var hitConnected = hit.GetConnectedGrid();
             var stack = layoutCopy.DrawJumpTowardsSearch(
-            startPoint.x,
-            startPoint.y,
-            3,
-            5,
-            Draw.IsType<GenSpace>(GridType.NULL).And(Draw.Inside<GenSpace>(layoutCopy.Bounding.Expand(5))),
-            passTest.And(Draw.ContainedIn(hitConnected)),
-            Rand,
-            endPoint,
-            true);
+                startPoint.x,
+                startPoint.y,
+                3,
+                5,
+                Draw.IsType<GenSpace>(GridType.NULL).And(Draw.Inside<GenSpace>(layoutCopy.Bounding.Expand(5))),
+                passTest.And(Draw.ContainedIn(hitConnected)),
+                Rand,
+                endPoint,
+                true);
             var path = new Path(stack);
             if (path.Valid)
             {
@@ -663,6 +663,10 @@ public class LevelGenerator
                         queue.Enqueue(v);
                     }
                     visited[v] = true;
+                }
+                foreach (var p in path)
+                {
+                    layoutCopy.DrawAround(p.x, p.y, true, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, Theme)));
                 }
                 Container.Objects.Add(pathObj);
                 hitConnected.DrawAll(Draw.AddTo(runningConnected));
