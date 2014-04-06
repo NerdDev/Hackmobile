@@ -666,11 +666,6 @@ public class LevelGenerator
                 }
                 foreach (var p in path)
                 {
-                    if (p.x == -17 && p.y == 37)
-                    {
-                        int wer = 23;
-                        wer++;
-                    }
                     layoutCopy.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, Theme).And(Draw.SetTo(GridType.Floor, Theme))));
                     layoutCopy.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
                     {

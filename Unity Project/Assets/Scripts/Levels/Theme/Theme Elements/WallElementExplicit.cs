@@ -16,6 +16,7 @@ public class WallElementExplicit : WallElement
     public ThemeQualitySet TriWall;
     public ThemeQualitySet InverseCornerWall;
     public ThemeQualitySet CornerWallFilled;
+    public ThemeQualitySet DiagonalWall;
     static DrawAction<GenSpace> _test = (arr, x, y) =>
     {
         GenSpace space;
@@ -45,7 +46,12 @@ public class WallElementExplicit : WallElement
         }
         else if (spec.GenGrid.Cornered(results, out loc, false))
         {
-            if (results[loc])
+            //if (results[loc.Clockwise90()] || results[loc.CounterClockwise90()])
+            //{
+            //    spec.GenDeploy.Element = DiagonalWall.Get(spec.Random);
+            //} 
+            //else 
+                if (results[loc])
             {
                 spec.GenDeploy.Element = CornerWallFilled.Get(spec.Random);
             }

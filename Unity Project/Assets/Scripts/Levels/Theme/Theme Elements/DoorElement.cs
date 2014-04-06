@@ -15,17 +15,16 @@ public class DoorElement : ThemeElement
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
-        if (spec.GenGrid.AlternatesSides(spec.DeployX, spec.DeployY, Draw.Walkable(), out walkableDir))
+        if (spec.GenGrid.AlternatesSides(spec.DeployX, spec.DeployY, Draw.IsType<GenSpace>(GridType.Wall), out walkableDir))
         {
             bool neg = spec.Random.NextBool();
             if (walkableDir == GridDirection.HORIZ)
             {
-                //PlaceFlush(spec.GenDeploy, neg ? GridLocation.LEFT : GridLocation.RIGHT);
-                spec.GenDeploy.Rotate(spec.Random.NextClockwise());
+                spec.GenDeploy.Rotate(spec.Random.NextFlip());
             }
             else
             {
-                //PlaceFlush(spec.GenDeploy, neg ? GridLocation.BOTTOM : GridLocation.TOP);
+                spec.GenDeploy.Rotate(spec.Random.NextClockwise());
             }
         }
         // Diagonal door

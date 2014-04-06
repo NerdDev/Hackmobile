@@ -124,7 +124,7 @@ MonoBehaviour:
       Item: {fileID: 11400004, guid: 65e3f77b505eafc4fb4d903e4faa7d76, type: 2}
   DualInverseCornerWall:
     Elements:
-    - Multiplier: 0
+    - Multiplier: 1
       Unique: 0
       Item: {fileID: 11400004, guid: 2c90762fcfdc4734d85363617e5f8a37, type: 2}
   TriWall:
@@ -142,6 +142,11 @@ MonoBehaviour:
     - Multiplier: 1
       Unique: 0
       Item: {fileID: 11400002, guid: d9d5323a488d0f144af8c64f032b88f3, type: 2}
+  DiagonalWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000, guid: c030bba5fd21495499abddd591fddd32, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

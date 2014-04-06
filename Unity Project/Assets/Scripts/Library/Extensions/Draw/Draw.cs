@@ -421,7 +421,7 @@ public static class Draw
     {
         return new DrawAction<GenSpace>((arr, x, y) =>
         {
-            GenSpace space = arr[x, y];
+            GenSpace space;
             if (arr.TryGetValue(x, y, out space))
             {
                 if (space == null) return false;
