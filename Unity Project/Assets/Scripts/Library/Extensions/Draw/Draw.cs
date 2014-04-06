@@ -398,7 +398,20 @@ public static class Draw
             GenSpace space;
             if (arr.TryGetValue(x, y, out space))
             {
-                if (space.Deploys == null) return true;
+                if (space.Deploys == null || space.Deploys.Count == 0) return true;
+            }
+            return false;
+        });
+    }
+
+    public static DrawAction<GenSpace> EmptyAndFloor()
+    {
+        return new DrawAction<GenSpace>((arr, x, y) =>
+        {
+            GenSpace space;
+            if (arr.TryGetValue(x, y, out space))
+            {
+                return space.Type == GridType.Floor && (space.Deploys == null || space.Deploys.Count == 0);
             }
             return false;
         });
