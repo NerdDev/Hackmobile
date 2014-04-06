@@ -63,7 +63,7 @@ GameObject:
   - 33: {fileID: 3300004}
   - 23: {fileID: 2300004}
   - 65: {fileID: 6500004}
-  m_Layer: 12
+  m_Layer: 14
   m_Name: ShadowCaster
   m_TagString: Untagged
   m_Icon: {fileID: 0}

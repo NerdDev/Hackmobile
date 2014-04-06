@@ -25,7 +25,7 @@ TagManager:
   User Layer 11: NPC
   User Layer 12: Grid
   User Layer 13: Stairs
-  User Layer 14: 
+  User Layer 14: Doodads
   User Layer 15: 
   User Layer 16: 
   User Layer 17: 
@@ -43,3 +43,8 @@ TagManager:
   User Layer 29: 
   User Layer 30: 
   User Layer 31: 
+  m_SortingLayers:
+  - name: Default
+    userID: 0
+    uniqueID: 0
+    locked: 0
