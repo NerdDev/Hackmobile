@@ -589,6 +589,7 @@ public class NPC : Affectable
                 this.dropItem(i, GridSpace);
             }
             JustUnregister();
+            GO.GetComponent<Collider>().enabled = false;
             animator.Play(deathState);
             GO.AddComponent<TimedAction>().init(1.5f, new Action(() => { JustDestroy(); }));
         }

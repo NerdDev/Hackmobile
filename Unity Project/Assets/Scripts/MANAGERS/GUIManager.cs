@@ -64,6 +64,7 @@ public class GUIManager : MonoBehaviour, IManager
     public GUITexture LoadImage;
 
     public Shader InvisibilityShader;
+    public Shader TransparentShader;
     public GameObject InvisibleObject;
 
     //Cameras

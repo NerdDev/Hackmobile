@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\Camera scripts\HeroCam.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\JoystickCamera.cs" />
      <Compile Include="Assets\Scripts\Camera scripts\MasterCamera.cs" />
+     <Compile Include="Assets\Scripts\Camera scripts\Transparency.cs" />
      <Compile Include="Assets\Scripts\Common\Array2D.cs" />
      <Compile Include="Assets\Scripts\Common\Array2DRaw.cs" />
      <Compile Include="Assets\Scripts\Common\Bounding.cs" />
@@ -505,6 +506,7 @@
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored (HardClip).shader" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
+     <None Include="Assets\Scripts\Shaders\TransparentShadowCaster.shader" />
      <None Include="Assets\Tools\NGUI\Examples\Other\English.txt" />
      <None Include="Assets\Tools\NGUI\Examples\Other\French.txt" />
      <None Include="Assets\Tools\B2M_2.1\Script\BatchApply_README.txt" />
