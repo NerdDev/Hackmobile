@@ -15,7 +15,7 @@ public class DoorElement : ThemeElement
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
-        if (spec.GenGrid.AlternatesSides(spec.DeployX, spec.DeployY, Draw.Walkable<GenSpace>(), out walkableDir))
+        if (spec.GenGrid.AlternatesSides(spec.DeployX, spec.DeployY, Draw.Walkable(), out walkableDir))
         {
             bool neg = spec.Random.NextBool();
             if (walkableDir == GridDirection.HORIZ)
@@ -29,12 +29,12 @@ public class DoorElement : ThemeElement
             }
         }
         // Diagonal door
-        else if (spec.GenGrid.AlternatesCorners(spec.DeployX, spec.DeployY, Draw.Walkable<GenSpace>(), out walkableDir))
+        else if (spec.GenGrid.AlternatesCorners(spec.DeployX, spec.DeployY, Draw.Walkable(), out walkableDir))
         {
             spec.GenDeploy.YRotation = walkableDir == GridDirection.DIAGTLBR ? -45 : 45;
         }
         // Offset alternates
-        else if (spec.GenGrid.AlternateSidesOffset(spec.DeployX, spec.DeployY, Draw.Not(Draw.Walkable<GenSpace>()), out offsetLocation))
+        else if (spec.GenGrid.AlternateSidesOffset(spec.DeployX, spec.DeployY, Draw.Not(Draw.Walkable()), out offsetLocation))
         {
             PlaceFlush(spec.GenDeploy, offsetLocation);
         }

@@ -234,4 +234,20 @@ public class LeveledPool<T> : ProbabilityPool<T>
             return prototypePool.Cast<ProbabilityItem<T>>().GetEnumerator();
         }
     }
+
+    public override void BeginTaking()
+    {
+        if (curLevel != -1)
+        {
+            currentPool.BeginTaking();
+        }
+    }
+
+    public override void EndTaking()
+    {
+        if (curLevel != -1)
+        {
+            currentPool.EndTaking();
+        }
+    }
 }

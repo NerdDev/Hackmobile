@@ -147,11 +147,14 @@ public class LevelGenerator
             Theme.ChooseAllSmartObjects(Rand);
             RoomSpec spec = new RoomSpec(room, Depth, Theme, Rand);
             // Base Mod
-            ApplyMod(spec, spec.RoomModifiers.BaseMods.Get(spec.Random));
+            if (!ApplyMod(spec, spec.RoomModifiers.BaseMods))
+            {
+                throw new ArgumentException("Could not apply base mod");
+            }
             // Definining Mod
             if (spec.RoomModifiers.AllowDefiningMod)
             {
-                ApplyMod(spec, spec.RoomModifiers.DefiningMods.Get(spec.Random));
+                ApplyMod(spec, spec.RoomModifiers.DefiningMods);
             }
             // Flex Mods
             int numFlex = Rand.Next(spec.RoomModifiers.MinFlexMods, spec.RoomModifiers.MaxFlexMods);
@@ -160,15 +163,21 @@ public class LevelGenerator
             // Heavy Mods
             for (int i = 0; i < numHeavy; i++ )
             {
-                ApplyMod(spec, spec.RoomModifiers.HeavyMods.Get(spec.Random));
+                if (!ApplyMod(spec, spec.RoomModifiers.HeavyMods))
+                {
+                    break;
+                }
             }
             // Fill Mods
             for (int i = 0; i < numFill; i++)
             {
-                ApplyMod(spec, spec.RoomModifiers.FillMods.Get(spec.Random));
+                if (!ApplyMod(spec, spec.RoomModifiers.FillMods))
+                {
+                    break;
+                }
             }
             // Final Mods
-            ApplyMod(spec, spec.RoomModifiers.FinalMods.Get(spec.Random));
+            ApplyMod(spec, spec.RoomModifiers.FinalMods);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -191,29 +200,50 @@ public class LevelGenerator
         #endregion
     }
 
-    protected void ApplyMod(RoomSpec spec, RoomModifier mod)
+    protected bool ApplyMod<T>(RoomSpec spec, ProbabilityPool<T> mods)
+        where T : RoomModifier
     {
-        if (mod == null) return;
-        #region DEBUG
-        float stepTime = 0;
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
+        mods.BeginTaking();
+        T mod;
+        while (mods.Take(spec.Random, out mod))
         {
-            BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
+            #region DEBUG
+            float stepTime = 0;
+            if (BigBoss.Debug.logging(Logs.LevelGenMain))
+            {
+                BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
+            }
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                stepTime = Time.realtimeSinceStartup;
+                BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
+            }
+            #endregion
+            Container2D<GenSpace> backupGrid = new MultiMap<GenSpace>(spec.Grids);
+            if (mod.Modify(spec))
+            {
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    spec.Grids.ToLog(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+                }
+                #endregion
+                mods.EndTaking();
+                return true;
+            }
+            else
+            {
+                spec.Grids = backupGrid;
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    spec.Grids.ToLog(Logs.LevelGen, "Couldn't apply mod.  Processing " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+                }
+                #endregion
+            }
         }
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            stepTime = Time.realtimeSinceStartup;
-            BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
-        }
-        #endregion
-        mod.Modify(spec);
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            spec.Grids.ToLog(Logs.LevelGen);
-            BigBoss.Debug.w(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
-        }
-        #endregion
+        mods.EndTaking();
+        return false;
     }
 
     protected bool ValidateRoom(LayoutObject room)
@@ -388,7 +418,7 @@ public class LevelGenerator
         var placed = new List<Value2D<GenSpace>>(0);
         while (shiftOptions.Take(Rand, out info))
         {
-            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor<GenSpace>().IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
+            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -551,7 +581,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
-        DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor<GenSpace>());
+        DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor());
         var layoutCopy = Container.GetGrid().Array;
         List<LayoutObject> rooms = new List<LayoutObject>(Layout.Rooms.Cast<LayoutObject>());
         var runningConnected = Container2D<GenSpace>.CreateArrayFromBounds(layoutCopy);

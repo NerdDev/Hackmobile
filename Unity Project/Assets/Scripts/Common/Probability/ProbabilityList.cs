@@ -5,6 +5,9 @@ using System;
 
 public class ProbabilityList<T> : ProbabilityPool<T>
 {
+    private bool _takingMode = false;
+    private HashSet<int> _taken;
+    private int _lastTaken = -1;
     protected List<ProbContainer> itemList = new List<ProbContainer>();
     protected double max;
     protected double uniqueTmpMax;
@@ -108,14 +111,26 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         double curNum = 0;
         foreach (ProbContainer cont in itemList)
         {
-            if (cont.Skip) continue;
-            curNum += cont.Multiplier;
-            if (picked < curNum)
+            if (!cont.Skip)
             {
-                if (cont.Unique || take)
-                    SetToSkip(cont);
-                item = cont.Item;
-                return true;
+                curNum += cont.Multiplier;
+                if (picked < curNum)
+                {
+                    if (cont.Unique || take)
+                    {
+                        if (_takingMode)
+                        {
+                            if (_lastTaken != -1)
+                            {
+                                _taken.Add(_lastTaken);
+                            }
+                            _lastTaken = resultIndex;
+                        }
+                        SetToSkip(cont);
+                    }
+                    item = cont.Item;
+                    return true;
+                }
             }
             resultIndex++;
         }
@@ -209,5 +224,28 @@ public class ProbabilityList<T> : ProbabilityPool<T>
                 yield return cont;
             }
         }
+    }
+
+    public override void BeginTaking()
+    {
+        _takingMode = true;
+        _taken = new HashSet<int>();
+    }
+
+    public override void EndTaking()
+    {
+        _takingMode = false;
+        foreach (int index in _taken)
+        {
+            itemList[index].Skip = false;
+        }
+        if (_lastTaken != -1)
+        {
+            if (!itemList[_lastTaken].Unique)
+            {
+                itemList[_lastTaken].Skip = false;
+            }
+        }
+        _taken = null;
     }
 }

@@ -41,7 +41,7 @@ public class StairWallElement : StairElement
                 bool ret = grid.DrawEdge(box, box.Front,
                     Draw.HasAround(false,
                         Draw.And(Draw.IsType<GenSpace>(GridType.Floor), Draw.Count<GenSpace>(counter)).
-                        Or(Draw.Walkable<GenSpace>())));
+                        Or(Draw.Walkable())));
                 return ret && counter > 0;
             }));
         if (options.Count == 0)

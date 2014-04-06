@@ -11,7 +11,7 @@ public abstract class StairElement : ThemeElement
         {
             return Draw.IsType<GenSpace>(GridType.Floor).
                 // If not blocking a path
-                And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>())));
+                And(Draw.Not(Draw.Blocking(Draw.Walkable())));
         }
     }
     public virtual DrawAction<GenSpace> FrontTest { get { return Draw.IsType<GenSpace>(GridType.Floor); } }

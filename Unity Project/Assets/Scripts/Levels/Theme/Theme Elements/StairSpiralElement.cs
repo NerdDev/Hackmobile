@@ -7,7 +7,7 @@ public class StairSpiralElement : StairElement
 {
     public virtual DrawAction<GenSpace> UnitTest { get { return Draw.IsType<GenSpace>(GridType.Floor).
                 // If not blocking a path
-                And(Draw.Not(Draw.Blocking(Draw.Walkable<GenSpace>()))); } }
+                And(Draw.Not(Draw.Blocking(Draw.Walkable()))); } }
     public virtual DrawAction<GenSpace> FrontTest { get { return Draw.IsType<GenSpace>(GridType.Floor); } }
     public virtual DrawAction<GenSpace> BackTest { get { return Draw.True<GenSpace>(); } }
 

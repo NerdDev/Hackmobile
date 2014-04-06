@@ -8,7 +8,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
     public Point ShiftP;
     readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
     private static int _nextId = 0;
-    public virtual Container2D<GenSpace> Grids { get; protected set; }
+    public virtual Container2D<GenSpace> Grids { get; set; }
     public override Bounding Bounding
     {
         get

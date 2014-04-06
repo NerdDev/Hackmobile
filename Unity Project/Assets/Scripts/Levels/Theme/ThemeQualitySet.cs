@@ -95,5 +95,15 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IE
     {
         return pool.Take(random, out item);
     }
+
+    public override void BeginTaking()
+    {
+        pool.BeginTaking();
+    }
+
+    public override void EndTaking()
+    {
+        pool.EndTaking();
+    }
     #endregion
 }

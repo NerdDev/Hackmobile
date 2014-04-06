@@ -30,6 +30,11 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>, IEns
         Add(item, multiplier, false);
     }
 
+    public void Add(ProbabilityItem<T> probItem)
+    {
+        Add(probItem.Item, probItem.Multiplier, probItem.Unique);
+    }
+
     public virtual void Add(T item)
     {
         if (item is IProbabilityItem)
@@ -86,7 +91,12 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>, IEns
     public abstract ProbabilityPool<T> Filter(Func<T, bool> filter);
 
     public abstract void Freshen();
-        public abstract void ToLog(Logs log, string name = "");
+
+    public abstract void BeginTaking();
+
+    public abstract void EndTaking();
+
+    public abstract void ToLog(Logs log, string name = "");
 
     public void EnsureType(Type target)
     {

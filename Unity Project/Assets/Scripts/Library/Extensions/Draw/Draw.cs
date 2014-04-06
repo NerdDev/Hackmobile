@@ -377,27 +377,50 @@ public static class Draw
     }
 
     #region GridType
-    public static DrawAction<T> CanDrawDoor<T>()
-        where T : IGridSpace
+    public static DrawAction<GenSpace> CanDrawDoor()
     {
-        return new DrawAction<T>((arr, x, y) =>
+        return new DrawAction<GenSpace>((arr, x, y) =>
         {
-            T space;
+            GenSpace space;
             if (!arr.TryGetValue(x, y, out space)) return false;
             if (space.GetGridType() != GridType.Wall) return false;
             // Include null to work with levelgen placement
-            if (arr.AlternatesSides(x, y, Draw.IsType<T>(GridType.NULL).Or(Draw.Walkable<T>()))) return true;
-            if (arr.HasAround(x, y, false, Draw.Walkable<T>()) && arr.HasAround(x, y, false, Draw.IsType<T>(GridType.NULL))) return true;
+            if (arr.AlternatesSides(x, y, Draw.IsType<GenSpace>(GridType.NULL).Or(Draw.Walkable()))) return true;
+            if (arr.HasAround(x, y, false, Draw.Walkable()) && arr.HasAround(x, y, false, Draw.IsType<GenSpace>(GridType.NULL))) return true;
             return false;
         });
     }
 
-    public static DrawAction<T> Walkable<T>()
-        where T : IGridSpace
+    public static DrawAction<GenSpace> Empty()
     {
-        return new DrawAction<T>((arr, x, y) =>
+        return new DrawAction<GenSpace>((arr, x, y) =>
         {
-            return GridTypeEnum.Walkable(arr[x, y].GetGridType());
+            GenSpace space;
+            if (arr.TryGetValue(x, y, out space))
+            {
+                if (space.Deploys == null) return true;
+            }
+            return false;
+        });
+    }
+
+    public static DrawAction<GenSpace> Walkable()
+    {
+        return new DrawAction<GenSpace>((arr, x, y) =>
+        {
+            GenSpace space = arr[x, y];
+            if (arr.TryGetValue(x, y, out space))
+            {
+                if (space == null) return false;
+                if (!GridTypeEnum.Walkable(space.Type)) return false;
+                if (space.Deploys == null) return true;
+                foreach (GenDeploy deploy in space.Deploys)
+                {
+                    if (!deploy.Element.Walkable) return false;
+                }
+                return true;
+            }
+            return false;
         });
     }
 
