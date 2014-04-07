@@ -126,7 +126,7 @@ public class JoystickCamera : MonoBehaviour
         {
             Vector3 dir = transform.TransformDirection(Vector3.forward);
             Vector3 pos = transform.position - dir;
-            RaycastHit[] collisions = Physics.SphereCastAll(new Ray(pos, dir), .1f, currentDistance + 1f, TransparencyLayers);
+            RaycastHit[] collisions = Physics.SphereCastAll(new Ray(pos, dir), .05f, currentDistance + 1f, TransparencyLayers);
             foreach (RaycastHit collision in collisions)
             {
                 //Debug.DrawLine(pos, collision.point, Color.red, 3f);

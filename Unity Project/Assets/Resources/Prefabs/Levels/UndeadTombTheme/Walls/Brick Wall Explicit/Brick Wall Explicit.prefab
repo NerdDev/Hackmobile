@@ -57,7 +57,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: c919c023d77b6ec4fa7ce95053af08c9, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 1d004d6227d5af842b650c353ce500ab, type: 2}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -124,7 +124,7 @@ MonoBehaviour:
       Item: {fileID: 11400004, guid: 65e3f77b505eafc4fb4d903e4faa7d76, type: 2}
   DualInverseCornerWall:
     Elements:
-    - Multiplier: 0
+    - Multiplier: 1
       Unique: 0
       Item: {fileID: 11400004, guid: 2c90762fcfdc4734d85363617e5f8a37, type: 2}
   TriWall:

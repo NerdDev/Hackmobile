@@ -42,7 +42,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: a5f6fa79044266a41bbb0c3f61f1ca58, type: 2}
+  - {fileID: 2100000, guid: 003be200bbba4b744ba90926aa6b29fb, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -87,6 +87,7 @@ MonoBehaviour:
   GridLength: 1
   Walkable: 0
   PrintChar: 
+  Dynamic: 0
   CanFallOff: 1
 --- !u!1001 &100100000
 Prefab:
