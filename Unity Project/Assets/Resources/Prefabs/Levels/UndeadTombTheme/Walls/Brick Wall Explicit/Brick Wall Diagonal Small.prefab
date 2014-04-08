@@ -11,9 +11,9 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   - 65: {fileID: 6500000}
-  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400000}
   m_Layer: 12
-  m_Name: Brick Wall Explicit
+  m_Name: Brick Wall Diagonal Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: .923879564, z: 0, w: -.382683396}
   m_LocalPosition: {x: 0, y: 1.29999995, z: 0}
   m_LocalScale: {x: 1, y: 2.5999999, z: 1}
   m_Children: []
@@ -57,7 +57,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: c919c023d77b6ec4fa7ce95053af08c9, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 2f426356b08aff64e9e38d8cf491341a, type: 2}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -68,9 +68,9 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 3, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11400002
+  m_Size: {x: .200000003, y: 3, z: 1}
+  m_Center: {x: .100000001, y: 0, z: -0}
+--- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -78,80 +78,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 585095db6a113b0408c2d8fe87674a11, type: 3}
+  m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   GridWidth: 1
   GridLength: 1
   Walkable: 0
-  PrintChar: 
+  PrintChar: '#'
   Dynamic: 0
   PlaceFloor: 1
-  ThinWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400002, guid: 17d6664179b5ea844a45f161a62cd462, type: 2}
-  TWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400008, guid: 07321256b18bb2245b9a0c63454274da, type: 2}
-  TEdgeWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400008, guid: 73f910e2acd57d94cad9f42979eccf93, type: 2}
-  EdgeWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400002, guid: 663dcf84eabf52a4d86b20763803909b, type: 2}
-  PWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400008, guid: eeb833f287aa8d44498dbb7942c4ce92, type: 2}
-  QuadWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400002, guid: addf2908381feb745bc81b70185ed557, type: 2}
-  CornerWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400004, guid: 65e3f77b505eafc4fb4d903e4faa7d76, type: 2}
-  DualInverseCornerWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400004, guid: 2c90762fcfdc4734d85363617e5f8a37, type: 2}
-  TriWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400004, guid: 3acd3feda0268af44aa1b3b84955f68c, type: 2}
-  InverseCornerWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400000, guid: d0d212fd178e9ee43a6dd0bb488e26c9, type: 2}
-  CornerWallFilled:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400002, guid: d9d5323a488d0f144af8c64f032b88f3, type: 2}
-  DiagonalSmallWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400000, guid: c030bba5fd21495499abddd591fddd32, type: 2}
-  DiagonalBluntWall:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400000, guid: bb0b62ed0dd66774fb8633418d7b88f6, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

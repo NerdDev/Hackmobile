@@ -35,7 +35,7 @@ public class LevelBuilder : MonoBehaviour
             GameObject obj = Instantiate(
                 deploy.GO,
                 new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
-                , Quaternion.Euler(new Vector3(t.rotation.x + deploy.XRotation, t.rotation.y + deploy.YRotation, t.rotation.z + deploy.ZRotation))) as GameObject;
+                , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
             if (deploy.Static)
             {
                 obj.transform.parent = staticHolder.transform;

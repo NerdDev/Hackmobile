@@ -243,4 +243,49 @@ public static class GridLocationExt
         }
         return GridLocation.CENTER;
     }
+
+    public static void Modify(this GridLocation loc, ref int x, ref int y)
+    {
+        switch (loc)
+        {
+            case GridLocation.TOP:
+                y++;
+                break;
+            case GridLocation.BOTTOM:
+                y--;
+                break;
+            case GridLocation.LEFT:
+                x--;
+                break;
+            case GridLocation.RIGHT:
+                x++;
+                break;
+            case GridLocation.TOPRIGHT:
+                x++;
+                y++;
+                break;
+            case GridLocation.BOTTOMRIGHT:
+                x++;
+                y--;
+                break;
+            case GridLocation.TOPLEFT:
+                x--;
+                y++;
+                break;
+            case GridLocation.BOTTOMLEFT:
+                x--;
+                y--;
+                break;
+            case GridLocation.CENTER:
+            default:
+                break;
+        }
+    }
+
+    public static void Modify(this GridLocation loc, int x, int y, out int xOut, out int yOut)
+    {
+        loc.Modify(ref x, ref y);
+        xOut = x;
+        yOut = y;
+    }
 }

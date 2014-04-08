@@ -16,7 +16,8 @@ public class WallElementExplicit : WallElement
     public ThemeQualitySet TriWall;
     public ThemeQualitySet InverseCornerWall;
     public ThemeQualitySet CornerWallFilled;
-    public ThemeQualitySet DiagonalWall;
+    public ThemeQualitySet DiagonalSmallWall;
+    public ThemeQualitySet DiagonalBluntWall;
     static DrawAction<GenSpace> _test = (arr, x, y) =>
     {
         GenSpace space;
@@ -33,6 +34,12 @@ public class WallElementExplicit : WallElement
         }
     };
 
+    protected bool IsDiagonalPiece(ThemeElementSpec spec, GridLocationResults results, out GridLocation loc)
+    {
+        if (!spec.GenGrid.Cornered(results, out loc, false)) return false;
+        return results[loc.Clockwise90()] || results[loc.CounterClockwise90()];
+    }
+
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
         GridLocationResults results = spec.GenGrid.DrawLocationsAroundResults(spec.DeployX, spec.DeployY, true, _test);
@@ -44,14 +51,14 @@ public class WallElementExplicit : WallElement
             spec.GenDeploy.Element = ThinWall.Get(spec.Random);
             spec.GenDeploy.RotateToPoint(dir, spec.Random);
         }
+        else if (IsDiagonalPiece(spec, results, out loc))
+        {
+            spec.GenDeploy.Element = DiagonalSmallWall.Get(spec.Random);
+            spec.GenDeploy.RotateToPoint(loc.Clockwise());
+        }
         else if (spec.GenGrid.Cornered(results, out loc, false))
         {
-            //if (results[loc.Clockwise90()] || results[loc.CounterClockwise90()])
-            //{
-            //    spec.GenDeploy.Element = DiagonalWall.Get(spec.Random);
-            //} 
-            //else 
-                if (results[loc])
+            if (results[loc])
             {
                 spec.GenDeploy.Element = CornerWallFilled.Get(spec.Random);
             }
@@ -115,7 +122,20 @@ public class WallElementExplicit : WallElement
                     break;
                 case 3:
                     spec.GenGrid.GetCorner(!results, out loc);
-                    spec.GenDeploy.Element = InverseCornerWall.Get(spec.Random);
+                    int neighborX, neighborY;
+                    loc.Clockwise().Modify(spec.DeployX, spec.DeployY, out neighborX, out neighborY);
+                    GridLocationResults neighborResults = spec.GenGrid.DrawLocationsAroundResults(neighborX, neighborY, true, _test);
+                    loc.CounterClockwise().Modify(spec.DeployX, spec.DeployY, out neighborX, out neighborY);
+                    GridLocationResults neighborResults2 = spec.GenGrid.DrawLocationsAroundResults(neighborX, neighborY, true, _test);
+                    GridLocation tmp;
+                    if (IsDiagonalPiece(spec, neighborResults, out tmp) || IsDiagonalPiece(spec, neighborResults2, out tmp))
+                    {
+                        spec.GenDeploy.Element = DiagonalBluntWall.Get(spec.Random);
+                    }
+                    else
+                    {
+                        spec.GenDeploy.Element = InverseCornerWall.Get(spec.Random);
+                    }
                     spec.GenDeploy.RotateToPoint(loc.Clockwise());
                     break;
                 case 4:
