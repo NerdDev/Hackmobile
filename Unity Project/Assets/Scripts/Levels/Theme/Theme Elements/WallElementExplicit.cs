@@ -18,6 +18,8 @@ public class WallElementExplicit : WallElement
     public ThemeQualitySet CornerWallFilled;
     public ThemeQualitySet DiagonalSmallWall;
     public ThemeQualitySet DiagonalBluntWall;
+    public ThemeQualitySet DiagonalWedgeWall;
+    public ThemeQualitySet DiagonalTurnWall;
     static DrawAction<GenSpace> _test = (arr, x, y) =>
     {
         GenSpace space;
@@ -36,27 +38,39 @@ public class WallElementExplicit : WallElement
 
     protected bool IsDiagonalPiece(ThemeElementSpec spec, GridLocationResults results, out GridLocation loc)
     {
-        if (!spec.GenGrid.Cornered(results, out loc, false)) return false;
+        if (!results.Cornered(out loc, false)) return false;
         return results[loc.Clockwise90()] || results[loc.CounterClockwise90()];
     }
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
+        if (spec.DeployX == -25 && spec.DeployY == -13)
+        {
+            int wer = 23;
+            wer++;
+        }
         GridLocationResults results = spec.GenGrid.DrawLocationsAroundResults(spec.DeployX, spec.DeployY, true, _test);
         GridDirection dir;
         GridLocation loc;
         bool placeFloor = PlaceFloor;
-        if (spec.GenGrid.AlternatesSides(results, out dir))
+        if (results.AlternatesSides(out dir))
         {
             spec.GenDeploy.Element = ThinWall.Get(spec.Random);
             spec.GenDeploy.RotateToPoint(dir, spec.Random);
         }
         else if (IsDiagonalPiece(spec, results, out loc))
         {
-            spec.GenDeploy.Element = DiagonalSmallWall.Get(spec.Random);
+            if (results[loc.Opposite()])
+            {
+                spec.GenDeploy.Element = DiagonalWedgeWall.Get(spec.Random);
+            }
+            else
+            {
+                spec.GenDeploy.Element = DiagonalSmallWall.Get(spec.Random);
+            }
             spec.GenDeploy.RotateToPoint(loc.Clockwise());
         }
-        else if (spec.GenGrid.Cornered(results, out loc, false))
+        else if (results.Cornered(out loc, false))
         {
             if (results[loc])
             {
@@ -68,7 +82,7 @@ public class WallElementExplicit : WallElement
             }
             spec.GenDeploy.RotateToPoint(loc.Clockwise());
         }
-        else if (spec.GenGrid.TShape(results, out loc))
+        else if (results.TShape(out loc))
         {
             if (results[loc.Clockwise()] && results[loc.CounterClockwise()])
             {
@@ -90,24 +104,22 @@ public class WallElementExplicit : WallElement
         }
         else
         {
-            Counter numCorners = new Counter();
-            spec.GenGrid.DrawCorners(spec.DeployX, spec.DeployY, _test.IfThen(Draw.Count<GenSpace>(numCorners)));
-            switch (numCorners)
+            switch (results.NumCorners)
             {
                 case 0:
                     spec.GenDeploy.Element = QuadWall.Get(spec.Random);
                     spec.GenDeploy.Rotate(spec.Random.NextRotation());
                     break;
                 case 1:
-                    spec.GenGrid.GetCorner(results, out loc);
+                    results.GetCorner(out loc);
                     spec.GenDeploy.Element = TriWall.Get(spec.Random);
                     spec.GenDeploy.RotateToPoint(loc.Clockwise());
                     break;
                 case 2:
-                    spec.GenGrid.GetCorner(results, out loc);
+                    results.GetCorner(out loc);
                     results[loc] = false;
                     GridLocation loc2;
-                    spec.GenGrid.GetCorner(results, out loc2);
+                    results.GetCorner(out loc2);
                     loc2 = loc2.Merge(loc);
                     if (loc2 == GridLocation.CENTER)
                     {
@@ -121,7 +133,7 @@ public class WallElementExplicit : WallElement
                     }
                     break;
                 case 3:
-                    spec.GenGrid.GetCorner(!results, out loc);
+                    (!results).GetCorner(out loc);
                     int neighborX, neighborY;
                     loc.Clockwise().Modify(spec.DeployX, spec.DeployY, out neighborX, out neighborY);
                     GridLocationResults neighborResults = spec.GenGrid.DrawLocationsAroundResults(neighborX, neighborY, true, _test);

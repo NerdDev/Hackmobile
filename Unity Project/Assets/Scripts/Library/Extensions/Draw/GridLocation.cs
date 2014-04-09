@@ -17,6 +17,20 @@ public enum GridLocation
 
 public static class GridLocationExt
 {
+    public static bool IsCorner(this GridLocation loc)
+    {
+        switch (loc)
+        {
+            case GridLocation.TOPRIGHT:
+            case GridLocation.BOTTOMRIGHT:
+            case GridLocation.TOPLEFT:
+            case GridLocation.BOTTOMLEFT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private static GridLocation[] dirs = new[] { GridLocation.TOP, GridLocation.RIGHT, GridLocation.BOTTOM, GridLocation.LEFT };
     public static GridLocation[] Dirs()
     {

@@ -152,6 +152,16 @@ MonoBehaviour:
     - Multiplier: 1
       Unique: 0
       Item: {fileID: 11400000, guid: bb0b62ed0dd66774fb8633418d7b88f6, type: 2}
+  DiagonalWedgeWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000, guid: 73f1add794015e5488ec9f38cc948f67, type: 2}
+  DiagonalTurnWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400004, guid: 456d4ee8372228142b6525e8b7805e59, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
