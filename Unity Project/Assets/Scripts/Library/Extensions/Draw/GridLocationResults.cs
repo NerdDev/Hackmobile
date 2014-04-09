@@ -57,6 +57,32 @@ public class GridLocationResults
         return false;
     }
 
+    public bool GetSide(out GridLocation loc)
+    {
+        if (this[GridLocation.RIGHT])
+        {
+            loc = GridLocation.RIGHT;
+            return true;
+        }
+        if (this[GridLocation.BOTTOM])
+        {
+            loc = GridLocation.BOTTOM;
+            return true;
+        }
+        if (this[GridLocation.LEFT])
+        {
+            loc = GridLocation.LEFT;
+            return true;
+        }
+        if (this[GridLocation.TOP])
+        {
+            loc = GridLocation.TOP;
+            return true;
+        }
+        loc = GridLocation.CENTER;
+        return false;
+    }
+
     public bool Cornered(out GridLocation loc, bool withOpposing = false)
     {
         if (this[GridLocation.LEFT] == this[GridLocation.RIGHT])
@@ -161,6 +187,17 @@ public class GridLocationResults
             }
         }
         loc = GridLocation.BOTTOM;
+        return false;
+    }
+
+    public bool IsTurn(out GridLocation corner, out GridLocation side)
+    {
+        if (NumSides == 1 && NumCorners == 3 && GetSide(out side) && (!(this)).GetCorner(out corner))
+        {
+            return true;
+        }
+        corner = GridLocation.CENTER;
+        side = GridLocation.CENTER;
         return false;
     }
 }

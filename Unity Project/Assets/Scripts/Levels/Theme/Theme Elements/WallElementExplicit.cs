@@ -51,7 +51,7 @@ public class WallElementExplicit : WallElement
         }
         GridLocationResults results = spec.GenGrid.DrawLocationsAroundResults(spec.DeployX, spec.DeployY, true, _test);
         GridDirection dir;
-        GridLocation loc;
+        GridLocation loc, loc2;
         bool placeFloor = PlaceFloor;
         if (results.AlternatesSides(out dir))
         {
@@ -102,6 +102,15 @@ public class WallElementExplicit : WallElement
             }
             spec.GenDeploy.RotateToPoint(loc);
         }
+        else if (results.IsTurn(out loc, out loc2))
+        {
+            spec.GenDeploy.Element = DiagonalTurnWall.Get(spec.Random);
+            spec.GenDeploy.RotateToPoint(loc2);
+            if (results[loc.Opposite().Clockwise()])
+            {
+                spec.GenDeploy.XScale *= -1;
+            }
+        }
         else
         {
             switch (results.NumCorners)
@@ -118,7 +127,6 @@ public class WallElementExplicit : WallElement
                 case 2:
                     results.GetCorner(out loc);
                     results[loc] = false;
-                    GridLocation loc2;
                     results.GetCorner(out loc2);
                     loc2 = loc2.Merge(loc);
                     if (loc2 == GridLocation.CENTER)
