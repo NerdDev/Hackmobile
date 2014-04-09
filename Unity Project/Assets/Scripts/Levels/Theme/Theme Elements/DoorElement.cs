@@ -12,6 +12,11 @@ public class DoorElement : ThemeElement
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
+        if (spec.DeployX == -26 && spec.DeployY == -14)
+        {
+            int wer = 23;
+            wer++;
+        }
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
@@ -28,14 +33,14 @@ public class DoorElement : ThemeElement
             }
         }
         // Diagonal door
-        else if (spec.GenGrid.AlternatesCorners(spec.DeployX, spec.DeployY, Draw.Walkable(), out walkableDir))
+        else if (spec.GenGrid.AlternatesCorners(spec.DeployX, spec.DeployY, Draw.IsType<GenSpace>(GridType.Wall), out walkableDir))
         {
-            spec.GenDeploy.YRotation = walkableDir == GridDirection.DIAGTLBR ? -45 : 45;
+            spec.GenDeploy.RotateToPoint(walkableDir.Rotate90(), spec.Random);
         }
         // Offset alternates
-        else if (spec.GenGrid.AlternateSidesOffset(spec.DeployX, spec.DeployY, Draw.Not(Draw.Walkable()), out offsetLocation))
+        else if (spec.GenGrid.AlternateSidesOffset(spec.DeployX, spec.DeployY, Draw.IsType<GenSpace>(GridType.Wall), out offsetLocation))
         {
-            PlaceFlush(spec.GenDeploy, offsetLocation);
+            PlaceFlush(spec.GenDeploy, offsetLocation.Clockwise90());
         }
         PlaceFloors(spec);
     }
