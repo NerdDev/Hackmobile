@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using System.Threading;
 using System.Collections.Generic;
-using System.Linq;
 
 /// <summary>
 /// Fog of War system needs 3 components in order to work:
@@ -14,18 +13,6 @@ using System.Linq;
 [AddComponentMenu("Fog of War/System")]
 public class FOWSystem : MonoBehaviour
 {
-    private int HeightMapSize = 2048; //this is 4:1 to WorldSize for more detailed fog
-    private int WorldSize = 512; //this is 512 grid squares, so 512 in the Unity coordinate system
-    private int TextureSize = 128; //this is the size of each texture grid, which has to fill the height map size per pixel
-
-    private int yBufferMin = 0;
-    private int yBufferMax = 2048;
-    private int xBufferMin = 0;
-    private int xBufferMax = 2048;
-
-    Array2D<Texture2D> TextureGrid = new Array2D<Texture2D>(16, 16);
-    Color32[,][] Buffers = new Color32[3,3][];
-
     public enum LOSChecks
     {
         None,
@@ -208,25 +195,18 @@ public class FOWSystem : MonoBehaviour
     void Start()
     {
         mTrans = transform;
-        mHeights = new int[HeightMapSize, HeightMapSize];
-        mSize = new Vector3(WorldSize, heightRange.y - heightRange.x, WorldSize);
+        mHeights = new int[textureSize, textureSize];
+        mSize = new Vector3(worldSize, heightRange.y - heightRange.x, worldSize);
 
         mOrigin = mTrans.position;
-        mOrigin.x -= WorldSize * 0.5f;
-        mOrigin.z -= WorldSize * 0.5f;
+        mOrigin.x -= worldSize * 0.5f;
+        mOrigin.z -= worldSize * 0.5f;
 
-        int size = HeightMapSize * HeightMapSize;
+        int size = textureSize * textureSize;
         mBuffer0 = new Color32[size];
         mBuffer1 = new Color32[size];
         mBuffer2 = new Color32[size];
 
-        for (int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < 2; j++)
-            {
-                Buffers[i, j] = new Color32[TextureSize * TextureSize];
-            }
-        }
         // Create the height grid
         //CreateGrid();
 
@@ -389,14 +369,14 @@ public class FOWSystem : MonoBehaviour
     {
         Vector3 pos = mOrigin;
         pos.y += mSize.y;
-        float texToWorld = (float)WorldSize / HeightMapSize;
+        float texToWorld = (float)worldSize / textureSize;
         bool useSphereCast = raycastRadius > 0f;
 
-        for (int z = 0; z < HeightMapSize; ++z)
+        for (int z = 0; z < textureSize; ++z)
         {
             pos.z = mOrigin.z + z * texToWorld;
 
-            for (int x = 0; x < HeightMapSize; ++x)
+            for (int x = 0; x < textureSize; ++x)
             {
                 pos.x = mOrigin.x + x * texToWorld;
 
@@ -429,8 +409,8 @@ public class FOWSystem : MonoBehaviour
         pos.y += mSize.y;
 
         // For conversion from world coordinates to texture coordinates
-        float worldToTex = (float)HeightMapSize / WorldSize;
-        float texToWorld = (float)WorldSize / HeightMapSize;
+        float worldToTex = (float)textureSize / worldSize;
+        float texToWorld = (float)worldSize / textureSize;
 
         // Coordinates we'll be dealing with
         int xmin = Mathf.RoundToInt((pos.x - steps) * worldToTex);
@@ -440,13 +420,13 @@ public class FOWSystem : MonoBehaviour
 
         for (int y = ymin; y < ymax; ++y)
         {
-            if (y > -1 && y < HeightMapSize)
+            if (y > -1 && y < textureSize)
             {
                 pos.z = mOrigin.z + y * texToWorld;
 
                 for (int x = xmin; x < xmax; ++x)
                 {
-                    if (x > -1 && x < HeightMapSize)
+                    if (x > -1 && x < textureSize)
                     {
                         pos.x = mOrigin.x + x * texToWorld;
 
@@ -513,32 +493,14 @@ public class FOWSystem : MonoBehaviour
         float factor = (textureBlendTime > 0f) ? Mathf.Clamp01(mBlendFactor + mElapsed / textureBlendTime) : 1f;
 
         // Clear the buffer's red channel (channel used for current visibility -- it's updated right after)
-        //for (int i = 0, imax = mBuffer0.Length; i < imax; ++i)
-        //{
-        //    mBuffer0[i] = Color32.Lerp(mBuffer0[i], mBuffer1[i], factor);
-        //   mBuffer1[i].r = 0;
-        //}
-
-        //resets the buffer in the area we are working with
-        for (int y = yBufferMin; y < yBufferMax; ++y)
-        {
-            if (y > -1 && y < textureSize)
-            {
-                int yw = y * HeightMapSize;
-
-                for (int x = xBufferMin; x < xBufferMax; ++x)
+        for (int i = 0, imax = mBuffer0.Length; i < imax; ++i)
                 {
-                    if (x > -1 && x < textureSize)
-                    {
-                        mBuffer0[yw + x] = Color32.Lerp(mBuffer0[yw + x], mBuffer1[yw + x], factor);
-                        mBuffer1[yw + x].r = 0;
-                    }
-                }
-            }
+            mBuffer0[i] = Color32.Lerp(mBuffer0[i], mBuffer1[i], factor);
+            mBuffer1[i].r = 0;
         }
 
         // For conversion from world coordinates to texture coordinates
-        float worldToTex = (float)HeightMapSize / WorldSize;
+        float worldToTex = (float)textureSize / worldSize;
 
         // Update the visibility buffer, one revealer at a time
         for (int i = 0; i < mRevealers.size; ++i)
@@ -792,7 +754,7 @@ public class FOWSystem : MonoBehaviour
     {
         Color32 c;
 
-        for (int y = yBufferMin; y < yBufferMax; ++y)
+        for (int y = 0; y < textureSize; ++y)
         {
             int yw = y * textureSize;
             int yw0 = (y - 1);
@@ -803,7 +765,7 @@ public class FOWSystem : MonoBehaviour
             yw0 *= textureSize;
             yw1 *= textureSize;
 
-            for (int x = xBufferMin; x < xBufferMax; ++x)
+            for (int x = 0; x < textureSize; ++x)
             {
                 int x0 = (x - 1);
                 if (x0 < 0) x0 = 0;
@@ -841,27 +803,12 @@ public class FOWSystem : MonoBehaviour
 
     void RevealMap()
     {
-        int yindex = 0;
-        int xindex = 0;
-
-        for (int y = yBufferMin, yBuffer = 0; y < yBufferMax; ++y, yBuffer++)
-        {
-            int yw = y * HeightMapSize;
-            if (yBuffer > TextureSize)
+        for (int y = 0; y < textureSize; ++y)
             {
-                yindex++;
-                yBuffer = 0;
-            }
-            int yB = yBuffer * TextureSize;
+            int yw = y * textureSize;
 
-            for (int x = xBufferMin, xBuffer = 0; x < xBufferMax; ++x, xBuffer++)
-            {
-                if (xBuffer > TextureSize)
+            for (int x = 0; x < textureSize; ++x)
                 {
-                    xindex++;
-                    xBuffer = 0;
-                }
-
                 int index = x + yw;
                 Color32 c = mBuffer1[index];
 
@@ -869,7 +816,6 @@ public class FOWSystem : MonoBehaviour
                 {
                     c.g = c.r;
                     mBuffer1[index] = c;
-                    Buffers[yindex, xindex][yB + xBuffer] = mBuffer1[index];
                 }
             }
         }
@@ -879,14 +825,8 @@ public class FOWSystem : MonoBehaviour
     /// Update the specified texture with the new color buffer.
     /// </summary>
 
-    void UpdateTexture(Point p)
+    void UpdateTexture()
     {
-        if (TextureGrid[p] == null)
-        {
-            TextureGrid[p] = new Texture2D(TextureSize, TextureSize, TextureFormat.ARGB32, false);
-            TextureGrid[p].wrapMode = TextureWrapMode.Clamp;
-
-        }
         if (mScreenHeight != Screen.height || mTexture0 == null)
         {
             mScreenHeight = Screen.height;
@@ -895,8 +835,8 @@ public class FOWSystem : MonoBehaviour
             if (mTexture1 != null) Destroy(mTexture1);
 
             // Native ARGB format is the fastest as it involves no data conversion
-            mTexture0 = new Texture2D(TextureSize, TextureSize, TextureFormat.ARGB32, false);
-            mTexture1 = new Texture2D(TextureSize, TextureSize, TextureFormat.ARGB32, false);
+            mTexture0 = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
+            mTexture1 = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
 
             mTexture0.wrapMode = TextureWrapMode.Clamp;
             mTexture1.wrapMode = TextureWrapMode.Clamp;
