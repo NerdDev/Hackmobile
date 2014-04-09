@@ -277,14 +277,40 @@ public class FOWSystem : MonoBehaviour
             ReCreateGrid();
             reCreateGrid = false;
         }
-        if (TestThisCode)
-        {
-            TestThis();
-            TestThisCode = false;
-        }
+
+        //if (TestThisCode)
+        //{
+            GetPosition();
+        //}
     }
     public bool TestThisCode = false;
     float mElapsed = 0f;
+
+    private void GetPosition()
+    {
+        GridSpace grid = null;
+        if (BigBoss.Player.GridSpace != null)
+        {
+            grid = BigBoss.Player.GridSpace;
+        }
+        if (grid != null)
+        {
+            SetPosition(new Vector3(grid.X, 0f, grid.Y));
+        }
+    }
+
+    public void SetPosition(Vector3 pos)
+    {
+        mOrigin = pos;
+        mOrigin.x -= worldSize * 0.5f;
+        mOrigin.z -= worldSize * 0.5f;
+
+        HeightOffsetX = Mathf.RoundToInt((pos.x - lowerRange.x) * 4 - textureSize / 2);
+        HeightOffsetY = Mathf.RoundToInt((pos.z - lowerRange.z) * 4 - textureSize / 2);
+
+        HeightOffsetX = Mathf.Clamp(HeightOffsetX, 0, 2048);
+        HeightOffsetY = Mathf.Clamp(HeightOffsetY, 0, 2048);
+    }
 
     /// <summary>
     /// If it's time to update, do so now.
@@ -335,7 +361,7 @@ public class FOWSystem : MonoBehaviour
         int dir = dx - dy;
 
         float sh = sightHeight;
-        float fh = mHeights[fx +  HeightOffsetX, fy + HeightOffsetY];
+        float fh = mHeights[fx + HeightOffsetX, fy + HeightOffsetY];
 
         float invDist = 1f / outer;
         float lerpFactor = 0f;
@@ -349,7 +375,7 @@ public class FOWSystem : MonoBehaviour
 
             // If the sampled height is higher than expected, then the point must be obscured
             lerpFactor = invDist * Mathf.Sqrt(xd * xd + yd * yd);
-            if (mHeights[sx +  HeightOffsetX, sy + HeightOffsetY] > Mathf.Lerp(fh, sh, lerpFactor) + variance) return false;
+            if (mHeights[sx + HeightOffsetX, sy + HeightOffsetY] > Mathf.Lerp(fh, sh, lerpFactor) + variance) return false;
 
             int dir2 = dir << 1;
 
@@ -416,7 +442,7 @@ public class FOWSystem : MonoBehaviour
         }
     }
 
-    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 1, float raycastRadius = .1f)
+    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 4, float raycastRadius = .1f)
     {
         bool useSphereCast = raycastRadius > 0f;
 
@@ -436,13 +462,13 @@ public class FOWSystem : MonoBehaviour
         //Debug.Log("x: [" + xmin + ", " + xmax + "]");
         //Debug.Log("y: [" + ymin + ", " + ymax + "]");
 
-        for (int y = ymin; y < ymax; ++y)
+        for (int y = ymin; y < ymax; y++)
         {
             if (y > -1 && y < 2048)
             {
                 pos.z = lowerRange.z + y * texToWorld;
 
-                for (int x = xmin; x < xmax; ++x)
+                for (int x = xmin; x < xmax; x++)
                 {
                     if (x > -1 && x < 2048)
                     {
@@ -516,13 +542,13 @@ public class FOWSystem : MonoBehaviour
 
         // Clear the buffer's red channel (channel used for current visibility -- it's updated right after)
         for (int i = 0, imax = mBuffer0.Length; i < imax; ++i)
-                {
+        {
             mBuffer0[i] = Color32.Lerp(mBuffer0[i], mBuffer1[i], factor);
             mBuffer1[i].r = 0;
         }
 
         // For conversion from world coordinates to texture coordinates
-        float worldToTex = (float)textureSize / worldSize;
+        float worldToTex = (float)4;
 
         // Update the visibility buffer, one revealer at a time
         for (int i = 0; i < mRevealers.size; ++i)
@@ -826,11 +852,11 @@ public class FOWSystem : MonoBehaviour
     void RevealMap()
     {
         for (int y = 0; y < textureSize; ++y)
-            {
+        {
             int yw = y * textureSize;
 
             for (int x = 0; x < textureSize; ++x)
-                {
+            {
                 int index = x + yw;
                 Color32 c = mBuffer1[index];
 
