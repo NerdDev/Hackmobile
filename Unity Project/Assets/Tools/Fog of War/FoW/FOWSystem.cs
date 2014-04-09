@@ -13,6 +13,12 @@ using System.Collections.Generic;
 [AddComponentMenu("Fog of War/System")]
 public class FOWSystem : MonoBehaviour
 {
+
+    public int HeightOffsetX = 512;
+    public int HeightOffsetY = 256;
+    public Vector3 lowerRange = new Vector3(-256f, 0f, -256f);
+
+
     public enum LOSChecks
     {
         None,
@@ -47,7 +53,7 @@ public class FOWSystem : MonoBehaviour
     // Height map used for visibility checks. Integers are used instead of floats as integer checks are significantly faster.
     protected int[,] mHeights;
     protected Transform mTrans;
-    protected Vector3 mOrigin = Vector3.zero;
+    public Vector3 mOrigin = Vector3.zero;
     protected Vector3 mSize = Vector3.one;
 
     // Revealers that the thread is currently working with
@@ -195,12 +201,10 @@ public class FOWSystem : MonoBehaviour
     void Start()
     {
         mTrans = transform;
-        mHeights = new int[textureSize, textureSize];
+        mHeights = new int[2048, 2048];
         mSize = new Vector3(worldSize, heightRange.y - heightRange.x, worldSize);
 
-        mOrigin = mTrans.position;
-        mOrigin.x -= worldSize * 0.5f;
-        mOrigin.z -= worldSize * 0.5f;
+        mOrigin = new Vector3(-64f, 0, -64f);
 
         int size = textureSize * textureSize;
         mBuffer0 = new Color32[size];
@@ -218,6 +222,13 @@ public class FOWSystem : MonoBehaviour
         // Add a thread update function -- all visibility checks will be done on a separate thread
         mThread = new Thread(ThreadUpdate);
         mThread.Start();
+    }
+
+    public void TestThis()
+    {
+        //mOrigin += new Vector3(128f, 0f, 128f);
+        HeightOffsetX += 512;
+        HeightOffsetY += 512;
     }
 
     /// <summary>
@@ -266,8 +277,13 @@ public class FOWSystem : MonoBehaviour
             ReCreateGrid();
             reCreateGrid = false;
         }
+        if (TestThisCode)
+        {
+            TestThis();
+            TestThisCode = false;
+        }
     }
-
+    public bool TestThisCode = false;
     float mElapsed = 0f;
 
     /// <summary>
@@ -319,7 +335,7 @@ public class FOWSystem : MonoBehaviour
         int dir = dx - dy;
 
         float sh = sightHeight;
-        float fh = mHeights[fx, fy];
+        float fh = mHeights[fx +  HeightOffsetX, fy + HeightOffsetY];
 
         float invDist = 1f / outer;
         float lerpFactor = 0f;
@@ -333,7 +349,7 @@ public class FOWSystem : MonoBehaviour
 
             // If the sampled height is higher than expected, then the point must be obscured
             lerpFactor = invDist * Mathf.Sqrt(xd * xd + yd * yd);
-            if (mHeights[sx, sy] > Mathf.Lerp(fh, sh, lerpFactor) + variance) return false;
+            if (mHeights[sx +  HeightOffsetX, sy + HeightOffsetY] > Mathf.Lerp(fh, sh, lerpFactor) + variance) return false;
 
             int dir2 = dir << 1;
 
@@ -405,30 +421,32 @@ public class FOWSystem : MonoBehaviour
         bool useSphereCast = raycastRadius > 0f;
 
         // Position relative to the fog of war
-        pos = pos - mOrigin;
+        pos = pos - lowerRange;
         pos.y += mSize.y;
 
         // For conversion from world coordinates to texture coordinates
-        float worldToTex = (float)textureSize / worldSize;
-        float texToWorld = (float)worldSize / textureSize;
+        float texToWorld = (float)512 / 2048;
 
         // Coordinates we'll be dealing with
-        int xmin = Mathf.RoundToInt((pos.x - steps) * worldToTex);
-        int ymin = Mathf.RoundToInt((pos.z - steps) * worldToTex);
-        int xmax = Mathf.RoundToInt((pos.x + steps) * worldToTex);
-        int ymax = Mathf.RoundToInt((pos.z + steps) * worldToTex);
+        int xmin = Mathf.RoundToInt((pos.x * 4 - steps));
+        int ymin = Mathf.RoundToInt((pos.z * 4 - steps));
+        int xmax = Mathf.RoundToInt((pos.x * 4 + steps));
+        int ymax = Mathf.RoundToInt((pos.z * 4 + steps));
+
+        //Debug.Log("x: [" + xmin + ", " + xmax + "]");
+        //Debug.Log("y: [" + ymin + ", " + ymax + "]");
 
         for (int y = ymin; y < ymax; ++y)
         {
-            if (y > -1 && y < textureSize)
+            if (y > -1 && y < 2048)
             {
-                pos.z = mOrigin.z + y * texToWorld;
+                pos.z = lowerRange.z + y * texToWorld;
 
                 for (int x = xmin; x < xmax; ++x)
                 {
-                    if (x > -1 && x < textureSize)
+                    if (x > -1 && x < 2048)
                     {
-                        pos.x = mOrigin.x + x * texToWorld;
+                        pos.x = lowerRange.x + x * texToWorld;
 
                         RaycastHit hit;
                         if (useSphereCast)
@@ -436,17 +454,21 @@ public class FOWSystem : MonoBehaviour
                             if (Physics.SphereCast(new Ray(pos, Vector3.down), raycastRadius, out hit, mSize.y, raycastMask))
                             {
                                 mHeights[x, y] = WorldToGridHeight(pos.y - hit.distance - raycastRadius) + extraHeight;
+                                //Debug.Log("mHeights: [" + x + ", " + y + "]");
+                                //Debug.Log("position: " + pos);
                                 continue;
                             }
                         }
                         else if (Physics.Raycast(new Ray(pos, Vector3.down), out hit, mSize.y, raycastMask))
                         {
                             mHeights[x, y] = WorldToGridHeight(pos.y - hit.distance) + extraHeight;
+                            //Debug.Log("mHeights: [" + x + ", " + y + "]");
                             continue;
                         }
                         else
                         {
                             mHeights[x, y] = 0;
+                            //Debug.Log("mHeights: [" + x + ", " + y + "]");
                         }
                     }
                 }
