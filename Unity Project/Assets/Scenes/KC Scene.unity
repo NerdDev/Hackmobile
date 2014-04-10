@@ -1518,10 +1518,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NormalStart: 1
-  ShowStartMenu: 1
+  ShowStartMenu: 0
   PlacePlayerManually: 0
-  PlacePlayerX: 0
-  PlacePlayerY: 0
+  PlacePlayerX: -69
+  PlacePlayerY: -103
 --- !u!1 &362888547
 GameObject:
   m_ObjectHideFlags: 0
@@ -5591,12 +5591,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff305e18ad52574498a55f1e786a069c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldSize: 256
-  textureSize: 512
+  HeightOffsetX: 0
+  HeightOffsetY: 0
+  lowerRange: {x: -256, y: 0, z: -256}
+  mOrigin: {x: 0, y: 0, z: 0}
+  worldSize: 96
+  textureSize: 384
   updateFrequency: .125
   textureBlendTime: .400000006
   blurIterations: 3
-  heightRange: {x: -1, y: 10}
+  heightRange: {x: -5, y: 10}
   raycastMask:
     serializedVersion: 2
     m_Bits: 20480
@@ -5604,6 +5608,7 @@ MonoBehaviour:
   margin: .300000012
   debug: 0
   reCreateGrid: 0
+  TestThisCode: 0
 --- !u!1 &1698757089
 GameObject:
   m_ObjectHideFlags: 0
@@ -5720,7 +5725,7 @@ Prefab:
       objectReference: {fileID: 2100000, guid: d46457a5db9393a46b971c1b18e482c5, type: 2}
     - target: {fileID: 11400122, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: textureSize
-      value: 512
+      value: 384
       objectReference: {fileID: 0}
     - target: {fileID: 100184, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: m_IsActive
@@ -5728,7 +5733,39 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ShowStartMenu
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400122, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: HeightOffsetX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400122, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: HeightOffsetY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400122, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: worldSize
+      value: 96
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400122, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: heightRange.x
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400080, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: Seed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: PlacePlayerX
+      value: -69
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: PlacePlayerY
+      value: -103
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: PlacePlayerManually
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}

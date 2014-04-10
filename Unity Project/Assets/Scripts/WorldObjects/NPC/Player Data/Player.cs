@@ -182,6 +182,10 @@ public class Player : NPC
             resetToGrid();
             Debug.DrawRay(new Vector3(GridSpace.X, 0, GridSpace.Y), Vector3.up, Color.yellow);
         }
+        else
+        {
+            UpdateCurrentTileVectors();
+        }
     }
 
     private void resetToGrid()
@@ -247,14 +251,16 @@ public class Player : NPC
         MovePlayer(v);
     }
 
-    protected bool UpdateCurrentTileVectors()
+    public bool UpdateCurrentTileVectors()
     {
         Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
+        if (BigBoss.Levels.Level == null) return false;
         GridSpace newGridSpace = BigBoss.Levels.Level[currentLoc.x.ToInt(), currentLoc.y.ToInt()];
-        if (!newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
+        if (newGridSpace != null && !newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
         {
             GridSpace = newGridSpace;
             BigBoss.Gooey.CheckChestDistance();
+            FOWSystem.instance.UpdatePosition(GridSpace);
             return true;
         }
         else
@@ -263,17 +269,24 @@ public class Player : NPC
         }
     }
 
+    public void ForceUpdateTiles(GridSpace grid)
+    {
+        GridSpace = grid;
+        BigBoss.Gooey.CheckChestDistance();
+        FOWSystem.instance.UpdatePosition(GridSpace);
+    }
+
     float gravity;
     CharacterController controller;
     private void MovePlayer(float speed)
     {
         if (controller == null) controller = GO.GetComponent<CharacterController>();
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        if (GO.transform.position.y <= verticalOffset) 
+        if (GO.transform.position.y <= verticalOffset)
         {
-            gravity = 0; 
+            gravity = 0;
         }
-        
+
         else { gravity -= 9.81f * Time.deltaTime; }
         Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
         controller.Move(newMove * speed * Time.deltaTime);
@@ -305,7 +318,7 @@ public class Player : NPC
         currentBaseState = animator.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
     }
 
-    
+
 
     #region MECANIM EXAMPLE SCRIPT
     //	using UnityEngine;

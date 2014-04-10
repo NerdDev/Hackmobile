@@ -77,6 +77,7 @@ public class FOWSystem : MonoBehaviour
     // Whether some color buffer is ready to be uploaded to VRAM
     protected float mBlendFactor = 0f;
     protected float mNextUpdate = 0f;
+    protected float mPosUpdate = 0f;
     protected int mScreenHeight = 0;
     protected State mState = State.Blending;
 
@@ -251,6 +252,7 @@ public class FOWSystem : MonoBehaviour
 
     void Update()
     {
+        float time = Time.time;
         if (textureBlendTime > 0f)
         {
             mBlendFactor = Mathf.Clamp01(mBlendFactor + Time.deltaTime / textureBlendTime);
@@ -259,8 +261,6 @@ public class FOWSystem : MonoBehaviour
 
         if (mState == State.Blending)
         {
-            float time = Time.time;
-
             if (mNextUpdate < time)
             {
                 mNextUpdate = time + updateFrequency;
@@ -271,32 +271,24 @@ public class FOWSystem : MonoBehaviour
         {
             UpdateTexture();
         }
-
-        if (reCreateGrid)
-        {
-            ReCreateGrid();
-            reCreateGrid = false;
-        }
-
-        //if (TestThisCode)
-        //{
-            GetPosition();
-        //}
     }
-    public bool TestThisCode = false;
-    float mElapsed = 0f;
 
-    private void GetPosition()
+    int priorX;
+    int priorY;
+    public void UpdatePosition(GridSpace grid)
     {
-        GridSpace grid = null;
-        if (BigBoss.Player.GridSpace != null)
-        {
-            grid = BigBoss.Player.GridSpace;
-        }
-        if (grid != null)
-        {
-            SetPosition(new Vector3(grid.X, 0f, grid.Y));
-        }
+        int x = grid.X;
+        int y = grid.Y;
+
+        x = Math.Abs(x);
+        y = Math.Abs(y);
+
+        if (Math.Abs(priorX - x) < 32 && Math.Abs(priorY - y) < 32) return;
+
+        SetPosition(new Vector3(grid.X, 0f, grid.Y));
+        priorX = x;
+        priorY = y;
+        mState = State.Blending;
     }
 
     public void SetPosition(Vector3 pos)
@@ -312,6 +304,7 @@ public class FOWSystem : MonoBehaviour
         HeightOffsetY = Mathf.Clamp(HeightOffsetY, 0, 2048);
     }
 
+    float mElapsed = 0f;
     /// <summary>
     /// If it's time to update, do so now.
     /// </summary>
