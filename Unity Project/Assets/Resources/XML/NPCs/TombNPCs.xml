@@ -43,6 +43,11 @@
 				<slots>2</slots>
 			</equiptype>
 		</equipslots>
+		<OnDeath>
+			<effect type="Death">
+				<speed>2</speed>
+			</effect>
+		</OnDeath>
 		<aipackages>
 		</aipackages>
 	</npc>
@@ -77,6 +82,11 @@
 				</damage>
 			</stats>
 		</naturalweapon>
+		<OnDeath>
+			<effect type="Death">
+				<speed>2</speed>
+			</effect>
+		</OnDeath>
 	</npc>
 	<npc name="Ghoul">
 		<prefab>Ghoul</prefab>
@@ -109,13 +119,17 @@
 				</damage>
 			</stats>
 			<OnHitEffect>
-				<effect>
-					<type>PoisonDamageEffect</type>
+				<effect type="PoisonDamageEffect">
 					<turns>3</turns>
 					<strength>2</strength>
 				</effect>
 			</OnHitEffect>
 		</naturalweapon>
+		<OnDeath>
+			<effect type="Death">
+				<speed>2</speed>
+			</effect>
+		</OnDeath>
 		<equipslots>
 			<equiptype type="HAND">
 				<slots>2</slots>
@@ -177,11 +191,15 @@
 				</damage>
 			</stats>
 			<OnHitEffect>
-				<effect>
-					<type>PoisonDamageEffect</type>
+				<effect type="PoisonDamageEffect">
 					<turns>5</turns>
 					<strength>4</strength>
 				</effect>
 			</OnHitEffect>
 		</naturalweapon>
+		<OnDeath>
+			<effect type="Death">
+				<speed>2</speed>
+			</effect>
+		</OnDeath>
 	</npc>
