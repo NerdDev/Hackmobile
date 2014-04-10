@@ -720,7 +720,7 @@ MonoBehaviour:
   StairHeight: 2.79999995
   UpStair: 1
   DownStair: 1
-  InwardStairs: 1
+  InwardStairs: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

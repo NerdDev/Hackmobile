@@ -417,6 +417,11 @@ public static class Draw
         });
     }
 
+    public static DrawAction<GenSpace> EmptyFloorNotBlocking()
+    {
+        return Draw.EmptyAndFloor().And(Draw.Not(Draw.Blocking(Draw.Walkable())));
+    }
+
     public static DrawAction<GenSpace> Walkable()
     {
         return new DrawAction<GenSpace>((arr, x, y) =>
@@ -463,6 +468,33 @@ public static class Draw
             return arr.IsType(x, y, g);
         };
     }
+
+    public static DrawAction<T> IsType<T>(params GridType[] g)
+        where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            GridType type;
+            T space;
+            if (arr.TryGetValue(x, y, out space))
+            {
+                type = space.Type;
+            }
+            else
+            {
+                type = GridType.NULL;
+            }
+            foreach (GridType t in g)
+            {
+                if (t == type)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
     public static DrawAction<T> ContainedIn<T>(ICollection<GridType> col)
         where T : IGridSpace
     {
