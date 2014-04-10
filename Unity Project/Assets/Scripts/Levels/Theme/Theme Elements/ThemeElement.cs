@@ -39,7 +39,7 @@ public class ThemeElement : FOWRenderers
         var ret = new MultiMap<List<GenDeploy>>();
         foreach (var space in spec)
         {
-            spec.AddAdditional(new GenDeploy(spec.Theme.Floor.SmartElement.Get(spec.Random)), space.x, space.y);
+            spec.AddAdditional(spec.Theme.Floor.SmartElement.Get(spec.Random), space.x, space.y);
         }
         return ret;
     }

@@ -45,6 +45,11 @@ public class ThemeElementSpec : IEnumerable<Value2D<GenSpace>>
         list.Add(deploy);
     }
 
+    public void AddAdditional(ThemeElement element, int x, int y)
+    {
+        AddAdditional(new GenDeploy(element), x, y);
+    }
+
     public void Reset()
     {
         _bounding = null;

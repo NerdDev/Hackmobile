@@ -5,6 +5,8 @@ using System.Text;
 
 public class DoorElement : ThemeElement
 {
+    public ThemeElement DiagonalExtensions;
+
     public DoorElement()
     {
         Walkable = true;
@@ -12,11 +14,6 @@ public class DoorElement : ThemeElement
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
-        if (spec.DeployX == -26 && spec.DeployY == -14)
-        {
-            int wer = 23;
-            wer++;
-        }
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
@@ -35,7 +32,13 @@ public class DoorElement : ThemeElement
         // Diagonal door
         else if (spec.GenGrid.AlternatesCorners(spec.DeployX, spec.DeployY, Draw.IsType<GenSpace>(GridType.Wall), out walkableDir))
         {
-            spec.GenDeploy.RotateToPoint(walkableDir.Rotate90(), spec.Random);
+            spec.GenDeploy.RotateToPoint(walkableDir.Rotate90());
+            if (DiagonalExtensions != null)
+            {
+                GenDeploy extensions = new GenDeploy(DiagonalExtensions);
+                extensions.RotateToPoint(walkableDir.Rotate90());
+                spec.AddAdditional(extensions, spec.DeployX, spec.DeployY);
+            }
         }
         // Offset alternates
         else if (spec.GenGrid.AlternateSidesOffset(spec.DeployX, spec.DeployY, Draw.IsType<GenSpace>(GridType.Wall), out offsetLocation))
