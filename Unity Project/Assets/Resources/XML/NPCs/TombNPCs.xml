@@ -1,205 +1,206 @@
 <npcs>
-	<npc name="skeleton_knight">
-		<prefab>Skeleton_Knight</prefab>
-		<flags>
-			<flag name="nopoly" />
-			<flag name="Undead" />
-		</flags>
-		<spawnkeywords>
-			<entry name="tomb" />
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>3</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<size>medium</size>
-		</attributes>
-		<startingitems>
-			<list min="0" max="2">
-				<ref name="potions" />
-			</list>
-			<list min="1">
-				<ref name="weapons" />
-			</list>
-		</startingitems>
-		<naturalweapon name="fist">
-			<stats>
-				<damage>
-					<min>4</min>
-					<max>12</max>
-				</damage>
-			</stats>
-		</naturalweapon>
-		<equipslots>
-			<equiptype type="HAND">
-				<slots>2</slots>
-			</equiptype>
-		</equipslots>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-		<aipackages>
-		</aipackages>
-	</npc>
-	<npc name="Giant Rat">
-		<prefab>GIANT_RAT</prefab>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<spawnkeywords>
-			<keyword name="Corpse_Scavenger" />
-			<keyword name="tomb" />
-		</spawnkeywords>
-		<stats>
-			<maxhealth>12</maxhealth>
-			<level>1</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<naturalweapon name="teeth">
-			<stats>
-				<damage>
-					<min>1</min>
-					<max>5</max>
-				</damage>
-			</stats>
-		</naturalweapon>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Ghoul">
-		<prefab>Ghoul</prefab>
-		<flags>
-			<flag name="nopoly" />
-			<flag name="Undead" />
-		</flags>
-		<spawnkeywords>
-			<keyword name="tomb" />
-		</spawnkeywords>
-		<stats>
-			<maxhealth>20</maxhealth>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<naturalweapon name="fists">
-			<stats>
-				<damage>
-					<min>3</min>
-					<max>7</max>
-				</damage>
-			</stats>
-			<OnHitEffect>
-				<effect type="PoisonDamageEffect">
-					<turns>3</turns>
-					<strength>2</strength>
-				</effect>
-			</OnHitEffect>
-		</naturalweapon>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-		<equipslots>
-			<equiptype type="HAND">
-				<slots>2</slots>
-			</equiptype>
-		</equipslots>
-	</npc>
-	<npc name="Mummy">
-		<prefab>Mummy</prefab>
-		<flags>
-			<flag name="nopoly" />
-			<flag name="Undead" />
-		</flags>
-		<spawnkeywords>
-			<keyword name="tomb" />
-		</spawnkeywords>
-		<stats>
-			<maxhealth>35</maxhealth>
-			<maxpower>75</maxpower>
-			<level>5</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<spells>
-			<spell name="Fireball">
-				<range>5</range>
-				<targeter type="TargetedObjects">
-					<effect type="TargetedObject">
-						<speed>2</speed>
-						<startvisual>FX/Fireball</startvisual>
-						<finishvisual>FX/FireballExplosion</finishvisual>
-					</effect>
-					<effect type="DamageFire">
-						<strength>
-							<min>6</min>
-							<max>12</max>
-						</strength>
-					</effect>
-				</targeter>
-			</spell>
-		</spells>
-		<equipslots>
-			<equiptype type="HAND">
-				<slots>2</slots>
-			</equiptype>
-		</equipslots>
-		<naturalweapon name="fists">
-			<stats>
-				<damage>
-					<min>2</min>
-					<max>7</max>
-				</damage>
-			</stats>
-			<OnHitEffect>
-				<effect type="PoisonDamageEffect">
-					<turns>5</turns>
-					<strength>4</strength>
-				</effect>
-			</OnHitEffect>
-		</naturalweapon>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
+  <npc name="skeleton_knight">
+    <prefab>Skeleton_Knight</prefab>
+    <flags>
+      <flag name="nopoly" />
+      <flag name="Undead" />
+    </flags>
+    <spawnkeywords>
+      <entry name="tomb" />
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>3</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <size>medium</size>
+    </attributes>
+    <startingitems>
+      <list min="0" max="2">
+        <ref name="potions" />
+      </list>
+      <list min="1">
+        <ref name="weapons" />
+      </list>
+    </startingitems>
+    <naturalweapon name="fist">
+      <stats>
+        <damage>
+          <min>4</min>
+          <max>12</max>
+        </damage>
+      </stats>
+    </naturalweapon>
+    <equipslots>
+      <equiptype type="HAND">
+        <slots>2</slots>
+      </equiptype>
+    </equipslots>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+    <aipackages>
+    </aipackages>
+  </npc>
+  <npc name="Giant Rat">
+    <prefab>GIANT_RAT</prefab>
+    <flags>
+      <flag name="nopoly" />
+    </flags>
+    <spawnkeywords>
+      <keyword name="Corpse_Scavenger" />
+      <keyword name="tomb" />
+    </spawnkeywords>
+    <stats>
+      <maxhealth>12</maxhealth>
+      <level>1</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <naturalweapon name="teeth">
+      <stats>
+        <damage>
+          <min>1</min>
+          <max>5</max>
+        </damage>
+      </stats>
+    </naturalweapon>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Ghoul">
+    <prefab>Ghoul</prefab>
+    <flags>
+      <flag name="nopoly" />
+      <flag name="Undead" />
+    </flags>
+    <spawnkeywords>
+      <keyword name="tomb" />
+    </spawnkeywords>
+    <stats>
+      <maxhealth>20</maxhealth>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <naturalweapon name="fists">
+      <stats>
+        <damage>
+          <min>3</min>
+          <max>7</max>
+        </damage>
+      </stats>
+      <OnHitEffect>
+        <effect type="PoisonDamageEffect">
+          <turns>3</turns>
+          <strength>2</strength>
+        </effect>
+      </OnHitEffect>
+    </naturalweapon>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+    <equipslots>
+      <equiptype type="HAND">
+        <slots>2</slots>
+      </equiptype>
+    </equipslots>
+  </npc>
+  <npc name="Mummy">
+    <prefab>Mummy</prefab>
+    <flags>
+      <flag name="nopoly" />
+      <flag name="Undead" />
+    </flags>
+    <spawnkeywords>
+      <keyword name="tomb" />
+    </spawnkeywords>
+    <stats>
+      <maxhealth>35</maxhealth>
+      <maxpower>75</maxpower>
+      <level>5</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <spells>
+      <spell name="Fireball">
+        <range>5</range>
+        <targeter type="TargetedObjects">
+          <effect type="TargetedObject">
+            <speed>2</speed>
+            <startvisual>FX/Fireball</startvisual>
+            <finishvisual>FX/FireballExplosion</finishvisual>
+          </effect>
+          <effect type="DamageFire">
+            <strength>
+              <min>6</min>
+              <max>12</max>
+            </strength>
+          </effect>
+        </targeter>
+      </spell>
+    </spells>
+    <equipslots>
+      <equiptype type="HAND">
+        <slots>2</slots>
+      </equiptype>
+    </equipslots>
+    <naturalweapon name="fists">
+      <stats>
+        <damage>
+          <min>2</min>
+          <max>7</max>
+        </damage>
+      </stats>
+      <OnHitEffect>
+        <effect type="PoisonDamageEffect">
+          <turns>5</turns>
+          <strength>4</strength>
+        </effect>
+      </OnHitEffect>
+    </naturalweapon>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+</npcs>

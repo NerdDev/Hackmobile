@@ -35,10 +35,6 @@ public class ObjectManager : MonoBehaviour, IManager
 
         List<UnityEngine.Object> files = new List<UnityEngine.Object>();
         files.AddRange(Resources.LoadAll("XML", typeof(TextAsset)));
-        files.AddRange(Resources.LoadAll("XML/NPCs", typeof(TextAsset)));
-        files.AddRange(Resources.LoadAll("XML/Strings", typeof(TextAsset)));
-        files.AddRange(Resources.LoadAll("XML/Items", typeof(TextAsset)));
-        files.AddRange(Resources.LoadAll("XML/LeveledLists", typeof(TextAsset)));
 
         foreach (UnityEngine.Object file in files)
         {
