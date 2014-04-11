@@ -40,7 +40,6 @@ public class FOWRenderers : MonoBehaviour
         mNextUpdate = 0.2f + (UnityEngine.Random.value + UnityEngine.Random.value) * .05f;
         wfs = new WaitForSeconds(mNextUpdate);
         mRenderers = GetComponentsInChildren<Renderer>();
-        StartCoroutine(UpdateRendering());
     }
 
     void OnEnable()

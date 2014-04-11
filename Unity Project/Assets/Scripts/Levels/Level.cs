@@ -166,6 +166,7 @@ public class Level : Container2D<GridSpace>
     {
         BigBoss.PlayerInfo.transform.position = new Vector3(space.X, 0, space.Y);
         BigBoss.Player.GridSpace = space;
+        BigBoss.Player.ForceUpdateTiles(space);
         BigBoss.Levels.Builder.Instantiate(space);
     }
 }

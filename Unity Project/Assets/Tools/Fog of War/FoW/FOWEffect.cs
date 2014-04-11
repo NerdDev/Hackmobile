@@ -83,9 +83,11 @@ public class FOWEffect : MonoBehaviour
 		mInverseMVP = (mCam.projectionMatrix * mCam.worldToCameraMatrix).inverse;
 
 		float invScale = 1f / mFog.worldSize;
-		Transform t = mFog.transform;
-		float x = t.position.x - mFog.worldSize * 0.5f;
-		float z = t.position.z - mFog.worldSize * 0.5f;
+		//Transform t = mFog.transform;
+		//float x = t.position.x - mFog.worldSize * 0.5f;
+		//float z = t.position.z - mFog.worldSize * 0.5f;
+        float x = -256f + mFog.HeightOffsetX / 4;
+        float z = -256f + mFog.HeightOffsetY / 4;
 
 		if (mMat == null)
 		{

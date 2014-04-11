@@ -46,6 +46,7 @@ public class NPC : Affectable
     protected List<Item> EquippedItems = new List<Item>();
     public Equipment Equipment = new Equipment();
     public Item NaturalWeapon { get; set; }
+    public Spell OnDeath { get; set; }
     #endregion
 
     /**
@@ -69,7 +70,7 @@ public class NPC : Affectable
     internal Queue<GridSpace> targetGrids = new Queue<GridSpace>();
     internal Vector3 heading; //this is the heading of target minus current location
 
-    internal Animator animator;
+    public Animator animator;
     float velocity;
 
     static int idleState = Animator.StringToHash("Base Layer.idle");
@@ -588,9 +589,7 @@ public class NPC : Affectable
                 Debug.Log("Dropping item: " + i.Name);
                 this.dropItem(i, GridSpace);
             }
-            JustUnregister();
-            animator.Play(deathState);
-            GO.AddComponent<TimedAction>().init(1.5f, new Action(() => { JustDestroy(); }));
+            OnDeath.Activate(this);
         }
         else
         {
@@ -702,6 +701,7 @@ public class NPC : Affectable
         StartingItems = x.Select<StartingItems>("startingitems");
         Equipment = x.Select<Equipment>("equipslots");
         NaturalWeapon = x.Select<Item>("naturalweapon");
+        OnDeath = x.Select<Spell>("OnDeath");
         //parse AI packages
     }
     #endregion

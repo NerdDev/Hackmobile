@@ -13,7 +13,6 @@ public class JoystickCamera : MonoBehaviour
 {
     public Transform target;
     public Vector3 targetOffset;
-    public float distance = 5.0f;
     public float maxDistance = 20;
     public float minDistance = .6f;
     public float xSpeed = 200.0f;
@@ -23,6 +22,9 @@ public class JoystickCamera : MonoBehaviour
     public int zoomRate = 40;
     public float panSpeed = 120f;
     public float zoomDampening = 5.0f;
+    public float Transparency = .3f;
+    public float TransparencyDelay = .2f;
+    public LayerMask TransparencyLayers;
 
     internal float xDeg = 0.0f;
     public float yDeg = 44.5f;
@@ -35,6 +37,7 @@ public class JoystickCamera : MonoBehaviour
     private Vector3 position;
     bool useMouse = true;
     bool useTouch = true;
+    bool useTransparency = true;
 
     void Start() { Init(); }
     void OnEnable() { Init(); }
@@ -46,13 +49,13 @@ public class JoystickCamera : MonoBehaviour
         if (!target)
         {
             GameObject go = new GameObject("Cam Target");
-            go.transform.position = transform.position + (transform.forward * distance);
+            go.transform.position = transform.position + (transform.forward * maxDistance);
             target = go.transform;
         }
         #endregion
 
-        distance = Vector3.Distance(transform.position, target.position);
-        currentDistance = distance;
+        currentDistance = Vector3.Distance(transform.position, target.position);
+        //currentDistance = distance;
         desiredDistance = 2;
 
         //be sure to grab the current rotations as starting points.
@@ -118,6 +121,27 @@ public class JoystickCamera : MonoBehaviour
         transform.rotation = rotation;
         position = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
         transform.position = position;
+
+        if (useTransparency)
+        {
+            Vector3 dir = transform.TransformDirection(Vector3.forward);
+            Vector3 pos = transform.position - dir;
+            RaycastHit[] collisions = Physics.SphereCastAll(new Ray(pos, dir), .05f, currentDistance + 1f, TransparencyLayers);
+            foreach (RaycastHit collision in collisions)
+            {
+                //Debug.DrawLine(pos, collision.point, Color.red, 3f);
+                Collider col = collision.collider;
+                Transparency trans = col.GetComponent<Transparency>();
+                if (trans == null)
+                {
+                    col.gameObject.AddComponent<Transparency>().init(TransparencyDelay, Transparency);
+                }
+                else
+                {
+                    trans.Extend(TransparencyDelay);
+                }
+            }
+        }
     }
 
     public void Rotate(float x, float y)

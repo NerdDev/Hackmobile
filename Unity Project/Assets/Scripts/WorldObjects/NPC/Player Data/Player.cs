@@ -73,7 +73,7 @@ public class Player : NPC
 
     public override void Start()
     {
-        animator = GO.GetComponent<Animator>() as Animator;
+        animator = GO.GetComponentInChildren<Animator>() as Animator;
     }
     // Update is called once per frame
     public override void Update()
@@ -165,7 +165,7 @@ public class Player : NPC
     {
         if (GridSpace != null)
         {
-            Vector3 lookVectorToOccupiedTile = new Vector3(GridSpace.X, GO.transform.position.y, GridSpace.Y) - GO.transform.position;
+            Vector2 lookVectorToOccupiedTile = new Vector2(GridSpace.X, GridSpace.Y) - new Vector2(GO.transform.position.x, GO.transform.position.z);
             Debug.DrawLine(GO.transform.position + Vector3.up, new Vector3(GridSpace.X, 0, GridSpace.Y), Color.green);
 
             //If distance is greater than 1.3 (var), pass turn
@@ -181,6 +181,10 @@ public class Player : NPC
             //Moving toward closest center point if player isn't moving with input:
             resetToGrid();
             Debug.DrawRay(new Vector3(GridSpace.X, 0, GridSpace.Y), Vector3.up, Color.yellow);
+        }
+        else
+        {
+            UpdateCurrentTileVectors();
         }
     }
 
@@ -210,6 +214,10 @@ public class Player : NPC
             {
                 moving = false;
             }
+            //if (!verticalMoving)
+            //{
+            //    resetVerticalPosition();
+            //}
         }
         else
         {
@@ -231,20 +239,28 @@ public class Player : NPC
         GO.transform.position = new Vector3(GridSpace.X, verticalOffset, GridSpace.Y);
     }
 
+    private void resetVerticalPosition()
+    {
+        Vector3 refVector = GO.transform.position;
+        GO.transform.position = new Vector3(refVector.x, verticalOffset, refVector.z);
+    }
+
     public void MovePlayer(Vector2 magnitude)
     {
         v = magnitude.sqrMagnitude * PlayerSpeed;
         MovePlayer(v);
     }
 
-    protected bool UpdateCurrentTileVectors()
+    public bool UpdateCurrentTileVectors()
     {
         Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
+        if (BigBoss.Levels.Level == null) return false;
         GridSpace newGridSpace = BigBoss.Levels.Level[currentLoc.x.ToInt(), currentLoc.y.ToInt()];
-        if (!newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
+        if (newGridSpace != null && !newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
         {
             GridSpace = newGridSpace;
             BigBoss.Gooey.CheckChestDistance();
+            FOWSystem.instance.UpdatePosition(GridSpace);
             return true;
         }
         else
@@ -253,10 +269,28 @@ public class Player : NPC
         }
     }
 
+    public void ForceUpdateTiles(GridSpace grid)
+    {
+        GridSpace = grid;
+        BigBoss.Gooey.CheckChestDistance();
+        FOWSystem.instance.UpdatePosition(GridSpace);
+    }
+
+    float gravity;
+    CharacterController controller;
     private void MovePlayer(float speed)
     {
+        if (controller == null) controller = GO.GetComponent<CharacterController>();
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        GO.GetComponent<CharacterController>().Move(moveDir * speed * Time.deltaTime);
+        if (GO.transform.position.y <= verticalOffset)
+        {
+            gravity = 0;
+        }
+
+        else { gravity -= 9.81f * Time.deltaTime; }
+        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
+        controller.Move(newMove * speed * Time.deltaTime);
+
         //GO.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
     }
 
@@ -269,7 +303,7 @@ public class Player : NPC
         {
             try
             {
-                animator = GO.GetComponent<Animator>() as Animator;
+                animator = GO.GetComponentInChildren<Animator>() as Animator;
             }
             catch (Exception)
             {
@@ -284,7 +318,7 @@ public class Player : NPC
         currentBaseState = animator.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
     }
 
-    
+
 
     #region MECANIM EXAMPLE SCRIPT
     //	using UnityEngine;

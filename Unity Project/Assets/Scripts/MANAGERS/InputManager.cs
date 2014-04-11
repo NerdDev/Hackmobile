@@ -21,6 +21,7 @@ public class InputManager : MonoBehaviour, IManager
     public bool defaultPlayerInput;
     public bool spellInput;
     public bool logInput;
+
     #endregion
 
     #region Mouse variables:

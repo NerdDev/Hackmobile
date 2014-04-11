@@ -60,7 +60,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: b24672e031a6d074783f4b4fb3871d5b, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 28b4810ed6f62844bb75db8bc4dc78b2, type: 3}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -88,6 +88,7 @@ MonoBehaviour:
   GridLength: 1
   Walkable: 0
   PrintChar: O
+  Dynamic: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
