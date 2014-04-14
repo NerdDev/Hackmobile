@@ -1435,16 +1435,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                 #endregion
                 if (!DrawAround(curPoint.x, curPoint.y, cornered, (arr, x2, y2) =>
                 {
-                    if (y2 == 54 && x2 == -26)
-                    {
-                        int wer = 23;
-                        wer++;
-                    }
-                    if (y2 == 54 && x2 == -25)
-                    {
-                        int wer = 23;
-                        wer++;
-                    }
                     if (!visited[x2, y2])
                     {
                         if (shouldQueue(arr, x2, y2))
