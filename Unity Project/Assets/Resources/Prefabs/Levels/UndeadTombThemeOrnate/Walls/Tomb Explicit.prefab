@@ -1,0 +1,179 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400000}
+  - 33: {fileID: 3300000}
+  - 23: {fileID: 2300000}
+  - 65: {fileID: 6500000}
+  - 114: {fileID: 11400002}
+  m_Layer: 12
+  m_Name: Tomb Explicit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.91100001, z: 0}
+  m_LocalScale: {x: 1, y: 3.82200003, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!23 &2300000
+Renderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: e1827ee348ebeee4180e7d9e5226407e, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+--- !u!33 &3300000
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Mesh: {fileID: 4300000, guid: 1d004d6227d5af842b650c353ce500ab, type: 2}
+--- !u!65 &6500000
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 3, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 585095db6a113b0408c2d8fe87674a11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GridWidth: 1
+  GridLength: 1
+  Walkable: 0
+  PrintChar: 
+  Dynamic: 0
+  PlaceFloor: 1
+  ThinWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400002, guid: c05c8850a153fef46b920ef6d082b817, type: 2}
+    - Multiplier: .400000006
+      Unique: 0
+      Item: {fileID: 11400000, guid: c243cc20f74214e47b67fa68783a1b53, type: 2}
+  TWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400008, guid: 07321256b18bb2245b9a0c63454274da, type: 2}
+  TEdgeWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400008, guid: 73f910e2acd57d94cad9f42979eccf93, type: 2}
+  EdgeWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400002, guid: 819a40204fb09264cb2631d08b330962, type: 2}
+  PWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400008, guid: eeb833f287aa8d44498dbb7942c4ce92, type: 2}
+  QuadWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400002, guid: addf2908381feb745bc81b70185ed557, type: 2}
+  CornerWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400004, guid: 65e3f77b505eafc4fb4d903e4faa7d76, type: 2}
+  DualInverseCornerWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400004, guid: 2c90762fcfdc4734d85363617e5f8a37, type: 2}
+  TriWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400004, guid: 42662face0ce0de45b8d5f8a3eea1d77, type: 2}
+  InverseCornerWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000, guid: 4e17a4f1ffe5d254b86402b51b72ff2f, type: 2}
+  CornerWallFilled:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400002, guid: d9d5323a488d0f144af8c64f032b88f3, type: 2}
+  DiagonalSmallWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000, guid: c030bba5fd21495499abddd591fddd32, type: 2}
+  DiagonalBluntWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000, guid: bb0b62ed0dd66774fb8633418d7b88f6, type: 2}
+  DiagonalWedgeWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000, guid: 73f1add794015e5488ec9f38cc948f67, type: 2}
+  DiagonalTurnWall:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400004, guid: 456d4ee8372228142b6525e8b7805e59, type: 2}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 100000}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1
