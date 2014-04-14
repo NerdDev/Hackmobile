@@ -44,11 +44,6 @@ public class WallElementExplicit : WallElement
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
-        if (spec.DeployX == -25 && spec.DeployY == -13)
-        {
-            int wer = 23;
-            wer++;
-        }
         GridLocationResults results = spec.GenGrid.DrawLocationsAroundResults(spec.DeployX, spec.DeployY, true, _test);
         GridDirection dir;
         GridLocation loc, loc2;

@@ -1390,6 +1390,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             shouldContinue);
     }
 
+    private const int BFSMax = 300000;
     public bool DrawBreadthFirstFill(
         Queue<Value2D<T>> queue,
         Container2D<bool> visited,
@@ -1397,73 +1398,103 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         DrawAction<T> shouldQueue,
         DrawAction<T> shouldContinue = null)
     {
-        #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
-            MultiMap<GridType> queueMap = new MultiMap<GridType>();
-            foreach (Point p in queue)
-                queueMap[p] = GridType.INTERNAL_RESERVED_BLOCKED;
-            queueMap.ToLog("Starting queue");
-            visited.ToLog("Starting Visited");
-        }
-        #endregion
         Value2D<T> curPoint = null;
-        bool pass = true;
-        while (queue.Count > 0)
+        try
         {
-            curPoint = queue.Dequeue();
             #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
-                MultiMap<GridType> tmpMap = new MultiMap<GridType>();
-                foreach (Value2D<bool> val in visited)
-                {
-                    tmpMap[val] = GridType.INTERNAL_RESERVED_BLOCKED;
-                }
-                foreach (Value2D<T> val in queue)
-                {
-                    tmpMap[val] = GridType.INTERNAL_RESERVED_CUR;
-                }
-                tmpMap[curPoint] = GridType.INTERNAL_RESERVED_CUR;
-                tmpMap.ToLog("At " + curPoint);
+                BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
+                MultiMap<GridType> queueMap = new MultiMap<GridType>();
+                foreach (Point p in queue)
+                    queueMap[p] = GridType.INTERNAL_RESERVED_BLOCKED;
+                queueMap.ToLog("Starting queue");
+                visited.ToLog("Starting Visited");
             }
             #endregion
-            if (!DrawAround(curPoint.x, curPoint.y, cornered, (arr, x2, y2) =>
+            int num = 0;
+            bool pass = true;
+            while (queue.Count > 0)
             {
-                if (!visited[x2, y2])
+                curPoint = queue.Dequeue();
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    if (shouldQueue(arr, x2, y2))
+                    MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+                    foreach (Value2D<bool> val in visited)
                     {
-                        queue.Enqueue(new Value2D<T>(x2, y2, arr[x2, y2]));
-                        #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            BigBoss.Debug.w(Logs.LevelGen, "Queued " + x2 + " " + y2);
-                        }
-                        #endregion
+                        tmpMap[val] = GridType.INTERNAL_RESERVED_BLOCKED;
                     }
-                    else if (shouldContinue != null && !shouldContinue(arr, x2, y2))
+                    foreach (Value2D<T> val in queue)
                     {
-                        #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            BigBoss.Debug.w(Logs.LevelGen, "Stopping early at " + x2 + " " + y2);
-                        }
-                        #endregion
-                        return false;
+                        tmpMap[val] = GridType.INTERNAL_RESERVED_CUR;
                     }
+                    tmpMap[curPoint] = GridType.INTERNAL_RESERVED_CUR;
+                    tmpMap.ToLog("At " + curPoint);
                 }
-                visited[x2, y2] = true;
-                return true;
-            }))
-            {
-                // Stopping early
-                pass = false;
-                break;
+                #endregion
+                if (!DrawAround(curPoint.x, curPoint.y, cornered, (arr, x2, y2) =>
+                {
+                    if (y2 == 54 && x2 == -26)
+                    {
+                        int wer = 23;
+                        wer++;
+                    }
+                    if (y2 == 54 && x2 == -25)
+                    {
+                        int wer = 23;
+                        wer++;
+                    }
+                    if (!visited[x2, y2])
+                    {
+                        if (shouldQueue(arr, x2, y2))
+                        {
+                            if (num++ > BFSMax)
+                            {
+                                throw new ArgumentOutOfRangeException("BFS Count too high.");
+                            }
+                            queue.Enqueue(new Value2D<T>(x2, y2, arr[x2, y2]));
+                            #region DEBUG
+                            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                            {
+                                BigBoss.Debug.w(Logs.LevelGen, "Queued " + x2 + " " + y2);
+                            }
+                            #endregion
+                        }
+                        else if (shouldContinue != null && !shouldContinue(arr, x2, y2))
+                        {
+                            #region DEBUG
+                            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                            {
+                                BigBoss.Debug.w(Logs.LevelGen, "Stopping early at " + x2 + " " + y2);
+                            }
+                            #endregion
+                            return false;
+                        }
+                    }
+                    visited[x2, y2] = true;
+                    return true;
+                }))
+                {
+                    // Stopping early
+                    pass = false;
+                    break;
+                }
             }
+            #region DEBUG
+            PrintBFSState(curPoint, visited, queue);
+            #endregion
+            return pass;
         }
-        #region DEBUG
+        catch (Exception ex)
+        {
+            PrintBFSState(curPoint, visited, queue);
+            throw ex;
+        }
+    }
+
+    protected void PrintBFSState<T>(Value2D<T> curPoint, Container2D<bool> visited, Queue<Value2D<T>> queue)
+    {
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
             MultiMap<GridType> tmpMap = new MultiMap<GridType>();
@@ -1482,8 +1513,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             tmpMap.ToLog("Ending at " + curPoint);
             BigBoss.Debug.printFooter(Logs.LevelGen, "Breadth First Fill");
         }
-        #endregion
-        return pass;
     }
 
     public bool DrawBreadthFirstSearch(

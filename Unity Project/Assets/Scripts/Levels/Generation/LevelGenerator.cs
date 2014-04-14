@@ -654,6 +654,17 @@ public class LevelGenerator
                 {
                     leaf2.SetTo(second, GridType.Door, Theme);
                 }
+                // Expand path
+                foreach (var p in path)
+                {
+                    layoutCopy.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, Theme).And(Draw.SetTo(GridType.Floor, Theme))));
+                    layoutCopy.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
+                    {
+                        if (!arr.IsType(x, y, GridType.NULL)) return false;
+                        return arr.Cornered(x, y, Draw.IsType<GenSpace>(GridType.Floor));
+                    }).IfThen(Draw.SetTo(pathObj, GridType.Floor, Theme)));
+                }
+                // Mark path on layout object
                 foreach (var v in pathObj)
                 {
                     layoutCopy[v] = v.val;
@@ -663,15 +674,6 @@ public class LevelGenerator
                         queue.Enqueue(v);
                     }
                     visited[v] = true;
-                }
-                foreach (var p in path)
-                {
-                    layoutCopy.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, Theme).And(Draw.SetTo(GridType.Floor, Theme))));
-                    layoutCopy.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
-                    {
-                        if (!arr.IsType(x, y, GridType.NULL)) return false;
-                        return arr.Cornered(x, y, Draw.IsType<GenSpace>(GridType.Floor));
-                    }).IfThen(Draw.SetTo(pathObj, GridType.Floor, Theme)));
                 }
                 Container.Objects.Add(pathObj);
                 hitConnected.DrawAll(Draw.AddTo(runningConnected));
@@ -732,6 +734,12 @@ public class LevelGenerator
             startPoint = null;
             return false;
         }
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Found unconnected object at " + endPoint);
+        }
+        #endregion
         Container2D<bool> hitVisited;
         Queue<Value2D<GenSpace>> hitQueue;
         ConstructBFS(hit, out hitQueue, out hitVisited);
