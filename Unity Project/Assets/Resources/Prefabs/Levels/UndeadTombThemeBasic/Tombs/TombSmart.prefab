@@ -38,11 +38,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3c8d68a0e182b468e20f3cd81cf9c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridWidth: 2
+  GridLength: 3
+  PrintChar: 
   Normal:
     Elements:
     - Multiplier: 1
       Unique: 0
       Item: {fileID: 11400000, guid: 15956c11fce589d43aebadac16ff9dd6, type: 2}
+    SmartElement: {fileID: 11400000}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

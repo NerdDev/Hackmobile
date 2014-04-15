@@ -4,21 +4,11 @@ using System.Linq;
 using System.Text;
 
 [Serializable]
-public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IEnsureType
+public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IEnsureType
 {
-    private ProbabilityPool<ThemeElement> _pool;
-    private ProbabilityPool<ThemeElement> pool
-    {
-        get
-        {
-            if (_pool == null)
-            {
-                Init();
-            }
-            return _pool;
-        }
-    }
+    private ProbabilityPool<ThemeElement> pool;
     public List<PrefabProbabilityContainer> Elements;
+    public SmartThemeElement SmartElement;
 
     [Serializable]
     public class PrefabProbabilityContainer
@@ -28,9 +18,10 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IE
         public ThemeElement Item;
     }
 
-    public void Init()
+    public void Init(SmartThemeElement smart)
     {
-        _pool = ProbabilityPool<ThemeElement>.Create();
+        pool = ProbabilityPool<ThemeElement>.Create();
+        SmartElement = smart;
         foreach (PrefabProbabilityContainer cont in Elements)
         {
             if (cont.Item == null)
@@ -41,7 +32,8 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IE
             {
                 cont.Multiplier = 1f;
             }
-            _pool.Add(cont.Item, cont.Multiplier, cont.Unique);
+            cont.Item.Set = this;
+            pool.Add(cont.Item, cont.Multiplier, cont.Unique);
         }
     }
 

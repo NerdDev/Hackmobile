@@ -9,7 +9,6 @@ public class TombElement : FloorDoodadElement
     public TombTopElement[] TombTop;
     public TombElement()
     {
-        SetChar((char)(240));
     }
 
     public override void PreDeployTweaks(ThemeElementSpec spec)

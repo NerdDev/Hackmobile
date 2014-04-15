@@ -7,6 +7,10 @@ using UnityEngine;
 public class ThemeElement : FOWRenderers
 {
     public GameObject GO { get { return gameObject; } }
+    public ThemeQualitySet Set;
+    public int GridWidth { get { return Set.SmartElement.GridWidth; } }
+    public int GridLength { get { return Set.SmartElement.GridLength; } }
+    public string PrintChar { get { return Set.SmartElement.PrintChar; } }
     private Bounds _bounds;
     private bool _bounded = false;
     public Bounds Bounds
@@ -24,10 +28,7 @@ public class ThemeElement : FOWRenderers
             return _bounds;
         }
     }
-    public byte GridWidth = 1;
-    public byte GridLength = 1;
     public bool Walkable;
-    public string PrintChar = string.Empty;
     public bool Dynamic;
 
     public virtual void PreDeployTweaks(ThemeElementSpec spec)
@@ -158,11 +159,6 @@ public class ThemeElement : FOWRenderers
             }
             return remaining;
         }
-    }
-
-    protected void SetChar(char c)
-    {
-        PrintChar = c.ToString();
     }
 }
 

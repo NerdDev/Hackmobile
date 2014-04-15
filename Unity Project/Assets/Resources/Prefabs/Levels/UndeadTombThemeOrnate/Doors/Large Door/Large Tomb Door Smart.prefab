@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Epic Stair Smart
+  m_Name: Large Tomb Door Smart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,7 +23,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.20000005, z: -.00012421608}
+  m_LocalPosition: {x: .945654392, y: -1.11780345, z: -4.42818451}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -38,15 +38,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3c8d68a0e182b468e20f3cd81cf9c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 2
-  GridLength: 4
-  PrintChar: 
   Normal:
     Elements:
     - Multiplier: 1
       Unique: 0
-      Item: {fileID: 11400048, guid: 754f34846ec04e743828fcd8421a06c2, type: 2}
-    SmartElement: {fileID: 11400000}
+      Item: {fileID: 11400000, guid: f9f898e2d50f6c54d924ddb17b5904f7, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
