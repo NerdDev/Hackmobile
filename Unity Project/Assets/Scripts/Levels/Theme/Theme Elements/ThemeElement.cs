@@ -8,9 +8,9 @@ public class ThemeElement : FOWRenderers
 {
     public GameObject GO { get { return gameObject; } }
     public ThemeQualitySet Set;
-    public int GridWidth { get { return Set.SmartElement.GridWidth; } }
-    public int GridLength { get { return Set.SmartElement.GridLength; } }
-    public string PrintChar { get { return Set.SmartElement.PrintChar; } }
+    public int GridWidth { get { return Set.GridWidth; } }
+    public int GridLength { get { return Set.GridLength; } }
+    public string PrintChar { get { return Set.PrintChar; } }
     private Bounds _bounds;
     private bool _bounded = false;
     public Bounds Bounds

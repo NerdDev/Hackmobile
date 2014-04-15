@@ -6,9 +6,44 @@ using System.Text;
 [Serializable]
 public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IEnsureType
 {
-    private ProbabilityPool<ThemeElement> pool;
+    private ProbabilityPool<ThemeElement> _pool;
+    protected ProbabilityPool<ThemeElement> pool
+    {
+        get
+        {
+            if (_pool == null)
+            {
+                Init();
+            }
+            return _pool;
+        }
+    }
     public List<PrefabProbabilityContainer> Elements;
-    public SmartThemeElement SmartElement;
+    protected SmartThemeElement SmartElement;
+    public int GridWidth
+    {
+        get
+        {
+            if (SmartElement == null) return 1;
+            return SmartElement.GridWidth;
+        }
+    }
+    public int GridLength
+    {
+        get
+        {
+            if (SmartElement == null) return 1;
+            return SmartElement.GridLength;
+        }
+    }
+    public string PrintChar
+    {
+        get
+        {
+            if (SmartElement == null) return "?";
+            return SmartElement.PrintChar;
+        }
+    }
 
     [Serializable]
     public class PrefabProbabilityContainer
@@ -20,8 +55,13 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IEnsureType
 
     public void Init(SmartThemeElement smart)
     {
-        pool = ProbabilityPool<ThemeElement>.Create();
         SmartElement = smart;
+        Init();
+    }
+
+    public void Init()
+    {
+        _pool = ProbabilityPool<ThemeElement>.Create();
         foreach (PrefabProbabilityContainer cont in Elements)
         {
             if (cont.Item == null)
@@ -33,7 +73,7 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IEnsureType
                 cont.Multiplier = 1f;
             }
             cont.Item.Set = this;
-            pool.Add(cont.Item, cont.Multiplier, cont.Unique);
+            _pool.Add(cont.Item, cont.Multiplier, cont.Unique);
         }
     }
 
