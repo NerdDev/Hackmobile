@@ -883,19 +883,31 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             return this.DrawCol(from, to, on, action);
     }
 
-    public bool DrawLine(int x, int y, GridDirection dir, int amount, DrawAction<T> action)
+    public bool DrawLineExpanding(int x, int y, GridDirection dir, int amount, DrawAction<T> action)
     {
+        if (!action(this, x, y)) return false;
         switch (dir)
         {
             case GridDirection.HORIZ:
-                return this.DrawRow(x - amount, x + amount, y, action);
+                for (int i = 1; i <= amount; i++)
+                {
+                    if (!action(this, x + i, y)) return false;
+                    if (!action(this, x - i, y)) return false;
+                }
+                break;
             case GridDirection.VERT:
-                return this.DrawCol(y - amount, y + amount, x, action);
+                for (int i = 1; i <= amount; i++)
+                {
+                    if (!action(this, x, y + i)) return false;
+                    if (!action(this, x, y - i)) return false;
+                }
+                break;
             case GridDirection.DIAGTLBR:
             case GridDirection.DIAGBLTR:
             default:
                 throw new NotImplementedException();
         }
+        return true;
     }
 
     public bool DrawCol(int yb, int yt, int x, DrawAction<T> action, bool BottomToTop = true)

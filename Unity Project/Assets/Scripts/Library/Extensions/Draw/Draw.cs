@@ -469,6 +469,12 @@ public static class Draw
         };
     }
 
+    public static DrawAction<T> IsNull<T>()
+        where T : IGridSpace
+    {
+        return IsType<T>(GridType.NULL);
+    }
+
     public static DrawAction<T> IsType<T>(params GridType[] g)
         where T : IGridSpace
     {

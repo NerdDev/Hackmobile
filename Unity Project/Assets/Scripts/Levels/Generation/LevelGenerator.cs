@@ -652,7 +652,7 @@ public class LevelGenerator
                 }
                 if (leaf2[second].Type == GridType.Wall)
                 {
-                    Theme.PlaceDoor(leaf1, second.x, second.y, Rand);
+                    Theme.PlaceDoor(leaf2, second.x, second.y, Rand);
                 }
                 // Expand path
                 foreach (var p in path)

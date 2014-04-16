@@ -55,28 +55,26 @@ public class Theme : ScriptableObject, IInitializable
     public void PlaceDoor(Container2D<GenSpace> cont, int x, int y, System.Random rand)
     {
         // Count largest option
-        Counter horizCount = new Counter();
-        cont.DrawLine(x - 5, x + 5, y, true, Draw.CanDrawDoor().IfThen(Draw.Count<GenSpace>(horizCount)));
-        Counter vertCount = new Counter();
-        cont.DrawLine(y - 5, y + 5, x, false, Draw.CanDrawDoor().IfThen(Draw.Count<GenSpace>(vertCount)));
+        Counter horiz = new Counter();
+        cont.DrawLineExpanding(x, y, GridDirection.HORIZ, 5, Draw.CanDrawDoor().IfThen(Draw.Count<GenSpace>(horiz)));
+        Counter vert = new Counter();
+        cont.DrawLineExpanding(x, y, GridDirection.VERT, 5, Draw.CanDrawDoor().IfThen(Draw.Count<GenSpace>(vert)));
 
         // Find largest
         GridDirection dir;
-        int count = 1;
-        if (horizCount < vertCount)
+        MultiMap<GenSpace> map;
+        int count;
+        if (horiz.Count < vert || (horiz == vert && rand.NextBool()))
         {
-            count = vertCount;
+            count = vert;
             dir = GridDirection.VERT;
-        }
-        else if (horizCount > vertCount)
-        {
-            count = horizCount;
-            dir = GridDirection.HORIZ;
         }
         else
         {
-            dir = rand.NextBool() ? GridDirection.HORIZ : GridDirection.VERT;
+            count = horiz;
+            dir = GridDirection.HORIZ;
         }
+        count = Math.Max(count, 1);
 
         // Pick random size
         for (; count > 1; count--)
@@ -94,6 +92,7 @@ public class Theme : ScriptableObject, IInitializable
             count--;
         }
 
-        cont.DrawLine(x, y, dir, count / 2, Draw.MergeIn(doorElement, rand, this, GridType.Door));
+        ThemeElement door = doorElement.Get(rand);
+        cont.DrawLineExpanding(x, y, dir, count / 2, Draw.MergeIn(door, this, GridType.Door).And(Draw.Around(false, Draw.IsNull<GenSpace>().IfThen(Draw.SetTo(GridType.Floor, this)))));
     }
 }

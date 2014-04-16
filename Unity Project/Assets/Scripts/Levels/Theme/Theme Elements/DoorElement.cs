@@ -28,6 +28,7 @@ public class DoorElement : ThemeElement
             {
                 spec.GenDeploy.Rotate(spec.Random.NextClockwise());
             }
+            CenterDoodad(spec);
         }
         // Diagonal door
         else if (spec.GenGrid.AlternatesCorners(spec.DeployX, spec.DeployY, Draw.IsType<GenSpace>(GridType.Wall), out walkableDir))
