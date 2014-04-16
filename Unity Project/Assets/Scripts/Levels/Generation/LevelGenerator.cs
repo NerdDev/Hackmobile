@@ -648,11 +648,11 @@ public class LevelGenerator
                 Container.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
                 if (leaf1[first].Type == GridType.Wall)
                 {
-                    leaf1.SetTo(first, GridType.Door, Theme);
+                    Theme.PlaceDoor(leaf1, first.x, first.y, Rand);
                 }
                 if (leaf2[second].Type == GridType.Wall)
                 {
-                    leaf2.SetTo(second, GridType.Door, Theme);
+                    Theme.PlaceDoor(leaf1, second.x, second.y, Rand);
                 }
                 // Expand path
                 foreach (var p in path)

@@ -67,6 +67,20 @@ public class ThemeElementBundle : IInitializable, IThemeElementBundle
         return false;
     }
 
+    public bool HasSize(int width, int length, bool flip = true)
+    {
+        ProbabilityPool<SmartThemeElement> pool;
+        if (_map.TryGetValue(width, length, out pool))
+        {
+            return true;
+        }
+        if (flip && width != length)
+        {
+            return HasSize(length, width, false);
+        }
+        return false;
+    }
+
     public void EnsureType(Type target)
     {
         foreach (PrefabProbabilityContainer cont in Elements)

@@ -51,4 +51,49 @@ public class Theme : ScriptableObject, IInitializable
         }
         return ret;
     }
+
+    public void PlaceDoor(Container2D<GenSpace> cont, int x, int y, System.Random rand)
+    {
+        // Count largest option
+        Counter horizCount = new Counter();
+        cont.DrawLine(x - 5, x + 5, y, true, Draw.CanDrawDoor().IfThen(Draw.Count<GenSpace>(horizCount)));
+        Counter vertCount = new Counter();
+        cont.DrawLine(y - 5, y + 5, x, false, Draw.CanDrawDoor().IfThen(Draw.Count<GenSpace>(vertCount)));
+
+        // Find largest
+        GridDirection dir;
+        int count = 1;
+        if (horizCount < vertCount)
+        {
+            count = vertCount;
+            dir = GridDirection.VERT;
+        }
+        else if (horizCount > vertCount)
+        {
+            count = horizCount;
+            dir = GridDirection.HORIZ;
+        }
+        else
+        {
+            dir = rand.NextBool() ? GridDirection.HORIZ : GridDirection.VERT;
+        }
+
+        // Pick random size
+        for (; count > 1; count--)
+        {
+            if (rand.NextBool())
+            {
+                break;
+            }
+        }
+
+        // Pick door
+        SmartThemeElement doorElement;
+        while (!Door.Select(rand, count, 1, out doorElement) && count > 1)
+        {
+            count--;
+        }
+
+        cont.DrawLine(x, y, dir, count / 2, Draw.MergeIn(doorElement, rand, this, GridType.Door));
+    }
 }

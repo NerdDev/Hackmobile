@@ -2332,7 +2332,6 @@ MonoBehaviour:
     - Multiplier: 1
       Unique: 0
       Item: {fileID: 462783506}
-    SmartElement: {fileID: 11400000, guid: a6530169c6aa59241bf35081d2ff5cc8, type: 2}
   Walkable: 0
   Dynamic: 0
 --- !u!23 &462783507
@@ -4041,7 +4040,6 @@ MonoBehaviour:
     - Multiplier: 1
       Unique: 0
       Item: {fileID: 1040969373}
-    SmartElement: {fileID: 11400000, guid: a6530169c6aa59241bf35081d2ff5cc8, type: 2}
   Walkable: 0
   Dynamic: 0
 --- !u!23 &1040969374
@@ -5061,7 +5059,6 @@ MonoBehaviour:
     - Multiplier: 1
       Unique: 0
       Item: {fileID: 1415882351}
-    SmartElement: {fileID: 11400000, guid: a6530169c6aa59241bf35081d2ff5cc8, type: 2}
   Walkable: 0
   Dynamic: 0
 --- !u!23 &1415882352
@@ -6323,7 +6320,6 @@ MonoBehaviour:
     - Multiplier: 1
       Unique: 0
       Item: {fileID: 1761365039}
-    SmartElement: {fileID: 11400000, guid: a6530169c6aa59241bf35081d2ff5cc8, type: 2}
   Walkable: 0
   Dynamic: 0
 --- !u!23 &1761365040
@@ -6701,7 +6697,6 @@ MonoBehaviour:
     - Multiplier: 1
       Unique: 0
       Item: {fileID: 1860901364}
-    SmartElement: {fileID: 11400000, guid: a6530169c6aa59241bf35081d2ff5cc8, type: 2}
   Walkable: 0
   Dynamic: 0
 --- !u!23 &1860901365
