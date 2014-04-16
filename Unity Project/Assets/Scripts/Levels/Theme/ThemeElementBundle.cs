@@ -50,7 +50,7 @@ public class ThemeElementBundle : IInitializable, IThemeElementBundle
         return SmartElement;
     }
 
-    public bool Select(System.Random rand, int width, int length, out SmartThemeElement element)
+    public bool Select(System.Random rand, int width, int length, out SmartThemeElement element, bool flip = true)
     {
         ProbabilityPool<SmartThemeElement> pool;
         if (_map.TryGetValue(width, length, out pool))
@@ -58,6 +58,10 @@ public class ThemeElementBundle : IInitializable, IThemeElementBundle
             element = pool.Get(rand);
             SmartElement = element;
             return true;
+        }
+        if (flip && width != length)
+        {
+            return Select(rand, length, width, out element, false);
         }
         element = null;
         return false;
