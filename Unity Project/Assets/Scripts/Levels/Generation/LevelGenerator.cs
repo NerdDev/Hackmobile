@@ -85,7 +85,7 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             if (newLog)
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + _debugNum++ + " - " + name);
+                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + ++_debugNum + " - " + name);
             BigBoss.Debug.w(Logs.LevelGen, "Start time: " + time);
         }
         foreach (Action action in a)
@@ -438,7 +438,7 @@ public class LevelGenerator
             if (clusterDoorOptions.Count > 0)
             { // Cluster side has door options
                 obj.Shift(info.Shift.x, info.Shift.y);
-                placed = obj.PlaceSomeDoors(clusterDoorOptions, Theme, Rand);
+                placed = Theme.PlaceSomeDoors(obj, clusterDoorOptions, Rand);
                 if (placed.Count != 0)
                 { // Placed a door
                     foreach (Point p in placed)
@@ -626,7 +626,7 @@ public class LevelGenerator
                 3,
                 5,
                 Draw.IsType<GenSpace>(GridType.NULL).And(Draw.Inside<GenSpace>(layoutCopy.Bounding.Expand(5))),
-                passTest.And(Draw.ContainedIn(hitConnected)),
+                passTest.And(Draw.PointContainedIn(hitConnected)),
                 Rand,
                 endPoint,
                 true);
@@ -748,7 +748,7 @@ public class LevelGenerator
         return map.DrawBreadthFirstSearch(
             hitQueue, hitVisited, false,
             Draw.IsType<GenSpace>(GridType.NULL),
-            pass.And(Draw.ContainedIn(runningConnected)),
+            pass.And(Draw.PointContainedIn(runningConnected)),
             out startPoint);
     }
 

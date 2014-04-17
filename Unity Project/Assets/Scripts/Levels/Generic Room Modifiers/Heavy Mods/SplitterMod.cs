@@ -68,7 +68,7 @@ public class SplitterMod : HeavyRoomMod
         }
         #endregion
 
-        spec.Grids.PlaceSomeDoors(walls, spec.Theme, spec.Random, 5);
+        spec.Theme.PlaceSomeDoors(spec.Grids, walls, spec.Random, 4, false);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

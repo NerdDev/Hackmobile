@@ -37,7 +37,7 @@ public class StairWallElement : StairElement
                     GridLength,
                     GridLocation.TOP,
                     new BoxedAction<GenSpace>(
-                        frontTest.And(Draw.ContainedIn(obj)),
+                        frontTest.And(Draw.PointContainedIn(obj)),
                         unitTest),
                         true,
                         true,

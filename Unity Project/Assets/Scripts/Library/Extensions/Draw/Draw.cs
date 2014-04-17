@@ -68,7 +68,7 @@ public static class Draw
         };
     }
 
-    public static DrawAction<T> ContainedIn<T>(Container2D<T> coll)
+    public static DrawAction<T> PointContainedIn<T>(Container2D<T> coll)
     {
         return (arr, x, y) =>
         {
