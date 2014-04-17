@@ -51,7 +51,7 @@ public class WallElementExplicit : WallElement
         if (results.AlternatesSides(out dir))
         {
             spec.GenDeploy.Element = ThinWall.Get(spec.Random);
-            spec.GenDeploy.RotateToPoint(dir, spec.Random);
+            spec.GenDeploy.RotateToPoint(dir.Rotate90(), spec.Random);
         }
         else if (IsDiagonalPiece(spec, results, out loc))
         {
