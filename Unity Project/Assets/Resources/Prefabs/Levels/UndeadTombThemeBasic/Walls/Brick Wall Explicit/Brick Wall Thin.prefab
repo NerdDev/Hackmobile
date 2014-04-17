@@ -25,7 +25,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: .707106829, z: 0, w: .707106829}
   m_LocalPosition: {x: 0, y: 1.29999995, z: 0}
   m_LocalScale: {x: .330000013, y: 2.5999999, z: 1}
   m_Children: []
@@ -81,10 +81,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridLength: 1
+  Set:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400002}
   Walkable: 0
-  PrintChar: 
   Dynamic: 0
   PlaceFloor: 1
 --- !u!1001 &100100000
