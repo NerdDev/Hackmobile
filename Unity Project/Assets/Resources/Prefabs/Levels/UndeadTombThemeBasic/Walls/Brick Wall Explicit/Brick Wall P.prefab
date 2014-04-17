@@ -178,10 +178,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridLength: 1
+  Set:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000, guid: 1f6c791d39f48774d88d0a91eca50666, type: 2}
   Walkable: 0
-  PrintChar: '#'
   Dynamic: 0
   PlaceFloor: 1
 --- !u!1001 &100100000

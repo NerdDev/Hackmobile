@@ -38,6 +38,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3c8d68a0e182b468e20f3cd81cf9c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridWidth: 1
+  GridLength: 1
+  PrintChar: O
   Normal:
     Elements:
     - Multiplier: 1
