@@ -49,9 +49,7 @@ MonoBehaviour:
     - Multiplier: 1
       Item: {fileID: 11400000, guid: 44b54308d8b9b594a913a8f80f6f6f09, type: 2}
     - Multiplier: 1
-      Item: {fileID: 11400000, guid: 226299dbcf62db340a51dafc621c6449, type: 2}
-    - Multiplier: 1
-      Item: {fileID: 11400000, guid: f1509eb84a15fd4459af7062c4aef0a9, type: 2}
+      Item: {fileID: 11400000, guid: 3f10d49008ba970489b03ed35f139b34, type: 2}
   Floor:
     Elements:
     - Multiplier: 1
