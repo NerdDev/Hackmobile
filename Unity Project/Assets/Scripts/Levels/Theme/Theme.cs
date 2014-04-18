@@ -101,6 +101,7 @@ public class Theme : ScriptableObject, IInitializable
             {
                 notAllowed.Remove(picked);
                 PlaceDoor(arr, picked.x, picked.y, rand, additionalTest);
+                notAllowed[picked] = null;
             }
             else
             {

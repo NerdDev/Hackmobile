@@ -264,10 +264,14 @@ public class LevelGenerator
         int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
         // Num clusters cannot be more than half num rooms
         if (numClusters > Objects.Count / 2)
+        {
             numClusters = Objects.Count / 2;
+        }
         List<LayoutObjectContainer> clusters = new List<LayoutObjectContainer>();
         for (int i = 0; i < numClusters; i++)
+        {
             clusters.Add(new LayoutObjectContainer());
+        }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
