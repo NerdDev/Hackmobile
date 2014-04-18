@@ -24,26 +24,47 @@ public class StairWallElement : StairElement
     public override bool Place(Container2D<GenSpace> grid, LayoutObject obj, Theme theme, Random rand, out Boxing placed)
     {
         int max = Math.Max(GridWidth, GridLength);
-        List<Boxing> options = new List<Boxing>(
-            grid.FindBoxes(
-                GridWidth,
-                GridLength,
-                GridLocation.TOP,
-                new BoxedAction<GenSpace>(
-                    frontTest.And(Draw.ContainedIn(obj)),
-                    unitTest),
-                    true,
-                    true,
-                    obj.Bounding.Expand(max))
-            .Filter((box) =>
-            {
-                Counter counter = new Counter();
-                bool ret = grid.DrawEdge(box, box.Front,
-                    Draw.HasAround(false,
-                        Draw.And(Draw.IsType<GenSpace>(GridType.Floor), Draw.Count<GenSpace>(counter)).
-                        Or(Draw.Walkable<GenSpace>())));
-                return ret && counter > 0;
-            }));
+        List<Boxing> options;
+        if (InwardStairs)
+        {
+            throw new NotImplementedException();
+        }
+        else
+        {
+            options = new List<Boxing>(
+                grid.FindBoxes(
+                    GridWidth,
+                    GridLength,
+                    GridLocation.TOP,
+                    new BoxedAction<GenSpace>(
+                        frontTest.And(Draw.PointContainedIn(obj)),
+                        unitTest),
+                        true,
+                        true,
+                        obj.Bounding.Expand(max))
+                .Filter((box) =>
+                {
+                    box.Expand(1);
+                    Counter counter = new Counter();
+                    bool ret = grid.DrawEdge(box, box.Front, Draw.Or(Draw.IsType<GenSpace>(GridType.Floor).And(Draw.Count<GenSpace>(counter)), Draw.Walkable()), false);
+                    DrawAction<GenSpace> edgeTest = Draw.IsType<GenSpace>(GridType.NULL, GridType.Wall);
+                    ret = ret && grid.DrawEdge(box, box.Front.Opposite(), edgeTest, true);
+                    ret = ret && grid.DrawEdge(box, box.Front.Clockwise90(), edgeTest, false);
+                    ret = ret && grid.DrawEdge(box, box.Front.CounterClockwise90(), edgeTest, false);
+                    box.Expand(-1);
+                    #region DEBUG
+                    if (!ret && BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+                    {
+                        MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                        tmp.PutAll(obj);
+                        tmp.DrawRect(box, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, theme));
+                        tmp.DrawEdge(box, box.Front, Draw.SetTo(GridType.INTERNAL_RESERVED_BLOCKED, theme));
+                        tmp.ToLog(Logs.LevelGen, "Failed Option");
+                    }
+                    #endregion
+                    return ret && counter > 0;
+                }));
+        }
         if (options.Count == 0)
         {
             placed = null;

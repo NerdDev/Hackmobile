@@ -8,6 +8,9 @@ using UnityEditor;
 [Serializable]
 public class SmartThemeElement : MonoBehaviour, IInitializable, IThemeElementBundle
 {
+    public byte GridWidth = 1;
+    public byte GridLength = 1;
+    public string PrintChar = string.Empty;
     public ThemeQualitySet Normal;
     public ThemeElement Proto { get { return Normal.First().Item; } }
 
@@ -20,7 +23,7 @@ public class SmartThemeElement : MonoBehaviour, IInitializable, IThemeElementBun
     {
         foreach (ThemeQualitySet set in this.FindAllDerivedObjects<ThemeQualitySet>(false))
         {
-            set.Init();
+            set.Init(this);
         }
     }
 

@@ -68,6 +68,26 @@ public static class ITransformExt
         }
     }
 
+    public static void RotateToPoint(this ITransform trans, GridDirection dir, bool TopLeftAffinity = true)
+    {
+        switch (dir)
+        {
+            case GridDirection.HORIZ:
+                trans.YRotation = TopLeftAffinity ? 90 : -90;
+                break;
+            case GridDirection.VERT:
+                trans.YRotation = TopLeftAffinity ? 0 : 180;
+                break;
+            case GridDirection.DIAGTLBR:
+                trans.YRotation = TopLeftAffinity ? -45 : 135;
+                break;
+            case GridDirection.DIAGBLTR:
+            default:
+                trans.YRotation = TopLeftAffinity ? 45 : -135;
+                break;
+        }
+    }
+
     public static void RotateToPoint(this ITransform trans, GridLocation loc)
     {
         switch (loc)

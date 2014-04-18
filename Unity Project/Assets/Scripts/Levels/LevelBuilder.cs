@@ -35,7 +35,7 @@ public class LevelBuilder : MonoBehaviour
             GameObject obj = Instantiate(
                 deploy.GO,
                 new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
-                , Quaternion.Euler(new Vector3(t.rotation.x + deploy.XRotation, t.rotation.y + deploy.YRotation, t.rotation.z + deploy.ZRotation))) as GameObject;
+                , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
             if (deploy.Static)
             {
                 obj.transform.parent = staticHolder.transform;
@@ -149,17 +149,17 @@ public class LevelBuilder : MonoBehaviour
     protected bool HandleEmptyDeploy(GenSpace space, System.Random rand)
     {
         space.Deploys = new List<GenDeploy>(1);
-        ThemeElement element;
+        SmartThemeElement element;
         switch (space.Type)
         {
             case GridType.Wall:
-                element = space.Theme.Wall.SmartElement.Get(rand);
+                space.Theme.Wall.Select(rand, 1, 1, out element, false);
                 break;
             case GridType.Door:
-                element = space.Theme.Door.SmartElement.Get(rand);
+                space.Theme.Door.Select(rand, 1, 1, out element, false);
                 break;
             case GridType.Chest:
-                element = space.Theme.Chest.SmartElement.Get(rand);
+                space.Theme.Chest.Select(rand, 1, 1, out element, false);
                 break;
             case GridType.NULL:
                 return false;
@@ -167,14 +167,14 @@ public class LevelBuilder : MonoBehaviour
             case GridType.Floor:
             case GridType.SmallLoot:
             default:
-                element = space.Theme.Floor.SmartElement.Get(rand);
+                space.Theme.Floor.Select(rand, 1, 1, out element, false);
                 break;
         }
         if (element == null)
         {
             throw new ArgumentException("Theme " + space.Theme.GetType() + " had no elements for type: " + space.Type);
         }
-        GenDeploy deploy = new GenDeploy(element);
+        GenDeploy deploy = new GenDeploy(element.Get(rand));
         space.AddDeploy(deploy, 0, 0);
         return true;
     }

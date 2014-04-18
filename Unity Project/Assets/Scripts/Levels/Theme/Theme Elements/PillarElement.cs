@@ -7,6 +7,5 @@ public class PillarElement : FloorDoodadElement
 {
     public PillarElement()
     {
-        PrintChar = "O";
     }
 }

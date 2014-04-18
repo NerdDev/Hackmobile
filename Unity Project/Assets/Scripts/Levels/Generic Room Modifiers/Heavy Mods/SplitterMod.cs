@@ -31,7 +31,7 @@ public class SplitterMod : HeavyRoomMod
                 // If no doors around
                 Draw.Not(Draw.Around(false, Draw.IsType<GenSpace>(GridType.Door)))
                 // Not blocking walking
-                .And(Draw.Not(Draw.Blocking<GenSpace>(Draw.Walkable<GenSpace>())))
+                .And(Draw.Not(Draw.Blocking<GenSpace>(Draw.Walkable())))
                 // Count floors on line as well as sides
                 .And(Draw.IsType<GenSpace>(GridType.Floor).IfThen(Draw.Count<GenSpace>(out floorCount)))
                 .And(Draw.Loc(horizontal ? GridLocation.TOP : GridLocation.LEFT,
@@ -68,7 +68,7 @@ public class SplitterMod : HeavyRoomMod
         }
         #endregion
 
-        spec.Grids.PlaceSomeDoors(walls, spec.Theme, spec.Random, 5);
+        spec.Theme.PlaceSomeDoors(spec.Grids, walls, spec.Random, 4, false);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

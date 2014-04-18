@@ -99,5 +99,20 @@ namespace System
                     return Rotation.OneEighty;
             }
         }
+
+        public static GridDirection NextDirection(this System.Random rand, bool diag = false)
+        {
+            switch (rand.Next(4))
+            {
+                case 0:
+                    return GridDirection.HORIZ;
+                case 1:
+                    return GridDirection.VERT;
+                case 2:
+                    return diag ? GridDirection.DIAGBLTR : GridDirection.HORIZ;
+                default:
+                    return diag ? GridDirection.DIAGTLBR : GridDirection.VERT;
+            }
+        }
     }
 }

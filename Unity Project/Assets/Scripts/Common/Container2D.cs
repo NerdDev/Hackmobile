@@ -525,6 +525,14 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         GridLocationResults results = new GridLocationResults();
         foreach (GridLocation g in DrawLocationsAround(x, y, cornered, action))
         {
+            if (g.IsCorner())
+            {
+                results.NumCorners++;
+            }
+            else
+            {
+                results.NumSides++;
+            }
             results[g] = true;
         }
         return results;
@@ -579,32 +587,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             return true;
         }
         if (action(this, x + 1, y + 1))
-        {
-            loc = GridLocation.TOPLEFT;
-            return true;
-        }
-        loc = GridLocation.CENTER;
-        return false;
-    }
-
-    public bool GetCorner(GridLocationResults results, out GridLocation loc)
-    {
-        if (results[GridLocation.TOPRIGHT])
-        {
-            loc = GridLocation.TOPRIGHT;
-            return true;
-        }
-        if (results[GridLocation.BOTTOMRIGHT])
-        {
-            loc = GridLocation.BOTTOMRIGHT;
-            return true;
-        }
-        if (results[GridLocation.BOTTOMLEFT])
-        {
-            loc = GridLocation.BOTTOMLEFT;
-            return true;
-        }
-        if (results[GridLocation.TOPLEFT])
         {
             loc = GridLocation.TOPLEFT;
             return true;
@@ -714,27 +696,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
-    public bool AlternatesSides(GridLocationResults results, out GridDirection passDir)
-    {
-        if (results[GridLocation.LEFT] != results[GridLocation.RIGHT])
-        {
-            passDir = GridDirection.HORIZ;
-            return false;
-        }
-        if (results[GridLocation.LEFT] == results[GridLocation.TOP])
-        {
-            passDir = GridDirection.HORIZ;
-            return false;
-        }
-        if (results[GridLocation.LEFT] == results[GridLocation.BOTTOM])
-        {
-            passDir = GridDirection.HORIZ;
-            return false;
-        }
-        passDir = results[GridLocation.LEFT] ? GridDirection.HORIZ : GridDirection.VERT;
-        return true;
-    }
-
     public bool AlternatesCorners(int x, int y, DrawAction<T> action)
     {
         bool pass = action(this, x - 1, y - 1);
@@ -820,48 +781,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             {
                 loc = GridLocation.TOPRIGHT;
             }
-        }
-        return true;
-    }
-
-    public bool Cornered(GridLocationResults results, out GridLocation loc, bool withOpposing = false)
-    {
-        if (results[GridLocation.LEFT] == results[GridLocation.RIGHT])
-        {
-            loc = GridLocation.RIGHT;
-            return false;
-        }
-        if (results[GridLocation.BOTTOM] == results[GridLocation.TOP])
-        {
-            loc = GridLocation.RIGHT;
-            return false;
-        }
-        if (results[GridLocation.LEFT])
-        {
-            if (results[GridLocation.BOTTOM])
-            {
-                loc = GridLocation.BOTTOMLEFT;
-            }
-            else
-            {
-                loc = GridLocation.TOPLEFT;
-            }
-        }
-        else
-        {
-            if (results[GridLocation.BOTTOM])
-            {
-                loc = GridLocation.BOTTOMRIGHT;
-            }
-            else
-            {
-                loc = GridLocation.TOPRIGHT;
-            }
-        }
-        if (withOpposing && !results[loc.Opposite()])
-        {
-            loc = GridLocation.RIGHT;
-            return false;
         }
         return true;
     }
@@ -962,6 +881,33 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             return this.DrawRow(from, to, on, action);
         else
             return this.DrawCol(from, to, on, action);
+    }
+
+    public bool DrawLineExpanding(int x, int y, GridDirection dir, int amount, DrawAction<T> action)
+    {
+        if (!action(this, x, y)) return false;
+        switch (dir)
+        {
+            case GridDirection.HORIZ:
+                for (int i = 1; i <= amount; i++)
+                {
+                    if (!action(this, x + i, y)) return false;
+                    if (!action(this, x - i, y)) return false;
+                }
+                break;
+            case GridDirection.VERT:
+                for (int i = 1; i <= amount; i++)
+                {
+                    if (!action(this, x, y + i)) return false;
+                    if (!action(this, x, y - i)) return false;
+                }
+                break;
+            case GridDirection.DIAGTLBR:
+            case GridDirection.DIAGBLTR:
+            default:
+                throw new NotImplementedException();
+        }
+        return true;
     }
 
     public bool DrawCol(int yb, int yt, int x, DrawAction<T> action, bool BottomToTop = true)
@@ -1144,51 +1090,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     #region Other
     public bool TShape(int x, int y, DrawAction<T> tester, out GridLocation loc)
     {
-        return TShape(DrawLocationsAroundResults(x, y, false, tester), out loc);
-    }
-
-    public bool TShape(GridLocationResults results, out GridLocation loc)
-    {
-        if (results[GridLocation.LEFT] && results[GridLocation.RIGHT])
-        {
-            if (results[GridLocation.TOP])
-            {
-                if (!results[GridLocation.BOTTOM])
-                {
-                    loc = GridLocation.TOP;
-                    return true;
-                }
-            }
-            else if (results[GridLocation.BOTTOM])
-            {
-                if (!results[GridLocation.TOP])
-                {
-                    loc = GridLocation.BOTTOM;
-                    return true;
-                }
-            }
-        }
-        else if (results[GridLocation.TOP] && results[GridLocation.BOTTOM])
-        {
-            if (results[GridLocation.LEFT])
-            {
-                if (!results[GridLocation.RIGHT])
-                {
-                    loc = GridLocation.LEFT;
-                    return true;
-                }
-            }
-            else if (results[GridLocation.RIGHT])
-            {
-                if (!results[GridLocation.LEFT])
-                {
-                    loc = GridLocation.RIGHT;
-                    return true;
-                }
-            }
-        }
-        loc = GridLocation.BOTTOM;
-        return false;
+        return DrawLocationsAroundResults(x, y, false, tester).TShape(out loc);
     }
     #endregion
     #region Expand
@@ -1515,6 +1417,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             shouldContinue);
     }
 
+    private const int BFSMax = 300000;
     public bool DrawBreadthFirstFill(
         Queue<Value2D<T>> queue,
         Container2D<bool> visited,
@@ -1522,73 +1425,93 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         DrawAction<T> shouldQueue,
         DrawAction<T> shouldContinue = null)
     {
-        #region DEBUG
-        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
-            MultiMap<GridType> queueMap = new MultiMap<GridType>();
-            foreach (Point p in queue)
-                queueMap[p] = GridType.INTERNAL_RESERVED_BLOCKED;
-            queueMap.ToLog("Starting queue");
-            visited.ToLog("Starting Visited");
-        }
-        #endregion
         Value2D<T> curPoint = null;
-        bool pass = true;
-        while (queue.Count > 0)
+        try
         {
-            curPoint = queue.Dequeue();
             #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
-                MultiMap<GridType> tmpMap = new MultiMap<GridType>();
-                foreach (Value2D<bool> val in visited)
-                {
-                    tmpMap[val] = GridType.INTERNAL_RESERVED_BLOCKED;
-                }
-                foreach (Value2D<T> val in queue)
-                {
-                    tmpMap[val] = GridType.INTERNAL_RESERVED_CUR;
-                }
-                tmpMap[curPoint] = GridType.INTERNAL_RESERVED_CUR;
-                tmpMap.ToLog("At " + curPoint);
+                BigBoss.Debug.printHeader(Logs.LevelGen, "Breadth First Fill");
+                MultiMap<GridType> queueMap = new MultiMap<GridType>();
+                foreach (Point p in queue)
+                    queueMap[p] = GridType.INTERNAL_RESERVED_BLOCKED;
+                queueMap.ToLog("Starting queue");
+                visited.ToLog("Starting Visited");
             }
             #endregion
-            if (!DrawAround(curPoint.x, curPoint.y, cornered, (arr, x2, y2) =>
+            int num = 0;
+            bool pass = true;
+            while (queue.Count > 0)
             {
-                if (!visited[x2, y2])
+                curPoint = queue.Dequeue();
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    if (shouldQueue(arr, x2, y2))
+                    MultiMap<GridType> tmpMap = new MultiMap<GridType>();
+                    foreach (Value2D<bool> val in visited)
                     {
-                        queue.Enqueue(new Value2D<T>(x2, y2, arr[x2, y2]));
-                        #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            BigBoss.Debug.w(Logs.LevelGen, "Queued " + x2 + " " + y2);
-                        }
-                        #endregion
+                        tmpMap[val] = GridType.INTERNAL_RESERVED_BLOCKED;
                     }
-                    else if (shouldContinue != null && !shouldContinue(arr, x2, y2))
+                    foreach (Value2D<T> val in queue)
                     {
-                        #region DEBUG
-                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                        {
-                            BigBoss.Debug.w(Logs.LevelGen, "Stopping early at " + x2 + " " + y2);
-                        }
-                        #endregion
-                        return false;
+                        tmpMap[val] = GridType.INTERNAL_RESERVED_CUR;
                     }
+                    tmpMap[curPoint] = GridType.INTERNAL_RESERVED_CUR;
+                    tmpMap.ToLog("At " + curPoint);
                 }
-                visited[x2, y2] = true;
-                return true;
-            }))
-            {
-                // Stopping early
-                pass = false;
-                break;
+                #endregion
+                if (!DrawAround(curPoint.x, curPoint.y, cornered, (arr, x2, y2) =>
+                {
+                    if (!visited[x2, y2])
+                    {
+                        if (shouldQueue(arr, x2, y2))
+                        {
+                            if (num++ > BFSMax)
+                            {
+                                throw new ArgumentOutOfRangeException("BFS Count too high.");
+                            }
+                            queue.Enqueue(new Value2D<T>(x2, y2, arr[x2, y2]));
+                            #region DEBUG
+                            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                            {
+                                BigBoss.Debug.w(Logs.LevelGen, "Queued " + x2 + " " + y2);
+                            }
+                            #endregion
+                        }
+                        else if (shouldContinue != null && !shouldContinue(arr, x2, y2))
+                        {
+                            #region DEBUG
+                            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.SearchSteps) && BigBoss.Debug.Flag(DebugManager.DebugFlag.BFSSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+                            {
+                                BigBoss.Debug.w(Logs.LevelGen, "Stopping early at " + x2 + " " + y2);
+                            }
+                            #endregion
+                            return false;
+                        }
+                    }
+                    visited[x2, y2] = true;
+                    return true;
+                }))
+                {
+                    // Stopping early
+                    pass = false;
+                    break;
+                }
             }
+            #region DEBUG
+            PrintBFSState(curPoint, visited, queue);
+            #endregion
+            return pass;
         }
-        #region DEBUG
+        catch (Exception ex)
+        {
+            PrintBFSState(curPoint, visited, queue);
+            throw ex;
+        }
+    }
+
+    protected void PrintBFSState<T>(Value2D<T> curPoint, Container2D<bool> visited, Queue<Value2D<T>> queue)
+    {
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {
             MultiMap<GridType> tmpMap = new MultiMap<GridType>();
@@ -1607,8 +1530,6 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             tmpMap.ToLog("Ending at " + curPoint);
             BigBoss.Debug.printFooter(Logs.LevelGen, "Breadth First Fill");
         }
-        #endregion
-        return pass;
     }
 
     public bool DrawBreadthFirstSearch(

@@ -8,7 +8,6 @@ public class WallElement : ThemeElement
     public bool PlaceFloor = true;
     public WallElement()
     {
-        SetChar('#');
     }
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {

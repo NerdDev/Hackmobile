@@ -275,6 +275,7 @@ public class FOWSystem : MonoBehaviour
 
     int priorX;
     int priorY;
+    bool firstSet = false;
     public void UpdatePosition(GridSpace grid)
     {
         int x = grid.X;
@@ -283,7 +284,14 @@ public class FOWSystem : MonoBehaviour
         x = Math.Abs(x);
         y = Math.Abs(y);
 
-        if (Math.Abs(priorX - x) < 32 && Math.Abs(priorY - y) < 32) return;
+        if (!firstSet)
+        {
+            firstSet = true;
+        }
+        else
+        {
+            if (Math.Abs(priorX - x) < 32 && Math.Abs(priorY - y) < 32) return;
+        }
 
         SetPosition(new Vector3(grid.X, 0f, grid.Y));
         priorX = x;

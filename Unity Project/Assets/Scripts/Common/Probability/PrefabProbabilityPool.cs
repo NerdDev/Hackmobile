@@ -79,5 +79,15 @@ public class PrefabProbabilityPool<T> : ProbabilityPool<T>, IInitializable
     {
         return _pool.Take(random, out item);
     }
+
+    public override void BeginTaking()
+    {
+        _pool.BeginTaking();
+    }
+
+    public override void EndTaking()
+    {
+        _pool.EndTaking();
+    }
     #endregion
 }

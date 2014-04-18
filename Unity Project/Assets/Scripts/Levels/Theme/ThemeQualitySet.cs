@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 
 [Serializable]
-public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IEnsureType
+public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IEnsureType
 {
     private ProbabilityPool<ThemeElement> _pool;
-    private ProbabilityPool<ThemeElement> pool
+    protected ProbabilityPool<ThemeElement> pool
     {
         get
         {
@@ -19,6 +19,31 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IE
         }
     }
     public List<PrefabProbabilityContainer> Elements;
+    protected SmartThemeElement SmartElement;
+    public int GridWidth
+    {
+        get
+        {
+            if (SmartElement == null) return 1;
+            return SmartElement.GridWidth;
+        }
+    }
+    public int GridLength
+    {
+        get
+        {
+            if (SmartElement == null) return 1;
+            return SmartElement.GridLength;
+        }
+    }
+    public string PrintChar
+    {
+        get
+        {
+            if (SmartElement == null) return "?";
+            return SmartElement.PrintChar;
+        }
+    }
 
     [Serializable]
     public class PrefabProbabilityContainer
@@ -26,6 +51,12 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IE
         public float Multiplier = 1f;
         public bool Unique;
         public ThemeElement Item;
+    }
+
+    public void Init(SmartThemeElement smart)
+    {
+        SmartElement = smart;
+        Init();
     }
 
     public void Init()
@@ -41,6 +72,7 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IE
             {
                 cont.Multiplier = 1f;
             }
+            cont.Item.Set = this;
             _pool.Add(cont.Item, cont.Multiplier, cont.Unique);
         }
     }
@@ -94,6 +126,16 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IInitializable, IE
     public override bool Take(Random random, out ThemeElement item)
     {
         return pool.Take(random, out item);
+    }
+
+    public override void BeginTaking()
+    {
+        pool.BeginTaking();
+    }
+
+    public override void EndTaking()
+    {
+        pool.EndTaking();
     }
     #endregion
 }

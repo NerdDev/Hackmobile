@@ -5,19 +5,29 @@ using System.Text;
 
 public class Counter
 {
-    private int _count;
-    public int Count { get { return _count; } }
+    public int Count;
     public DrawAction<T> Action<T>()
     {
         return new DrawAction<T>((arr2, x, y) =>
         {
-            _count++;
+            Count++;
             return true;
         });
     }
+
+    public Counter()
+    {
+
+    }
+
+    public Counter(int count)
+    {
+        this.Count = count;
+    }
+
     public static implicit operator int(Counter c)
     {
-        return c._count;
+        return c.Count;
     }
 
     public override string ToString()
