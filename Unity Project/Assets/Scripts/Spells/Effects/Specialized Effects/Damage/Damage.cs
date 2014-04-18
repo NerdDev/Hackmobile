@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using XML;
 
 public abstract class DamageEffect : EffectInstance
 {

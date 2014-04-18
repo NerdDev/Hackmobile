@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using XML;
 
 public class AppliedEffects : SortedDictionary<string, EffectInstance>, IXmlParsable, IAffectable
 {

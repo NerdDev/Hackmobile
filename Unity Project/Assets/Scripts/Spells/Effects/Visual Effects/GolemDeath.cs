@@ -13,7 +13,7 @@ public class GolemDeath : EffectInstance
         n.GO.AddComponent<TimedAction>().init(.2f, new Action(() => { n.JustDestroy(); }));
     }
 
-    protected override void ParseParams(XML.XMLNode x)
+    protected override void ParseParams(XMLNode x)
     {
     }
 }

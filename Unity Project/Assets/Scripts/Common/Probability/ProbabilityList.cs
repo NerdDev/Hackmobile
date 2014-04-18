@@ -72,8 +72,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     protected void Add(ProbContainer cont)
     {
-        if (cont.Multiplier < 0)
-            throw new ArgumentException("Multiplier cannot be less than zero: " + cont.Multiplier);
+        if (cont.Multiplier < 0) return;
         itemList.Add(cont);
         Max += cont.Multiplier;
     }

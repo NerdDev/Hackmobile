@@ -3,77 +3,70 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class AICore
+public class AICore : IXmlParsable
 {
-    internal List<AIAction> actions = new List<AIAction>();
-    NPC npc;
-    public Role role;
+    // Defining features
+    public NPC NPC;
+    public double[] RoleWeights = new double[EnumExt.Length<AIRole>()];
+    public Func<double, double> WeightingCurve;
+    private AIDecisionArgs decisionArgs;
+    private AIActionArgs actionArgs;
+    private System.Random rand;
 
-    //initialization parameters
-    public AICore()
-    {
-    }
+    // State variables
+    AIRoleCore[] roleCores = new AIRoleCore[EnumExt.Length<AIState>()];
+    public AIState CurrentState = AIState.Passive;
+
     public AICore(NPC n)
     {
-        InitAI(n);
-    }
-    public AICore(NPC n, params AIAction[] aiParams)
-    {
-        InitAI(n, aiParams);
-    }
-    public AICore(NPC n, List<AIAction> aiParams)
-    {
-        InitAI(n, aiParams);
-    }
-    public AICore(NPC n, Role role)
-    {
-        InitAI(n, role);
-    }
-    public void InitAI(NPC n, params AIAction[] aiParams)
-    {
-        this.npc = n;
-        actions.AddRange(aiParams);
-    }
-    public void InitAI(NPC n, List<AIAction> aiParams)
-    {
-        this.npc = n;
-        actions.AddRange(aiParams);
-    }
-    public void InitAI(NPC n, Role role)
-    {
-        this.npc = n;
-        //if the NPC has a role, we've got a default AI setup
-        switch (role)
+        this.NPC = n;
+        for (int i = 0; i < roleCores.Length; i++)
         {
-            case Role.MAGE:
-                actions.Add(new AIAttack(npc));
-                actions.Add(new AICastDamageSpell(npc));
-                actions.Add(new AIMove(npc));
-
-                break;
-            default:
-                InitAI(n);
-                break;
+            roleCores[i] = new AIRoleCore();
         }
-    }
-
-    public void InitAI(NPC n)
-    {
-        this.npc = n;
-        actions.Add(new AIAttack(n));
-        actions.Add(new AIMove(n));
+        decisionArgs = new AIDecisionArgs(this);
+        actionArgs = new AIActionArgs(this);
+        rand = new System.Random(Probability.Rand.Next());
     }
 
     public void DecideWhatToDo()
     {
-        foreach (AIAction action in actions)
+        ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
+        roleCores[(int)CurrentState].FillPool(this, pool, decisionArgs);
+        AIDecision decision = pool.Get(rand);
+        decision.Action(actionArgs);
+    }
+
+    #region XML
+    public void ParseXML(XMLNode x)
+    {
+        foreach (var stateNode in x.SelectList("AIState"))
         {
-            action.CalcWeighting();
+            AIState state;
+            if (!stateNode.SelectEnum<AIState>("State", out state)) continue;
+            AIRoleCore core = roleCores[(int)state];
+            foreach (var packageNode in stateNode.SelectList("AIPackage"))
+            {
+                string name;
+                if (!x.SelectString("name", out name)) continue;
+                AIDecision decision;
+                if (!BigBoss.Types.TryInstantiate<AIDecision>(name, out decision)) continue;
+                core.AddDecision(decision);
+            }
+
         }
-        actions.Sort();
-        if (actions[actions.Count - 1].Weight > 0)
+
+        // Package Defaults
+        if (x.SelectBool("UseDefaults", true))
         {
-            actions[actions.Count - 1].Action();
+            // Passive
+            var core = roleCores[(int)AIState.Passive];
+            core.AddDecision(new AIAggro());
+            // Combat
+            core = roleCores[(int)AIState.Combat];
+            core.AddDecision(new AIAttack());
+            core.AddDecision(new AIMove());
         }
     }
+    #endregion
 }

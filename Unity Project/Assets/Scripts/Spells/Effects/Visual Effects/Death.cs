@@ -16,7 +16,7 @@ public class Death : EffectInstance
         n.GO.AddComponent<TimedAction>().init(speed, new Action(() => { n.JustDestroy(); }));
     }
 
-    protected override void ParseParams(XML.XMLNode x)
+    protected override void ParseParams(XMLNode x)
     {
         speed = x.SelectFloat("speed");
     }

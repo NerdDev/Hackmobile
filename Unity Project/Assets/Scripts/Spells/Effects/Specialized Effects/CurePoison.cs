@@ -1,5 +1,4 @@
 using System;
-using XML;
 
 public class CurePoison : EffectInstance
 {

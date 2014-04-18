@@ -65,10 +65,8 @@ public class Player : NPC
 
     public override void Init()
     {
-        PlayerStats.Load(this, Role.ARCHAELOGIST, NPCFlags.HUMAN);
+        PlayerStats.Load(this, NPCFlags.HUMAN);
         CalcStats();
-        //BigBoss.Gooey.UpdateMaxHealth(this.Stats.MaxHealth);
-        //BigBoss.Gooey.UpdateHealthBar(this.Stats.MaxHealth);
 
         BigBoss.Gooey.UpdateMaxPower(this.Stats.MaxPower);
         BigBoss.Gooey.UpdatePowerBar(this.Stats.MaxPower);

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using XML;
 
 public class Equipment : IXmlParsable
 {
@@ -181,7 +180,7 @@ public class Equipment : IXmlParsable
         }
     }
 
-    public void ParseXML(XML.XMLNode x)
+    public void ParseXML(XMLNode x)
     {
         foreach (XMLNode node in x.SelectList("equiptype"))
         {

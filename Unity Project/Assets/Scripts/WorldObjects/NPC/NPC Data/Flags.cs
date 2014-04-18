@@ -9,10 +9,12 @@ public enum NPCFlags
     //  which are properties of the NPC itself
     NONE,
     NO_CORPSE, // Doesn't leave a corpse on death
-    COVETOUS,
-    NOPOLY, //player can't turn into one of these
-    GREEDY,
+    POLY, //player can turn into one of these
     NO_RANDOM_SPAWN, // Won't be picked if a random NPC should be spawned
+
+    //qualities (examples for now)
+    COVETOUS,
+    GREEDY,
 
     //races
     DEMON,

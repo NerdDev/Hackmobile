@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using XML;
 
 public class ObjectDictionary<O> where O : IXmlParsable, INamed, new()
 {

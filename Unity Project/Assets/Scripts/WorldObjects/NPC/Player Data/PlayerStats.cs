@@ -6,10 +6,10 @@ public class PlayerStats
     // All this will need refactoring later
     //
 
-    public static void Load(Player player, Role role, NPCFlags race)
+    public static void Load(Player player, NPCFlags race)
     {
         LoadBasicStats(player);
-        LoadStatModRole(player, role);
+        LoadStatModRole(player);
         LoadStatModRace(player, race);
     }
 
@@ -18,7 +18,7 @@ public class PlayerStats
         //do nothing atm
     }
 
-    private static void LoadStatModRole(Player player, Role role)
+    private static void LoadStatModRole(Player player)
     {
         //do nothing atm
     }
@@ -44,7 +44,6 @@ public class PlayerStats
         player.Stats = stats;
 
         GenericFlags<NPCFlags> flags = new GenericFlags<NPCFlags>();
-        flags[NPCFlags.NOPOLY] = true;
         flags[NPCFlags.NO_RANDOM_SPAWN] = true;
         player.Flags = flags;
 

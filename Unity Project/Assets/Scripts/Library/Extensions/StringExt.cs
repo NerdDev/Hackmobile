@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public static class StringExt {
-
+public static class StringExt 
+{
     public static bool ToEnum<T>(this string str, out T e) where T : struct, IComparable, IConvertible
     {
         try

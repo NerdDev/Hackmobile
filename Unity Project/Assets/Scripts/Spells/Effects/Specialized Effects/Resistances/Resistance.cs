@@ -5,7 +5,7 @@ using System.Text;
 
 public abstract class Resistance : EffectInstance
 {
-    protected override void ParseParams(XML.XMLNode x)
+    protected override void ParseParams(XMLNode x)
     {
     }
 }

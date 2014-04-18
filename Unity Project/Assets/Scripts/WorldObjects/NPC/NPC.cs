@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using XML;
 
 public class NPC : Affectable
 {
@@ -13,9 +12,6 @@ public class NPC : Affectable
      */
     public override void Init()
     {
-        //initalize AI
-        Master.InitAI(this);
-
         //calculate any stats that need set on start
         CalcInitialStats();
 
@@ -40,7 +36,7 @@ public class NPC : Affectable
     public Stats Stats = new Stats();
     public Spells KnownSpells = new Spells();
     public StartingItems StartingItems = new StartingItems();
-    private AICore Master = new AICore();
+    private AICore AI;
 
     public Inventory Inventory = new Inventory();
     protected List<Item> EquippedItems = new List<Item>();
@@ -82,6 +78,7 @@ public class NPC : Affectable
         Stats.CurrentPower = Stats.MaxPower;
         Stats.CurrentXP = 0;
         Stats.hungerRate = 1;
+        AI = new AICore(this);
     }
 
     public override void Start()
@@ -689,7 +686,7 @@ public class NPC : Affectable
 
     #endregion
 
-    #region NPC Data Management for Instances
+    #region XML
     public override void ParseXML(XMLNode x)
     {
         base.ParseXML(x);
@@ -702,7 +699,7 @@ public class NPC : Affectable
         Equipment = x.Select<Equipment>("equipslots");
         NaturalWeapon = x.Select<Item>("naturalweapon");
         OnDeath = x.Select<Spell>("OnDeath");
-        //parse AI packages
+        x.Select("AI", AI);
     }
     #endregion
 
@@ -732,7 +729,7 @@ public class NPC : Affectable
             {
                 if (this.IsNotAFreaking<Player>())
                 {
-                    Master.DecideWhatToDo();
+                    AI.DecideWhatToDo();
                 }
             }
             catch (Exception e)

@@ -69,13 +69,13 @@ public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
         refsResolved = true;
     }
 
-	public void ParseXML(XML.XMLNode node)
+	public void ParseXML(XMLNode node)
 	{
 		Name = node.SelectString ("name");
         minNumItems = node.SelectInt("min", 0);
         maxNumItems = node.SelectInt("max", 1);
 
-		foreach (XML.XMLNode x in node.SelectList("entry")) {
+		foreach (XMLNode x in node.SelectList("entry")) {
 			string item = x.SelectString("item");
 			double probability = x.SelectDouble("probability");
 			int count = x.SelectInt("count");
@@ -83,7 +83,7 @@ public class LeveledItemList : LeveledPool<ItemHolder>, IXmlParsable, INamed
 			ItemHolder ih = new ItemHolder(item, count);
 			Add(ih, probability, false, (ushort) level);
 		}
-        foreach (XML.XMLNode x in node.SelectList("ref"))
+        foreach (XMLNode x in node.SelectList("ref"))
         {
             refs.Add(x.SelectString("name"));
         }

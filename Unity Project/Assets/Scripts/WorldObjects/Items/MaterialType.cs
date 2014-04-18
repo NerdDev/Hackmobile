@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using XML;
 
 public class MaterialType : IXmlParsable, INamed
 {
@@ -24,7 +23,7 @@ public class MaterialType : IXmlParsable, INamed
         density[0] = densityNode.SelectFloat("min");
         density[2] = densityNode.SelectFloat("max");
         density[1] = (density[0] + density[2]) / 2;
-        this.Density = density[Probability.getRandomInt(3)];
+        this.Density = density[Probability.Rand.Next(3)];
 
         this.MeltingPoint = x.SelectInt("meltingpoint");
     }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using XML;
 using System.Linq;
 
 public class ESFlags<T> : IXmlParsable where T : struct, IComparable, IConvertible

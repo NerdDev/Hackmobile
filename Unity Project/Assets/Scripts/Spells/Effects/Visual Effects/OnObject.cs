@@ -14,7 +14,7 @@ public class OnObject : EffectInstance
         go.AddComponent<TimedDestruction>().init(.5f);
     }
 
-    protected override void ParseParams(XML.XMLNode x)
+    protected override void ParseParams(XMLNode x)
     {
         finishVisual = x.SelectString("finishvisual");
     }

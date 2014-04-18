@@ -30,7 +30,7 @@ public struct Damage : IXmlParsable
         return (min + (int) (UnityEngine.Random.value * (max - min)));
     }
 
-    public void ParseXML(XML.XMLNode x)
+    public void ParseXML(XMLNode x)
     {
         min = x.SelectInt("min");
         max = x.SelectInt("max", 1);

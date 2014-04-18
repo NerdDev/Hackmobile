@@ -2,7 +2,6 @@
   <npc name="skeleton_knight">
     <prefab>Skeleton_Knight</prefab>
     <flags>
-      <flag name="nopoly" />
       <flag name="Undead" />
     </flags>
     <spawnkeywords>
@@ -51,10 +50,11 @@
     <aipackages>
     </aipackages>
   </npc>
+  
+  
   <npc name="Giant Rat">
     <prefab>GIANT_RAT</prefab>
     <flags>
-      <flag name="nopoly" />
     </flags>
     <spawnkeywords>
       <keyword name="Corpse_Scavenger" />
@@ -87,11 +87,24 @@
         <speed>2</speed>
       </effect>
     </OnDeath>
+    <AI>
+      <AIRoles>
+        <!-- No special role -->
+      </AIRoles>
+      <AIState state="Passive">
+        <AIPackage name="Wander" />
+        <AIPackage name="EatCorpse" />
+      </AIState>
+      <AIState state="Combat">
+        <AIPackage name="PassiveHorde" />
+      </AIState>
+    </AI>
   </npc>
+  
+  
   <npc name="Ghoul">
     <prefab>Ghoul</prefab>
     <flags>
-      <flag name="nopoly" />
       <flag name="Undead" />
     </flags>
     <spawnkeywords>
@@ -136,10 +149,11 @@
       </equiptype>
     </equipslots>
   </npc>
+  
+  
   <npc name="Mummy">
     <prefab>Mummy</prefab>
     <flags>
-      <flag name="nopoly" />
       <flag name="Undead" />
     </flags>
     <spawnkeywords>

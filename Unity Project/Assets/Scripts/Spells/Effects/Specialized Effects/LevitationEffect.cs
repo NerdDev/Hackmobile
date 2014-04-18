@@ -18,7 +18,7 @@ public class Levitation : EffectInstance
         n.verticalMove(-strength);
     }
 
-    protected override void ParseParams(XML.XMLNode x)
+    protected override void ParseParams(XMLNode x)
     {
         strength = x.SelectFloat("strength");
     }

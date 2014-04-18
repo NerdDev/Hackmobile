@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using XML;
 
 public class Spells : Dictionary<string, Spell>, IXmlParsable
 {
-    public void ParseXML(XML.XMLNode x)
+    public void ParseXML(XMLNode x)
     {
         foreach (XMLNode node in x.SelectList("spell"))
         {
