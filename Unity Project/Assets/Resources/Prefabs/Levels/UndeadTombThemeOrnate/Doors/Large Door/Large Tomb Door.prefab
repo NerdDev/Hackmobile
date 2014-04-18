@@ -77,7 +77,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400008}
   - 65: {fileID: 6500002}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400010}
   - 65: {fileID: 6500004}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +303,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Set:
-    Elements: []
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000}
   Walkable: 1
   Dynamic: 0
   DiagonalExtensions: {fileID: 0}

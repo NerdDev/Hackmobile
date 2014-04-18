@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400004}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Brick Wall Diagonal Turn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,10 +250,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridLength: 1
+  Set:
+    Elements: []
   Walkable: 0
-  PrintChar: 
   Dynamic: 0
   PlaceFloor: 1
 --- !u!114 &11400002
@@ -267,10 +266,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridLength: 1
+  Set:
+    Elements: []
   Walkable: 0
-  PrintChar: 
   Dynamic: 0
   PlaceFloor: 1
 --- !u!114 &11400004
@@ -284,10 +282,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridLength: 1
+  Set:
+    Elements: []
   Walkable: 0
-  PrintChar: '#'
   Dynamic: 0
   PlaceFloor: 1
 --- !u!1001 &100100000

@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400000}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ GameObject:
   - 23: {fileID: 2300002}
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400002}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ GameObject:
   - 23: {fileID: 2300006}
   - 65: {fileID: 6500008}
   - 114: {fileID: 11400006}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400006}
   - 114: {fileID: 11400004}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Tomb Wall Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - 23: {fileID: 2300008}
   - 65: {fileID: 6500010}
   - 114: {fileID: 11400008}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
