@@ -1497,9 +1497,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NormalStart: 1
   ShowStartMenu: 0
-  PlacePlayerManually: 0
-  PlacePlayerX: 85
-  PlacePlayerY: 51
+  PlacePlayerManually: 1
+  PlacePlayerX: 9
+  PlacePlayerY: -24
 --- !u!1 &367975433
 GameObject:
   m_ObjectHideFlags: 0
@@ -3773,9 +3773,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a481f2cbcee4164e8575888c6e5e653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Theme: {fileID: 11400002, guid: 631dbf33a897fc14f88db2d53201f711, type: 2}
+  Theme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: 0
+  Seed: 14
 --- !u!1 &1064103705
 GameObject:
   m_ObjectHideFlags: 0
@@ -4122,16 +4122,29 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: PlacePlayerManually
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: PlacePlayerX
-      value: 85
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: PlacePlayerY
-      value: 51
+      value: -24
       objectReference: {fileID: 0}
+    - target: {fileID: 100134, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400080, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: Seed
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400080, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: Theme
+      value: 
+      objectReference: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
   m_RootGameObject: {fileID: 302515056}
@@ -5197,7 +5210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1549679976
 Transform:
   m_ObjectHideFlags: 0
