@@ -9,6 +9,10 @@ public class StartManager : MonoBehaviour, IManager
 {
     public bool NormalStart = true;
     public bool ShowStartMenu = false;
+    public bool SetLevelForTesting = false;
+    public Color AmbientTestingColor = Color.gray;
+    public float RevealDistance = 300;
+    public float MaxCameraDistance = 10;
     public bool PlacePlayerManually = false;
     public int PlacePlayerX = 0;
     public int PlacePlayerY = 0;
@@ -49,6 +53,21 @@ public class StartManager : MonoBehaviour, IManager
         BigBoss.Gooey.OpenSpellGUI();
         BigBoss.Gooey.OpenInventoryGUI();
         BigBoss.Gooey.OpenGroundGUI(null);
+
+        if (SetLevelForTesting)
+        {
+            SetForTesting();
+        }
         BigBoss.Gooey.CloseLoading();
+    }
+
+    private void SetForTesting()
+    {
+        BigBoss.PlayerInfo.GetComponentInChildren<FOWRevealer>().RevealDistance = RevealDistance;
+        Camera.main.GetComponent<FOWEffect>().exploredColor = Color.white;
+        Camera.main.GetComponent<FOWEffect>().unexploredColor = Color.white;
+
+        Camera.main.GetComponent<JoystickCamera>().maxDistance = MaxCameraDistance;
+        RenderSettings.ambientLight = AmbientTestingColor;
     }
 }

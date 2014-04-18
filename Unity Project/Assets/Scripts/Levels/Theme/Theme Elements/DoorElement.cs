@@ -14,10 +14,15 @@ public class DoorElement : ThemeElement
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
+        if (spec.DeployX == 10)
+        {
+            int wer = 23;
+            wer++;
+        }
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
-        if (spec.GenGrid.AlternatesSides(spec.DeployX, spec.DeployY, Draw.IsType<GenSpace>(GridType.Wall), out walkableDir))
+        if (spec.GenGrid.AlternatesSides(spec.DeployX, spec.DeployY, Draw.IsType<GenSpace>(GridType.Wall).Or(Draw.IsType<GenSpace>(GridType.Door)), out walkableDir))
         {
             bool neg = spec.Random.NextBool();
             if (walkableDir == GridDirection.HORIZ)
