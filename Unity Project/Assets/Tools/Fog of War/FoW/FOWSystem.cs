@@ -13,7 +13,7 @@ using System.Collections.Generic;
 [AddComponentMenu("Fog of War/System")]
 public class FOWSystem : MonoBehaviour
 {
-
+    public int GridDistance;
     public int HeightOffsetX = 512;
     public int HeightOffsetY = 256;
     public Vector3 lowerRange = new Vector3(-256f, 0f, -256f);
@@ -276,21 +276,14 @@ public class FOWSystem : MonoBehaviour
     int priorX;
     int priorY;
     bool firstSet = false;
-    public void UpdatePosition(GridSpace grid)
+    public void UpdatePosition(GridSpace grid, bool force)
     {
         int x = grid.X;
         int y = grid.Y;
 
-        x = Math.Abs(x);
-        y = Math.Abs(y);
-
-        if (!firstSet)
+        if (!force)
         {
-            firstSet = true;
-        }
-        else
-        {
-            if (Math.Abs(priorX - x) < 32 && Math.Abs(priorY - y) < 32) return;
+            if (Math.Abs(priorX - x) < GridDistance && Math.Abs(priorY - y) < GridDistance) return;
         }
 
         SetPosition(new Vector3(grid.X, 0f, grid.Y));

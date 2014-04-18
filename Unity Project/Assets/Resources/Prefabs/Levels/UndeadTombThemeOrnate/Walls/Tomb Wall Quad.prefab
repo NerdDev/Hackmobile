@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400000}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ GameObject:
   - 23: {fileID: 2300002}
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400002}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ GameObject:
   - 23: {fileID: 2300006}
   - 65: {fileID: 6500008}
   - 114: {fileID: 11400006}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400006}
   - 114: {fileID: 11400004}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Tomb Wall Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - 23: {fileID: 2300008}
   - 65: {fileID: 6500010}
   - 114: {fileID: 11400008}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: e1827ee348ebeee4180e7d9e5226407e, type: 2}
+  - {fileID: 2100000, guid: 0b81ea639e87a48418b25453132f903f, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -184,7 +184,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: e1827ee348ebeee4180e7d9e5226407e, type: 2}
+  - {fileID: 2100000, guid: 0b81ea639e87a48418b25453132f903f, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -205,7 +205,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: e1827ee348ebeee4180e7d9e5226407e, type: 2}
+  - {fileID: 2100000, guid: 0b81ea639e87a48418b25453132f903f, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -226,7 +226,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: e1827ee348ebeee4180e7d9e5226407e, type: 2}
+  - {fileID: 2100000, guid: 0b81ea639e87a48418b25453132f903f, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0

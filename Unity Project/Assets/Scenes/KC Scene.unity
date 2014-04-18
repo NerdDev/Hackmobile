@@ -6116,6 +6116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff305e18ad52574498a55f1e786a069c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridDistance: 0
   HeightOffsetX: 0
   HeightOffsetY: 0
   lowerRange: {x: -256, y: 0, z: -256}

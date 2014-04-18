@@ -262,7 +262,7 @@ public class Player : NPC
         {
             GridSpace = newGridSpace;
             BigBoss.Gooey.CheckChestDistance();
-            FOWSystem.instance.UpdatePosition(GridSpace);
+            FOWSystem.instance.UpdatePosition(GridSpace, false);
             return true;
         }
         else
@@ -275,7 +275,7 @@ public class Player : NPC
     {
         GridSpace = grid;
         BigBoss.Gooey.CheckChestDistance();
-        FOWSystem.instance.UpdatePosition(GridSpace);
+        FOWSystem.instance.UpdatePosition(GridSpace, true);
     }
 
     float gravity;

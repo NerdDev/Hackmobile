@@ -77,7 +77,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400008}
   - 65: {fileID: 6500002}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400010}
   - 65: {fileID: 6500004}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: e1827ee348ebeee4180e7d9e5226407e, type: 2}
+  - {fileID: 2100000, guid: 0b81ea639e87a48418b25453132f903f, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -204,7 +204,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: e1827ee348ebeee4180e7d9e5226407e, type: 2}
+  - {fileID: 2100000, guid: 0b81ea639e87a48418b25453132f903f, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -303,7 +303,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Set:
-    Elements: []
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000}
   Walkable: 1
   Dynamic: 0
   DiagonalExtensions: {fileID: 0}
