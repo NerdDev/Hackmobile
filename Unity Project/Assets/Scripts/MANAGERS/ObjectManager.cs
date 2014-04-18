@@ -18,6 +18,8 @@ public class ObjectManager : MonoBehaviour, IManager
 
     internal Dictionary<string, Spell> PlayerSpells = new Dictionary<string, Spell>();
 
+    private Dictionary<string, GameObject> LoadedObjects = new Dictionary<string, GameObject>();
+
     public ObjectManager()
     {
 
@@ -116,5 +118,24 @@ public class ObjectManager : MonoBehaviour, IManager
     public GameObject Instantiate(WorldObject obj, int x, int y)
     {
         return Instantiate(Resources.Load(obj.Prefab), new Vector3(x, 0, y), Quaternion.identity) as GameObject;
+    }
+
+    public GameObject Instantiate(WorldObject obj)
+    {
+        string prefab = obj.Prefab;
+        if (!LoadedObjects.ContainsKey(prefab))
+        {
+            LoadedObjects.Add(prefab, Resources.Load(prefab) as GameObject);
+        }
+        return Instantiate(LoadedObjects[prefab]) as GameObject;
+    }
+
+    public void ResetObj(WorldObject obj)
+    {
+        GameObject go = LoadedObjects[obj.Prefab];
+        if (obj.GO == null || go == null) return; //in case it's not loaded yet
+        obj.GO.transform.localPosition = go.transform.localPosition;
+        obj.GO.transform.localRotation = go.transform.localRotation;
+        obj.GO.transform.localScale = go.transform.localScale;
     }
 }

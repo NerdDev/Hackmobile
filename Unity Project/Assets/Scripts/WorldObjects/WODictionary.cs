@@ -84,6 +84,26 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         return wrapper;
     }
 
+    public T Wrap(W obj, Transform parent)
+    {
+        GameObject gameObject = spawner.Instantiate(obj);
+        gameObject.transform.parent = parent;
+        T wrapper = gameObject.AddComponent<T>();
+        wrapper.SetTo(obj);
+        spawner.ResetObj(obj);
+        obj.Init();
+        return wrapper;
+    }
+
+    public T Wrap(W obj)
+    {
+        GameObject gameObject = spawner.Instantiate(obj);
+        T wrapper = gameObject.AddComponent<T>();
+        wrapper.SetTo(obj);
+        obj.Init();
+        return wrapper;
+    }
+
     public void DestroyWrappers()
     {
         foreach (W w in wrapped)

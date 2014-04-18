@@ -34,6 +34,9 @@ public class Player : NPC
     #endregion
 
     #region INVENTORY
+    Dictionary<Item, GameObject> InstantiatedItems = new Dictionary<Item, GameObject>();
+    EquipBones Bones = BigBoss.PlayerInfo.GetComponent<EquipBones>();
+
     public override void addToInventory(Item item, int count)
     {
         base.addToInventory(item, count);
@@ -112,6 +115,7 @@ public class Player : NPC
         if (base.equipItem(i))
         {
             CreateTextMessage("Item " + i.Name + " equipped.");
+            animator.SetBool(Equipment.WeaponAnims.Move, true);
             return true;
         }
         CreateTextMessage("Item not equipped.");
@@ -318,7 +322,23 @@ public class Player : NPC
         currentBaseState = animator.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
     }
 
-
+    internal override void SetAttackAnimation(GameObject target)
+    {
+        float testVal = UnityEngine.Random.value;
+        GO.transform.LookAt(target.transform);
+        if (testVal < .333)
+        {
+            animator.Play(Equipment.WeaponAnims.Attack1);
+        }
+        else if (testVal < .666)
+        {
+            animator.Play(Equipment.WeaponAnims.Attack2);
+        }
+        else
+        {
+            animator.Play(Equipment.WeaponAnims.Attack3);
+        }
+    }
 
     #region MECANIM EXAMPLE SCRIPT
     //	using UnityEngine;

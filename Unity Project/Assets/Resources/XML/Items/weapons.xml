@@ -1,6 +1,6 @@
 <items>
 	<weapons>
-		<weapon name="axe2">
+		<weapon name="Infiltrator's Sword">
 			<stats>
 				<weight>15</weight>
 				<cost>20</cost>
@@ -11,39 +11,7 @@
 					<max>16</max>
 				</damage>
 			</stats>
-			<model>weapons/axe2/axe2</model>
-			<modeltexture>weapons/axe2/mat_axe2_1</modeltexture>
-			<prefab> </prefab>
-		</weapon>
-		<weapon name="knife1">
-			<stats>
-				<weight>15</weight>
-				<cost>20</cost>
-				<nutrition>0</nutrition>
-				<equiptype>HAND</equiptype>
-				<damage>
-					<min>4</min>
-					<max>16</max>
-				</damage>
-			</stats>
-			<model>weapons/knife1/knife</model>
-			<modeltexture>weapons/knife1/Material01</modeltexture>
-			<prefab> </prefab>
-		</weapon>
-		<weapon name="sword1">
-			<stats>
-				<weight>15</weight>
-				<cost>20</cost>
-				<nutrition>0</nutrition>
-				<equiptype>HAND</equiptype>
-				<damage>
-					<min>4</min>
-					<max>16</max>
-				</damage>
-			</stats>
-			<model>weapons\sword1\sword1</model>
-			<modeltexture>weapons\sword1\Material03</modeltexture>
-			<prefab> </prefab>
+			<prefab>SwordInf</prefab>
 		</weapon>
 		<weapon name="sword2">
 			<stats>
@@ -56,9 +24,7 @@
 					<max>16</max>
 				</damage>
 			</stats>
-			<model>weapons/sword2/sword2</model>
-			<modeltexture>weapons/sword2/mat_sword2_1</modeltexture>
-			<prefab> </prefab>
+			<prefab>SwordInf</prefab>
 		</weapon>
 		<weapon name="sword3">
 			<stats>
@@ -71,9 +37,7 @@
 					<max>16</max>
 				</damage>
 			</stats>
-			<model>weapons/sword3/sword3</model>
-			<modeltexture>weapons/sword3/Material06</modeltexture>
-			<prefab> </prefab>
+			<prefab>SwordInf</prefab>
 		</weapon>
 	</weapons>
  </items>

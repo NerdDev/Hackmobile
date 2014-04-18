@@ -8,6 +8,7 @@ public class KCTesting : MonoBehaviour
     {
         Debug.Log("Running KC Method");
         KurtisMethod();
+
     }
 
     private void KurtisMethod()
@@ -18,7 +19,7 @@ public class KCTesting : MonoBehaviour
         BigBoss.PlayerInput.allowPlayerInput = true;
 
         //adds some items to the Player to test with
-        Item ii = BigBoss.Objects.Items.Instantiate("sword1");
+        Item ii = BigBoss.Objects.Items.Instantiate("Infiltrator's Sword");
         BigBoss.Player.addToInventory(ii);
 
         Item food = BigBoss.Objects.Items.Instantiate("Spoiled Bread");

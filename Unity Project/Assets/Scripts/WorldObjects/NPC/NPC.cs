@@ -73,13 +73,6 @@ public class NPC : Affectable
     public Animator animator;
     float velocity;
 
-    static int idleState = Animator.StringToHash("Base Layer.idle");
-    static int moveState = Animator.StringToHash("Base Layer.Locomotion_Tree");
-    static public int attackState1 = Animator.StringToHash("Base Layer.attack 1");
-    static public int attackState2 = Animator.StringToHash("Base Layer.attack 2");
-    static int attackState3 = Animator.StringToHash("Base Layer.attack 3");
-    static int deathState = Animator.StringToHash("Base Layer.death");
-
     #endregion
 
     public NPC()
@@ -138,25 +131,21 @@ public class NPC : Affectable
         }
     }
 
-    internal void SetAttackAnimation(GameObject target)
+    internal virtual void SetAttackAnimation(GameObject target)
     {
         float testVal = UnityEngine.Random.value;
         GO.transform.LookAt(target.transform);
-        if (this is Player)
-        {
-            //GO.transform.Rotate(Vector3.up, 45f);
-        }
         if (testVal < .333)
         {
-            animator.Play(attackState1);
+            animator.Play(Equipment.WeaponAnims.Attack1);
         }
         else if (testVal < .666)
         {
-            animator.Play(attackState2);
+            animator.Play(Equipment.WeaponAnims.Attack2);
         }
         else
         {
-            animator.Play(attackState3);
+            animator.Play(Equipment.WeaponAnims.Attack3);
         }
     }
 
@@ -555,7 +544,7 @@ public class NPC : Affectable
         {
             return NaturalWeapon.Damage(n);
         }
-        else 
+        else
             return n.damage(CalcHandDamage());
     }
 
@@ -646,12 +635,23 @@ public class NPC : Affectable
         return invWeightMax;
     }
 
+    EquipBones Bones = null;
+    private EquipBones GetEquipBones()
+    {
+        if (GO != null && Bones == null)
+        {
+            Bones = GO.GetComponent<EquipBones>();
+        }
+        return Bones;
+    }
+
     public virtual bool equipItem(Item i)
     {
-        if (Equipment.equipItem(i))
+        if (Equipment.equipItem(i, GetEquipBones()))
         {
             i.onEquipEvent(this);
             EquippedItems.Add(i);
+            if (Equipment.WeaponAnims.Move != "") animator.SetBool(Equipment.WeaponAnims.Move, true);
             return true;
         }
         return false;
@@ -659,7 +659,7 @@ public class NPC : Affectable
 
     public virtual bool unequipItem(Item i)
     {
-        if (i.isUnEquippable() && Equipment.removeItem(i))
+        if (i.isUnEquippable() && Equipment.removeItem(i, animator))
         {
             i.onUnEquipEvent(this);
             if (EquippedItems.Contains(i))

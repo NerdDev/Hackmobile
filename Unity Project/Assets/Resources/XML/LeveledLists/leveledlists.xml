@@ -27,16 +27,10 @@
 	</list>
 	<list name="weapons">
 		<entry>
-			<item>axe2</item>
+			<item>Infiltrator's Sword</item>
 			<probability>2</probability>
 			<count>1</count>
 			<level>1</level>
-		</entry>
-		<entry>
-			<item>sword1</item>
-			<probability>1</probability>
-			<count>2</count>
-			<level>3</level>
 		</entry>
 		<entry>
 			<item>sword2</item>

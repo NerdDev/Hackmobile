@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using XML;
 
 public class Equipment : IXmlParsable
 {
     internal Dictionary<EquipType, EquipSlot> equipSlots = new Dictionary<EquipType, EquipSlot>();
     internal HashSet<EquipType> filterSlots = new HashSet<EquipType>();
+
+    public WeaponAnimations WeaponAnims = WeaponAnimations.Default();
 
     public Equipment()
     {
@@ -32,13 +35,25 @@ public class Equipment : IXmlParsable
         return isFree(et);
     }
 
-    public bool equipItem(Item i)
+    public bool equipItem(Item i, EquipBones bones)
     {
         EquipType et = i.stats.EquipType;
         if (isFreeSlot(et))
         {
             EquipSlot es = equipSlots[et];
             es.equipItem(i);
+            if (bones != null)
+            {
+                Transform bone = GetBone(et, bones);
+                if (bone != null)
+                {
+                    //wrap object to NPC's bone
+                    GameObject item = BigBoss.Objects.Items.Wrap(i, bone).gameObject;
+                    //grab animations if it's a weapon
+                    WeaponAnimations temp = item.GetComponent<WeaponAnimations>();
+                    if (temp != null) WeaponAnims = temp;
+                }
+            }
             return true;
         }
         else
@@ -47,12 +62,35 @@ public class Equipment : IXmlParsable
         }
     }
 
-    public bool removeItem(Item i)
+    private Transform GetBone(EquipType et, EquipBones bones)
+    {
+        switch (et)
+        {
+            case EquipType.BODY:
+                return bones.Chest;
+            case EquipType.FEET:
+                return bones.Feet;
+            case EquipType.HAND:
+                return bones.RightHand;
+            case EquipType.HEAD:
+                return bones.Head;
+            case EquipType.LEGS:
+                return bones.Legs;
+        }
+        return null;
+    }
+
+    public bool removeItem(Item i, Animator anim)
     {
         EquipType et = i.stats.EquipType;
         if (!isFreeSlot(et)) //if it's free, there's no item for that type
         {
-            return equipSlots[et].removeItem(i);
+            if (equipSlots[et].removeItem(i))
+            {
+                i.Unwrap();
+                if (WeaponAnims.Move != "") anim.SetBool(WeaponAnims.Move, false);
+                WeaponAnims = WeaponAnimations.Default();
+            }
         }
         return false;
     }
