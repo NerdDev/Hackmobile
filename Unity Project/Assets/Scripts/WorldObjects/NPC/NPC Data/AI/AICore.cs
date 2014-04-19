@@ -15,6 +15,7 @@ public class AICore : IXmlParsable
 
     // State variables
     AIRoleCore[] roleCores = new AIRoleCore[EnumExt.Length<AIState>()];
+    AIMovementCore movementCore = new AIMovementCore();
     public AIState CurrentState = AIState.Passive;
 
     public AICore(NPC n)
@@ -27,13 +28,17 @@ public class AICore : IXmlParsable
         decisionArgs = new AIDecisionArgs(this);
         actionArgs = new AIActionArgs(this);
         rand = new System.Random(Probability.Rand.Next());
+        WeightingCurve = (weight) =>
+        {
+            return weight + 1;
+        };
     }
 
     public void DecideWhatToDo()
     {
-        ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
+        ProbabilityPool<AIRoleDecision> pool = ProbabilityPool<AIRoleDecision>.Create();
         roleCores[(int)CurrentState].FillPool(this, pool, decisionArgs);
-        AIDecision decision = pool.Get(rand);
+        AIRoleDecision decision = pool.Get(rand);
         decision.Action(actionArgs);
     }
 
@@ -45,27 +50,41 @@ public class AICore : IXmlParsable
             AIState state;
             if (!stateNode.SelectEnum<AIState>("State", out state)) continue;
             AIRoleCore core = roleCores[(int)state];
-            foreach (var packageNode in stateNode.SelectList("AIPackage"))
+            foreach (var packageNode in stateNode.SelectList("AIDecision"))
             {
                 string name;
                 if (!x.SelectString("name", out name)) continue;
-                AIDecision decision;
-                if (!BigBoss.Types.TryInstantiate<AIDecision>(name, out decision)) continue;
+                AIRoleDecision decision;
+                if (!BigBoss.Types.TryInstantiate<AIRoleDecision>(name, out decision)) continue;
                 core.AddDecision(decision);
             }
 
         }
 
+        foreach (var movementNode in x.SelectList("AIMovements"))
+        {
+            foreach (var packageNode in movementNode.SelectList("AIMovement"))
+            {
+                string name;
+                if (!x.SelectString("name", out name)) continue;
+                AIMovement movement;
+                if (!BigBoss.Types.TryInstantiate<AIMovement>(name, out movement)) continue;
+                movementCore.AddMovement(movement);
+            }
+        }
+
         // Package Defaults
         if (x.SelectBool("UseDefaults", true))
         {
+            // Movement
+            movementCore.AddMovement(new AIMove());
             // Passive
             var core = roleCores[(int)AIState.Passive];
             core.AddDecision(new AIAggro());
+            core.AddDecision(new AIWait());
             // Combat
             core = roleCores[(int)AIState.Combat];
             core.AddDecision(new AIAttack());
-            core.AddDecision(new AIMove());
         }
     }
     #endregion

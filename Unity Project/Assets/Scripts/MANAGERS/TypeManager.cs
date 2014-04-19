@@ -22,7 +22,8 @@ public class TypeManager : MonoBehaviour, IManager
         BigBoss.Debug.w(Logs.TypeHarvest, "Initializing");
         Harvest<EffectInstance>();
         Harvest<RoomModifier>();
-        Harvest<AIDecision>();
+        Harvest<AIRoleDecision>();
+        Harvest<AIMovement>();
         Harvest<ITargeter>();
     }
 

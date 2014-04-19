@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-internal class AIAttack : AIDecision
+internal class AIAttack : AIRoleDecision
 {
     public NPC target;
     public override AIRole Role { get { return AIRole.Damage; } }
+    public override double Cost { get { return 60d; } }
 
     public AIAttack()
     {
         target = BigBoss.Player; //temp
-        Cost = 60;
     }
 
     public override void Action(AIActionArgs args)

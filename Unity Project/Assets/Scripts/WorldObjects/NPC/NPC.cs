@@ -43,6 +43,16 @@ public class NPC : Affectable
     public Equipment Equipment = new Equipment();
     public Item NaturalWeapon { get; set; }
     public Spell OnDeath { get; set; }
+
+    // Temporary arbitrary offset
+    public Vector3 EyeSightPosition
+    {
+        get
+        {
+            Vector3 pos = this.GO.transform.position;
+            return new Vector3(pos.x, pos.y + 2, pos.z);
+        }
+    } 
     #endregion
 
     /**

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AICastDamageSpell : AIDecision
+public class AICastDamageSpell : AIRoleDecision
 {
     int turnsSinceLastCast = 0;
     public override AIRole Role { get { return AIRole.Damage; } }
+    public override double Cost { get { return 60d; } }
 
     public AICastDamageSpell()
     {
-        Cost = 60;
     }
 
     public override void Action(AIActionArgs args)

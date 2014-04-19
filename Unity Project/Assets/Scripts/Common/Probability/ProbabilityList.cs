@@ -72,7 +72,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 
     protected void Add(ProbContainer cont)
     {
-        if (cont.Multiplier < 0) return;
+        if (cont.Multiplier <= 0) return;
         itemList.Add(cont);
         Max += cont.Multiplier;
     }

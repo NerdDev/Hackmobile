@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class AIMove : AIDecision
+public class AIMove : AIMovement
 {
     public NPC target;
-    public override AIRole Role { get { return AIRole.Other; } }
+    public override double Cost { get { return 60d; } }
 
     public AIMove()
     {
         target = BigBoss.Player;
-        Cost = 60;
     }
 
     public override void Action(AIActionArgs args)

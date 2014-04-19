@@ -91,12 +91,15 @@
       <AIRoles>
         <!-- No special role -->
       </AIRoles>
+      <AIMovements>
+        <!-- No special movements -->
+      </AIMovements>
       <AIState state="Passive">
-        <AIPackage name="Wander" />
-        <AIPackage name="EatCorpse" />
+        <AIDecision name="Wander" />
+        <AIDecision name="EatCorpse" />
       </AIState>
       <AIState state="Combat">
-        <AIPackage name="PassiveHorde" />
+        <AIDecision name="PassiveHorde" />
       </AIState>
     </AI>
   </npc>
