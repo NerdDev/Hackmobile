@@ -16,8 +16,11 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
     public virtual string Prefab { get { return _prefab; } set { _prefab = "Prefabs/" + value; } }
     public GridSpace GridSpace { 
         get { return _grid; }
-        set { 
-            if (_grid != null) _grid.Remove(this);
+        set {
+            if (_grid != null)
+            {
+                _grid.Remove(this);
+            }
             value.Put(this);
             _grid = value; 
         } }

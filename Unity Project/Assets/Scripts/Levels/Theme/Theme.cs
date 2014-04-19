@@ -113,11 +113,6 @@ public class Theme : ScriptableObject, IInitializable
 
     public void PlaceDoor(Container2D<GenSpace> cont, int x, int y, System.Random rand, DrawAction<GenSpace> additionalTest = null)
     {
-        if (y == 21)
-        {
-            int wer = 23;
-            wer++;
-        }
         DrawAction<GenSpace> test = Draw.CanDrawDoor();
         if (additionalTest != null)
         {

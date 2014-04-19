@@ -14,11 +14,6 @@ public class DoorElement : ThemeElement
 
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
-        if (spec.DeployX == 10)
-        {
-            int wer = 23;
-            wer++;
-        }
         // Normal 
         GridDirection walkableDir;
         GridLocation offsetLocation;
