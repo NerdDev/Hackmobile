@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AICastDamageSpell : AIRoleDecision
+public class AICastDamageSpell : AIAction
 {
     int turnsSinceLastCast = 0;
-    public override AIRole Role { get { return AIRole.Damage; } }
     public override double Cost { get { return 60d; } }
 
     public AICastDamageSpell()
@@ -26,12 +25,12 @@ public class AICastDamageSpell : AIRoleDecision
         }
     }
 
-    public override double CalcWeighting(AIDecisionArgs args)
-    {
-        if (args.NPC.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
-            return 0.4d;
-        else
-            turnsSinceLastCast++;
-        return -1.0d;
-    }
+    //public override double CalcWeighting(AIDecisionArgs args)
+    //{
+    //    if (args.NPC.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
+    //        return 0.4d;
+    //    else
+    //        turnsSinceLastCast++;
+    //    return -1.0d;
+    //}
 }

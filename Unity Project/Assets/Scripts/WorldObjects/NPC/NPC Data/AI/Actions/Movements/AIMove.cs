@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class AIMove : AIMovement
+public class AIMove : AIAction
 {
     public NPC target;
     public override double Cost { get { return 60d; } }
@@ -26,18 +26,6 @@ public class AIMove : AIMovement
             }
             //else, continue on and move the NPC... if it's not a door, or if it's an open door
             args.NPC.MoveNPC(nodeToMove);
-        }
-    }
-
-    public override double CalcWeighting(AIDecisionArgs args)
-    {
-        if (args.NPC.IsNextToTarget(target))
-        {
-            return -1.0d;
-        }
-        else
-        {
-            return 0.1d;
         }
     }
 

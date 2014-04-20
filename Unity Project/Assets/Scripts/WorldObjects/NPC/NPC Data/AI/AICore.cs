@@ -15,7 +15,7 @@ public class AICore : IXmlParsable
 
     // State variables
     AIRoleCore[] roleCores = new AIRoleCore[EnumExt.Length<AIState>()];
-    AIMovementCore movementCore = new AIMovementCore();
+    AIActionSet movementSet = new AIActionSet();
     public AIState CurrentState = AIState.Passive;
 
     public AICore(NPC n)
@@ -67,9 +67,9 @@ public class AICore : IXmlParsable
             {
                 string name;
                 if (!x.SelectString("name", out name)) continue;
-                AIMovement movement;
-                if (!BigBoss.Types.TryInstantiate<AIMovement>(name, out movement)) continue;
-                movementCore.AddMovement(movement);
+                AIAction movement;
+                if (!BigBoss.Types.TryInstantiate<AIAction>(name, out movement)) continue;
+                movementSet.AddAction(movement);
             }
         }
 
@@ -77,14 +77,14 @@ public class AICore : IXmlParsable
         if (x.SelectBool("UseDefaults", true))
         {
             // Movement
-            movementCore.AddMovement(new AIMove());
+            movementSet.AddAction(new AIMove());
             // Passive
             var core = roleCores[(int)AIState.Passive];
             core.AddDecision(new AIAggro());
             core.AddDecision(new AIWait());
             // Combat
             core = roleCores[(int)AIState.Combat];
-            core.AddDecision(new AIAttack());
+            core.AddDecision(new AIDoDamage());
         }
     }
     #endregion

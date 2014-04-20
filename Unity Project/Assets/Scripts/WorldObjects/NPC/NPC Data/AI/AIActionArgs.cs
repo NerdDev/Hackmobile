@@ -18,4 +18,14 @@ public class AIActionArgs
     {
 
     }
+
+    public void MoveTo(GridSpace space)
+    {
+
+    }
+
+    public void MoveTo(WorldObject obj)
+    {
+        MoveTo(obj.GridSpace);
+    }
 }
