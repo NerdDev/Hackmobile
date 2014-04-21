@@ -7,7 +7,7 @@ public class AIRoleCore
 {
     AIDecisionCore[] cores = new AIDecisionCore[EnumExt.Length<AIRole>()];
 
-    public void FillPool(AICore core, ProbabilityPool<AIRoleDecision> pool, AIDecisionArgs args)
+    public void FillPool(AICore core, ProbabilityPool<AIDecision> pool, AIDecisionArgs args)
     {
         for (int i = 0; i < cores.Length; i++)
         {

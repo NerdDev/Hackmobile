@@ -15,7 +15,7 @@ public class AICore : IXmlParsable
 
     // State variables
     AIRoleCore[] roleCores = new AIRoleCore[EnumExt.Length<AIState>()];
-    AIActionSet movementSet = new AIActionSet();
+    AIDecisionCore movementCore = new AIDecisionCore();
     public AIState CurrentState = AIState.Passive;
 
     public AICore(NPC n)
@@ -28,6 +28,8 @@ public class AICore : IXmlParsable
         decisionArgs = new AIDecisionArgs(this);
         actionArgs = new AIActionArgs(this);
         rand = new System.Random(Probability.Rand.Next());
+        decisionArgs.Target = BigBoss.Player; // Temp
+        actionArgs.Target = BigBoss.Player; // Temp
         WeightingCurve = (weight) =>
         {
             return weight + 1;
@@ -36,10 +38,30 @@ public class AICore : IXmlParsable
 
     public void DecideWhatToDo()
     {
-        ProbabilityPool<AIRoleDecision> pool = ProbabilityPool<AIRoleDecision>.Create();
+        ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
         roleCores[(int)CurrentState].FillPool(this, pool, decisionArgs);
-        AIRoleDecision decision = pool.Get(rand);
-        decision.Action(actionArgs);
+        #region Debug
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + decisionArgs.Self.ID + "/Log.txt");
+            pool.ToLog(
+        }
+        #endregion
+        AIDecision decision = pool.Get(rand);
+        decision.Action(actionArgs); 
+    }
+
+    public void Move(int x, int y)
+    {
+        Move(BigBoss.Levels.Level[x, y]);
+    }
+
+    public void Move(GridSpace space)
+    {
+        ProbabilityPool<AIDecision> movementPool = ProbabilityPool<AIDecision>.Create();
+        movementCore.FillPool(movementPool, decisionArgs);
+        AIDecision movement = movementPool.Get(rand);
+        movement.Action(new AIActionArgs(this) { TargetSpace = space }); 
     }
 
     #region XML
@@ -67,9 +89,9 @@ public class AICore : IXmlParsable
             {
                 string name;
                 if (!x.SelectString("name", out name)) continue;
-                AIAction movement;
-                if (!BigBoss.Types.TryInstantiate<AIAction>(name, out movement)) continue;
-                movementSet.AddAction(movement);
+                AIDecision movement;
+                if (!BigBoss.Types.TryInstantiate<AIDecision>(name, out movement)) continue;
+                movementCore.AddDecision(movement);
             }
         }
 
@@ -77,14 +99,14 @@ public class AICore : IXmlParsable
         if (x.SelectBool("UseDefaults", true))
         {
             // Movement
-            movementSet.AddAction(new AIMove());
+            movementCore.AddDecision(new AIMove());
             // Passive
             var core = roleCores[(int)AIState.Passive];
             core.AddDecision(new AIAggro());
             core.AddDecision(new AIWait());
             // Combat
             core = roleCores[(int)AIState.Combat];
-            core.AddDecision(new AIDoDamage());
+            core.AddDecision(new AIUseAbility());
         }
     }
     #endregion

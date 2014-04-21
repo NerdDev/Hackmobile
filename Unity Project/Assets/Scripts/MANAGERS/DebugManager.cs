@@ -6,6 +6,7 @@ using System.IO;
 
 public class DebugManager : MonoBehaviour, IManager
 {
+    const string debugFolder = @"Debug Logs\";
     public bool Initialized { get; set; }
     public Logs LastLog { get; protected set; }
     Log lastLog;
@@ -22,18 +23,6 @@ public class DebugManager : MonoBehaviour, IManager
     public DebugFlag[] ActiveFlags = new DebugFlag[] { DebugFlag.GlobalLogging };
     #endregion
 
-    #region StringConstants
-    const string debugFolder = @"Debug Logs\";
-    const string depthStrExtra = "  ";
-    const string depthStr = "|   ";
-    const string headerStrMid = @"/=============  ";
-    const string headerStrMid2 = @"  =============\";
-    const string headerStrFoot = @"\=============  ";
-    const string headerStrFoot2 = @"  =============/";
-    const string breaker = @"___________________________________________________";
-    const string breaker2 = @"|/////////////////////////////////////////////////|";
-    #endregion
-
     public enum DebugFlag
     {
         GlobalLogging,
@@ -43,7 +32,8 @@ public class DebugManager : MonoBehaviour, IManager
         Perimeter,
         BFSSteps,
         LevelGen_Path_Simplify_Prune,
-        XML_Print
+        XML_Print,
+        AI
     }
 
     static GenericFlags<DebugFlag> flags = new GenericFlags<DebugFlag>();
@@ -287,12 +277,23 @@ public class DebugManager : MonoBehaviour, IManager
         }
     }
 
+    public Log CreateNewLog(string logPath)
+    {
+        return new Log(debugFolder + "/" + logPath, this);
+    }
+
     public void close()
     {
         if (logs != null)
+        {
             foreach (Log l in logs)
+            {
                 if (l != null)
+                {
                     l.close();
+                }
+            }
+        }
     }
 
     public bool logging()
@@ -316,114 +317,6 @@ public class DebugManager : MonoBehaviour, IManager
     }
     #endregion
 
-    #region LogClass
-    class Log
-    {
-        StreamWriter writer;
-        string depth = "";
-        int lineNum = 1;
-        DebugManager manager;
-
-        private Log(DebugManager manager)
-        {
-            this.manager = manager;
-        }
-
-        public Log(string path, DebugManager manager)
-            : this(manager)
-        {
-            writer = new StreamWriter(path);
-        }
-
-        public Log(FileStream fstream, DebugManager manager)
-            : this(manager)
-        {
-            writer = new StreamWriter(fstream);
-        }
-
-        public void printHeader(string line)
-        {
-            w("");
-            w(headerStrMid + line + headerStrMid2);
-            incrementDepth();
-        }
-
-        public void printBreakers(int num)
-        {
-            w("");
-            for (int i = 0; i < num; i++)
-            {
-                w(breaker);
-                w(breaker2);
-            }
-            w("");
-        }
-
-        public void printFooter(string line)
-        {
-            decrementDepth();
-            w(headerStrFoot + line + headerStrFoot2);
-        }
-
-        public void w(string line)
-        {
-            w(0, line);
-        }
-
-        public void w(int depthModifier, string line)
-        {
-            string toWrite = "";
-            if (manager.Flag(DebugFlag.LineNumbers))
-            {
-                toWrite += "[" + lineNum + "] ";
-            }
-            toWrite += depth + getExtraDepth(depthModifier) + line;
-            writeInternal(toWrite);
-            lineNum++;
-        }
-
-        public void writeInternal(string line)
-        {
-            writer.WriteLine(line);
-            writer.Flush();
-        }
-
-        public string getExtraDepth(int val)
-        {
-            string ret = "";
-            for (int i = 0; i < val; i++)
-            {
-                ret += depthStrExtra;
-            }
-            return ret;
-        }
-
-        public void decrementDepth()
-        {
-            // Cut off left depthStr
-            if (depth.Length > 0)
-            {
-                depth = depth.Substring(depthStr.Length);
-            }
-        }
-
-        public void incrementDepth()
-        {
-            depth = depthStr + depth;
-        }
-
-        public void resetDepth()
-        {
-            depth = "";
-        }
-
-        public void close()
-        {
-            writer.Close();
-        }
-    }
-    #endregion LogClass
-
     public void dump(System.Object o)
     {
         ObjDump.Dump(o);
@@ -446,3 +339,122 @@ public enum Logs
     TypeHarvest,
     Pathfinding,
 };
+
+#region LogClass
+public class Log
+{
+    #region StringConstants
+    const string depthStrExtra = "  ";
+    const string depthStr = "|   ";
+    const string headerStrMid = @"/=============  ";
+    const string headerStrMid2 = @"  =============\";
+    const string headerStrFoot = @"\=============  ";
+    const string headerStrFoot2 = @"  =============/";
+    const string breaker = @"___________________________________________________";
+    const string breaker2 = @"|/////////////////////////////////////////////////|";
+    #endregion
+
+    StreamWriter writer;
+    string depth = "";
+    int lineNum = 1;
+    DebugManager manager;
+
+    private Log(DebugManager manager)
+    {
+        this.manager = manager;
+    }
+
+    public Log(string path, DebugManager manager)
+        : this(manager)
+    {
+        writer = new StreamWriter(path, true);
+    }
+
+    public Log(FileStream fstream, DebugManager manager)
+        : this(manager)
+    {
+        writer = new StreamWriter(fstream);
+    }
+
+    public void printHeader(string line)
+    {
+        w("");
+        w(headerStrMid + line + headerStrMid2);
+        incrementDepth();
+    }
+
+    public void printBreakers(int num)
+    {
+        w("");
+        for (int i = 0; i < num; i++)
+        {
+            w(breaker);
+            w(breaker2);
+        }
+        w("");
+    }
+
+    public void printFooter(string line)
+    {
+        decrementDepth();
+        w(headerStrFoot + line + headerStrFoot2);
+    }
+
+    public void w(string line)
+    {
+        w(0, line);
+    }
+
+    public void w(int depthModifier, string line)
+    {
+        string toWrite = "";
+        if (manager.Flag(DebugManager.DebugFlag.LineNumbers))
+        {
+            toWrite += "[" + lineNum + "] ";
+        }
+        toWrite += depth + getExtraDepth(depthModifier) + line;
+        writeInternal(toWrite);
+        lineNum++;
+    }
+
+    public void writeInternal(string line)
+    {
+        writer.WriteLine(line);
+        writer.Flush();
+    }
+
+    public string getExtraDepth(int val)
+    {
+        string ret = "";
+        for (int i = 0; i < val; i++)
+        {
+            ret += depthStrExtra;
+        }
+        return ret;
+    }
+
+    public void decrementDepth()
+    {
+        // Cut off left depthStr
+        if (depth.Length > 0)
+        {
+            depth = depth.Substring(depthStr.Length);
+        }
+    }
+
+    public void incrementDepth()
+    {
+        depth = depthStr + depth;
+    }
+
+    public void resetDepth()
+    {
+        depth = "";
+    }
+
+    public void close()
+    {
+        writer.Close();
+    }
+}
+#endregion LogClass

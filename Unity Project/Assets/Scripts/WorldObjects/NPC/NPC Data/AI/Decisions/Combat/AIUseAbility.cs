@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-internal class AIDoDamage : AIRoleDecision
+internal class AIUseAbility : AIRoleDecision
 {
     public override AIRole Role { get { return AIRole.Damage; } }
     public override double Cost { get { return 60d; } }
-    NPC target;
 
-    public AIDoDamage()
+    public AIUseAbility()
     {
-        target = BigBoss.Player;
     }
 
     public override void Action(AIActionArgs args)
@@ -19,7 +17,14 @@ internal class AIDoDamage : AIRoleDecision
         // Code to roll between damage options
         
         // Temporarily just doing autoattack for now.
-        args.NPC.attack(target);
+        if (args.Self.IsNextToTarget(args.Target))
+        {
+            args.Self.attack(args.Target);
+        }
+        else
+        {
+            args.MoveTo(args.Target);
+        }
     }
 
     public override double CalcWeighting(AIDecisionArgs args)

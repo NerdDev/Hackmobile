@@ -17,7 +17,7 @@ public class AIAggro : AIRoleDecision
     public override double CalcWeighting(AIDecisionArgs args)
     {
         var player = BigBoss.Player;
-        if (Physics.Linecast(args.NPC.EyeSightPosition, player.EyeSightPosition))
+        if (Physics.Linecast(args.Self.EyeSightPosition, player.EyeSightPosition))
         {
             return -1d;
         }

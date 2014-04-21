@@ -5,11 +5,11 @@ using System.Text;
 
 public class AIDecisionCore
 {
-    List<AIRoleDecision> decisions = new List<AIRoleDecision>();
+    List<AIDecision> decisions = new List<AIDecision>();
 
-    public void FillPool(ProbabilityPool<AIRoleDecision> pool, AIDecisionArgs args)
+    public void FillPool(ProbabilityPool<AIDecision> pool, AIDecisionArgs args)
     {
-        foreach (AIRoleDecision decision in decisions)
+        foreach (AIDecision decision in decisions)
         {
             double weight = decision.CalcWeighting(args);
             weight = args.WeightingCurve(weight);
@@ -17,7 +17,7 @@ public class AIDecisionCore
         }
     }
 
-    public void AddDecision(AIRoleDecision decision)
+    public void AddDecision(AIDecision decision)
     {
         decisions.Add(decision);
     }

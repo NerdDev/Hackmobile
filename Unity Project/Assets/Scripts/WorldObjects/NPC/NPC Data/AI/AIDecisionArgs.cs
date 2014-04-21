@@ -6,7 +6,8 @@ using System.Text;
 public class AIDecisionArgs
 {
     private AICore core;
-    public NPC NPC { get { return core.NPC; } }
+    public NPC Self { get { return core.NPC; } }
+    public NPC Target;
     public Func<double, double> WeightingCurve;
 
     public AIDecisionArgs(AICore core)

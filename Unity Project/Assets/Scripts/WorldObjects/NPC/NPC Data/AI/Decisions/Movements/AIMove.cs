@@ -4,19 +4,17 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class AIMove : AIAction
+public class AIMove : AIDecision
 {
-    public NPC target;
     public override double Cost { get { return 60d; } }
 
     public AIMove()
     {
-        target = BigBoss.Player;
     }
 
     public override void Action(AIActionArgs args)
     {
-        PathNode[] nodes = PathTree.Instance.getPath(args.NPC.GridSpace, target.GridSpace, 75).ToArray();
+        PathNode[] nodes = PathTree.Instance.getPath(args.Self.GridSpace, args.TargetSpace, 75).ToArray();
         if (nodes.Length > 2)
         {
             GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
@@ -25,7 +23,7 @@ public class AIMove : AIAction
                 return;
             }
             //else, continue on and move the NPC... if it's not a door, or if it's an open door
-            args.NPC.MoveNPC(nodeToMove);
+            args.Self.MoveNPC(nodeToMove);
         }
     }
 
@@ -46,5 +44,10 @@ public class AIMove : AIAction
             }
         }
         return false;
+    }
+
+    public override double CalcWeighting(AIDecisionArgs args)
+    {
+        return 0.0d;
     }
 }
