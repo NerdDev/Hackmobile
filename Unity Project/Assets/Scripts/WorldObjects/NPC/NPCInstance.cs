@@ -7,6 +7,11 @@ public class NPCInstance : WOWrapper
 {
     public bool DestroyThisNPC = false;
 
+    void Start()
+    {
+        WO.Start();
+    }
+
     void Update()
     {
         if (WO == null) return;
@@ -21,6 +26,6 @@ public class NPCInstance : WOWrapper
     void FixedUpdate()
     {
         if (WO != null)
-        this.WO.FixedUpdate();
+            this.WO.FixedUpdate();
     }
 }

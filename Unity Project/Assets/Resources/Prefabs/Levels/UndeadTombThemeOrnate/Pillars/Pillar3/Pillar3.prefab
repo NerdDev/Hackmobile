@@ -13,7 +13,7 @@ GameObject:
   - 136: {fileID: 13600000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Pillar3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,10 +70,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f475704fe172e044b187e8155e84574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridLength: 1
+  Set:
+    Elements:
+    - Multiplier: 1
+      Unique: 0
+      Item: {fileID: 11400000}
   Walkable: 0
-  PrintChar: O
   Dynamic: 0
 --- !u!114 &11400002
 MonoBehaviour:

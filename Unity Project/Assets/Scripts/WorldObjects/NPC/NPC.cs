@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using XML;
+using Pathfinding;
 
 public class NPC : Affectable
 {
@@ -70,8 +71,16 @@ public class NPC : Affectable
     internal Queue<GridSpace> targetGrids = new Queue<GridSpace>();
     internal Vector3 heading; //this is the heading of target minus current location
 
-    public Animator animator;
+    internal Animator animator;
+    internal CharacterController controller;
+    internal Seeker seeker;
     float velocity;
+
+    internal PFPath CurrentPath;
+    //The max distance from the AI to a waypoint for it to continue to the next waypoint
+    public float nextWaypointDistance = .5f;
+    //The waypoint we are currently moving towards
+    private int currentWaypoint = 0;
 
     #endregion
 
@@ -87,6 +96,8 @@ public class NPC : Affectable
     public override void Start()
     {
         animator = GO.GetComponent<Animator>() as Animator;
+        controller = GO.GetComponent<CharacterController>();
+        seeker = GO.GetComponent<Seeker>();
     }
 
     public override void Update()
@@ -95,7 +106,7 @@ public class NPC : Affectable
         {
             if (moving)
             {
-                movement();
+                GetMovement();
             }
             if (verticalMoving)
             {
@@ -106,6 +117,7 @@ public class NPC : Affectable
 
     public override void FixedUpdate()
     {
+        //GetMovement();
         if (moving)
         {
             if (velocity < NPCSpeed)
@@ -121,13 +133,36 @@ public class NPC : Affectable
         {
             velocity = 0;
         }
-        if (animator == null)
+        animator.SetFloat("runSpeed", velocity);
+    }
+
+    float gravity;
+    void GetMovement()
+    {
+        if (CurrentPath == null)
         {
-            animator = GO.GetComponent<Animator>() as Animator;
+            moving = false;
+            return; //no path, don't move
         }
-        else
+        if (!CurrentPath.IsDone())
         {
-            animator.SetFloat("runSpeed", velocity);
+            return;
+        }
+        if (!CurrentPath.foundEnd || currentWaypoint >= CurrentPath.vectorPath.Length)
+        {
+            CurrentPath = null;
+            moving = false;
+            return; //path finished, set to null
+        }
+
+        //Direction to the next waypoint
+        Vector3 dir = (CurrentPath.vectorPath[currentWaypoint] - GO.transform.position).normalized;
+        dir *= NPCSpeed * Time.fixedDeltaTime;
+        GO.MoveStepWise(dir, 1f);
+        if (Vector3.Distance(GO.transform.position, CurrentPath.vectorPath[currentWaypoint]) < nextWaypointDistance)
+        {
+            currentWaypoint++;
+            return;
         }
     }
 
@@ -401,11 +436,24 @@ public class NPC : Affectable
     public void MoveNPC(GridSpace node)
     {
         //GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
-        if (!node.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
-        {
-            GridSpace = node;
-            move(node);
-        }
+        //if (!node.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
+        //{
+        //    GridSpace = node;
+        //    move(node);
+        //}
+        //if (subtractPoints(BigBoss.Time.regularMoveCost))
+        //{
+        moving = true;
+        currentWaypoint = 0;
+        CurrentPath = seeker.StartPath(GO.transform.position, new Vector3(node.X, 0, node.Y));
+        //}
+    }
+
+    public void MoveNPC(Vector3 pos)
+    {
+        moving = true;
+        currentWaypoint = 0;
+        CurrentPath = seeker.StartPath(GO.transform.position, pos);
     }
 
     public void move(GridSpace node)

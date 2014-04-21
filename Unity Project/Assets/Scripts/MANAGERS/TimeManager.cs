@@ -49,7 +49,7 @@ public class TimeManager : MonoBehaviour, IManager
     #endregion
     #region Action Costs
     public int diagonalMoveCost = 84;
-    public int regularMoveCost = 60;
+    public int regularMoveCost = 1;
     public int attackCost = 60;
     public int eatItemCost = 60;
     #endregion

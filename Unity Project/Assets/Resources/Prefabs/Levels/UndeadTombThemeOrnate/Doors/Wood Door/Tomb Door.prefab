@@ -48,7 +48,7 @@ GameObject:
   - 33: {fileID: 3300006}
   - 23: {fileID: 2300006}
   - 95: {fileID: 9500002}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ GameObject:
   - 33: {fileID: 3300004}
   - 23: {fileID: 2300004}
   - 95: {fileID: 9500000}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Wall_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}

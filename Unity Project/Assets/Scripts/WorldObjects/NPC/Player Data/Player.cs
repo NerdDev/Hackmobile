@@ -74,10 +74,6 @@ public class Player : NPC
         BigBoss.Gooey.UpdatePowerBar(this.Stats.MaxPower);
     }
 
-    public override void Start()
-    {
-        animator = GO.GetComponentInChildren<Animator>() as Animator;
-    }
     // Update is called once per frame
     public override void Update()
     {
@@ -150,16 +146,7 @@ public class Player : NPC
     #region Movement and Animation
 
     #region Movement/Animation Properties
-    //private Animator anim;							// a reference to the animator on the character
-    private AnimatorStateInfo currentBaseState;			// a reference to the current state of the animator, used for base layer
-    private AnimatorStateInfo layer2CurrentState;	// a reference to the current state of the animator, used for layer 2
-    ///static int idleState = Animator.StringToHash("Base Layer.Idle");
-    ///static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
-    Vector3 currentGridLoc;
-    Vector3 currentGridCenterPointWithoffset;
-
     public float tileMovementTolerance = .85f;  //radius
-
     float timePassed = 0;
     float timeVar = 20f;
     bool timeSet;
@@ -218,10 +205,6 @@ public class Player : NPC
             {
                 moving = false;
             }
-            //if (!verticalMoving)
-            //{
-            //    resetVerticalPosition();
-            //}
         }
         else
         {
@@ -281,21 +264,16 @@ public class Player : NPC
     }
 
     float gravity;
-    CharacterController controller;
     private void MovePlayer(float speed)
     {
-        if (controller == null) controller = GO.GetComponent<CharacterController>();
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        if (GO.transform.position.y <= verticalOffset)
+        if (GO.transform.position.y <= verticalOffset || controller.isGrounded)
         {
             gravity = 0;
         }
-
         else { gravity -= 9.81f * Time.deltaTime; }
         Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
         controller.Move(newMove * speed * Time.deltaTime);
-
-        //GO.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
     }
 
     //BRAD WHAT DOES THIS DO?!
@@ -303,23 +281,11 @@ public class Player : NPC
 
     public override void FixedUpdate()
     {
-        if (animator == null)
-        {
-            try
-            {
-                animator = GO.GetComponentInChildren<Animator>() as Animator;
-            }
-            catch (Exception)
-            {
-            }
-            return;
-        }
-        if (!moving)
+        if (!BigBoss.PlayerInput.mouseMovement && !BigBoss.PlayerInput.touchMovement)
         {
             v = 0;
         }
         animator.SetFloat("runSpeed", v);							// set our animator's float parameter 'runSpeed' to the speed of the NPC
-        currentBaseState = animator.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
     }
 
     internal override void SetAttackAnimation(GameObject target)
