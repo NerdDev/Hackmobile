@@ -147,7 +147,7 @@ public class DungeonMaster : MonoBehaviour, IManager
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.NPCs))
             {
-                pool.ToLog(Logs.NPCs, "NPCs");
+                pool.ToLog(BigBoss.Debug.Get(Logs.NPCs), "NPCs");
                 BigBoss.Debug.printFooter(Logs.NPCs, "Get Pool");
             }
             #endregion

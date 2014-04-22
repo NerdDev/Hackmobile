@@ -414,7 +414,7 @@ public class LevelGenerator
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            shiftOptions.ToLog(Logs.LevelGen, "Shift options");
+            shiftOptions.ToLog(BigBoss.Debug.Get(Logs.LevelGen), "Shift options");
         }
         #endregion
         List<Point> clusterDoorOptions = new List<Point>();

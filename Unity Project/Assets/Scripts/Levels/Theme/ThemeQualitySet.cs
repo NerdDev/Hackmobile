@@ -113,7 +113,7 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IEnsureType
         pool.Freshen();
     }
 
-    public override void ToLog(Logs log, string name = "")
+    public override void ToLog(Log log, string name = "")
     {
         pool.ToLog(log, name);
     }

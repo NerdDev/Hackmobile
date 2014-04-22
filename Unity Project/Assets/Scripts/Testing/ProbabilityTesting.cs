@@ -52,7 +52,7 @@ public class ProbabilityTesting : MonoBehaviour
             dict[c] = num;
         }
 
-        pool.ToLog(Logs.Main);
+        pool.ToLog(BigBoss.Debug.Get(Logs.Main));
 
         BigBoss.Debug.w(Logs.Main, "Real probability out of " + max);
         foreach (KeyValuePair<T, int> pair in dict)

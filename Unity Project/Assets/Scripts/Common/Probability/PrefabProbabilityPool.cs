@@ -65,7 +65,7 @@ public class PrefabProbabilityPool<T> : ProbabilityPool<T>, IInitializable
         _pool.Freshen();
     }
 
-    public override void ToLog(Logs log, string name = "")
+    public override void ToLog(Log log, string name = "")
     {
         _pool.ToLog(log, name);
     }

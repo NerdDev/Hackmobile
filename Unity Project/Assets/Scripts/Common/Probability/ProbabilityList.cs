@@ -88,7 +88,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         Fresh = true;
     }
 
-    public override void ToLog(Logs log, string name = "")
+    public override void ToLog(Log log, string name = "")
     {
         if (BigBoss.Debug.logging(log))
         {

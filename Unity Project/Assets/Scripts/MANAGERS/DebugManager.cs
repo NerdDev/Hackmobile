@@ -110,9 +110,14 @@ public class DebugManager : MonoBehaviour, IManager
 
     public void w(Logs e, string line)
     {
-        if (logging(e))
+        w(Get(e), line);
+    }
+
+    public void w(Log l, string line)
+    {
+        if (logging(l))
         {
-            Get(e).w(line);
+            l.w(line);
         }
     }
 
@@ -152,9 +157,14 @@ public class DebugManager : MonoBehaviour, IManager
 
     public void printHeader(Logs e, string line)
     {
-        if (logging(e))
+        printHeader(Get(e), line);
+    }
+
+    public void printHeader(Log l, string line)
+    {
+        if (logging(l))
         {
-            Get(e).printHeader(line);
+            l.printHeader(line);
         }
     }
 
@@ -166,12 +176,17 @@ public class DebugManager : MonoBehaviour, IManager
         }
     }
 
+    public void printFooter(Log l, string line)
+    {
+        if (logging(l))
+        {
+            l.printFooter(line);
+        }
+    }
+
     public void printFooter(Logs e, string line)
     {
-        if (logging(e))
-        {
-            Get(e).printFooter(line);
-        }
+        printFooter(Get(e), line);
     }
 
     public void printFooter(string line)
@@ -247,7 +262,7 @@ public class DebugManager : MonoBehaviour, IManager
         logPaths[(int)e] = path;
     }
 
-    Log Get(Logs e)
+    public Log Get(Logs e)
     {
         if (logs[(int)e] == null)
         {
@@ -301,7 +316,12 @@ public class DebugManager : MonoBehaviour, IManager
 
     public bool logging(Logs e)
     {
-        return logging() && Get(e).Logging;
+        return logging(Get(e));
+    }
+
+    public bool logging(Log l)
+    {
+        return logging() && l.Logging;
     }
 
     public void logging(bool logging)

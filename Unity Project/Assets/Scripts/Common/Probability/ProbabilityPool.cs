@@ -96,7 +96,7 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>, IEns
 
     public abstract void EndTaking();
 
-    public abstract void ToLog(Logs log, string name = "");
+    public abstract void ToLog(Log log, string name = "");
 
     public void EnsureType(Type target)
     {
