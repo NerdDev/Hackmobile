@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class AICore
+public class AICore
 {
     internal List<AIAction> actions = new List<AIAction>();
     NPC npc;

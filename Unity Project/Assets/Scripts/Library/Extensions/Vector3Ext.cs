@@ -15,4 +15,12 @@ public static class Vector3Ext
         }
         return true;
     }
+
+    public static bool IsLessThan(this Vector3 pos, Vector3 target)
+    {
+        if (pos.x > target.x) return false;
+        if (pos.y > target.y) return false;
+        if (pos.z > target.z) return false;
+        return true;
+    }
 }

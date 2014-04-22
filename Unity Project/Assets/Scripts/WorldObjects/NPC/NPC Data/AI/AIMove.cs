@@ -11,25 +11,12 @@ public class AIMove : AIAction
     public AIMove(NPC n)
         : base(n)
     {
-        //target = BigBoss.Player;
+        target = BigBoss.Player;
         Cost = 60;
     }
 
     public override void Action()
     {
-        /*
-        PathNode[] nodes = PathTree.Instance.getPath(npc.GridSpace, target.GridSpace, 75).ToArray();
-        if (nodes.Length > 2)
-        {
-            GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
-            if (nodeToMove.Type == GridType.Door && DoorCheck(nodeToMove))
-            {
-                return;
-            }
-            //else, continue on and move the NPC... if it's not a door, or if it's an open door
-            npc.MoveNPC(nodeToMove);
-        }
-        */
         target = BigBoss.Player;
         npc.MoveNPC(target.GO.transform.position);
     }

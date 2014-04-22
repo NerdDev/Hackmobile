@@ -77,6 +77,10 @@ public class Player : NPC
     // Update is called once per frame
     public override void Update()
     {
+        if (Acting)
+        {
+            DoAction();
+        }
         movement();
         if (verticalMoving)
         {
@@ -85,11 +89,20 @@ public class Player : NPC
     }
 
     #region Actions
+    internal void DoAction()
+    {
+        action.Do();
+    }
+
+    public override void Do(Action action, int cost, bool interuptible, bool actOnStart)
+    {
+        base.Do(action, cost, interuptible, actOnStart);
+        BigBoss.Time.PassTurn(cost);
+    }
 
     public override void attack(NPC n)
     {
         base.attack(n);
-        BigBoss.Time.PassTurn(60);
     }
 
     public override void eatItem(Item i)
@@ -159,57 +172,17 @@ public class Player : NPC
             Vector2 lookVectorToOccupiedTile = new Vector2(GridSpace.X, GridSpace.Y) - new Vector2(GO.transform.position.x, GO.transform.position.z);
             Debug.DrawLine(GO.transform.position + Vector3.up, new Vector3(GridSpace.X, 0, GridSpace.Y), Color.green);
 
-            //If distance is greater than 1.3 (var), pass turn
             if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
             {
                 if (UpdateCurrentTileVectors())
                 {
-                    // Needs to be reactivated later when turn manager is revamped
-                    BigBoss.Time.PassTurn(60);
                 }
             }
-
-            //Moving toward closest center point if player isn't moving with input:
-            resetToGrid();
             Debug.DrawRay(new Vector3(GridSpace.X, 0, GridSpace.Y), Vector3.up, Color.yellow);
         }
         else
         {
             UpdateCurrentTileVectors();
-        }
-    }
-
-    private void resetToGrid()
-    {
-        if (!BigBoss.PlayerInput.mouseMovement && !BigBoss.PlayerInput.touchMovement)
-        {
-            if (!timeSet)
-            {
-                timePassed = UnityEngine.Time.time + timeVar;
-                timeSet = true;
-            }
-            if (UnityEngine.Time.time > timePassed)
-            {
-                if (!checkXYPosition(GO.transform.position, new Vector3(GridSpace.X, 0f, GridSpace.Y)))
-                {
-                    moving = true;
-                    MovePlayerStepWise(this.GridSpace);
-                }
-                else
-                {
-                    resetPosition();
-                    moving = false;
-                }
-            }
-            else
-            {
-                moving = false;
-            }
-        }
-        else
-        {
-            moving = true;
-            timeSet = false;
         }
     }
 
@@ -232,13 +205,20 @@ public class Player : NPC
         GO.transform.position = new Vector3(refVector.x, verticalOffset, refVector.z);
     }
 
+    float timeMoved;
     public void MovePlayer(Vector2 magnitude)
     {
+        if (v > .1f) timeMoved += Time.deltaTime;
+        if (timeMoved > BigBoss.Time.TimeInterval)
+        {
+            timeMoved = 0f;
+            BigBoss.Time.PassTurn(1);
+        }
         v = magnitude.sqrMagnitude * PlayerSpeed;
-        MovePlayer(v);
+        MoveForward(v);
     }
 
-    public bool UpdateCurrentTileVectors()
+    public override bool UpdateCurrentTileVectors()
     {
         Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
         if (BigBoss.Levels.Level == null) return false;
@@ -263,22 +243,7 @@ public class Player : NPC
         FOWSystem.instance.UpdatePosition(GridSpace, true);
     }
 
-    float gravity;
-    private void MovePlayer(float speed)
-    {
-        Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        if (GO.transform.position.y <= verticalOffset || controller.isGrounded)
-        {
-            gravity = 0;
-        }
-        else { gravity -= 9.81f * Time.deltaTime; }
-        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
-        controller.Move(newMove * speed * Time.deltaTime);
-    }
-
-    //BRAD WHAT DOES THIS DO?!
     float v;
-
     public override void FixedUpdate()
     {
         if (!BigBoss.PlayerInput.mouseMovement && !BigBoss.PlayerInput.touchMovement)
@@ -478,9 +443,6 @@ public class Player : NPC
 
     public override void UpdateTurn()
     {
-        base.UpdateTurn();
-        BigBoss.Time.numTilesCrossed++;
-        BigBoss.Gooey.UpdateTilesCrossedLabel();
     }
 
     #endregion

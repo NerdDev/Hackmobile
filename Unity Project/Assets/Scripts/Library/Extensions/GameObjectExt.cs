@@ -83,6 +83,7 @@ public static class GameObjectExt
     {
         Vector3 heading = new Vector3(target.x - obj.transform.position.x, 0f, target.z - obj.transform.position.z);
         obj.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
+        //obj.GetComponent<CharacterController>().SimpleMove(Vector3.one);
         Quaternion toRot = Quaternion.LookRotation(heading);
         obj.transform.rotation = toRot;
     }

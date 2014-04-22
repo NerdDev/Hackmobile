@@ -173,10 +173,11 @@ public class BigBoss : MonoBehaviour
     {
         if (!manager.Initialized)
         {
-            manager.Initialize();
             manager.Initialized = true;
+            manager.Initialize();
         }
     }
+
 
     public static void Log(string input)
     {

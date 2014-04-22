@@ -64,7 +64,9 @@ public class NPC : Affectable
     //public Vector3 CurrentOccupiedGridCenterWorldPoint;
     //public Vector3 LastOccupiedGridCenterWorldPoint;
 
-    internal bool moving; //stores moving condition
+    private bool moving;
+    internal bool Moving { get { return CurrentPath != null && !Acting; } } //stores moving condition
+    internal bool Acting { get { return action != null && !action.IsDone(); } } //is the NPC already doing an action?
     protected bool verticalMoving;
     protected bool movingUp;
     protected float verticalOffset = 0f;
@@ -78,7 +80,7 @@ public class NPC : Affectable
 
     internal PFPath CurrentPath;
     //The max distance from the AI to a waypoint for it to continue to the next waypoint
-    public float nextWaypointDistance = .5f;
+    public float nextWaypointDistance = 1.2f;
     //The waypoint we are currently moving towards
     private int currentWaypoint = 0;
 
@@ -100,87 +102,106 @@ public class NPC : Affectable
         seeker = GO.GetComponent<Seeker>();
     }
 
+    float turnTime;
+    float gridTime;
+    bool movementValid;
+    float timeToMove;
     public override void Update()
     {
         if (IsActive)
         {
-            if (moving)
+            float curTime = Time.time;
+            if (curTime > turnTime)
             {
-                GetMovement();
+                turnTime = curTime + .03f;
+                if (subtractPoints(1))
+                {
+                    if (!Acting)
+                    {
+                        timeToMove += BigBoss.Time.TimeInterval;
+                    }
+                    else
+                    {
+                        DoingThis();
+                    }
+                }
+                else
+                {
+                    velocity = 0;
+                }
             }
-            if (verticalMoving)
+            if (curTime > gridTime)
             {
-                verticalMovement();
+                gridTime = curTime + .2f;
+                UpdateCurrentTileVectors();
             }
+            GetMovement();
+        }
+    }
+
+    internal ActionToDo action;
+    public void DoingThis()
+    {
+        if (Acting && !action.IsDone())
+        {
+            action.Do();
         }
     }
 
     public override void FixedUpdate()
     {
-        //GetMovement();
-        if (moving)
-        {
-            if (velocity < NPCSpeed)
-            {
-                velocity += .01f;
-            }
-            else
-            {
-                velocity = NPCSpeed;
-            }
-        }
-        else
-        {
-            velocity = 0;
-        }
         animator.SetFloat("runSpeed", velocity);
     }
 
-    float gravity;
-    void GetMovement()
+    public virtual void Do(Action action, int cost, bool interuptible, bool actOnStart)
     {
-        if (CurrentPath == null)
+        if (!Acting || this.action.IsDone() || this.action.Replaceable())
         {
-            moving = false;
-            return; //no path, don't move
-        }
-        if (!CurrentPath.IsDone())
-        {
-            return;
-        }
-        if (!CurrentPath.foundEnd || currentWaypoint >= CurrentPath.vectorPath.Length)
-        {
-            CurrentPath = null;
-            moving = false;
-            return; //path finished, set to null
-        }
-
-        //Direction to the next waypoint
-        Vector3 dir = (CurrentPath.vectorPath[currentWaypoint] - GO.transform.position).normalized;
-        dir *= NPCSpeed * Time.fixedDeltaTime;
-        GO.MoveStepWise(dir, 1f);
-        if (Vector3.Distance(GO.transform.position, CurrentPath.vectorPath[currentWaypoint]) < nextWaypointDistance)
-        {
-            currentWaypoint++;
-            return;
+            CurrentPath = null; //stops moving
+            this.action = new ActionToDo(action, cost, interuptible, actOnStart);
         }
     }
 
-    internal virtual void SetAttackAnimation(GameObject target)
+    internal class ActionToDo
     {
-        float testVal = UnityEngine.Random.value;
-        GO.transform.LookAt(target.transform);
-        if (testVal < .333)
+        public Action action;
+        public int turnsRemaining;
+        public bool interuptible;
+        public bool actOnStart;
+
+        public ActionToDo(Action action, int turns, bool interupt, bool actOnStart)
         {
-            animator.Play(Equipment.WeaponAnims.Attack1);
+            this.action = action;
+            this.turnsRemaining = turns;
+            this.interuptible = interupt;
+            this.actOnStart = actOnStart;
+
+            if (actOnStart)
+            {
+                action();
+            }
         }
-        else if (testVal < .666)
+
+        public void Do()
         {
-            animator.Play(Equipment.WeaponAnims.Attack2);
+            turnsRemaining--;
+            if (turnsRemaining <= 0)
+            {
+                if (!actOnStart)
+                {
+                    action();
+                }
+            }
         }
-        else
+
+        public bool IsDone()
         {
-            animator.Play(Equipment.WeaponAnims.Attack3);
+            return turnsRemaining <= 0;
+        }
+
+        public bool Replaceable()
+        {
+            return interuptible;
         }
     }
 
@@ -399,22 +420,90 @@ public class NPC : Affectable
     #endregion
 
     #region Movement
-    private void movement()
+
+    float gravity;
+    internal Vector3 target;
+
+    public virtual bool UpdateCurrentTileVectors()
     {
-        GridSpace currentTarget = targetGrids.Peek();
-        if (!checkXYPosition(GO.transform.position, new Vector3(currentTarget.X, 0f, currentTarget.Y)))
+        Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
+        if (BigBoss.Levels.Level == null) return false;
+        GridSpace newGridSpace = BigBoss.Levels.Level[currentLoc.x.ToInt(), currentLoc.y.ToInt()];
+        if (newGridSpace != null && !newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
         {
-            MoveNPCStepwise(currentTarget);
+            GridSpace = newGridSpace;
+            return true;
         }
         else
         {
-            GridSpace grid = targetGrids.Dequeue();
-            GO.transform.position = new Vector3(grid.X, verticalOffset, grid.Y);
+            return false;
+        }
+    }
 
-            if (targetGrids.Count <= 0)
-            {
-                moving = false;
-            }
+    void GetMovement()
+    {
+        if (timeToMove <= 0) return;
+        if (CurrentPath == null) return; //no path, don't move
+        if (!CurrentPath.IsDone()) return; //path isn't done (should never occur)
+        if (!CurrentPath.foundEnd || currentWaypoint >= CurrentPath.vectorPath.Length) //path has no end, or at the end of path
+        {
+            CurrentPath = null;
+            return; //path finished, set to null
+        }
+
+        //Direction to the next waypoint
+        Vector3 dir = (CurrentPath.vectorPath[currentWaypoint]);
+        LookTowards(dir);
+        MoveForward();
+        timeToMove -= Time.deltaTime;
+        velocity = NPCSpeed;
+
+        if ((CurrentPath.vectorPath[currentWaypoint] - GO.transform.position).sqrMagnitude < nextWaypointDistance)
+        {
+            currentWaypoint++;
+            return;
+        }
+    }
+
+    internal void MoveForward()
+    {
+        Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
+        if (GO.transform.position.y <= verticalOffset || controller.isGrounded)
+        {
+            gravity = 0;
+        }
+        else { gravity -= 9.81f * Time.deltaTime; }
+        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
+        controller.Move(newMove * NPCSpeed * Time.deltaTime);
+    }
+
+    internal void MoveForward(float speed)
+    {
+        Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
+        if (GO.transform.position.y <= verticalOffset || controller.isGrounded)
+        {
+            gravity = 0;
+        }
+        else { gravity -= 9.81f * Time.deltaTime; }
+        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
+        controller.Move(newMove * speed * Time.deltaTime);
+    }
+
+    internal void LookTowards(Vector3 target)
+    {
+        Vector3 heading = new Vector3(target.x - GO.transform.position.x, 0f, target.z - GO.transform.position.z);
+        Quaternion lerp = Quaternion.LookRotation(heading);
+        Quaternion toRot = Quaternion.Lerp(GO.transform.rotation, lerp, 3 * NPCSpeed * Time.deltaTime);
+        GO.transform.rotation = toRot;
+    }
+
+    void OnPathComplete(PFPath p)
+    {
+        if (!p.error)
+        {
+            CurrentPath = p;
+            //Reset the waypoint counter
+            currentWaypoint = 1;
         }
     }
 
@@ -435,31 +524,17 @@ public class NPC : Affectable
 
     public void MoveNPC(GridSpace node)
     {
-        //GridSpace grid = BigBoss.Levels.Level[node.X, node.Y];
-        //if (!node.IsBlocked() && subtractPoints(BigBoss.Time.regularMoveCost))
-        //{
-        //    GridSpace = node;
-        //    move(node);
-        //}
-        //if (subtractPoints(BigBoss.Time.regularMoveCost))
-        //{
-        moving = true;
-        currentWaypoint = 0;
-        CurrentPath = seeker.StartPath(GO.transform.position, new Vector3(node.X, 0, node.Y));
-        //}
+        seeker.StartPath(GO.transform.position, new Vector3(node.X, 0, node.Y), OnPathComplete);
     }
 
     public void MoveNPC(Vector3 pos)
     {
-        moving = true;
-        currentWaypoint = 0;
-        CurrentPath = seeker.StartPath(GO.transform.position, pos);
-    }
-
-    public void move(GridSpace node)
-    {
-        moving = true;
-        targetGrids.Enqueue(node);
+        if (target == null) target = pos;
+        if (((pos - target).sqrMagnitude > .2f) || CurrentPath == null)
+        {
+            target = pos;
+            seeker.StartPath(GO.transform.position, pos, OnPathComplete);
+        }
     }
 
     public void verticalMove(float z)
@@ -474,16 +549,6 @@ public class NPC : Affectable
         {
             movingUp = false;
         }
-    }
-
-    internal void MoveNPCStepwise(GridSpace gridTarget)
-    {
-        GO.MoveStepWise(new Vector3(gridTarget.X, 0, gridTarget.Y), NPCSpeed);
-        //heading = new Vector3(gridTarget.X - GO.transform.position.x, 0f, gridTarget.Y - GO.transform.position.z);
-        //GO.transform.Translate(Vector3.forward * NPCSpeed * Time.deltaTime, Space.Self);
-        //Quaternion toRot = Quaternion.LookRotation(heading);
-        //GO.transform.rotation = toRot;
-        //GO.transform.rotation = Quaternion.Slerp(GO.transform.rotation, toRot, NPCRotationSpeed);
     }
 
     void MoveNPCStepwiseUp()
@@ -518,11 +583,23 @@ public class NPC : Affectable
         return true;
     }
 
-    //public PathTree getPathTree(GridSpace dest)
-    //{
-    //    PathTree path = new PathTree(GridSpace, dest);
-    //    return path;
-    //}
+    internal virtual void SetAttackAnimation(GameObject target)
+    {
+        float testVal = UnityEngine.Random.value;
+        GO.transform.LookAt(target.transform);
+        if (testVal < .333)
+        {
+            animator.Play(Equipment.WeaponAnims.Attack1);
+        }
+        else if (testVal < .666)
+        {
+            animator.Play(Equipment.WeaponAnims.Attack2);
+        }
+        else
+        {
+            animator.Play(Equipment.WeaponAnims.Attack3);
+        }
+    }
     #endregion
 
     #region Actions
@@ -551,28 +628,31 @@ public class NPC : Affectable
 
     public virtual void attack(NPC n)
     {
-        List<Item> weapons = Equipment.GetWeapons();
-        if (weapons.Count > 0)
+        Do(new Action(() =>
         {
-            foreach (Item i in weapons)
+            List<Item> weapons = Equipment.GetWeapons();
+            if (weapons.Count > 0)
             {
-                CreateTextMessage("The " + this.Name + " swings with his " + i.Name + "!");
+                foreach (Item i in weapons)
+                {
+                    CreateTextMessage("The " + this.Name + " swings with his " + i.Name + "!");
+                    SetAttackAnimation(n.GO);
+                    if (i.Damage(n))
+                    {
+                        AdjustXP(n.getXPfromNPC());
+                    }
+                }
+            }
+            else
+            {
+                CreateTextMessage("The " + this.Name + " swings with his bare hands!");
                 SetAttackAnimation(n.GO);
-                if (i.Damage(n))
+                if (NaturalDamage(n))
                 {
                     AdjustXP(n.getXPfromNPC());
                 }
             }
-        }
-        else
-        {
-            CreateTextMessage("The " + this.Name + " swings with his bare hands!");
-            SetAttackAnimation(n.GO);
-            if (NaturalDamage(n))
-            {
-                AdjustXP(n.getXPfromNPC());
-            }
-        }
+        }), BigBoss.Time.attackCost, false, true);
     }
 
     public virtual void CastSpell(string spell, params IAffectable[] targets)
@@ -757,11 +837,18 @@ public class NPC : Affectable
     #region Turn Management
 
     private int npcPoints = 0;
-    private int baseNPCPoints = 1;
+    private int TurnNPCIsOn = 1;
 
-    private bool subtractPoints(int points)
+    public bool subtractPoints(int points)
     {
-        if (npcPoints > points)
+        int gameTurns = BigBoss.Time.turnsPassed;
+        if (TurnNPCIsOn < gameTurns)
+        {
+            npcPoints += (gameTurns - TurnNPCIsOn);
+            TurnNPCIsOn = gameTurns;
+        }
+
+        if (npcPoints >= points)
         {
             npcPoints -= points;
             return true;
@@ -776,18 +863,7 @@ public class NPC : Affectable
     {
         if (IsActive)
         {
-            try
-            {
-                if (this.IsNotAFreaking<Player>())
-                {
-                    Master.DecideWhatToDo();
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Exception: ");
-                Debug.Log(e.ToString());
-            }
+            Master.DecideWhatToDo();
         }
     }
 
@@ -800,18 +876,6 @@ public class NPC : Affectable
         set
         {
             this.npcPoints = value;
-        }
-    }
-
-    public override int BasePoints
-    {
-        get
-        {
-            return this.baseNPCPoints;
-        }
-        set
-        {
-            this.baseNPCPoints = value;
         }
     }
 
@@ -841,8 +905,11 @@ public class NPC : Affectable
 
     public bool IsNextToTarget(NPC n)
     {
-        GridSpace targetSpace = n.GridSpace;
-        return IsNextToTarget(targetSpace);
+        if (Vector3.Distance(GO.transform.position, n.GO.transform.position) < 1.75f)
+        {
+            return true;
+        }
+        return false;
     }
 
     public int GridDistanceToTarget(NPC n)
