@@ -28,8 +28,6 @@ public class AICore : IXmlParsable
         decisionArgs = new AIDecisionArgs(this);
         actionArgs = new AIActionArgs(this);
         rand = new System.Random(Probability.Rand.Next());
-        decisionArgs.Target = BigBoss.Player; // Temp
-        actionArgs.Target = BigBoss.Player; // Temp
         WeightingCurve = (weight) =>
         {
             return weight + 1;
@@ -38,6 +36,8 @@ public class AICore : IXmlParsable
 
     public void DecideWhatToDo()
     {
+        decisionArgs.Target = BigBoss.Player; // Temp
+        actionArgs.Target = BigBoss.Player; // Temp
         ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
         roleCores[(int)CurrentState].FillPool(this, pool, decisionArgs);
         AIDecision decision = pool.Get(rand);
