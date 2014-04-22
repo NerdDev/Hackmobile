@@ -66,6 +66,10 @@ namespace System
                 visited.Add(originalObject, cloneObject);
                 CopyFields(originalObject, visited, cloneObject, typeToReflect);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
+                if (cloneObject is ICopyable && cloneObject != null)
+                {
+                    ((ICopyable)cloneObject).PostCopy();
+                }
                 return cloneObject;
             }
         }

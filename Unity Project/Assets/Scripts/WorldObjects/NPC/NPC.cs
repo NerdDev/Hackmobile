@@ -82,6 +82,7 @@ public class NPC : Affectable
     #endregion
 
     public NPC()
+        : base()
     {
         Stats.MaxEncumbrance = getMaxInventoryWeight();
         Stats.CurrentHealth = Stats.MaxHealth;

@@ -40,14 +40,26 @@ public class AICore : IXmlParsable
     {
         ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
         roleCores[(int)CurrentState].FillPool(this, pool, decisionArgs);
+        AIDecision decision = pool.Get(rand);
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
             Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + decisionArgs.Self.ID + "/Log.txt");
+            log.printHeader("Deciding");
+            pool.ToLog(log, "Decision options");
+            log.w("Decided on " + decision.GetType().ToString());
+            log.close();
         }
         #endregion
-        AIDecision decision = pool.Get(rand);
-        decision.Action(actionArgs); 
+        decision.Action(actionArgs);
+        #region Debug
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + decisionArgs.Self.ID + "/Log.txt");
+            log.printFooter("Deciding");
+            log.close();
+        }
+        #endregion
     }
 
     public void Move(int x, int y)

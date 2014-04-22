@@ -3,12 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class WorldObject : PassesTurns, IXmlParsable, INamed
+public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
 {
     #region Generic Object Properties (graphical info, names, etc).
     private WOWrapper _instance; // Private member to allow for one-set-only logic
     public WOWrapper Instance { get { return _instance; } set { if (_instance == null) _instance = value; } }
-    protected static uint nextID = 0;
+    public static uint NextID = 0;
     public uint ID { get; protected set; }
     public GameObject GO { get { return _instance.gameObject; } }
     public string Name { get; set; }
@@ -36,7 +36,12 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed
 
     public WorldObject()
     {
-        ID = nextID++;
+        ID = NextID++;
+    }
+
+    public void PostCopy()
+    {
+        ID = NextID++;
     }
 
     // Use this for initialization

@@ -386,6 +386,8 @@ public class Log
     public Log(string path, DebugManager manager)
         : this(manager)
     {
+        FileInfo file = new FileInfo(path);
+        file.Directory.Create();
         writer = new StreamWriter(path, true);
     }
 

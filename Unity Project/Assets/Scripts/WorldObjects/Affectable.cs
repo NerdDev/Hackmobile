@@ -9,6 +9,7 @@ public class Affectable : WorldObject, IAffectable
     public WorldObject Self { get { return this; } }
 
     public Affectable()
+        : base()
     {
         Effects = new AppliedEffects(this);
     }
