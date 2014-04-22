@@ -44,7 +44,6 @@ public class AICore : IXmlParsable
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
             Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + decisionArgs.Self.ID + "/Log.txt");
-            pool.ToLog(
         }
         #endregion
         AIDecision decision = pool.Get(rand);

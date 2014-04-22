@@ -14,7 +14,6 @@ public class DebugManager : MonoBehaviour, IManager
     #region LogTypes
     string[] logPaths;
     string[] logNames;
-    bool[] logOn;
     #endregion
 
     #region Editor Properties
@@ -53,7 +52,6 @@ public class DebugManager : MonoBehaviour, IManager
         int enumLength = Enum.GetNames(typeof(Logs)).Length;
         logNames = new string[enumLength];
         logPaths = new string[enumLength];
-        logOn = new bool[enumLength];
         putName(Logs.Main, "=== Main ===");
         putPath(Logs.LevelGen, "LevelGen/");
         putName(Logs.LevelGen, "LevelGenTmp");
@@ -303,7 +301,7 @@ public class DebugManager : MonoBehaviour, IManager
 
     public bool logging(Logs e)
     {
-        return logging() && logOn[(int)e];
+        return logging() && Get(e).Logging;
     }
 
     public void logging(bool logging)
@@ -313,7 +311,7 @@ public class DebugManager : MonoBehaviour, IManager
 
     public void logging(Logs e, bool logging)
     {
-        logOn[(int)e] = logging;
+        Get(e).Logging = logging;
     }
     #endregion
 
@@ -358,6 +356,7 @@ public class Log
     string depth = "";
     int lineNum = 1;
     DebugManager manager;
+    public bool Logging = true;
 
     private Log(DebugManager manager)
     {
