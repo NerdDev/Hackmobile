@@ -29,7 +29,7 @@ internal class AIUseAbility : AIRoleDecision
 
     public override double CalcWeighting(AIDecisionArgs args)
     {
-        // Do Damage is the arbitrary in-combat standard of zero
-        return 0.0d;
+        // Do Damage is the arbitrary in-combat standard of 1
+        return 1d;
     }
 }

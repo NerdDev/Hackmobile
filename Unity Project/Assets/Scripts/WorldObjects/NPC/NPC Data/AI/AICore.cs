@@ -8,15 +8,17 @@ public class AICore : IXmlParsable
     // Defining features
     public NPC NPC;
     public double[] RoleWeights = new double[EnumExt.Length<AIRole>()];
-    public Func<double, double> WeightingCurve;
     private AIDecisionArgs decisionArgs;
     private AIActionArgs actionArgs;
     private System.Random rand;
 
-    // State variables
+    // Cores
     AIRoleCore[] roleCores = new AIRoleCore[EnumExt.Length<AIState>()];
     AIDecisionCore movementCore = new AIDecisionCore();
+
+    // State variables
     public AIState CurrentState = AIState.Passive;
+
 
     public AICore(NPC n)
     {
@@ -28,10 +30,6 @@ public class AICore : IXmlParsable
         decisionArgs = new AIDecisionArgs(this);
         actionArgs = new AIActionArgs(this);
         rand = new System.Random(Probability.Rand.Next());
-        WeightingCurve = (weight) =>
-        {
-            return weight + 1;
-        };
     }
 
     public void DecideWhatToDo()

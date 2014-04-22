@@ -97,7 +97,12 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             BigBoss.Debug.w(log, "Percent - Alotted - Item");
             foreach (ProbContainer cont in itemList)
             {
-                BigBoss.Debug.w(log, (cont.Multiplier / max * 100) + "% - " + cont.Multiplier + " - " + cont.Item);
+                double percent = cont.Multiplier / max * 100;
+                if (percent < 0.000000000000000000001)
+                {
+                    percent = 0d;
+                }
+                BigBoss.Debug.w(log, percent + "% - " + cont.Multiplier + " - " + cont.Item);
             }
             BigBoss.Debug.printFooter(log, "Probability List - " + name);
         }

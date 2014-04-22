@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AIWait : AIRoleDecision
+public class AIWander : AIRoleDecision
 {
     public override AIRole Role { get { return AIRole.Other; } }
 
-    public override double Cost { get { return 60d; } }
+    public override double Cost { get { return 0d; } }
 
     public override void Action(AIActionArgs args)
     {
-        // Nuttin'
+        throw new NotImplementedException();
     }
 
     public override double CalcWeighting(AIDecisionArgs args)
     {
-        return 1d;
+        throw new NotImplementedException();
     }
 }
+

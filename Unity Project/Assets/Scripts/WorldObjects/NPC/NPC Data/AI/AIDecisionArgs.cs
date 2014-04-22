@@ -7,6 +7,7 @@ public class AIDecisionArgs
 {
     private AICore core;
     public NPC Self { get { return core.NPC; } }
+    public AIState CurrentState { get { return core.CurrentState; } }
     public NPC Target;
     public Func<double, double> WeightingCurve;
 

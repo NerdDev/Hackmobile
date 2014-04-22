@@ -65,7 +65,7 @@ public class DebugManager : MonoBehaviour, IManager
 
         // Set Logging to be on
         #if !UNITY_EDITOR
-            Logging = false;
+        Logging = false;
         #endif
         logging(Logging);
         foreach (Logs l in ActiveLogs)

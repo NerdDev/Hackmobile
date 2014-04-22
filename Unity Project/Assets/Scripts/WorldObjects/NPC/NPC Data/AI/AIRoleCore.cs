@@ -16,7 +16,7 @@ public class AIRoleCore
             double roleWeight = core.RoleWeights[i];
             args.WeightingCurve = (weight) =>
             {
-                return core.WeightingCurve(weight) + roleWeight;
+                return weight + roleWeight;
             };
             decisionCore.FillPool(pool, args);
         }

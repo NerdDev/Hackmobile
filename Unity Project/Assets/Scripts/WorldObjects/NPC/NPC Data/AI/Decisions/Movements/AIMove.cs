@@ -48,6 +48,6 @@ public class AIMove : AIDecision
 
     public override double CalcWeighting(AIDecisionArgs args)
     {
-        return 0.0d;
+        return 1d;
     }
 }
