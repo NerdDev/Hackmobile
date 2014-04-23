@@ -391,8 +391,8 @@ public static class Draw
             if (!arr.TryGetValue(x, y, out space)) return false;
             if (space.GetGridType() != GridType.Wall) return false;
             // Include null to work with levelgen placement
-            if (arr.AlternatesSides(x, y, Draw.IsType<GenSpace>(GridType.NULL).Or(Draw.Walkable()))) return true;
-            if (arr.HasAround(x, y, false, Draw.Walkable()) && arr.HasAround(x, y, false, Draw.IsType<GenSpace>(GridType.NULL))) return true;
+            if (arr.AlternatesSides(x, y, Draw.IsType<GenSpace>(GridType.NULL).Or(Draw.Walkable<GenSpace>()))) return true;
+            if (arr.HasAround(x, y, false, Draw.Walkable<GenSpace>()) && arr.HasAround(x, y, false, Draw.IsType<GenSpace>(GridType.NULL))) return true;
             return false;
         });
     }
@@ -410,37 +410,39 @@ public static class Draw
         });
     }
 
-    public static DrawAction<GenSpace> EmptyAndFloor()
+    public static DrawAction<T> EmptyAndFloor<T>()
+        where T : IGridSpace
     {
-        return new DrawAction<GenSpace>((arr, x, y) =>
+        return new DrawAction<T>((arr, x, y) =>
         {
-            GenSpace space;
+            T space;
             if (arr.TryGetValue(x, y, out space))
             {
-                return space.Type == GridType.Floor && (space.Deploys == null || space.Deploys.Count == 0);
+                return space.Type == GridType.Floor && space.ThemeElementCount == 0;
             }
             return false;
         });
     }
 
-    public static DrawAction<GenSpace> EmptyFloorNotBlocking()
+    public static DrawAction<T> EmptyFloorNotBlocking<T>()
+        where T : IGridSpace
     {
-        return Draw.EmptyAndFloor().And(Draw.Not(Draw.Blocking(Draw.Walkable())));
+        return Draw.EmptyAndFloor<T>().And(Draw.Not(Draw.Blocking(Draw.Walkable<T>())));
     }
 
-    public static DrawAction<GenSpace> Walkable()
+    public static DrawAction<T> Walkable<T>()
+        where T : IGridSpace
     {
-        return new DrawAction<GenSpace>((arr, x, y) =>
+        return new DrawAction<T>((arr, x, y) =>
         {
-            GenSpace space;
+            T space;
             if (arr.TryGetValue(x, y, out space))
             {
                 if (space == null) return false;
                 if (!GridTypeEnum.Walkable(space.Type)) return false;
-                if (space.Deploys == null) return true;
-                foreach (GenDeploy deploy in space.Deploys)
+                foreach (ThemeElement element in space.GetThemeElements())
                 {
-                    if (!deploy.Element.Walkable) return false;
+                    if (!element.Walkable) return false;
                 }
                 return true;
             }

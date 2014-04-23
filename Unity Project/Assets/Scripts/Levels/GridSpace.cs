@@ -7,6 +7,14 @@ public class GridSpace : IGridSpace
     public GridType Type { get; set; }
     public Theme Theme { get; set; }
     public List<GridDeploy> Deploys;
+    public int ThemeElementCount 
+    {
+        get
+        {
+            if (Deploys == null) return 0;
+            return Deploys.Count;
+        }
+    }
     public List<GameObject> Blocks;
     public int X { get; protected set; }
     public int Y { get; protected set; }
@@ -253,5 +261,16 @@ public class GridSpace : IGridSpace
     public override int GetHashCode()
     {
         return X.GetHashCode() ^ Y.GetHashCode();
+    }
+
+    public IEnumerable<ThemeElement> GetThemeElements()
+    {
+        if (Deploys != null)
+        {
+            foreach (var deploy in Deploys)
+            {
+                yield return deploy.Element;
+            }
+        }
     }
 }

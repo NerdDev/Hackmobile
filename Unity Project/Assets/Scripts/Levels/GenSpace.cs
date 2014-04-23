@@ -8,6 +8,14 @@ public class GenSpace : IGridSpace
     public GridType Type { get; set; }
     public Theme Theme { get; set; }
     public List<GenDeploy> Deploys;
+    public int ThemeElementCount
+    {
+        get
+        {
+            if (Deploys == null) return 0;
+            return Deploys.Count;
+        }
+    }
     public List<GenDeploy> MainDeploys;
     public int X { get; protected set; }
     public int Y { get; protected set; }
@@ -53,6 +61,18 @@ public class GenSpace : IGridSpace
             }
         }
         return GridTypeEnum.Convert(Type);
+    }
+
+
+    public IEnumerable<ThemeElement> GetThemeElements()
+    {
+        if (Deploys != null)
+        {
+            foreach (var deploy in Deploys)
+            {
+                yield return deploy.Element;
+            }
+        }
     }
 }
 

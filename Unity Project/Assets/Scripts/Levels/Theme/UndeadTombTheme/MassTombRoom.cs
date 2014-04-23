@@ -16,7 +16,7 @@ public class MassTombRoom : HeavyRoomMod
         List<List<Bounding>> options = spec.Grids.FindRectanglesMaximized(tombProto.GridWidth + 2, tombProto.GridLength + 2, true, new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.IsType<GenSpace>(GridType.Floor),
-                StrokeAction = Draw.Walkable()
+                StrokeAction = Draw.Walkable<GenSpace>()
             }, spec.Grids.Bounding);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))

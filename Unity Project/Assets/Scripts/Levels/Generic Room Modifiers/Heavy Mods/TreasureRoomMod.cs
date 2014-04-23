@@ -11,8 +11,8 @@ class TreasureRoomMod : HeavyRoomMod
     {
         List<Bounding> options = spec.Grids.FindRectangles(5, 5, false, new StrokedAction<GenSpace>()
             {
-                UnitAction = Draw.EmptyFloorNotBlocking(),
-                StrokeAction = Draw.EmptyFloorNotBlocking().Or(Draw.WallType<GenSpace>())
+                UnitAction = Draw.EmptyFloorNotBlocking<GenSpace>(),
+                StrokeAction = Draw.EmptyFloorNotBlocking<GenSpace>().Or(Draw.WallType<GenSpace>())
             }, spec.Grids.Bounding);
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
@@ -58,7 +58,7 @@ class TreasureRoomMod : HeavyRoomMod
 
     protected void HandleDoor(int x, int y, List<Point> doorOptions, RoomSpec spec)
     {
-        if (spec.Grids.DrawDir(x, y, GridDirection.HORIZ, Draw.Walkable()))
+        if (spec.Grids.DrawDir(x, y, GridDirection.HORIZ, Draw.Walkable<GenSpace>()))
         {
             doorOptions.Add(new Point(x, y));
         }

@@ -24,7 +24,7 @@ public class TrapRoomMod : FillRoomMod
         #endregion
         Counter floorSpace;
         RandomPicker<GenSpace> picker;
-        spec.Grids.DrawAll(Draw.EmptyAndFloor().IfThen(Draw.Count<GenSpace>(out floorSpace).And(Draw.PickRandom(out picker))));
+        spec.Grids.DrawAll(Draw.EmptyAndFloor<GenSpace>().IfThen(Draw.Count<GenSpace>(out floorSpace).And(Draw.PickRandom(out picker))));
         if (floorSpace < 15)
         {
             #region DEBUG

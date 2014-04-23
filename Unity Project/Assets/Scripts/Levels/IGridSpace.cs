@@ -9,5 +9,7 @@ public interface IGridSpace
     Theme Theme { get; set; }
     int X { get; }
     int Y { get; }
+    int ThemeElementCount { get; }
+    IEnumerable<ThemeElement> GetThemeElements();
 }
 

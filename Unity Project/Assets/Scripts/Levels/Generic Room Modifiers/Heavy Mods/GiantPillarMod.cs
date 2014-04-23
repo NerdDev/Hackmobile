@@ -14,7 +14,7 @@ public class GiantPillarMod : HeavyRoomMod
         List<Bounding> locations = spec.Grids.FindRectangles(size, size, false, new StrokedAction<GenSpace>()
             {
                 UnitAction = Draw.Or(Draw.IsType<GenSpace>(GridType.Floor), Draw.IsType<GenSpace>(GridType.Wall)).And(Draw.Empty()),
-                StrokeAction = Draw.Walkable()
+                StrokeAction = Draw.Walkable<GenSpace>()
             },
             spec.Grids.Bounding);
         if (locations.Count == 0) return false;

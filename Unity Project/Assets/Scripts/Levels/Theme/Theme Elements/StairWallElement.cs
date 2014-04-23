@@ -46,7 +46,7 @@ public class StairWallElement : StairElement
                 {
                     box.Expand(1);
                     Counter counter = new Counter();
-                    bool ret = grid.DrawEdge(box, box.Front, Draw.Or(Draw.IsType<GenSpace>(GridType.Floor).And(Draw.Count<GenSpace>(counter)), Draw.Walkable()), false);
+                    bool ret = grid.DrawEdge(box, box.Front, Draw.Or(Draw.IsType<GenSpace>(GridType.Floor).And(Draw.Count<GenSpace>(counter)), Draw.Walkable<GenSpace>()), false);
                     DrawAction<GenSpace> edgeTest = Draw.IsType<GenSpace>(GridType.NULL, GridType.Wall);
                     ret = ret && grid.DrawEdge(box, box.Front.Opposite(), edgeTest, true);
                     ret = ret && grid.DrawEdge(box, box.Front.Clockwise90(), edgeTest, false);
