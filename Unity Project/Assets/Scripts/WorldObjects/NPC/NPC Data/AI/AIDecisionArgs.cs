@@ -9,7 +9,11 @@ public class AIDecisionArgs
     public NPC Self { get { return core.NPC; } }
     public AIState CurrentState { get { return core.CurrentState; } }
     public NPC Target;
-    public Func<double, double> WeightingCurve;
+    public Func<AIDecision, double> WeightingCurve;
+    public System.Random Random { get { return core.Random; } }
+    public AIDecision LastDecision { get { return core.LastDecision; } }
+    public AIDecision CurrentDecision;
+    public bool Continuing { get { return Object.ReferenceEquals(LastDecision, CurrentDecision); } }
 
     public AIDecisionArgs(AICore core)
     {

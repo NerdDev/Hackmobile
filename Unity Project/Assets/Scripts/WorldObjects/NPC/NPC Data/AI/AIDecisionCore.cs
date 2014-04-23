@@ -11,8 +11,7 @@ public class AIDecisionCore
     {
         foreach (AIDecision decision in decisions)
         {
-            double weight = decision.CalcWeighting(args);
-            weight = args.WeightingCurve(weight);
+            double weight = args.WeightingCurve(decision);
             pool.Add(decision, weight);
         }
     }

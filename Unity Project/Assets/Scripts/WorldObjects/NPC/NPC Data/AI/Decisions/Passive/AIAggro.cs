@@ -8,6 +8,7 @@ public class AIAggro : AIRoleDecision
 {
     public override AIRole Role { get { return AIRole.Other; } }
     public override double Cost { get { return 0d; } }
+    public override double StickyShift { get { return 0d; } }
 
     public override void Action(AIActionArgs args)
     {
@@ -17,14 +18,12 @@ public class AIAggro : AIRoleDecision
     public override double CalcWeighting(AIDecisionArgs args)
     {
         var player = BigBoss.Player;
-        if (Physics.Linecast(args.Self.EyeSightPosition, player.EyeSightPosition))
-        {
-            return 0d;
-        }
-        else
+        if (!Physics.Linecast(args.Self.EyeSightPosition, player.EyeSightPosition)
+            && args.Random.Percent(0.6d))
         { // Can see player
-            return double.MaxValue;
+            return 1000;
         }
+        return 0d;
 
         /*
          * Need to check for other enemy NPCs.

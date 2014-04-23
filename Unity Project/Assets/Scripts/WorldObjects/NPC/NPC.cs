@@ -745,7 +745,7 @@ public class NPC : Affectable
             }
             catch (Exception e)
             {
-                Debug.Log("Exception: ");
+                Debug.Log("Exception: " + e);
                 Debug.Log(e.ToString());
             }
         }

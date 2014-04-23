@@ -7,6 +7,7 @@ using UnityEngine;
 public class AIMove : AIDecision
 {
     public override double Cost { get { return 60d; } }
+    public override double StickyShift { get { return 2d; } }
 
     public AIMove()
     {

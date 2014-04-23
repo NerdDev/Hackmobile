@@ -6,6 +6,7 @@ using System.Text;
 public class AIWait : AIRoleDecision
 {
     public override AIRole Role { get { return AIRole.Other; } }
+    public override double StickyShift { get { return 0d; } }
 
     public override double Cost { get { return 60d; } }
 

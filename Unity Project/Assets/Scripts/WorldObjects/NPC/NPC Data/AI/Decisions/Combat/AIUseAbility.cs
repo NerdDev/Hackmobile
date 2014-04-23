@@ -7,6 +7,7 @@ internal class AIUseAbility : AIRoleDecision
 {
     public override AIRole Role { get { return AIRole.Damage; } }
     public override double Cost { get { return 60d; } }
+    public override double StickyShift { get { return 0d; } }
 
     public AIUseAbility()
     {

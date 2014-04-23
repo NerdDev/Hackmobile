@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AICore : IXmlParsable
+public class AICore : IXmlParsable, ICopyable
 {
     // Defining features
     public NPC NPC;
     public double[] RoleWeights = new double[EnumExt.Length<AIRole>()];
     private AIDecisionArgs decisionArgs;
     private AIActionArgs actionArgs;
-    private System.Random rand;
+    public System.Random Random;
+    public Func<AIDecision, double> WeightingCurve;
 
     // Cores
     AIRoleCore[] roleCores = new AIRoleCore[EnumExt.Length<AIState>()];
@@ -18,7 +19,7 @@ public class AICore : IXmlParsable
 
     // State variables
     public AIState CurrentState = AIState.Passive;
-
+    public AIDecision LastDecision;
 
     public AICore(NPC n)
     {
@@ -29,7 +30,20 @@ public class AICore : IXmlParsable
         }
         decisionArgs = new AIDecisionArgs(this);
         actionArgs = new AIActionArgs(this);
-        rand = new System.Random(Probability.Rand.Next());
+        Random = new System.Random(Probability.Rand.Next());
+    }
+
+    public void PostCopy()
+    {
+        WeightingCurve = (decision) =>
+        {
+            double weight = decision.CalcWeighting(decisionArgs);
+            if (Object.ReferenceEquals(decision, LastDecision))
+            {
+                weight += decision.StickyShift;
+            }
+            return weight;
+        };
     }
 
     public void DecideWhatToDo()
@@ -38,7 +52,7 @@ public class AICore : IXmlParsable
         actionArgs.Target = BigBoss.Player; // Temp
         ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
         roleCores[(int)CurrentState].FillPool(this, pool, decisionArgs);
-        AIDecision decision = pool.Get(rand);
+        AIDecision decision = pool.Get(Random);
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
@@ -50,6 +64,7 @@ public class AICore : IXmlParsable
         }
         #endregion
         decision.Action(actionArgs);
+        LastDecision = decision;
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
@@ -69,8 +84,8 @@ public class AICore : IXmlParsable
     {
         ProbabilityPool<AIDecision> movementPool = ProbabilityPool<AIDecision>.Create();
         movementCore.FillPool(movementPool, decisionArgs);
-        AIDecision movement = movementPool.Get(rand);
-        movement.Action(new AIActionArgs(this) { TargetSpace = space }); 
+        AIDecision movement = movementPool.Get(Random);
+        movement.Action(new AIActionArgs(this) { TargetSpace = space });
     }
 
     #region XML

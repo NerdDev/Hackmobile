@@ -7,6 +7,7 @@ public class AICastDamageSpell : AIDecision
 {
     int turnsSinceLastCast = 0;
     public override double Cost { get { return 60d; } }
+    public override double StickyShift { get { return 0d; } }
 
     public AICastDamageSpell()
     {

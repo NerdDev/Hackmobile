@@ -23,6 +23,10 @@ public class AIActionArgs
     }
     public GridSpace TargetSpace;
     public AIState CurrentState { get { return core.CurrentState; } set { core.CurrentState = value; } }
+    public AIDecision LastDecision { get { return core.LastDecision; } }
+    public AIDecision CurrentDecision;
+    public bool Continuing { get { return System.Object.ReferenceEquals(LastDecision, CurrentDecision); } }
+    public Level Level { get { return BigBoss.Levels.Level; } }
 
     public AIActionArgs(AICore core)
     {

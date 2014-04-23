@@ -78,9 +78,17 @@ public static class Nifty
         return (T)Enum.Parse(typeof(T), toParse, true);
     }
 
-    public static bool Percent(this System.Random rand, Percent percent)
+    public static bool Percent(this System.Random rand, double percent)
     {
-        return percent.Float > rand.NextDouble();
+        if (percent < 0)
+        {
+            percent = 0;
+        }
+        else if (percent > 1)
+        {
+            percent = 1;
+        }
+        return percent > rand.NextDouble();
     }
 
     public static int ToInt(this float x)

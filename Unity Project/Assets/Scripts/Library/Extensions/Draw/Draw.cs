@@ -334,6 +334,12 @@ public static class Draw
         return counter.Action<T>();
     }
 
+    public static DrawAction<T> CountUntil<T>(int number, int startingNum = 0)
+    {
+        Counter counter = new Counter(startingNum);
+        return counter.Action<T>().And((arr, x, y) => counter < number);
+    }
+
     public static DrawAction<T> Stop<T>()
     {
         return (arr, x, y) => { return false; };

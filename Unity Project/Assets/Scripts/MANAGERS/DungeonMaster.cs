@@ -95,9 +95,9 @@ public class DungeonMaster : MonoBehaviour, IManager
         return SpawnNPC(g, BigBoss.Objects.NPCs.GetPrototype(npc));
     }
 
-    public NPC SpawnNPC(GridSpace g, Percent variety, params SpawnKeywords[] keywords)
+    public NPC SpawnNPC(GridSpace g, double varietyPercent, params SpawnKeywords[] keywords)
     {
-        if (Probability.SpawnRand.Percent(variety))
+        if (Probability.SpawnRand.Percent(varietyPercent))
             return SpawnNPC(g);
         else
             return SpawnNPC(g, keywords);
