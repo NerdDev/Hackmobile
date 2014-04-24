@@ -18,7 +18,7 @@
  */
 public class Flags<T> where T : IComparable, IConvertible
 {
-    protected long flags;
+    internal long flags;
 
     public Flags()
     {

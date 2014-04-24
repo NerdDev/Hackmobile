@@ -230,6 +230,7 @@ GameObject:
   - 114: {fileID: 26253887}
   - 92: {fileID: 26253886}
   - 114: {fileID: 26253888}
+  - 124: {fileID: 26253890}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -341,6 +342,13 @@ Skybox:
   m_GameObject: {fileID: 26253883}
   m_Enabled: 1
   m_CustomSkybox: {fileID: 2100000, guid: a2b201ef2cf6b8d4d8509168500e9fa8, type: 2}
+--- !u!124 &26253890
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 26253883}
+  m_Enabled: 1
 --- !u!1 &33483082
 GameObject:
   m_ObjectHideFlags: 0
@@ -1498,7 +1506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NormalStart: 1
   ShowStartMenu: 0
-  SetLevelForTesting: 1
+  SetLevelForTesting: 0
   AmbientTestingColor: {r: .5, g: .5, b: .5, a: 1}
   RevealDistance: 300
   MaxCameraDistance: 10
@@ -5212,7 +5220,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: SetLevelForTesting
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100134, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
@@ -8019,13 +8031,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c9945366dd4e343a288fafc656379c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowPlayerInput: 1
-  allowKeyboardInput: 1
-  allowMouseInput: 1
-  allowTouchInput: 1
-  defaultPlayerInput: 1
-  spellInput: 0
-  logInput: 0
   horizontalMouseSensitivity: 0
   horizontalMouseAxis: 0
   verticalMouseSensitivity: 0

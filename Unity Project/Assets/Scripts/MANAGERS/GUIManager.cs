@@ -332,8 +332,8 @@ public class GUIManager : MonoBehaviour, IManager
                     currentSpell = spellButton.refObject as string;
                     if (BigBoss.Player.Stats.CurrentPower > GetCurrentSpellCost())
                     {
-                        BigBoss.PlayerInput.defaultPlayerInput = false;
-                        BigBoss.PlayerInput.spellInput = true;
+                        BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = false;
+                        BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = true;
                         spellButton.defaultColor = spellButton.hover;
                         selectedButton = spellButton;
                         spellButton.UpdateColor(true, true);
@@ -348,8 +348,8 @@ public class GUIManager : MonoBehaviour, IManager
             GUIButton cancelSpellButton =  CreateButton(grid, "Cancel Spell");
             cancelSpellButton.OnSingleClick = new Action(() =>
                 {
-                    BigBoss.PlayerInput.defaultPlayerInput = true;
-                    BigBoss.PlayerInput.spellInput = false;
+                    BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
+                    BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = false;
                     currentSpell = null;
                     selectedButton.defaultColor = cancelSpellButton.defaultColor;
                     selectedButton.UpdateColor(true, true);
@@ -359,8 +359,8 @@ public class GUIManager : MonoBehaviour, IManager
             castSpellButton.OnSingleClick = new Action(() =>
             {
                 BigBoss.Player.CastSpell(currentSpell, spellTargets.ToArray());
-                BigBoss.PlayerInput.defaultPlayerInput = true;
-                BigBoss.PlayerInput.spellInput = false;
+                BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
+                BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = false;
                 foreach (IAffectable target in spellTargets)
                 {
                     if (target is NPC)

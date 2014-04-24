@@ -55,7 +55,7 @@ public class Player : NPC
 
     public override void OnClick()
     {
-        if (BigBoss.PlayerInput.defaultPlayerInput)
+        if (BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT])
         {
             BigBoss.Gooey.displayInventory = !BigBoss.Gooey.displayInventory;
             BigBoss.Gooey.OpenInventoryGUI();
@@ -77,27 +77,31 @@ public class Player : NPC
     // Update is called once per frame
     public override void Update()
     {
-        if (Acting)
+        if (!Acting || action.Replaceable())
         {
-            DoAction();
+            BigBoss.PlayerInput.EnableInput();
         }
-        movement();
-        if (verticalMoving)
+        else
         {
-            verticalMovement();
+            BigBoss.PlayerInput.DisableInput();
         }
+        base.Update();
     }
 
     #region Actions
-    internal void DoAction()
+    public override void DoingAction()
     {
-        action.Do();
+        if (Acting)
+        {
+            action.Do();
+            BigBoss.Time.PassTurn(1);
+        }
     }
 
     public override void Do(Action action, int cost, bool interuptible, bool actOnStart)
     {
         base.Do(action, cost, interuptible, actOnStart);
-        BigBoss.Time.PassTurn(cost);
+        BigBoss.Time.PassTurn(1);
     }
 
     public override void attack(NPC n)
@@ -151,7 +155,6 @@ public class Player : NPC
         {
             base.CastSpell(spell, targets);
             CreateTextMessage(this.Name + " casts " + spell + ".");
-            BigBoss.Time.PassTurn(60);
         }
     }
     #endregion
@@ -165,19 +168,12 @@ public class Player : NPC
     bool timeSet;
     #endregion
 
-    private void movement()
+    public override void GetMovement()
     {
         if (GridSpace != null)
         {
             Vector2 lookVectorToOccupiedTile = new Vector2(GridSpace.X, GridSpace.Y) - new Vector2(GO.transform.position.x, GO.transform.position.z);
             Debug.DrawLine(GO.transform.position + Vector3.up, new Vector3(GridSpace.X, 0, GridSpace.Y), Color.green);
-
-            if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
-            {
-                if (UpdateCurrentTileVectors())
-                {
-                }
-            }
             Debug.DrawRay(new Vector3(GridSpace.X, 0, GridSpace.Y), Vector3.up, Color.yellow);
         }
         else
@@ -213,6 +209,7 @@ public class Player : NPC
         {
             timeMoved = 0f;
             BigBoss.Time.PassTurn(1);
+            action = null;
         }
         v = magnitude.sqrMagnitude * PlayerSpeed;
         MoveForward(v);

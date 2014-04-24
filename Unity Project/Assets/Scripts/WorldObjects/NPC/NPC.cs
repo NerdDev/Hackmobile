@@ -116,13 +116,14 @@ public class NPC : Affectable
                 turnTime = curTime + .03f;
                 if (subtractPoints(1))
                 {
-                    if (!Acting)
+                    if (Acting)
                     {
-                        timeToMove += BigBoss.Time.TimeInterval;
+                        DoingAction();
                     }
                     else
                     {
-                        DoingThis();
+                        timeToMove += BigBoss.Time.TimeInterval;
+                        action = null;
                     }
                 }
                 else
@@ -140,9 +141,9 @@ public class NPC : Affectable
     }
 
     internal ActionToDo action;
-    public void DoingThis()
+    public virtual void DoingAction()
     {
-        if (Acting && !action.IsDone())
+        if (Acting)
         {
             action.Do();
         }
@@ -155,7 +156,7 @@ public class NPC : Affectable
 
     public virtual void Do(Action action, int cost, bool interuptible, bool actOnStart)
     {
-        if (!Acting || this.action.IsDone() || this.action.Replaceable())
+        if (!Acting || this.action.Replaceable())
         {
             CurrentPath = null; //stops moving
             this.action = new ActionToDo(action, cost, interuptible, actOnStart);
@@ -440,7 +441,7 @@ public class NPC : Affectable
         }
     }
 
-    void GetMovement()
+    public virtual void GetMovement()
     {
         if (timeToMove <= 0) return;
         if (CurrentPath == null) return; //no path, don't move
@@ -662,8 +663,11 @@ public class NPC : Affectable
 
     public virtual void CastSpell(Spell spell, params IAffectable[] targets)
     {
-        spell.Activate(this, targets);
-        AdjustPower(-spell.cost);
+        Do(new Action(() =>
+        {
+            spell.Activate(this, targets);
+            AdjustPower(-spell.cost);
+        }), 60, true, false);
     }
 
     protected bool NaturalDamage(NPC n)
@@ -905,6 +909,7 @@ public class NPC : Affectable
 
     public bool IsNextToTarget(NPC n)
     {
+        if (GO != null)
         if (Vector3.Distance(GO.transform.position, n.GO.transform.position) < 1.75f)
         {
             return true;
@@ -924,7 +929,7 @@ public class NPC : Affectable
     #region Touch Input
     public override void OnClick()
     {
-        if (BigBoss.PlayerInput.defaultPlayerInput)
+        if (BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT])
         {
             if (this.IsNotAFreaking<Player>())
             {
@@ -934,7 +939,7 @@ public class NPC : Affectable
                 }
             }
         }
-        else if (BigBoss.PlayerInput.spellInput)
+        else if (BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT])
         {
             if (this.GridDistanceToTarget(BigBoss.Player) > BigBoss.Gooey.GetCurrentSpellRange())
             {

@@ -14,9 +14,10 @@ public class KCTesting : MonoBehaviour
     private void KurtisMethod()
     {
         //Input checks
-        BigBoss.PlayerInput.allowKeyboardInput = true;
-        BigBoss.PlayerInput.allowMouseInput = true;
-        BigBoss.PlayerInput.allowPlayerInput = true;
+        BigBoss.PlayerInput.InputSetting[InputSettings.KEYBOARD_INPUT] = true;
+        BigBoss.PlayerInput.InputSetting[InputSettings.TOUCH_INPUT] = true;
+        BigBoss.PlayerInput.InputSetting[InputSettings.PLAYER_INPUT] = true;
+        BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
 
         //adds some items to the Player to test with
         Item ii = BigBoss.Objects.Items.Instantiate("Infiltrator's Sword");
