@@ -62,6 +62,17 @@ public class Array2D<T> : Container2D<T>
         return Nifty.AddRuler(arr.ToRowStrings(Bounding.Shift(-shift)), bounds);
     }
 
+    public override List<string> ToRowStrings(Bounding bounds, Container2D<T> highlight, char highlightChar = '*')
+    {
+        if (highlight == null)
+            return ToRowStrings(bounds);
+        if (bounds == null)
+            bounds = Bounding;
+        highlight = new MultiMap<T>(highlight);
+        highlight.Shift(-shift);
+        return Nifty.AddRuler(arr.ToRowStrings(highlight, highlightChar, Bounding.Shift(-shift)), bounds);
+    }
+
     #region GetSet
     public override bool InRange(int x, int y)
     {

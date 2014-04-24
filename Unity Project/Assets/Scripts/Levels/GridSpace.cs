@@ -273,4 +273,9 @@ public class GridSpace : IGridSpace
             }
         }
     }
+
+    public override string ToString()
+    {
+        return "GridSpace (" + X + "," + Y + ")";
+    }
 }

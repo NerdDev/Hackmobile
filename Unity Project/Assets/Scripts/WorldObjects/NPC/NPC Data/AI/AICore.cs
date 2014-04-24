@@ -30,13 +30,14 @@ public class AICore : IXmlParsable, ICopyable
         }
         decisionArgs = new AIDecisionArgs(this);
         actionArgs = new AIActionArgs(this);
-        Random = new System.Random(Probability.Rand.Next());
     }
 
     public void PostCopy()
     {
+        Random = new System.Random(Probability.Rand.Next());
         WeightingCurve = (decision) =>
         {
+            decisionArgs.CurrentDecision = decision;
             double weight = decision.CalcWeighting(decisionArgs);
             if (Object.ReferenceEquals(decision, LastDecision))
             {
@@ -63,6 +64,12 @@ public class AICore : IXmlParsable, ICopyable
             log.close();
         }
         #endregion
+        if (decision is AIWander)
+        {
+            int wer = 23;
+            wer++;
+        }
+        actionArgs.CurrentDecision = decision;
         decision.Action(actionArgs);
         LastDecision = decision;
         #region Debug
@@ -128,6 +135,7 @@ public class AICore : IXmlParsable, ICopyable
             var core = roleCores[(int)AIState.Passive];
             core.AddDecision(new AIAggro());
             core.AddDecision(new AIWait());
+            core.AddDecision(new AIWander());
             // Combat
             core = roleCores[(int)AIState.Combat];
             core.AddDecision(new AIUseAbility());

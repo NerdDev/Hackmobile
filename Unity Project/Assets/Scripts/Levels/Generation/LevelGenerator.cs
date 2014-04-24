@@ -96,6 +96,7 @@ public class LevelGenerator
             BigBoss.Debug.w(Logs.LevelGenMain, name + " took: " + (Time.realtimeSinceStartup - time));
         }
     }
+
     protected void GenerateRoomShells()
     {
         #region DEBUG

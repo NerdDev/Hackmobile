@@ -27,6 +27,7 @@ public class AIActionArgs
     public AIDecision CurrentDecision;
     public bool Continuing { get { return System.Object.ReferenceEquals(LastDecision, CurrentDecision); } }
     public Level Level { get { return BigBoss.Levels.Level; } }
+    public System.Random Random { get { return core.Random; } }
 
     public AIActionArgs(AICore core)
     {

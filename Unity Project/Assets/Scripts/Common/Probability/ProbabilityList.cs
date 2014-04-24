@@ -250,6 +250,7 @@ public class ProbabilityList<T> : ProbabilityPool<T>
                 itemList[_lastTaken].Skip = false;
             }
         }
+        _lastTaken = -1;
         _taken = null;
     }
 }

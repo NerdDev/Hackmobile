@@ -13,3 +13,23 @@ public interface IGridSpace
     IEnumerable<ThemeElement> GetThemeElements();
 }
 
+public static class IGridSpaceExt
+{
+    public static char GetChar(this IGridSpace space)
+    {
+        foreach (ThemeElement elem in space.GetThemeElements())
+        {
+            if (!string.IsNullOrEmpty(elem.PrintChar))
+            {
+                return elem.PrintChar[0];
+            }
+        }
+        return GridTypeEnum.Convert(space.Type);
+    }
+
+    public static GridType GetGridType(this IGridSpace space)
+    {
+        if (space == null) return GridType.NULL;
+        return space.Type;
+    }
+}

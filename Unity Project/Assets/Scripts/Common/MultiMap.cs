@@ -271,6 +271,8 @@ public class MultiMap<T> : Container2D<T>
             MultiMap<T> rhs = new MultiMap<T>(this, x, y);
             this.multimap = rhs.multimap;
         }
+        _bounding = null;
+        _arr = null;
     }
 
     public override void Rotate(Rotation rotate)

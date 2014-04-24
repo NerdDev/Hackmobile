@@ -10,7 +10,7 @@ public class SmartThemeElement : MonoBehaviour, IInitializable, IThemeElementBun
 {
     public byte GridWidth = 1;
     public byte GridLength = 1;
-    public string PrintChar = string.Empty;
+    public string PrintChar = "?";
     public ThemeQualitySet Normal;
     public ThemeElement Proto { get { return Normal.First().Item; } }
 

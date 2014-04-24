@@ -8,8 +8,8 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     #region Generic Object Properties (graphical info, names, etc).
     private WOWrapper _instance; // Private member to allow for one-set-only logic
     public WOWrapper Instance { get { return _instance; } set { if (_instance == null) _instance = value; } }
-    public static uint NextID = 0;
-    public uint ID { get; protected set; }
+    public static int NextID = 0;
+    public int ID { get; protected set; }
     public GameObject GO { get { return _instance.gameObject; } }
     public string Name { get; set; }
     private string _prefab;

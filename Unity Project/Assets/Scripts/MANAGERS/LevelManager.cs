@@ -38,11 +38,7 @@ public class LevelManager : MonoBehaviour, IManager
         {
             IGridSpace s = b as IGridSpace;
             if (s == null) return GridTypeEnum.Convert(GridType.NULL);
-            if (s is GenSpace)
-            {
-                return ((GenSpace)s).GetChar();
-            }
-            return GridTypeEnum.Convert(s.Type);
+            return s.GetChar();
         };
         if (Seed == -1)
             Seed = Probability.Rand.Next();

@@ -50,29 +50,36 @@ public static class ArrayExt
             });
     }
 
+    static private Func<T, char> GetConverter<T>()
+    {
+        Func<T, char> converter;
+        Func<object, char> conv;
+        Type type = typeof(T);
+        if (!Converters.TryGetValue(type, out conv))
+        {
+            converter = new Func<T, char>((t) =>
+            {
+                if (t == null)
+                    return ' ';
+                string str = t.ToString();
+                return str.Length > 0 ? str[0] : ' ';
+            });
+        }
+        else
+        {
+            converter = new Func<T, char>((t) =>
+            {
+                return conv(t);
+            });
+        }
+        return converter;
+    }
+
     static public List<string> ToRowStrings<T>(this T[,] array, Bounding bounds = null, Func<T, char> converter = null)
     {
         if (converter == null)
         {
-            Func<object, char> conv;
-            Type type = typeof(T);
-            if (!Converters.TryGetValue(type, out conv))
-            {
-                converter = new Func<T, char>((t) =>
-                    {
-                        if (t == null)
-                            return ' ';
-                        string str = t.ToString();
-                        return str.Length > 0 ? str[0] : ' ';
-                    });
-            }
-            else
-            {
-                converter = new Func<T, char>((t) =>
-                    {
-                        return conv(t);
-                    });
-            }
+            converter = GetConverter<T>();
         }
         List<string> ret = new List<string>();
         if (bounds == null)
@@ -85,6 +92,36 @@ public static class ArrayExt
             for (int x = bounds.XMin; x <= bounds.XMax; x += 1)
             {
                 sb.Append(converter(array[y, x]));
+            }
+            ret.Add(sb.ToString());
+        }
+        return ret;
+    }
+
+    static public List<string> ToRowStrings<T>(this T[,] array, Container2D<T> highlight, char highlightChar = '*', Bounding bounds = null, Func<T, char> converter = null)
+    {
+        if (converter == null)
+        {
+            converter = GetConverter<T>();
+        }
+        List<string> ret = new List<string>();
+        if (bounds == null)
+        {
+            bounds = array.GetBounds();
+        }
+        for (int y = bounds.YMax; y >= bounds.YMin; y -= 1)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int x = bounds.XMin; x <= bounds.XMax; x += 1)
+            {
+                if (highlight.Contains(x, y))
+                {
+                    sb.Append(highlightChar);
+                }
+                else
+                {
+                    sb.Append(converter(array[y, x]));
+                }
             }
             ret.Add(sb.ToString());
         }

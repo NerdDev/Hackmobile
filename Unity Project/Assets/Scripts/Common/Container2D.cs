@@ -209,6 +209,13 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return Array.ToRowStrings(bounds);
     }
 
+    public virtual List<string> ToRowStrings(Bounding bounds, Container2D<T> highlight, char highlightChar = '*')
+    {
+        if (highlight == null)
+            return Array.ToRowStrings(bounds);
+        return Array.ToRowStrings(bounds, highlight, highlightChar);
+    }
+
     public virtual void ToLog(Logs log)
     {
         if (BigBoss.Debug.logging(log))
@@ -227,7 +234,17 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         ToLog(BigBoss.Debug.LastLog, customContent);
     }
 
-    public virtual void ToLog(Logs log, params string[] customContent)
+    public void ToLog(Logs logs, params string[] customContent)
+    {
+        ToLog(BigBoss.Debug.Get(logs), customContent);
+    }
+
+    public virtual void ToLog(Log log, params string[] customContent)
+    {
+        ToLog(log, null, null, '_', customContent);
+    }
+
+    public void ToLog(Log log, Container2D<T> highlight, Bounding bounds = null, char highlightChar = '*', params string[] customContent)
     {
         if (BigBoss.Debug.logging(log))
         {
@@ -236,7 +253,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             {
                 BigBoss.Debug.w(log, s);
             }
-            foreach (string s in ToRowStrings())
+            foreach (string s in ToRowStrings(bounds, highlight, highlightChar))
             {
                 BigBoss.Debug.w(log, s);
             }
@@ -1392,11 +1409,12 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
 
     public bool DrawBreadthFirstFill(int x, int y,
         bool cornered,
-        DrawAction<T> shouldQueue)
+        DrawAction<T> shouldQueue,
+        DrawAction<T> shouldContinue = null)
     {
         Queue<Value2D<T>> q;
         Container2D<bool> f;
-        return DrawBreadthFirstFill(x, y, cornered, shouldQueue, null, out q, out f);
+        return DrawBreadthFirstFill(x, y, cornered, shouldQueue, shouldContinue, out q, out f);
     }
 
     public bool DrawBreadthFirstFill(int x, int y,

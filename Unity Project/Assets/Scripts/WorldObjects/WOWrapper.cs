@@ -7,6 +7,7 @@ using UnityEngine;
 public class WOWrapper : MonoBehaviour
 {
     public WorldObject WO;
+    public int ID;
 
     public WOWrapper()
     {
@@ -16,6 +17,7 @@ public class WOWrapper : MonoBehaviour
     {
         WO = item;
         WO.Instance = this;
+        ID = item.ID;
         return (W)WO;
     }
 

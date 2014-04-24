@@ -48,22 +48,6 @@ public class GenSpace : IGridSpace
         elem.Spaces[x, y] = this;
     }
 
-    public char GetChar()
-    {
-        if (Deploys != null)
-        {
-            foreach (GenDeploy d in Deploys)
-            {
-                if (!string.IsNullOrEmpty(d.Element.PrintChar))
-                {
-                    return d.Element.PrintChar[0];
-                }
-            }
-        }
-        return GridTypeEnum.Convert(Type);
-    }
-
-
     public IEnumerable<ThemeElement> GetThemeElements()
     {
         if (Deploys != null)
@@ -75,13 +59,3 @@ public class GenSpace : IGridSpace
         }
     }
 }
-
-public static class IGridSpaceExt
-{
-    public static GridType GetGridType(this IGridSpace space)
-    {
-        if (space == null) return GridType.NULL;
-        return space.Type;
-    }
-}
-
