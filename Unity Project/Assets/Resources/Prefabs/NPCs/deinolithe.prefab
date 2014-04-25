@@ -11,8 +11,11 @@ GameObject:
   - 95: {fileID: 9500000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400004}
-  - 135: {fileID: 13500000}
-  m_Layer: 0
+  - 114: {fileID: 11400006}
+  - 114: {fileID: 11400008}
+  - 143: {fileID: 14300000}
+  - 136: {fileID: 13600000}
+  m_Layer: 11
   m_Name: deinolithe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +32,7 @@ GameObject:
   - 4: {fileID: 400002}
   - 137: {fileID: 13700000}
   - 114: {fileID: 11400002}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +47,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400004}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +62,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400166}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_  Pas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +77,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400026}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Bassin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +92,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400012}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Colonne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +107,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400006}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Colonne1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +122,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400010}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Cou
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +137,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400014}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Cou1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +152,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400022}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Cou2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,7 +167,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400018}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ T__te
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +182,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400044}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Queue de cheval 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +197,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400060}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Queue de cheval 11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +212,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400170}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Queue de cheval 1Morceau
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +227,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400168}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ T__teMorceau
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,7 +242,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400116}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,7 +257,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400142}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +272,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400144}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +287,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400146}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -299,7 +302,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400148}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +317,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400150}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +332,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400152}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,7 +347,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400154}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -359,7 +362,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400156}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +377,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400158}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +392,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400160}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +407,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400162}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,7 +422,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400164}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_down_013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -434,7 +437,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400052}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -449,7 +452,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400118}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -464,7 +467,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400120}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -479,7 +482,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400122}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,7 +497,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400124}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +512,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400126}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,7 +527,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400128}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,7 +542,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400130}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -554,7 +557,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400132}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -569,7 +572,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400134}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -584,7 +587,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400136}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -599,7 +602,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400138}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -614,7 +617,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400140}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_D_up_013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,7 +632,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400046}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -644,7 +647,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400092}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -659,7 +662,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400094}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -674,7 +677,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400096}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -689,7 +692,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400098}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -704,7 +707,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400100}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -719,7 +722,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400102}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,7 +737,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400104}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -749,7 +752,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400106}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -764,7 +767,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400108}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -779,7 +782,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400110}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -794,7 +797,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400112}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -809,7 +812,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400114}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_down_013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -824,7 +827,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400048}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -839,7 +842,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400062}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -854,7 +857,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400064}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -869,7 +872,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400066}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -884,7 +887,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400068}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -899,7 +902,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400076}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -914,7 +917,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400078}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -929,7 +932,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400080}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -944,7 +947,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400082}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -959,7 +962,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400084}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -974,7 +977,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400086}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -989,7 +992,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400088}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1004,7 +1007,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400090}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tentacule_G_up_013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1019,7 +1022,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400020}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ D Clavicule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1034,7 +1037,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400042}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ D Membre sup__rieur du bras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1049,7 +1052,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400072}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ D Avant bras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1064,7 +1067,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400038}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ D Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1081,7 +1084,7 @@ GameObject:
   - 4: {fileID: 400172}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: collider_front_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1096,7 +1099,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400074}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Doigt D0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1111,7 +1114,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400174}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Doigt D0Morceau
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1126,7 +1129,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400008}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ G Clavicule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1141,7 +1144,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400016}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ G Membre sup__rieur du bras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1156,7 +1159,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400050}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ G Avant bras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1171,7 +1174,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400030}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ G Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1188,7 +1191,7 @@ GameObject:
   - 4: {fileID: 400176}
   - 33: {fileID: 3300002}
   - 23: {fileID: 2300002}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: collider_front_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1203,7 +1206,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400070}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Doigt G0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1218,7 +1221,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400178}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Doigt G0Morceau
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1233,7 +1236,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400032}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ D Cuisse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1248,7 +1251,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400056}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ D Mollet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1263,7 +1266,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400036}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ D Pied
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1280,7 +1283,7 @@ GameObject:
   - 4: {fileID: 400180}
   - 33: {fileID: 3300004}
   - 23: {fileID: 2300004}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: collider_rear_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1295,7 +1298,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400182}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Orteil D0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1310,7 +1313,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400184}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Orteil D0Morceau
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1325,7 +1328,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400024}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ G Cuisse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1340,7 +1343,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400040}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ G Mollet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1355,7 +1358,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400028}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ G Pied
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1372,7 +1375,7 @@ GameObject:
   - 4: {fileID: 400186}
   - 33: {fileID: 3300006}
   - 23: {fileID: 2300006}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: collider_rear_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1387,7 +1390,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400188}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Orteil G0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1402,7 +1405,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400190}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Orteil G0Morceau
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1417,7 +1420,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400034}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Queue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1432,7 +1435,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400054}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Queue1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1447,7 +1450,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400058}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ Queue2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1462,7 +1465,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400192}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: deinolithe_ QueueMorceau
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26973,7 +26976,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instantiated: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -27022,8 +27024,57 @@ MonoBehaviour:
     joinNormals: 0
     joinNormalsThreshold: 60
     recalculateNormals: 1
---- !u!135 &13500000
-SphereCollider:
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawGizmos: 1
+  detailedGizmos: 0
+  saveGetNearestHints: 1
+  startEndModifier:
+    priority: 1
+    addPoints: 0
+    exactStartPoint: 1
+    exactEndPoint: 1
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags:
+    tagsChange: -1
+    tagsSet: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+--- !u!114 &11400008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 2
+  smoothType: 0
+  subdivisions: 2
+  iterations: 2
+  strength: .5
+  uniformLength: 1
+  maxSegmentLength: .5
+  bezierTangentLength: .400000006
+  offset: .200000003
+  factor: .100000001
+--- !u!136 &13600000
+CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -27031,9 +27082,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 4
-  m_Center: {x: 0, y: .5, z: 0}
+  m_Radius: .360000014
+  m_Height: 1.20000005
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -27148,6 +27200,20 @@ SkinnedMeshRenderer:
     m_Center: {x: -.265886307, y: .00366187096, z: 6.61060238}
     m_Extent: {x: 2.73203516, y: 7.91365814, z: 11.0981722}
   m_DirtyAABB: 0
+--- !u!143 &14300000
+CharacterController:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_Height: 1.20000005
+  m_Radius: .439999998
+  m_SlopeLimit: 30
+  m_StepOffset: .100000001
+  m_SkinWidth: .0799999982
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

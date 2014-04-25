@@ -178,6 +178,7 @@ public class BigBoss : MonoBehaviour
         }
     }
 
+
     public static void Log(string input)
     {
         UnityEngine.Debug.Log(input);

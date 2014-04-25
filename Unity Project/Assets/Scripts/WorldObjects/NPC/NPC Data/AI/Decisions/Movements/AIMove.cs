@@ -15,17 +15,8 @@ public class AIMove : AIDecision
 
     public override void Action(AIActionArgs args)
     {
-        PathNode[] nodes = PathTree.Instance.getPath(args.Self.GridSpace, args.TargetSpace, 75).ToArray();
-        if (nodes.Length > 2)
-        {
-            GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
-            if (nodeToMove.Type == GridType.Door && DoorCheck(nodeToMove))
-            {
-                return;
-            }
-            //else, continue on and move the NPC... if it's not a door, or if it's an open door
-            args.Self.MoveNPC(nodeToMove);
-        }
+        target = BigBoss.Player;
+        npc.MoveNPC(target.GO.transform.position);
     }
 
     private bool DoorCheck(GridSpace grid)

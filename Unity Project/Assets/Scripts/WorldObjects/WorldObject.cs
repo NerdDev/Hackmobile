@@ -116,6 +116,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
 
     protected virtual void Unregister()
     {
+        IsActive = false;
         BigBoss.Time.RemoveFromUpdateList(this);
     }
 

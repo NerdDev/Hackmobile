@@ -55,7 +55,7 @@ public class Player : NPC
 
     public override void OnClick()
     {
-        if (BigBoss.PlayerInput.defaultPlayerInput)
+        if (BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT])
         {
             BigBoss.Gooey.displayInventory = !BigBoss.Gooey.displayInventory;
             BigBoss.Gooey.OpenInventoryGUI();
@@ -72,26 +72,39 @@ public class Player : NPC
         BigBoss.Gooey.UpdatePowerBar(this.Stats.MaxPower);
     }
 
-    public override void Start()
-    {
-        animator = GO.GetComponentInChildren<Animator>() as Animator;
-    }
     // Update is called once per frame
     public override void Update()
     {
-        movement();
-        if (verticalMoving)
+        if (!Acting || action.Replaceable())
         {
-            verticalMovement();
+            BigBoss.PlayerInput.EnableInput();
         }
+        else
+        {
+            BigBoss.PlayerInput.DisableInput();
+        }
+        base.Update();
     }
 
     #region Actions
+    public override void DoingAction()
+    {
+        if (Acting)
+        {
+            action.Do();
+            BigBoss.Time.PassTurn(1);
+        }
+    }
+
+    public override void Do(Action action, int cost, bool interuptible, bool actOnStart)
+    {
+        base.Do(action, cost, interuptible, actOnStart);
+        BigBoss.Time.PassTurn(1);
+    }
 
     public override void attack(NPC n)
     {
         base.attack(n);
-        BigBoss.Time.PassTurn(60);
     }
 
     public override void eatItem(Item i)
@@ -140,7 +153,6 @@ public class Player : NPC
         {
             base.CastSpell(spell, targets);
             CreateTextMessage(this.Name + " casts " + spell + ".");
-            BigBoss.Time.PassTurn(60);
         }
     }
     #endregion
@@ -148,83 +160,23 @@ public class Player : NPC
     #region Movement and Animation
 
     #region Movement/Animation Properties
-    //private Animator anim;							// a reference to the animator on the character
-    private AnimatorStateInfo currentBaseState;			// a reference to the current state of the animator, used for base layer
-    private AnimatorStateInfo layer2CurrentState;	// a reference to the current state of the animator, used for layer 2
-    ///static int idleState = Animator.StringToHash("Base Layer.Idle");
-    ///static int locoState = Animator.StringToHash("Base Layer.Locomotion");			// these integers are references to our animator's states
-    Vector3 currentGridLoc;
-    Vector3 currentGridCenterPointWithoffset;
-
     public float tileMovementTolerance = .85f;  //radius
-
     float timePassed = 0;
     float timeVar = 20f;
     bool timeSet;
     #endregion
 
-    private void movement()
+    public override void GetMovement()
     {
         if (GridSpace != null)
         {
             Vector2 lookVectorToOccupiedTile = new Vector2(GridSpace.X, GridSpace.Y) - new Vector2(GO.transform.position.x, GO.transform.position.z);
             Debug.DrawLine(GO.transform.position + Vector3.up, new Vector3(GridSpace.X, 0, GridSpace.Y), Color.green);
-
-            //If distance is greater than 1.3 (var), pass turn
-            if (lookVectorToOccupiedTile.sqrMagnitude > tileMovementTolerance)  //saving overhead for Vec3.Distance()
-            {
-                if (UpdateCurrentTileVectors())
-                {
-                    // Needs to be reactivated later when turn manager is revamped
-                    BigBoss.Time.PassTurn(60);
-                }
-            }
-
-            //Moving toward closest center point if player isn't moving with input:
-            resetToGrid();
             Debug.DrawRay(new Vector3(GridSpace.X, 0, GridSpace.Y), Vector3.up, Color.yellow);
         }
         else
         {
             UpdateCurrentTileVectors();
-        }
-    }
-
-    private void resetToGrid()
-    {
-        if (!BigBoss.PlayerInput.mouseMovement && !BigBoss.PlayerInput.touchMovement)
-        {
-            if (!timeSet)
-            {
-                timePassed = UnityEngine.Time.time + timeVar;
-                timeSet = true;
-            }
-            if (UnityEngine.Time.time > timePassed)
-            {
-                if (!checkXYPosition(GO.transform.position, new Vector3(GridSpace.X, 0f, GridSpace.Y)))
-                {
-                    moving = true;
-                    MovePlayerStepWise(this.GridSpace);
-                }
-                else
-                {
-                    resetPosition();
-                    moving = false;
-                }
-            }
-            else
-            {
-                moving = false;
-            }
-            //if (!verticalMoving)
-            //{
-            //    resetVerticalPosition();
-            //}
-        }
-        else
-        {
-            moving = true;
-            timeSet = false;
         }
     }
 
@@ -247,13 +199,21 @@ public class Player : NPC
         GO.transform.position = new Vector3(refVector.x, verticalOffset, refVector.z);
     }
 
+    float timeMoved;
     public void MovePlayer(Vector2 magnitude)
     {
+        if (v > .1f) timeMoved += Time.deltaTime;
+        if (timeMoved > BigBoss.Time.TimeInterval)
+        {
+            timeMoved = 0f;
+            BigBoss.Time.PassTurn(1);
+            action = null;
+        }
         v = magnitude.sqrMagnitude * PlayerSpeed;
-        MovePlayer(v);
+        MoveForward(v);
     }
 
-    public bool UpdateCurrentTileVectors()
+    public override bool UpdateCurrentTileVectors()
     {
         Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
         if (BigBoss.Levels.Level == null) return false;
@@ -278,46 +238,14 @@ public class Player : NPC
         FOWSystem.instance.UpdatePosition(GridSpace, true);
     }
 
-    float gravity;
-    CharacterController controller;
-    private void MovePlayer(float speed)
-    {
-        if (controller == null) controller = GO.GetComponent<CharacterController>();
-        Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        if (GO.transform.position.y <= verticalOffset)
-        {
-            gravity = 0;
-        }
-
-        else { gravity -= 9.81f * Time.deltaTime; }
-        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
-        controller.Move(newMove * speed * Time.deltaTime);
-
-        //GO.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
-    }
-
-    //BRAD WHAT DOES THIS DO?!
     float v;
-
     public override void FixedUpdate()
     {
-        if (animator == null)
-        {
-            try
-            {
-                animator = GO.GetComponentInChildren<Animator>() as Animator;
-            }
-            catch (Exception)
-            {
-            }
-            return;
-        }
-        if (!moving)
+        if (!BigBoss.PlayerInput.mouseMovement && !BigBoss.PlayerInput.touchMovement)
         {
             v = 0;
         }
         animator.SetFloat("runSpeed", v);							// set our animator's float parameter 'runSpeed' to the speed of the NPC
-        currentBaseState = animator.GetCurrentAnimatorStateInfo(0);	// set our currentState variable to the current state of the Base Layer (0) of animation
     }
 
     internal override void SetAttackAnimation(GameObject target)
@@ -510,9 +438,6 @@ public class Player : NPC
 
     public override void UpdateTurn()
     {
-        base.UpdateTurn();
-        BigBoss.Time.numTilesCrossed++;
-        BigBoss.Gooey.UpdateTilesCrossedLabel();
     }
 
     #endregion

@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 public class TimeManager : MonoBehaviour, IManager
 {
@@ -29,9 +30,9 @@ public class TimeManager : MonoBehaviour, IManager
                 + " Minutes.";
         }
     }
-    public string RealComputerTimeNeat 
-    { 
-        get { return System.DateTime.Now.ToShortTimeString(); } 
+    public string RealComputerTimeNeat
+    {
+        get { return System.DateTime.Now.ToShortTimeString(); }
     }
     public string TotalTimePlayedNeat
     {
@@ -49,9 +50,11 @@ public class TimeManager : MonoBehaviour, IManager
     #endregion
     #region Action Costs
     public int diagonalMoveCost = 84;
-    public int regularMoveCost = 60;
+    public int regularMoveCost = 1;
     public int attackCost = 60;
     public int eatItemCost = 60;
+
+    public float TimeInterval;
     #endregion
 
     public void Initialize()
@@ -94,9 +97,16 @@ public class TimeManager : MonoBehaviour, IManager
     public int CapOnTurnPoints;
     public void PassTurn(int turnPoints)
     {
+        for (int i = 0; i < turnPoints; i++)
+            PassTurn();
+    }
+
+    private void PassTurn()
+    {
         turnsPassed++;
         //Justin's hot: // Thx brah
-        runGroupUpdate(turnPoints);
+        if (turnsPassed % 2 == 0)
+            runGroupUpdate();
     }
 
     #endregion
@@ -107,21 +117,20 @@ public class TimeManager : MonoBehaviour, IManager
 
     public void RegisterToUpdateList<T>(T obj) where T : PassesTurns
     {
-        TotalObjectList.Add(obj);
+        //TotalObjectList.Add(obj);
     }
 
     public void RemoveFromUpdateList<T>(T obj) where T : PassesTurns
     {
-        TotalObjectList.Remove(obj);
+        //TotalObjectList.Remove(obj);
     }
 
-    public void runGroupUpdate(int turnPoints)
+    public void runGroupUpdate()
     {
         foreach (PassesTurns obj in TotalObjectList)
         {
             if (obj.IsActive)
             {
-                obj.CurrentPoints += turnPoints;
                 updateList.Enqueue(obj);
             }
         }

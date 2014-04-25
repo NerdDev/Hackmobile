@@ -10,8 +10,11 @@ GameObject:
   - 4: {fileID: 400000}
   - 95: {fileID: 9500000}
   - 114: {fileID: 11400000}
-  - 135: {fileID: 13500000}
-  m_Layer: 0
+  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
+  - 143: {fileID: 14300000}
+  - 136: {fileID: 13600000}
+  m_Layer: 11
   m_Name: CHIMERA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +30,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400002}
   - 137: {fileID: 13700000}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +45,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400004}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +60,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400050}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +75,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400048}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Calf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +90,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400040}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L HorseLink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +105,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400046}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +120,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400006}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Toe0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +135,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400044}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Pelvis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +150,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400052}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +165,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400022}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +180,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400030}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +195,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400032}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,7 +210,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400018}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +225,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400106}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,7 +240,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400104}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,7 +255,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400102}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +270,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400100}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,7 +285,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400098}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +300,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400096}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +315,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400094}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +330,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400092}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +345,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400090}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -357,7 +360,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400088}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +375,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400014}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -387,7 +390,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400012}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -402,7 +405,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400008}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -417,7 +420,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400016}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -432,7 +435,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400028}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -447,7 +450,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400042}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Tail20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -462,7 +465,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400084}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Snake_Head_jaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,7 +480,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400170}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Snake_Head_jaw_nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -492,7 +495,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400086}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Snake_Head_tongue_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,7 +510,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400108}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Snake_Head_tongue_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +525,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400110}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Snake_Head_tongue_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -537,7 +540,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400112}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Snake_Head_tongue_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +555,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400114}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Snake_Head_tongue_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -567,7 +570,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400056}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -582,7 +585,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400062}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Calf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -597,7 +600,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400026}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R HorseLink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -612,7 +615,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400122}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +630,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400064}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Toe0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -642,7 +645,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400038}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -657,7 +660,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400010}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Spine1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -672,7 +675,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400054}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -687,7 +690,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400066}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Clavicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -702,7 +705,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400058}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -717,7 +720,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400080}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -732,7 +735,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400082}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -747,7 +750,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400128}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -762,7 +765,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400142}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +780,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400140}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -792,7 +795,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400136}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -807,7 +810,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400138}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -822,7 +825,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400148}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -837,7 +840,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400130}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -852,7 +855,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400132}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -867,7 +870,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400146}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -882,7 +885,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400020}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -897,7 +900,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400134}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger31
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -912,7 +915,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400144}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ L Finger32
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -927,7 +930,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400068}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Neck1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -942,7 +945,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400024}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Neck2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -957,7 +960,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400074}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -972,7 +975,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400076}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ Queue de cheval 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -987,7 +990,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400078}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Clavicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1002,7 +1005,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400060}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1017,7 +1020,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400124}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1032,7 +1035,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400126}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1047,7 +1050,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400150}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1062,7 +1065,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400036}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1077,7 +1080,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400162}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1092,7 +1095,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400158}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1107,7 +1110,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400160}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1122,7 +1125,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400168}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1137,7 +1140,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400034}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1152,7 +1155,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400156}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1167,7 +1170,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400166}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1182,7 +1185,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400152}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1197,7 +1200,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400154}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger31
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1212,7 +1215,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400164}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_ R Finger32
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1227,7 +1230,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400070}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Neck_b_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1242,7 +1245,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400072}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Neck_b_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1257,7 +1260,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400120}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_Neck_b_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1272,7 +1275,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400116}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_He-Goat_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1287,7 +1290,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400118}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CHIMERA_He-Goat_jaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2350,8 +2353,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!135 &13500000
-SphereCollider:
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawGizmos: 1
+  detailedGizmos: 0
+  saveGetNearestHints: 1
+  startEndModifier:
+    priority: 2
+    addPoints: 0
+    exactStartPoint: 1
+    exactEndPoint: 1
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags:
+    tagsChange: -1
+    tagsSet: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 1
+  smoothType: 0
+  subdivisions: 2
+  iterations: 2
+  strength: .5
+  uniformLength: 1
+  maxSegmentLength: .5
+  bezierTangentLength: .400000006
+  offset: .200000003
+  factor: .100000001
+--- !u!136 &13600000
+CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -2359,8 +2411,9 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.5
+  m_Radius: .360000014
+  m_Height: 1.20000005
+  m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!137 &13700000
 SkinnedMeshRenderer:
@@ -2477,6 +2530,20 @@ SkinnedMeshRenderer:
     m_Center: {x: 2.09249735, y: .654600799, z: 3.93390656e-06}
     m_Extent: {x: 5.67856455, y: 2.49425387, z: 2.35546494}
   m_DirtyAABB: 0
+--- !u!143 &14300000
+CharacterController:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_Height: 1.20000005
+  m_Radius: .439999998
+  m_SlopeLimit: 30
+  m_StepOffset: .100000001
+  m_SkinWidth: .0799999982
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
