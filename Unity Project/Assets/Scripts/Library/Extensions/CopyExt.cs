@@ -7,6 +7,10 @@ namespace System
     public static class ObjectExtensions
     {
         private static readonly MethodInfo CloneMethod = typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly Type CopyType = typeof(Copyable);
+        private static readonly Type DictionaryType = typeof(Dictionary<,>);
+        private static readonly Type ActionType = typeof(Action<>);
+        private static readonly Type FuncType = typeof(Func<,>);
 
         public static bool IsPrimitive(this Type type)
         {
@@ -16,10 +20,7 @@ namespace System
 
         public static Object Copy(this Object originalObject)
         {
-            //float startTime = UnityEngine.Time.realtimeSinceStartup;
             Object o = InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
-            // float finishTime = UnityEngine.Time.realtimeSinceStartup;
-            //UnityEngine.Debug.Log("Total time: " + (finishTime - startTime));
             return o;
         }
         private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)
@@ -29,21 +30,19 @@ namespace System
             if (IsPrimitive(typeToReflect)) return originalObject;
             if (visited.ContainsKey(originalObject)) return visited[originalObject];
 
-            if ((typeToReflect.IsGenericType && typeToReflect.GetGenericTypeDefinition() == typeof(Dictionary<,>)))
+            object cloneObject = null;
+            if ((typeToReflect.IsGenericType && typeToReflect.GetGenericTypeDefinition() == DictionaryType))
             {
-                var cloneObject = CopyDictionary(originalObject, visited, typeToReflect);
+                cloneObject = CopyDictionary(originalObject, visited, typeToReflect);
                 visited.Add(originalObject, cloneObject);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
-
-                return cloneObject;
             }
-            else if (typeToReflect.IsSubclassOfGeneric(typeof(Dictionary<,>)))
+            else if (typeToReflect.IsSubclassOfGeneric(DictionaryType))
             {
-                var cloneObject = CopyDictionary(originalObject, visited, typeToReflect); ;
+                cloneObject = CopyDictionary(originalObject, visited, typeToReflect); ;
                 visited.Add(originalObject, cloneObject);
                 CopyFields(originalObject, visited, cloneObject, typeToReflect);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
-                return cloneObject;
             }
             else if (typeToReflect.IsArray) // this grabs arrays and copies the elements into a new one
             {
@@ -54,24 +53,23 @@ namespace System
                 {
                     temp.SetValue(InternalCopy(arrayObject.GetValue(i), visited), i);
                 }
-                var cloneObject = temp;
+                cloneObject = temp;
                 visited.Add(originalObject, cloneObject);
                 CopyFields(originalObject, visited, cloneObject, typeToReflect);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
-                return cloneObject;
             }
             else
             {
-                var cloneObject = CloneMethod.Invoke(originalObject, null);
+                cloneObject = CloneMethod.Invoke(originalObject, null);
                 visited.Add(originalObject, cloneObject);
                 CopyFields(originalObject, visited, cloneObject, typeToReflect);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
-                if (cloneObject is ICopyable && cloneObject != null)
-                {
-                    ((ICopyable)cloneObject).PostCopy();
-                }
-                return cloneObject;
             }
+            if (cloneObject is ICopyable && cloneObject != null)
+            {
+                ((ICopyable)cloneObject).PostCopy();
+            }
+            return cloneObject;
         }
 
         private static object CopyDictionary(Object originalObject, IDictionary<Object, Object> visited, Type typeToReflect)
@@ -79,64 +77,17 @@ namespace System
             var dict = Activator.CreateInstance(typeToReflect);
             Type[] types = GetDictionaryTypes(typeToReflect);
 
-            ParameterModifier p = new ParameterModifier(1);
-            p[0] = true;
-            ParameterModifier[] mods = { p };
-
-            MethodInfo GetItem = typeToReflect.GetMethod("get_Item", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { types[0] }, mods);
+            MethodInfo GetItem = typeToReflect.GetMethod("get_Item", new Type[] { types[0] });
             MethodInfo Add = typeToReflect.GetMethod("Add", new Type[] { types[0], types[1] });
 
             IEnumerable keys = (IEnumerable)typeToReflect.GetProperty("Keys").GetValue(originalObject, null);
             foreach (object key in keys)
             {
                 object[] arguments = new object[] { key };
-                try
+                object value = GetItem.Invoke(originalObject, arguments);
+                if (value != null)
                 {
-                    object value = GetItem.Invoke(originalObject, arguments);
-                    if (value != null)
-                    {
-                        Add.Invoke(dict, new object[] { InternalCopy(key, visited), InternalCopy(value, visited) });
-                    }
-                }
-                catch (Exception e)
-                {
-                    UnityEngine.Debug.Log(typeToReflect.ToString());
-                    UnityEngine.Debug.Log(e.StackTrace);
-                    UnityEngine.Debug.Log(e.InnerException.ToString());
-                }
-            }
-            return dict;
-        }
-
-        private static object CopyList(Object originalObject, IDictionary<Object, Object> visited, Type typeToReflect)
-        {
-            var dict = Activator.CreateInstance(typeToReflect);
-            Type[] types = GetDictionaryTypes(typeToReflect);
-
-            ParameterModifier p = new ParameterModifier(1);
-            p[0] = true;
-            ParameterModifier[] mods = { p };
-
-            MethodInfo GetItem = typeToReflect.GetMethod("get_Item", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { types[0] }, mods);
-            MethodInfo Add = typeToReflect.GetMethod("Add", new Type[] { types[0], types[1] });
-
-            IEnumerable keys = (IEnumerable)typeToReflect.GetProperty("Keys").GetValue(originalObject, null);
-            foreach (object key in keys)
-            {
-                object[] arguments = new object[] { key };
-                try
-                {
-                    object value = GetItem.Invoke(originalObject, arguments);
-                    if (value != null)
-                    {
-                        Add.Invoke(dict, new object[] { InternalCopy(key, visited), InternalCopy(value, visited) });
-                    }
-                }
-                catch (Exception e)
-                {
-                    UnityEngine.Debug.Log(typeToReflect.ToString());
-                    UnityEngine.Debug.Log(e.StackTrace);
-                    UnityEngine.Debug.Log(e.InnerException.ToString());
+                    Add.Invoke(dict, new object[] { InternalCopy(key, visited), InternalCopy(value, visited) });
                 }
             }
             return dict;
@@ -144,7 +95,7 @@ namespace System
 
         private static Type[] GetDictionaryTypes(Type t)
         {
-            if (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Dictionary<,>)) && t.BaseType != null)
+            if (!(t.IsGenericType && t.GetGenericTypeDefinition() == DictionaryType) && t.BaseType != null)
             {
                 return GetDictionaryTypes(t.BaseType);
             }
@@ -156,7 +107,7 @@ namespace System
 
         private static void RecursiveCopyBaseTypePrivateFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect)
         {
-            if (typeToReflect.BaseType != null && !(typeToReflect.BaseType.IsGenericType && typeToReflect.BaseType.GetGenericTypeDefinition() == typeof(Dictionary<,>)))
+            if (typeToReflect.BaseType != null && !(typeToReflect.BaseType.IsGenericType && typeToReflect.BaseType.GetGenericTypeDefinition() == DictionaryType))
             {
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect.BaseType);
                 CopyFields(originalObject, visited, cloneObject, typeToReflect.BaseType, BindingFlags.Instance | BindingFlags.NonPublic, info => info.IsPrivate);
@@ -169,14 +120,17 @@ namespace System
             {
                 if (filter != null && filter(fieldInfo) == false) continue;
                 if (IsPrimitive(fieldInfo.FieldType)) continue;
-                if (fieldInfo.FieldType.IsGenericType)
+                if (fieldInfo.IsDefined(CopyType, false))
                 {
-                    Type genericType = fieldInfo.FieldType.GetGenericTypeDefinition();
-                    if (genericType == typeof(Action<>) || genericType == typeof(Func<,>)) continue;
+                    if (fieldInfo.FieldType.IsGenericType)
+                    {
+                        Type genericType = fieldInfo.FieldType.GetGenericTypeDefinition();
+                        if (genericType == ActionType || genericType == FuncType) continue;
+                    }
+                    var originalFieldValue = fieldInfo.GetValue(originalObject);
+                    var clonedFieldValue = originalFieldValue == null ? null : InternalCopy(originalFieldValue, visited);
+                    fieldInfo.SetValue(cloneObject, clonedFieldValue);
                 }
-                var originalFieldValue = fieldInfo.GetValue(originalObject);
-                var clonedFieldValue = originalFieldValue == null ? null : InternalCopy(originalFieldValue, visited);
-                fieldInfo.SetValue(cloneObject, clonedFieldValue);
             }
         }
         public static T Copy<T>(this T original)
