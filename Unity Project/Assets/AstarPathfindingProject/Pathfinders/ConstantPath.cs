@@ -160,7 +160,7 @@ mySeeker.StartPath (cpath,myCallbackFunction);
 				allNodes.Add (currentR.node);
 				
 #if DEBUG
-				Debug.DrawRay (current.position,Vector3.up*5,Color.cyan);
+				//Debug.DrawRay (current.position,Vector3.up*5,Color.cyan);
 #endif
 				
 //--- Here the important stuff ends

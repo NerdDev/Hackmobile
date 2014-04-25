@@ -280,9 +280,9 @@ and have a low memory footprint because of their smaller size to describe the sa
 					} else {
 					
 #if DEBUG
-						Debug.DrawLine (vertices[node.v1],vertices[node.v2],Color.blue);
-						Debug.DrawLine (vertices[node.v2],vertices[node.v3],Color.blue);
-						Debug.DrawLine (vertices[node.v3],vertices[node.v1],Color.blue);
+						//Debug.DrawLine (vertices[node.v1],vertices[node.v2],Color.blue);
+						//Debug.DrawLine (vertices[node.v2],vertices[node.v3],Color.blue);
+						//Debug.DrawLine (vertices[node.v3],vertices[node.v1],Color.blue);
 #endif
 						
 						int dist = Mathfx.Abs (node.position.y-pos.y);
@@ -494,7 +494,7 @@ and have a low memory footprint because of their smaller size to describe the sa
 			}*/
 			
 #if DEBUG
-			Debug.DrawLine (origin,end,Color.black);
+			//Debug.DrawLine (origin,end,Color.black);
 #endif
 			
 			//Current position for tracing
@@ -553,7 +553,7 @@ and have a low memory footprint because of their smaller size to describe the sa
 					vs[i] = tmp;
 					
 #if DEBUG
-					Debug.DrawRay (Vector3.Lerp (vertices[node[i]],node.position,0.5F),Vector3.up*2*tmp*0.001F,new Color (1,0.5F,0));
+					//Debug.DrawRay (Vector3.Lerp (vertices[node[i]],node.position,0.5F),Vector3.up*2*tmp*0.001F,new Color (1,0.5F,0));
 #endif
 				}
 				
@@ -716,7 +716,7 @@ and have a low memory footprint because of their smaller size to describe the sa
 					}
 					
 #if DEBUG
-					Debug.DrawLine (origin,intersectionPoint,Color.red);
+					//Debug.DrawLine (origin,intersectionPoint,Color.red);
 #endif			
 					hit.tangentOrigin = (Vector3)vertices[v1];
 					hit.tangent = (Vector3)(vertices[v2]-vertices[v1]);
@@ -733,7 +733,7 @@ and have a low memory footprint because of their smaller size to describe the sa
 				}
 			}
 #if DEBUG		
-			Debug.DrawLine (origin,end,Color.green);
+			//Debug.DrawLine (origin,end,Color.green);
 #endif	
 			hit.node = node;
 			return false;
@@ -1092,13 +1092,13 @@ and have a low memory footprint because of their smaller size to describe the sa
 				MeshNode node = nodes[i] as MeshNode;
 				
 				if (Polygon.IsClockwise (vertices[node.v1],vertices[node.v2],vertices[node.v3])) {
-					Debug.DrawLine (vertices[node.v1],vertices[node.v2],Color.green);
-					Debug.DrawLine (vertices[node.v2],vertices[node.v3],Color.green);
-					Debug.DrawLine (vertices[node.v3],vertices[node.v1],Color.green);
+					//Debug.DrawLine (vertices[node.v1],vertices[node.v2],Color.green);
+					//Debug.DrawLine (vertices[node.v2],vertices[node.v3],Color.green);
+					//Debug.DrawLine (vertices[node.v3],vertices[node.v1],Color.green);
 				} else {
-					Debug.DrawLine (vertices[node.v1],vertices[node.v2],Color.red);
-					Debug.DrawLine (vertices[node.v2],vertices[node.v3],Color.red);
-					Debug.DrawLine (vertices[node.v3],vertices[node.v1],Color.red);
+					//Debug.DrawLine (vertices[node.v1],vertices[node.v2],Color.red);
+					//Debug.DrawLine (vertices[node.v2],vertices[node.v3],Color.red);
+					//Debug.DrawLine (vertices[node.v3],vertices[node.v1],Color.red);
 				}
 			}
 #endif

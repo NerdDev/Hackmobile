@@ -129,8 +129,8 @@ seeker.StartPath (path,MyCompleteFunction);
 			endNode = startNode;
 			
 	#if DEBUG
-			Debug.DrawLine (startNode.position,startPoint,Color.blue);
-			Debug.DrawLine (endNode.position,endPoint,Color.blue);
+			//Debug.DrawLine (startNode.position,startPoint,Color.blue);
+			//Debug.DrawLine (endNode.position,endPoint,Color.blue);
 	#endif
 			
 			if (startNode == null || endNode == null) {

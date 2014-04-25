@@ -201,7 +201,7 @@ public class NavmeshController : MonoBehaviour {
 					// Store to closed with parent for trace back.
 					closed.Add(conn);
 #if DEBUG
-					Debug.DrawLine (cur.position,conn.position,Color.black);
+					//Debug.DrawLine (cur.position,conn.position,Color.black);
 					Debug.DrawLine ((Vector3)graph.vertices[sp]+Vector3.up*0.1F,(Vector3)graph.vertices[sq]+Vector3.up*0.1F,Color.blue);
 #endif
 					

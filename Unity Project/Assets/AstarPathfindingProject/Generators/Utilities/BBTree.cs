@@ -74,9 +74,9 @@ namespace Pathfinding
 					//Update the NNInfo
 					
 #if DEBUG
-					Debug.DrawLine (graph.vertices[box.node[0]],graph.vertices[box.node[1]],Color.red);
-					Debug.DrawLine (graph.vertices[box.node[1]],graph.vertices[box.node[2]],Color.red);
-					Debug.DrawLine (graph.vertices[box.node[2]],graph.vertices[box.node[0]],Color.red);
+					//Debug.DrawLine (graph.vertices[box.node[0]],graph.vertices[box.node[1]],Color.red);
+					//Debug.DrawLine (graph.vertices[box.node[1]],graph.vertices[box.node[2]],Color.red);
+					//Debug.DrawLine (graph.vertices[box.node[2]],graph.vertices[box.node[0]],Color.red);
 #endif
 					
 					Vector3 closest = NavMeshGraph.ClosestPointOnNode (box.node,graph.vertices,p);

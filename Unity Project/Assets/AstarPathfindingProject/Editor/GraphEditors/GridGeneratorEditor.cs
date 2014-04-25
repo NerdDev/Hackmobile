@@ -641,13 +641,13 @@ public class GridGraphEditor : GraphEditor, ISerializableGraphEditor {
 				return;
 			}
 			
-			Handles.SphereCap (0,node1.position,Quaternion.identity,graph.nodeSize*0.5F);
+			//Handles.SphereCap (0,node1.position,Quaternion.identity,graph.nodeSize*0.5F);
 			
 			
 			Node node = node1;
 			
 			GUI.color = Color.white;
-			Handles.Label((Vector3)node.position + Vector3.up*2,"G : "+node.g+"\nH : "+node.h+"\nF : "+node.f+"\nPosition : "+node.position.ToString (),EditorStyles.whiteBoldLabel);
+			//Handles.Label((Vector3)node.position + Vector3.up*2,"G : "+node.g+"\nH : "+node.h+"\nF : "+node.f+"\nPosition : "+node.position.ToString (),EditorStyles.whiteBoldLabel);
 		}
 		
 #endif

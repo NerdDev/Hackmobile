@@ -12,10 +12,8 @@ public class SmoothModifierEditor : Editor {
 		SimpleSmoothModifier ob = target as SimpleSmoothModifier;
 		
 		ob.smoothType = (SimpleSmoothModifier.SmoothType)EditorGUILayout.EnumPopup (new GUIContent ("Smooth Type"),ob.smoothType);
-		
-		EditorGUIUtility.LookLikeInspector ();
-		
-		if (ob.smoothType == SimpleSmoothModifier.SmoothType.Simple) {
+        EditorGUIUtility.LookLikeInspector ();
+        if (ob.smoothType == SimpleSmoothModifier.SmoothType.Simple) {
 			
 			ob.uniformLength = EditorGUILayout.Toggle (new GUIContent ("Uniform Segment Length","Toggle to divide all lines in equal length segments"),ob.uniformLength);
 			
