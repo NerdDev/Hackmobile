@@ -12,16 +12,7 @@ public class InputManager : MonoBehaviour, IManager
 
     public bool Initialized { get; set; }
     #region Safety Check Booleans
-    public bool allowPlayerInput;
-    public bool allowKeyboardInput;
-    public bool allowMouseInput;
-    public bool allowTouchInput;
-    internal bool isMovementKeyPressed;//mainly for debugging, will convert this bool when the input class is implemented for mobile
-
-    public bool defaultPlayerInput;
-    public bool spellInput;
-    public bool logInput;
-
+    public Flags<InputSettings> InputSetting = new Flags<InputSettings>();
     #endregion
 
     #region Mouse variables:
@@ -36,6 +27,7 @@ public class InputManager : MonoBehaviour, IManager
 
     public void Initialize()
     {
+        
     }
 
     void Start()
@@ -56,18 +48,18 @@ public class InputManager : MonoBehaviour, IManager
 
     void Update()
     {
-        if (allowPlayerInput)
+        if (InputSetting[InputSettings.PLAYER_INPUT])
         {
-            if (allowKeyboardInput)
+            if (InputSetting[InputSettings.KEYBOARD_INPUT])
             {
                 CheckForKeyboardInput();
             }
-            if (allowMouseInput)
+            if (InputSetting[InputSettings.MOUSE_INPUT])
             {
                 CheckForMouseMovement();
                 CheckForMouseInput();
             }
-            if (allowTouchInput)
+            if (InputSetting[InputSettings.TOUCH_INPUT])
             {
                 CheckForTouchMovement();
                 CheckForTouchInput();
@@ -142,7 +134,6 @@ public class InputManager : MonoBehaviour, IManager
 
         if (mouseMovement) //hold right click
         {
-            isMovementKeyPressed = true;
             centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
             Vector2 centerScreenPointToMousePosLookVector = (Vector2)Input.mousePosition - centerPointInScreenSpace;
             Vector3 playerConvertedTranslationVector = new Vector3(centerScreenPointToMousePosLookVector.x, 0, centerScreenPointToMousePosLookVector.y);
@@ -184,4 +175,41 @@ public class InputManager : MonoBehaviour, IManager
     }
     #endregion
 
+
+    long inputVal;
+    bool disabledInput;
+    public void DisableInput()
+    {
+        if (!disabledInput)
+        {
+            disabledInput = true;
+            inputVal = InputSetting.flags;
+            InputSetting.flags = 0;
+        }
+    }
+
+    public void EnableInput()
+    {
+        if (disabledInput)
+        {
+            InputSetting.flags = inputVal;
+            disabledInput = false;
+        }
+    }
+}
+
+public enum InputSettings
+{
+    NONE = 0x00,
+
+    //what levels of hardware input are valid
+    PLAYER_INPUT = 0x01,
+    KEYBOARD_INPUT = 0x02,
+    MOUSE_INPUT = 0x04,
+    TOUCH_INPUT = 0x08,
+
+    //Input settings for what input is valid in context
+    DEFAULT_INPUT = 0x100,
+    SPELL_INPUT = 0x200,
+    LOG_INPUT = 0x400,
 }

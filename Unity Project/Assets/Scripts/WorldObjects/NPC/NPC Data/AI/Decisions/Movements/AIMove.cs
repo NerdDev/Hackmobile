@@ -15,16 +15,13 @@ public class AIMove : AIDecision
 
     public override void Action(AICore core)
     {
-        PathNode[] nodes = PathTree.Instance.getPath(core.Self.GridSpace, core.TargetSpace, 75).ToArray();
-        if (nodes.Length > 2)
+        if (args.Target != null)
         {
-            GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
-            if (nodeToMove.Type == GridType.Door && DoorCheck(nodeToMove))
-            {
-                return;
-            }
-            //else, continue on and move the NPC... if it's not a door, or if it's an open door
-            core.Self.MoveNPC(nodeToMove);
+            args.Self.MoveNPC(args.Target.GridSpace);
+        }
+        else
+        {
+            args.Self.MoveNPC(args.TargetSpace);
         }
     }
 
