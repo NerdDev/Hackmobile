@@ -15,8 +15,14 @@ public class AIMove : AIDecision
 
     public override void Action(AIActionArgs args)
     {
-        target = BigBoss.Player;
-        npc.MoveNPC(target.GO.transform.position);
+        if (args.Target != null)
+        {
+            args.Self.MoveNPC(args.Target.GridSpace);
+        }
+        else
+        {
+            args.Self.MoveNPC(args.TargetSpace);
+        }
     }
 
     private bool DoorCheck(GridSpace grid)

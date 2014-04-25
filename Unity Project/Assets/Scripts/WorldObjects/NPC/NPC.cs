@@ -875,7 +875,7 @@ public class NPC : Affectable
     {
         if (IsActive)
         {
-            Master.DecideWhatToDo();
+            AI.DecideWhatToDo();
         }
     }
 
