@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AIWait : AIRoleDecision
+public class AIWait : AIDecision
 {
-    public override AIRole Role { get { return AIRole.Other; } }
     public override double StickyShift { get { return 0d; } }
 
     public override double Cost { get { return 60d; } }
 
-    public override void Action(AIActionArgs args)
+    public override void Action(AICore core)
     {
         // Nuttin'
     }
 
-    public override double CalcWeighting(AIDecisionArgs args)
+    public override double CalcWeighting(AICore core)
     {
         return 1d;
     }

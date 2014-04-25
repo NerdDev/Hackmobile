@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Logging: 1
-  ActiveLogs: 000000000200000001000000
+  ActiveLogs: 00000000020000000100000005000000
   ActiveFlags: 0000000008000000
 --- !u!1 &16695338
 GameObject:
@@ -2174,7 +2174,7 @@ MonoBehaviour:
   DiscoLight: {fileID: 0}
   cookie: {fileID: 2800000, guid: b9d67bb2d8a6eb443841d394648d8e0a, type: 3}
   LoadImage: {fileID: 545698272}
-  InvisibilityShader: {fileID: 31, guid: 0000000000000000f000000000000000, type: 0}
+  InvisibilityShader: {fileID: 31, guid: 0000000000000000f000000000000000, type: 3}
   TransparentShader: {fileID: 4800000, guid: e54b0daae218c1d4096822c3de26c457, type: 3}
   InvisibleObject: {fileID: 100000, guid: 3878e4a462c1d624097fb6db33bb777d, type: 2}
   GUICam: {fileID: 1503070279}
@@ -4094,7 +4094,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ActiveLogs.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ActiveFlags.Array.size
@@ -4163,7 +4163,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ActiveLogs.Array.data[3]
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ActiveFlags.Array.data[1]
@@ -5311,6 +5311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8dbfb821551f25408b927bdd480a6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
   DestroyThisNPC: 0
 --- !u!114 &1549679980
 MonoBehaviour:

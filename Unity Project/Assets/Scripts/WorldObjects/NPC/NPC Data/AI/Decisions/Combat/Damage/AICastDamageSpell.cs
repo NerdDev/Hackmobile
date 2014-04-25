@@ -13,22 +13,22 @@ public class AICastDamageSpell : AIDecision
     {
     }
 
-    public override void Action(AIActionArgs args)
+    public override void Action(AICore core)
     {
-        if (args.Self.KnownSpells.ContainsKey("Fireball"))
+        if (core.Self.KnownSpells.ContainsKey("Fireball"))
         {
-            Spell spellToCast = args.Self.KnownSpells["Fireball"];
-            if (args.Self.GridDistanceToTarget(BigBoss.Player) < spellToCast.range)
+            Spell spellToCast = core.Self.KnownSpells["Fireball"];
+            if (core.Self.GridDistanceToTarget(BigBoss.Player) < spellToCast.range)
             {
-                args.Self.CastSpell(spellToCast, BigBoss.Player);
+                core.Self.CastSpell(spellToCast, BigBoss.Player);
                 turnsSinceLastCast = 0;
             }
         }
     }
 
-    public override double CalcWeighting(AIDecisionArgs args)
+    public override double CalcWeighting(AICore core)
     {
-        if (args.Self.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
+        if (core.Self.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
             return 0.4d;
         else
             turnsSinceLastCast++;

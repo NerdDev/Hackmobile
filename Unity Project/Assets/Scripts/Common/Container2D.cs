@@ -1426,7 +1426,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     {
         endingQueue = new Queue<Value2D<T>>();
         endingQueue.Enqueue(new Value2D<T>(x, y, this[x, y]));
-        endingVisited = Container2D<bool>.CreateArrayFromBounds(this);
+        endingVisited = new MultiMap<bool>();
         endingVisited[x, y] = true;
         return DrawBreadthFirstFill(endingQueue,
             endingVisited,

@@ -13,9 +13,9 @@ public class AIMove : AIDecision
     {
     }
 
-    public override void Action(AIActionArgs args)
+    public override void Action(AICore core)
     {
-        PathNode[] nodes = PathTree.Instance.getPath(args.Self.GridSpace, args.TargetSpace, 75).ToArray();
+        PathNode[] nodes = PathTree.Instance.getPath(core.Self.GridSpace, core.TargetSpace, 75).ToArray();
         if (nodes.Length > 2)
         {
             GridSpace nodeToMove = nodes[nodes.Length - 2].loc;
@@ -24,7 +24,7 @@ public class AIMove : AIDecision
                 return;
             }
             //else, continue on and move the NPC... if it's not a door, or if it's an open door
-            args.Self.MoveNPC(nodeToMove);
+            core.Self.MoveNPC(nodeToMove);
         }
     }
 
@@ -47,7 +47,7 @@ public class AIMove : AIDecision
         return false;
     }
 
-    public override double CalcWeighting(AIDecisionArgs args)
+    public override double CalcWeighting(AICore core)
     {
         return 1d;
     }

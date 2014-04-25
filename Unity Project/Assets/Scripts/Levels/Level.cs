@@ -6,23 +6,25 @@ using System;
 public class Level : Container2D<GridSpace>
 {
     public bool Populated;
-    protected Array2D<GridSpace> _array;
+    protected MultiMap<GridSpace> map;
+    public MultiMap<GridSpace> UnderlyingContainer
+    {
+        set
+        {
+            map = value;
+        }
+    }
     public List<Container2D<GridSpace>> RoomMaps = new List<Container2D<GridSpace>>();
     private MultiMap<Container2D<GridSpace>> roomMapping = new MultiMap<Container2D<GridSpace>>(); // floor space to roommap
     public Bounding UpStartPoint;
     public Bounding DownStartPoint;
-    public System.Random Random { get; protected set; }
+    public System.Random Random;
 
-    public Level(Container2D<GridSpace> spaces, LevelLayout layout, Theme theme, System.Random rand)
+    public Level()
     {
-        _array = spaces.Array;
-        LoadRoomMaps(layout);
-        UpStartPoint = layout.UpStart;
-        DownStartPoint = layout.DownStart;
-        Random = rand;
     }
 
-    private void LoadRoomMaps(LevelLayout layout)
+    public void LoadRoomMaps(LevelLayout layout)
     {
         foreach (LayoutObject room in layout.Rooms)
         {
@@ -32,7 +34,7 @@ public class Level : Container2D<GridSpace>
             {
                 int x = floor.x + room.ShiftP.x;
                 int y = floor.y = room.ShiftP.y;
-                roomMap[x, y] = _array[x, y];
+                roomMap[x, y] = map[x, y];
                 roomMapping[x, y] = roomMap;
             }
         }
@@ -43,13 +45,13 @@ public class Level : Container2D<GridSpace>
     {
         get
         {
-            if (x < _array.Width && y < _array.Height)
+            if (x < map.Width && y < map.Height)
             {
-                GridSpace space = _array[x, y];
+                GridSpace space = map[x, y];
                 if (space == null)
                 { // Create empty gridspace
-                    space = new GridSpace(GridType.NULL, x, y);
-                    _array[x, y] = space;
+                    space = new GridSpace(this, GridType.NULL, x, y);
+                    map[x, y] = space;
                     return space;
                 }
                 return space;
@@ -58,15 +60,15 @@ public class Level : Container2D<GridSpace>
         }
         set
         {
-            _array[x, y] = value;
+            map[x, y] = value;
         }
     }
 
-    public override Array2D<GridSpace> Array { get { return _array; } }
+    public override Array2D<GridSpace> Array { get { return map.Array; } }
 
     public override bool TryGetValue(int x, int y, out GridSpace val)
     {
-        if (_array.InRange(x, y))
+        if (map.InRange(x, y))
         {
             val = this[x, y];
             return true;
@@ -80,57 +82,57 @@ public class Level : Container2D<GridSpace>
 
     public override int Count
     {
-        get { return _array.Count; }
+        get { return map.Count; }
     }
 
     public override Bounding Bounding
     {
-        get { return _array.Bounding; }
+        get { return map.Bounding; }
     }
 
     public override bool Contains(int x, int y)
     {
-        return _array.Contains(x, y);
+        return map.Contains(x, y);
     }
 
     public override bool InRange(int x, int y)
     {
-        return _array.InRange(x, y);
+        return map.InRange(x, y);
     }
 
     public override bool DrawAll(DrawAction<GridSpace> call)
     {
-        return _array.DrawAll(call);
+        return map.DrawAll(call);
     }
 
     public override void Clear()
     {
-        _array.Clear();
+        map.Clear();
     }
 
     public override Array2DRaw<GridSpace> RawArray(out Point shift)
     {
-        return _array.RawArray(out shift);
+        return map.RawArray(out shift);
     }
 
     public override bool Remove(int x, int y)
     {
-        return _array.Remove(x, y);
+        return map.Remove(x, y);
     }
 
     public override void Shift(int x, int y)
     {
-        _array.Shift(x, y);
+        map.Shift(x, y);
     }
 
     public override IEnumerable<GridSpace> GetEnumerateValues()
     {
-        return _array.GetEnumerateValues();
+        return map.GetEnumerateValues();
     }
 
     public override IEnumerator<Value2D<GridSpace>> GetEnumerator()
     {
-        return _array.GetEnumerator();
+        return map.GetEnumerator();
     }
     #endregion
 
@@ -147,7 +149,7 @@ public class Level : Container2D<GridSpace>
         }
         BigBoss.Debug.w(Logs.Main, "Placing player in position.");
         RandomPicker<GridSpace> picker;
-        this._array.DrawRect(new Bounding(startBounding).Expand(1), Draw.IsType<GridSpace>(GridType.StairPlace).IfThen(Draw.PickRandom(out picker)));
+        this.map.DrawRect(new Bounding(startBounding).Expand(1), Draw.IsType<GridSpace>(GridType.StairPlace).IfThen(Draw.PickRandom(out picker)));
         Value2D<GridSpace> start;
         if (!picker.Pick(Random, out start))
         {

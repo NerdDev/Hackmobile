@@ -148,8 +148,13 @@ public class LevelManager : MonoBehaviour, IManager
         gen.Depth = depth;
         gen.Rand = new System.Random(_levelSeeds[depth]);
         LevelLayout layout = gen.Generate();
-        Container2D<GridSpace> spaces = Builder.GeneratePrototypes(layout);
-        Level level = new Level(spaces, layout, gen.Theme, gen.Rand);
+        Level level = new Level();
+        MultiMap<GridSpace> spaces = Builder.GeneratePrototypes(level, layout);
+        level.UnderlyingContainer = spaces;
+        level.LoadRoomMaps(layout);
+        level.Random = gen.Rand;
+        level.UpStartPoint = layout.UpStart;
+        level.DownStartPoint = layout.DownStart;
         _levels[depth] = level;
     }
 

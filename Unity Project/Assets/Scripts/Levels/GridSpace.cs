@@ -16,6 +16,7 @@ public class GridSpace : IGridSpace
         }
     }
     public List<GameObject> Blocks;
+    public Level Level { get; protected set; }
     public int X { get; protected set; }
     public int Y { get; protected set; }
     public WorldObject RandomContainedObj
@@ -34,8 +35,9 @@ public class GridSpace : IGridSpace
     internal ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
 
-    public GridSpace(GridType type, int x, int y)
+    public GridSpace(Level level, GridType type, int x, int y)
     {
+        this.Level = level;
         this.Type = type;
         X = x;
         Y = y;
@@ -222,28 +224,6 @@ public class GridSpace : IGridSpace
             wo.IsActive = wrap;
             wo.Wrap(wrap);
         }
-    }
-
-    public static Array2D<GridSpace> Convert(Container2D<GenSpace> container)
-    {
-        Array2D<GridSpace> arrOut = new Array2D<GridSpace>(container.Bounding);
-        foreach (Value2D<GenSpace> val in container)
-        {
-            if (val == null) continue;
-            switch (val.val.Type)
-            {
-                case GridType.Path_Horiz:
-                case GridType.Path_Vert:
-                case GridType.Path_RT:
-                case GridType.Path_LT:
-                case GridType.Path_LB:
-                case GridType.Path_RB:
-                    val.val.Type = GridType.Floor;
-                    break;
-            }
-            arrOut[val.x, val.y] = new GridSpace(val.val.Type, val.x, val.y);
-        }
-        return arrOut;
     }
 
     public static implicit operator Point(GridSpace space)

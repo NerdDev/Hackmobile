@@ -4,22 +4,25 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class AIAggro : AIRoleDecision
+public class AIAggro : AIDecision
 {
-    public override AIRole Role { get { return AIRole.Other; } }
     public override double Cost { get { return 0d; } }
     public override double StickyShift { get { return 0d; } }
 
-    public override void Action(AIActionArgs args)
+    public override void Action(AICore core)
     {
-        args.CurrentState = AIState.Combat;
+        core.CurrentState = AIState.Combat;
     }
 
-    public override double CalcWeighting(AIDecisionArgs args)
+    public override double CalcWeighting(AICore core)
     {
+        if (core.CurrentState == AIState.Combat)
+        {
+            return 0d;
+        }
         var player = BigBoss.Player;
-        if (!Physics.Linecast(args.Self.EyeSightPosition, player.EyeSightPosition)
-            && args.Random.Percent(0.6d))
+        if (!Physics.Linecast(core.Self.EyeSightPosition, player.EyeSightPosition)
+            && core.Random.Percent(0.6d))
         { // Can see player
             return 1000;
         }

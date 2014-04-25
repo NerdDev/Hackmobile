@@ -7,11 +7,11 @@ public class AIDecisionCore
 {
     List<AIDecision> decisions = new List<AIDecision>();
 
-    public void FillPool(ProbabilityPool<AIDecision> pool, AIDecisionArgs args)
+    public void FillPool(ProbabilityPool<AIDecision> pool, AICore core)
     {
         foreach (AIDecision decision in decisions)
         {
-            double weight = args.WeightingCurve(decision);
+            double weight = core.WeightingCurve(decision);
             pool.Add(decision, weight);
         }
     }

@@ -95,11 +95,11 @@
         <!-- No special movements -->
       </AIMovements>
       <AIState state="Passive">
-        <AIDecision name="Wander" />
-        <AIDecision name="EatCorpse" />
+        <AIDecision name="AIPassiveHording" />
+        <AIDecision name="AIWander" />
+        <AIDecision name="AIEatCorpse" />
       </AIState>
       <AIState state="Combat">
-        <AIDecision name="PassiveHorde" />
       </AIState>
     </AI>
   </npc>
