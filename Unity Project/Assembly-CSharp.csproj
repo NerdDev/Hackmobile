@@ -132,7 +132,6 @@
      <Compile Include="Assets\Scripts\Common\Boxing.cs" />
      <Compile Include="Assets\Scripts\Common\Container2D.cs" />
      <Compile Include="Assets\Scripts\Common\Data Structures\IXmlParsable.cs" />
-     <Compile Include="Assets\Scripts\Common\Dice.cs" />
      <Compile Include="Assets\Scripts\Common\ESFlags.cs" />
      <Compile Include="Assets\Scripts\Common\Exceptions\InfiniteLoopException.cs" />
      <Compile Include="Assets\Scripts\Common\Flags.cs" />
@@ -141,7 +140,6 @@
      <Compile Include="Assets\Scripts\Common\Loom.cs" />
      <Compile Include="Assets\Scripts\Common\MultiMap.cs" />
      <Compile Include="Assets\Scripts\Common\Nifty.cs" />
-     <Compile Include="Assets\Scripts\Common\Percent.cs" />
      <Compile Include="Assets\Scripts\Common\Point.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\IProbabilityItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\IProbabilityLevItem.cs" />
@@ -203,6 +201,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\DoorElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\FloorDoodadElement.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\FloorElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\PillarElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\StairElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\StairSpiralElement.cs" />
@@ -248,6 +247,7 @@
      <Compile Include="Assets\Scripts\Library\Extensions\TransformExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\TypeExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Vector3Ext.cs" />
+     <Compile Include="Assets\Scripts\Library\Interfaces\ICopyable.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IEnsureType.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\NotHashable.cs" />
@@ -333,11 +333,21 @@
      <Compile Include="Assets\Scripts\WorldObjects\Items\ItemHolder.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\LeveledItemList.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Items\MaterialType.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIAction.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIAttack.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AICastDamageSpell.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIActionArgs.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AICore.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIMove.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIDecision.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIDecisionArgs.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIDecisionCore.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIRole.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIRoleCore.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIRoleDecision.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\AIState.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\Decisions\Combat\AIUseAbility.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\Decisions\Combat\Damage\AICastDamageSpell.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\Decisions\Movements\AIMove.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\Decisions\Passive\AIAggro.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\Decisions\Passive\AIWait.cs" />
+     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\AI\Decisions\Passive\AIWander.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Attributes.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\BodyParts.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\EquipType.cs" />
@@ -347,7 +357,6 @@
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\InventoryCategory.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Misc Enums.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Properties.cs" />
-     <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Roles.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\SpawnKeywords.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\Spells.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\NPC\NPC Data\StartingItems.cs" />
