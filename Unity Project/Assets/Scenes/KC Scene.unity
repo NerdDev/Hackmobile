@@ -5791,6 +5791,7 @@ MonoBehaviour:
   ID: 0
   DestroyThisNPC: 0
   TurnPoints: 0
+  TimeToMove: 0
 --- !u!114 &1549679980
 MonoBehaviour:
   m_ObjectHideFlags: 0

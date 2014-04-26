@@ -26,12 +26,16 @@ public class AICastDamageSpell : AIDecision
         }
     }
 
-    public override double CalcWeighting(AICore core)
+    public override bool CalcWeighting(AICore core, out double weight)
     {
         if (core.Self.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
-            return 0.4d;
+        {
+            weight = 0.4d;
+            return false;
+        }
         else
             turnsSinceLastCast++;
-        return -1.0d;
+        weight = -1.0d;
+        return false;
     }
 }

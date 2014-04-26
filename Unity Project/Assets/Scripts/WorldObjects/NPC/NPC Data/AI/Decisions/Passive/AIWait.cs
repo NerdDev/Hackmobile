@@ -14,8 +14,9 @@ public class AIWait : AIDecision
         // Nuttin'
     }
 
-    public override double CalcWeighting(AICore core)
+    public override bool CalcWeighting(AICore core, out double weight)
     {
-        return 1d;
+        weight = 1d;
+        return false;
     }
 }

@@ -72,19 +72,22 @@ public class AIWander : AIDecision
         core.MoveTo(targetSpace);
     }
 
-    public override double CalcWeighting(AICore core)
+    public override bool CalcWeighting(AICore core, out double weight)
     {
         if (core.Continuing(this))
         {
             if (targetSpace != null && targetSpace.Equals(core.Self.GridSpace))
             { // Chance to continue wandering in a different direction
-                return 2d;
+                weight = 2d;
+                return false;
             }
             // Chance to continue on path
-            return 20d;
+            weight = 20d;
+            return false;
         }
         // Chance to start wandering
-        return 0.15d;
+        weight = 0.15d;
+        return false;
     }
 }
 

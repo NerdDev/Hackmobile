@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AIPassiveHording : AIDecision
+public class AIPassiveHording : AIAggro
 {
     public override double Cost { get { return 0d; } }
 
@@ -11,20 +11,19 @@ public class AIPassiveHording : AIDecision
 
     public int CombatLimit;
 
-    static AIAggro AggroPackage = new AIAggro();
-
     public override void Action(AICore core)
     {
 
     }
 
-    public override double CalcWeighting(AICore core)
+    public override bool CalcWeighting(AICore core, out double weight)
     {
-        if (AggroPackage.CalcWeighting(core) > 0)
+        if (base.CalcWeighting(core, out weight))
         { // Should aggro player
-
+            return true;
         }
-        return 0d;
+        weight = 0d;
+        return false;
     }
 
     public override void ParseXML(XMLNode x)

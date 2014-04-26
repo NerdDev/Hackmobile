@@ -14,19 +14,17 @@ public class AIAggro : AIDecision
         core.CurrentState = AIState.Combat;
     }
 
-    public override double CalcWeighting(AICore core)
+    public override bool CalcWeighting(AICore core, out double weight)
     {
-        if (core.CurrentState == AIState.Combat)
-        {
-            return 0d;
-        }
+        weight = 0d;
         var player = BigBoss.Player;
-        if (!Physics.Linecast(core.Self.EyeSightPosition, player.EyeSightPosition)
+        if (core.CurrentState != AIState.Combat
+            && !Physics.Linecast(core.Self.EyeSightPosition, player.EyeSightPosition)
             && core.Random.Percent(0.6d))
         { // Can see player
-            return 1000;
+            return true;
         }
-        return 0d;
+        return false;
 
         /*
          * Need to check for other enemy NPCs.

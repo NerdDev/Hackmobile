@@ -27,9 +27,10 @@ internal class AIUseAbility : AIDecision
         }
     }
 
-    public override double CalcWeighting(AICore core)
+    public override bool CalcWeighting(AICore core, out double weight)
     {
         // Do Damage is the arbitrary in-combat standard of 1
-        return 1d;
+        weight = 1d;
+        return false;
     }
 }

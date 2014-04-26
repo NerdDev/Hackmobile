@@ -7,13 +7,20 @@ public class AIDecisionCore
 {
     List<AIDecision> decisions = new List<AIDecision>();
 
-    public void FillPool(ProbabilityPool<AIDecision> pool, AICore core)
+    public bool FillPool(ProbabilityPool<AIDecision> pool, AICore core, out AIDecision autoDecision)
     {
         foreach (AIDecision decision in decisions)
         {
-            double weight = core.WeightingCurve(decision);
+            double weight;
+            if (decision.CalcWeighting(core, out weight))
+            {
+                autoDecision = decision;
+                return true;
+            }
             pool.Add(decision, weight);
         }
+        autoDecision = null;
+        return false;
     }
 
     public void AddDecision(AIDecision decision)

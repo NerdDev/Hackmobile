@@ -11,7 +11,7 @@ public abstract class AIDecision : IXmlParsable
 
     public abstract void Action(AICore core);
 
-    public abstract double CalcWeighting(AICore core);
+    public abstract bool CalcWeighting(AICore core, out double weight);
 
     public virtual void ParseXML(XMLNode x)
     {

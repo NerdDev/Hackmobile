@@ -8,7 +8,6 @@ public class AICore : IXmlParsable, ICopyable
     // Defining features
     public NPC Self { get; protected set; }
     public System.Random Random { get; protected set; }
-    public Func<AIDecision, double> WeightingCurve;
 
     // Cores
     AIDecisionCore[] cores = new AIDecisionCore[EnumExt.Length<AIState>()];
@@ -100,16 +99,6 @@ public class AICore : IXmlParsable, ICopyable
     public void PostCopy()
     {
         Random = new System.Random(Probability.Rand.Next());
-        WeightingCurve = (decision) =>
-        {
-            CurrentDecision = decision;
-            double weight = decision.CalcWeighting(this);
-            if (Object.ReferenceEquals(decision, LastDecision))
-            {
-                weight += decision.StickyShift;
-            }
-            return weight;
-        };
     }
 
     public bool Continuing(AIDecision decision)
@@ -120,8 +109,11 @@ public class AICore : IXmlParsable, ICopyable
     public void DecideWhatToDo()
     {
         ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
-        cores[(int)CurrentState].FillPool(pool, this);
-        AIDecision decision = pool.Get(Random);
+        AIDecision decision;
+        if (!cores[(int)CurrentState].FillPool(pool, this, out decision))
+        {
+            decision = pool.Get(Random);
+        }
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
@@ -158,8 +150,11 @@ public class AICore : IXmlParsable, ICopyable
     public void MoveTo(GridSpace space)
     {
         ProbabilityPool<AIDecision> movementPool = ProbabilityPool<AIDecision>.Create();
-        movementCore.FillPool(movementPool, this);
-        AIDecision movement = movementPool.Get(Random);
+        AIDecision movement;
+        if (!movementCore.FillPool(movementPool, this, out movement))
+        {
+            movement = movementPool.Get(Random);
+        }
         this.TargetSpace = space;
         movement.Action(this);
     }
