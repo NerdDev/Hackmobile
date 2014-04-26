@@ -25,7 +25,6 @@ public class NPCInstance : WOWrapper
         else
         {
             TurnPoints = WO.CurrentPoints;
-            TimeToMove = ((NPC)WO).timeToMove;
         }
         //if (TurnPoints > 0)
         //{
