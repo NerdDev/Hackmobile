@@ -19,10 +19,9 @@ public class Door : MonoBehaviour
     void OnMouseDown() //player's input only here
     {
         doorLoc = new Point(transform.parent.position.x, transform.parent.position.z);
-        if (BigBoss.Player.IsNextToTarget(BigBoss.Levels.Level[doorLoc.x, doorLoc.y]))
+        if (BigBoss.Player.DistanceToTarget(this.gameObject) < 1.5f)
         {
-            OpenDoor();
-            BigBoss.Time.PassTurn(60);
+            BigBoss.Player.Do(OpenDoor, 10, false, true);
         }
     }
 

@@ -49,10 +49,14 @@ public class TimeManager : MonoBehaviour, IManager
     public int numTilesCrossed = 0;
     #endregion
     #region Action Costs
-    public int diagonalMoveCost = 84;
     public int regularMoveCost = 1;
     public int attackCost = 60;
-    public int eatItemCost = 60;
+    public int eatItemCost = 20;
+    public int useItemCost = 20;
+    public int equipItemCost = 20;
+    public int spellCost = 60;
+    public int pickDropItemCost = 10;
+
 
     public float TimeInterval;
     #endregion
@@ -105,7 +109,7 @@ public class TimeManager : MonoBehaviour, IManager
     {
         turnsPassed++;
         //Justin's hot: // Thx brah
-        if (turnsPassed % 2 == 0)
+        if (turnsPassed % 5 == 0)
             runGroupUpdate();
     }
 

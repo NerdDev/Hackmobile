@@ -18,7 +18,7 @@ public class AICastDamageSpell : AIDecision
         if (core.Self.KnownSpells.ContainsKey("Fireball"))
         {
             Spell spellToCast = core.Self.KnownSpells["Fireball"];
-            if (core.Self.GridDistanceToTarget(BigBoss.Player) < spellToCast.range)
+            if (core.Self.DistanceToTarget(BigBoss.Player) < spellToCast.range)
             {
                 core.Self.CastSpell(spellToCast, BigBoss.Player);
                 turnsSinceLastCast = 0;

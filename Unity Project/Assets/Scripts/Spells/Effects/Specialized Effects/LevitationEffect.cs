@@ -10,12 +10,12 @@ public class Levitation : EffectInstance
 
     public override void Init(NPC n)
     {
-        n.verticalMove(strength);
+        //n.verticalMove(strength);
     }
 
     public override void Remove(NPC n)
     {
-        n.verticalMove(-strength);
+        //n.verticalMove(-strength);
     }
 
     protected override void ParseParams(XMLNode x)

@@ -15,13 +15,13 @@ public class AIMove : AIDecision
 
     public override void Action(AICore core)
     {
-        if (args.Target != null)
+        if (core.Target != null)
         {
-            args.Self.MoveNPC(args.Target.GridSpace);
+            core.Self.MoveNPC(core.Target.GridSpace);
         }
         else
         {
-            args.Self.MoveNPC(args.TargetSpace);
+            core.Self.MoveNPC(core.TargetSpace);
         }
     }
 
