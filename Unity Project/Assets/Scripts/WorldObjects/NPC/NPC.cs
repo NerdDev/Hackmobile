@@ -13,6 +13,7 @@ public class NPC : Affectable
      */
     public override void Init()
     {
+        TurnNPCIsOn = BigBoss.Time.turnsPassed;
         //calculate any stats that need set on start
         CalcInitialStats();
 
@@ -27,9 +28,6 @@ public class NPC : Affectable
         addToInventory(StartingItems.GetItems(Stats.Level));
     }
 
-    /**
-     * All the properties of the NPC should be contained here.
-     */
     #region NPC Properties
     public GenericFlags<NPCFlags> Flags = new GenericFlags<NPCFlags>();
     public GenericFlags<SpawnKeywords> SpawnKeywords = new GenericFlags<SpawnKeywords>();
@@ -53,36 +51,37 @@ public class NPC : Affectable
             Vector3 pos = this.GO.transform.position;
             return new Vector3(pos.x, pos.y + 2, pos.z);
         }
-    } 
+    }
     #endregion
 
-    /**
-     * Anything relating to movement.
-     */
+    #region Individual NPC Variables
+
+    private int npcPoints = 0;
+    private int TurnNPCIsOn = 1;
+    EquipBones Bones = null;
+    internal float turnTime;
+    internal float gridTime;
+    float gravity;
+    internal Vector3 target;
+    internal ActionToDo action;
+    float TurnInterval = BigBoss.Time.TimeInterval;
+    bool canMove;
+    #endregion
+
     #region NPC Movement Properties
 
     public float Speed = 1.75f;  //temporarily hard-coded
     public float NPCSpeed { get { return Speed; } }
 
-    private float _rotationSpeed = .5f;  //temporarily hard-coded
-    public float NPCRotationSpeed { get { return _rotationSpeed; } }
-
-    //public Vector3 CurrentOccupiedGridCenterWorldPoint;
-    //public Vector3 LastOccupiedGridCenterWorldPoint;
-
-    private bool moving;
     internal bool Moving { get { return CurrentPath != null && !Acting; } } //stores moving condition
     internal bool Acting { get { return action != null && !action.IsDone(); } } //is the NPC already doing an action?
-    protected bool verticalMoving;
-    protected bool movingUp;
     protected float verticalOffset = 0f;
     internal Queue<GridSpace> targetGrids = new Queue<GridSpace>();
-    internal Vector3 heading; //this is the heading of target minus current location
 
     internal Animator animator;
     internal CharacterController controller;
     internal Seeker seeker;
-    float velocity;
+    internal float velocity;
 
     internal PFPath CurrentPath;
     //The max distance from the AI to a waypoint for it to continue to the next waypoint
@@ -110,10 +109,6 @@ public class NPC : Affectable
         seeker = GO.GetComponent<Seeker>();
     }
 
-    float turnTime;
-    float gridTime;
-    bool movementValid;
-    float timeToMove;
     public override void Update()
     {
         if (IsActive)
@@ -121,21 +116,24 @@ public class NPC : Affectable
             float curTime = Time.time;
             if (curTime > turnTime)
             {
-                turnTime = curTime + .03f;
+                turnTime = curTime + TurnInterval;
                 if (subtractPoints(1))
                 {
                     if (Acting)
                     {
+                        canMove = false;
                         DoingAction();
                     }
                     else
                     {
-                        timeToMove += BigBoss.Time.TimeInterval;
+                        //timeToMove += BigBoss.Time.TimeInterval;
+                        canMove = true;
                         action = null;
                     }
                 }
                 else
                 {
+                    canMove = false;
                     velocity = 0;
                 }
             }
@@ -148,7 +146,6 @@ public class NPC : Affectable
         }
     }
 
-    internal ActionToDo action;
     public virtual void DoingAction()
     {
         if (Acting)
@@ -159,6 +156,10 @@ public class NPC : Affectable
 
     public override void FixedUpdate()
     {
+        if (!Moving)
+        {
+            velocity = 0;
+        }
         animator.SetFloat("runSpeed", velocity);
     }
 
@@ -397,7 +398,7 @@ public class NPC : Affectable
     protected float calcXPForNextLevel()
     {
         //do calc here
-        return Stats.Level * 15;
+        return (float)Math.Pow(Stats.Level, 1.2) * 15;
         //return (100 + ((Mathf.Pow(Stats.Level, 2f) / 2)));
     }
 
@@ -424,16 +425,13 @@ public class NPC : Affectable
     public float getXPfromNPC()
     {
         //how much XP is this NPC worth?
-        return 10f;
+        return this.Stats.Level * 5;
     }
     #endregion
 
     #region Movement
 
-    float gravity;
-    internal Vector3 target;
-
-    public virtual bool UpdateCurrentTileVectors()
+    public virtual bool UpdateCurrentTileVectors() //assigns gridspaces every interval
     {
         Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
         if (BigBoss.Levels.Level == null) return false;
@@ -449,9 +447,9 @@ public class NPC : Affectable
         }
     }
 
-    public virtual void GetMovement()
+    public virtual void GetMovement() //only for NPC's
     {
-        if (timeToMove <= 0) return;
+        if (!canMove) return;
         if (CurrentPath == null) return; //no path, don't move
         if (!CurrentPath.IsDone()) return; //path isn't done (should never occur)
         if (!CurrentPath.foundEnd || currentWaypoint >= CurrentPath.vectorPath.Length) //path has no end, or at the end of path
@@ -459,25 +457,23 @@ public class NPC : Affectable
             CurrentPath = null;
             return; //path finished, set to null
         }
-
         //Direction to the next waypoint
         Vector3 dir = (CurrentPath.vectorPath[currentWaypoint]);
-        LookTowards(dir);
-        MoveForward();
-        timeToMove -= Time.deltaTime;
-        velocity = NPCSpeed;
+        LookTowards(dir); //orient towards it
+        MoveForward(); //move forward
+        velocity = NPCSpeed; //sets animation velocity
 
         if ((CurrentPath.vectorPath[currentWaypoint] - GO.transform.position).sqrMagnitude < nextWaypointDistance)
-        {
-            currentWaypoint++;
+        { //if the waypoint is close, transition to the next waypoint
+            currentWaypoint++; //if they get stuck, trying to back turn - next pathing call would fix
             return;
         }
     }
 
-    internal void MoveForward()
+    internal void MoveForward() //mainly for NPC's
     {
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        if (GO.transform.position.y <= verticalOffset || controller.isGrounded)
+        if (controller.isGrounded)
         {
             gravity = 0;
         }
@@ -486,10 +482,10 @@ public class NPC : Affectable
         controller.Move(newMove * NPCSpeed * Time.deltaTime);
     }
 
-    internal void MoveForward(float speed)
+    internal void MoveForward(float speed) //mainly for player, because he has variable movement
     {
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        if (GO.transform.position.y <= verticalOffset || controller.isGrounded)
+        if (controller.isGrounded)
         {
             gravity = 0;
         }
@@ -498,7 +494,7 @@ public class NPC : Affectable
         controller.Move(newMove * speed * Time.deltaTime);
     }
 
-    internal void LookTowards(Vector3 target)
+    internal void LookTowards(Vector3 target) //lerp orientation towards target
     {
         Vector3 heading = new Vector3(target.x - GO.transform.position.x, 0f, target.z - GO.transform.position.z);
         Quaternion lerp = Quaternion.LookRotation(heading);
@@ -516,80 +512,19 @@ public class NPC : Affectable
         }
     }
 
-    protected void verticalMovement()
-    {
-        if (!checkVerticalPosition(GO.transform.position, new Vector3(0f, verticalOffset, 0f)))
-        {
-            MoveNPCStepwiseUp();
-        }
-        else
-        {
-            verticalMoving = false;
-            Vector3 pos = GO.transform.position;
-            pos.y = verticalOffset;
-            GO.transform.position = pos;
-        }
-    }
-
     public void MoveNPC(GridSpace node)
     {
-        seeker.StartPath(GO.transform.position, new Vector3(node.X, 0, node.Y), OnPathComplete);
+        MoveNPC(new Vector3(node.X, 0, node.Y));
     }
 
     public void MoveNPC(Vector3 pos)
     {
-        if (target == null) target = pos;
-        if (((pos - target).sqrMagnitude > .2f) || CurrentPath == null)
+        if (target == Vector3.zero) target = pos; //if target position is close to last target, don't bother w/ new path
+        if (((pos - target).sqrMagnitude > .3f) || CurrentPath == null)
         {
             target = pos;
             seeker.StartPath(GO.transform.position, pos, OnPathComplete);
         }
-    }
-
-    public void verticalMove(float z)
-    {
-        verticalMoving = true;
-        verticalOffset += z;
-        if (z > 0)
-        {
-            movingUp = true;
-        }
-        else
-        {
-            movingUp = false;
-        }
-    }
-
-    void MoveNPCStepwiseUp()
-    {
-        if (movingUp)
-        {
-            GO.transform.Translate(Vector3.up * NPCSpeed * Time.deltaTime, Space.Self);
-        }
-        else
-        {
-            GO.transform.Translate(Vector3.down * NPCSpeed * Time.deltaTime, Space.Self);
-        }
-    }
-
-    protected float variance = .08f;
-    protected bool checkXYPosition(Vector3 playPos, Vector3 curPos)
-    {
-        if (Math.Abs(playPos.x - curPos.x) > variance ||
-            Math.Abs(playPos.z - curPos.z) > variance)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    protected bool checkVerticalPosition(Vector3 playPos, Vector3 curPos)
-    {
-        if (Math.Abs(playPos.y - curPos.y) > variance)
-        {
-            return false;
-        }
-        return true;
     }
 
     internal virtual void SetAttackAnimation(GameObject target)
@@ -615,24 +550,30 @@ public class NPC : Affectable
 
     public virtual void eatItem(Item i)
     {
-        //enforces it being in inventory, if that should change we'll rewrite later
-        if (Inventory.Contains(i))
+        Do(new Action(() =>
         {
-            //item was just eaten, take it outta that list
-            if (i.itemFlags[ItemFlags.IS_EQUIPPED])
+            //enforces it being in inventory, if that should change we'll rewrite later
+            if (Inventory.Contains(i))
             {
-                unequipItem(i);
+                //item was just eaten, take it outta that list
+                if (i.itemFlags[ItemFlags.IS_EQUIPPED])
+                {
+                    unequipItem(i);
+                }
+                i.onEatenEvent(this);
             }
-            i.onEatenEvent(this);
-        }
+        }), BigBoss.Time.eatItemCost, false, true);
     }
 
     public virtual void useItem(Item i)
     {
-        if (i.isUsable())
+        Do(new Action(() =>
         {
-            i.onUseEvent(this);
-        }
+            if (i.isUsable())
+            {
+                i.onUseEvent(this);
+            }
+        }), BigBoss.Time.useItemCost, false, true);
     }
 
     public virtual void attack(NPC n)
@@ -675,7 +616,7 @@ public class NPC : Affectable
         {
             spell.Activate(this, targets);
             AdjustPower(-spell.cost);
-        }), 60, true, false);
+        }), BigBoss.Time.spellCost, true, false);
     }
 
     protected bool NaturalDamage(NPC n)
@@ -775,7 +716,7 @@ public class NPC : Affectable
         return invWeightMax;
     }
 
-    EquipBones Bones = null;
+
     private EquipBones GetEquipBones()
     {
         if (GO != null && Bones == null)
@@ -792,6 +733,7 @@ public class NPC : Affectable
             i.onEquipEvent(this);
             EquippedItems.Add(i);
             if (Equipment.WeaponAnims.Move != "") animator.SetBool(Equipment.WeaponAnims.Move, true);
+            Wait(BigBoss.Time.equipItemCost);
             return true;
         }
         return false;
@@ -806,6 +748,7 @@ public class NPC : Affectable
             {
                 EquippedItems.Remove(i);
             }
+            Wait(BigBoss.Time.equipItemCost);
             return true;
         }
         return false;
@@ -818,14 +761,26 @@ public class NPC : Affectable
 
     internal bool dropItem(Item i, GridSpace space)
     {
-        return Inventory.TransferTo(i, space);
+        bool var = Inventory.TransferTo(i, space);
+        if (var) Wait(BigBoss.Time.pickDropItemCost);
+        return var;
     }
 
     internal bool pickUpItem(Item i, GridSpace space)
     {
-        return Inventory.TransferFrom(i, space);
+        bool var = Inventory.TransferFrom(i, space);
+        if (var) Wait(BigBoss.Time.pickDropItemCost);
+        return var;
     }
 
+    public void Wait()
+    {
+    }
+
+    public void Wait(int turns)
+    {
+        Do(Wait, turns, false, true);
+    }
 
     #endregion
 
@@ -847,9 +802,6 @@ public class NPC : Affectable
     #endregion
 
     #region Turn Management
-
-    private int npcPoints = 0;
-    private int TurnNPCIsOn = 1;
 
     public bool subtractPoints(int points)
     {
@@ -906,9 +858,10 @@ public class NPC : Affectable
 
     #region AI
 
-    public bool IsNextToTarget(GridSpace targetSpace)
+    public bool IsNextToGrid(GridSpace targetSpace, bool includeSelfSpace)
     {
         Value2D<GridSpace> space;
+        if (includeSelfSpace && this.GridSpace.Equals(targetSpace)) return true;
         return BigBoss.Levels.Level.Array.GetPointAround(targetSpace.X, targetSpace.Y, true, (arr, x, y) =>
         {
             return this.GridSpace.X == x && this.GridSpace.Y == y;
@@ -918,20 +871,26 @@ public class NPC : Affectable
     public bool IsNextToTarget(NPC n)
     {
         if (GO != null)
-        if (Vector3.Distance(GO.transform.position, n.GO.transform.position) < 1.75f)
-        {
-            return true;
-        }
+            if (Vector3.Distance(GO.transform.position, n.GO.transform.position) < 1.75f)
+            {
+                return true;
+            }
         return false;
     }
 
-    public int GridDistanceToTarget(NPC n)
+    public float DistanceToTarget(NPC n)
     {
-        GridSpace targetSpace = n.GridSpace;
-        PathNode[] nodes = PathTree.Instance.getPath(this.GridSpace, targetSpace, 50).ToArray();
-        return nodes.Length;
+        if (GO != null)
+            return Vector3.Distance(GO.transform.position, n.GO.transform.position);
+        else return float.MaxValue;
     }
 
+    public float DistanceToTarget(GameObject obj)
+    {
+        if (GO != null)
+            return Vector3.Distance(GO.transform.position, obj.transform.position);
+        else return float.MaxValue;
+    }
     #endregion
 
     #region Touch Input
@@ -949,7 +908,7 @@ public class NPC : Affectable
         }
         else if (BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT])
         {
-            if (this.GridDistanceToTarget(BigBoss.Player) > BigBoss.Gooey.GetCurrentSpellRange())
+            if (this.DistanceToTarget(BigBoss.Player) > BigBoss.Gooey.GetCurrentSpellRange())
             {
                 CreateTextMessage(this.Name + " is too far away to cast this spell!");
             }

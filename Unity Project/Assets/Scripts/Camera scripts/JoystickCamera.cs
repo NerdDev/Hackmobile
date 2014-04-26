@@ -22,8 +22,9 @@ public class JoystickCamera : MonoBehaviour
     public int zoomRate = 40;
     public float panSpeed = 120f;
     public float zoomDampening = 5.0f;
-    public float Transparency = .3f;
+    public float Transparency = .2f;
     public float TransparencyDelay = .2f;
+    public float TransparencyOffset = 1.5f;
     public LayerMask TransparencyLayers;
 
     internal float xDeg = 0.0f;
@@ -126,7 +127,7 @@ public class JoystickCamera : MonoBehaviour
         {
             Vector3 dir = transform.TransformDirection(Vector3.forward);
             Vector3 pos = transform.position - dir;
-            RaycastHit[] collisions = Physics.SphereCastAll(new Ray(pos, dir), .05f, currentDistance + 1f, TransparencyLayers);
+            RaycastHit[] collisions = Physics.SphereCastAll(new Ray(pos, dir), .05f, currentDistance + TransparencyOffset, TransparencyLayers);
             foreach (RaycastHit collision in collisions)
             {
                 //Debug.DrawLine(pos, collision.point, Color.red, 3f);

@@ -27,7 +27,7 @@ public class Blindness : EffectInstance
         base.Remove(n);
         if (n is Player)
         {
-            if (fow != null && originalRange != null)
+            if (fow != null && originalRange != Vector2.zero)
                 fow.range = originalRange;
             n.CreateTextMessage("You feel your vision return.");
         }
