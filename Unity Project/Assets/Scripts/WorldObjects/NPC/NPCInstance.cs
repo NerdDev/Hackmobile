@@ -22,17 +22,7 @@ public class NPCInstance : WOWrapper
         {
             WO.Destroy();
         }
-        else
-        {
-            TurnPoints = WO.CurrentPoints;
-        }
-        //if (TurnPoints > 0)
-        //{
-        //    BigBoss.Time.PassTurn(1);
-        //    TurnPoints--;
-        //}
     }
-    public int TurnPoints;
     public float TimeToMove;
     void FixedUpdate()
     {

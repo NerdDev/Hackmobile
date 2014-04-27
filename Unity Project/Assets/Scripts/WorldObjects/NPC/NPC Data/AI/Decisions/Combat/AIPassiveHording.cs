@@ -19,8 +19,8 @@ public class AIPassiveHording : AIAggro
     public override bool CalcWeighting(AICore core, out double weight)
     {
         if (base.CalcWeighting(core, out weight))
-        { // Should aggro player
-            return true;
+        { // Aware of player
+
         }
         weight = 0d;
         return false;

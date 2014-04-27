@@ -37,6 +37,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     public WorldObject()
     {
         ID = NextID++;
+        BasePoints = 60;
     }
 
     public void PostCopy()
@@ -129,50 +130,17 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     #endregion
 
     #region Time Management
-    int turnPoints = 0;
-    int basePoints = 60;
-    public bool isActive = false;
+    ulong basePoints = 60;
 
     public virtual void UpdateTurn()
     {
         //do nothing atm
     }
 
-    public virtual int CurrentPoints
-    {
-        get
-        {
-            return this.turnPoints;
-        }
-        set
-        {
-            this.turnPoints = value;
-        }
-    }
+    public virtual ulong CurrentPoints { get; set; }
 
-    public virtual int BasePoints
-    {
-        get
-        {
-            return this.basePoints;
-        }
-        set
-        {
-            this.basePoints = value;
-        }
-    }
+    public virtual ulong BasePoints { get; set; }
 
-    public virtual bool IsActive
-    {
-        get
-        {
-            return this.isActive;
-        }
-        set
-        {
-            this.isActive = value;
-        }
-    }
-
+    public virtual bool IsActive { get; set; }
     #endregion
 }

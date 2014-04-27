@@ -3830,7 +3830,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalTimePlayed: 0
-  turnsPassed: 0
   numTilesCrossed: 0
   regularMoveCost: 60
   attackCost: 60
@@ -5790,7 +5789,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   DestroyThisNPC: 0
-  TurnPoints: 0
   TimeToMove: 0
 --- !u!114 &1549679980
 MonoBehaviour:

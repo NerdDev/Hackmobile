@@ -36,56 +36,11 @@ public class AICore : IXmlParsable, ICopyable
     }
     public GridSpace TargetSpace;
 
-    private bool processedNearbyNPCs = false;
-    private List<NPC> friendlyNPCs = new List<NPC>();
-    public IEnumerable<NPC> FriendlyNPCs
-    {
-        get
-        {
-            if (!processedNearbyNPCs)
-            {
-                ProcessNPCs();
-            }
-            return friendlyNPCs;
-        }
-    }
-    private List<NPC> enemyNPCs = new List<NPC>();
-    public IEnumerable<NPC> EnemyNPCs
-    {
-        get
-        {
-            if (!processedNearbyNPCs)
-            {
-                ProcessNPCs();
-            }
-            return enemyNPCs;
-        }
-    }
-    private List<NPC> friendlyNPCsInLOS = new List<NPC>();
-    public IEnumerable<NPC> FriendlyNPCsInLOS
-    {
-        get
-        {
-            if (!processedNearbyNPCs)
-            {
-                ProcessNPCs();
-            }
-            return friendlyNPCsInLOS;
-        }
-    }
-    private List<NPC> enemyNPCsInLOS = new List<NPC>();
-    public IEnumerable<NPC> EnemyNPCsInLOS
-    {
-        get
-        {
-            if (!processedNearbyNPCs)
-            {
-                ProcessNPCs();
-            }
-            return enemyNPCsInLOS;
-        }
-    }
 
+
+    #region NPC Presence Memory
+
+    #endregion
 
     public AICore(NPC n)
     {
@@ -135,6 +90,11 @@ public class AICore : IXmlParsable, ICopyable
             log.close();
         }
         #endregion
+    }
+
+    public void UpdateAwareness()
+    {
+
     }
 
     protected void ProcessNPCs()

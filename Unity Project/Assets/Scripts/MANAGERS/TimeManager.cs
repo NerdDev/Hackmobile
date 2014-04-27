@@ -45,7 +45,7 @@ public class TimeManager : MonoBehaviour, IManager
         }
     }
 
-    public int turnsPassed = 0;
+    public ulong turnsPassed = 0;
     public int numTilesCrossed = 0;
     #endregion
     #region Action Costs

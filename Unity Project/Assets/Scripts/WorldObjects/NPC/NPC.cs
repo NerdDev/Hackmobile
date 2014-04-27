@@ -56,8 +56,8 @@ public class NPC : Affectable
 
     #region Individual NPC Variables
 
-    private int npcPoints = 0;
-    private int TurnNPCIsOn = 1;
+    private ulong npcPoints = 0;
+    private ulong TurnNPCIsOn = 1;
     EquipBones Bones = null;
     internal float turnTime;
     internal float gridTime;
@@ -802,10 +802,9 @@ public class NPC : Affectable
     #endregion
 
     #region Turn Management
-
-    public bool subtractPoints(int points)
+    public bool subtractPoints(ulong points)
     {
-        int gameTurns = BigBoss.Time.turnsPassed;
+        ulong gameTurns = BigBoss.Time.turnsPassed;
         if (TurnNPCIsOn < gameTurns)
         {
             npcPoints += (gameTurns - TurnNPCIsOn);
@@ -828,30 +827,6 @@ public class NPC : Affectable
         if (IsActive)
         {
             AI.DecideWhatToDo();
-        }
-    }
-
-    public override int CurrentPoints
-    {
-        get
-        {
-            return this.npcPoints;
-        }
-        set
-        {
-            this.npcPoints = value;
-        }
-    }
-
-    public override bool IsActive
-    {
-        get
-        {
-            return this.isActive;
-        }
-        set
-        {
-            this.isActive = value;
         }
     }
     #endregion
