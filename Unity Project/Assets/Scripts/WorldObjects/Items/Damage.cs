@@ -35,4 +35,12 @@ public struct Damage : IXmlParsable
         min = x.SelectInt("min");
         max = x.SelectInt("max", 1);
     }
+
+    public int GetHash()
+    {
+        int hash = 3;
+        hash += min * 5;
+        hash += max * 19;
+        return hash;
+    }
 }

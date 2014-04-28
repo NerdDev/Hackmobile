@@ -27,4 +27,6 @@ public class PlayerInstance : NPCInstance, IManager
             }
         }
     }
+
+    public BoneStructure bones;
 }

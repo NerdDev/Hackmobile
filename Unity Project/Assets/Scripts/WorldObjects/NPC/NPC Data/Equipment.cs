@@ -34,7 +34,7 @@ public class Equipment : IXmlParsable
         return isFree(et);
     }
 
-    public bool equipItem(Item i, EquipBones bones)
+    public bool equipItem(Item i, BoneStructure bones)
     {
         EquipType et = i.stats.EquipType;
         if (isFreeSlot(et))
@@ -43,15 +43,11 @@ public class Equipment : IXmlParsable
             es.equipItem(i);
             if (bones != null)
             {
-                Transform bone = GetBone(et, bones);
-                if (bone != null)
-                {
-                    //wrap object to NPC's bone
-                    GameObject item = BigBoss.Objects.Items.Wrap(i, bone).gameObject;
-                    //grab animations if it's a weapon
-                    WeaponAnimations temp = item.GetComponent<WeaponAnimations>();
-                    if (temp != null) WeaponAnims = temp;
-                }
+                //wrap object to NPC's bone
+                GameObject item = BigBoss.Objects.Items.WrapEquipment(i, bones).gameObject;
+                //grab animations if it's a weapon
+                WeaponAnimations temp = item.GetComponent<WeaponAnimations>();
+                if (temp != null) WeaponAnims = temp;
             }
             return true;
         }
@@ -59,24 +55,6 @@ public class Equipment : IXmlParsable
         {
             return false;
         }
-    }
-
-    private Transform GetBone(EquipType et, EquipBones bones)
-    {
-        switch (et)
-        {
-            case EquipType.BODY:
-                return bones.Chest;
-            case EquipType.FEET:
-                return bones.Feet;
-            case EquipType.HAND:
-                return bones.RightHand;
-            case EquipType.HEAD:
-                return bones.Head;
-            case EquipType.LEGS:
-                return bones.Legs;
-        }
-        return null;
     }
 
     public bool removeItem(Item i, Animator anim)

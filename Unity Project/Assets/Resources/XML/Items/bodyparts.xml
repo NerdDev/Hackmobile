@@ -1,0 +1,40 @@
+<items>
+	<bodyparts>
+		<bodypart name="HairB">
+			<stats>
+				<equiptype>HAIR</equiptype>
+			</stats>
+			<prefab>HairB</prefab>
+		</bodypart>
+		<bodypart name="HairC">
+			<stats>
+				<equiptype>HAIR</equiptype>
+			</stats>
+			<prefab>HairC</prefab>
+		</bodypart>
+		<bodypart name="NoseA">
+			<stats>
+				<equiptype>NOSE</equiptype>
+			</stats>
+			<prefab>NoseA</prefab>
+		</bodypart>
+		<bodypart name="EarsA">
+			<stats>
+				<equiptype>EARS</equiptype>
+			</stats>
+			<prefab>EarsA</prefab>
+		</bodypart>
+		<bodypart name="EarsB">
+			<stats>
+				<equiptype>EARS</equiptype>
+			</stats>
+			<prefab>EarsB</prefab>
+		</bodypart>
+		<bodypart name="BootsDefault">
+			<stats>
+				<equiptype>FEET</equiptype>
+			</stats>
+			<prefab>BootsNoble</prefab>
+		</bodypart>
+	</bodyparts>
+ </items>

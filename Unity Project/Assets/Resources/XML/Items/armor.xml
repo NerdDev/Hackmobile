@@ -1,0 +1,30 @@
+<items>
+	<Armors>
+		<armor name="Leather Armor">
+			<stats>
+				<weight>15</weight>
+				<cost>20</cost>
+				<nutrition>0</nutrition>
+				<equiptype>BODY</equiptype>
+				<damage>
+					<min>4</min>
+					<max>16</max>
+				</damage>
+			</stats>
+			<prefab>LeatherChest</prefab>
+		</armor>
+		<armor name="Leather Skirt">
+			<stats>
+				<weight>15</weight>
+				<cost>20</cost>
+				<nutrition>0</nutrition>
+				<equiptype>LEGS</equiptype>
+				<damage>
+					<min>4</min>
+					<max>16</max>
+				</damage>
+			</stats>
+			<prefab>LeatherLegs</prefab>
+		</armor>
+	</Armors>
+ </items>

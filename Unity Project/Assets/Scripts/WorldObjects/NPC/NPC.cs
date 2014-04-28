@@ -43,6 +43,7 @@ public class NPC : Affectable
     public Item NaturalWeapon { get; set; }
     public Spell OnDeath { get; set; }
 
+    public SkinnedMeshRenderer mainMesh;
     // Temporary arbitrary offset
     public Vector3 EyeSightPosition
     {
@@ -58,7 +59,7 @@ public class NPC : Affectable
 
     private int npcPoints = 0;
     private int TurnNPCIsOn = 1;
-    EquipBones Bones = null;
+    BoneStructure Bones = null;
     internal float turnTime;
     internal float gridTime;
     float gravity;
@@ -104,7 +105,7 @@ public class NPC : Affectable
 
     public override void Start()
     {
-        animator = GO.GetComponent<Animator>() as Animator;
+        animator = GO.GetComponentInChildren<Animator>() as Animator;
         controller = GO.GetComponent<CharacterController>();
         seeker = GO.GetComponent<Seeker>();
     }
@@ -717,11 +718,11 @@ public class NPC : Affectable
     }
 
 
-    private EquipBones GetEquipBones()
+    private BoneStructure GetEquipBones()
     {
         if (GO != null && Bones == null)
         {
-            Bones = GO.GetComponent<EquipBones>();
+            Bones = GO.GetComponentInChildren<BoneStructure>();
         }
         return Bones;
     }
@@ -733,7 +734,22 @@ public class NPC : Affectable
             i.onEquipEvent(this);
             EquippedItems.Add(i);
             if (Equipment.WeaponAnims.Move != "") animator.SetBool(Equipment.WeaponAnims.Move, true);
-            Wait(BigBoss.Time.equipItemCost);
+
+            //move roots to parents position
+            //i.GO.transform.position = GO.transform.position;
+//
+            //if (mainMesh.bones.Length != itemMesh.bones.Length)
+            //{
+            //    Debug.LogError("Bone arrays for child and parent do not match. Aborting parenting operation");
+                //for (int j = 0; j < mainMesh.bones.Length; j++)
+                //{
+                //    itemMesh.bones[j].parent = mainMesh.bones[j];
+                //}
+            //}
+
+            //now that we've changed the bone values, parent it to the correct transform
+            //itemMesh.mesh.transform.parent = mainMesh.mesh.transform.parent;
+            //itemMesh.mesh.transform.localPosition = Vector3.zero;
             return true;
         }
         return false;

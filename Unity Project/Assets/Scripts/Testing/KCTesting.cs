@@ -20,8 +20,23 @@ public class KCTesting : MonoBehaviour
         BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
 
         //adds some items to the Player to test with
-        Item ii = BigBoss.Objects.Items.Instantiate("Infiltrator's Sword");
+        Item ii = BigBoss.Objects.Items.Instantiate("NoseA");
         BigBoss.Player.addToInventory(ii);
+        ii = BigBoss.Objects.Items.Instantiate("EarsA");
+        BigBoss.Player.addToInventory(ii);
+        ii = BigBoss.Objects.Items.Instantiate("HairC");
+        BigBoss.Player.addToInventory(ii);
+        ii = BigBoss.Objects.Items.Instantiate("BootsDefault");
+        BigBoss.Player.addToInventory(ii);
+
+        Item i4 = BigBoss.Objects.Items.Instantiate("Leather Armor");
+        BigBoss.Player.addToInventory(i4);
+
+        i4 = BigBoss.Objects.Items.Instantiate("Bow");
+        BigBoss.Player.addToInventory(i4);
+
+        i4 = BigBoss.Objects.Items.Instantiate("Leather Skirt");
+        BigBoss.Player.addToInventory(i4);
 
         Item food = BigBoss.Objects.Items.Instantiate("Spoiled Bread");
         BigBoss.Player.addToInventory(food, 5);

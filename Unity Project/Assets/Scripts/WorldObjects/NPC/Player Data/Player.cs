@@ -38,7 +38,6 @@ public class Player : NPC
 
     #region INVENTORY
     Dictionary<Item, GameObject> InstantiatedItems = new Dictionary<Item, GameObject>();
-    EquipBones Bones = BigBoss.PlayerInfo.GetComponent<EquipBones>();
 
     public override void addToInventory(Item item, int count)
     {

@@ -59,7 +59,12 @@ public class PlayerStats
         equipment.AddSlot(EquipType.LEGS);
         equipment.AddSlot(EquipType.NECK);
         equipment.AddSlot(EquipType.RING, 2);
-        equipment.AddSlot(EquipType.SHIRT);
+        equipment.AddSlot(EquipType.UNDERBODY);
+
+        equipment.AddSlot(EquipType.CLOAK);
+        equipment.AddSlot(EquipType.EARS);
+        equipment.AddSlot(EquipType.HAIR);
+        equipment.AddSlot(EquipType.NOSE);
 
         player.Name = "Kurtis";
 

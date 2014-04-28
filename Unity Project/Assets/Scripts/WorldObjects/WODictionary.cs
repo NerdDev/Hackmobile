@@ -95,6 +95,26 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         return wrapper;
     }
 
+    public T WrapEquipment(W obj, BoneStructure parent)
+    {
+        GameObject gameObject = spawner.Instantiate(obj);
+        GameObject holder = new GameObject(obj.Prefab);
+        holder.transform.parent = parent.transform;
+        List<GameObject> objects = parent.AddEquipment(gameObject);
+        foreach (GameObject go in objects)
+        {
+            go.transform.parent = holder.transform;
+        }
+        WeaponAnimations animations = gameObject.GetComponent<WeaponAnimations>();
+        if (animations != null) holder.AddComponent<WeaponAnimations>().CopyInto(animations);
+        GameObject.Destroy(gameObject);
+
+        T wrapper = holder.AddComponent<T>();
+        wrapper.SetTo(obj);
+        obj.Init();
+        return wrapper;
+    }
+
     public T Wrap(W obj)
     {
         GameObject gameObject = spawner.Instantiate(obj);
