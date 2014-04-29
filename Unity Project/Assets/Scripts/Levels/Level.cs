@@ -19,6 +19,7 @@ public class Level : Container2D<GridSpace>
     public Bounding UpStartPoint;
     public Bounding DownStartPoint;
     public System.Random Random;
+    public HashSet<WorldObject> WorldObjects = new HashSet<WorldObject>();
 
     public Level()
     {

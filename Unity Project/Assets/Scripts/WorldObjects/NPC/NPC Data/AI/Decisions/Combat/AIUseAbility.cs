@@ -17,13 +17,19 @@ internal class AIUseAbility : AIDecision
         // Code to roll between damage options
         
         // Temporarily just doing autoattack for now.
-        if (core.Self.IsNextToTarget(core.Target))
+        NPC n = core.Target as NPC;
+        n = BigBoss.Player; // Temp
+        if (n == null)
         {
-            core.Self.attack(core.Target);
+            UnityEngine.Debug.LogError("Cannot attack non-npc " + core.Target);
+        }
+        if (core.Self.IsNextToTarget(n))
+        {
+            core.Self.attack(n);
         }
         else
         {
-            core.MoveTo(core.Target);
+            core.MoveTo(n);
         }
     }
 

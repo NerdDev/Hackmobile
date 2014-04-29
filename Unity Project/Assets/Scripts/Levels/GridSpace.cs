@@ -226,6 +226,11 @@ public class GridSpace : IGridSpace
         }
     }
 
+    public double Distance(GridSpace rhs)
+    {
+        return Math.Sqrt(Math.Pow(X - this.X, 2) + Math.Pow(Y - this.Y, 2));
+    }
+
     public static implicit operator Point(GridSpace space)
     {
         return new Point(space.X, space.Y);

@@ -47,8 +47,20 @@
         <speed>2</speed>
       </effect>
     </OnDeath>
-    <aipackages>
-    </aipackages>
+    <AI>
+      <AIRoles>
+        <!-- No special role -->
+      </AIRoles>
+      <AIMovements>
+        <!-- No special movements -->
+      </AIMovements>
+      <AIState state="Passive">
+        <AIDecision name="AIAggro" />
+        <AIDecision name="AIWander" />
+      </AIState>
+      <AIState state="Combat">
+      </AIState>
+    </AI>
   </npc>
   
   
@@ -95,7 +107,8 @@
         <!-- No special movements -->
       </AIMovements>
       <AIState state="Passive">
-        <AIDecision name="AIPassiveHording" />
+        <AIDecision name="AIAggro" />
+        <!--<AIDecision name="AIPassiveHording" TippingRatio="2.1" />-->
         <AIDecision name="AIWander" />
         <AIDecision name="AIEatCorpse" />
       </AIState>
@@ -151,6 +164,21 @@
         <slots>2</slots>
       </equiptype>
     </equipslots>
+    <AI>
+      <AIRoles>
+        <!-- No special role -->
+      </AIRoles>
+      <AIMovements>
+        <!-- No special movements -->
+      </AIMovements>
+      <AIState state="Passive">
+        <AIDecision name="AIAggro" />
+        <AIDecision name="AIWander" />
+        <AIDecision name="AIEatCorpse" />
+      </AIState>
+      <AIState state="Combat">
+      </AIState>
+    </AI>
   </npc>
   
   
@@ -219,5 +247,20 @@
         <speed>2</speed>
       </effect>
     </OnDeath>
+    <AI>
+      <AIRoles>
+        <!-- No special role -->
+      </AIRoles>
+      <AIMovements>
+        <!-- No special movements -->
+      </AIMovements>
+      <AIState state="Passive">
+        <AIDecision name="AIAggro" />
+        <AIDecision name="AIWander" />
+        <AIDecision name="AIEatCorpse" />
+      </AIState>
+      <AIState state="Combat">
+      </AIState>
+    </AI>
   </npc>
 </npcs>

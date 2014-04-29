@@ -14,19 +14,33 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     public string Name { get; set; }
     private string _prefab;
     public virtual string Prefab { get { return _prefab; } set { _prefab = "Prefabs/" + value; } }
-    public GridSpace GridSpace { 
+    public GridSpace GridSpace
+    {
         get { return _grid; }
-        set {
+        set
+        {
             if (_grid != null)
             {
                 _grid.Remove(this);
+                if (!System.Object.ReferenceEquals(_grid.Level, value.Level))
+                { // Transitioning to a new level.
+                    _grid.Level.WorldObjects.Remove(this);
+                }
             }
+            value.Level.WorldObjects.Add(this);
             value.Put(this);
-            _grid = value; 
-        } }
-    //X, Y in integers, GridSpace ref
+            _grid = value;
+        }
+    }
     private GridSpace _grid;
     public event Action<WorldObject> OnDestroy;
+    public virtual Vector3 CanSeePosition
+    {
+        get
+        {
+            return this.GO.transform.position;
+        }
+    }
 
     public override string ToString()
     {
@@ -72,7 +86,11 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     {
         Unregister();
         Unwrap();
-        if (GridSpace != null) GridSpace.Remove(this);
+        if (GridSpace != null)
+        {
+            GridSpace.Remove(this);
+            GridSpace.Level.WorldObjects.Remove(this);
+        }
         if (OnDestroy != null)
             OnDestroy(this);
     }
@@ -80,8 +98,9 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     public virtual void JustDestroy()
     {
         Unwrap();
-        
+
     }
+
     public virtual void JustUnregister()
     {
         Unregister();
@@ -121,7 +140,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
         BigBoss.Time.RemoveFromUpdateList(this);
     }
 
-    #region Data Management for Instances
+    #region XML
     public virtual void ParseXML(XMLNode x)
     {
         Name = x.SelectString("name", "NONAME!");
@@ -142,5 +161,19 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     public virtual ulong BasePoints { get; set; }
 
     public virtual bool IsActive { get; set; }
+    #endregion
+
+    #region Members
+    public override bool Equals(object obj)
+    {
+        WorldObject rhs = obj as WorldObject;
+        if (rhs == null) return false;
+        return ID == rhs.ID;
+    }
+
+    public override int GetHashCode()
+    {
+        return ID.GetHashCode();
+    }
     #endregion
 }

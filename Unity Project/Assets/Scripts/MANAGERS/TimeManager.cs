@@ -45,7 +45,7 @@ public class TimeManager : MonoBehaviour, IManager
         }
     }
 
-    public ulong turnsPassed = 0;
+    public ulong CurrentTurn = 0;
     public int numTilesCrossed = 0;
     #endregion
     #region Action Costs
@@ -107,9 +107,9 @@ public class TimeManager : MonoBehaviour, IManager
 
     private void PassTurn()
     {
-        turnsPassed++;
+        CurrentTurn++;
         //Justin's hot: // Thx brah
-        if (turnsPassed % 5 == 0)
+        if (CurrentTurn % 5 == 0)
             runGroupUpdate();
     }
 

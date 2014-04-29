@@ -17,7 +17,7 @@ public class AIMove : AIDecision
     {
         if (core.Target != null)
         {
-            core.Self.MoveNPC(core.Target.GridSpace);
+            core.Self.MoveNPC(core.Target.GO.transform.position);
         }
         else
         {
