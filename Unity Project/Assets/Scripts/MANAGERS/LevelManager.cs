@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour, IManager
     public Level Level { get; private set; }
     public int CurLevelDepth { get; private set; }
     public bool Initialized { get; set; }
+    public Theme TestTheme;
     public Theme Theme;
     public LevelBuilder Builder;
     public int Seed = -1;
@@ -73,13 +74,24 @@ public class LevelManager : MonoBehaviour, IManager
         Destroy(Level);
         Level level;
         GetLevel(depth, out level);
-        level.ToLog(Logs.Main, "Setting level to");
+        #region DEBUG
+        if (BigBoss.Debug.logging())
+        {
+            level.ToLog(Logs.Main, "Setting level to");
+        }
+        #endregion
         CurLevelDepth = depth;
-        Deploy(level);
-        Level = level;
+        DeployLevel(level);
         Level.PlacePlayer(true);
         BigBoss.DungeonMaster.PopulateLevel(Level);
+    }
+
+    protected void DeployLevel(Level level)
+    {
+        Deploy(level);
+        Level = level;
         Builder.Combine();
+        AstarPath.active.Scan();
     }
 
     public void SetCurLevel(bool up)
@@ -148,14 +160,28 @@ public class LevelManager : MonoBehaviour, IManager
         gen.Depth = depth;
         gen.Rand = new System.Random(_levelSeeds[depth]);
         LevelLayout layout = gen.Generate();
+        Level level = GenerateFromLayout(layout, gen.Rand);
+        _levels[depth] = level;
+    }
+
+    Level GenerateFromLayout(LevelLayout layout, System.Random rand)
+    {
+        LevelGenerator.ConfirmEdges(layout);
         Level level = new Level();
         MultiMap<GridSpace> spaces = Builder.GeneratePrototypes(level, layout);
         level.UnderlyingContainer = spaces;
         level.LoadRoomMaps(layout);
-        level.Random = gen.Rand;
+        level.Random = rand;
         level.UpStartPoint = layout.UpStart;
         level.DownStartPoint = layout.DownStart;
-        _levels[depth] = level;
+        return level;
+    }
+
+    public void LoadTestLevel(LevelLayout layout, System.Random rand)
+    {
+        layout.Random = rand;
+        Level level = GenerateFromLayout(layout, rand);
+        DeployLevel(level);
     }
 
     Theme GetTheme()

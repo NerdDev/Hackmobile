@@ -107,8 +107,7 @@
         <!-- No special movements -->
       </AIMovements>
       <AIState state="Passive">
-        <AIDecision name="AIAggro" />
-        <!--<AIDecision name="AIPassiveHording" TippingRatio="2.1" />-->
+        <AIDecision name="AIPassiveHording" />
         <AIDecision name="AIWander" />
         <AIDecision name="AIEatCorpse" />
       </AIState>

@@ -115,19 +115,22 @@ public class AICore : IXmlParsable, ICopyable
                 break;
             }
             // Update faction info
-            if (item.Friendly)
+            if (item.AwareOf)
             {
-                NumFriendlies++;
-            }
-            else
-            {
-                double dist = Vector3.Distance(Self.GO.transform.position, item.NPC.GO.transform.position);
-                if (dist > ClosestEnemyDist)
+                if (item.Friendly)
                 {
-                    ClosestEnemy = item.NPC;
-                    ClosestEnemyDist = dist;
+                    NumFriendlies++;
                 }
-                NumEnemies++;
+                else
+                {
+                    double dist = Vector3.Distance(Self.GO.transform.position, item.NPC.GO.transform.position);
+                    if (dist > ClosestEnemyDist)
+                    {
+                        ClosestEnemy = item.NPC;
+                        ClosestEnemyDist = dist;
+                    }
+                    NumEnemies++;
+                }
             }
         }
 
@@ -253,11 +256,11 @@ public class AICore : IXmlParsable, ICopyable
             AIDecisionCore core = cores[(int)state];
             foreach (var packageNode in stateNode.SelectList("AIDecision"))
             {
-                string name;
-                if (!packageNode.SelectString("name", out name)) continue;
                 AIDecision decision;
-                if (!BigBoss.Types.TryInstantiate<AIDecision>(name, out decision)) continue;
-                core.AddDecision(decision);
+                if (ParseDecision(packageNode, out decision))
+                {
+                    core.AddDecision(decision);
+                }
             }
 
         }
@@ -266,11 +269,11 @@ public class AICore : IXmlParsable, ICopyable
         {
             foreach (var packageNode in movementNode.SelectList("AIMovement"))
             {
-                string name;
-                if (!x.SelectString("name", out name)) continue;
-                AIDecision movement;
-                if (!BigBoss.Types.TryInstantiate<AIDecision>(name, out movement)) continue;
-                movementCore.AddDecision(movement);
+                AIDecision decision;
+                if (ParseDecision(packageNode, out decision))
+                {
+                    movementCore.AddDecision(decision);
+                }
             }
         }
 
@@ -286,6 +289,22 @@ public class AICore : IXmlParsable, ICopyable
             core = cores[(int)AIState.Combat];
             core.AddDecision(new AIUseAbility());
         }
+    }
+
+    protected bool ParseDecision(XMLNode node, out AIDecision decision)
+    {
+        string name;
+        if (!node.SelectString("name", out name))
+        {
+            decision = null;
+            return false;
+        }
+        if (BigBoss.Types.TryInstantiate<AIDecision>(name, out decision))
+        {
+            decision.ParseXML(node);
+            return true;
+        }
+        return false;
     }
     #endregion
 }

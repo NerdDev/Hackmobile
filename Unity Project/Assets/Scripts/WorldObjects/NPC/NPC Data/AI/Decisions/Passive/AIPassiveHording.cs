@@ -24,6 +24,8 @@ public class AIPassiveHording : AIAggro
     public override bool CalcWeighting(AICore core, out double weight)
     {
         weight = 0d;
+        if (core.NumEnemies == 0) return false;
+
         ratio = core.NumFriendlies;
         ratio /= core.NumEnemies;
         if (ratio > TippingRatio)

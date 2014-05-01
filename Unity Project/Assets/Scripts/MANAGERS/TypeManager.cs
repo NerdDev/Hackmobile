@@ -24,6 +24,9 @@ public class TypeManager : MonoBehaviour, IManager
         Harvest<RoomModifier>();
         Harvest<AIDecision>();
         Harvest<ITargeter>();
+        #if UNITY_EDITOR
+        Harvest<TestLevelSetup>();
+        #endif
     }
 
     protected void Harvest<T>()

@@ -149,9 +149,9 @@ public class Level : Container2D<GridSpace>
             startBounding = DownStartPoint;
         }
         BigBoss.Debug.w(Logs.Main, "Placing player in position.");
+        Value2D<GridSpace> start;
         RandomPicker<GridSpace> picker;
         this.map.DrawRect(new Bounding(startBounding).Expand(1), Draw.IsType<GridSpace>(GridType.StairPlace).IfThen(Draw.PickRandom(out picker)));
-        Value2D<GridSpace> start;
         if (!picker.Pick(Random, out start))
         {
             throw new ArgumentException("Cannot place player");
