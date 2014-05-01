@@ -48,22 +48,12 @@
       </effect>
     </OnDeath>
     <AI>
-      <AIRoles>
-        <!-- No special role -->
-      </AIRoles>
-      <AIMovements>
-        <!-- No special movements -->
-      </AIMovements>
-      <AIState state="Passive">
-        <AIDecision name="AIAggro" />
-        <AIDecision name="AIWander" />
-      </AIState>
-      <AIState state="Combat">
-      </AIState>
+      <AIDecision name="AIAggro" />
+      <AIDecision name="AIWander" />
     </AI>
   </npc>
-  
-  
+
+
   <npc name="Giant Rat">
     <prefab>GIANT_RAT</prefab>
     <flags>
@@ -100,23 +90,13 @@
       </effect>
     </OnDeath>
     <AI>
-      <AIRoles>
-        <!-- No special role -->
-      </AIRoles>
-      <AIMovements>
-        <!-- No special movements -->
-      </AIMovements>
-      <AIState state="Passive">
-        <AIDecision name="AIPassiveHording" />
-        <AIDecision name="AIWander" />
-        <AIDecision name="AIEatCorpse" />
-      </AIState>
-      <AIState state="Combat">
-      </AIState>
+      <AIDecision name="AIHording" />
+      <AIDecision name="AIWander" />
+      <AIDecision name="AIEatCorpse" />
     </AI>
   </npc>
-  
-  
+
+
   <npc name="Ghoul">
     <prefab>Ghoul</prefab>
     <flags>
@@ -164,23 +144,13 @@
       </equiptype>
     </equipslots>
     <AI>
-      <AIRoles>
-        <!-- No special role -->
-      </AIRoles>
-      <AIMovements>
-        <!-- No special movements -->
-      </AIMovements>
-      <AIState state="Passive">
-        <AIDecision name="AIAggro" />
-        <AIDecision name="AIWander" />
-        <AIDecision name="AIEatCorpse" />
-      </AIState>
-      <AIState state="Combat">
-      </AIState>
+      <AIDecision name="AIAggro" />
+      <AIDecision name="AIWander" />
+      <AIDecision name="AIEatCorpse" />
     </AI>
   </npc>
-  
-  
+
+
   <npc name="Mummy">
     <prefab>Mummy</prefab>
     <flags>
@@ -247,19 +217,9 @@
       </effect>
     </OnDeath>
     <AI>
-      <AIRoles>
-        <!-- No special role -->
-      </AIRoles>
-      <AIMovements>
-        <!-- No special movements -->
-      </AIMovements>
-      <AIState state="Passive">
-        <AIDecision name="AIAggro" />
-        <AIDecision name="AIWander" />
-        <AIDecision name="AIEatCorpse" />
-      </AIState>
-      <AIState state="Combat">
-      </AIState>
+      <AIDecision name="AIAggro" />
+      <AIDecision name="AIWander" />
+      <AIDecision name="AIEatCorpse" />
     </AI>
   </npc>
 </npcs>

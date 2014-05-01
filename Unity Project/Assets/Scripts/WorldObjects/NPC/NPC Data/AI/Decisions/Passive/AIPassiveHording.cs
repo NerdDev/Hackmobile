@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AIPassiveHording : AIAggro
+public class AIHording : AIAggro
 {
     public float TippingRatio;
     public float FleeDistance;
     private float ratio;
-    private NPC closestEnemy;
 
     public override void Action(AICore core)
     {

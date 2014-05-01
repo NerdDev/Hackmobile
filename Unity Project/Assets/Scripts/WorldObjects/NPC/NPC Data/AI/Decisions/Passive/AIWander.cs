@@ -6,6 +6,7 @@ using System.Text;
 public class AIWander : AIDecision
 {
     public override double StickyShift { get { return 0d; } }
+    public override IEnumerable<AIState> States { get { yield return AIState.Passive; } } 
     GridSpace targetSpace;
     MultiMap<GridSpace> targetArea;
 

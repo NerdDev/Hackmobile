@@ -12,7 +12,6 @@ public class AICore : IXmlParsable, ICopyable
 
     // Cores
     AIDecisionCore[] cores = new AIDecisionCore[EnumExt.Length<AIState>()];
-    AIDecisionCore movementCore = new AIDecisionCore();
 
     // State variables
     public AIState CurrentState = AIState.Passive;
@@ -208,7 +207,7 @@ public class AICore : IXmlParsable, ICopyable
     {
         ProbabilityPool<AIDecision> movementPool = ProbabilityPool<AIDecision>.Create();
         AIDecision movement;
-        if (!movementCore.FillPool(movementPool, this, out movement))
+        if (!cores[(int)AIState.Movement].FillPool(movementPool, this, out movement))
         {
             movement = movementPool.Get(Random);
         }
@@ -249,30 +248,14 @@ public class AICore : IXmlParsable, ICopyable
     #region XML
     public void ParseXML(XMLNode x)
     {
-        foreach (var stateNode in x.SelectList("AIState"))
+        foreach (var packageNode in x.SelectList("AIDecision"))
         {
-            AIState state;
-            if (!stateNode.SelectEnum<AIState>("State", out state)) continue;
-            AIDecisionCore core = cores[(int)state];
-            foreach (var packageNode in stateNode.SelectList("AIDecision"))
+            AIDecision decision;
+            if (ParseDecision(packageNode, out decision))
             {
-                AIDecision decision;
-                if (ParseDecision(packageNode, out decision))
+                foreach (AIState state in decision.States)
                 {
-                    core.AddDecision(decision);
-                }
-            }
-
-        }
-
-        foreach (var movementNode in x.SelectList("AIMovements"))
-        {
-            foreach (var packageNode in movementNode.SelectList("AIMovement"))
-            {
-                AIDecision decision;
-                if (ParseDecision(packageNode, out decision))
-                {
-                    movementCore.AddDecision(decision);
+                    cores[(int)state].AddDecision(decision);
                 }
             }
         }
@@ -280,10 +263,12 @@ public class AICore : IXmlParsable, ICopyable
         // Package Defaults
         if (x.SelectBool("UseDefaults", true))
         {
+            AIDecisionCore core;
             // Movement
-            movementCore.AddDecision(new AIMove());
+            core = cores[(int)AIState.Movement];
+            core.AddDecision(new AIMove());
             // Passive
-            var core = cores[(int)AIState.Passive];
+            core = cores[(int)AIState.Passive];
             core.AddDecision(new AIWait());
             // Combat
             core = cores[(int)AIState.Combat];

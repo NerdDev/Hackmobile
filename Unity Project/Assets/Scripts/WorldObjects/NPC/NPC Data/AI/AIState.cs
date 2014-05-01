@@ -6,5 +6,7 @@ using System.Text;
 public enum AIState
 {
     Passive,
-    Combat
+    Combat,
+    Movement,
+
 }

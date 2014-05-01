@@ -9,6 +9,8 @@ public abstract class AIDecision : IXmlParsable
 
     public abstract double StickyShift { get; }
 
+    public abstract IEnumerable<AIState> States { get; }
+
     public abstract void Action(AICore core);
 
     public abstract bool CalcWeighting(AICore core, out double weight);

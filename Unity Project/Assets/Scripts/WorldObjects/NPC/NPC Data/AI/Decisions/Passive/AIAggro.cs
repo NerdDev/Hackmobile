@@ -5,6 +5,8 @@ using System.Text;
 
 public class AIAggro : AIDecision
 {
+    public override IEnumerable<AIState> States { get { yield return AIState.Passive; } }
+
     public override double Cost
     {
         get { return 0; }

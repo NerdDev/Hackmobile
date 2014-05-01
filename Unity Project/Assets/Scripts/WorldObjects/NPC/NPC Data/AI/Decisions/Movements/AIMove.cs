@@ -8,6 +8,7 @@ public class AIMove : AIDecision
 {
     public override double Cost { get { return 60d; } }
     public override double StickyShift { get { return 2d; } }
+    public override IEnumerable<AIState> States { get { yield return AIState.Movement; } }
 
     public AIMove()
     {

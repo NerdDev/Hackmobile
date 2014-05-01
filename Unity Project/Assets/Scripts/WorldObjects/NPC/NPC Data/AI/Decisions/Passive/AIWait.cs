@@ -6,6 +6,7 @@ using System.Text;
 public class AIWait : AIDecision
 {
     public override double StickyShift { get { return 0d; } }
+    public override IEnumerable<AIState> States { get { yield return AIState.Passive; } }
 
     public override double Cost { get { return 60d; } }
 
