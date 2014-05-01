@@ -675,6 +675,18 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         val = ret;
         return true;
     }
+
+    public T GetFromAngle(int x, int y, float angle)
+    {
+        GridLocation loc = angle.GetGridLocation();
+        loc.Modify(ref x, ref y);
+        return this[x, y];
+    }
+
+    public T GetFromTangent(int x, int y, float angle, bool clockwise)
+    {
+        return GetFromAngle(x, y, angle + (clockwise ? -90 : 90));
+    }
     #endregion
     #region Utility
     /*

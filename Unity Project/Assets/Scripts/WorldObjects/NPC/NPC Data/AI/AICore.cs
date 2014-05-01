@@ -44,6 +44,10 @@ public class AICore : IXmlParsable, ICopyable
     public Dictionary<NPC, NPCMemoryItem> NPCMemory = new Dictionary<NPC, NPCMemoryItem>();
     #endregion
 
+    #region Movement Memory
+    public Dictionary<GridSpace, GridSpace> MovementSubstitutions = new Dictionary<GridSpace, GridSpace>();
+    #endregion
+
     public AICore(NPC n)
     {
         this.Self = n;
@@ -65,7 +69,7 @@ public class AICore : IXmlParsable, ICopyable
 
     public void DecideWhatToDo()
     {
-        UpdateNPCMemory();
+        Reset();
         ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
         AIDecision decision;
         if (!cores[(int)CurrentState].FillPool(pool, this, out decision))
@@ -95,7 +99,13 @@ public class AICore : IXmlParsable, ICopyable
         #endregion
     }
 
-    public void UpdateNPCMemory()
+    protected void Reset()
+    {
+        UpdateNPCMemory();
+        MovementSubstitutions.Clear();
+    }
+
+    protected void UpdateNPCMemory()
     {
         NumFriendlies = 0;
         NumEnemies = 0;
@@ -193,14 +203,34 @@ public class AICore : IXmlParsable, ICopyable
 
     public void MoveTo(GridSpace space)
     {
-        this.TargetSpace = space;
+        this.Target = null;
+        GridSpace sub;
+        if (MovementSubstitutions.TryGetValue(space, out sub))
+        {
+            this.TargetSpace = sub;
+        }
+        else
+        {
+            this.TargetSpace = space;
+        }
         Move();
     }
 
     public void MoveTo(WorldObject wo)
     {
-        this.Target = wo;
-        Move();
+        GridSpace sub;
+        if (MovementSubstitutions.TryGetValue(wo.GridSpace, out sub))
+        {
+            this.Target = null;
+            this.TargetSpace = sub;
+            Move();
+        }
+        else
+        {
+            this.TargetSpace = null;
+            this.Target = wo;
+            Move();
+        }
     }
 
     protected void Move()
@@ -272,6 +302,7 @@ public class AICore : IXmlParsable, ICopyable
             core.AddDecision(new AIWait());
             // Combat
             core = cores[(int)AIState.Combat];
+            core.AddDecision(new AIWait());
             core.AddDecision(new AIUseAbility());
         }
     }

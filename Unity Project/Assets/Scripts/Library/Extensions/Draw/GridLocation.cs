@@ -302,4 +302,45 @@ public static class GridLocationExt
         xOut = x;
         yOut = y;
     }
+
+    public static GridLocation GetGridLocation(this float angle)
+    {
+        angle = angle % 360f;
+        if (angle < 202.5f)
+        {
+            if (angle < 112.5f)
+            {
+                if (angle < 67.5)
+                {
+                    if (angle < 22.5)
+                    {
+                        return GridLocation.TOP;
+                    }
+                    return GridLocation.TOPRIGHT;
+                }
+                return GridLocation.RIGHT;
+            }
+            else if (angle < 157.5f)
+            {
+                return GridLocation.BOTTOMRIGHT;
+            }
+            return GridLocation.BOTTOM;
+        }
+        else
+        {
+            if (angle < 292.5f)
+            {
+                if (angle < 247.5)
+                {
+                    return GridLocation.BOTTOMLEFT;
+                }
+                return GridLocation.LEFT;
+            }
+            else if (angle < 337.5)
+            {
+                return GridLocation.TOPLEFT;
+            }
+            return GridLocation.TOP;
+        }
+    }
 }

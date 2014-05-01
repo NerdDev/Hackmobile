@@ -439,12 +439,7 @@ public static class Draw
             if (arr.TryGetValue(x, y, out space))
             {
                 if (space == null) return false;
-                if (!GridTypeEnum.Walkable(space.Type)) return false;
-                foreach (ThemeElement element in space.GetThemeElements())
-                {
-                    if (!element.Walkable) return false;
-                }
-                return true;
+                return space.Walkable();
             }
             return false;
         });
