@@ -7,23 +7,29 @@ public class AIPassiveHording : AIHording
 {
     public float ChaseTippingRatio;
 
+    public override IEnumerable<AIState> States
+    {
+        get
+        {
+            yield return AIState.Combat;
+            yield return AIState.Passive;
+        }
+    }
+
+
     public override bool Decide(AICore core, out double weight, out DecisionActions actions)
     {
+        bool hordingRet = base.Decide(core, out weight, out actions);
         if (core.CurrentState == AIState.Passive)
         {
-            actions = (coreP) => core.CurrentState = AIState.Combat;
-            weight = 0d;
-
             if (ratio > ChaseTippingRatio)
             {
+                actions = (coreP) => core.CurrentState = AIState.Combat;
+                weight = 0d;
                 return true;
             }
-            return false;
         }
-        else
-        {
-            return base.Decide(core, out weight, out actions);
-        }
+        return hordingRet;
     }
 
     public override void ParseXML(XMLNode x)

@@ -5,5 +5,6 @@ using System.Text;
 
 public interface ICopyable
 {
-    void PostCopy();
+    void PostPrimitiveCopy();
+    void PostObjectCopy();
 }

@@ -63,12 +63,17 @@ namespace System
             else
             {
                 var cloneObject = CloneMethod.Invoke(originalObject, null);
+                ICopyable copyAble = cloneObject as ICopyable;
                 visited.Add(originalObject, cloneObject);
+                if (copyAble != null)
+                {
+                    copyAble.PostPrimitiveCopy();
+                }
                 CopyFields(originalObject, visited, cloneObject, typeToReflect);
                 RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
-                if (cloneObject is ICopyable && cloneObject != null)
+                if (copyAble != null)
                 {
-                    ((ICopyable)cloneObject).PostCopy();
+                    copyAble.PostObjectCopy();
                 }
                 return cloneObject;
             }

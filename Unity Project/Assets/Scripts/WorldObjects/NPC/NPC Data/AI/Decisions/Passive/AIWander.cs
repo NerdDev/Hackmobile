@@ -22,12 +22,10 @@ public class AIWander : AIDecision
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + core.Self.ID + "/Log.txt");
-            log.printHeader("AIWander New Area");
-            targetArea.ToLog(log);
-            core.Level.ToLog(log, targetArea);
-            log.printFooter("AIWander New Area");
-            log.close();
+            core.Log.printHeader("AIWander New Area");
+            targetArea.ToLog(core.Log);
+            core.Level.ToLog(core.Log, targetArea);
+            core.Log.printFooter("AIWander New Area");
         }
         #endregion
     }
@@ -40,11 +38,9 @@ public class AIWander : AIDecision
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + core.Self.ID + "/Log.txt");
-            log.printHeader("AIWander Pick Target");
-            log.w("New target: " + targetSpace);
-            log.printFooter("AIWander Pick Target");
-            log.close();
+            core.Log.printHeader("AIWander Pick Target");
+            core.Log.w("New target: " + targetSpace);
+            core.Log.printFooter("AIWander Pick Target");
         }
         #endregion
     }
@@ -54,14 +50,14 @@ public class AIWander : AIDecision
         actions = AIDecisions.Base();
         if (!targetArea.Contains(core.Self.GridSpace.X, core.Self.GridSpace.Y))
         {
-            actions.Then(RegenAreaAction);
+            actions = actions.Then(RegenAreaAction);
             targetSpace = core.Self.GridSpace;
         }
         if (core.Continuing(this))
         {
             if (core.Self.GridSpace.Equals(targetSpace)) // At end goal
             { // Chance to continue wandering in a different direction
-                actions.Then(PickNewTarget);
+                actions = actions.Then(PickNewTarget);
                 weight = 2d;
             }
             else
@@ -73,10 +69,10 @@ public class AIWander : AIDecision
         else
         {
             // Chance to start wandering
-            actions.Then(PickNewTarget);
-            weight = 0.15d;
+            actions = actions.Then(PickNewTarget);
+            weight = .15d;
         }
-        actions.Then((coreP) => core.MoveTo(targetSpace));
+        actions = actions.Then((coreP) => core.MoveTo(targetSpace));
         return false;
     }
 }

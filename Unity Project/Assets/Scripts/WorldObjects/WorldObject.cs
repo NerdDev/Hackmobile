@@ -54,9 +54,13 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
         BasePoints = 60;
     }
 
-    public void PostCopy()
+    public void PostPrimitiveCopy()
     {
         ID = NextID++;
+    }
+
+    public void PostObjectCopy()
+    {
     }
 
     // Use this for initialization

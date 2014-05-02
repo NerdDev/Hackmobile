@@ -16,4 +16,16 @@ public class NPCMemoryItem
     {
         this.NPC = npc;
     }
+
+    public void ToLog(Log log)
+    {
+        if (!BigBoss.Debug.Flag(DebugManager.DebugFlag.AI)) return;
+        log.printHeader(NPC + " Memory Item");
+        log.w("Can See: " + CanSee);
+        log.w("Aware of: " + AwareOf);
+        log.w("Turn Last Seen: " + TurnLastSeen);
+        log.w("Space Last Seen: " + SpaceLastSeen);
+        log.w("Friendly: " + Friendly);
+        log.printFooter(NPC + " Memory Item");
+    }
 }

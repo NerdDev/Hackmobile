@@ -50,6 +50,8 @@ public class AICore : IXmlParsable, ICopyable
     public Dictionary<GridSpace, GridSpace> MovementSubstitutions = new Dictionary<GridSpace, GridSpace>();
     #endregion
 
+    public Log Log;
+
     public AICore(NPC n)
     {
         this.Self = n;
@@ -59,9 +61,14 @@ public class AICore : IXmlParsable, ICopyable
         }
     }
 
-    public void PostCopy()
+    public void PostPrimitiveCopy()
+    {
+    }
+
+    public void PostObjectCopy()
     {
         Random = new System.Random(Probability.Rand.Next());
+        Log = BigBoss.Debug.CreateNewLog("AI/NPC " + Self.ID + "/Log.txt");
     }
 
     public bool Continuing(AIDecision decision)
@@ -71,6 +78,12 @@ public class AICore : IXmlParsable, ICopyable
 
     public void DecideWhatToDo()
     {
+        #region Debug
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            Log.printHeader("Deciding - Turn " + BigBoss.Time.CurrentTurn + " - " + System.DateTime.Now);
+        }
+        #endregion
         Reset();
         ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
         AIDecision decision;
@@ -81,11 +94,9 @@ public class AICore : IXmlParsable, ICopyable
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + Self.ID + "/Log.txt");
-            log.printHeader("Deciding");
-            pool.ToLog(log, "Decision options");
-            log.w("Decided on " + decision.GetType().ToString());
-            log.close();
+            ToLog(Log);
+            pool.ToLog(Log, "Decision options");
+            Log.w("Decided on " + decision.GetType().ToString());
         }
         #endregion
         CurrentDecision = decision;
@@ -97,9 +108,7 @@ public class AICore : IXmlParsable, ICopyable
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + Self.ID + "/Log.txt");
-            log.printFooter("Deciding");
-            log.close();
+            Log.printFooter("Deciding");
         }
         #endregion
     }
@@ -112,21 +121,62 @@ public class AICore : IXmlParsable, ICopyable
 
     protected void UpdateNPCMemory()
     {
+        #region Debug
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            Log.printHeader("UpdateNPCMemory");
+        }
+        #endregion
         NumFriendlies = 0;
         NumEnemies = 0;
+        // Check for new NPCs to become aware of
+        foreach (WorldObject wo in BigBoss.Levels.Level.WorldObjects)
+        {
+            NPC npc = wo as NPC;
+            if (npc == null) continue;
+            if (System.Object.ReferenceEquals(Self, npc)) continue;
+            if (NPCMemory.ContainsKey(npc)) continue;
+            if (!Self.CanSee(npc)) continue;
+            NPCMemoryItem item = new NPCMemoryItem(npc);
+            NPCMemory[npc] = item;
+            #region Debug
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                Log.w("Adding to memory: " + npc);
+            }
+            #endregion
+        }
 
         // Update NPCs already aware of
         foreach (var item in NPCMemory.Values.ToList())
         {
             // Update can see
             item.CanSee = Self.CanSee(item.NPC);
+            #region Debug
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                Log.printHeader(item.NPC.ToString());
+            }
+            #endregion
             // Update NPC memory item
             UpdateNPCMemory(item);
+            #region Debug
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                item.ToLog(Log);
+            }
+            #endregion
             // Remove if should forget
             if (!item.CanSee && ShouldForget(item))
             {
+                #region Debug
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+                {
+                    Log.printFooter("Forgetting: " + item.NPC);
+                }
+                #endregion
                 NPCMemory.Remove(item.NPC);
-                break;
+                continue;
             }
             // Update faction info
             if (item.AwareOf)
@@ -146,20 +196,19 @@ public class AICore : IXmlParsable, ICopyable
                     NumEnemies++;
                 }
             }
+            #region Debug
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                Log.printFooter(item.NPC.ToString());
+            }
+            #endregion
         }
-
-        // Check for new NPCs to become aware of
-        foreach (WorldObject wo in BigBoss.Levels.Level.WorldObjects)
+        #region Debug
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            NPC npc = wo as NPC;
-            if (npc == null) continue;
-            if (NPCMemory.ContainsKey(npc)) continue;
-            if (!Self.CanSee(npc)) continue;
-            NPCMemoryItem item = new NPCMemoryItem(npc);
-            item.CanSee = true;
-            NPCMemory[npc] = item;
-            UpdateNPCMemory(item);
+            Log.printFooter("Update NPC Memory");
         }
+        #endregion
     }
 
     protected void UpdateNPCMemory(NPCMemoryItem item)
@@ -169,6 +218,12 @@ public class AICore : IXmlParsable, ICopyable
             if (!item.AwareOf && ShouldBecomeAware(item))
             {
                 item.AwareOf = true;
+                #region Debug
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+                {
+                    Log.w("Became Aware");
+                }
+                #endregion
             }
             if (item.AwareOf)
             {
@@ -328,6 +383,14 @@ public class AICore : IXmlParsable, ICopyable
         return false;
     }
     #endregion
+
+    public void ToLog(Log log)
+    {
+        if (!BigBoss.Debug.Flag(DebugManager.DebugFlag.AI)) return;
+        log.w("Num Friendlies: " + NumFriendlies);
+        log.w("Num Enemies: " + NumEnemies);
+        log.w("Closest Enemy: " + ClosestEnemy + "  Dist: " + ClosestEnemyDist);
+    }
 }
 
 public static class AIDecisions

@@ -15,7 +15,6 @@ public class AIHording : AIDecision, ICopyable
         get
         {
             yield return AIState.Combat;
-            yield return AIState.Passive;
         }
     }
 
@@ -27,9 +26,13 @@ public class AIHording : AIDecision, ICopyable
     private const double circleChangeChance = .2d;
     bool clockwise;
 
-    public void PostCopy()
+    public void PostPrimitiveCopy()
     {
         clockwise = Probability.Rand.NextBool();
+    }
+
+    public void PostObjectCopy()
+    {
     }
 
     public override bool Decide(AICore core, out double weight, out DecisionActions actions)
@@ -79,7 +82,7 @@ public class AIHording : AIDecision, ICopyable
         base.ParseXML(x);
         AttackTippingRatio = x.SelectFloat("AttackTippingRatio", 4.1f);
         FleeDistance = x.SelectFloat("FleeDistance", 7f);
-        CirclingBuffer = x.SelectFloat("FleeDistance", 7f);
+        CirclingBuffer = x.SelectFloat("CirclingBuffer", 1f);
         FleeWeight = x.SelectFloat("FleeWeight", 3f);
     }
 }
