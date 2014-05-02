@@ -12,7 +12,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
     public bool OnGround { get; set; }
 
     //flags
-    public Flags<ItemFlags> itemFlags = new Flags<ItemFlags>();
+    public GenericFlags<ItemFlags> itemFlags = new GenericFlags<ItemFlags>();
 
     //separate classes
     public ItemStats stats = new ItemStats();
@@ -51,7 +51,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         hash += Icon.GetHashCode() * 5;
         hash += Prefab.GetHashCode() * 7;
         hash += props.GetHash() * 11;
-        hash += itemFlags.GetHash() * 13;
+        //hash += itemFlags.GetHash() * 13; //flags not counted in hash
         hash += stats.GetHash() * 17;
         hash += onEquip.GetHash() * 3;
         hash += onUse.GetHash() * 5;
@@ -146,6 +146,7 @@ public class Item : Affectable, PassesTurns, IXmlParsable
         onEaten = x.Select<Spell>("OnEatenEffect");
         onHit = x.Select<Spell>("OnHitEffect");
         stats = x.Select<ItemStats>("stats");
+        itemFlags = new GenericFlags<ItemFlags>(x.SelectEnums<ItemFlags>("flags"));
         Icon = x.SelectString("icon");
     }
 

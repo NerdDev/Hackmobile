@@ -673,11 +673,10 @@ public class GUIManager : MonoBehaviour, IManager
         itemButton.OnSingleClick = new Action(() =>
         {
             Item i = itemButton.refObject as Item;
-            Item itemAlreadyEquipped = BigBoss.Player.getEquippedItems().Find(items => items.Name.Equals(i.Name));
-            if (itemAlreadyEquipped != null)
+            if (i != null)
             {
-                BigBoss.Player.unequipItem(itemAlreadyEquipped);
-                BigBoss.Gooey.RegenItemInfoGUI(itemAlreadyEquipped);
+                BigBoss.Player.unequipItem(i);
+                BigBoss.Gooey.RegenItemInfoGUI(i);
             }
         });
     }

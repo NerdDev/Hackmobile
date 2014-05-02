@@ -111,7 +111,6 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
 
         T wrapper = holder.AddComponent<T>();
         wrapper.SetTo(obj);
-        obj.Init();
         return wrapper;
     }
 

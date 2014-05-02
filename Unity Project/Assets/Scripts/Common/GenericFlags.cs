@@ -141,6 +141,11 @@ public class GenericFlags<T> : IEnumerable<T> where T : struct, IComparable, ICo
         return _set.IsSubsetOf(rhs._set);
     }
 
+    public int GetHash()
+    {
+        return GetHashCode();
+    }
+
     public override int GetHashCode()
     {
         int hash = 17;

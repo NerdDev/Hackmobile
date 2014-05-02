@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class NPCInstance : WOWrapper
 {
+    //display values
     public bool DestroyThisNPC = false;
+    public int TurnPoints;
 
     void Start()
     {
@@ -26,14 +28,8 @@ public class NPCInstance : WOWrapper
         {
             TurnPoints = WO.CurrentPoints;
         }
-        //if (TurnPoints > 0)
-        //{
-        //    BigBoss.Time.PassTurn(1);
-        //    TurnPoints--;
-        //}
     }
-    public int TurnPoints;
-    public float TimeToMove;
+    
     void FixedUpdate()
     {
         if (WO != null)

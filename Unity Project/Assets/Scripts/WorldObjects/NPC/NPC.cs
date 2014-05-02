@@ -38,8 +38,7 @@ public class NPC : Affectable
     private AICore AI;
 
     public Inventory Inventory = new Inventory();
-    protected List<Item> EquippedItems = new List<Item>();
-    public Equipment Equipment = new Equipment();
+    public Equipment Equipment;
     public Item NaturalWeapon { get; set; }
     public Spell OnDeath { get; set; }
 
@@ -67,6 +66,7 @@ public class NPC : Affectable
     internal ActionToDo action;
     float TurnInterval = BigBoss.Time.TimeInterval;
     bool canMove;
+    FOWRenderers fow;
     #endregion
 
     #region NPC Movement Properties
@@ -78,6 +78,7 @@ public class NPC : Affectable
     internal bool Acting { get { return action != null && !action.IsDone(); } } //is the NPC already doing an action?
     protected float verticalOffset = 0f;
     internal Queue<GridSpace> targetGrids = new Queue<GridSpace>();
+    bool NPCPlaced = false;
 
     internal Animator animator;
     internal CharacterController controller;
@@ -106,6 +107,7 @@ public class NPC : Affectable
     public override void Start()
     {
         animator = GO.GetComponentInChildren<Animator>() as Animator;
+        Equipment.AddAnimator(animator);
         controller = GO.GetComponent<CharacterController>();
         seeker = GO.GetComponent<Seeker>();
     }
@@ -435,11 +437,13 @@ public class NPC : Affectable
     public virtual bool UpdateCurrentTileVectors() //assigns gridspaces every interval
     {
         Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
+        float ypos = GO.transform.position.y;
         if (BigBoss.Levels.Level == null) return false;
         GridSpace newGridSpace = BigBoss.Levels.Level[currentLoc.x.ToInt(), currentLoc.y.ToInt()];
         if (newGridSpace != null && !newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
         {
             GridSpace = newGridSpace;
+            if (ypos < -10f) PlaceNPC();
             return true;
         }
         else
@@ -471,28 +475,75 @@ public class NPC : Affectable
         }
     }
 
-    internal void MoveForward() //mainly for NPC's
+    internal void MoveForward() //only for NPC's
     {
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        if (controller.isGrounded)
+        bool gridInstantiated = GridSpace.Blocks != null;
+        if (!gridInstantiated) //grid is not instantiated, so reset the placement check
+        {
+            NPCPlaced = false;
+        }
+        else if (!NPCPlaced) //if NPC is not placed and grid IS instantiated, place it
+        {
+            PlaceNPC();
+            NPCPlaced = true; //npc is placed, so set the check - until it's not instantiated under it again, it will not replace the NPC
+        }
+
+        if (controller.isGrounded || !gridInstantiated) //if either the controller is grounded or the grid is not instantiated, gravity = 0
         {
             gravity = 0;
         }
-        else { gravity -= 9.81f * Time.deltaTime; }
-        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
-        controller.Move(newMove * NPCSpeed * Time.deltaTime);
+        else //gravity is by default normal speed
+        {
+            gravity -= 9.81f * Time.deltaTime;
+        }
+        gravity = Mathf.Clamp(gravity, -20, 20); //clamp gravity so the values don't go too high
+        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z); //move in the xz + gravity direction
+        controller.Move(newMove * NPCSpeed * Time.deltaTime); //move the controller
     }
 
-    internal void MoveForward(float speed) //mainly for player, because he has variable movement
+    internal void MoveForward(float speed) //only for player, because he has variable movement
     {
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
         if (controller.isGrounded)
         {
             gravity = 0;
         }
-        else { gravity -= 9.81f * Time.deltaTime; }
+        else
+        {
+            gravity -= 9.81f * Time.deltaTime;
+        }
         Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
         controller.Move(newMove * speed * Time.deltaTime);
+    }
+
+    protected bool checkVerticalPosition(Vector3 playPos, Vector3 curPos)
+    {
+        if (Math.Abs(playPos.y - curPos.y) > .05f)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    protected bool PlaceNPC() //places the NPC at the grid location via Raycasting
+    {
+        if (GridSpace.Blocks == null) return false;
+        if (GridSpace.Blocks[0] == null) return false;
+        Vector3 pos = GridSpace.Blocks[0].transform.position;
+        pos.y += 5;
+        RaycastHit hit;
+        if (Physics.Raycast(new Ray(pos, Vector3.down), out hit, 10f))
+        {
+            GO.transform.position = new Vector3(pos.x, pos.y - hit.distance + .05f, pos.z);
+            return true;
+        }
+        else
+        {
+            //leave NPC at current position
+            return false;
+        }
+
     }
 
     internal void LookTowards(Vector3 target) //lerp orientation towards target
@@ -732,24 +783,9 @@ public class NPC : Affectable
         if (Equipment.equipItem(i, GetEquipBones()))
         {
             i.onEquipEvent(this);
-            EquippedItems.Add(i);
             if (Equipment.WeaponAnims.Move != "") animator.SetBool(Equipment.WeaponAnims.Move, true);
-
-            //move roots to parents position
-            //i.GO.transform.position = GO.transform.position;
-//
-            //if (mainMesh.bones.Length != itemMesh.bones.Length)
-            //{
-            //    Debug.LogError("Bone arrays for child and parent do not match. Aborting parenting operation");
-                //for (int j = 0; j < mainMesh.bones.Length; j++)
-                //{
-                //    itemMesh.bones[j].parent = mainMesh.bones[j];
-                //}
-            //}
-
-            //now that we've changed the bone values, parent it to the correct transform
-            //itemMesh.mesh.transform.parent = mainMesh.mesh.transform.parent;
-            //itemMesh.mesh.transform.localPosition = Vector3.zero;
+            i.itemFlags[ItemFlags.IS_EQUIPPED] = true;
+            //i.ModifyItem(Inventory, new Action<Item>((item) => { item.itemFlags[ItemFlags.IS_EQUIPPED] = true; }));
             return true;
         }
         return false;
@@ -757,22 +793,22 @@ public class NPC : Affectable
 
     public virtual bool unequipItem(Item i)
     {
-        if (i.isUnEquippable() && Equipment.removeItem(i, animator))
+        if (i.isUnEquippable() && Equipment.removeItem(i))
         {
             i.onUnEquipEvent(this);
-            if (EquippedItems.Contains(i))
-            {
-                EquippedItems.Remove(i);
-            }
+            if (Equipment.WeaponAnims.Move != "") animator.SetBool(Equipment.WeaponAnims.Move, false);
+            if (Equipment.GetWeapons().Count == 0) Equipment.WeaponAnims = WeaponAnimations.Default();
+            i.itemFlags[ItemFlags.IS_EQUIPPED] = false;
+            //i.ModifyItem(Inventory, new Action<Item>((item) => { item.itemFlags[ItemFlags.IS_EQUIPPED] = false; }));
             Wait(BigBoss.Time.equipItemCost);
             return true;
         }
         return false;
     }
 
-    public List<Item> getEquippedItems()
+    public HashSet<Item> getEquippedItems()
     {
-        return EquippedItems;
+        return Equipment.EquippedItems;
     }
 
     internal bool dropItem(Item i, GridSpace space)
@@ -873,6 +909,20 @@ public class NPC : Affectable
     #endregion
 
     #region AI
+
+    public bool isVisible()
+    {
+        if (fow == null)
+        {
+            fow = Instance.GetComponent<FOWRenderers>();
+        }
+        return fow.isVisible;
+    }
+
+    public bool isInstantiated()
+    {
+        return Instance != null;
+    }
 
     public bool IsNextToGrid(GridSpace targetSpace, bool includeSelfSpace)
     {
