@@ -32,30 +32,30 @@ public class AIHording : AIDecision, ICopyable
         clockwise = Probability.Rand.NextBool();
     }
 
-    public override void Action(AICore core)
-    {
-        if (core.ClosestEnemyDist < FleeDistance)
-        {
-            core.MoveAway(core.ClosestEnemy);
-            return;
-        }
-    }
-
-    public override bool CalcWeighting(AICore core, out double weight)
+    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
     {
         weight = 0d;
-        if (core.NumEnemies == 0) return false;
+        if (core.NumEnemies == 0)
+        {
+            actions = null;
+            return false;
+        }
 
         ratio = core.NumFriendlies;
         ratio /= core.NumEnemies;
         if (ratio > AttackTippingRatio)
         { // Release to other AI
+            actions = null;
             return false;
         }
 
         if (core.ClosestEnemyDist < FleeDistance)
         { // Run
             weight = FleeWeight;
+            actions = (coreP) =>
+            {
+                coreP.MoveAway(core.ClosestEnemy);
+            };
             return false;
         }
         else if (core.ClosestEnemyDist < FleeDistance + CirclingBuffer)
@@ -68,10 +68,9 @@ public class AIHording : AIDecision, ICopyable
             float angle = Vector3.Angle(core.Self.GO.transform.position, core.ClosestEnemy.GO.transform.position);
             circleSpace = core.Level.GetFromTangent(core.Self.GridSpace.X, core.Self.GridSpace.Y, angle, clockwise);
             core.MovementSubstitutions[core.ClosestEnemy.GridSpace] = circleSpace.Walkable() ? circleSpace : core.Self.GridSpace;
-            // Release to other AI
-            return false;
         }
-
+        // Release to other AI
+        actions = null;
         return false;
     }
 

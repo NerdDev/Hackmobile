@@ -10,12 +10,7 @@ public class AIWait : AIDecision
 
     public override double Cost { get { return 60d; } }
 
-    public override void Action(AICore core)
-    {
-        // Nuttin'
-    }
-
-    public override bool CalcWeighting(AICore core, out double weight)
+    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
     {
         if (core.CurrentState == AIState.Passive)
         {
@@ -25,6 +20,7 @@ public class AIWait : AIDecision
         { // Last resort
             weight = 0.05d;
         }
+        actions = null;
         return false;
     }
 }

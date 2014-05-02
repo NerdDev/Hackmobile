@@ -12,11 +12,14 @@ public class AIDecisionCore
         foreach (AIDecision decision in decisions)
         {
             double weight;
-            if (decision.CalcWeighting(core, out weight))
+            DecisionActions actions;
+            if (decision.Decide(core, out weight, out actions))
             {
+                decision.Actions = actions;
                 autoDecision = decision;
                 return true;
             }
+            decision.Actions = actions;
             pool.Add(decision, weight);
         }
         autoDecision = null;

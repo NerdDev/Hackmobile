@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+public delegate void DecisionActions(AICore core);
+
 public class AICore : IXmlParsable, ICopyable
 {
     // Defining features
@@ -87,7 +89,10 @@ public class AICore : IXmlParsable, ICopyable
         }
         #endregion
         CurrentDecision = decision;
-        decision.Action(this);
+        if (decision.Actions != null)
+        {
+            decision.Actions(this);
+        }
         LastDecision = decision;
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
@@ -241,7 +246,7 @@ public class AICore : IXmlParsable, ICopyable
         {
             movement = movementPool.Get(Random);
         }
-        movement.Action(this);
+        movement.Actions(this);
     }
 
     public void MoveAway(int x, int y, float range = 10)
@@ -323,4 +328,21 @@ public class AICore : IXmlParsable, ICopyable
         return false;
     }
     #endregion
+}
+
+public static class AIDecisions
+{
+    public static DecisionActions Then(this DecisionActions actions, DecisionActions rhs)
+    {
+        return (core) =>
+        {
+            actions(core);
+            rhs(core);
+        };
+    }
+
+    public static DecisionActions Base()
+    {
+        return (core) => { };
+    }
 }

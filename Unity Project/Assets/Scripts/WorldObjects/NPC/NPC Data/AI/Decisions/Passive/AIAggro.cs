@@ -17,21 +17,18 @@ public class AIAggro : AIDecision
         get { return 0; }
     }
 
-    public override void Action(AICore core)
-    {
-        core.CurrentState = AIState.Combat;
-    }
-
-    public override bool CalcWeighting(AICore core, out double weight)
+    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
     {
         weight = 0d;
         foreach (var pair in core.NPCMemory)
         {
             if (!pair.Value.Friendly && pair.Value.AwareOf)
             {
+                actions = (coreP) => core.CurrentState = AIState.Combat;
                 return true;
             }
         }
+        actions = null;
         return false;
     }
 }

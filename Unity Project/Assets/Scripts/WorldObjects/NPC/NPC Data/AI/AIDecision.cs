@@ -9,11 +9,11 @@ public abstract class AIDecision : IXmlParsable
 
     public abstract double StickyShift { get; }
 
+    public DecisionActions Actions;
+
     public abstract IEnumerable<AIState> States { get; }
 
-    public abstract void Action(AICore core);
-
-    public abstract bool CalcWeighting(AICore core, out double weight);
+    public abstract bool Decide(AICore core, out double weight, out DecisionActions actions);
 
     public virtual void ParseXML(XMLNode x)
     {

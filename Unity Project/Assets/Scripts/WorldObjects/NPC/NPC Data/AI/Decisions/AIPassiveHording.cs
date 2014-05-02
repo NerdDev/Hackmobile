@@ -7,27 +7,13 @@ public class AIPassiveHording : AIHording
 {
     public float ChaseTippingRatio;
 
-    public override void Action(AICore core)
+    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
     {
         if (core.CurrentState == AIState.Passive)
         {
-            if (ratio > ChaseTippingRatio)
-            {
-                core.CurrentState = AIState.Combat;
-                return;
-            }
-        }
-        else
-        {
-            base.Action(core);
-        }
-    }
-
-    public override bool CalcWeighting(AICore core, out double weight)
-    {
-        if (core.CurrentState == AIState.Passive)
-        {
+            actions = (coreP) => core.CurrentState = AIState.Combat;
             weight = 0d;
+
             if (ratio > ChaseTippingRatio)
             {
                 return true;
@@ -36,7 +22,7 @@ public class AIPassiveHording : AIHording
         }
         else
         {
-            return base.CalcWeighting(core, out weight);
+            return base.Decide(core, out weight, out actions);
         }
     }
 

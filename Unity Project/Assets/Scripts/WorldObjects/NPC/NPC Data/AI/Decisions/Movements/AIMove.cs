@@ -14,7 +14,7 @@ public class AIMove : AIDecision
     {
     }
 
-    public override void Action(AICore core)
+    public void Move(AICore core)
     {
         if (core.Target != null)
         {
@@ -45,9 +45,10 @@ public class AIMove : AIDecision
         return false;
     }
 
-    public override bool CalcWeighting(AICore core, out double weight)
+    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
     {
         weight = 1d;
+        actions = Move;
         return false;
     }
 }

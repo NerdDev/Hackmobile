@@ -13,10 +13,10 @@ internal class AIUseAbility : AIDecision
     {
     }
 
-    public override void Action(AICore core)
+    protected void UseAbility(AICore core)
     {
         // Code to roll between damage options
-        
+
         // Temporarily just doing autoattack for now.
         NPC n = core.Target as NPC;
         n = BigBoss.Player; // Temp
@@ -34,10 +34,11 @@ internal class AIUseAbility : AIDecision
         }
     }
 
-    public override bool CalcWeighting(AICore core, out double weight)
+    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
     {
         // Do Damage is the arbitrary in-combat standard of 1
         weight = 1d;
+        actions = UseAbility;
         return false;
     }
 }
