@@ -81,7 +81,7 @@ public class AICore : IXmlParsable, ICopyable
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            Log.printHeader("Deciding - Turn " + BigBoss.Time.CurrentTurn + " - " + System.DateTime.Now);
+            Log.printHeader("Deciding - Turn " + BigBoss.Time.CurrentTurn + " - " + System.DateTime.Now + " - " + Self.GridSpace);
         }
         #endregion
         Reset();
@@ -100,9 +100,9 @@ public class AICore : IXmlParsable, ICopyable
         }
         #endregion
         CurrentDecision = decision;
-        if (decision.Actions != null)
+        if (decision.Args.Actions != null)
         {
-            decision.Actions(this);
+            decision.Args.Actions(this);
         }
         LastDecision = decision;
         #region Debug
@@ -115,6 +115,10 @@ public class AICore : IXmlParsable, ICopyable
 
     protected void Reset()
     {
+        NumFriendlies = 0;
+        NumEnemies = 0;
+        ClosestEnemyDist = 0;
+        ClosestEnemy = null;
         UpdateNPCMemory();
         MovementSubstitutions.Clear();
     }
@@ -127,8 +131,6 @@ public class AICore : IXmlParsable, ICopyable
             Log.printHeader("UpdateNPCMemory");
         }
         #endregion
-        NumFriendlies = 0;
-        NumEnemies = 0;
         // Check for new NPCs to become aware of
         foreach (WorldObject wo in BigBoss.Levels.Level.WorldObjects)
         {
@@ -301,36 +303,63 @@ public class AICore : IXmlParsable, ICopyable
         {
             movement = movementPool.Get(Random);
         }
-        movement.Actions(this);
+        movement.Args.Actions(this);
     }
 
-    public void MoveAway(int x, int y, float range = 10)
+    public void MoveAway(int x, int y, float range = 4)
     {
         MoveAway(BigBoss.Levels.Level[x, y], range);
     }
 
-    public void MoveAway(GridSpace space, float range = 10)
+    public void MoveAway(GridSpace space, float range = 4)
     {
         GridSpace target = null;
-        double distance = 0, cur = 0;
-        Level.DrawBreadthFirstFill(space.X, space.Y, true,
-            Draw.Walkable<GridSpace>().And((arr, x, y) =>
+        double toFleeTargetDist = 0, toTarget = 0, potentialFleeTargetDist = 0, potentialToTarget = 0;
+        var draw = Draw.Walkable<GridSpace>().And((arr, x, y) =>
             {
-                cur = Math.Sqrt(Math.Pow(x - space.X, 2) + Math.Pow(y - space.Y, 2));
-                if (cur > distance)
+                potentialFleeTargetDist = Math.Sqrt(Math.Pow(x - space.X, 2) + Math.Pow(y - space.Y, 2));
+                potentialToTarget = Math.Sqrt(Math.Pow(x - Self.GridSpace.X, 2) + Math.Pow(y - Self.GridSpace.Y, 2));
+                if (potentialFleeTargetDist > toFleeTargetDist || (potentialFleeTargetDist == toFleeTargetDist && potentialToTarget < toFleeTargetDist))
                 {
-                    distance = cur;
+                    toFleeTargetDist = potentialFleeTargetDist;
                     target = arr[x, y];
                 }
                 return true;
-            }).And(Draw.WithinTo<GridSpace>(range, space)));
+            }).And(Draw.WithinTo<GridSpace>(range, space));
+        #region DEBUG
+        MultiMap<GridSpace> tmp = null;
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            tmp = new MultiMap<GridSpace>();
+            draw = draw.And(Draw.AddTo(tmp));
+        }
+        #endregion
+        Level.DrawBreadthFirstFill(space.X, space.Y, true, draw);
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            MultiMap<GridType> tmp2 = new MultiMap<GridType>();
+            tmp.DrawAll((arr, x, y) =>
+            {
+                arr.DrawRect(x, y, 5, Draw.AddGridTo<GridSpace>(Level, tmp2));
+                return true;
+            });
+            tmp.DrawAll(Draw.SetTo<GridSpace>(tmp2, GridType.INTERNAL_RESERVED_BLOCKED));
+            if (target != null)
+            {
+                tmp2[target] = GridType.INTERNAL_RESERVED_CUR;
+            }
+            tmp2[space] = GridType.INTERNAL_MARKER_1;
+            tmp2.ToLog(Log, "Move away area");
+        }
+        #endregion
         if (target != null)
         {
             MoveTo(target);
         }
     }
 
-    public void MoveAway(WorldObject wo, float range = 10)
+    public void MoveAway(WorldObject wo, float range = 4)
     {
         MoveAway(wo.GridSpace, range);
     }

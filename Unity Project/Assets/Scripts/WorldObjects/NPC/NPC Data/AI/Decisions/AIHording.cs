@@ -8,8 +8,6 @@ public class AIHording : AIDecision, ICopyable
 {
     public override double Cost { get { return 0; } }
 
-    public override double StickyShift { get { return 0; } }
-
     public override IEnumerable<AIState> States
     {
         get
@@ -35,30 +33,54 @@ public class AIHording : AIDecision, ICopyable
     {
     }
 
-    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
+    public override bool Decide(AICore core)
     {
-        weight = 0d;
+        Args.Weight = 0d;
         if (core.NumEnemies == 0)
         {
-            actions = null;
+            Args.Actions = null;
             return false;
         }
 
         ratio = core.NumFriendlies;
         ratio /= core.NumEnemies;
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            core.Log.w("Ratio " + ratio);
+        }
+        #endregion
         if (ratio > AttackTippingRatio)
         { // Release to other AI
-            actions = null;
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                core.Log.w("Releasing to AI");
+            }
+            #endregion
+            Args.Actions = null;
             return false;
         }
 
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            core.Log.w("Closest enemy dist: " + core.ClosestEnemyDist + "  Flee Dist: " + FleeDistance + "  Circling Buffer: " + CirclingBuffer);
+        }
+        #endregion
         if (core.ClosestEnemyDist < FleeDistance)
         { // Run
-            weight = FleeWeight;
-            actions = (coreP) =>
+            Args.Weight = FleeWeight;
+            Args.Actions = (coreP) =>
             {
                 coreP.MoveAway(core.ClosestEnemy);
             };
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                core.Log.w("Running away");
+            }
+            #endregion
             return false;
         }
         else if (core.ClosestEnemyDist < FleeDistance + CirclingBuffer)
@@ -70,10 +92,20 @@ public class AIHording : AIDecision, ICopyable
             }
             float angle = Vector3.Angle(core.Self.GO.transform.position, core.ClosestEnemy.GO.transform.position);
             circleSpace = core.Level.GetFromTangent(core.Self.GridSpace.X, core.Self.GridSpace.Y, angle, clockwise);
+            if (!circleSpace.Walkable())
+            {
+                circleSpace = core.Self.GridSpace;
+            }
             core.MovementSubstitutions[core.ClosestEnemy.GridSpace] = circleSpace.Walkable() ? circleSpace : core.Self.GridSpace;
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                core.Log.w("Circling.  Angle: " + angle + " Sub Space: " + circleSpace);
+            }
+            #endregion
         }
         // Release to other AI
-        actions = null;
+        Args.Actions = null;
         return false;
     }
 

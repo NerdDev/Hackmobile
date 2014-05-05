@@ -11,16 +11,32 @@ public class AIDecisionCore
     {
         foreach (AIDecision decision in decisions)
         {
-            double weight;
-            DecisionActions actions;
-            if (decision.Decide(core, out weight, out actions))
+            decision.Args.Reset();
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
             {
-                decision.Actions = actions;
+                core.Log.printHeader(decision.GetType().Name);
+            }
+            #endregion
+            if (decision.Decide(core))
+            {
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+                {
+                    core.Log.w("Instant picking");
+                    core.Log.printFooter(decision.GetType().Name);
+                }
+                #endregion
                 autoDecision = decision;
                 return true;
             }
-            decision.Actions = actions;
-            pool.Add(decision, weight);
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                core.Log.printFooter(decision.GetType().Name);
+            }
+            #endregion
+            pool.Add(decision, decision.Args.Weight);
         }
         autoDecision = null;
         return false;

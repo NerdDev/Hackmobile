@@ -5,7 +5,6 @@ using System.Text;
 
 public class AIWander : AIDecision
 {
-    public override double StickyShift { get { return 0d; } }
     public override IEnumerable<AIState> States { get { yield return AIState.Passive; } } 
     GridSpace targetSpace;
     MultiMap<GridSpace> targetArea = new MultiMap<GridSpace>();
@@ -45,34 +44,34 @@ public class AIWander : AIDecision
         #endregion
     }
 
-    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
+    public override bool Decide(AICore core)
     {
-        actions = AIDecisions.Base();
+        Args.Actions = AIDecisions.Base();
         if (!targetArea.Contains(core.Self.GridSpace.X, core.Self.GridSpace.Y))
         {
-            actions = actions.Then(RegenAreaAction);
+            Args.Actions = Args.Actions.Then(RegenAreaAction);
             targetSpace = core.Self.GridSpace;
         }
         if (core.Continuing(this))
         {
             if (core.Self.GridSpace.Equals(targetSpace)) // At end goal
             { // Chance to continue wandering in a different direction
-                actions = actions.Then(PickNewTarget);
-                weight = 2d;
+                Args.Actions = Args.Actions.Then(PickNewTarget);
+                Args.Weight = 2d;
             }
             else
             {
                 // Chance to continue on path
-                weight = 20d;
+                Args.Weight = 20d;
             }
         }
         else
         {
             // Chance to start wandering
-            actions = actions.Then(PickNewTarget);
-            weight = .15d;
+            Args.Actions = Args.Actions.Then(PickNewTarget);
+            Args.Weight = .15d;
         }
-        actions = actions.Then((coreP) => core.MoveTo(targetSpace));
+        Args.Actions = Args.Actions.Then((coreP) => core.MoveTo(targetSpace));
         return false;
     }
 }

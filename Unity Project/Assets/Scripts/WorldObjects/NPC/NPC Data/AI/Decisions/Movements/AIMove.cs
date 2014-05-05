@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class AIMove : AIDecision
+public class AIMove : AIDecision, ICopyable
 {
     public override double Cost { get { return 60d; } }
-    public override double StickyShift { get { return 2d; } }
     public override IEnumerable<AIState> States { get { yield return AIState.Movement; } }
 
     public AIMove()
@@ -45,10 +44,18 @@ public class AIMove : AIDecision
         return false;
     }
 
-    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
+    public override bool Decide(AICore core)
     {
-        weight = 1d;
-        actions = Move;
         return false;
+    }
+
+    public void PostPrimitiveCopy()
+    {
+    }
+
+    public void PostObjectCopy()
+    {
+        Args.Weight = 1d;
+        Args.Actions = Move;
     }
 }

@@ -28,7 +28,8 @@ public enum GridType
     SmallLoot,
     Chest,
 
-    INTERNAL_RESERVED_CUR
+    INTERNAL_RESERVED_CUR,
+    INTERNAL_MARKER_1
 }
 
 public class GridTypeEnum
@@ -67,6 +68,8 @@ public class GridTypeEnum
                 return '*';
             case GridType.INTERNAL_RESERVED_CUR:
                 return '%';
+            case GridType.INTERNAL_MARKER_1:
+                return (char)233;
             case GridType.Path_Horiz:
                 return (char)205;
             case GridType.Path_Vert:

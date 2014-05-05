@@ -116,6 +116,33 @@ public static class Draw
         };
     }
 
+    public static DrawAction<T> MoveTo<T>(Container2D<T> to)
+    {
+        return (arr, x, y) =>
+        {
+            to[x, y] = arr[x, y];
+            return true;
+        };
+    }
+
+    public static DrawAction<T> MoveTo<T>(Container2D<GridType> to) where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            to[x, y] = arr[x, y].Type;
+            return true;
+        };
+    }
+
+    public static DrawAction<T> SetTo<T>(Container2D<GridType> to, GridType t) where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            to[x, y] = t;
+            return true;
+        };
+    }
+
     public static DrawAction<T> SetTo<T>(Container2D<T> container, T g, Point shift = null)
     {
         return SetTo<T, T>(container, g, shift);
@@ -241,6 +268,32 @@ public static class Draw
                 return true;
             };
         }
+    }
+
+    public static DrawAction<T> AddGridTo<T>(Container2D<T> from, Container2D<GridType> cont) where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            T space;
+            if (from.TryGetValue(x, y, out space))
+            {
+                cont[x, y] = space.Type;
+            }
+            return true;
+        };
+    }
+
+    public static DrawAction<T> AddGridTo<T>(Container2D<GridType> cont) where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            T space;
+            if (arr.TryGetValue(x, y, out space))
+            {
+                cont[x, y] = space.Type;
+            }
+            return true;
+        };
     }
 
     public static DrawAction<T> AddTo<T>(Queue<Point> queue, Point shift = null)

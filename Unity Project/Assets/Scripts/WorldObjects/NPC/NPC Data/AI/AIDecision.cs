@@ -7,13 +7,11 @@ public abstract class AIDecision : IXmlParsable
 {
     public abstract double Cost { get; }
 
-    public abstract double StickyShift { get; }
-
-    public DecisionActions Actions;
+    public AIDecisionArgs Args = new AIDecisionArgs();
 
     public abstract IEnumerable<AIState> States { get; }
 
-    public abstract bool Decide(AICore core, out double weight, out DecisionActions actions);
+    public abstract bool Decide(AICore core);
 
     public virtual void ParseXML(XMLNode x)
     {

@@ -7,19 +7,18 @@ public class AICastDamageSpell : AIDecision
 {
     int turnsSinceLastCast = 0;
     public override double Cost { get { return 60d; } }
-    public override double StickyShift { get { return 0d; } }
     public override IEnumerable<AIState> States { get { yield return AIState.Combat; } }
 
     public AICastDamageSpell()
     {
     }
 
-    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
+    public override bool Decide(AICore core)
     {
         if (core.Self.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
         {
-            weight = 0.4d;
-            actions = (coreP) =>
+            Args.Weight = 0.4d;
+            Args.Actions = (coreP) =>
             {
                 Spell spellToCast = core.Self.KnownSpells["Fireball"];
                 if (core.Self.DistanceToTarget(BigBoss.Player) < spellToCast.range)
@@ -32,8 +31,8 @@ public class AICastDamageSpell : AIDecision
         }
         else
             turnsSinceLastCast++;
-        weight = -1.0d;
-        actions = null;
+        Args.Weight = -1.0d;
+        Args.Actions = null;
         return false;
     }
 }

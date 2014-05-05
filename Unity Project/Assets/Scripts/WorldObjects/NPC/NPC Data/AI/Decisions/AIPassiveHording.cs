@@ -17,15 +17,18 @@ public class AIPassiveHording : AIHording
     }
 
 
-    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
+    public override bool Decide(AICore core)
     {
-        bool hordingRet = base.Decide(core, out weight, out actions);
+        bool hordingRet = base.Decide(core);
         if (core.CurrentState == AIState.Passive)
         {
             if (ratio > ChaseTippingRatio)
             {
-                actions = (coreP) => core.CurrentState = AIState.Combat;
-                weight = 0d;
+                Args.Actions = (coreP) => core.CurrentState = AIState.Combat;
+                return true;
+            }
+            if (hordingRet)
+            { // Force flee
                 return true;
             }
         }

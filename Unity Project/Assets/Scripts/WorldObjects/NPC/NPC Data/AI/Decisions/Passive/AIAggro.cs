@@ -12,23 +12,18 @@ public class AIAggro : AIDecision
         get { return 0; }
     }
 
-    public override double StickyShift
+    public override bool Decide(AICore core)
     {
-        get { return 0; }
-    }
-
-    public override bool Decide(AICore core, out double weight, out DecisionActions actions)
-    {
-        weight = 0d;
+        Args.Weight = 0d;
         foreach (var pair in core.NPCMemory)
         {
             if (!pair.Value.Friendly && pair.Value.AwareOf)
             {
-                actions = (coreP) => core.CurrentState = AIState.Combat;
+                Args.Actions = (coreP) => core.CurrentState = AIState.Combat;
                 return true;
             }
         }
-        actions = null;
+        Args.Actions = null;
         return false;
     }
 }
