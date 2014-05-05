@@ -13,7 +13,7 @@ public class AICastDamageSpell : AIDecision
     {
     }
 
-    public override bool Decide(AICore core)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
         if (core.Self.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
         {

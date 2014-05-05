@@ -5,10 +5,42 @@ using System.Text;
 
 public class AIDecisionCore
 {
+    public AIDecision LastDecision { get; protected set; }
+    public AIDecision CurrentDecision { get; protected set; }
     List<AIDecision> decisions = new List<AIDecision>();
+    AICore core;
 
-    public bool FillPool(ProbabilityPool<AIDecision> pool, AICore core, out AIDecision autoDecision)
+    public AIDecisionCore(AICore core)
     {
+        this.core = core;
+    }
+
+    public void ExecuteDecision()
+    {
+        AIDecision decision = FillPool();
+        CurrentDecision = decision;
+        if (decision.Args.Actions != null)
+        {
+            decision.Args.Actions(core);
+        }
+        LastDecision = decision;
+    }
+
+    public bool Continuing(AIDecision decision)
+    {
+        return !decision.Args.Ending && System.Object.ReferenceEquals(decision, LastDecision);
+    }
+
+    protected AIDecision FillPool()
+    {
+        double reducLevel = 0, reducAmount = 0;
+        if (LastDecision != null)
+        {
+            reducAmount = LastDecision.Args.StickyReduc;
+            reducLevel = LastDecision.Args.Weight;
+        }
+        bool reducing = reducAmount > 0d;
+        ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
         foreach (AIDecision decision in decisions)
         {
             decision.Args.Reset();
@@ -18,7 +50,7 @@ public class AIDecisionCore
                 core.Log.printHeader(decision.GetType().Name);
             }
             #endregion
-            if (decision.Decide(core))
+            if (decision.Decide(core, this))
             {
                 #region DEBUG
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
@@ -27,8 +59,7 @@ public class AIDecisionCore
                     core.Log.printFooter(decision.GetType().Name);
                 }
                 #endregion
-                autoDecision = decision;
-                return true;
+                return decision;
             }
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
@@ -36,10 +67,26 @@ public class AIDecisionCore
                 core.Log.printFooter(decision.GetType().Name);
             }
             #endregion
-            pool.Add(decision, decision.Args.Weight);
+            double weight = decision.Args.Weight;
+            if (Continuing(decision))
+            {
+                weight += decision.Args.StickyShift;
+            }
+            if (reducing && weight < reducLevel)
+            {
+                weight /= reducAmount * (1 - (weight / reducLevel));
+            }
+            pool.Add(decision, weight);
         }
-        autoDecision = null;
-        return false;
+        var chosen = pool.Get(core.Random);
+        #region Debug
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            pool.ToLog(core.Log, "Decision options");
+            core.Log.w("Decided on " + chosen.GetType().ToString());
+        }
+        #endregion
+        return chosen;
     }
 
     public void AddDecision(AIDecision decision)

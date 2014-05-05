@@ -44,7 +44,7 @@ public class AIWander : AIDecision
         #endregion
     }
 
-    public override bool Decide(AICore core)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
         Args.Actions = AIDecisions.Base();
         if (!targetArea.Contains(core.Self.GridSpace.X, core.Self.GridSpace.Y))
@@ -52,7 +52,7 @@ public class AIWander : AIDecision
             Args.Actions = Args.Actions.Then(RegenAreaAction);
             targetSpace = core.Self.GridSpace;
         }
-        if (core.Continuing(this))
+        if (decisionCore.Continuing(this))
         {
             if (core.Self.GridSpace.Equals(targetSpace)) // At end goal
             { // Chance to continue wandering in a different direction
@@ -63,6 +63,8 @@ public class AIWander : AIDecision
             {
                 // Chance to continue on path
                 Args.Weight = 20d;
+                //Args.StickyShift = 1d;
+                //Args.StickyReduc = 5d;
             }
         }
         else

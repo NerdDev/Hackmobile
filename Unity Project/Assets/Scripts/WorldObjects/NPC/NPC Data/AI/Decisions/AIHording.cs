@@ -33,7 +33,7 @@ public class AIHording : AIDecision, ICopyable
     {
     }
 
-    public override bool Decide(AICore core)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
         Args.Weight = 0d;
         if (core.NumEnemies == 0)

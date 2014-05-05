@@ -9,7 +9,7 @@ public class AIWait : AIDecision
 
     public override double Cost { get { return 60d; } }
 
-    public override bool Decide(AICore core)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
         if (core.CurrentState == AIState.Passive)
         {

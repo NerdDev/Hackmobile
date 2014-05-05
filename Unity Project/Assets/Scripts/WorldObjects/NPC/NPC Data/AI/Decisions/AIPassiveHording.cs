@@ -17,9 +17,9 @@ public class AIPassiveHording : AIHording
     }
 
 
-    public override bool Decide(AICore core)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
-        bool hordingRet = base.Decide(core);
+        bool hordingRet = base.Decide(core, decisionCore);
         if (core.CurrentState == AIState.Passive)
         {
             if (ratio > ChaseTippingRatio)

@@ -17,8 +17,6 @@ public class AICore : IXmlParsable, ICopyable
 
     // State variables
     public AIState CurrentState = AIState.Passive;
-    public AIDecision LastDecision;
-    public AIDecision CurrentDecision;
     private WorldObject _target;
     public WorldObject Target
     {
@@ -57,7 +55,7 @@ public class AICore : IXmlParsable, ICopyable
         this.Self = n;
         for (int i = 0; i < cores.Length; i++)
         {
-            cores[i] = new AIDecisionCore();
+            cores[i] = new AIDecisionCore(this);
         }
     }
 
@@ -71,11 +69,6 @@ public class AICore : IXmlParsable, ICopyable
         Log = BigBoss.Debug.CreateNewLog("AI/NPC " + Self.ID + "/Log.txt");
     }
 
-    public bool Continuing(AIDecision decision)
-    {
-        return System.Object.ReferenceEquals(decision, LastDecision);
-    }
-
     public void DecideWhatToDo()
     {
         #region Debug
@@ -85,26 +78,13 @@ public class AICore : IXmlParsable, ICopyable
         }
         #endregion
         Reset();
-        ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
-        AIDecision decision;
-        if (!cores[(int)CurrentState].FillPool(pool, this, out decision))
-        {
-            decision = pool.Get(Random);
-        }
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
             ToLog(Log);
-            pool.ToLog(Log, "Decision options");
-            Log.w("Decided on " + decision.GetType().ToString());
         }
         #endregion
-        CurrentDecision = decision;
-        if (decision.Args.Actions != null)
-        {
-            decision.Args.Actions(this);
-        }
-        LastDecision = decision;
+        cores[(int)CurrentState].ExecuteDecision();
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
@@ -123,6 +103,7 @@ public class AICore : IXmlParsable, ICopyable
         MovementSubstitutions.Clear();
     }
 
+    #region NPC Memory
     protected void UpdateNPCMemory()
     {
         #region Debug
@@ -252,12 +233,9 @@ public class AICore : IXmlParsable, ICopyable
     {
         return !System.Object.ReferenceEquals(BigBoss.Player, item.NPC);
     }
+    #endregion
 
-    protected void ProcessNPCs()
-    {
-
-    }
-
+    #region Move
     public void MoveTo(int x, int y)
     {
         MoveTo(BigBoss.Levels.Level[x, y]);
@@ -297,13 +275,7 @@ public class AICore : IXmlParsable, ICopyable
 
     protected void Move()
     {
-        ProbabilityPool<AIDecision> movementPool = ProbabilityPool<AIDecision>.Create();
-        AIDecision movement;
-        if (!cores[(int)AIState.Movement].FillPool(movementPool, this, out movement))
-        {
-            movement = movementPool.Get(Random);
-        }
-        movement.Args.Actions(this);
+        cores[(int)AIState.Movement].ExecuteDecision();
     }
 
     public void MoveAway(int x, int y, float range = 4)
@@ -363,6 +335,7 @@ public class AICore : IXmlParsable, ICopyable
     {
         MoveAway(wo.GridSpace, range);
     }
+    #endregion
 
     #region XML
     public void ParseXML(XMLNode x)

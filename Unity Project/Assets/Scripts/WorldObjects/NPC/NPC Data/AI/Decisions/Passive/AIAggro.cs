@@ -12,7 +12,7 @@ public class AIAggro : AIDecision
         get { return 0; }
     }
 
-    public override bool Decide(AICore core)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
         Args.Weight = 0d;
         foreach (var pair in core.NPCMemory)

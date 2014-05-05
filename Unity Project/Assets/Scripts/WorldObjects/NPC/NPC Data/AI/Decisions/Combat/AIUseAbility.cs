@@ -45,7 +45,7 @@ internal class AIUseAbility : AIDecision,  ICopyable
         }
     }
 
-    public override bool Decide(AICore core)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
         return false;
     }

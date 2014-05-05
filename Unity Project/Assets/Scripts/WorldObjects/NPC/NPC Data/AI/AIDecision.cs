@@ -11,7 +11,7 @@ public abstract class AIDecision : IXmlParsable
 
     public abstract IEnumerable<AIState> States { get; }
 
-    public abstract bool Decide(AICore core);
+    public abstract bool Decide(AICore core, AIDecisionCore decisionCore);
 
     public virtual void ParseXML(XMLNode x)
     {

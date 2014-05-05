@@ -6,13 +6,17 @@ using System.Text;
 public class AIDecisionArgs
 {
     public double Weight;
-    public double Sticky;
+    public double StickyShift;
+    public double StickyReduc;
+    public bool Ending;
     public DecisionActions Actions;
 
     public void Reset()
     {
         Weight = 1;
-        Sticky = 0;
+        StickyShift = 0;
+        StickyReduc = 0;
+        Ending = false;
     }
 }
 

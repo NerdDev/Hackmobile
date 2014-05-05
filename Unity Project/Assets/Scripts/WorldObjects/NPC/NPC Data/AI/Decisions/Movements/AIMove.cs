@@ -44,7 +44,7 @@ public class AIMove : AIDecision, ICopyable
         return false;
     }
 
-    public override bool Decide(AICore core)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
         return false;
     }
