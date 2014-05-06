@@ -7,7 +7,7 @@ public class AIDecisionCore
 {
     public AIDecision LastDecision { get; protected set; }
     public AIDecision CurrentDecision { get; protected set; }
-    List<AIDecision> decisions = new List<AIDecision>();
+    public HashSet<AIDecision> Decisions = new HashSet<AIDecision>();
     AICore core;
 
     public AIDecisionCore(AICore core)
@@ -47,7 +47,7 @@ public class AIDecisionCore
         }
         #endregion
         ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
-        foreach (AIDecision decision in decisions)
+        foreach (AIDecision decision in Decisions)
         {
             decision.Args.Reset();
             #region DEBUG
@@ -99,6 +99,6 @@ public class AIDecisionCore
 
     public void AddDecision(AIDecision decision)
     {
-        decisions.Add(decision);
+        Decisions.Add(decision);
     }
 }

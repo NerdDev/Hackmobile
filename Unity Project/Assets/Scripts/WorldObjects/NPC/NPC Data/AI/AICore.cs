@@ -103,6 +103,15 @@ public class AICore : IXmlParsable, ICopyable
         MovementSubstitutions.Clear();
     }
 
+    public bool Contains(AIDecision decision)
+    {
+        foreach (AIDecisionCore core in cores)
+        {
+            if (core.Decisions.Contains(decision)) return true;
+        }
+        return false;
+    }
+
     #region NPC Memory
     protected void UpdateNPCMemory()
     {

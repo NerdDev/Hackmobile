@@ -22,8 +22,21 @@ public class AIPassiveHording : AIHording
         bool hordingRet = base.Decide(core, decisionCore);
         if (core.CurrentState == AIState.Passive)
         {
-            if (ratio > ChaseTippingRatio)
+            bool otherInCombat = false;
+            foreach (var npcMem in core.NPCMemory.Values)
             {
+                if (npcMem.Friendly && npcMem.NPC.InCombat() && npcMem.NPC.HasDecision(this))
+                {
+                    otherInCombat = true;
+                    break;
+                }
+            }
+            if (otherInCombat || ratio >= ChaseTippingRatio)
+            {
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+                {
+                    core.Log.w("Switching to combat");
+                }
                 Args.Actions = (coreP) => core.CurrentState = AIState.Combat;
                 return true;
             }

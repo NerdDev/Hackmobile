@@ -16,4 +16,16 @@ public abstract class AIDecision : IXmlParsable
     public virtual void ParseXML(XMLNode x)
     {
     }
+
+    public override bool Equals(object obj)
+    {
+        AIDecision rhs = obj as AIDecision;
+        if (rhs == null) return false;
+        return GetType().Equals(rhs.GetType());
+    }
+
+    public override int GetHashCode()
+    {
+        return GetType().GetHashCode();
+    }
 }

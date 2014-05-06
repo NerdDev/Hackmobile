@@ -878,6 +878,16 @@ public class NPC : Affectable
             return Vector3.Distance(GO.transform.position, obj.transform.position);
         else return float.MaxValue;
     }
+
+    public bool HasDecision(AIDecision decision)
+    {
+        return AI.Contains(decision);
+    }
+
+    public bool InCombat()
+    {
+        return AI.CurrentState == AIState.Combat;
+    }
     #endregion
 
     #region Touch Input

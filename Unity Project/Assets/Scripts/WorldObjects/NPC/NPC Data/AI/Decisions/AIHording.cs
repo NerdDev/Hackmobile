@@ -43,7 +43,7 @@ public class AIHording : AIDecision, ICopyable
             return false;
         }
 
-        ratio = core.NumFriendlies;
+        ratio = core.NumFriendlies + 1;
         ratio /= core.NumEnemies;
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
@@ -51,7 +51,7 @@ public class AIHording : AIDecision, ICopyable
             core.Log.w("Ratio " + ratio);
         }
         #endregion
-        if (ratio > AttackTippingRatio)
+        if (ratio >= AttackTippingRatio)
         { // Release to other AI
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
