@@ -29,7 +29,8 @@ public enum GridType
     Chest,
 
     INTERNAL_RESERVED_CUR,
-    INTERNAL_MARKER_1
+    INTERNAL_MARKER_1,
+    INTERNAL_MARKER_2
 }
 
 public class GridTypeEnum
@@ -70,6 +71,8 @@ public class GridTypeEnum
                 return '%';
             case GridType.INTERNAL_MARKER_1:
                 return (char)233;
+            case GridType.INTERNAL_MARKER_2:
+                return (char)143;
             case GridType.Path_Horiz:
                 return (char)205;
             case GridType.Path_Vert:

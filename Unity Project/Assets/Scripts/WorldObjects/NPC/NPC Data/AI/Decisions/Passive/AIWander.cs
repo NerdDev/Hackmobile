@@ -5,7 +5,7 @@ using System.Text;
 
 public class AIWander : AIDecision
 {
-    public override IEnumerable<AIState> States { get { yield return AIState.Passive; } } 
+    public override IEnumerable<AIState> States { get { yield return AIState.Passive; } }
     GridSpace targetSpace;
     MultiMap<GridSpace> targetArea = new MultiMap<GridSpace>();
 
@@ -52,26 +52,18 @@ public class AIWander : AIDecision
             Args.Actions = Args.Actions.Then(RegenAreaAction);
             targetSpace = core.Self.GridSpace;
         }
-        if (decisionCore.Continuing(this))
-        {
-            if (core.Self.GridSpace.Equals(targetSpace)) // At end goal
-            { // Chance to continue wandering in a different direction
-                Args.Actions = Args.Actions.Then(PickNewTarget);
-                Args.Weight = 2d;
-            }
-            else
-            {
-                // Chance to continue on path
-                Args.Weight = 20d;
-                //Args.StickyShift = 1d;
-                //Args.StickyReduc = 5d;
-            }
+        if (decisionCore.Continuing(this) && core.Self.GridSpace.Equals(targetSpace)) // At end goal
+        { // Chance to continue wandering in a different direction
+            Args.Actions = Args.Actions.Then(PickNewTarget);
+            Args.Weight = 2d;
         }
         else
         {
             // Chance to start wandering
             Args.Actions = Args.Actions.Then(PickNewTarget);
             Args.Weight = .15d;
+            Args.StickyShift = 4.85d;
+            Args.StickyReduc = 5d;
         }
         Args.Actions = Args.Actions.Then((coreP) => core.MoveTo(targetSpace));
         return false;

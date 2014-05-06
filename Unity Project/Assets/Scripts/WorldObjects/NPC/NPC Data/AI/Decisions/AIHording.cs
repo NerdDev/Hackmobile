@@ -17,8 +17,9 @@ public class AIHording : AIDecision, ICopyable
     }
 
     public float AttackTippingRatio;
-    public float FleeDistance;
+    public float FleeTriggerDistance;
     public float FleeWeight;
+    public float FleeLookRange;
     public float CirclingBuffer;
     protected float ratio;
     private const double circleChangeChance = .2d;
@@ -65,15 +66,16 @@ public class AIHording : AIDecision, ICopyable
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            core.Log.w("Closest enemy dist: " + core.ClosestEnemyDist + "  Flee Dist: " + FleeDistance + "  Circling Buffer: " + CirclingBuffer);
+            core.Log.w("Closest enemy dist: " + core.ClosestEnemyDist + "  Flee Dist: " + FleeTriggerDistance + "  Circling Buffer: " + CirclingBuffer);
         }
         #endregion
-        if (core.ClosestEnemyDist < FleeDistance)
+        if (core.ClosestEnemyDist < FleeTriggerDistance)
         { // Run
             Args.Weight = FleeWeight;
+            Args.StickyReduc = 3;
             Args.Actions = (coreP) =>
             {
-                coreP.MoveAway(core.ClosestEnemy);
+                coreP.MoveAway(core.ClosestEnemy, FleeLookRange);
             };
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
@@ -83,7 +85,7 @@ public class AIHording : AIDecision, ICopyable
             #endregion
             return false;
         }
-        else if (core.ClosestEnemyDist < FleeDistance + CirclingBuffer)
+        else if (core.ClosestEnemyDist < FleeTriggerDistance + CirclingBuffer)
         { // Close enough to NPC, so substitute movement to circle to run around him
             GridSpace circleSpace;
             if (core.Random.Percent(circleChangeChance))
@@ -113,9 +115,10 @@ public class AIHording : AIDecision, ICopyable
     {
         base.ParseXML(x);
         AttackTippingRatio = x.SelectFloat("AttackTippingRatio", 4.1f);
-        FleeDistance = x.SelectFloat("FleeDistance", 7f);
+        FleeTriggerDistance = x.SelectFloat("FleeTriggerDistance", 7f);
         CirclingBuffer = x.SelectFloat("CirclingBuffer", 1f);
-        FleeWeight = x.SelectFloat("FleeWeight", 3f);
+        FleeWeight = x.SelectFloat("FleeWeight", 15f);
+        FleeLookRange = x.SelectFloat("FleeLookRange", 6);
     }
 }
 

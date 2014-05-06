@@ -40,6 +40,12 @@ public class AIDecisionCore
             reducLevel = LastDecision.Args.Weight;
         }
         bool reducing = reducAmount > 0d;
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI) && reducing)
+        {
+            core.Log.w("Reducing " + reducAmount + " below weight " + reducLevel);
+        }
+        #endregion
         ProbabilityPool<AIDecision> pool = ProbabilityPool<AIDecision>.Create();
         foreach (AIDecision decision in decisions)
         {
@@ -61,12 +67,6 @@ public class AIDecisionCore
                 #endregion
                 return decision;
             }
-            #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
-            {
-                core.Log.printFooter(decision.GetType().Name);
-            }
-            #endregion
             double weight = decision.Args.Weight;
             if (Continuing(decision))
             {
@@ -76,6 +76,14 @@ public class AIDecisionCore
             {
                 weight /= reducAmount * (1 - (weight / reducLevel));
             }
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                decision.Args.ToLog(core.Log);
+                core.Log.w("Final weight: " + weight);
+                core.Log.printFooter(decision.GetType().Name);
+            }
+            #endregion
             pool.Add(decision, weight);
         }
         var chosen = pool.Get(core.Random);

@@ -18,5 +18,10 @@ public class AIDecisionArgs
         StickyReduc = 0;
         Ending = false;
     }
+
+    public void ToLog(Log log)
+    {
+        log.w("Weight: " + Weight + ", StickyShift: " + StickyShift + ", StickyReduc: " + StickyReduc + ", Ending: " + Ending);
+    }
 }
 

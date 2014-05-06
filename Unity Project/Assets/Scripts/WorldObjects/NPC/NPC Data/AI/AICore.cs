@@ -253,6 +253,10 @@ public class AICore : IXmlParsable, ICopyable
         {
             this.TargetSpace = space;
         }
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            Log.w("Trying to move to " + space);
+        }
         Move();
     }
 
@@ -263,12 +267,20 @@ public class AICore : IXmlParsable, ICopyable
         {
             this.Target = null;
             this.TargetSpace = sub;
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                Log.w("Trying to move to " + sub);
+            }
             Move();
         }
         else
         {
             this.TargetSpace = null;
             this.Target = wo;
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+            {
+                Log.w("Trying to move to " + wo + " at space " + wo.GridSpace);
+            }
             Move();
         }
     }
@@ -297,7 +309,7 @@ public class AICore : IXmlParsable, ICopyable
                     target = arr[x, y];
                 }
                 return true;
-            }).And(Draw.WithinTo<GridSpace>(range, space));
+            }).And(Draw.WithinTo<GridSpace>(range, Self.GridSpace));
         #region DEBUG
         MultiMap<GridSpace> tmp = null;
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
@@ -306,7 +318,7 @@ public class AICore : IXmlParsable, ICopyable
             draw = draw.And(Draw.AddTo(tmp));
         }
         #endregion
-        Level.DrawBreadthFirstFill(space.X, space.Y, true, draw);
+        Level.DrawBreadthFirstFill(Self.GridSpace.X, Self.GridSpace.Y, true, draw);
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
@@ -322,6 +334,7 @@ public class AICore : IXmlParsable, ICopyable
                 tmp2[target] = GridType.INTERNAL_RESERVED_CUR;
             }
             tmp2[space] = GridType.INTERNAL_MARKER_1;
+            tmp2[Self.GridSpace] = GridType.INTERNAL_MARKER_2;
             tmp2.ToLog(Log, "Move away area");
         }
         #endregion
