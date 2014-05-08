@@ -228,7 +228,12 @@ public class GridSpace : IGridSpace
 
     public double Distance(GridSpace rhs)
     {
-        return Math.Sqrt(Math.Pow(X - this.X, 2) + Math.Pow(Y - this.Y, 2));
+        return Distance(rhs.X, rhs.Y);
+    }
+
+    public double Distance(int x, int y)
+    {
+        return Math.Sqrt(Math.Pow(this.X - x, 2) + Math.Pow(this.Y - y, 2));
     }
 
     public static implicit operator Point(GridSpace space)

@@ -30,7 +30,11 @@ public enum GridType
 
     INTERNAL_RESERVED_CUR,
     INTERNAL_MARKER_1,
-    INTERNAL_MARKER_2
+    INTERNAL_MARKER_2,
+    INTERNAL_MARKER_FRIENDLY,
+    INTERNAL_RATIO_LOW,
+    INTERNAL_RATIO_MED,
+    INTERNAL_RATIO_HIGH
 }
 
 public class GridTypeEnum
@@ -85,6 +89,16 @@ public class GridTypeEnum
                 return (char)200;
             case GridType.Path_RB:
                 return (char)201;
+            case GridType.INTERNAL_RATIO_LOW:
+                return (char)176;
+            case GridType.INTERNAL_RATIO_MED:
+                return (char)177;
+            case GridType.INTERNAL_RATIO_HIGH:
+                return (char)178;
+            case GridType.INTERNAL_MARKER_FRIENDLY:
+                return 'F';
+            case GridType.Enemy:
+                return 'E';
             default:
                 return '?';
         };

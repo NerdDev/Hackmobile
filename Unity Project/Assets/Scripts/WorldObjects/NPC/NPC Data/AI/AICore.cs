@@ -35,6 +35,7 @@ public class AICore : IXmlParsable, ICopyable
         get { return Self.GridSpace.Level; }
     }
     public GridSpace TargetSpace;
+    public GridSpace LastMovementGoal;
 
     #region NPC Presence Memory
     public int NumFriendlies;
@@ -284,7 +285,7 @@ public class AICore : IXmlParsable, ICopyable
         }
         else
         {
-            this.TargetSpace = null;
+            this.TargetSpace = wo.GridSpace;
             this.Target = wo;
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
             {
@@ -297,6 +298,7 @@ public class AICore : IXmlParsable, ICopyable
     protected void Move()
     {
         cores[(int)AIState.Movement].ExecuteDecision();
+        LastMovementGoal = TargetSpace;
     }
 
     public void MoveAway(int x, int y, float range = 4)
@@ -334,7 +336,7 @@ public class AICore : IXmlParsable, ICopyable
             MultiMap<GridType> tmp2 = new MultiMap<GridType>();
             tmp.DrawAll((arr, x, y) =>
             {
-                arr.DrawRect(x, y, 5, Draw.AddGridTo<GridSpace>(Level, tmp2));
+                arr.DrawRect(x, y, 5, Draw.AddGridTo<GridSpace, GridSpace>(Level, tmp2));
                 return true;
             });
             tmp.DrawAll(Draw.SetTo<GridSpace>(tmp2, GridType.INTERNAL_RESERVED_BLOCKED));
@@ -356,6 +358,108 @@ public class AICore : IXmlParsable, ICopyable
     public void MoveAway(WorldObject wo, float range = 4)
     {
         MoveAway(wo.GridSpace, range);
+    }
+
+    public void FleeNPCs(Func<NPCMemoryItem, bool> evalFunc, float fleeRadius, float lookRadius = 4, float scatterWeight = 0.15f, float travelDistanceWeight = 0.02f)
+    {
+        GridSpace target = null;
+        double bestWeight = double.MinValue;
+        float maxRadius = Math.Max(fleeRadius, lookRadius);
+
+        #region NPC Filter
+        // Filter out NPCs that won't have an effect
+        List<NPCMemoryItem> filteredNPCMem = new List<NPCMemoryItem>();
+        foreach (var npcMem in NPCMemory.Values)
+        {
+            if (!npcMem.CanSee) continue;
+            double dist = npcMem.NPC.GridSpace.Distance(Self.GridSpace);
+            if (dist <= maxRadius)
+            { // If inside radius
+                filteredNPCMem.Add(npcMem);
+            }
+        }
+        #endregion
+
+        #region Weight Func
+        Func<Container2D<GridSpace>, int, int, double> weightFunc = (arr, x, y) =>
+        {
+            double weight = 0;
+            // Favor closer options
+            weight -= Math.Sqrt(Math.Pow(x - Self.GridSpace.X, 2) + Math.Pow(y - Self.GridSpace.Y, 2)) * travelDistanceWeight;
+            foreach (var npcMem in filteredNPCMem)
+            {
+                if (npcMem.NPC.GridSpace.X == x && npcMem.NPC.GridSpace.Y == y) return double.MinValue;
+                // Get NPC distance from target space
+                double npcDist = maxRadius - npcMem.SpaceLastSeen.Distance(x, y);
+                double npcWeight = npcDist / maxRadius;
+                if (!evalFunc(npcMem))
+                {
+                    npcWeight *= scatterWeight;
+                }
+                // Add NPC distance to weighting
+                weight -= npcWeight;
+            }
+            return weight;
+        };
+        #endregion
+
+        var draw = Draw.Walkable<GridSpace>().And((arr, x, y) =>
+        {
+            double weight = weightFunc(arr, x, y);
+            if (weight > bestWeight)
+            {
+                bestWeight = weight;
+                target = arr[x, y];
+            }
+            return true;
+        }).And(Draw.WithinTo<GridSpace>(lookRadius, Self.GridSpace));
+        #region DEBUG
+        MultiMap<double> weightMap = null;
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            weightMap = new MultiMap<double>();
+            draw = draw.And((arr, x, y) =>
+            {
+                double weight = weightFunc(arr, x, y);
+                if (weight > double.MinValue)
+                {
+                    weightMap[x, y] = weight;
+                }
+                return true;
+            });
+        }
+        #endregion
+        Level.DrawBreadthFirstFill(Self.GridSpace.X, Self.GridSpace.Y, true, draw);
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            Log.printHeader("Flee Targets");
+            MultiMap<GridType> gridMap = new MultiMap<GridType>();
+            weightMap.DrawAll((arr, x, y) =>
+            {
+                arr.DrawRect(x, y, 5, Draw.AddGridTo<GridSpace, double>(Level, gridMap).And(Draw.FilterWalkable<double>(gridMap)));
+                return true;
+            });
+            double max = weightMap.Max(x => x.val);
+            double min = weightMap.Min(x => x.val);
+            weightMap.DrawAll(Draw.TranslateRatio(gridMap, max, min));
+            if (target != null)
+            {
+                gridMap[target] = GridType.INTERNAL_RESERVED_CUR;
+            }
+            foreach (NPCMemoryItem npcMem in filteredNPCMem)
+            {
+                gridMap[npcMem.NPC.GridSpace] = npcMem.Friendly ? GridType.INTERNAL_MARKER_FRIENDLY : GridType.Enemy;
+            }
+            gridMap[Self.GridSpace] = GridType.INTERNAL_MARKER_1;
+            gridMap.ToLog(Log, "Move away area");
+            Log.printFooter("Flee Targets");
+        }
+        #endregion
+        if (target != null)
+        {
+            MoveTo(target);
+        }
     }
     #endregion
 

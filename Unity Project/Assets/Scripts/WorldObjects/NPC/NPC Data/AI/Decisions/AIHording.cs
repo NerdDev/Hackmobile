@@ -75,7 +75,7 @@ public class AIHording : AIDecision, ICopyable
             Args.StickyReduc = 3;
             Args.Actions = (coreP) =>
             {
-                coreP.MoveAway(core.ClosestEnemy, FleeLookRange);
+                coreP.FleeNPCs(x => !x.Friendly, FleeTriggerDistance, FleeLookRange);
             };
             #region DEBUG
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
