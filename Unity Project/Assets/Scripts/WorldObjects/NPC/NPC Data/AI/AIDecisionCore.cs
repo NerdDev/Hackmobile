@@ -28,7 +28,14 @@ public class AIDecisionCore
 
     public bool Continuing(AIDecision decision)
     {
-        return !decision.Args.Ending && System.Object.ReferenceEquals(decision, LastDecision);
+        if (decision.Args.Ending) return false;
+        var last = LastDecision;
+        while (last != null)
+        {
+            if (System.Object.ReferenceEquals(decision, last)) return true;
+            last = last.Args.LastPassedDecision;
+        }
+        return false;
     }
 
     protected AIDecision FillPool()
@@ -60,6 +67,13 @@ public class AIDecisionCore
             double weight = decision.Args.Weight;
             if (double.IsInfinity(weight))
             { // Instant picking
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+                {
+                    core.Log.w("Instant Picking: " + decision);
+                    core.Log.printFooter(decision.GetType().Name);
+                }
+                #endregion
                 return decision;
             }
             if (Continuing(decision))

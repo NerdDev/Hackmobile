@@ -22,7 +22,7 @@ public abstract class AIDecision : IXmlParsable
         decision.Args.Reset();
         if (decision.Decide(core, decisionCore))
         {
-            Args.CopyIn(decision.Args);
+            Args.PassTo(decision);
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
             {
                 core.Log.printFooter(decision.GetType().ToString());
