@@ -268,7 +268,7 @@ Camera:
     height: 1
   near clip plane: .300000012
   far clip plane: 1000
-  field of view: 85
+  field of view: 80
   orthographic: 0
   orthographic size: 100
   m_Depth: -1
@@ -316,9 +316,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 2066637558}
   targetOffset: {x: 0, y: 0, z: 0}
-  maxDistance: 5
-  minDistance: .600000024
-  xSpeed: 40
+  maxDistance: 6
+  minDistance: 6
+  xSpeed: 120
   ySpeed: 12
   yMinLimit: 15
   yMaxLimit: 75
@@ -331,7 +331,7 @@ MonoBehaviour:
   TransparencyLayers:
     serializedVersion: 2
     m_Bits: 36864
-  yDeg: 44.5
+  yDeg: 55.5
   currentDistance: 0
   currentRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!45 &26253889
@@ -5288,6 +5288,26 @@ Prefab:
     - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ActiveFlags.Array.data[4]
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: field of view
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: minDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: maxDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: yDeg
+      value: 55.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
+      propertyPath: xSpeed
+      value: 120
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
