@@ -17,13 +17,11 @@ public class AIHording : AIDecision, ICopyable
     }
 
     public float AttackTippingRatio;
-    public float FleeTriggerDistance;
-    public float FleeWeight;
-    public float FleeLookRange;
     public float CirclingBuffer;
     protected float ratio;
     private const double circleChangeChance = .2d;
-    bool clockwise;
+    private bool clockwise;
+    AIFlee fleePackage = new AIFlee();
 
     public void PostPrimitiveCopy()
     {
@@ -63,29 +61,19 @@ public class AIHording : AIDecision, ICopyable
             return false;
         }
 
+        bool instantPick;
+        if (PassControl(core, decisionCore, fleePackage, out instantPick))
+        {
+            return instantPick;
+        }
+
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            core.Log.w("Closest enemy dist: " + core.ClosestEnemyDist + "  Flee Dist: " + FleeTriggerDistance + "  Circling Buffer: " + CirclingBuffer);
+            core.Log.w("Closest enemy dist: " + core.ClosestEnemyDist + "  Flee Dist: " + fleePackage.FleeTriggerDistance + "  Circling Buffer: " + CirclingBuffer);
         }
         #endregion
-        if (core.ClosestEnemyDist < FleeTriggerDistance)
-        { // Run
-            Args.Weight = FleeWeight;
-            Args.StickyReduc = 3;
-            Args.Actions = (coreP) =>
-            {
-                coreP.FleeNPCs(x => !x.Friendly, FleeTriggerDistance, FleeLookRange);
-            };
-            #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
-            {
-                core.Log.w("Running away");
-            }
-            #endregion
-            return false;
-        }
-        else if (core.ClosestEnemyDist < FleeTriggerDistance + CirclingBuffer)
+        if (core.ClosestEnemyDist < fleePackage.FleeTriggerDistance + CirclingBuffer)
         { // Close enough to NPC, so substitute movement to circle to run around him
             GridSpace circleSpace;
             if (core.Random.Percent(circleChangeChance))
@@ -115,10 +103,8 @@ public class AIHording : AIDecision, ICopyable
     {
         base.ParseXML(x);
         AttackTippingRatio = x.SelectFloat("AttackTippingRatio", 4.1f);
-        FleeTriggerDistance = x.SelectFloat("FleeTriggerDistance", 7f);
         CirclingBuffer = x.SelectFloat("CirclingBuffer", 1f);
-        FleeWeight = x.SelectFloat("FleeWeight", 15f);
-        FleeLookRange = x.SelectFloat("FleeLookRange", 6);
+        fleePackage.ParseXML(x);
     }
 }
 

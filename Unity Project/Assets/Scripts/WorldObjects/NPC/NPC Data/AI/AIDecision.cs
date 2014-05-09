@@ -13,6 +13,21 @@ public abstract class AIDecision : IXmlParsable
 
     public abstract bool Decide(AICore core, AIDecisionCore decisionCore);
 
+    public bool PassControl(AICore core, AIDecisionCore decisionCore, AIDecision decision, out bool instantPick)
+    {
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            core.Log.printHeader(decision.GetType().ToString());
+        }
+        instantPick = decision.Decide(core, decisionCore);
+        Args.CopyIn(decision.Args);
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            core.Log.printFooter(decision.GetType().ToString());
+        }
+        return instantPick || !decision.Args.Weight.EqualsWithin(0d);
+    }
+
     public virtual void ParseXML(XMLNode x)
     {
     }

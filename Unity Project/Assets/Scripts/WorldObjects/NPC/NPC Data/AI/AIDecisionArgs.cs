@@ -19,6 +19,15 @@ public class AIDecisionArgs
         Ending = false;
     }
 
+    public void CopyIn(AIDecisionArgs rhs)
+    {
+        Weight = rhs.Weight;
+        StickyShift = rhs.StickyShift;
+        StickyReduc = rhs.StickyReduc;
+        Ending = rhs.Ending;
+        Actions = rhs.Actions;
+    }
+
     public void ToLog(Log log)
     {
         log.w("Weight: " + Weight + ", StickyShift: " + StickyShift + ", StickyReduc: " + StickyReduc + ", Ending: " + Ending);
