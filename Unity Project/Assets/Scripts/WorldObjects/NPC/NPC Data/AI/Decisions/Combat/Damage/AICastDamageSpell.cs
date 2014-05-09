@@ -33,6 +33,6 @@ public class AICastDamageSpell : AIDecision
             turnsSinceLastCast++;
         Args.Weight = -1.0d;
         Args.Actions = null;
-        return false;
+        return true;
     }
 }

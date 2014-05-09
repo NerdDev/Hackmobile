@@ -3,25 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-internal class AIUseAbility : AIDecision,  ICopyable
+internal class AIUseAbility : AIDecision
 {
     public override double Cost { get { return 60d; } }
     public override IEnumerable<AIState> States { get { yield return AIState.Combat; } }
 
     public AIUseAbility()
     {
-    }
-
-    public void PostPrimitiveCopy()
-    {
-
-    }
-
-    public void PostObjectCopy()
-    {
-        // Do Damage is the arbitrary in-combat standard of 1
-        Args.Weight = 1d;
-        Args.Actions = UseAbility;
     }
 
     protected void UseAbility(AICore core)
@@ -47,6 +35,8 @@ internal class AIUseAbility : AIDecision,  ICopyable
 
     public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
-        return false;
+        Args.Weight = 1d;
+        Args.Actions = UseAbility;
+        return true;
     }
 }

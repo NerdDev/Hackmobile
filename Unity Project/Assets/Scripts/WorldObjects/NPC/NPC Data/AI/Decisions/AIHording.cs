@@ -34,12 +34,7 @@ public class AIHording : AIDecision, ICopyable
 
     public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
-        Args.Weight = 0d;
-        if (core.NumEnemies == 0)
-        {
-            Args.Actions = null;
-            return false;
-        }
+        if (core.NumEnemies == 0) return false;
 
         ratio = core.NumFriendlies + 1;
         ratio /= core.NumEnemies;
@@ -61,10 +56,13 @@ public class AIHording : AIDecision, ICopyable
             return false;
         }
 
-        bool instantPick;
-        if (PassControl(core, decisionCore, fleePackage, out instantPick))
+        //
+        // Write code to look for NPCs in combat and share knowledge to start swarm combat
+        //
+
+        if (PassControl(core, decisionCore, fleePackage))
         {
-            return instantPick;
+            return true;
         }
 
         #region DEBUG
@@ -93,9 +91,14 @@ public class AIHording : AIDecision, ICopyable
                 core.Log.w("Circling.  Angle: " + angle + " Sub Space: " + circleSpace);
             }
             #endregion
+            return true;
         }
-        // Release to other AI
-        Args.Actions = null;
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+        {
+            core.Log.w("Releasing to AI");
+        }
+        #endregion
         return false;
     }
 

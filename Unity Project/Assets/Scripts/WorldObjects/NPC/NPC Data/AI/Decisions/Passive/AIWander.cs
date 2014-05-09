@@ -66,7 +66,7 @@ public class AIWander : AIDecision
             Args.StickyReduc = 5d;
         }
         Args.Actions = Args.Actions.Then((coreP) => core.MoveTo(targetSpace));
-        return false;
+        return true;
     }
 }
 

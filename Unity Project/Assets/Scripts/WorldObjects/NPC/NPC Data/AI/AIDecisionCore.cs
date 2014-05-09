@@ -56,18 +56,12 @@ public class AIDecisionCore
                 core.Log.printHeader(decision.GetType().Name);
             }
             #endregion
-            if (decision.Decide(core, this))
-            {
-                #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
-                {
-                    core.Log.w("Instant picking");
-                    core.Log.printFooter(decision.GetType().Name);
-                }
-                #endregion
+            if (!decision.Decide(core, this)) continue;
+            double weight = decision.Args.Weight;
+            if (double.IsInfinity(weight))
+            { // Instant picking
                 return decision;
             }
-            double weight = decision.Args.Weight;
             if (Continuing(decision))
             {
                 weight += decision.Args.StickyShift;

@@ -8,6 +8,7 @@ public class AIFlee : AIDecision
     public float FleeTriggerDistance;
     public float FleeWeight;
     public float FleeLookRange;
+    public float EndingFleeWeightSkew;
 
     public override double Cost
     {
@@ -28,7 +29,7 @@ public class AIFlee : AIDecision
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            core.Log.w("Closest enemy dist: " + core.ClosestEnemyDist + "  Flee Dist: " + FleeTriggerDistance);
+            core.Log.w("Closest enemy dist: " + core.ClosestEnemyDist + "  Flee Dist: " + FleeTriggerDistance + " Continuing: " + decisionCore.Continuing(this) + " LastMovementGoal: " + core.LastMovementGoal);
         }
         #endregion
         if (core.ClosestEnemyDist < FleeTriggerDistance)
@@ -45,8 +46,17 @@ public class AIFlee : AIDecision
                 core.Log.w("Running away");
             }
             #endregion
+            return true;
         }
-        return false;
+        if (!decisionCore.Continuing(this)) return false;
+        if (core.LastMovementGoal == null || core.Self.GridSpace.Equals(core.LastMovementGoal)) return false;
+
+        Args.Actions = (corep) =>
+        {
+            core.MoveTo(core.LastMovementGoal);
+        };
+        Args.Weight = FleeWeight * EndingFleeWeightSkew;
+        return true;
     }
 
     public override void ParseXML(XMLNode x)
@@ -55,5 +65,6 @@ public class AIFlee : AIDecision
         FleeTriggerDistance = x.SelectFloat("FleeTriggerDistance", 7f);
         FleeWeight = x.SelectFloat("FleeWeight", 15f);
         FleeLookRange = x.SelectFloat("FleeLookRange", 6);
+        EndingFleeWeightSkew = x.SelectFloat("EndingFleeWeightSkew", .75f);
     }
 }

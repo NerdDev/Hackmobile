@@ -20,10 +20,10 @@ public class AIAggro : AIDecision
             if (!pair.Value.Friendly && pair.Value.AwareOf)
             {
                 Args.Actions = (coreP) => core.CurrentState = AIState.Combat;
+                Args.Weight = double.PositiveInfinity;
                 return true;
             }
         }
-        Args.Actions = null;
         return false;
     }
 }

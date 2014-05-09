@@ -25,7 +25,7 @@ public class AIPassiveHording : AIHording
             bool otherInCombat = false;
             foreach (var npcMem in core.NPCMemory.Values)
             {
-                if (npcMem.Friendly && npcMem.NPC.InCombat() && npcMem.NPC.HasDecision(this))
+                if (npcMem.Friendly && npcMem.AwareOf && npcMem.NPC.InCombat() && npcMem.NPC.HasDecision(this))
                 {
                     otherInCombat = true;
                     break;
@@ -38,10 +38,7 @@ public class AIPassiveHording : AIHording
                     core.Log.w("Switching to combat");
                 }
                 Args.Actions = (coreP) => core.CurrentState = AIState.Combat;
-                return true;
-            }
-            if (hordingRet)
-            { // Force flee
+                // Write code to make this NPC aware of same targets (communication)
                 return true;
             }
         }

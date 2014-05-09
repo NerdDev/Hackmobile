@@ -19,6 +19,6 @@ public class AIWait : AIDecision
         { // Last resort
             Args.Weight = 0.05d;
         }
-        return false;
+        return true;
     }
 }
