@@ -221,9 +221,9 @@ public class AICore : IXmlParsable, ICopyable
             {
                 item.SpaceLastSeen = item.NPC.GridSpace;
                 item.TurnLastSeen = BigBoss.Time.CurrentTurn;
-                item.Friendly = IsFriendly(item);
             }
         }
+        item.Friendly = IsFriendly(item);
     }
 
     protected bool ShouldBecomeAware(NPCMemoryItem item)
