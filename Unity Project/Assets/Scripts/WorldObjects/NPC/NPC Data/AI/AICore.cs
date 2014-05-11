@@ -235,7 +235,7 @@ public class AICore : IXmlParsable, ICopyable
     protected bool ShouldForget(NPCMemoryItem item)
     {
         // Improve later
-        return BigBoss.Time.CurrentTurn - item.TurnLastSeen > 200;
+        return item.TurnsSinceLastSeen > 200;
     }
 
     protected bool IsFriendly(NPCMemoryItem item)

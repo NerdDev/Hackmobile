@@ -8,6 +8,7 @@ public class NPCMemoryItem
     public bool CanSee;
     public bool AwareOf;
     public ulong TurnLastSeen;
+    public ulong TurnsSinceLastSeen { get { return BigBoss.Time.CurrentTurn - TurnLastSeen; } }
     public GridSpace SpaceLastSeen;
     public bool Friendly;
     public NPC NPC;
