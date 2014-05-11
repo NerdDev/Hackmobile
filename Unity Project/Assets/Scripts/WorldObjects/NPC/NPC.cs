@@ -35,7 +35,7 @@ public class NPC : Affectable
     public Stats Stats = new Stats();
     public Spells KnownSpells = new Spells();
     public StartingItems StartingItems = new StartingItems();
-    private AICore AI;
+    public AICore AI;
 
     public Inventory Inventory = new Inventory();
     protected List<Item> EquippedItems = new List<Item>();

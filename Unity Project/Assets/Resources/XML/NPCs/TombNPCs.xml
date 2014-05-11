@@ -90,6 +90,7 @@
       </effect>
     </OnDeath>
     <AI>
+      <AIDecision name="AIShareMemory" />
       <AIDecision name="AIPassiveHording" ChaseTippingRatio="3" AttackTippingRatio="5" />
       <AIDecision name="AIWander" />
       <AIDecision name="AIEatCorpse" />

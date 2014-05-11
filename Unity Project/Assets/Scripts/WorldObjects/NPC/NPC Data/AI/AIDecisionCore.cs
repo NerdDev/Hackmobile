@@ -63,7 +63,16 @@ public class AIDecisionCore
                 core.Log.printHeader(decision.GetType().Name);
             }
             #endregion
-            if (!decision.Decide(core, this)) continue;
+            if (!decision.Decide(core, this))
+            {
+                #region DEBUG
+                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
+                {
+                    core.Log.printFooter(decision.GetType().Name);
+                }
+                #endregion
+                continue;
+            }
             double weight = decision.Args.Weight;
             if (double.IsInfinity(weight))
             { // Instant picking

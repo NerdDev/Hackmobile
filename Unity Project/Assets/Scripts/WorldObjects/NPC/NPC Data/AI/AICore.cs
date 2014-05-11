@@ -13,6 +13,7 @@ public class AICore : IXmlParsable, ICopyable
     public System.Random Random { get; protected set; }
 
     // Cores
+    public HashSet<AIDecision> DecisionSet = new HashSet<AIDecision>();
     AIDecisionCore[] cores = new AIDecisionCore[EnumExt.Length<AIState>()];
 
     // State variables
@@ -43,6 +44,7 @@ public class AICore : IXmlParsable, ICopyable
     public NPC ClosestEnemy;
     public double ClosestEnemyDist;
     public Dictionary<NPC, NPCMemoryItem> NPCMemory = new Dictionary<NPC, NPCMemoryItem>();
+    private Dictionary<AIDecision, List<NPCMemoryItem>> decisionMemoryCache = new Dictionary<AIDecision, List<NPCMemoryItem>>();
     #endregion
 
     #region Movement Memory
@@ -75,7 +77,7 @@ public class AICore : IXmlParsable, ICopyable
         #region Debug
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            Log.printHeader("Deciding - Turn " + BigBoss.Time.CurrentTurn + " - " + System.DateTime.Now + " - " + Self.GridSpace);
+            Log.printHeader("Deciding - Turn " + BigBoss.Time.CurrentTurn + " - " + System.DateTime.Now + " - " + Self.GridSpace + " - State: " + CurrentState);
         }
         #endregion
         Reset();
@@ -102,15 +104,12 @@ public class AICore : IXmlParsable, ICopyable
         ClosestEnemy = null;
         UpdateNPCMemory();
         MovementSubstitutions.Clear();
+        decisionMemoryCache.Clear();
     }
 
     public bool Contains(AIDecision decision)
     {
-        foreach (AIDecisionCore core in cores)
-        {
-            if (core.Decisions.Contains(decision)) return true;
-        }
-        return false;
+        return DecisionSet.Contains(decision);
     }
 
     #region NPC Memory
@@ -242,6 +241,38 @@ public class AICore : IXmlParsable, ICopyable
     protected bool IsFriendly(NPCMemoryItem item)
     {
         return !System.Object.ReferenceEquals(BigBoss.Player, item.NPC);
+    }
+
+    public List<NPCMemoryItem> GetNPCsUsingDecision(AIDecision decision)
+    {
+        List<NPCMemoryItem> list;
+        if (!decisionMemoryCache.TryGetValue(decision, out list))
+        {
+            list = new List<NPCMemoryItem>(NPCMemory.Values.Count);
+            foreach (NPCMemoryItem mem in NPCMemory.Values)
+            {
+                if (mem.NPC.AI.Contains(decision))
+                {
+                    list.Add(mem);
+                }
+            }
+        }
+        return list;
+    }
+
+    public void LearnAbout(NPCMemoryItem item)
+    {
+        if (item.NPC.Equals(Self)) return;
+        NPCMemoryItem cur;
+        if (NPCMemory.TryGetValue(item.NPC, out cur))
+        {
+            cur.Absorb(item);
+        }
+        else
+        {
+            cur = new NPCMemoryItem(item);
+            NPCMemory[item.NPC] = cur;
+        }
     }
     #endregion
 
@@ -471,28 +502,26 @@ public class AICore : IXmlParsable, ICopyable
             AIDecision decision;
             if (ParseDecision(packageNode, out decision))
             {
-                foreach (AIState state in decision.States)
-                {
-                    cores[(int)state].AddDecision(decision);
-                }
+                AddDecision(decision);
             }
         }
 
         // Package Defaults
         if (x.SelectBool("UseDefaults", true))
         {
-            AIDecisionCore core;
-            // Movement
-            core = cores[(int)AIState.Movement];
-            core.AddDecision(new AIMove());
-            // Passive
-            core = cores[(int)AIState.Passive];
-            core.AddDecision(new AIWait());
-            // Combat
-            core = cores[(int)AIState.Combat];
-            core.AddDecision(new AIWait());
-            core.AddDecision(new AIUseAbility());
+            AddDecision(new AIMove());
+            AddDecision(new AIWait());
+            AddDecision(new AIUseAbility());
         }
+    }
+
+    protected void AddDecision(AIDecision decision)
+    {
+        foreach (AIState state in decision.States)
+        {
+            cores[(int)state].AddDecision(decision);
+        }
+        DecisionSet.Add(decision);
     }
 
     protected bool ParseDecision(XMLNode node, out AIDecision decision)

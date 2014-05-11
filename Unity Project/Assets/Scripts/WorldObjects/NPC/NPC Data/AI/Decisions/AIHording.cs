@@ -56,10 +56,6 @@ public class AIHording : AIDecision, ICopyable
             return false;
         }
 
-        //
-        // Write code to look for NPCs in combat and share knowledge to start swarm combat
-        //
-
         if (PassControl(core, decisionCore, fleePackage))
         {
             return true;

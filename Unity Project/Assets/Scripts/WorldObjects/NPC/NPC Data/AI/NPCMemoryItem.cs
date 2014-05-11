@@ -17,6 +17,26 @@ public class NPCMemoryItem
         this.NPC = npc;
     }
 
+    public NPCMemoryItem(NPCMemoryItem rhs)
+        : this(rhs.NPC)
+    {
+        Absorb(rhs);
+    }
+
+    public void Absorb(NPCMemoryItem rhs)
+    {
+        if (rhs.AwareOf)
+        {
+            this.AwareOf = rhs.AwareOf;
+        }
+
+        if (rhs.TurnLastSeen > this.TurnLastSeen)
+        {
+            this.TurnLastSeen = rhs.TurnLastSeen;
+            this.SpaceLastSeen = rhs.SpaceLastSeen;
+        }
+    }
+
     public void ToLog(Log log)
     {
         if (!BigBoss.Debug.Flag(DebugManager.DebugFlag.AI)) return;
