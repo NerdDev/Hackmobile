@@ -101,7 +101,7 @@ public class AIHording : AIDecision, ICopyable
     public override void ParseXML(XMLNode x)
     {
         base.ParseXML(x);
-        AttackTippingRatio = x.SelectFloat("AttackTippingRatio", 4.1f);
+        AttackTippingRatio = x.SelectFloat("AttackTippingRatio", 5f);
         CirclingBuffer = x.SelectFloat("CirclingBuffer", 1f);
         fleePackage.ParseXML(x);
     }

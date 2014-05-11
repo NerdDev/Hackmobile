@@ -38,6 +38,6 @@ public class AIPassiveHording : AIHording
     public override void ParseXML(XMLNode x)
     {
         base.ParseXML(x);
-        ChaseTippingRatio = x.SelectFloat("ChaseTippingRatio", 2.1f);
+        ChaseTippingRatio = x.SelectFloat("ChaseTippingRatio", 3f);
     }
 }

@@ -8,5 +8,6 @@ public enum LevelOptions
     NORMAL,
     NONE,
     PassiveHordeTest,
+    HordeTest,
     FleeTest
 }
