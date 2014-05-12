@@ -32,4 +32,14 @@ public static class IGridSpaceExt
         if (space == null) return GridType.NULL;
         return space.Type;
     }
+
+    public static bool Walkable(this IGridSpace space)
+    {
+        if (!GridTypeEnum.Walkable(space.Type)) return false;
+        foreach (ThemeElement element in space.GetThemeElements())
+        {
+            if (!element.Walkable) return false;
+        }
+        return true;
+    }
 }

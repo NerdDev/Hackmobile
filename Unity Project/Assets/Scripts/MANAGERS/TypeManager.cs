@@ -22,9 +22,11 @@ public class TypeManager : MonoBehaviour, IManager
         BigBoss.Debug.w(Logs.TypeHarvest, "Initializing");
         Harvest<EffectInstance>();
         Harvest<RoomModifier>();
-        Harvest<AIRoleDecision>();
         Harvest<AIDecision>();
         Harvest<ITargeter>();
+        #if UNITY_EDITOR
+        Harvest<TestLevelSetup>();
+        #endif
     }
 
     protected void Harvest<T>()

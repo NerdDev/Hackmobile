@@ -181,48 +181,9 @@ public class Item : Affectable, PassesTurns, IXmlParsable
 
     #region Turn Management
 
-    //If there's anything that needs updated... let it go here.
-    private int itemPoints = 0;
-    private int baseItemPoints = 60;
-
     public override void UpdateTurn()
     {
         //throw new NotImplementedException();
-    }
-
-    public override int CurrentPoints
-    {
-        get
-        {
-            return this.itemPoints;
-        }
-        set
-        {
-            this.itemPoints = value;
-        }
-    }
-
-    public override int BasePoints
-    {
-        get
-        {
-            return this.baseItemPoints;
-        }
-        set
-        {
-            this.baseItemPoints = value;
-        }
-    }
-    public override bool IsActive
-    {
-        get
-        {
-            return this.isActive;
-        }
-        set
-        {
-            this.isActive = value;
-        }
     }
     #endregion
 }

@@ -3,89 +3,70 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AIWander : AIRoleDecision
+public class AIWander : AIDecision
 {
-    public override AIRole Role { get { return AIRole.Other; } }
-    public override double StickyShift { get { return 0d; } }
+    public override IEnumerable<AIState> States { get { yield return AIState.Passive; } }
     GridSpace targetSpace;
-    MultiMap<GridSpace> targetArea;
+    MultiMap<GridSpace> targetArea = new MultiMap<GridSpace>();
 
     public override double Cost { get { return 0d; } }
 
-    public override void Action(AIActionArgs args)
+    protected void RegenAreaAction(AICore core)
     {
+        targetArea = new MultiMap<GridSpace>();
+        core.Level.DrawBreadthFirstFill(core.Self.GridSpace.X, core.Self.GridSpace.Y, true,
+            Draw.Walkable<GridSpace>().And(Draw.AddTo(targetArea)),
+            Draw.CountUntil<GridSpace>(25));
+        targetArea[core.Self.GridSpace.X, core.Self.GridSpace.Y] = core.Self.GridSpace;
         #region DEBUG
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + args.Self.ID + "/Log.txt");
-            log.printHeader("AIWander Action");
-            log.w("target area" + targetSpace);
-            log.w("current area " + args.Self.GridSpace);
-            if (targetArea != null)
-            {
-                log.w("Area contains? " + targetArea.Contains(args.Self.GridSpace));
-            }
-            log.w("At destination? " + args.Self.GridSpace.Equals(targetSpace));
-            log.printFooter("AIWander Action");
-            log.close();
+            core.Log.printHeader("AIWander New Area");
+            targetArea.ToLog(core.Log);
+            core.Level.ToLog(core.Log, targetArea);
+            core.Log.printFooter("AIWander New Area");
         }
         #endregion
-        if (!args.Continuing // Not continuing previous
-            || !targetArea.Contains(args.Self.GridSpace.X, args.Self.GridSpace.Y) // Not in wander area
-            || targetSpace == null // No target area
-            || args.Self.GridSpace.Equals(targetSpace) // In target area
-            )
-        {
-            if (targetArea == null || !targetArea.Contains(args.Self.GridSpace.X, args.Self.GridSpace.Y))
-            { // Generate a new "wander area"
-                targetArea = new MultiMap<GridSpace>();
-                args.Level.DrawBreadthFirstFill(args.Self.GridSpace.X, args.Self.GridSpace.Y, true,
-                    Draw.Walkable<GridSpace>().And(Draw.AddTo(targetArea)),
-                    Draw.CountUntil<GridSpace>(25));
-                targetArea[args.Self.GridSpace.X, args.Self.GridSpace.Y] = args.Self.GridSpace;
-                #region DEBUG
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
-                {
-                    Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + args.Self.ID + "/Log.txt");
-                    log.printHeader("AIWander New Area");
-                    targetArea.ToLog(log);
-                    args.Level.ToLog(log, targetArea);
-                    log.printFooter("AIWander New Area");
-                    log.close();
-                }
-                #endregion
-            }
-            // Pick new targetSpace
-            Value2D<GridSpace> space;
-            targetArea.GetRandom(args.Random, out space);
-            targetSpace = space.val;
-            #region DEBUG
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
-            {
-                Log log = BigBoss.Debug.CreateNewLog("AI/NPC " + args.Self.ID + "/Log.txt");
-                log.printHeader("AIWander Pick Target");
-                log.w("New target: " + targetSpace);
-                log.printFooter("AIWander Pick Target");
-                log.close();
-            }
-            #endregion
-        }
-        args.MoveTo(targetSpace);
     }
 
-    public override double CalcWeighting(AIDecisionArgs args)
+    protected void PickNewTarget(AICore core)
     {
-        if (args.Continuing)
+        Value2D<GridSpace> space;
+        targetArea.GetRandom(core.Random, out space);
+        targetSpace = space.val;
+        #region DEBUG
+        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.AI))
         {
-            if (targetSpace != null && targetSpace.Equals(args.Self.GridSpace))
-            { // Chance to continue wandering in a different direction
-                return 2d;
-            }
-            // Chance to continue on path
-            return 20d;
+            core.Log.printHeader("AIWander Pick Target");
+            core.Log.w("New target: " + targetSpace);
+            core.Log.printFooter("AIWander Pick Target");
         }
-        // Chance to start wandering
-        return 1d;
+        #endregion
+    }
+
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
+    {
+        Args.Actions = AIDecisions.Base();
+        if (!targetArea.Contains(core.Self.GridSpace.X, core.Self.GridSpace.Y))
+        {
+            Args.Actions = Args.Actions.Then(RegenAreaAction);
+            targetSpace = core.Self.GridSpace;
+        }
+        if (decisionCore.Continuing(this) && core.Self.GridSpace.Equals(targetSpace)) // At end goal
+        { // Chance to continue wandering in a different direction
+            Args.Actions = Args.Actions.Then(PickNewTarget);
+            Args.Weight = 2d;
+        }
+        else
+        {
+            // Chance to start wandering
+            Args.Actions = Args.Actions.Then(PickNewTarget);
+            Args.Weight = .15d;
+            Args.StickyShift = 4.85d;
+            Args.StickyReduc = 5d;
+        }
+        Args.Actions = Args.Actions.Then((coreP) => core.MoveTo(targetSpace));
+        return true;
     }
 }
 

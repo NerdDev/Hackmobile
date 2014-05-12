@@ -9,4 +9,9 @@ public static class DoubleExt
     {
         return a - Math.Floor(a / b) * b;
     }
+
+    public static bool EqualsWithin(this double a, double b, double within = 0.000000001d)
+    {
+        return Math.Abs(a - b) < within;
+    }
 }

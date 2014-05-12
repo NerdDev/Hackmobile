@@ -62,7 +62,7 @@ MonoBehaviour:
     Elements:
     - Multiplier: 1
       Item: {fileID: 11400000, guid: 76f4b9464e81a35429e0dc4787f0a2fc, type: 2}
-  Keywords: 00000000
+  Keywords: 01000000
   Pillars:
     Elements:
     - Multiplier: 1

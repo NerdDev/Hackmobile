@@ -24,12 +24,7 @@ public class NPCInstance : WOWrapper
         {
             WO.Destroy();
         }
-        else
-        {
-            TurnPoints = WO.CurrentPoints;
-        }
     }
-    
     void FixedUpdate()
     {
         if (WO != null)

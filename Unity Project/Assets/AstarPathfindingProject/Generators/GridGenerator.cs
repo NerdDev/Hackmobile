@@ -618,7 +618,9 @@ A grid graph will update that area and a small margin around it equal to \link P
 				-1, 1, 1, -1
 			};
         }
+
         Level level;
+
         public override void Scan()
         {
             AstarPath.OnPostScan += new OnScanDelegate(OnPostScan);

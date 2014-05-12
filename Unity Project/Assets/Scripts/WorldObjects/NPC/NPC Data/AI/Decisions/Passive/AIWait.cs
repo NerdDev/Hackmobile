@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class AIWait : AIRoleDecision
+public class AIWait : AIDecision
 {
-    public override AIRole Role { get { return AIRole.Other; } }
-    public override double StickyShift { get { return 0d; } }
+    public override IEnumerable<AIState> States { get { yield return AIState.Passive; yield return AIState.Combat; } }
 
     public override double Cost { get { return 60d; } }
 
-    public override void Action(AIActionArgs args)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
-        // Nuttin'
-    }
-
-    public override double CalcWeighting(AIDecisionArgs args)
-    {
-        return 1d;
+        if (core.CurrentState == AIState.Passive)
+        {
+            Args.Weight = 1d;
+        }
+        else
+        { // Last resort
+            Args.Weight = 0.05d;
+        }
+        return true;
     }
 }

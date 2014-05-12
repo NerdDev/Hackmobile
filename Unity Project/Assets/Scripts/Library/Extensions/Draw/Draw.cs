@@ -116,6 +116,33 @@ public static class Draw
         };
     }
 
+    public static DrawAction<T> MoveTo<T>(Container2D<T> to)
+    {
+        return (arr, x, y) =>
+        {
+            to[x, y] = arr[x, y];
+            return true;
+        };
+    }
+
+    public static DrawAction<T> MoveTo<T>(Container2D<GridType> to) where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            to[x, y] = arr[x, y].Type;
+            return true;
+        };
+    }
+
+    public static DrawAction<T> SetTo<T>(Container2D<GridType> to, GridType t) where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            to[x, y] = t;
+            return true;
+        };
+    }
+
     public static DrawAction<T> SetTo<T>(Container2D<T> container, T g, Point shift = null)
     {
         return SetTo<T, T>(container, g, shift);
@@ -167,6 +194,28 @@ public static class Draw
         {
             val.x = x;
             val.y = y;
+            return true;
+        };
+    }
+
+    public static DrawAction<double> TranslateRatio(Container2D<GridType> cont, double max, double min)
+    {
+        max -= min;
+        return (arr, x, y) =>
+        {
+            double weight = (arr[x, y] - min) / max;
+            if (weight <= .333333333333333d)
+            {
+                cont[x, y] = GridType.INTERNAL_RATIO_LOW;
+            }
+            else if (weight <= .6666666666666d)
+            {
+                cont[x, y] = GridType.INTERNAL_RATIO_MED;
+            }
+            else
+            {
+                cont[x, y] = GridType.INTERNAL_RATIO_HIGH;
+            }
             return true;
         };
     }
@@ -241,6 +290,32 @@ public static class Draw
                 return true;
             };
         }
+    }
+
+    public static DrawAction<R> AddGridTo<T, R>(Container2D<T> from, Container2D<GridType> cont) where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            T space;
+            if (from.TryGetValue(x, y, out space))
+            {
+                cont[x, y] = space.Type;
+            }
+            return true;
+        };
+    }
+
+    public static DrawAction<T> AddGridTo<T>(Container2D<GridType> cont) where T : IGridSpace
+    {
+        return (arr, x, y) =>
+        {
+            T space;
+            if (arr.TryGetValue(x, y, out space))
+            {
+                cont[x, y] = space.Type;
+            }
+            return true;
+        };
     }
 
     public static DrawAction<T> AddTo<T>(Queue<Point> queue, Point shift = null)
@@ -439,12 +514,7 @@ public static class Draw
             if (arr.TryGetValue(x, y, out space))
             {
                 if (space == null) return false;
-                if (!GridTypeEnum.Walkable(space.Type)) return false;
-                foreach (ThemeElement element in space.GetThemeElements())
-                {
-                    if (!element.Walkable) return false;
-                }
-                return true;
+                return space.Walkable();
             }
             return false;
         });
@@ -540,6 +610,21 @@ public static class Draw
         };
     }
 
+    public static DrawAction<T> FilterWalkable<T>(Container2D<GridType> cont)
+    {
+        return (arr, x, y) =>
+        {
+            GridType space;
+            if (cont.TryGetValue(x, y, out space))
+            {
+                if (!GridTypeEnum.Walkable(space))
+                {
+                    cont[x, y] = GridType.NULL;
+                }
+            }
+            return true;
+        };
+    }
     #endregion
 
     #region GenSpace

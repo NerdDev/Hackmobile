@@ -7,31 +7,32 @@ public class AICastDamageSpell : AIDecision
 {
     int turnsSinceLastCast = 0;
     public override double Cost { get { return 60d; } }
-    public override double StickyShift { get { return 0d; } }
+    public override IEnumerable<AIState> States { get { yield return AIState.Combat; } }
 
     public AICastDamageSpell()
     {
     }
 
-    public override void Action(AIActionArgs args)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
-        if (args.Self.KnownSpells.ContainsKey("Fireball"))
+        if (core.Self.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
         {
-            Spell spellToCast = args.Self.KnownSpells["Fireball"];
-            if (args.Self.DistanceToTarget(BigBoss.Player) < spellToCast.range)
+            Args.Weight = 0.4d;
+            Args.Actions = (coreP) =>
             {
-                args.Self.CastSpell(spellToCast, BigBoss.Player);
-                turnsSinceLastCast = 0;
-            }
+                Spell spellToCast = core.Self.KnownSpells["Fireball"];
+                if (core.Self.DistanceToTarget(BigBoss.Player) < spellToCast.range)
+                {
+                    core.Self.CastSpell(spellToCast, BigBoss.Player);
+                    turnsSinceLastCast = 0;
+                }
+            };
+            return false;
         }
-    }
-
-    public override double CalcWeighting(AIDecisionArgs args)
-    {
-        if (args.Self.KnownSpells.ContainsKey("Fireball") && turnsSinceLastCast > 5)
-            return 0.4d;
         else
             turnsSinceLastCast++;
-        return -1.0d;
+        Args.Weight = -1.0d;
+        Args.Actions = null;
+        return true;
     }
 }

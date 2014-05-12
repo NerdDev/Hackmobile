@@ -216,44 +216,9 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
         }
     }
 
-    int currentPoints;
-    public int CurrentPoints
-    {
-        get
-        {
-            return currentPoints;
-        }
-        set
-        {
-            currentPoints = value;
-        }
-    }
-
-    int basePoints;
-    public int BasePoints
-    {
-        get
-        {
-            return basePoints;
-        }
-        set
-        {
-            basePoints = value;
-        }
-    }
-
-    bool isActive;
-    public bool IsActive
-    {
-        get
-        {
-            return isActive;
-        }
-        set
-        {
-            isActive = value;
-        }
-    }
+    public ulong CurrentPoints { get; set; }
+    public ulong BasePoints { get; set; }
+    public bool IsActive { get; set; }
     #endregion
 
 }

@@ -91,7 +91,7 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
-    public Container2D<GridSpace> GeneratePrototypes(LevelLayout layout)
+    public MultiMap<GridSpace> GeneratePrototypes(Level level, LevelLayout layout)
     {
         MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
         ThemeElementSpec spec = new ThemeElementSpec()
@@ -109,7 +109,7 @@ public class LevelBuilder : MonoBehaviour
             GridSpace space;
             if (!ret.TryGetValue(gen, out space))
             {
-                space = new GridSpace(gen.val.Type, gen.x, gen.y)
+                space = new GridSpace(level, gen.val.Type, gen.x, gen.y)
                 {
                     Theme = gen.val.Theme
                 };
@@ -126,13 +126,13 @@ public class LevelBuilder : MonoBehaviour
             foreach (GenDeploy genDeploy in tmp)
             {
                 spec.GenDeploy = genDeploy;
-                Deploy(spec);
+                Deploy(level, spec);
             }
         }
         return ret;
     }
 
-    protected void Deploy(ThemeElementSpec spec)
+    protected void Deploy(Level level, ThemeElementSpec spec)
     {
         if (spec.GenDeploy.Deployed) return;
         spec.GenDeploy.Deployed = true;
@@ -149,7 +149,7 @@ public class LevelBuilder : MonoBehaviour
             GridSpace space;
             if (!spec.Grid.TryGetValue(d, out space))
             {
-                space = new GridSpace(spec.Type, spec.DeployX, spec.DeployY)
+                space = new GridSpace(level, spec.Type, spec.DeployX, spec.DeployY)
                 {
                     Theme = spec.Theme
                 };
@@ -160,7 +160,7 @@ public class LevelBuilder : MonoBehaviour
             foreach (GenDeploy d2 in d.val)
             {
                 spec.GenDeploy = d2;
-                Deploy(spec);
+                Deploy(level, spec);
             }
         }
     }

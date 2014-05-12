@@ -3,34 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-internal class AIUseAbility : AIRoleDecision
+internal class AIUseAbility : AIDecision
 {
-    public override AIRole Role { get { return AIRole.Damage; } }
     public override double Cost { get { return 60d; } }
-    public override double StickyShift { get { return 0d; } }
+    public override IEnumerable<AIState> States { get { yield return AIState.Combat; } }
 
     public AIUseAbility()
     {
     }
 
-    public override void Action(AIActionArgs args)
+    protected void UseAbility(AICore core)
     {
         // Code to roll between damage options
-        
+
         // Temporarily just doing autoattack for now.
-        if (args.Self.IsNextToTarget(args.Target))
+        NPC n = core.Target as NPC;
+        n = BigBoss.Player; // Temp
+        if (n == null)
         {
-            args.Self.attack(args.Target);
+            UnityEngine.Debug.LogError("Cannot attack non-npc " + core.Target);
+        }
+        if (core.Self.IsNextToTarget(n))
+        {
+            core.Self.attack(n);
         }
         else
         {
-            args.MoveTo(args.Target);
+            core.MoveTo(n);
         }
     }
 
-    public override double CalcWeighting(AIDecisionArgs args)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
-        // Do Damage is the arbitrary in-combat standard of 1
-        return 1d;
+        Args.Weight = 1d;
+        Args.Actions = UseAbility;
+        return true;
     }
 }

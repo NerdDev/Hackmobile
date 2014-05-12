@@ -13,7 +13,7 @@ public class NPC : Affectable
      */
     public override void Init()
     {
-        TurnNPCIsOn = BigBoss.Time.turnsPassed;
+        TurnNPCIsOn = BigBoss.Time.CurrentTurn;
         //calculate any stats that need set on start
         CalcInitialStats();
 
@@ -35,7 +35,7 @@ public class NPC : Affectable
     public Stats Stats = new Stats();
     public Spells KnownSpells = new Spells();
     public StartingItems StartingItems = new StartingItems();
-    private AICore AI;
+    public AICore AI;
 
     public Inventory Inventory = new Inventory();
     public Equipment Equipment;
@@ -52,12 +52,13 @@ public class NPC : Affectable
             return new Vector3(pos.x, pos.y + 2, pos.z);
         }
     }
+    public override Vector3 CanSeePosition { get { return this.EyeSightPosition; } }
     #endregion
 
     #region Individual NPC Variables
 
-    private int npcPoints = 0;
-    private int TurnNPCIsOn = 1;
+    private ulong npcPoints = 0;
+    private ulong TurnNPCIsOn = 1;
     BoneStructure Bones = null;
     internal float turnTime;
     internal float gridTime;
@@ -432,6 +433,17 @@ public class NPC : Affectable
     {
         //how much XP is this NPC worth?
         return this.Stats.Level * 5;
+    }
+    #endregion
+
+    #region Checks
+    public bool CanSee(WorldObject obj)
+    {
+        if (this.Instance == null || obj.Instance == null)
+        {
+            return false;
+        }
+        return !Physics.Linecast(this.EyeSightPosition, obj.CanSeePosition);
     }
     #endregion
 
@@ -857,10 +869,9 @@ public class NPC : Affectable
     #endregion
 
     #region Turn Management
-
-    public bool subtractPoints(int points)
+    public bool subtractPoints(ulong points)
     {
-        int gameTurns = BigBoss.Time.turnsPassed;
+        ulong gameTurns = BigBoss.Time.CurrentTurn;
         if (TurnNPCIsOn < gameTurns)
         {
             npcPoints += (gameTurns - TurnNPCIsOn);
@@ -883,30 +894,6 @@ public class NPC : Affectable
         if (IsActive)
         {
             AI.DecideWhatToDo();
-        }
-    }
-
-    public override int CurrentPoints
-    {
-        get
-        {
-            return this.npcPoints;
-        }
-        set
-        {
-            this.npcPoints = value;
-        }
-    }
-
-    public override bool IsActive
-    {
-        get
-        {
-            return this.isActive;
-        }
-        set
-        {
-            this.isActive = value;
         }
     }
     #endregion
@@ -937,7 +924,7 @@ public class NPC : Affectable
         }, out space);
     }
 
-    public bool IsNextToTarget(NPC n)
+    public bool IsNextToTarget(WorldObject n)
     {
         if (GO != null)
             if (Vector3.Distance(GO.transform.position, n.GO.transform.position) < 1.75f)
@@ -959,6 +946,16 @@ public class NPC : Affectable
         if (GO != null)
             return Vector3.Distance(GO.transform.position, obj.transform.position);
         else return float.MaxValue;
+    }
+
+    public bool HasDecision(AIDecision decision)
+    {
+        return AI.Contains(decision);
+    }
+
+    public bool InCombat()
+    {
+        return AI.CurrentState == AIState.Combat;
     }
     #endregion
 

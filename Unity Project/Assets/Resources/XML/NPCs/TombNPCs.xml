@@ -47,11 +47,13 @@
         <speed>2</speed>
       </effect>
     </OnDeath>
-    <aipackages>
-    </aipackages>
+    <AI>
+      <AIDecision name="AIAggro" />
+      <AIDecision name="AIWander" />
+    </AI>
   </npc>
-  
-  
+
+
   <npc name="Giant Rat">
     <prefab>GIANT_RAT</prefab>
     <flags>
@@ -88,23 +90,14 @@
       </effect>
     </OnDeath>
     <AI>
-      <AIRoles>
-        <!-- No special role -->
-      </AIRoles>
-      <AIMovements>
-        <!-- No special movements -->
-      </AIMovements>
-      <AIState state="Passive">
-        <AIDecision name="Wander" />
-        <AIDecision name="EatCorpse" />
-      </AIState>
-      <AIState state="Combat">
-        <AIDecision name="PassiveHorde" />
-      </AIState>
+      <AIDecision name="AIShareMemory" />
+      <AIDecision name="AIPassiveHording" ChaseTippingRatio="3" AttackTippingRatio="5" />
+      <AIDecision name="AIWander" />
+      <AIDecision name="AIEatCorpse" />
     </AI>
   </npc>
-  
-  
+
+
   <npc name="Ghoul">
     <prefab>Ghoul</prefab>
     <flags>
@@ -151,9 +144,14 @@
         <slots>2</slots>
       </equiptype>
     </equipslots>
+    <AI>
+      <AIDecision name="AIAggro" />
+      <AIDecision name="AIWander" />
+      <AIDecision name="AIEatCorpse" />
+    </AI>
   </npc>
-  
-  
+
+
   <npc name="Mummy">
     <prefab>Mummy</prefab>
     <flags>
@@ -219,5 +217,10 @@
         <speed>2</speed>
       </effect>
     </OnDeath>
+    <AI>
+      <AIDecision name="AIAggro" />
+      <AIDecision name="AIWander" />
+      <AIDecision name="AIEatCorpse" />
+    </AI>
   </npc>
 </npcs>

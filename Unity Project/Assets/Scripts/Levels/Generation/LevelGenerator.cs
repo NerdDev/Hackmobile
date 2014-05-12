@@ -61,7 +61,6 @@ public class LevelGenerator
         Log("Place Rooms", true, PlaceRooms);
         Log("Confirm Connection", true, ConfirmConnection);
         Log("Place Stairs", true, PlaceStairs);
-        Log("Confirm Edges", true, ConfirmEdges);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
@@ -162,7 +161,7 @@ public class LevelGenerator
             int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * Rand.NextDouble()));
             int numFill = numFlex - numHeavy;
             // Heavy Mods
-            for (int i = 0; i < numHeavy; i++ )
+            for (int i = 0; i < numHeavy; i++)
             {
                 if (!ApplyMod(spec, spec.RoomModifiers.HeavyMods))
                 {
@@ -757,28 +756,30 @@ public class LevelGenerator
             out startPoint);
     }
 
-    private void ConfirmEdges()
+    public static void ConfirmEdges(LayoutObject obj)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Edges");
-            Container.ToLog(Logs.LevelGen, "Pre Confirm Edges");
+            obj.ToLog(Logs.LevelGen, "Pre Confirm Edges");
         }
         #endregion
-        LayoutObject edgeObject = new LayoutObject("Edges");
-        var grids = Container.GetGrid();
-        grids.DrawAll(Draw.Not(Draw.IsType<GenSpace>(GridType.NULL).Or(Draw.IsType<GenSpace>(GridType.Wall))).IfThen((arr, x, y) =>
+        MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+        obj.DrawAll(Draw.Not(Draw.IsType<GenSpace>(GridType.NULL).Or(Draw.IsType<GenSpace>(GridType.Wall))).IfThen((arr, x, y) =>
+        {
+            GenSpace space;
+            if (arr.TryGetValue(x, y, out space))
             {
-                grids.DrawAround(x, y, true, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(edgeObject.Grids, GridType.Wall, Theme)));
-                return true;
-            }));
-        Container.Objects.Add(edgeObject);
+                obj.DrawAround(x, y, true, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(tmp, GridType.Wall, space.Theme)));
+            }
+            return true;
+        }));
+        obj.Grids.PutAll(tmp);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            edgeObject.ToLog(Logs.LevelGen, "Edge Object");
-            Container.ToLog(Logs.LevelGen, "Post Confirm Edges");
+            obj.ToLog(Logs.LevelGen, "Post Confirm Edges");
             BigBoss.Debug.printFooter(Logs.LevelGen, "Confirm Edges");
         }
         #endregion
@@ -844,7 +845,7 @@ public class LevelGenerator
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    BigBoss.Debug.w(Logs.LevelGen, "No options.");  
+                    BigBoss.Debug.w(Logs.LevelGen, "No options.");
                 }
                 #endregion
                 continue;

@@ -7,21 +7,21 @@ using UnityEngine;
 public class AIMove : AIDecision
 {
     public override double Cost { get { return 60d; } }
-    public override double StickyShift { get { return 2d; } }
+    public override IEnumerable<AIState> States { get { yield return AIState.Movement; } }
 
     public AIMove()
     {
     }
 
-    public override void Action(AIActionArgs args)
+    public void Move(AICore core)
     {
-        if (args.Target != null)
+        if (core.Target != null)
         {
-            args.Self.MoveNPC(args.Target.GridSpace);
+            core.Self.MoveNPC(core.Target.GO.transform.position);
         }
         else
         {
-            args.Self.MoveNPC(args.TargetSpace);
+            core.Self.MoveNPC(core.TargetSpace);
         }
     }
 
@@ -44,8 +44,10 @@ public class AIMove : AIDecision
         return false;
     }
 
-    public override double CalcWeighting(AIDecisionArgs args)
+    public override bool Decide(AICore core, AIDecisionCore decisionCore)
     {
-        return 1d;
+        Args.Weight = 1d;
+        Args.Actions = Move;
+        return true;
     }
 }
