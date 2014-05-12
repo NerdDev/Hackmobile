@@ -248,6 +248,8 @@
      <Compile Include="Assets\Scripts\Library\Extensions\TypeExt.cs" />
      <Compile Include="Assets\Scripts\Library\Extensions\Vector3Ext.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\ICopyable.cs" />
+    <Compile Include="Assets\Scripts\Library\Interfaces\Copyable.cs" />
+    <Compile Include="Assets\Scripts\Library\Interfaces\ICopyable.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IEnsureType.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\IPoint.cs" />
      <Compile Include="Assets\Scripts\Library\Interfaces\NotHashable.cs" />
