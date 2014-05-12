@@ -29,12 +29,19 @@ public class NPC : Affectable
     }
 
     #region NPC Properties
+    [Copyable]
     public GenericFlags<NPCFlags> Flags = new GenericFlags<NPCFlags>();
+    [Copyable]
     public GenericFlags<SpawnKeywords> SpawnKeywords = new GenericFlags<SpawnKeywords>();
+    [Copyable]
     public AttributesData Attributes = new AttributesData();
+    [Copyable]
     public Stats Stats = new Stats();
+    [Copyable]
     public Spells KnownSpells = new Spells();
+    [Copyable]
     public StartingItems StartingItems = new StartingItems();
+    [Copyable]
     public AICore AI;
 
     public Inventory Inventory = new Inventory();

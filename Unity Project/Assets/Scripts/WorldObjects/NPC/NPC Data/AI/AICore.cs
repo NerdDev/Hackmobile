@@ -9,11 +9,14 @@ public delegate void DecisionActions(AICore core);
 public class AICore : IXmlParsable, ICopyable
 {
     // Defining features
+    [Copyable]
     public NPC Self { get; protected set; }
     public System.Random Random { get; protected set; }
 
     // Cores
+    [Copyable]
     public HashSet<AIDecision> DecisionSet = new HashSet<AIDecision>();
+    [Copyable]
     AIDecisionCore[] cores = new AIDecisionCore[EnumExt.Length<AIState>()];
 
     // State variables
@@ -43,11 +46,14 @@ public class AICore : IXmlParsable, ICopyable
     public int NumEnemies;
     public NPC ClosestEnemy;
     public double ClosestEnemyDist;
+    [Copyable]
     public Dictionary<NPC, NPCMemoryItem> NPCMemory = new Dictionary<NPC, NPCMemoryItem>();
+    [Copyable]
     private Dictionary<AIDecision, List<NPCMemoryItem>> decisionMemoryCache = new Dictionary<AIDecision, List<NPCMemoryItem>>();
     #endregion
 
     #region Movement Memory
+    [Copyable]
     public Dictionary<GridSpace, GridSpace> MovementSubstitutions = new Dictionary<GridSpace, GridSpace>();
     #endregion
 
