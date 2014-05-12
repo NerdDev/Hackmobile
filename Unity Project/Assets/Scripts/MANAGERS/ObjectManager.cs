@@ -21,7 +21,6 @@ public class ObjectManager : MonoBehaviour, IManager
 
     public ObjectManager()
     {
-
     }
 
     public void Initialize()

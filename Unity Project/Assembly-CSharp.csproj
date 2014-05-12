@@ -156,7 +156,9 @@
      <Compile Include="Assets\Scripts\GUI\GUIButton.cs" />
      <Compile Include="Assets\Scripts\GUI\GUILabel.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIProgressBar.cs" />
+     <Compile Include="Assets\Scripts\GUI\GenericButton.cs" />
      <Compile Include="Assets\Scripts\GUI\KGrid.cs" />
+     <Compile Include="Assets\Scripts\GUI\LevelButton.cs" />
      <Compile Include="Assets\Scripts\GUI\ScrollingGrid.cs" />
      <Compile Include="Assets\Scripts\GUI\TextGrid.cs" />
      <Compile Include="Assets\Scripts\Levels\GenDeploy.cs" />

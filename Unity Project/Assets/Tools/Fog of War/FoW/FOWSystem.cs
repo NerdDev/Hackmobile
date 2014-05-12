@@ -453,9 +453,6 @@ public class FOWSystem : MonoBehaviour
         int xmax = Mathf.RoundToInt((pos.x * 4 + steps));
         int ymax = Mathf.RoundToInt((pos.z * 4 + steps));
 
-        //Debug.Log("x: [" + xmin + ", " + xmax + "]");
-        //Debug.Log("y: [" + ymin + ", " + ymax + "]");
-
         for (int y = ymin; y < ymax; y++)
         {
             if (y > -1 && y < 2048)
@@ -474,21 +471,17 @@ public class FOWSystem : MonoBehaviour
                             if (Physics.SphereCast(new Ray(pos, Vector3.down), raycastRadius, out hit, mSize.y, raycastMask))
                             {
                                 mHeights[x, y] = WorldToGridHeight(pos.y - hit.distance - raycastRadius) + extraHeight;
-                                //Debug.Log("mHeights: [" + x + ", " + y + "]");
-                                //Debug.Log("position: " + pos);
                                 continue;
                             }
                         }
                         else if (Physics.Raycast(new Ray(pos, Vector3.down), out hit, mSize.y, raycastMask))
                         {
                             mHeights[x, y] = WorldToGridHeight(pos.y - hit.distance) + extraHeight;
-                            //Debug.Log("mHeights: [" + x + ", " + y + "]");
                             continue;
                         }
                         else
                         {
                             mHeights[x, y] = 0;
-                            //Debug.Log("mHeights: [" + x + ", " + y + "]");
                         }
                     }
                 }
@@ -939,9 +932,37 @@ public class FOWSystem : MonoBehaviour
 
     public bool IsVis(Vector3 pos)
     {
+        return IsVis(pos.x, pos.z);
+    }
+
+    public bool IsVis(Point pos)
+    {
+        return IsVis(pos.x, pos.y);
+    }
+
+    //these are called often, so I am keeping two versions
+    public bool IsVis(int x, int y)
+    {
         foreach (Revealer r in mRevealers)
         {
-            float circleRadii = (pos.x - r.pos.x) * (pos.x - r.pos.x) + (pos.z - r.pos.z) * (pos.z - r.pos.z);
+            float xr = x - r.pos.x;
+            float yr = y - r.pos.z;
+            float circleRadii = xr * xr + yr * yr;
+            if (circleRadii < r.revDist)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsVis(float x, float y)
+    {
+        foreach (Revealer r in mRevealers)
+        {
+            float xr = x - r.pos.x;
+            float yr = y - r.pos.z;
+            float circleRadii = xr * xr + yr * yr;
             if (circleRadii < r.revDist)
             {
                 return true;

@@ -52,7 +52,7 @@ public class StartManager : MonoBehaviour, IManager
         BigBoss.PlayerInfo.Rendering(true);
         BigBoss.Gooey.OpenSpellGUI();
         BigBoss.Gooey.OpenInventoryGUI();
-        AstarPath.active.Scan();
+        
         BigBoss.Gooey.OpenGroundGUI(null);
 
         if (SetLevelForTesting)

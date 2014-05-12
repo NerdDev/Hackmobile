@@ -15,7 +15,6 @@ public class Player : NPC
     public string PlayerTitle { get { return playerTitle; } set { playerTitle = value; } }
     public PlayerProfessions PlayerChosenProfession;
     //Stored in the stats class
-    //public int level = 10; // Just for testing.  'Prolly change this to 1 later.
     public ushort Level { get { return Stats.Level; } }
     #endregion
 
@@ -29,16 +28,11 @@ public class Player : NPC
         }
     }
 
-    public float playerRotationSpeed = .15f;  //temporarily hard-coded
-    public float PlayerRotationSpeed { get { return playerRotationSpeed; } }
-
     float distanceMoved;
     float TurnInterval = BigBoss.Time.TimeInterval;
     #endregion
 
     #region INVENTORY
-    Dictionary<Item, GameObject> InstantiatedItems = new Dictionary<Item, GameObject>();
-
     public override void addToInventory(Item item, int count)
     {
         base.addToInventory(item, count);
@@ -53,7 +47,6 @@ public class Player : NPC
     #endregion
 
     #region Physics
-    int lastCollisionTime = 0; //unused atm
 
     public override void OnClick()
     {
@@ -195,13 +188,20 @@ public class Player : NPC
 
     public override bool UpdateCurrentTileVectors()
     {
-        Vector2 currentLoc = new Vector2(GO.transform.position.x.Round(), GO.transform.position.z.Round());
         if (BigBoss.Levels.Level == null) return false;
-        GridSpace newGridSpace = BigBoss.Levels.Level[currentLoc.x.ToInt(), currentLoc.y.ToInt()];
+
+        Vector3 pos = GO.transform.position;
+        Point current = new Point(pos.x, pos.z);
+
+        GridSpace newGridSpace = BigBoss.Levels.Level[current.x, current.y];
         if (newGridSpace != null && !newGridSpace.IsBlocked() && GridTypeEnum.Walkable(newGridSpace.Type))
         {
             GridSpace = newGridSpace;
             BigBoss.Gooey.CheckChestDistance();
+            if (revealer != null)
+            {
+                revealer.StartCoroutine(revealer.UpdateFogRadius(current.x, current.y));
+            }
             FOWSystem.instance.UpdatePosition(GridSpace, false);
             return true;
         }

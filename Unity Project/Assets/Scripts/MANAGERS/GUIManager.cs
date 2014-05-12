@@ -81,10 +81,6 @@ public class GUIManager : MonoBehaviour, IManager
 
     void Update()
     {
-        if (Time.time % 20 == 0)
-        {
-            GC.Collect();
-        }
     }
 
     public void Initialize()

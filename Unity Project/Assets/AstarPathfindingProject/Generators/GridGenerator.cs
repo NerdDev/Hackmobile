@@ -649,9 +649,9 @@ A grid graph will update that area and a small margin around it equal to \link P
             collision.Initialize(matrix, nodeSize);
             textureData.Initialize();
 
-            foreach (Value2D<GridSpace> val in level)
+            foreach (GridSpace val in level.GetEnumerateValues())
             {
-                Int3 pos = new Int3(val.x * 1000, 0, val.y * 1000);
+                Int3 pos = new Int3(val.X * 1000, 0, val.Y * 1000);
                 Int3 xz = ConvertToGrid(pos);
 
                 int index = xz.z * width + xz.x;
@@ -659,7 +659,7 @@ A grid graph will update that area and a small margin around it equal to \link P
                 node.SetIndex(index);
 
                 node.position = pos;
-                node.walkable = GridTypeEnum.Walkable(val.val.Type);
+                node.walkable = GridTypeEnum.Walkable(val.Type);
                 if (node.walkable) node.penalty = 0;
                 node.Bit15 = node.walkable;
 

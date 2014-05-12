@@ -537,6 +537,28 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
+    public IEnumerator DrawAroundCoroutine(int x, int y, bool cornered, DrawAction<T> action)
+    {
+        if (!cornered)
+        {
+            action(this, x, y + 1); yield return null;
+            action(this, x, y - 1); yield return null;
+            action(this, x + 1, y); yield return null;
+            action(this, x - 1, y); yield return null;
+        }
+        else
+        {
+            action(this, x - 1, y - 1); yield return null; // Bottom left
+            action(this, x, y - 1); yield return null; // Bottom
+            action(this, x + 1, y - 1); yield return null; // Bottom right
+            action(this, x + 1, y); yield return null; // Right
+            action(this, x + 1, y + 1); yield return null; // Top Right
+            action(this, x, y + 1); yield return null; // Top
+            action(this, x - 1, y + 1); yield return null; // Top Left
+            action(this, x - 1, y); yield return null; // Left
+        }
+    }
+
     public GridLocationResults DrawLocationsAroundResults(int x, int y, bool cornered, DrawAction<T> action)
     {
         GridLocationResults results = new GridLocationResults();

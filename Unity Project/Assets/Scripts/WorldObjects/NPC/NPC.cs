@@ -66,7 +66,8 @@ public class NPC : Affectable
     internal ActionToDo action;
     float TurnInterval = BigBoss.Time.TimeInterval;
     bool canMove;
-    FOWRenderers fow;
+    internal FOWRenderers fow;
+    internal FOWRevealer revealer;
     #endregion
 
     #region NPC Movement Properties
@@ -110,6 +111,8 @@ public class NPC : Affectable
         Equipment.AddAnimator(animator);
         controller = GO.GetComponent<CharacterController>();
         seeker = GO.GetComponent<Seeker>();
+        fow = GO.GetComponent<FOWRenderers>();
+        revealer = GO.GetComponentInChildren<FOWRevealer>();
     }
 
     public override void Update()
