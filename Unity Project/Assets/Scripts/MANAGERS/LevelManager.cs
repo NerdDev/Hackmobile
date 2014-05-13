@@ -5,23 +5,17 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour, IManager
 {
-    // Internal
-    private const int _maxLevels = 100;
-    private static Level[] _levels;
-    private int[] _levelSeeds = new int[_maxLevels];
-
-    // Public Access
     public Level Level { get; private set; }
-    public int CurLevelDepth { get; private set; }
     public bool Initialized { get; set; }
     public Theme TestTheme;
-    public Theme Theme;
+    private ProbabilityPool<IThemeOption> themeSets = ProbabilityPool<IThemeOption>.Create();
     public LevelBuilder Builder;
     public int Seed = -1;
+    public bool UseInitialTheme;
+    public Theme InitialTheme;
 
     public void Initialize()
     {
-        _levels = new Level[_maxLevels];
         ArrayExt.Converters[typeof(GridType)] = (b) => { return GridTypeEnum.Convert((GridType)b); };
         ArrayExt.Converters[typeof(GridSpace)] = (b) =>
         {
@@ -42,10 +36,13 @@ public class LevelManager : MonoBehaviour, IManager
             return s.GetChar();
         };
         if (Seed == -1)
+        {
             Seed = Probability.Rand.Next();
-        System.Random rand = new System.Random(Seed);
-        for (int i = 0; i < _maxLevels; i++)
-            _levelSeeds[i] = rand.Next();
+        }
+        if (InitialTheme == null || !UseInitialTheme)
+        {
+            InitialTheme = themeSets.Get(Probability.Rand).GetTheme(Probability.Rand);
+        }
         LevelBuilder.Initialize();
         foreach (IInitializable init in this.FindAllDerivedObjects<IInitializable>())
         {
@@ -63,27 +60,25 @@ public class LevelManager : MonoBehaviour, IManager
     {
     }
 
-    protected bool InRange(int depth)
+    public void SetFirstLevel()
     {
-        return depth >= 0 && depth < _maxLevels;
+        Level level = GenerateLevel(Seed, InitialTheme, 0);
+        SetCurLevel(level);
     }
 
-    public void SetCurLevel(int depth)
+    public void SetCurLevel(Level level)
     {
-        if (!InRange(depth)) return;
+        if (level.Equals(Level)) return;
         Destroy(Level);
-        Level level;
-        GetLevel(depth, out level);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
             level.ToLog(Logs.Main, "Setting level to");
         }
         #endregion
-        CurLevelDepth = depth;
         DeployLevel(level);
+        Level = level;
         Level.PlacePlayer(true);
-        BigBoss.DungeonMaster.PopulateLevel(Level);
     }
 
     protected void DeployLevel(Level level)
@@ -92,36 +87,6 @@ public class LevelManager : MonoBehaviour, IManager
         Level = level;
         Builder.Combine();
         AstarPath.active.Scan();
-    }
-
-    public void SetCurLevel(bool up)
-    {
-        if (up)
-        {
-            if (CurLevelDepth > 0)
-            {
-                SetCurLevel(CurLevelDepth - 1);
-            }
-        }
-        else
-        {
-            SetCurLevel(CurLevelDepth + 1);
-        }
-    }
-
-    public bool GetLevel(int depth, out Level level)
-    {
-        if (!InRange(depth))
-        {
-            level = null;
-            return false;
-        }
-        if (_levels[depth] == null)
-        {
-            GenerateLevel(depth);
-        }
-        level = _levels[depth];
-        return true;
     }
 
     void Destroy(Level level)
@@ -145,23 +110,15 @@ public class LevelManager : MonoBehaviour, IManager
         BigBoss.Debug.w(Logs.LevelGenMain, "Deployed " + level);
     }
 
-    void GenerateLevels(int num)
-    {
-        for (int i = 0; i < num; i++)
-        {
-            GenerateLevel(num);
-        }
-    }
-
-    void GenerateLevel(int depth)
+    public Level GenerateLevel(int seed, Theme startingTheme, int depth)
     {
         LevelGenerator gen = new LevelGenerator();
-        gen.Theme = GetTheme();
+        gen.Theme = startingTheme;
         gen.Depth = depth;
-        gen.Rand = new System.Random(_levelSeeds[depth]);
+        gen.Rand = new System.Random(seed);
         LevelLayout layout = gen.Generate();
         Level level = GenerateFromLayout(layout, gen.Rand);
-        _levels[depth] = level;
+        return level;
     }
 
     Level GenerateFromLayout(LevelLayout layout, System.Random rand)
@@ -182,10 +139,5 @@ public class LevelManager : MonoBehaviour, IManager
         layout.Random = rand;
         Level level = GenerateFromLayout(layout, rand);
         DeployLevel(level);
-    }
-
-    Theme GetTheme()
-    {
-        return Theme;
     }
 }

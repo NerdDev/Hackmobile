@@ -45,7 +45,7 @@ public class StartManager : MonoBehaviour, IManager
         switch (Level)
         {
             case LevelOptions.NORMAL:
-                BigBoss.Levels.SetCurLevel(0);
+                BigBoss.Levels.SetFirstLevel();
                 if (PlacePlayerManually)
                 {
                     BigBoss.Levels.Level.PlacePlayer(PlacePlayerX, PlacePlayerY);
