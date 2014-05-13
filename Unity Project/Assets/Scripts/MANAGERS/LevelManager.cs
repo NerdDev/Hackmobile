@@ -8,11 +8,19 @@ public class LevelManager : MonoBehaviour, IManager
     public Level Level { get; private set; }
     public bool Initialized { get; set; }
     public Theme TestTheme;
-    private ProbabilityPool<IThemeOption> themeSets = ProbabilityPool<IThemeOption>.Create();
+    private ProbabilityPool<ThemeOption> themeSets = ProbabilityPool<ThemeOption>.Create();
+    public PrefabProbabilityContainer[] ThemeSets;
     public LevelBuilder Builder;
     public int Seed = -1;
     public bool UseInitialTheme;
     public Theme InitialTheme;
+
+    [Serializable]
+    public class PrefabProbabilityContainer
+    {
+        public float Multiplier = 1f;
+        public ThemeOption Item;
+    }
 
     public void Initialize()
     {
@@ -39,15 +47,28 @@ public class LevelManager : MonoBehaviour, IManager
         {
             Seed = Probability.Rand.Next();
         }
+        themeSets = ProbabilityPool<ThemeOption>.Create();
+        foreach (IInitializable init in this.FindAllDerivedObjects<IInitializable>())
+        {
+            init.Init();
+        }
+        foreach (PrefabProbabilityContainer cont in ThemeSets)
+        {
+            if (cont.Item == null)
+            {
+                throw new ArgumentException("Prefab has to be not null");
+            }
+            if (cont.Multiplier <= 0)
+            {
+                cont.Multiplier = 1f;
+            }
+            themeSets.Add(cont.Item, cont.Multiplier);
+        }
         if (InitialTheme == null || !UseInitialTheme)
         {
             InitialTheme = themeSets.Get(Probability.Rand).GetTheme(Probability.Rand);
         }
         LevelBuilder.Initialize();
-        foreach (IInitializable init in this.FindAllDerivedObjects<IInitializable>())
-        {
-            init.Init();
-        }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {

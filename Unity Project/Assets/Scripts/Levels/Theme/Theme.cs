@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class Theme : ScriptableObject, IInitializable, IThemeOption
+public class Theme : ThemeOption, IInitializable
 {
     public bool Scatterable;
     public bool Chainable;
@@ -161,7 +161,7 @@ public class Theme : ScriptableObject, IInitializable, IThemeOption
         cont.DrawLineExpanding(x, y, dir, count / 2, Draw.MergeIn(door, this, GridType.Door, false).And(Draw.Around(false, Draw.IsNull<GenSpace>().IfThen(Draw.SetTo(GridType.Floor, this)))));
     }
 
-    public Theme GetTheme(System.Random rand)
+    public override Theme GetTheme(System.Random rand)
     {
         return this;
     }

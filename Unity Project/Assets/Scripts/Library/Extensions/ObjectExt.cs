@@ -16,7 +16,7 @@ namespace System
         {
             return typeof(T);
         }
-        
+
         public static bool IsNotAFreaking<T>(this object obj)
         {
             return !(obj is T);
@@ -140,26 +140,47 @@ namespace System
 
         private static List<T> FindAllDerivedObjects<T>(Object obj, Type objType, Type target, HashSet<Object> set, bool recursive)
         {
-            List<T> ret = new List<T>();
-            foreach (var field in objType.GetFields())
+            List<T> ret = new List<T>(0);
+            foreach (var field in objType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy))
             {
                 Type fieldType = field.FieldType;
                 if (!fieldType.IsPrimitive())
                 {
                     object fieldObj = field.GetValue(obj);
-                    if (fieldObj == null) continue;
+                    if (fieldObj == null || !set.Add(fieldObj)) continue;
                     fieldType = fieldObj.GetType();
-                    set.Add(obj);
                     if (target.IsAssignableFrom(fieldType))
                     {
                         ret.Add((T)fieldObj);
                     }
-                    if (recursive)
+                    if (fieldType.IsArray)
+                    {
+                        var arrayType = fieldType.GetElementType();
+                        Array arrayObject = (Array)(fieldObj);
+                        if (target.IsAssignableFrom(arrayType))
+                        {
+                            for (int i = 0; i < arrayObject.Length; ++i)
+                            {
+                                ret.Add((T)arrayObject.GetValue(i));
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < arrayObject.Length; ++i)
+                            {
+                                var arrayItem = arrayObject.GetValue(i);
+                                if (arrayItem == null) continue;
+                                ret.AddRange(FindAllDerivedObjects<T>(arrayItem, arrayType, target, set, true));
+                            }
+                        }
+                    }
+                    else
                     {
                         ret.AddRange(FindAllDerivedObjects<T>(fieldObj, fieldType, target, set, true));
                     }
                 }
             }
+            //}
             return ret;
         }
     }

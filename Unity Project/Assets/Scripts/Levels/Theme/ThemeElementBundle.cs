@@ -28,7 +28,6 @@ public class ThemeElementBundle : IInitializable, IThemeElementBundle
             {
                 throw new ArgumentException("Prefab has to be not null");
             }
-            cont.Item.Init();
             if (cont.Multiplier <= 0)
             {
                 cont.Multiplier = 1f;
