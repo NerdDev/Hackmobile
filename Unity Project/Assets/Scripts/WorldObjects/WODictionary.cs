@@ -70,7 +70,7 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         newWorldObject.OnDestroy += Unregister;
         existing.Add(newWorldObject);
         if (newWorldObject is PassesTurns)
-            BigBoss.Time.TotalObjectList.Add((PassesTurns)newWorldObject);
+            BigBoss.Time.Register((PassesTurns)newWorldObject);
         newWorldObject.IsActive = true;
         return newWorldObject;
     }
@@ -140,7 +140,5 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
     protected void Unregister(WorldObject obj)
     {
         existing.Remove((W)obj);
-        if (obj is PassesTurns)
-            BigBoss.Time.RemoveFromUpdateList((PassesTurns)obj);
     }
 }

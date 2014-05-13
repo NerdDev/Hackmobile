@@ -51,7 +51,6 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     public WorldObject()
     {
         ID = NextID++;
-        BasePoints = 60;
     }
 
     public void PostPrimitiveCopy()
@@ -83,7 +82,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     public virtual void Init()
     {
         IsActive = true;
-        BigBoss.Time.RegisterToUpdateList(this);
+        BigBoss.Time.Register(this);
     }
 
     public virtual void Destroy()
@@ -102,7 +101,6 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     public virtual void JustDestroy()
     {
         Unwrap();
-
     }
 
     public virtual void JustUnregister()
@@ -140,8 +138,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
 
     protected virtual void Unregister()
     {
-        IsActive = false;
-        BigBoss.Time.RemoveFromUpdateList(this);
+        BigBoss.Time.Remove(this);
     }
 
     #region XML
@@ -153,18 +150,16 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
     #endregion
 
     #region Time Management
-    ulong basePoints = 60;
-
     public virtual void UpdateTurn()
     {
         //do nothing atm
     }
 
-    public virtual ulong CurrentPoints { get; set; }
-
-    public virtual ulong BasePoints { get; set; }
-
     public virtual bool IsActive { get; set; }
+
+    public virtual int TurnID { get; set; }
+
+    public virtual int Rate { get; set; }
     #endregion
 
     #region Members

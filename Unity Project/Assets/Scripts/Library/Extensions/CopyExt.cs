@@ -81,7 +81,7 @@ namespace System
 
         private static object CopyDictionary(Object originalObject, IDictionary<Object, Object> visited, Type typeToReflect)
         {
-            var dict = Activator.CreateInstance(typeToReflect);
+            var dict = Activator.CreateInstance(typeToReflect, true);
             Type[] types = GetDictionaryTypes(typeToReflect);
 
             ParameterModifier p = new ParameterModifier(1);
@@ -115,7 +115,7 @@ namespace System
 
         private static object CopyList(Object originalObject, IDictionary<Object, Object> visited, Type typeToReflect)
         {
-            var dict = Activator.CreateInstance(typeToReflect);
+            var dict = Activator.CreateInstance(typeToReflect, true);
             Type[] types = GetDictionaryTypes(typeToReflect);
 
             ParameterModifier p = new ParameterModifier(1);

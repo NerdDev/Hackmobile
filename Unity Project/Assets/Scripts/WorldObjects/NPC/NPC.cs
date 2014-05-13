@@ -103,6 +103,7 @@ public class NPC : Affectable
         Stats.CurrentPower = Stats.MaxPower;
         Stats.CurrentXP = 0;
         Stats.hungerRate = 1;
+        Rate = 5;
         AI = new AICore(this);
     }
 
@@ -472,22 +473,62 @@ public class NPC : Affectable
         if (!canMove) return;
         if (CurrentPath == null) return; //no path, don't move
         if (!CurrentPath.IsDone()) return; //path isn't done (should never occur)
-        if (!CurrentPath.foundEnd || currentWaypoint >= CurrentPath.vectorPath.Length) //path has no end, or at the end of path
+        if (currentWaypoint >= CurrentPath.vectorPath.Length) //path has no end, or at the end of path
         {
             CurrentPath = null;
             return; //path finished, set to null
         }
         //Direction to the next waypoint
-        Vector3 dir = (CurrentPath.vectorPath[currentWaypoint]);
+
+        Vector3 dir = BackSearchWaypoints();
         LookTowards(dir); //orient towards it
         MoveForward(); //move forward
         velocity = NPCSpeed; //sets animation velocity
 
-        if ((CurrentPath.vectorPath[currentWaypoint] - GO.transform.position).sqrMagnitude < nextWaypointDistance)
-        { //if the waypoint is close, transition to the next waypoint
-            currentWaypoint++; //if they get stuck, trying to back turn - next pathing call would fix
-            return;
+        float sqrDist = (dir - GO.transform.position).sqrMagnitude;
+        if (currentWaypoint >= CurrentPath.vectorPath.Length - 1)
+        {
+            if (sqrDist < .2f)
+            {
+                CurrentPath = null;
+                return;
+            }
         }
+        else if (sqrDist < nextWaypointDistance)
+        {
+            if (currentWaypoint < CurrentPath.vectorPath.Length - 1)
+            {
+                currentWaypoint++; //if they get stuck, trying to back turn - next pathing call would fix
+            }
+        }
+    }
+
+    private Vector3 BackSearchWaypoints()
+    {
+        float dist = 10;
+        float checkDist = 0;
+        Vector3 returnVector = Vector3.zero;
+        Vector3[] path = CurrentPath.vectorPath;
+        if (path.Length > currentWaypoint + 2)
+        {
+            dist = Vector3.Distance(GO.transform.position, path[currentWaypoint + 2]);
+            returnVector = path[currentWaypoint + 2];
+        }
+        if (path.Length > currentWaypoint + 1)
+        {
+            checkDist = Vector3.Distance(GO.transform.position, path[currentWaypoint + 1]);
+            if (checkDist < dist)
+            {
+                dist = checkDist;
+                returnVector = path[currentWaypoint + 1];
+            }
+        }
+        checkDist = Vector3.Distance(GO.transform.position, path[currentWaypoint]);
+        if (checkDist < dist)
+        {
+            returnVector = path[currentWaypoint];
+        }
+        return returnVector;
     }
 
     internal void MoveForward() //only for NPC's
@@ -894,6 +935,18 @@ public class NPC : Affectable
         if (IsActive)
         {
             AI.DecideWhatToDo();
+        }
+    }
+
+    public override int Rate
+    {
+        get
+        {
+            return base.Rate;
+        }
+        set
+        {
+            base.Rate = value;
         }
     }
     #endregion

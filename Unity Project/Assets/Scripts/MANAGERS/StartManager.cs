@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using ParallelThreading;
 
 public class StartManager : MonoBehaviour, IManager
 {
@@ -67,6 +68,7 @@ public class StartManager : MonoBehaviour, IManager
                 }
                 break;
         }
+        
 
         // Temp (will move eventually)
         BigBoss.PlayerInfo.Rendering(true);

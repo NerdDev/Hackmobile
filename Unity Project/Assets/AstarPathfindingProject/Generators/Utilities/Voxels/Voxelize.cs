@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Pathfinding;
-using Pathfinding.Threading;
+using ParallelThreading;
 
 /** \astarpro */
 public class Voxelize {

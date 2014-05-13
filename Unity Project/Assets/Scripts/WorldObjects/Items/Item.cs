@@ -1,6 +1,6 @@
 using System;
 
-public class Item : Affectable, PassesTurns, IXmlParsable
+public class Item : Affectable, IXmlParsable
 {
     #region Properties of Items
     //Properties

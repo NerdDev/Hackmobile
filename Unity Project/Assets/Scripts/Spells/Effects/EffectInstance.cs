@@ -77,7 +77,7 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
         }
         else
         {
-            BigBoss.Time.RegisterToUpdateList(this);
+            BigBoss.Time.Register(this);
         }
     }
 
@@ -186,8 +186,7 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
     {
         if (target == null)
         {
-            IsActive = false;
-            BigBoss.Time.RemoveFromUpdateList(this);
+            BigBoss.Time.Remove(this);
             return;
         }
         if (checkTurns())
@@ -207,7 +206,7 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
         {
             this.Remove();
             target.RemoveEffect(Name);
-            this.IsActive = false;
+            BigBoss.Time.Remove(this);
             return false;
         }
         else
@@ -216,9 +215,9 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
         }
     }
 
-    public ulong CurrentPoints { get; set; }
-    public ulong BasePoints { get; set; }
     public bool IsActive { get; set; }
+    public int TurnID { get; set; }
+    public int Rate { get; set; }
     #endregion
 
 }
