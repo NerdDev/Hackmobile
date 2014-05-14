@@ -114,5 +114,64 @@ namespace System
                     return diag ? GridDirection.DIAGTLBR : GridDirection.VERT;
             }
         }
+
+        private static double spareRoll;
+        private static bool hasSpare;
+        // Broken
+        private static double NextMargsalia(this System.Random rand, bool useSpare)
+        {
+            double magn;
+            if (useSpare && hasSpare)
+            {
+                magn = spareRoll;
+                hasSpare = false;
+            }
+            else
+            {
+                double roll1 = rand.NextDouble() * 2 - 1;
+                double roll2 = rand.NextDouble() * 2 - 1;
+                double s = Math.Pow(roll1, 2) + Math.Pow(roll2, 2);
+                if (s >= 1)
+                { // Retry
+                    return NextNormalDist(rand, useSpare);
+                }
+                double commonTerm = Math.Sqrt(-2 * Math.Log(s) / s);
+                magn = roll1 * commonTerm;
+                if (!hasSpare)
+                {
+                    spareRoll = roll2 * commonTerm;
+                    hasSpare = true;
+                }
+            }
+            return magn;
+        }
+
+        public static double NextNormalDist(this System.Random rand, bool useSpare = false)
+        {
+            return NextMargsalia(rand, useSpare);
+        }
+
+        public static int NextNormalDist(this System.Random rand, int min, int max, double wingCutoff = 2, bool useSpare = false)
+        {
+            if (max < min)
+            {
+                throw new ArgumentException("Max must be greater than or equal to min");
+            }
+            if (max == min)
+            {
+                return max;
+            }
+            double magn = NextNormalDist(rand, useSpare);
+            while (Math.Abs(magn) > wingCutoff)
+            {
+                magn = NextNormalDist(rand, true);
+            }
+            magn = (magn + wingCutoff) / 2 / wingCutoff;
+            if (magn.EqualsWithin(1d))
+            {
+                return max;
+            }
+            return (int)((magn * (max - min) + min));
+        }
     }
 }
