@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public interface IGridSpace
+public interface IGridType
 {
     GridType Type { get; set; }
+}
+
+public interface IGridSpace :  IGridType
+{
     Theme Theme { get; set; }
     int X { get; }
     int Y { get; }
@@ -27,7 +31,7 @@ public static class IGridSpaceExt
         return GridTypeEnum.Convert(space.Type);
     }
 
-    public static GridType GetGridType(this IGridSpace space)
+    public static GridType GetGridType(this IGridType space)
     {
         if (space == null) return GridType.NULL;
         return space.Type;

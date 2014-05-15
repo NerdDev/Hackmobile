@@ -113,39 +113,36 @@ public class LevelGenerator
         }
         #endregion
 
+        LayoutObjectContainer<GridTypeObj> areaCont = new LayoutObjectContainer<GridTypeObj>();
+        GridTypeObj floor = new GridTypeObj() { Type = GridType.Floor };
+        GridTypeObj wall = new GridTypeObj() { Type = GridType.Wall };
+
         for (int i = 0; i < numAreas; i++)
         {
             ThemeSet set = ThemeSetOptions.Get(Rand);
 
-            Point center = new Point(0, 0);
-            Vector2 dir = Rand.NextOnUnitCircle();
-            bool intersects = true;
-            while (intersects)
+            LayoutObject<GridTypeObj> areaObj = new LayoutObject<GridTypeObj>("Area " + i);
+            areaObj.DrawCircle(0, 0, (int) Math.Round(set.AvgRadius / AREA_RADIUS_SHRINK), new StrokedAction<GridTypeObj>()
             {
-                intersects = false;
-                foreach (Area existingArea in Areas)
-                {
-                    double distance = existingArea.Center.Distance(center);
-                    double existingRadius = existingArea.Set.AvgRadius / AREA_RADIUS_SHRINK;
-                    double radius = set.AvgRadius / AREA_RADIUS_SHRINK;
-                    double diff = existingRadius + radius - distance;
-                    if (diff > 1)
-                    {
-                        intersects = true;
-                        center.x += (int)Math.Round(diff * dir.x);
-                        center.y += (int)Math.Round(diff * dir.y);
-                        break;
-                    }
-                }
+                UnitAction = Draw.SetTo(floor),
+                StrokeAction = Draw.SetTo(wall)
+            });
+
+            ProbabilityPool<ClusterInfo> shiftOptions = GenerateClusterOptions<GridTypeObj>(areaCont, areaObj);
+            ClusterInfo info;
+            if (shiftOptions.Get(Rand, out info))
+            {
+                areaObj.Shift(info.Shift);
             }
 
             Area area = new Area()
             {
                 Set = set,
                 NumRooms = Rand.NextNormalDist(set.MinRooms, set.MaxRooms),
-                Center = center
+                Center = areaObj.ShiftP
             };
             Areas.Add(area);
+            areaCont.Objects.Add(areaObj);
 
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -422,7 +419,7 @@ public class LevelGenerator
     }
 
     protected ProbabilityPool<ClusterInfo> GenerateClusterOptions<T>(LayoutObjectContainer<T> cluster, LayoutObject<T> obj)
-        where T : IGridSpace
+        where T : IGridType
     {
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))

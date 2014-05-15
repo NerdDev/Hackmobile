@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
-    where T : IGridSpace
+    where T : IGridType
 {
     public Point ShiftP;
     readonly HashSet<LayoutObject<T>> _connectedTo = new HashSet<LayoutObject<T>>();

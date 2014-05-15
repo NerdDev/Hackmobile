@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LayoutObjectContainer<T> : ILayoutObject<T>
-    where T : IGridSpace
+    where T : IGridType
 {
     public List<ILayoutObject<T>> Objects = new List<ILayoutObject<T>>();
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 public interface ILayoutObject<T> : IEnumerable<Value2D<T>>
-    where T : IGridSpace
+    where T : IGridType
 {
     Bounding Bounding { get; }
     bool ContainsPoint(Point pt);
@@ -17,7 +17,7 @@ public interface ILayoutObject<T> : IEnumerable<Value2D<T>>
 public static class ILayoutObjectExt
 {
     public static void CenterOn<T>(this ILayoutObject<T> obj1, ILayoutObject<T> rhs)
-        where T : IGridSpace
+    where T : IGridType
     {
         Point center = obj1.Bounding.GetCenter();
         Point centerRhs = obj1.Bounding.GetCenter();
@@ -25,7 +25,7 @@ public static class ILayoutObjectExt
     }
 
     public static void ShiftOutside<T>(this ILayoutObject<T> obj, IEnumerable<ILayoutObject<T>> rhs, Point dir)
-        where T : IGridSpace
+    where T : IGridType
     {
         ILayoutObject<T> intersect;
         Point hint;
@@ -36,7 +36,7 @@ public static class ILayoutObjectExt
     }
 
     public static void ShiftOutside<T>(this ILayoutObject<T> obj, ILayoutObject<T> rhs, Point dir, Point hint, bool rough, bool finalShift)
-        where T : IGridSpace
+    where T : IGridType
     {
         Point reducBase = dir.Reduce();
         Point reduc = new Point(reducBase);
@@ -98,7 +98,7 @@ public static class ILayoutObjectExt
     }
 
     public static bool Intersects<T>(this ILayoutObject<T> obj, IEnumerable<ILayoutObject<T>> rhs, out ILayoutObject<T> intersect, out Point at)
-        where T : IGridSpace
+    where T : IGridType
     {
         foreach (ILayoutObject<T> l in rhs)
         {
@@ -114,7 +114,7 @@ public static class ILayoutObjectExt
     }
 
     public static bool Intersects<T>(this ILayoutObject<T> obj, ILayoutObject<T> rhs, Point hint, out Point at)
-        where T : IGridSpace
+    where T : IGridType
     {
         if (hint != null && rhs.ContainsPoint(hint))
         {
@@ -134,7 +134,7 @@ public static class ILayoutObjectExt
     }
 
     public static bool ConnectTo<T>(this ILayoutObject<T> obj1, Point pt1, ILayoutObject<T> obj2, Point pt2, out LayoutObject<T> retObj1, out LayoutObject<T> retObj2)
-        where T : IGridSpace
+    where T : IGridType
     {
         if (obj1 is LayoutObjectContainer<T>)
         {

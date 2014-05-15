@@ -37,6 +37,18 @@ public class LevelManager : MonoBehaviour, IManager
             if (s == null) return GridTypeEnum.Convert(GridType.NULL);
             return s.GetChar();
         };
+        ArrayExt.Converters[typeof(GridTypeObj)] = (b) =>
+        {
+            GridTypeObj s = b as GridTypeObj;
+            if (s == null) return GridTypeEnum.Convert(GridType.NULL);
+            return GridTypeEnum.Convert(s.Type);
+        };
+        ArrayExt.Converters[typeof(IGridType)] = (b) =>
+        {
+            IGridType s = b as IGridType;
+            if (s == null) return GridTypeEnum.Convert(GridType.NULL);
+            return GridTypeEnum.Convert(s.Type);
+        };
         ArrayExt.Converters[typeof(IGridSpace)] = (b) =>
         {
             IGridSpace s = b as IGridSpace;
