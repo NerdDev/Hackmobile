@@ -13,7 +13,7 @@ public class RoomModTester : MonoBehaviour
         {
             try
             {
-                LayoutObject obj = new LayoutObject("Room Test " + i);
+                LayoutObject<GenSpace> obj = new LayoutObject<GenSpace>("Room Test " + i);
                 RoomSpec spec = new RoomSpec(obj, 1, null, rand);
                 TRoomMod troom = new TRoomMod();
                 troom.Modify(spec);

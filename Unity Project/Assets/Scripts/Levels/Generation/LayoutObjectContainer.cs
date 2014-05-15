@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class LayoutObjectContainer : ILayoutObject
+public class LayoutObjectContainer<T> : ILayoutObject<T>
+    where T : IGridSpace
 {
-    public List<ILayoutObject> Objects = new List<ILayoutObject>();
+    public List<ILayoutObject<T>> Objects = new List<ILayoutObject<T>>();
 
     public Bounding Bounding
     {
         get
         {
             Bounding bounds = new Bounding();
-            foreach (ILayoutObject obj in Objects)
+            foreach (ILayoutObject<T> obj in Objects)
             {
                 bounds.Absorb(obj.Bounding);
             }
@@ -20,7 +21,7 @@ public class LayoutObjectContainer : ILayoutObject
 
     public void Shift(int x, int y)
     {
-        foreach (ILayoutObject obj in Objects)
+        foreach (ILayoutObject<T> obj in Objects)
         {
             obj.Shift(x, y);
         }
@@ -36,9 +37,9 @@ public class LayoutObjectContainer : ILayoutObject
         GetGrid().ToLog(log, customContent);
     }
 
-    public IEnumerator<Value2D<GenSpace>> GetEnumerator()
+    public IEnumerator<Value2D<T>> GetEnumerator()
     {
-        foreach (ILayoutObject obj in Objects)
+        foreach (ILayoutObject<T> obj in Objects)
         {
             foreach (var val in obj)
             {
@@ -54,14 +55,14 @@ public class LayoutObjectContainer : ILayoutObject
 
     public bool ContainsPoint(Point pt)
     {
-        LayoutObject obj;
+        LayoutObject<T> obj;
         return GetObjAt(pt, out obj);
     }
 
-    public bool FindAndConnect(LayoutObject obj1, Point connectPt)
+    public bool FindAndConnect(LayoutObject<T> obj1, Point connectPt)
     {
         Point pt = new Value2D<GridType>(connectPt.x + obj1.ShiftP.x, connectPt.y + obj1.ShiftP.y);
-        LayoutObject obj;
+        LayoutObject<T> obj;
         if (GetObjAt(pt, out obj))
         {
             obj1.Connect(obj);
@@ -70,20 +71,20 @@ public class LayoutObjectContainer : ILayoutObject
         return false;
     }
 
-    public bool GetObjAt(Point pt, out LayoutObject layoutObj)
+    public bool GetObjAt(Point pt, out LayoutObject<T> layoutObj)
     {
-        foreach (ILayoutObject obj in Objects)
+        foreach (ILayoutObject<T> obj in Objects)
         {
             if (obj.ContainsPoint(pt))
             {
-                if (obj is LayoutObject)
+                if (obj is LayoutObject<T>)
                 {
-                    layoutObj = (LayoutObject)obj;
+                    layoutObj = (LayoutObject<T>)obj;
                     return true;
                 }
                 else
                 {
-                    return ((LayoutObjectContainer)obj).GetObjAt(pt, out layoutObj);
+                    return ((LayoutObjectContainer<T>)obj).GetObjAt(pt, out layoutObj);
                 }
             }
         }
@@ -91,25 +92,25 @@ public class LayoutObjectContainer : ILayoutObject
         return false;
     }
 
-    public Container2D<GenSpace> GetGrid()
+    public Container2D<T> GetGrid()
     {
-        var map = new MultiMap<GenSpace>();
-        foreach (ILayoutObject obj in Objects)
+        var map = new MultiMap<T>();
+        foreach (ILayoutObject<T> obj in Objects)
         {
             map.PutAll(obj.GetGrid());
         }
         return map;
     }
 
-    public void ConnectTo(ILayoutObject obj, Point at)
+    public void ConnectTo(ILayoutObject<T> obj, Point at)
     {
         throw new System.NotImplementedException();
     }
 
-    public List<LayoutObject> Flatten()
+    public List<LayoutObject<T>> Flatten()
     {
-        List<LayoutObject> ret = new List<LayoutObject>(Objects.Count);
-        foreach (ILayoutObject obj in Objects)
+        List<LayoutObject<T>> ret = new List<LayoutObject<T>>(Objects.Count);
+        foreach (ILayoutObject<T> obj in Objects)
         {
             ret.AddRange(obj.Flatten());
         }

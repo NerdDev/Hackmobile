@@ -88,9 +88,9 @@ public class Path : IEnumerable<Value2D<GenSpace>>
         Prune();
     }
 
-    public LayoutObject Bake(Theme theme)
+    public LayoutObject<GenSpace> Bake(Theme theme)
     {
-        LayoutObject obj = new LayoutObject("Path");
+        LayoutObject<GenSpace> obj = new LayoutObject<GenSpace>("Path");
         foreach (var v in PathPrint(List.Cast<Point>()))
         {
             obj.SetTo(v, v.val, theme);

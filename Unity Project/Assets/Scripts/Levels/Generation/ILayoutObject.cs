@@ -3,28 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public interface ILayoutObject : IEnumerable<Value2D<GenSpace>>
+public interface ILayoutObject<T> : IEnumerable<Value2D<T>>
+    where T : IGridSpace
 {
     Bounding Bounding { get; }
     bool ContainsPoint(Point pt);
     void Shift(int x, int y);
-    Container2D<GenSpace> GetGrid();
-    List<LayoutObject> Flatten();
+    Container2D<T> GetGrid();
+    List<LayoutObject<T>> Flatten();
     void ToLog(Logs log, params String[] customContent);
 }
 
 public static class ILayoutObjectExt
 {
-    public static void CenterOn(this ILayoutObject obj1, ILayoutObject rhs)
+    public static void CenterOn<T>(this ILayoutObject<T> obj1, ILayoutObject<T> rhs)
+        where T : IGridSpace
     {
         Point center = obj1.Bounding.GetCenter();
         Point centerRhs = obj1.Bounding.GetCenter();
         obj1.Shift(centerRhs.x - center.x, centerRhs.y - center.y);
     }
 
-    public static void ShiftOutside(this ILayoutObject obj, IEnumerable<ILayoutObject> rhs, Point dir)
+    public static void ShiftOutside<T>(this ILayoutObject<T> obj, IEnumerable<ILayoutObject<T>> rhs, Point dir)
+        where T : IGridSpace
     {
-        ILayoutObject intersect;
+        ILayoutObject<T> intersect;
         Point hint;
         while (obj.Intersects(rhs, out intersect, out hint))
         {
@@ -32,7 +35,8 @@ public static class ILayoutObjectExt
         }
     }
 
-    public static void ShiftOutside(this ILayoutObject obj, ILayoutObject rhs, Point dir, Point hint, bool rough, bool finalShift)
+    public static void ShiftOutside<T>(this ILayoutObject<T> obj, ILayoutObject<T> rhs, Point dir, Point hint, bool rough, bool finalShift)
+        where T : IGridSpace
     {
         Point reducBase = dir.Reduce();
         Point reduc = new Point(reducBase);
@@ -44,7 +48,7 @@ public static class ILayoutObjectExt
             BigBoss.Debug.w(Logs.LevelGen, "Shifting outside of " + rhs.ToString());
             BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
             BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + obj.Bounding + "  RHS bounds: " + rhs.Bounding);
-            var tmp = new MultiMap<GenSpace>();
+            var tmp = new MultiMap<T>();
             tmp.PutAll(rhs.GetGrid());
             tmp.PutAll(obj.GetGrid());
             tmp.ToLog(Logs.LevelGen, "Before shifting");
@@ -74,7 +78,7 @@ public static class ILayoutObjectExt
             if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.w(Logs.LevelGen, "Intersected at " + at);
-                var tmp = new MultiMap<GenSpace>();
+                var tmp = new MultiMap<T>();
                 tmp.PutAll(rhs.GetGrid());
                 tmp.PutAll(obj.GetGrid());
                 tmp.ToLog(Logs.LevelGen, "After shifting");
@@ -93,9 +97,10 @@ public static class ILayoutObjectExt
         #endregion
     }
 
-    public static bool Intersects(this ILayoutObject obj, IEnumerable<ILayoutObject> rhs, out ILayoutObject intersect, out Point at)
+    public static bool Intersects<T>(this ILayoutObject<T> obj, IEnumerable<ILayoutObject<T>> rhs, out ILayoutObject<T> intersect, out Point at)
+        where T : IGridSpace
     {
-        foreach (ILayoutObject l in rhs)
+        foreach (ILayoutObject<T> l in rhs)
         {
             if (obj.Intersects(l, null, out at))
             {
@@ -108,14 +113,15 @@ public static class ILayoutObjectExt
         return false;
     }
 
-    public static bool Intersects(this ILayoutObject obj, ILayoutObject rhs, Point hint, out Point at)
+    public static bool Intersects<T>(this ILayoutObject<T> obj, ILayoutObject<T> rhs, Point hint, out Point at)
+        where T : IGridSpace
     {
         if (hint != null && rhs.ContainsPoint(hint))
         {
             at = hint;
             return true;
         }
-        foreach (Value2D<GenSpace> val in obj)
+        foreach (Value2D<T> val in obj)
         {
             if (rhs.ContainsPoint(val))
             {
@@ -127,11 +133,12 @@ public static class ILayoutObjectExt
         return false;
     }
 
-    public static bool ConnectTo(this ILayoutObject obj1, Point pt1, ILayoutObject obj2, Point pt2, out LayoutObject retObj1, out LayoutObject retObj2)
+    public static bool ConnectTo<T>(this ILayoutObject<T> obj1, Point pt1, ILayoutObject<T> obj2, Point pt2, out LayoutObject<T> retObj1, out LayoutObject<T> retObj2)
+        where T : IGridSpace
     {
-        if (obj1 is LayoutObjectContainer)
+        if (obj1 is LayoutObjectContainer<T>)
         {
-            if (!((LayoutObjectContainer)obj1).GetObjAt(pt1, out retObj1))
+            if (!((LayoutObjectContainer<T>)obj1).GetObjAt(pt1, out retObj1))
             {
                 retObj2 = null;
                 return false;
@@ -139,19 +146,19 @@ public static class ILayoutObjectExt
         }
         else
         {
-            retObj1 = (LayoutObject)obj1;
+            retObj1 = (LayoutObject<T>)obj1;
         }
 
-        if (obj2 is LayoutObjectContainer)
+        if (obj2 is LayoutObjectContainer<T>)
         {
-            if (!((LayoutObjectContainer)obj2).GetObjAt(pt2, out retObj2))
+            if (!((LayoutObjectContainer<T>)obj2).GetObjAt(pt2, out retObj2))
             {
                 return false;
             }
         }
         else
         {
-            retObj2 = (LayoutObject)obj2;
+            retObj2 = (LayoutObject<T>)obj2;
         }
         retObj1.Connect(retObj2);
         retObj2.Connect(retObj1);

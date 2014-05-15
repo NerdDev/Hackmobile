@@ -21,7 +21,7 @@ public class StairWallElement : StairElement
         }
     }
 
-    public override bool Place(Container2D<GenSpace> grid, LayoutObject obj, Theme theme, Random rand, out Boxing placed)
+    public override bool Place(Container2D<GenSpace> grid, LayoutObject<GenSpace> obj, Theme theme, Random rand, out Boxing placed)
     {
         int max = Math.Max(GridWidth, GridLength);
         List<Boxing> options;

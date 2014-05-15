@@ -36,7 +36,7 @@ public class StairSpiralElement : StairElement
         }
     }
 
-    public override bool Place(Container2D<GenSpace> grid, LayoutObject obj, Theme theme, System.Random rand, out Boxing placed)
+    public override bool Place(Container2D<GenSpace> grid, LayoutObject<GenSpace> obj, Theme theme, System.Random rand, out Boxing placed)
     {
         List<Bounding> options = obj.FindRectangles(GridWidth, GridLength, true, UnitTest);
         options = new List<Bounding>(options.Filter((bounds) =>

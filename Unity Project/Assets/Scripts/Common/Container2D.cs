@@ -1540,7 +1540,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
     }
 
-    protected void PrintBFSState<T>(Value2D<T> curPoint, Container2D<bool> visited, Queue<Value2D<T>> queue)
+    protected void PrintBFSState(Value2D<T> curPoint, Container2D<bool> visited, Queue<Value2D<T>> queue)
     {
         if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
         {

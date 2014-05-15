@@ -3,12 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LayoutObject : Container2D<GenSpace>, ILayoutObject
+public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
+    where T : IGridSpace
 {
     public Point ShiftP;
-    readonly HashSet<LayoutObject> _connectedTo = new HashSet<LayoutObject>();
+    readonly HashSet<LayoutObject<T>> _connectedTo = new HashSet<LayoutObject<T>>();
     private static int _nextId = 0;
-    public virtual Container2D<GenSpace> Grids { get; set; }
+    public virtual Container2D<T> Grids { get; set; }
     public override Bounding Bounding
     {
         get
@@ -20,17 +21,17 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
     }
     public int Id { get; protected set; }
     string _name;
-    public LayoutObject Object { get { return this; } }
+    public LayoutObject<T> Object { get { return this; } }
 
     public LayoutObject(String name)
     {
         _name = name;
         Id = _nextId++;
         ShiftP = new Point();
-        Grids = new MultiMap<GenSpace>();
+        Grids = new MultiMap<T>();
     }
 
-    public override GenSpace this[int x, int y]
+    public override T this[int x, int y]
     {
         get
         {
@@ -69,7 +70,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
     }
     #endregion Bounds
 
-    public Container2D<GenSpace> GetConnectedGrid()
+    public Container2D<T> GetConnectedGrid()
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
@@ -77,8 +78,8 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
             BigBoss.Debug.printHeader(Logs.LevelGen, "Get Connected Grid " + this);
         }
         #endregion
-        List<LayoutObject> connected = ConnectedToAll();
-        var arrOut = new MultiMap<GenSpace>();
+        List<LayoutObject<T>> connected = ConnectedToAll();
+        var arrOut = new MultiMap<T>();
         foreach (var obj in connected)
             arrOut.PutAll(obj.Grids, obj.ShiftP);
         #region DEBUG
@@ -90,7 +91,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         return arrOut;
     }
 
-    public void Connect(LayoutObject obj)
+    public void Connect(LayoutObject<T> obj)
     {
         if (obj != null)
         {
@@ -108,14 +109,14 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         return Grids.Contains(pt - ShiftP);
     }
 
-    public List<LayoutObject> ConnectedToAll()
+    public List<LayoutObject<T>> ConnectedToAll()
     {
-        var connected = new List<LayoutObject>();
+        var connected = new List<LayoutObject<T>>();
         ConnectedToRecursive(connected);
         return connected;
     }
 
-    void ConnectedToRecursive(List<LayoutObject> list)
+    void ConnectedToRecursive(List<LayoutObject<T>> list)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
@@ -144,7 +145,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         #endregion
     }
 
-    public bool ConnectedTo(IEnumerable<LayoutObject> roomsToConnect, out LayoutObject failObj)
+    public bool ConnectedTo(IEnumerable<LayoutObject<T>> roomsToConnect, out LayoutObject<T> failObj)
     {
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
@@ -171,21 +172,21 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         return failObj == null;
     }
 
-    public bool ConnectedTo(LayoutObject obj)
+    public bool ConnectedTo(LayoutObject<T> obj)
     {
         var connected = ConnectedToAll();
         return connected.Contains(obj);
     }
 
-    public bool GetPathTo(LayoutObject target, out List<LayoutObject> list)
+    public bool GetPathTo(LayoutObject<T> target, out List<LayoutObject<T>> list)
     {
-        var visited = new HashSet<LayoutObject> { this };
+        var visited = new HashSet<LayoutObject<T>> { this };
         return GetPathToRecursive(this, target, visited, out list);
     }
 
-    bool GetPathToRecursive(LayoutObject cur, LayoutObject target, HashSet<LayoutObject> visited, out List<LayoutObject> list)
+    bool GetPathToRecursive(LayoutObject<T> cur, LayoutObject<T> target, HashSet<LayoutObject<T>> visited, out List<LayoutObject<T>> list)
     {
-        list = new List<LayoutObject>();
+        list = new List<LayoutObject<T>>();
         if (_connectedTo.Contains(target))
         {
             list.Add(target);
@@ -196,7 +197,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         {
             if (!visited.Contains(connected))
             {
-                List<LayoutObject> targetPath;
+                List<LayoutObject<T>> targetPath;
                 visited.Add(connected);
                 if (GetPathToRecursive(connected, target, visited, out targetPath))
                 {
@@ -256,7 +257,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
     }
     #endregion Printing
 
-    protected bool Equals(LayoutObject other)
+    protected bool Equals(LayoutObject<T> other)
     {
         return Id == other.Id;
     }
@@ -266,7 +267,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((LayoutObject)obj);
+        return Equals((LayoutObject<T>)obj);
     }
 
     public override int GetHashCode()
@@ -274,17 +275,17 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         return Id;
     }
 
-    public static bool operator ==(LayoutObject left, LayoutObject right)
+    public static bool operator ==(LayoutObject<T> left, LayoutObject<T> right)
     {
         return Equals(left, right);
     }
 
-    public static bool operator !=(LayoutObject left, LayoutObject right)
+    public static bool operator !=(LayoutObject<T> left, LayoutObject<T> right)
     {
         return !Equals(left, right);
     }
 
-    public override IEnumerator<Value2D<GenSpace>> GetEnumerator()
+    public override IEnumerator<Value2D<T>> GetEnumerator()
     {
         foreach (var val in Grids)
         {
@@ -294,13 +295,13 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         }
     }
 
-    public override IEnumerable<GenSpace> GetEnumerateValues()
+    public override IEnumerable<T> GetEnumerateValues()
     {
         return Grids.GetEnumerateValues();
     }
 
     #region Container2D
-    public override bool TryGetValue(int x, int y, out GenSpace val)
+    public override bool TryGetValue(int x, int y, out T val)
     {
         return Grids.TryGetValue(x - ShiftP.x, y - ShiftP.y, out val);
     }
@@ -310,7 +311,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         get { return Grids.Count; }
     }
 
-    public override Array2D<GenSpace> Array
+    public override Array2D<T> Array
     {
         get 
         {
@@ -332,7 +333,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         return Grids.Contains(x - ShiftP.x, y - ShiftP.y);
     }
 
-    public override bool DrawAll(DrawAction<GenSpace> call)
+    public override bool DrawAll(DrawAction<T> call)
     {
         return Grids.DrawAll(call);
     }
@@ -342,7 +343,7 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
         Grids.Clear();
     }
 
-    public override Array2DRaw<GenSpace> RawArray(out Point shift)
+    public override Array2DRaw<T> RawArray(out Point shift)
     {
         var ret = Grids.RawArray(out shift);
         shift += ShiftP;
@@ -355,15 +356,15 @@ public class LayoutObject : Container2D<GenSpace>, ILayoutObject
     }
     #endregion
 
-    public Container2D<GenSpace> GetGrid()
+    public Container2D<T> GetGrid()
     {
-        var map = new MultiMap<GenSpace>();
+        var map = new MultiMap<T>();
         map.PutAll(Grids, ShiftP);
         return map;
     }
 
-    public List<LayoutObject> Flatten()
+    public List<LayoutObject<T>> Flatten()
     {
-        return new List<LayoutObject>(new[] { this });
+        return new List<LayoutObject<T>>(new[] { this });
     }
 }

@@ -13,6 +13,6 @@ public abstract class StairElement : ThemeElement
     {
     }
 
-    public abstract bool Place(Container2D<GenSpace> grid, LayoutObject obj, Theme theme, System.Random rand, out Boxing placed);
+    public abstract bool Place(Container2D<GenSpace> grid, LayoutObject<GenSpace> obj, Theme theme, System.Random rand, out Boxing placed);
 }
 

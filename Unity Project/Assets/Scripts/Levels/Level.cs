@@ -27,7 +27,7 @@ public class Level : Container2D<GridSpace>
 
     public void LoadRoomMaps(LevelLayout layout)
     {
-        foreach (LayoutObject room in layout.Rooms)
+        foreach (LayoutObject<GenSpace> room in layout.Rooms)
         {
             var roomMap = new MultiMap<GridSpace>();
             RoomMaps.Add(roomMap);
