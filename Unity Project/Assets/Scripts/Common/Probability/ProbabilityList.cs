@@ -253,4 +253,16 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         _lastTaken = -1;
         _taken = null;
     }
+
+    public override IEnumerable<ProbabilityChance<T>> GetChances()
+    {
+        foreach (var item in itemList)
+        {
+            yield return new ProbabilityChance<T>()
+            {
+                Item = item.Item,
+                Chance = item.Multiplier / Max
+            };
+        }
+    }
 }

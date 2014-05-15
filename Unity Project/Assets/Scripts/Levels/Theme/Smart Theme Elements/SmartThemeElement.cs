@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 
 [Serializable]
-public class SmartThemeElement : MonoBehaviour, IInitializable, IThemeElementBundle
+public class SmartThemeElement : MonoBehaviour, IInitializable
 {
     public byte GridWidth = 1;
     public byte GridLength = 1;

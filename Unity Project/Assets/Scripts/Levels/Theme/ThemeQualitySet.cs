@@ -137,5 +137,10 @@ public class ThemeQualitySet : ProbabilityPool<ThemeElement>, IEnsureType
     {
         pool.EndTaking();
     }
+
+    public override IEnumerable<ProbabilityChance<ThemeElement>> GetChances()
+    {
+        return _pool.GetChances();
+    }
     #endregion
 }

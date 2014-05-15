@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace System
 {
@@ -113,6 +114,19 @@ namespace System
                 default:
                     return diag ? GridDirection.DIAGTLBR : GridDirection.VERT;
             }
+        }
+
+        public static Vector2 NextInUnitCircle(this System.Random rand)
+        {
+            UnityEngine.Random.seed = rand.Next();
+            return UnityEngine.Random.insideUnitCircle;
+        }
+
+        public static Vector2 NextOnUnitCircle(this System.Random rand)
+        {
+            Vector2 ret = NextInUnitCircle(rand);
+            ret.Normalize();
+            return ret;
         }
 
         private static double spareRoll;

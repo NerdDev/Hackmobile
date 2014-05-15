@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 [Serializable]
-public class ThemeElementBundle : IInitializable, IThemeElementBundle
+public class ThemeElementBundle : IInitializable
 {
     private ProbabilityPool<SmartThemeElement> _pool;
     private MultiMap<ProbabilityPool<SmartThemeElement>> _map;
@@ -87,9 +87,4 @@ public class ThemeElementBundle : IInitializable, IThemeElementBundle
             cont.Item.EnsureType(target);
         }
     }
-}
-
-public interface IThemeElementBundle
-{
-    SmartThemeElement SmartElement { get; }
 }

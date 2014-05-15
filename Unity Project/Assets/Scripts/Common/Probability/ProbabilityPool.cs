@@ -106,6 +106,8 @@ public abstract class ProbabilityPool<T> : IEnumerable<ProbabilityItem<T>>, IEns
         }
     }
 
+    public abstract IEnumerable<ProbabilityChance<T>> GetChances();
+
     public abstract IEnumerator<ProbabilityItem<T>> GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator()

@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour, IManager
     public Level Level { get; private set; }
     public bool Initialized { get; set; }
     public Theme TestTheme;
-    private ProbabilityPool<ThemeOption> themeSets = ProbabilityPool<ThemeOption>.Create();
+    private ProbabilityPool<ThemeSet> themeSets = ProbabilityPool<ThemeSet>.Create();
     public PrefabProbabilityContainer[] ThemeSets;
     public LevelBuilder Builder;
     public int Seed = -1;
@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour, IManager
     public class PrefabProbabilityContainer
     {
         public float Multiplier = 1f;
-        public ThemeOption Item;
+        public ThemeSet Set;
     }
 
     public void Initialize()
@@ -47,14 +47,14 @@ public class LevelManager : MonoBehaviour, IManager
         {
             Seed = Probability.Rand.Next();
         }
-        themeSets = ProbabilityPool<ThemeOption>.Create();
+        themeSets = ProbabilityPool<ThemeSet>.Create();
         foreach (IInitializable init in this.FindAllDerivedObjects<IInitializable>())
         {
             init.Init();
         }
         foreach (PrefabProbabilityContainer cont in ThemeSets)
         {
-            if (cont.Item == null)
+            if (cont.Set == null)
             {
                 throw new ArgumentException("Prefab has to be not null");
             }
@@ -62,7 +62,7 @@ public class LevelManager : MonoBehaviour, IManager
             {
                 cont.Multiplier = 1f;
             }
-            themeSets.Add(cont.Item, cont.Multiplier);
+            themeSets.Add(cont.Set, cont.Multiplier);
         }
         if (InitialTheme == null || !UseInitialTheme)
         {
@@ -133,8 +133,10 @@ public class LevelManager : MonoBehaviour, IManager
 
     public Level GenerateLevel(int seed, Theme startingTheme, int depth)
     {
+        themeSets.Freshen();
         LevelGenerator gen = new LevelGenerator();
-        gen.Theme = startingTheme;
+        gen.InitialTheme = startingTheme;
+        gen.ThemeSetOptions = themeSets;
         gen.Depth = depth;
         gen.Rand = new System.Random(seed);
         LevelLayout layout = gen.Generate();

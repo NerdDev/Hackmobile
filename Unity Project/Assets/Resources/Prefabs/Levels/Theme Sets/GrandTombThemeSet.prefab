@@ -43,6 +43,8 @@ MonoBehaviour:
     Item: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
   - Multiplier: .200000003
     Item: {fileID: 11400002, guid: 631dbf33a897fc14f88db2d53201f711, type: 2}
+  MinRooms: 6
+  MaxRooms: 20
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

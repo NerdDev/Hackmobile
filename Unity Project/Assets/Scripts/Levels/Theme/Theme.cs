@@ -17,6 +17,18 @@ public class Theme : ThemeOption, IInitializable
     protected RoomModCollection _roomMods;
     public SpawnKeywords[] Keywords;
     public GenericFlags<SpawnKeywords> KeywordFlags;
+    public double AverageRoomRadius;
+    public override double AvgRoomRadius
+    {
+        get
+        {
+            if (AverageRoomRadius == 0)
+            {
+                throw new ArgumentException(this + ": Average room radius == 0.  Did you forget to set it?");
+            }
+            return AverageRoomRadius;
+        }
+    }
 
     public virtual void Init()
     {
@@ -39,13 +51,13 @@ public class Theme : ThemeOption, IInitializable
 
     public Theme Flatten()
     {
-        Theme ret = (Theme) this.MemberwiseClone();
+        Theme ret = (Theme)this.MemberwiseClone();
         Type bundleType = typeof(ThemeElementBundle);
         foreach (var field in ret.GetType().GetFields())
         {
             if (bundleType.IsAssignableFrom(bundleType))
             {
-                ThemeElementBundle bundle = (ThemeElementBundle) field.GetValue(this);
+                ThemeElementBundle bundle = (ThemeElementBundle)field.GetValue(this);
                 field.SetValue(this, bundle.SmartElement);
             }
         }

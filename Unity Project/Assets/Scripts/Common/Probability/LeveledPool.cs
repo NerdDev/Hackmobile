@@ -250,4 +250,15 @@ public class LeveledPool<T> : ProbabilityPool<T>
             currentPool.EndTaking();
         }
     }
+
+    public override IEnumerable<ProbabilityChance<T>> GetChances()
+    {
+        if (curLevel != -1)
+        {
+            foreach (var v in currentPool.GetChances())
+            {
+                yield return v;
+            }
+        }
+    }
 }

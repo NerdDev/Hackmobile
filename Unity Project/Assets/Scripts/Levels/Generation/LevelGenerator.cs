@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using LevelGen;
 
 public class LevelGenerator
 {
@@ -32,13 +33,17 @@ public class LevelGenerator
     public const int desiredWallToDoorRatio = 10;
     #endregion
 
-    public Theme Theme;
+    public Theme InitialTheme;
+    public ProbabilityPool<ThemeSet> ThemeSetOptions;
     public System.Random Rand;
     public int Depth;
     protected LevelLayout Layout;
     protected LayoutObjectContainer Container;
+    protected List<Area> Areas = new List<Area>();
     protected List<ILayoutObject> Objects;
     private int _debugNum = 0;
+
+    private const double AREA_RADIUS_SHRINK = 5;
 
     public LevelGenerator()
     {
@@ -56,6 +61,7 @@ public class LevelGenerator
         #endregion
         Layout = new LevelLayout() { Random = Rand };
         Container = new LayoutObjectContainer();
+        Log("Areas", true, GenerateAreas);
         Log("Mod Rooms", false, GenerateRoomShells, ModRooms);
         Log("Cluster", true, ClusterRooms);
         Log("Place Rooms", true, PlaceRooms);
@@ -94,6 +100,78 @@ public class LevelGenerator
             BigBoss.Debug.w(Logs.LevelGen, "End time: " + Time.realtimeSinceStartup + ", Total time: " + (Time.realtimeSinceStartup - time));
             BigBoss.Debug.w(Logs.LevelGenMain, name + " took: " + (Time.realtimeSinceStartup - time));
         }
+    }
+
+    protected void GenerateAreas()
+    {
+        int numAreas = Rand.NextNormalDist(3, 10);
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Generate Areas");
+            BigBoss.Debug.w(Logs.LevelGen, "Number of areas: " + numAreas);
+        }
+        #endregion
+
+        for (int i = 0; i < numAreas; i++)
+        {
+            ThemeSet set = ThemeSetOptions.Get(Rand);
+
+            Point center = new Point(0, 0);
+            Vector2 dir = Rand.NextOnUnitCircle();
+            bool intersects = true;
+            while (intersects)
+            {
+                intersects = false;
+                foreach (Area existingArea in Areas)
+                {
+                    double distance = existingArea.Center.Distance(center);
+                    double existingRadius = existingArea.Set.AvgRadius / AREA_RADIUS_SHRINK;
+                    double radius = set.AvgRadius / AREA_RADIUS_SHRINK;
+                    double diff = existingRadius + radius - distance;
+                    if (diff > 1)
+                    {
+                        intersects = true;
+                        center.x += (int)Math.Round(diff * dir.x);
+                        center.y += (int)Math.Round(diff * dir.y);
+                        break;
+                    }
+                }
+            }
+
+            Area area = new Area()
+            {
+                Set = set,
+                NumRooms = Rand.NextNormalDist(set.MinRooms, set.MaxRooms),
+                Center = center
+            };
+            Areas.Add(area);
+
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "Area center at " + area.Center + ", using set " + set + ", with " + area.NumRooms + " rooms.");
+            }
+            #endregion
+        }
+
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            MultiMap<GridType> tmp = new MultiMap<GridType>();
+            foreach (Area area in Areas)
+            {
+                tmp.DrawCircle(area.Center.x, area.Center.y, (int)Math.Round(area.Set.AvgRadius / AREA_RADIUS_SHRINK), new StrokedAction<GridType>()
+                {
+                    UnitAction = Draw.SetTo(GridType.Floor),
+                    StrokeAction = Draw.SetTo(GridType.Wall)
+                });
+                tmp[area.Center] = GridType.INTERNAL_MARKER_1;
+            }
+            tmp.ToLog(BigBoss.Debug.Get(Logs.LevelGen));
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Generate Areas");
+        }
+        #endregion
     }
 
     protected void GenerateRoomShells()
@@ -144,8 +222,8 @@ public class LevelGenerator
                 time = Time.realtimeSinceStartup;
             }
             #endregion
-            Theme.ChooseAllSmartObjects(Rand);
-            RoomSpec spec = new RoomSpec(room, Depth, Theme, Rand);
+            InitialTheme.ChooseAllSmartObjects(Rand);
+            RoomSpec spec = new RoomSpec(room, Depth, InitialTheme, Rand);
             // Base Mod
             if (!ApplyMod(spec, spec.RoomModifiers.BaseMods))
             {
@@ -343,12 +421,12 @@ public class LevelGenerator
         }
     }
 
-    protected void ClusterAround(LayoutObjectContainer cluster, LayoutObject obj)
+    protected ProbabilityPool<ClusterInfo> GenerateClusterOptions(LayoutObjectContainer cluster, LayoutObject obj)
     {
         #region Debug
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            BigBoss.Debug.printHeader("Cluster Around");
+            BigBoss.Debug.printHeader("Generate Cluster Options");
         }
         #endregion
         obj.ShiftOutside(cluster, new Point(1, 0), null, false, false);
@@ -384,19 +462,19 @@ public class LevelGenerator
             // Test if pass
             List<Point> intersectPoints = new List<Point>();
             if (objGrid.DrawAll((arr, x, y) =>
-            {
-                if (GridTypeEnum.EdgeType(arr[x, y].GetGridType()))
                 {
-                    GridType clusterType = clusterGrid[x + curShift.x, y + curShift.y].GetGridType();
-                    if (clusterType == GridType.NULL) return true;
-                    intersectPoints.Add(new Point(x, y));
-                    return GridTypeEnum.EdgeType(clusterType);
-                }
-                else
-                {
-                    return !clusterGrid.Contains(x + curShift.x, y + curShift.y);
-                }
-            })
+                    if (GridTypeEnum.EdgeType(arr[x, y].GetGridType()))
+                    {
+                        GridType clusterType = clusterGrid[x + curShift.x, y + curShift.y].GetGridType();
+                        if (clusterType == GridType.NULL) return true;
+                        intersectPoints.Add(new Point(x, y));
+                        return GridTypeEnum.EdgeType(clusterType);
+                    }
+                    else
+                    {
+                        return !clusterGrid.Contains(x + curShift.x, y + curShift.y);
+                    }
+                })
                 && intersectPoints.Count > 0)
             { // Passed test
                 // queue surrounding points
@@ -415,10 +493,24 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             shiftOptions.ToLog(BigBoss.Debug.Get(Logs.LevelGen), "Shift options");
+            BigBoss.Debug.printFooter("Generate Cluster Options");
         }
         #endregion
+        return shiftOptions;
+    }
+
+    protected void ClusterAround(LayoutObjectContainer cluster, LayoutObject obj)
+    {
+        #region Debug
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader("Cluster Around");
+        }
+        #endregion
+        ProbabilityPool<ClusterInfo> shiftOptions = GenerateClusterOptions(cluster, obj);
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
+        Container2D<GenSpace> clusterGrid = cluster.GetGrid();
         var placed = new List<Value2D<GenSpace>>(0);
         while (shiftOptions.Take(Rand, out info))
         {
@@ -429,20 +521,20 @@ public class LevelGenerator
                 BigBoss.Debug.w(Logs.LevelGen, "selected " + info.Shift);
                 var tmpMap = new MultiMap<GenSpace>();
                 clusterGrid.DrawAll(Draw.CopyTo(tmpMap));
-                objGrid.DrawAll(Draw.CopyTo(tmpMap, info.Shift));
-                tmpMap.DrawPoints(info.Intersects, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, Theme).Shift(info.Shift));
+                obj.GetGrid().DrawAll(Draw.CopyTo(tmpMap, info.Shift));
+                tmpMap.DrawPoints(info.Intersects, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, InitialTheme).Shift(info.Shift));
                 tmpMap.ToLog(Logs.LevelGen, "Intersect Points");
                 tmpMap = new MultiMap<GenSpace>();
                 clusterGrid.DrawAll(Draw.CopyTo(tmpMap));
-                objGrid.DrawAll(Draw.CopyTo(tmpMap, info.Shift));
-                tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(GridType.Door, Theme));
+                obj.GetGrid().DrawAll(Draw.CopyTo(tmpMap, info.Shift));
+                tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(GridType.Door, InitialTheme));
                 tmpMap.ToLog(Logs.LevelGen, "Cluster door options");
             }
             #endregion
             if (clusterDoorOptions.Count > 0)
             { // Cluster side has door options
                 obj.Shift(info.Shift.x, info.Shift.y);
-                placed = Theme.PlaceSomeDoors(obj, clusterDoorOptions, Rand);
+                placed = InitialTheme.PlaceSomeDoors(obj, clusterDoorOptions, Rand);
                 if (placed.Count != 0)
                 { // Placed a door
                     foreach (Point p in placed)
@@ -558,7 +650,7 @@ public class LevelGenerator
             #endregion
             foreach (Value2D<GenSpace> doorSpace in potentialDoors.GetRandom(Rand, numDoors, minDoorSpacing))
             {
-                room.Grids.SetTo(doorSpace, GridType.Door, Theme);
+                room.Grids.SetTo(doorSpace, GridType.Door, InitialTheme);
             }
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -618,7 +710,7 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                layoutCopy.SetTo(startPoint, GridType.INTERNAL_RESERVED_CUR, Theme);
+                layoutCopy.SetTo(startPoint, GridType.INTERNAL_RESERVED_CUR, InitialTheme);
                 layoutCopy.ToLog(Logs.LevelGen, "Largest after putting blocked");
                 BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
             }
@@ -647,26 +739,26 @@ public class LevelGenerator
                 Point first = path.FirstEnd;
                 Point second = path.SecondEnd;
                 LayoutObject leaf1, leaf2;
-                LayoutObject pathObj = path.Bake(Theme);
+                LayoutObject pathObj = path.Bake(InitialTheme);
                 Container.ConnectTo(first, pathObj, first, out leaf1, out pathObj);
                 Container.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
                 if (leaf1[first].Type == GridType.Wall)
                 {
-                    Theme.PlaceDoor(leaf1, first.x, first.y, Rand);
+                    InitialTheme.PlaceDoor(leaf1, first.x, first.y, Rand);
                 }
                 if (leaf2[second].Type == GridType.Wall)
                 {
-                    Theme.PlaceDoor(leaf2, second.x, second.y, Rand);
+                    InitialTheme.PlaceDoor(leaf2, second.x, second.y, Rand);
                 }
                 // Expand path
                 foreach (var p in path)
                 {
-                    layoutCopy.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, Theme).And(Draw.SetTo(GridType.Floor, Theme))));
+                    layoutCopy.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, InitialTheme).And(Draw.SetTo(GridType.Floor, InitialTheme))));
                     layoutCopy.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
                     {
                         if (!arr.IsType(x, y, GridType.NULL)) return false;
                         return arr.Cornered(x, y, Draw.IsType<GenSpace>(GridType.Floor));
-                    }).IfThen(Draw.SetTo(pathObj, GridType.Floor, Theme)));
+                    }).IfThen(Draw.SetTo(pathObj, GridType.Floor, InitialTheme)));
                 }
                 // Mark path on layout object
                 foreach (var v in pathObj)
@@ -838,9 +930,9 @@ public class LevelGenerator
                     continue;
                 }
             }
-            StairElement stair = Theme.Stair.SmartElement.Get(Rand) as StairElement;
+            StairElement stair = InitialTheme.Stair.SmartElement.Get(Rand) as StairElement;
 
-            if (!stair.Place(layout, obj, Theme, Rand, out placed))
+            if (!stair.Place(layout, obj, InitialTheme, Rand, out placed))
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -850,7 +942,7 @@ public class LevelGenerator
                 #endregion
                 continue;
             }
-            obj.DrawRect(placed, Draw.SetTo(up ? GridType.StairUp : GridType.StairDown, Theme).And(Draw.MergeIn(stair, Theme)));
+            obj.DrawRect(placed, Draw.SetTo(up ? GridType.StairUp : GridType.StairDown, InitialTheme).And(Draw.MergeIn(stair, InitialTheme)));
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -873,8 +965,7 @@ public class LevelGenerator
 
     public static Point GenerateShiftMagnitude(int mag, System.Random rand)
     {
-        UnityEngine.Random.seed = rand.Next();
-        Vector2 vect = UnityEngine.Random.insideUnitCircle * mag;
+        Vector2 vect = rand.NextInUnitCircle() * mag;
         Point p = new Point(vect);
         while (p.isZero())
         {

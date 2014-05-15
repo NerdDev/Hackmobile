@@ -89,5 +89,10 @@ public class PrefabProbabilityPool<T> : ProbabilityPool<T>, IInitializable
     {
         _pool.EndTaking();
     }
+
+    public override IEnumerable<ProbabilityChance<T>> GetChances()
+    {
+        return _pool.GetChances();
+    }
     #endregion
 }

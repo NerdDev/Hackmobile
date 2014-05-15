@@ -82,7 +82,9 @@ public static class ILayoutObjectExt
             #endregion
         }
         if (finalShift)
+        {
             obj.Shift(dir.x, dir.y);
+        }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {

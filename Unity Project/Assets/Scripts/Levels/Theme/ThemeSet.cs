@@ -8,6 +8,22 @@ public class ThemeSet : ThemeOption, IInitializable
 {
     private ProbabilityPool<ThemeOption> _pool;
     public List<PrefabProbabilityContainer> Elements;
+    public int MinRooms;
+    public int MaxRooms;
+    public override double AvgRoomRadius
+    {
+        get
+        {
+            double avgRoomRadius = 0;
+            foreach (var chance in _pool.GetChances())
+            {
+                avgRoomRadius += chance.Item.AvgRoomRadius * chance.Chance;
+            }
+            return avgRoomRadius;
+        }
+    }
+    public double AvgRadius { get { return Math.Sqrt(AvgRooms) * AvgRoomRadius; } }
+    public double AvgRooms { get { return ((MaxRooms - MinRooms) / 2d) + MinRooms; } }
 
     [Serializable]
     public class PrefabProbabilityContainer
