@@ -7,7 +7,7 @@ public interface ILayoutObject<T> : IEnumerable<Value2D<T>>
     where T : IGridType
 {
     Bounding Bounding { get; }
-    bool ContainsPoint(Point pt);
+    bool Contains(int x, int y);
     void Shift(int x, int y);
     Container2D<T> GetGrid();
     List<LayoutObject<T>> Flatten();
@@ -116,14 +116,14 @@ public static class ILayoutObjectExt
     public static bool Intersects<T>(this ILayoutObject<T> obj, ILayoutObject<T> rhs, Point hint, out Point at)
     where T : IGridType
     {
-        if (hint != null && rhs.ContainsPoint(hint))
+        if (hint != null && rhs.Contains(hint.x, hint.y))
         {
             at = hint;
             return true;
         }
         foreach (Value2D<T> val in obj)
         {
-            if (rhs.ContainsPoint(val))
+            if (rhs.Contains(val.x, val.y))
             {
                 at = val;
                 return true;
@@ -138,7 +138,7 @@ public static class ILayoutObjectExt
     {
         if (obj1 is LayoutObjectContainer<T>)
         {
-            if (!((LayoutObjectContainer<T>)obj1).GetObjAt(pt1, out retObj1))
+            if (!((LayoutObjectContainer<T>)obj1).GetObjAt(pt1.x, pt1.y, out retObj1))
             {
                 retObj2 = null;
                 return false;
@@ -151,7 +151,7 @@ public static class ILayoutObjectExt
 
         if (obj2 is LayoutObjectContainer<T>)
         {
-            if (!((LayoutObjectContainer<T>)obj2).GetObjAt(pt2, out retObj2))
+            if (!((LayoutObjectContainer<T>)obj2).GetObjAt(pt2.x, pt2.y, out retObj2))
             {
                 return false;
             }

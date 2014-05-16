@@ -53,17 +53,17 @@ public class LayoutObjectContainer<T> : ILayoutObject<T>
         return this.GetEnumerator();
     }
 
-    public bool ContainsPoint(Point pt)
+    public bool Contains(int x, int y)
     {
         LayoutObject<T> obj;
-        return GetObjAt(pt, out obj);
+        return GetObjAt(x, y, out obj);
     }
 
     public bool FindAndConnect(LayoutObject<T> obj1, Point connectPt)
     {
         Point pt = new Value2D<GridType>(connectPt.x + obj1.ShiftP.x, connectPt.y + obj1.ShiftP.y);
         LayoutObject<T> obj;
-        if (GetObjAt(pt, out obj))
+        if (GetObjAt(pt.x, pt.y, out obj))
         {
             obj1.Connect(obj);
             return true;
@@ -71,11 +71,11 @@ public class LayoutObjectContainer<T> : ILayoutObject<T>
         return false;
     }
 
-    public bool GetObjAt(Point pt, out LayoutObject<T> layoutObj)
+    public bool GetObjAt(int x, int y, out LayoutObject<T> layoutObj)
     {
         foreach (ILayoutObject<T> obj in Objects)
         {
-            if (obj.ContainsPoint(pt))
+            if (obj.Contains(x, y))
             {
                 if (obj is LayoutObject<T>)
                 {
@@ -84,7 +84,7 @@ public class LayoutObjectContainer<T> : ILayoutObject<T>
                 }
                 else
                 {
-                    return ((LayoutObjectContainer<T>)obj).GetObjAt(pt, out layoutObj);
+                    return ((LayoutObjectContainer<T>)obj).GetObjAt(x, y, out layoutObj);
                 }
             }
         }

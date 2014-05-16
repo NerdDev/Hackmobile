@@ -122,13 +122,13 @@ public class LevelGenerator
             ThemeSet set = ThemeSetOptions.Get(Rand);
 
             LayoutObject<GridTypeObj> areaObj = new LayoutObject<GridTypeObj>("Area " + i);
-            areaObj.DrawCircle(0, 0, (int) Math.Round(set.AvgRadius / AREA_RADIUS_SHRINK), new StrokedAction<GridTypeObj>()
+            areaObj.DrawCircle(0, 0, (int)Math.Round(set.AvgRadius / AREA_RADIUS_SHRINK), new StrokedAction<GridTypeObj>()
             {
                 UnitAction = Draw.SetTo(floor),
                 StrokeAction = Draw.SetTo(wall)
             });
 
-            ProbabilityPool<ClusterInfo> shiftOptions = GenerateClusterOptions<GridTypeObj>(areaCont, areaObj);
+            ProbabilityPool<ClusterInfo> shiftOptions = GenerateClusterOptions<GridTypeObj>(areaCont, areaObj, false);
             ClusterInfo info;
             if (shiftOptions.Get(Rand, out info))
             {
@@ -418,7 +418,7 @@ public class LevelGenerator
         }
     }
 
-    protected ProbabilityPool<ClusterInfo> GenerateClusterOptions<T>(LayoutObjectContainer<T> cluster, LayoutObject<T> obj)
+    protected ProbabilityPool<ClusterInfo> GenerateClusterOptions<T>(LayoutObjectContainer<T> cluster, LayoutObject<T> obj, bool clusterByVolume)
         where T : IGridType
     {
         #region Debug
@@ -459,6 +459,11 @@ public class LevelGenerator
             #endregion
             // Test if pass
             List<Point> intersectPoints = new List<Point>();
+            HashSet<LayoutObject<T>> intersectingObjs = null;
+            if (!clusterByVolume)
+            {
+                intersectingObjs = new HashSet<LayoutObject<T>>();
+            }
             if (objGrid.DrawAll((arr, x, y) =>
                 {
                     if (GridTypeEnum.EdgeType(arr[x, y].GetGridType()))
@@ -478,13 +483,36 @@ public class LevelGenerator
                 // queue surrounding points
                 visited.DrawAround(curShift.x, curShift.y, true, Draw.Not(Draw.EqualTo(true)).IfThen(Draw.AddTo<bool>(shiftQueue).And(Draw.SetTo(true))));
 
+                double multiplier;
+                if (clusterByVolume)
+                {
+                    multiplier = Math.Pow(intersectPoints.Count, 3);
+                }
+                else
+                {
+                    intersectingObjs = new HashSet<LayoutObject<T>>();
+                    foreach (Point intersect in intersectPoints)
+                    {
+                        LayoutObject<T> intersectObj;
+                        if (!clusterByVolume && cluster.GetObjAt(intersect.x + curShift.x, intersect.y + curShift.y, out intersectObj))
+                        {
+                            intersectingObjs.Add(intersectObj);
+                        }
+                    }
+                    multiplier = Math.Pow(intersectingObjs.Count, 5);
+                }
+                shiftOptions.Add(new ClusterInfo() { Shift = curShift, Intersects = intersectPoints }, multiplier);
                 #region Debug
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     BigBoss.Debug.w(Logs.LevelGen, "passed with " + intersectPoints.Count);
+                    if (!clusterByVolume)
+                    {
+                        BigBoss.Debug.w(Logs.LevelGen, "intersected number of objs: " + intersectingObjs.Count);
+                    }
+                    BigBoss.Debug.w(Logs.LevelGen, "Mult " + multiplier);
                 }
                 #endregion
-                shiftOptions.Add(new ClusterInfo() { Shift = curShift, Intersects = intersectPoints }, Math.Pow(intersectPoints.Count, 3));
             }
         }
         #region Debug
@@ -505,7 +533,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader("Cluster Around");
         }
         #endregion
-        ProbabilityPool<ClusterInfo> shiftOptions = GenerateClusterOptions(cluster, obj);
+        ProbabilityPool<ClusterInfo> shiftOptions = GenerateClusterOptions(cluster, obj, true);
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
         Container2D<GenSpace> clusterGrid = cluster.GetGrid();
@@ -538,7 +566,7 @@ public class LevelGenerator
                     foreach (Point p in placed)
                     {
                         LayoutObject<GenSpace> clusterObj;
-                        cluster.GetObjAt(p, out clusterObj);
+                        cluster.GetObjAt(p.x, p.y, out clusterObj);
                         obj.Connect(clusterObj);
                     }
                     break;
@@ -823,7 +851,7 @@ public class LevelGenerator
             startPoint = null;
             return false;
         }
-        if (!Container.GetObjAt(endPoint, out hit))
+        if (!Container.GetObjAt(endPoint.x, endPoint.y, out hit))
         {
             startPoint = null;
             return false;
