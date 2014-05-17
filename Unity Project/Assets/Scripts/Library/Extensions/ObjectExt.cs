@@ -126,7 +126,7 @@ namespace System
                 if (!objType.IsPrimitive())
                 {
                     Type target = typeof(T);
-                    var hashSet = new HashSet<object>(new ReferenceEqualityComparer());
+                    var hashSet = new HashSet<object>(ReferenceEqualityComparer.Instance);
                     hashSet.Add(obj);
                     if (target.IsAssignableFrom(objType))
                     {

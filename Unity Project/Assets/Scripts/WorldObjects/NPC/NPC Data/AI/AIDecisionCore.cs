@@ -7,7 +7,9 @@ public class AIDecisionCore
 {
     public AIDecision LastDecision { get; protected set; }
     public AIDecision CurrentDecision { get; protected set; }
+    [Copyable]
     public HashSet<AIDecision> Decisions = new HashSet<AIDecision>();
+    [Copyable]
     AICore core;
 
     public AIDecisionCore(AICore core)
