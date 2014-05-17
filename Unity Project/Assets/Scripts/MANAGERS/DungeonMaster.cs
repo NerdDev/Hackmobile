@@ -6,7 +6,6 @@ using System.Linq;
 
 public class DungeonMaster : MonoBehaviour, IManager
 {
-
     public bool Initialized { get; set; }
     Dictionary<GenericFlags<SpawnKeywords>, LeveledPool<NPC>> npcPools = new Dictionary<GenericFlags<SpawnKeywords>, LeveledPool<NPC>>();
 

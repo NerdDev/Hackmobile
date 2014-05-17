@@ -10,7 +10,8 @@ public class AICore : IXmlParsable, ICopyable
 {
     // Defining features
     [Copyable]
-    public NPC Self { get; protected set; }
+    protected NPC _self;
+    public NPC Self { get { return _self; } }
     public System.Random Random { get; protected set; }
 
     // Cores
@@ -61,7 +62,7 @@ public class AICore : IXmlParsable, ICopyable
 
     public AICore(NPC n)
     {
-        this.Self = n;
+        this._self = n;
         for (int i = 0; i < cores.Length; i++)
         {
             cores[i] = new AIDecisionCore(this);

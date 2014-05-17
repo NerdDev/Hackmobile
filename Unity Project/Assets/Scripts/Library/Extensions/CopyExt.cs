@@ -20,7 +20,7 @@ namespace System
 
         public static Object Copy(this Object originalObject)
         {
-            Object o = InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
+            Object o = InternalCopy(originalObject, new Dictionary<Object, Object>(ReferenceEqualityComparer.Instance));
             return o;
         }
         private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)
@@ -145,19 +145,6 @@ namespace System
         public static T Copy<T>(this T original)
         {
             return (T)Copy((Object)original);
-        }
-    }
-
-    public class ReferenceEqualityComparer : EqualityComparer<Object>
-    {
-        public override bool Equals(object x, object y)
-        {
-            return ReferenceEquals(x, y);
-        }
-        public override int GetHashCode(object obj)
-        {
-            if (obj == null) return 0;
-            return obj.GetHashCode();
         }
     }
 }
