@@ -69,6 +69,8 @@ public class LevelGenerator
             BigBoss.Debug.printFooter(Logs.LevelGenMain, "Generating Level: " + Depth);
         }
         #endregion
+        Layout.PutAll(Container.GetGrid());
+        Layout.Random = Rand;
         return Layout;
     }
 
