@@ -38,8 +38,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616c9262268fd2a46a2c02bf1fc6d11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Scatterable: 0
-  Chainable: 0
   Wall:
     Elements:
     - Multiplier: 1

@@ -9,12 +9,13 @@ public class LevelGenerator
 {
 
     #region GlobalGenVariables
+    // Number of areas
+    public const int minAreas = 1;
+    public const int maxAreas = 2;
+
     // Number of Rooms
     public static int minRooms { get { return 8; } }
     public static int maxRooms { get { return 16; } } //Max not inclusive
-
-    // Amount to shift rooms
-    public static int shiftRange { get { return 10; } } //Max not inclusive
 
     // Number of doors per room
     public static int doorsMin { get { return 1; } }
@@ -31,23 +32,18 @@ public class LevelGenerator
 
     // Doors
     public const int desiredWallToDoorRatio = 10;
+
+    private const double areaRadiusShrink = 5;
     #endregion
 
     public Theme InitialTheme;
     public ProbabilityPool<ThemeSet> ThemeSetOptions;
     public System.Random Rand;
     public int Depth;
-    protected LevelLayout Layout;
+    protected LevelLayout Layout = new LevelLayout();
     protected LayoutObjectContainer<GenSpace> Container;
     protected List<Area> Areas = new List<Area>();
-    protected List<ILayoutObject<GenSpace>> Objects;
     private int _debugNum = 0;
-
-    private const double AREA_RADIUS_SHRINK = 5;
-
-    public LevelGenerator()
-    {
-    }
 
     public LevelLayout Generate()
     {
@@ -59,14 +55,12 @@ public class LevelGenerator
             startTime = Time.realtimeSinceStartup;
         }
         #endregion
-        Layout = new LevelLayout() { Random = Rand };
         Container = new LayoutObjectContainer<GenSpace>();
         Log("Areas", true, GenerateAreas);
-        Log("Mod Rooms", false, GenerateRoomShells, ModRooms);
-        Log("Cluster", true, ClusterRooms);
-        Log("Place Rooms", true, PlaceRooms);
-        Log("Confirm Connection", true, ConfirmConnection);
-        Log("Place Stairs", true, PlaceStairs);
+        GenerateComponents();
+        Layout.Rooms = Container.Flatten();
+        //Log("Confirm Connection", true, ConfirmConnection);
+        //Log("Place Stairs", true, PlaceStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
         {
@@ -75,7 +69,6 @@ public class LevelGenerator
             BigBoss.Debug.printFooter(Logs.LevelGenMain, "Generating Level: " + Depth);
         }
         #endregion
-        Layout.Grids.PutAll(Container.GetGrid());
         return Layout;
     }
 
@@ -104,7 +97,7 @@ public class LevelGenerator
 
     protected void GenerateAreas()
     {
-        int numAreas = Rand.NextNormalDist(3, 10);
+        int numAreas = Rand.NextNormalDist(minAreas, maxAreas);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -122,13 +115,13 @@ public class LevelGenerator
             ThemeSet set = ThemeSetOptions.Get(Rand);
 
             LayoutObject<GridTypeObj> areaObj = new LayoutObject<GridTypeObj>("Area " + i);
-            areaObj.DrawCircle(0, 0, (int)Math.Round(set.AvgRadius / AREA_RADIUS_SHRINK), new StrokedAction<GridTypeObj>()
+            areaObj.DrawCircle(0, 0, (int)Math.Round(set.AvgRadius / areaRadiusShrink), new StrokedAction<GridTypeObj>()
             {
                 UnitAction = Draw.SetTo(floor),
                 StrokeAction = Draw.SetTo(wall)
             });
 
-            ProbabilityPool<ClusterInfo> shiftOptions = GenerateClusterOptions<GridTypeObj>(areaCont, areaObj, false);
+            ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions<GridTypeObj>(areaCont, areaObj, false);
             ClusterInfo info;
             if (shiftOptions.Get(Rand, out info))
             {
@@ -142,6 +135,7 @@ public class LevelGenerator
                 Center = areaObj.ShiftP
             };
             Areas.Add(area);
+            Container.Objects.Add(area);
             areaCont.Objects.Add(areaObj);
 
             #region DEBUG
@@ -158,7 +152,7 @@ public class LevelGenerator
             MultiMap<GridType> tmp = new MultiMap<GridType>();
             foreach (Area area in Areas)
             {
-                tmp.DrawCircle(area.Center.x, area.Center.y, (int)Math.Round(area.Set.AvgRadius / AREA_RADIUS_SHRINK), new StrokedAction<GridType>()
+                tmp.DrawCircle(area.Center.x, area.Center.y, (int)Math.Round(area.Set.AvgRadius / areaRadiusShrink), new StrokedAction<GridType>()
                 {
                     UnitAction = Draw.SetTo(GridType.Floor),
                     StrokeAction = Draw.SetTo(GridType.Wall)
@@ -171,527 +165,28 @@ public class LevelGenerator
         #endregion
     }
 
-    protected void GenerateRoomShells()
+    protected void GenerateComponents()
     {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
+        int maxRooms = Areas.Max(a => a.NumRooms);
+        var areasTmp = new List<Area>(Areas.Randomize(Rand));
+        for (int i = 1; i <= maxRooms; i++)
         {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Generate Rooms");
-        }
-        #endregion
-        List<ILayoutObject<GenSpace>> rooms = new List<ILayoutObject<GenSpace>>();
-        int numRooms = Rand.Next(minRooms, maxRooms);
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Generating " + numRooms + " rooms.");
-        }
-        #endregion
-        for (int i = 1; i <= numRooms; i++)
-        {
-            LayoutObject<GenSpace> room = new LayoutObject<GenSpace>("Room");
-            rooms.Add(room);
-            Layout.Rooms.Add(room);
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen, "Generate Rooms");
-        }
-        #endregion
-        Objects = rooms;
-    }
-
-    void ModRooms()
-    {
-        foreach (LayoutObject<GenSpace> room in Objects)
-        {
-            #region DEBUG
-            double time = 0;
-            if (BigBoss.Debug.logging(Logs.LevelGenMain))
+            foreach (Area a in areasTmp)
             {
-                BigBoss.Debug.w(Logs.LevelGenMain, "Mods for " + room);
-            }
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + 0 + " - Generate Room " + room.Id);
-                BigBoss.Debug.printHeader(Logs.LevelGen, "Modding " + room);
-                time = Time.realtimeSinceStartup;
-            }
-            #endregion
-            InitialTheme.ChooseAllSmartObjects(Rand);
-            RoomSpec spec = new RoomSpec(room, Depth, InitialTheme, Rand);
-            // Base Mod
-            if (!ApplyMod(spec, spec.RoomModifiers.BaseMods))
-            {
-                throw new ArgumentException("Could not apply base mod");
-            }
-            // Definining Mod
-            if (spec.RoomModifiers.AllowDefiningMod)
-            {
-                ApplyMod(spec, spec.RoomModifiers.DefiningMods);
-            }
-            // Flex Mods
-            int numFlex = Rand.Next(spec.RoomModifiers.MinFlexMods, spec.RoomModifiers.MaxFlexMods);
-            int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * Rand.NextDouble()));
-            int numFill = numFlex - numHeavy;
-            // Heavy Mods
-            for (int i = 0; i < numHeavy; i++)
-            {
-                if (!ApplyMod(spec, spec.RoomModifiers.HeavyMods))
+                if (a.NumRooms == 0) continue;
+                int div = maxRooms / a.NumRooms;
+                if (i % div == div - 1)
                 {
-                    break;
+                    GenerateArea(a);
                 }
             }
-            // Fill Mods
-            for (int i = 0; i < numFill; i++)
-            {
-                if (!ApplyMod(spec, spec.RoomModifiers.FillMods))
-                {
-                    break;
-                }
-            }
-            // Final Mods
-            ApplyMod(spec, spec.RoomModifiers.FinalMods);
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                room.ToLog(Logs.LevelGen);
-                BigBoss.Debug.w(Logs.LevelGen, "Modding " + room + " took " + (Time.realtimeSinceStartup - time) + " seconds.");
-                BigBoss.Debug.printFooter(Logs.LevelGen, "Modding " + room);
-            }
-            #endregion
-            if (!ValidateRoom(room))
-            {
-                throw new ArgumentException(room + " is not valid.");
-            }
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGenMain))
-        {
-            foreach (LayoutObject<GenSpace> room in Objects)
-                room.ToLog(Logs.LevelGenMain);
-        }
-        #endregion
-    }
-
-    protected bool ApplyMod<T>(RoomSpec spec, ProbabilityPool<T> mods)
-        where T : RoomModifier
-    {
-        mods.BeginTaking();
-        T mod;
-        while (mods.Take(spec.Random, out mod))
-        {
-            #region DEBUG
-            float stepTime = 0;
-            if (BigBoss.Debug.logging(Logs.LevelGenMain))
-            {
-                BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
-            }
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                stepTime = Time.realtimeSinceStartup;
-                BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
-            }
-            #endregion
-            Container2D<GenSpace> backupGrid = new MultiMap<GenSpace>(spec.Grids);
-            if (mod.Modify(spec))
-            {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    spec.Grids.ToLog(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
-                }
-                #endregion
-                mods.EndTaking();
-                return true;
-            }
-            else
-            {
-                spec.Grids = backupGrid;
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    spec.Grids.ToLog(Logs.LevelGen, "Couldn't apply mod.  Processing " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
-                }
-                #endregion
-            }
-        }
-        mods.EndTaking();
-        return false;
-    }
-
-    protected bool ValidateRoom(LayoutObject<GenSpace> room)
-    {
-        return room.Bounding.IsValid();
-    }
-
-    #region Clustering
-    protected void ClusterRooms()
-    {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Cluster Rooms");
-        }
-        #endregion
-        List<LayoutObject<GenSpace>> ret = new List<LayoutObject<GenSpace>>();
-        int numClusters = Rand.Next(maxRoomClusters - minRoomClusters) + minRoomClusters;
-        // Num clusters cannot be more than half num rooms
-        if (numClusters > Objects.Count / 2)
-        {
-            numClusters = Objects.Count / 2;
-        }
-        List<LayoutObjectContainer<GenSpace>> clusters = new List<LayoutObjectContainer<GenSpace>>();
-        for (int i = 0; i < numClusters; i++)
-        {
-            clusters.Add(new LayoutObjectContainer<GenSpace>());
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Number of clusters: " + numClusters);
-        }
-        #endregion
-        // Add two rooms to each
-        foreach (LayoutObjectContainer<GenSpace> cluster in clusters)
-        {
-            LayoutObject<GenSpace> obj1 = (LayoutObject<GenSpace>)Objects.Take();
-            LayoutObject<GenSpace> obj2 = (LayoutObject<GenSpace>)Objects.Take();
-            cluster.Objects.Add(obj1);
-            ClusterAround(cluster, obj2);
-            cluster.Objects.Add(obj2);
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                cluster.ToLog(Logs.LevelGen);
-            }
-            #endregion
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.w(Logs.LevelGen, "Rooms left: " + Objects.Count);
-        }
-        #endregion
-        // For remaining rooms, put into random clusters
-        foreach (LayoutObject<GenSpace> r in new List<ILayoutObject<GenSpace>>(Objects))
-        {
-            if (Rand.Percent(clusterProbability))
-            {
-                LayoutObjectContainer<GenSpace> cluster = clusters.Random(Rand);
-                ClusterAround(cluster, r);
-                cluster.Objects.Add(r);
-                Objects.Remove(r);
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    cluster.ToLog(Logs.LevelGen);
-                }
-                #endregion
-            }
-        }
-        // Add Clusters to rooms list
-        foreach (ILayoutObject<GenSpace> cluster in clusters)
-        {
-            Objects.Add(cluster);
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            foreach (LayoutObjectContainer<GenSpace> cluster in clusters)
-            {
-                cluster.ToLog(Logs.LevelGen);
-            }
-            BigBoss.Debug.printFooter(Logs.LevelGen, "Cluster Rooms");
-        }
-        #endregion
-    }
-
-    protected class ClusterInfo
-    {
-        public Point Shift;
-        public List<Point> Intersects;
-        public override string ToString()
-        {
-            return Shift.ToString();
         }
     }
 
-    protected ProbabilityPool<ClusterInfo> GenerateClusterOptions<T>(LayoutObjectContainer<T> cluster, LayoutObject<T> obj, bool clusterByVolume)
-        where T : IGridType
+    protected void GenerateArea(Area a)
     {
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader("Generate Cluster Options");
-        }
-        #endregion
-        obj.ShiftOutside(cluster, new Point(1, 0), null, false, false);
-        obj.Shift(-1, 0); // Shift to overlapping slightly
-        MultiMap<bool> visited = new MultiMap<bool>();
-        visited[0, 0] = true;
-        ProbabilityList<ClusterInfo> shiftOptions = new ProbabilityList<ClusterInfo>();
-        Queue<Point> shiftQueue = new Queue<Point>();
-        shiftQueue.Enqueue(new Point());
-        Container2D<T> clusterGrid = cluster.GetGrid();
-        Container2D<T> objGrid = obj.GetGrid();
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            var tmp = new MultiMap<T>();
-            tmp.PutAll(obj.GetGrid());
-            tmp.PutAll(cluster.GetGrid());
-            tmp.ToLog(Logs.LevelGen, "Starting placement");
-        }
-        #endregion
-        while (shiftQueue.Count > 0)
-        {
-            Point curShift = shiftQueue.Dequeue();
-            #region Debug
-            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                var tmpMap = new MultiMap<T>();
-                tmpMap.PutAll(clusterGrid);
-                tmpMap.PutAll(objGrid, curShift);
-                tmpMap.ToLog(Logs.LevelGen, "Analyzing at shift " + curShift);
-            }
-            #endregion
-            // Test if pass
-            List<Point> intersectPoints = new List<Point>();
-            HashSet<LayoutObject<T>> intersectingObjs = null;
-            if (!clusterByVolume)
-            {
-                intersectingObjs = new HashSet<LayoutObject<T>>();
-            }
-            if (objGrid.DrawAll((arr, x, y) =>
-                {
-                    if (GridTypeEnum.EdgeType(arr[x, y].GetGridType()))
-                    {
-                        GridType clusterType = clusterGrid[x + curShift.x, y + curShift.y].GetGridType();
-                        if (clusterType == GridType.NULL) return true;
-                        intersectPoints.Add(new Point(x, y));
-                        return GridTypeEnum.EdgeType(clusterType);
-                    }
-                    else
-                    {
-                        return !clusterGrid.Contains(x + curShift.x, y + curShift.y);
-                    }
-                })
-                && intersectPoints.Count > 0)
-            { // Passed test
-                // queue surrounding points
-                visited.DrawAround(curShift.x, curShift.y, true, Draw.Not(Draw.EqualTo(true)).IfThen(Draw.AddTo<bool>(shiftQueue).And(Draw.SetTo(true))));
-
-                double multiplier;
-                if (clusterByVolume)
-                {
-                    multiplier = Math.Pow(intersectPoints.Count, 3);
-                }
-                else
-                {
-                    intersectingObjs = new HashSet<LayoutObject<T>>();
-                    foreach (Point intersect in intersectPoints)
-                    {
-                        LayoutObject<T> intersectObj;
-                        if (!clusterByVolume && cluster.GetObjAt(intersect.x + curShift.x, intersect.y + curShift.y, out intersectObj))
-                        {
-                            intersectingObjs.Add(intersectObj);
-                        }
-                    }
-                    multiplier = Math.Pow(intersectingObjs.Count, 5);
-                }
-                shiftOptions.Add(new ClusterInfo() { Shift = curShift, Intersects = intersectPoints }, multiplier);
-                #region Debug
-                if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    BigBoss.Debug.w(Logs.LevelGen, "passed with " + intersectPoints.Count);
-                    if (!clusterByVolume)
-                    {
-                        BigBoss.Debug.w(Logs.LevelGen, "intersected number of objs: " + intersectingObjs.Count);
-                    }
-                    BigBoss.Debug.w(Logs.LevelGen, "Mult " + multiplier);
-                }
-                #endregion
-            }
-        }
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            shiftOptions.ToLog(BigBoss.Debug.Get(Logs.LevelGen), "Shift options");
-            BigBoss.Debug.printFooter("Generate Cluster Options");
-        }
-        #endregion
-        return shiftOptions;
-    }
-
-    protected void ClusterAround(LayoutObjectContainer<GenSpace> cluster, LayoutObject<GenSpace> obj)
-    {
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader("Cluster Around");
-        }
-        #endregion
-        ProbabilityPool<ClusterInfo> shiftOptions = GenerateClusterOptions(cluster, obj, true);
-        List<Point> clusterDoorOptions = new List<Point>();
-        ClusterInfo info;
-        Container2D<GenSpace> clusterGrid = cluster.GetGrid();
-        var placed = new List<Value2D<GenSpace>>(0);
-        while (shiftOptions.Take(Rand, out info))
-        {
-            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
-            #region Debug
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "selected " + info.Shift);
-                var tmpMap = new MultiMap<GenSpace>();
-                clusterGrid.DrawAll(Draw.CopyTo(tmpMap));
-                obj.GetGrid().DrawAll(Draw.CopyTo(tmpMap, info.Shift));
-                tmpMap.DrawPoints(info.Intersects, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, InitialTheme).Shift(info.Shift));
-                tmpMap.ToLog(Logs.LevelGen, "Intersect Points");
-                tmpMap = new MultiMap<GenSpace>();
-                clusterGrid.DrawAll(Draw.CopyTo(tmpMap));
-                obj.GetGrid().DrawAll(Draw.CopyTo(tmpMap, info.Shift));
-                tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(GridType.Door, InitialTheme));
-                tmpMap.ToLog(Logs.LevelGen, "Cluster door options");
-            }
-            #endregion
-            if (clusterDoorOptions.Count > 0)
-            { // Cluster side has door options
-                obj.Shift(info.Shift.x, info.Shift.y);
-                placed = InitialTheme.PlaceSomeDoors(obj, clusterDoorOptions, Rand);
-                if (placed.Count != 0)
-                { // Placed a door
-                    foreach (Point p in placed)
-                    {
-                        LayoutObject<GenSpace> clusterObj;
-                        cluster.GetObjAt(p.x, p.y, out clusterObj);
-                        obj.Connect(clusterObj);
-                    }
-                    break;
-                }
-                else
-                {
-                    #region Debug
-                    if (BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        BigBoss.Debug.w(Logs.LevelGen, "selected point failed to match " + info.Shift + ". Backing up");
-                    }
-                    #endregion
-                    obj.Shift(-info.Shift.x, -info.Shift.y);
-                }
-            }
-        }
-        if (placed.Count == 0)
-        {
-            throw new ArgumentException("Could not cluster rooms");
-        }
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            var tmpMap = new MultiMap<GenSpace>();
-            tmpMap.PutAll(clusterGrid);
-            tmpMap.PutAll(obj.GetGrid());
-            tmpMap.ToLog(Logs.LevelGen, "Final setup " + info.Shift);
-            BigBoss.Debug.printFooter("Cluster Around");
-        }
-        #endregion
-    }
-    #endregion
-
-    protected void PlaceRooms()
-    {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Place Rooms");
-        }
-        #endregion
-        List<ILayoutObject<GenSpace>> unplacedRooms = new List<ILayoutObject<GenSpace>>(Objects);
-        List<ILayoutObject<GenSpace>> placedRooms = new List<ILayoutObject<GenSpace>>();
-        if (unplacedRooms.Count > 0)
-        { // Add seed
-            ILayoutObject<GenSpace> seed = unplacedRooms.Take();
-            Container.Objects.Add(seed);
-            placedRooms.Add(seed);
-        }
-        foreach (ILayoutObject<GenSpace> room in unplacedRooms)
-        {
-            // Find room it will start from
-            int roomNum = Rand.Next(placedRooms.Count);
-            ILayoutObject<GenSpace> startRoom = placedRooms[roomNum];
-            room.CenterOn(startRoom);
-            // Find where it will shift away
-            Point shiftMagn = GenerateShiftMagnitude(shiftRange, Rand);
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "Placing room: " + room);
-                BigBoss.Debug.w(Logs.LevelGen, "Picked starting room number: " + roomNum);
-                BigBoss.Debug.w(Logs.LevelGen, "Shift: " + shiftMagn);
-            }
-            #endregion
-            room.ShiftOutside(placedRooms, shiftMagn);
-            placedRooms.Add(room);
-            Container.Objects.Add(room);
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                Container.ToLog(Logs.LevelGen, "Layout after placing room at: " + room.Bounding);
-                BigBoss.Debug.printBreakers(Logs.LevelGen, 4);
-            }
-            #endregion
-        }
-        #region DEBUG
-        BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
-        #endregion
-    }
-
-    protected void PlaceDoors()
-    {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Place Doors");
-        }
-        #endregion
-        foreach (LayoutObject<GenSpace> room in Objects)
-        {
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.printHeader(Logs.LevelGen, "Place Doors on " + room);
-            }
-            #endregion
-            var potentialDoors = new MultiMap<GenSpace>();
-            room.Grids.DrawPotentialExternalDoors(Draw.AddTo<GenSpace>(potentialDoors));
-            int numDoors = Rand.Next(doorsMin, doorsMax);
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                potentialDoors.ToLog(Logs.LevelGen, "Potential Doors");
-                BigBoss.Debug.w(Logs.LevelGen, "Number of doors to generate: " + numDoors);
-            }
-            #endregion
-            foreach (Value2D<GenSpace> doorSpace in potentialDoors.GetRandom(Rand, numDoors, minDoorSpacing))
-            {
-                room.Grids.SetTo(doorSpace, GridType.Door, InitialTheme);
-            }
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                room.ToLog(Logs.LevelGen, "Room After placing doors");
-                BigBoss.Debug.printFooter(Logs.LevelGen, "Place Doors on " + room);
-            }
-            #endregion
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen, "Place Doors");
-        }
-        #endregion
+        Theme t = a.Set.GetTheme(Rand);
+        t.GenerateRoom(this, a);
     }
 
     #region Confirm Connection / Pathing
@@ -704,7 +199,7 @@ public class LevelGenerator
         }
         #endregion
         DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor());
-        var layoutCopy = Container.GetGrid().Array;
+        var layoutCopy = Layout.GetGrid().Array;
         List<LayoutObject<GenSpace>> rooms = new List<LayoutObject<GenSpace>>(Layout.Rooms.Cast<LayoutObject<GenSpace>>());
         var runningConnected = Container2D<GenSpace>.CreateArrayFromBounds(layoutCopy);
         // Create initial queue and visited
@@ -903,27 +398,6 @@ public class LevelGenerator
         #endregion
     }
     #endregion
-
-    protected void PlaceStairs()
-    {
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Placing missing stairs");
-        }
-        #endregion
-        if (!PlaceMissingStair(true, null, out Layout.UpStart)
-            || !PlaceMissingStair(false, Layout.UpStart, out Layout.DownStart))
-        {
-            throw new ArgumentException("Could not place stairs");
-        }
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter("Placing Missing Stairs");
-        }
-        #endregion
-    }
 
     protected bool PlaceMissingStair(bool up, Bounding otherStair, out Boxing placed)
     {

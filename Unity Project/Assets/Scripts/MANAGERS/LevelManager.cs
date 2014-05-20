@@ -111,7 +111,7 @@ public class LevelManager : MonoBehaviour, IManager
         #endregion
         DeployLevel(level);
         Level = level;
-        Level.PlacePlayer(true);
+        Level.PlacePlayer();
     }
 
     protected void DeployLevel(Level level)
@@ -164,8 +164,6 @@ public class LevelManager : MonoBehaviour, IManager
         level.UnderlyingContainer = spaces;
         level.LoadRoomMaps(layout);
         level.Random = rand;
-        level.UpStartPoint = layout.UpStart;
-        level.DownStartPoint = layout.DownStart;
         return level;
     }
 

@@ -2,11 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using LevelGen;
 
-public class Theme : ThemeOption, IInitializable
+public abstract class Theme : ThemeOption, IInitializable
 {
-    public bool Scatterable;
-    public bool Chainable;
     #region Core Elements
     public ThemeElementBundle Wall;
     public ThemeElementBundle Door;
@@ -14,7 +13,7 @@ public class Theme : ThemeOption, IInitializable
     public ThemeElementBundle Stair;
     public ThemeElementBundle Chest;
     #endregion
-    protected RoomModCollection _roomMods;
+    public RoomModCollection RoomMods { get; protected set; }
     public SpawnKeywords[] Keywords;
     public GenericFlags<SpawnKeywords> KeywordFlags;
     public double AverageRoomRadius;
@@ -32,13 +31,13 @@ public class Theme : ThemeOption, IInitializable
 
     public virtual void Init()
     {
-        _roomMods = new RoomModCollection();
+        RoomMods = new RoomModCollection();
         KeywordFlags = new GenericFlags<SpawnKeywords>(Keywords);
     }
 
-    public RoomModCollection GetRoomMods()
+    public override Theme GetTheme(System.Random rand)
     {
-        return new RoomModCollection(_roomMods);
+        return this;
     }
 
     public void ChooseAllSmartObjects(System.Random rand)
@@ -49,21 +48,7 @@ public class Theme : ThemeOption, IInitializable
         }
     }
 
-    public Theme Flatten()
-    {
-        Theme ret = (Theme)this.MemberwiseClone();
-        Type bundleType = typeof(ThemeElementBundle);
-        foreach (var field in ret.GetType().GetFields())
-        {
-            if (bundleType.IsAssignableFrom(bundleType))
-            {
-                ThemeElementBundle bundle = (ThemeElementBundle)field.GetValue(this);
-                field.SetValue(this, bundle.SmartElement);
-            }
-        }
-        return ret;
-    }
-
+    #region Door Placement
     public static ProbabilityList<int> DoorRatioPicker;
     public List<Value2D<GenSpace>> PlaceSomeDoors(Container2D<GenSpace> arr, IEnumerable<Point> points, System.Random rand, int desiredWallToDoorRatio = -1, bool expandDoors = true)
     {
@@ -172,9 +157,122 @@ public class Theme : ThemeOption, IInitializable
         ThemeElement door = doorElement.Get(rand);
         cont.DrawLineExpanding(x, y, dir, count / 2, Draw.MergeIn(door, this, GridType.Door, false).And(Draw.Around(false, Draw.IsNull<GenSpace>().IfThen(Draw.SetTo(GridType.Floor, this)))));
     }
+    #endregion
 
-    public override Theme GetTheme(System.Random rand)
+    public abstract bool GenerateRoom(LevelGenerator gen, Area a);
+    
+    protected LayoutObject<GenSpace> CreateRoom(LevelGenerator gen, Area a)
     {
-        return this;
+        LayoutObject<GenSpace> room = new LayoutObject<GenSpace>("Room");
+        #region DEBUG
+        double time = 0;
+        if (BigBoss.Debug.logging(Logs.LevelGenMain))
+        {
+            BigBoss.Debug.w(Logs.LevelGenMain, "Mods for " + room);
+        }
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Modding " + room);
+            time = Time.realtimeSinceStartup;
+        }
+        #endregion
+        this.ChooseAllSmartObjects(gen.Rand);
+        RoomSpec spec = new RoomSpec(room, gen.Depth, this, gen.Rand);
+        // Base Mod
+        if (!ApplyMod(spec, spec.RoomModifiers.BaseMods))
+        {
+            throw new ArgumentException("Could not apply base mod");
+        }
+        // Definining Mod
+        if (spec.RoomModifiers.AllowDefiningMod)
+        {
+            ApplyMod(spec, spec.RoomModifiers.DefiningMods);
+        }
+        // Flex Mods
+        int numFlex = gen.Rand.Next(spec.RoomModifiers.MinFlexMods, spec.RoomModifiers.MaxFlexMods);
+        int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * gen.Rand.NextDouble()));
+        int numFill = numFlex - numHeavy;
+        // Heavy Mods
+        for (int i = 0; i < numHeavy; i++)
+        {
+            if (!ApplyMod(spec, spec.RoomModifiers.HeavyMods))
+            {
+                break;
+            }
+        }
+        // Fill Mods
+        for (int i = 0; i < numFill; i++)
+        {
+            if (!ApplyMod(spec, spec.RoomModifiers.FillMods))
+            {
+                break;
+            }
+        }
+        // Final Mods
+        ApplyMod(spec, spec.RoomModifiers.FinalMods);
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            room.ToLog(Logs.LevelGen);
+            BigBoss.Debug.w(Logs.LevelGen, "Modding " + room + " took " + (Time.realtimeSinceStartup - time) + " seconds.");
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Modding " + room);
+        }
+        #endregion
+        if (!ValidateRoom(room))
+        {
+            throw new ArgumentException(room + " is not valid.");
+        }
+        return room;
+    }
+
+    protected bool ApplyMod<T>(RoomSpec spec, ProbabilityPool<T> mods)
+        where T : RoomModifier
+    {
+        mods.BeginTaking();
+        T mod;
+        while (mods.Take(spec.Random, out mod))
+        {
+            #region DEBUG
+            float stepTime = 0;
+            if (BigBoss.Debug.logging(Logs.LevelGenMain))
+            {
+                BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
+            }
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                stepTime = Time.realtimeSinceStartup;
+                BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
+            }
+            #endregion
+            Container2D<GenSpace> backupGrid = new MultiMap<GenSpace>(spec.Grids);
+            if (mod.Modify(spec))
+            {
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    spec.Grids.ToLog(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+                }
+                #endregion
+                mods.EndTaking();
+                return true;
+            }
+            else
+            {
+                spec.Grids = backupGrid;
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    spec.Grids.ToLog(Logs.LevelGen, "Couldn't apply mod.  Processing " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+                }
+                #endregion
+            }
+        }
+        mods.EndTaking();
+        return false;
+    }
+
+    protected bool ValidateRoom(LayoutObject<GenSpace> room)
+    {
+        return room.Bounding.IsValid();
     }
 }

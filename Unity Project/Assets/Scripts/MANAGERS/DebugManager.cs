@@ -277,7 +277,7 @@ public class DebugManager : MonoBehaviour, IManager
     {
         Log prev = logs[(int)e];
         // Create actual path
-        logName = debugFolder + getPath(e) + logName + ".txt";
+        logName = debugFolder + getPath(e) + logName + ".xml";
         // Create necessary directories
         string dir = System.IO.Path.GetDirectoryName(logName);
         Directory.CreateDirectory(dir);
@@ -363,11 +363,11 @@ public class Log
 {
     #region StringConstants
     const string depthStrExtra = "  ";
-    const string depthStr = "|   ";
-    const string headerStrMid = @"/=============  ";
-    const string headerStrMid2 = @"  =============\";
-    const string headerStrFoot = @"\=============  ";
-    const string headerStrFoot2 = @"  =============/";
+    const string depthStr = "   ";
+    const string headerStrMid = @"<";
+    const string headerStrMid2 = @">";
+    const string headerStrFoot = @"</";
+    const string headerStrFoot2 = @">";
     const string breaker = @"___________________________________________________";
     const string breaker2 = @"|/////////////////////////////////////////////////|";
     #endregion
@@ -399,7 +399,6 @@ public class Log
 
     public void printHeader(string line)
     {
-        w("");
         w(headerStrMid + line + headerStrMid2);
         incrementDepth();
     }

@@ -2185,7 +2185,7 @@ MonoBehaviour:
   DiscoLight: {fileID: 0}
   cookie: {fileID: 2800000, guid: b9d67bb2d8a6eb443841d394648d8e0a, type: 3}
   LoadImage: {fileID: 545698272}
-  InvisibilityShader: {fileID: 31, guid: 0000000000000000f000000000000000, type: 0}
+  InvisibilityShader: {fileID: 31, guid: 0000000000000000f000000000000000, type: 3}
   TransparentShader: {fileID: 4800000, guid: e54b0daae218c1d4096822c3de26c457, type: 3}
   InvisibleObject: {fileID: 100000, guid: 3878e4a462c1d624097fb6db33bb777d, type: 2}
   GUICam: {fileID: 1503070279}
@@ -3795,7 +3795,7 @@ MonoBehaviour:
   - Multiplier: 1
     Set: {fileID: 11400000, guid: 5bdffb19ccbc4284fa6b27e20b0d1809, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: -1
+  Seed: 15
   UseInitialTheme: 1
   InitialTheme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
 --- !u!1 &1064103705
@@ -5268,7 +5268,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400080, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: Seed
-      value: -1
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: SpawnLevel

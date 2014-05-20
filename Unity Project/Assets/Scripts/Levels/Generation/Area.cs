@@ -5,10 +5,11 @@ using System.Text;
 
 namespace LevelGen
 {
-    public class Area
+    public class Area : LayoutObjectContainer<GenSpace>
     {
         public ThemeSet Set;
         public int NumRooms;
+        public int NumRoomsGenerated;
         public Point Center;
     }
 }

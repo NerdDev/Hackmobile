@@ -16,8 +16,6 @@ public class Level : Container2D<GridSpace>
     }
     public List<Container2D<GridSpace>> RoomMaps = new List<Container2D<GridSpace>>();
     private MultiMap<Container2D<GridSpace>> roomMapping = new MultiMap<Container2D<GridSpace>>(); // floor space to roommap
-    public Bounding UpStartPoint;
-    public Bounding DownStartPoint;
     public System.Random Random;
     public HashSet<WorldObject> WorldObjects = new HashSet<WorldObject>();
 
@@ -137,21 +135,12 @@ public class Level : Container2D<GridSpace>
     }
     #endregion
 
-    public void PlacePlayer(bool up)
+    public void PlacePlayer()
     {
-        Bounding startBounding;
-        if (up)
-        {
-            startBounding = UpStartPoint;
-        }
-        else
-        {
-            startBounding = DownStartPoint;
-        }
         BigBoss.Debug.w(Logs.Main, "Placing player in position.");
         Value2D<GridSpace> start;
         RandomPicker<GridSpace> picker;
-        this.map.DrawRect(new Bounding(startBounding).Expand(1), Draw.IsType<GridSpace>(GridType.StairPlace).IfThen(Draw.PickRandom(out picker)));
+        this.map.DrawAll(Draw.Walkable<GridSpace>().IfThen(Draw.PickRandom(out picker)));
         if (!picker.Pick(Random, out start))
         {
             throw new ArgumentException("Cannot place player");

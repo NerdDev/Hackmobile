@@ -16,6 +16,6 @@ public class RoomSpec
         Depth = depth;
         Theme = theme;
         Random = random;
-        RoomModifiers = theme.GetRoomMods();
+        RoomModifiers = theme.RoomMods;
     }
 }

@@ -77,7 +77,7 @@ public class LevelBuilder : MonoBehaviour
         MultiMap<GridSpace> ret = new MultiMap<GridSpace>();
         ThemeElementSpec spec = new ThemeElementSpec()
         {
-            GenGrid = layout.Grids,
+            GenGrid = layout,
             Random = layout.Random,
             Grid = ret
         };

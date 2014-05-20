@@ -31,6 +31,17 @@ namespace System.Collections.Generic
             return item;
         }
 
+        public static bool Random<T>(this List<T> list, System.Random rand, out T item)
+        {
+            if (list.Count == 0)
+            {
+                item = default(T);
+                return false;
+            }
+            item = list[rand.Next(list.Count)];
+            return true;
+        }
+
         public static T Random<T>(this List<T> list, System.Random rand)
         {
             if (list.Count > 0)
