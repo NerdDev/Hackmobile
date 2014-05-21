@@ -444,6 +444,15 @@ public class NPC : Affectable
         {
             return false;
         }
+        if (!this.CanSeeObjects()) //self checks
+        {
+            return false;
+        }
+        if (obj is NPC) //object to be seen checks
+        {
+            NPC n = obj as NPC;
+            if (!this.CanSeeInvisible() && n.IsInvisible()) return false;
+        }
         return !Physics.Linecast(this.EyeSightPosition, obj.CanSeePosition);
     }
     #endregion
@@ -1009,6 +1018,33 @@ public class NPC : Affectable
     public bool InCombat()
     {
         return AI.CurrentState == AIState.Combat;
+    }
+
+    public bool CanSeeObjects()
+    {
+        if (!this.HasEffect<Blindness>())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool CanSeeInvisible()
+    {
+        if (this.HasEffect<SeeInvisible>())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool IsInvisible()
+    {
+        if (this.HasEffect<Invisibility>())
+        {
+            return true;
+        }
+        return false;
     }
     #endregion
 

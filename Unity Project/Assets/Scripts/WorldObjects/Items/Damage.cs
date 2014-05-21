@@ -36,6 +36,11 @@ public struct Damage : IXmlParsable
         max = x.SelectInt("max", 1);
     }
 
+    public override string ToString()
+    {
+        return min + " - " + max;
+    }
+
     public int GetHash()
     {
         int hash = 3;

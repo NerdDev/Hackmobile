@@ -20,7 +20,7 @@ using System.Collections.Specialized;
 
 [ExecuteInEditMode]
 [AddComponentMenu("NGUI/UI/Panel")]
-public class UIPanel : MonoBehaviour
+public class UIPanel : GUIElement
 {
 	public enum DebugInfo
 	{

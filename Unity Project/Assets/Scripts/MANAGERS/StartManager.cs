@@ -72,11 +72,7 @@ public class StartManager : MonoBehaviour, IManager
 
         // Temp (will move eventually)
         BigBoss.PlayerInfo.Rendering(true);
-        BigBoss.Gooey.OpenSpellGUI();
         BigBoss.Gooey.OpenInventoryGUI();
-        
-        BigBoss.Gooey.OpenGroundGUI(null);
-
         if (SetLevelForTesting)
         {
             SetForTesting();

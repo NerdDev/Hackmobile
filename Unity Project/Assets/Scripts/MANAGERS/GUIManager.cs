@@ -37,6 +37,11 @@ public class GUIManager : MonoBehaviour, IManager
     #endregion
 
     #region Publicly populated variables from scene
+    public InventoryMenu inventory;
+    public ItemMenu itemMenu;
+
+    public GroundMenu ground;
+
     public ScrollingGrid InventoryGrid;
     public ScrollingGrid ItemActionsGrid;
     public ScrollingGrid GroundItemsGrid;
@@ -47,7 +52,6 @@ public class GUIManager : MonoBehaviour, IManager
     public GUIProgressBar ManaBar;
 
     //Prefabs
-    public GameObject InvItemPrefab;
     public GameObject ButtonPrefab;
     public GameObject ChestPrefab;
     public GameObject LabelPrefab;
@@ -55,7 +59,6 @@ public class GUIManager : MonoBehaviour, IManager
     public UIFont font;
 
     //Misc
-    public GameObject InventoryLabel;
     public GameObject GroundLabel;
     public GameObject debugText;
     public GameObject textPopPrefab;
@@ -123,18 +126,24 @@ public class GUIManager : MonoBehaviour, IManager
 
     public void OpenSpellGUI()
     {
-        RegenSpellGUI(SpellCastGrid);
+        //RegenSpellGUI(SpellCastGrid);
     }
 
     public void OpenInventoryGUI()
     {
-        RegenInventoryGUI(InventoryGrid);
+        inventory.Display();
     }
 
     public void OpenGroundGUI(ItemChest chest)
     {
         displayInventory = true;
-        GenerateGroundItems(chest, GroundItemsGrid);
+        //ground.Display(chest);
+    }
+
+    public void OpenGroundGUI()
+    {
+        displayInventory = true;
+        //ground.Display(ground.chest);
     }
 
     public void DisplayLoading()
@@ -150,6 +159,16 @@ public class GUIManager : MonoBehaviour, IManager
     public void RecreateFOW(Vector3 pos, int height)
     {
         fow.ModifyGrid(pos, height);
+    }
+
+    public void pickUpItem(Item i)
+    {
+        BigBoss.Player.pickUpItem(i, ground.chest.Location);
+    }
+
+    public void dropItem(Item i)
+    {
+        BigBoss.Player.dropItem(i, ground.chest.Location);
     }
 
     /*
@@ -258,8 +277,9 @@ public class GUIManager : MonoBehaviour, IManager
 
     public void CreateTextMessage(string message, Color col)
     {
+        /*
         GameObject button = Instantiate(LabelPrefab) as GameObject;
-        GUILabel label = button.GetComponent<GUILabel>();
+        GUIButton label = button.GetComponent<GUIButton>();
         label.Text = message;
         label.UIDragPanel.draggablePanel = ChatGrid.DragPanel;
         ChatGrid.AddLabel(label);
@@ -273,6 +293,7 @@ public class GUIManager : MonoBehaviour, IManager
             Debug.Log(e.Source);
             Debug.Log(e.StackTrace);
         }
+         */
     }
 
     public void CreateTextPop(Vector3 worldPosition, string message, Color col)
@@ -341,7 +362,7 @@ public class GUIManager : MonoBehaviour, IManager
                     }
                 });
             }
-            GUIButton cancelSpellButton =  CreateButton(grid, "Cancel Spell");
+            GUIButton cancelSpellButton = CreateButton(grid, "Cancel Spell");
             cancelSpellButton.OnSingleClick = new Action(() =>
                 {
                     BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
@@ -369,8 +390,8 @@ public class GUIManager : MonoBehaviour, IManager
                 }
                 spellTargets.Clear();
                 currentSpell = null;
-				selectedButton.defaultColor = cancelSpellButton.defaultColor;
-				selectedButton.UpdateColor(true, true);
+                selectedButton.defaultColor = cancelSpellButton.defaultColor;
+                selectedButton.UpdateColor(true, true);
             });
             grid.Reposition();
         }
@@ -434,107 +455,6 @@ public class GUIManager : MonoBehaviour, IManager
         return 0;
     }
 
-    internal void RegenInventoryGUI(ScrollingGrid grid)
-    {
-        if (displayInventory)
-        {
-            InventoryLabel.SetActive(true);
-            grid.gameObject.SetActive(true);
-            grid.Clear();
-            if (!categoryDisplay)
-            {
-                foreach (InventoryCategory ic in BigBoss.Player.Inventory.Values)
-                {
-                    CreateCategoryButton(ic, grid);
-                }
-            }
-            else
-            {
-                InventoryCategory ic;
-                if (BigBoss.Player.Inventory.TryGetValue(category, out ic))
-                {
-                    foreach (Item item in ic.Values)
-                    {
-                        CreateItemButton(item, grid);
-                    }
-                }
-                CreateBackLabel(grid);
-            }
-            grid.Reposition();
-        }
-        else
-        {
-            InventoryLabel.SetActive(false);
-            grid.Clear();
-            RegenItemInfoGUI(null);
-        }
-    }
-
-    internal void GenerateGroundItems(ItemChest chest, ScrollingGrid grid)
-    {
-        if (displayInventory && chest != null)
-        {
-            currentChest = chest;
-            Inventory inv = chest.Location.inventory;
-            GroundLabel.SetActive(true);
-            grid.gameObject.SetActive(true);
-            grid.Clear();
-            foreach (InventoryCategory ic in inv.Values)
-            {
-                foreach (Item item in ic.Values)
-                {
-                    CreateItemButton(item, grid);
-                }
-            }
-            CreateCloseLabel(grid);
-            grid.ResetPosition();
-            grid.Reposition();
-        }
-        else
-        {
-            GroundLabel.SetActive(false);
-            grid.Clear();
-            RegenItemInfoGUI(null);
-        }
-    }
-
-    private void CreateCloseLabel(ScrollingGrid grid)
-    {
-        GUIButton button = CreateButton(grid, "CloseButton", "Close");
-        button.OnSingleClick = new Action(() =>
-        {
-            BigBoss.Gooey.category = "";
-            BigBoss.Gooey.categoryDisplay = false;
-            BigBoss.Gooey.OpenGroundGUI(null);
-            BigBoss.Gooey.displayItem = false;
-            BigBoss.Gooey.RegenItemInfoGUI(null);
-        });
-    }
-
-    internal void RegenItemInfoGUI(Item item)
-    {
-        if (displayInventory)
-        {
-			ItemInfoGrid.gameObject.SetActive(true);
-			ItemActionsGrid.gameObject.SetActive(true);
-            ItemInfoGrid.Clear();
-            ItemActionsGrid.Clear();
-            if (displayItem && item != null && item.Count > 0)
-            {
-                GenerateItemInfo(item, ItemInfoGrid);
-                GenerateItemActions(item, ItemActionsGrid);
-            }
-            else
-            {
-                OpenInventoryGUI();
-                ItemInfoGrid.Clear();
-                ItemActionsGrid.Clear();
-				ItemInfoGrid.gameObject.SetActive(false);
-				ItemActionsGrid.gameObject.SetActive(false);
-            }
-        }
-    }
-
     GUIButton CreateButton(string buttonName = "Button", string buttonText = null)
     {
         GameObject button = Instantiate(ButtonPrefab) as GameObject;
@@ -545,7 +465,7 @@ public class GUIManager : MonoBehaviour, IManager
         return butt;
     }
 
-    GUIButton CreateButton(ScrollingGrid grid, string buttonName = "Button", string buttonText = null)
+    public GUIButton CreateButton(ScrollingGrid grid, string buttonName = "Button", string buttonText = null)
     {
         if (buttonText == null) buttonText = buttonName;
         GUIButton button = CreateButton(buttonName, buttonText);
@@ -554,178 +474,36 @@ public class GUIManager : MonoBehaviour, IManager
         return button.GetComponent<GUIButton>();
     }
 
-    GUIButton CreateObjectButton(System.Object o, ScrollingGrid grid, string buttonName = "Button", string buttonText = null)
+    public GUIButton CreateObjectButton(System.Object o, ScrollingGrid grid, string buttonName = "Button", string buttonText = null)
     {
         GUIButton button = CreateButton(grid, buttonName, buttonText);
         button.refObject = o;
         return button;
     }
 
-    void CreateBackLabel(ScrollingGrid grid)
+    public void OpenItemMenu(Item item)
     {
-        GUIButton button = CreateButton(grid, "BackButton", "Back");
-        button.OnSingleClick = new Action(() =>
-        {
-            BigBoss.Gooey.category = "";
-            BigBoss.Gooey.categoryDisplay = false;
-            BigBoss.Gooey.OpenInventoryGUI();
-            BigBoss.Gooey.displayItem = false;
-            BigBoss.Gooey.RegenItemInfoGUI(null);
-        });
+        itemMenu.Display(item);
     }
 
-    void CreateItemButton(Item item, ScrollingGrid grid)
+    public void CloseItemMenu()
     {
-        if (grid.Grid == GroundItemsGrid.Grid) { item.OnGround = true; }
-        else if (grid.Grid == InventoryGrid.Grid) { item.OnGround = false; }
-        string buttonText;
-        if (item.Count > 1)
-        {
-            buttonText = item.Name + " (" + item.Count + ")";
-        }
-        else { buttonText = item.Name; }
-        GUIButton itemButton = CreateObjectButton(item, grid, item.Name, buttonText);
-        itemButton.OnSingleClick = new Action(() =>
-        {
-            if ((itemButton.refObject as Item).Count > 0)
-            {
-                BigBoss.Gooey.displayItem = true;
-                BigBoss.Gooey.RegenItemInfoGUI(itemButton.refObject as Item);
-            }
-        });
+        itemMenu.Clear();
     }
 
-    void CreateCategoryButton(InventoryCategory ic, ScrollingGrid grid)
+    public void CloseGroundMenu()
     {
-        GUIButton categoryButton = CreateObjectButton(ic, grid, ic.id);
-        categoryButton.OnSingleClick = new Action(() =>
-        {
-            BigBoss.Gooey.categoryDisplay = true;
-            BigBoss.Gooey.category = (categoryButton.refObject as InventoryCategory).id;
-            BigBoss.Gooey.OpenInventoryGUI();
-        });
+        //itemMenu.Clear();
     }
 
-    void GenerateItemInfo(Item item, ScrollingGrid grid)
+    public void OpenItemActionsMenu(Item item)
     {
-        if (item.Count > 0)
-        {
-            foreach (KeyValuePair<string, string> kvp in item.GetGUIDisplays())
-            {
-                //display the info on the item
-            }
-            CreateBackLabel(grid);
-            grid.ResetPosition();
-            grid.Reposition();
-        }
+        //itemActionsMenu.Display(item);
     }
 
-    void GenerateItemActions(Item item, ScrollingGrid grid)
+    public void CloseItemActionsMenu()
     {
-        if (!item.itemFlags[ItemFlags.IS_EQUIPPED])
-        {
-            CreateEquipButton(item, grid);
-        }
-        else
-        {
-            CreateUnEquipButton(item, grid);
-        }
-        CreateUseButton(item, grid);
-        CreateEatButton(item, grid);
-        if (item.OnGround)
-        {
-            CreatePickUpButton(item, grid);
-        }
-        else
-        {
-            CreateDropButton(item, grid);
-        }
-        grid.ResetPosition();
-        //itemActionClip.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-        //itemActionClip.clipRange = new Vector4(500, -400, 200, 800);
-        grid.Reposition();
-    }
-
-    void CreateEquipButton(Item item, ScrollingGrid grid)
-    {
-        GUIButton itemButton = CreateObjectButton(item, grid, "Equip Item");
-        itemButton.OnSingleClick = new Action(() =>
-        {
-            Item i = itemButton.refObject as Item;
-            if (i.OnGround == true)
-            {
-                BigBoss.Player.Inventory.Add(i);
-                BigBoss.Player.GridSpace.Remove(i);
-                BigBoss.Gooey.OpenGroundGUI(currentChest);
-            }
-            BigBoss.Player.equipItem(i);
-            BigBoss.Gooey.RegenItemInfoGUI(i);
-        });
-    }
-
-    void CreateUnEquipButton(Item item, ScrollingGrid grid)
-    {
-        GUIButton itemButton = CreateObjectButton(item, grid, "UnEquip Item");
-        itemButton.OnSingleClick = new Action(() =>
-        {
-            Item i = itemButton.refObject as Item;
-            if (i != null)
-            {
-                BigBoss.Player.unequipItem(i);
-                BigBoss.Gooey.RegenItemInfoGUI(i);
-            }
-        });
-    }
-
-    void CreateUseButton(Item item, ScrollingGrid grid)
-    {
-        GUIButton itemButton = CreateObjectButton(item, grid, "Use Item");
-        itemButton.OnSingleClick = new Action(() =>
-        {
-            Item i = itemButton.refObject as Item;
-            BigBoss.Player.useItem(i);
-            BigBoss.Gooey.RegenItemInfoGUI(i);
-            BigBoss.Gooey.OpenInventoryGUI();
-        });
-    }
-
-    void CreateDropButton(Item item, ScrollingGrid grid)
-    {
-        GUIButton itemButton = CreateObjectButton(item, grid, "Drop Item");
-        itemButton.OnSingleClick = new Action(() =>
-        {
-            Item i = itemButton.refObject as Item;
-            BigBoss.Player.dropItem(i, BigBoss.Player.GridSpace);
-            BigBoss.Gooey.OpenInventoryGUI();
-            BigBoss.Gooey.OpenGroundGUI(currentChest);
-        });
-    }
-
-    void CreatePickUpButton(Item item, ScrollingGrid grid)
-    {
-        GUIButton itemButton = CreateObjectButton(item, grid, "Pick Up Item");
-        itemButton.OnSingleClick = new Action(() =>
-        {
-            Item i = itemButton.refObject as Item;
-            BigBoss.Player.pickUpItem(i, currentChest.Location);
-            BigBoss.Gooey.OpenGroundGUI(currentChest);
-            BigBoss.Gooey.OpenInventoryGUI();
-        });
-    }
-
-    void CreateEatButton(Item item, ScrollingGrid grid)
-    {
-        GUIButton itemButton = CreateObjectButton(item, grid, "Eat Item");
-        itemButton.OnSingleClick = new Action(() =>
-        {
-            Item i = itemButton.refObject as Item;
-            if (!i.OnGround)
-            {
-                BigBoss.Player.eatItem(i);
-                BigBoss.Gooey.OpenInventoryGUI();
-                BigBoss.Gooey.RegenItemInfoGUI(i);
-            }
-        });
+        //itemActionsMenu.Clear();
     }
 
     internal void CheckChestDistance()

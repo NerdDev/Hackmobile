@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// Base class for all UI components that should be derived from when creating new widget types.
 /// </summary>
 
-public abstract class UIWidget : MonoBehaviour
+public abstract class UIWidget : GUIElement
 {
 	public enum Pivot
 	{
