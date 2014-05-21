@@ -40,7 +40,6 @@ public class LevelGenerator
     public ProbabilityPool<ThemeSet> ThemeSetOptions;
     public System.Random Rand;
     public int Depth;
-    protected LayoutObjectContainer<GenSpace> RoomContainer = new LayoutObjectContainer<GenSpace>();
     protected LevelLayout Layout = new LevelLayout();
     protected List<Area> Areas = new List<Area>();
     private int _debugNum = 0;
@@ -186,7 +185,7 @@ public class LevelGenerator
         Theme t = a.Set.GetTheme(Rand);
         LayoutObject<GenSpace> room;
         t.GenerateRoom(this, a, out room);
-        Layout.Rooms.Add(room);
+        Layout.RoomContainer.Objects.Add(room);
         Layout.PutAll(room);
     }
 
@@ -201,7 +200,7 @@ public class LevelGenerator
         #endregion
         DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor());
         var layoutCopy = Layout.GetGrid().Array;
-        List<LayoutObject<GenSpace>> rooms = new List<LayoutObject<GenSpace>>(Layout.Rooms.Cast<LayoutObject<GenSpace>>());
+        List<LayoutObject<GenSpace>> rooms = new List<LayoutObject<GenSpace>>(Layout.RoomContainer.Objects.Cast<LayoutObject<GenSpace>>());
         var runningConnected = Container2D<GenSpace>.CreateArrayFromBounds(layoutCopy);
         // Create initial queue and visited
         var startingRoom = rooms.Take();
@@ -262,8 +261,8 @@ public class LevelGenerator
                 Point second = path.SecondEnd;
                 LayoutObject<GenSpace> leaf1, leaf2;
                 LayoutObject<GenSpace> pathObj = path.Bake(InitialTheme);
-                RoomContainer.ConnectTo(first, pathObj, first, out leaf1, out pathObj);
-                RoomContainer.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
+                Layout.AllContainer.ConnectTo(first, pathObj, first, out leaf1, out pathObj);
+                Layout.AllContainer.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
                 if (leaf1[first].Type == GridType.Wall)
                 {
                     InitialTheme.PlaceDoor(leaf1, first.x, first.y, Rand);
@@ -347,7 +346,7 @@ public class LevelGenerator
             startPoint = null;
             return false;
         }
-        if (!RoomContainer.GetObjAt(endPoint.x, endPoint.y, out hit))
+        if (!Layout.AllContainer.GetObjAt(endPoint.x, endPoint.y, out hit))
         {
             startPoint = null;
             return false;
@@ -410,7 +409,7 @@ public class LevelGenerator
             BigBoss.Debug.w(Logs.LevelGen, "Up: " + up + ", other stair " + otherStair);
         }
         #endregion
-        foreach (LayoutObject<GenSpace> obj in RoomContainer.Objects.Randomize(Rand))
+        foreach (LayoutObject<GenSpace> obj in Layout.RoomContainer.Objects.Randomize(Rand))
         {
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
