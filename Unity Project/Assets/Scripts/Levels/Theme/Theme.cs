@@ -159,7 +159,7 @@ public abstract class Theme : ThemeOption, IInitializable
     }
     #endregion
 
-    public abstract bool GenerateRoom(LevelGenerator gen, Area a);
+    public abstract bool GenerateRoom(LevelGenerator gen, Area a, out LayoutObject<GenSpace> room);
     
     protected LayoutObject<GenSpace> CreateRoom(LevelGenerator gen, Area a)
     {

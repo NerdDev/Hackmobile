@@ -38,9 +38,9 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme
         return Pillars;
     }
 
-    public override bool GenerateRoom(LevelGenerator gen, Area a)
+    public override bool GenerateRoom(LevelGenerator gen, Area a, out LayoutObject<GenSpace> room)
     {
-        var room = CreateRoom(gen, a);
+        room = CreateRoom(gen, a);
         if (!this.PlaceOrClusterAround(gen, a, room))
         {
             return false;
