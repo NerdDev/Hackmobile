@@ -99,6 +99,8 @@ public class GridTypeEnum
                 return 'F';
             case GridType.Enemy:
                 return 'E';
+            case GridType.Doodad:
+                return (char)239;
             default:
                 return '?';
         };

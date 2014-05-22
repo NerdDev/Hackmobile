@@ -40,7 +40,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridWidth: 5
   GridLength: 1
-  PrintChar: 
+  PrintChar: ':'
   Normal:
     Elements:
     - Multiplier: 1

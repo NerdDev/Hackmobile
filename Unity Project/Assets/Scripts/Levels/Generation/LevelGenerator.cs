@@ -92,7 +92,9 @@ public class LevelGenerator
             BigBoss.Debug.w(Logs.LevelGen, "Start time: " + time);
         }
         foreach (Action action in a)
+        {
             action();
+        }
         if (BigBoss.Debug.logging(Logs.LevelGenMain))
         {
             BigBoss.Debug.w(Logs.LevelGen, "End time: " + Time.realtimeSinceStartup + ", Total time: " + (Time.realtimeSinceStartup - time));
