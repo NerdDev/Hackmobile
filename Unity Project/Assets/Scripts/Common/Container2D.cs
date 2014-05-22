@@ -248,17 +248,19 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     {
         if (BigBoss.Debug.logging(log))
         {
-            BigBoss.Debug.printHeader(log, ToString());
-            foreach (string s in customContent)
+            string header = customContent.Length > 0 ? customContent[0] + " " : string.Empty;
+            header += ToString();
+            BigBoss.Debug.printHeader(log, header);
+            for (int i = 1; i < customContent.Length; i++)
             {
-                BigBoss.Debug.w(log, s);
+                BigBoss.Debug.w(log, customContent[i]);
             }
             foreach (string s in ToRowStrings(bounds, highlight, highlightChar))
             {
                 BigBoss.Debug.w(log, s);
             }
             BigBoss.Debug.w(log, "Bounds: " + Bounding.ToString());
-            BigBoss.Debug.printFooter(log, ToString());
+            BigBoss.Debug.printFooter(log, header);
         }
     }
     #endregion

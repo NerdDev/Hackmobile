@@ -56,7 +56,7 @@ public class LevelGenerator
         #endregion
         Log("Areas", true, GenerateAreas);
         GenerateComponents();
-        //Log("Confirm Connection", true, ConfirmConnection);
+        Log("Confirm Connection", true, ConfirmConnection);
         //Log("Place Stairs", true, PlaceStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
@@ -202,6 +202,12 @@ public class LevelGenerator
         Layout.RoomContainer.Objects.Add(room);
         Layout.PutAll(room);
         a.NumRoomsGenerated++;
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            Layout.ToLog(Logs.LevelGen, "After generating Room " + a.NumRoomsGenerated);
+        }
+        #endregion
     }
 
     #region Confirm Connection / Pathing
