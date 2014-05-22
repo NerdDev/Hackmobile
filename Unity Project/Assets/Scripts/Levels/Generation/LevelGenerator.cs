@@ -40,7 +40,7 @@ public class LevelGenerator
     public ProbabilityPool<ThemeSet> ThemeSetOptions;
     public System.Random Rand;
     public int Depth;
-    protected LevelLayout Layout = new LevelLayout();
+    public LevelLayout Layout = new LevelLayout();
     protected List<Area> Areas = new List<Area>();
     private int _debugNum = 0;
 
@@ -70,6 +70,11 @@ public class LevelGenerator
         return Layout;
     }
 
+    protected void NewLog(string name)
+    {
+        BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + ++_debugNum + " - " + name);
+    }
+
     protected void Log(string name, bool newLog, params Action[] a)
     {
         float time = 0;
@@ -81,7 +86,9 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             if (newLog)
-                BigBoss.Debug.CreateNewLog(Logs.LevelGen, "Level Depth " + Depth + "/" + Depth + " " + ++_debugNum + " - " + name);
+            {
+                NewLog(name);
+            }
             BigBoss.Debug.w(Logs.LevelGen, "Start time: " + time);
         }
         foreach (Action action in a)
@@ -126,13 +133,14 @@ public class LevelGenerator
                 areaObj.Shift(info.Shift);
             }
 
-            Area area = new Area()
+            Area area = new Area(i)
             {
                 Set = set,
                 NumRooms = Rand.NextNormalDist(set.MinRooms, set.MaxRooms),
                 Center = areaObj.ShiftP
             };
             Areas.Add(area);
+            Layout.AllContainer.Objects.Add(area);
             areaCont.Objects.Add(areaObj);
 
             #region DEBUG
@@ -182,11 +190,18 @@ public class LevelGenerator
 
     protected void GenerateArea(Area a)
     {
+        LayoutObject<GenSpace> room = new LayoutObject<GenSpace>("Room");
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            NewLog(a + " Room " + (a.NumRoomsGenerated + 1));
+        }
+        #endregion
         Theme t = a.Set.GetTheme(Rand);
-        LayoutObject<GenSpace> room;
-        t.GenerateRoom(this, a, out room);
+        t.GenerateRoom(this, a, room);
         Layout.RoomContainer.Objects.Add(room);
         Layout.PutAll(room);
+        a.NumRoomsGenerated++;
     }
 
     #region Confirm Connection / Pathing

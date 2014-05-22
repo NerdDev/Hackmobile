@@ -159,11 +159,10 @@ public abstract class Theme : ThemeOption, IInitializable
     }
     #endregion
 
-    public abstract bool GenerateRoom(LevelGenerator gen, Area a, out LayoutObject<GenSpace> room);
+    public abstract bool GenerateRoom(LevelGenerator gen, Area a, LayoutObject<GenSpace> room);
     
-    protected LayoutObject<GenSpace> CreateRoom(LevelGenerator gen, Area a)
+    protected LayoutObject<GenSpace> ModRoom(LevelGenerator gen, Area a, LayoutObject<GenSpace> room)
     {
-        LayoutObject<GenSpace> room = new LayoutObject<GenSpace>("Room");
         #region DEBUG
         double time = 0;
         if (BigBoss.Debug.logging(Logs.LevelGenMain))

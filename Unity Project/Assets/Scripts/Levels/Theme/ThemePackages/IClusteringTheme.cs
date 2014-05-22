@@ -37,8 +37,8 @@ public static class IClusteringThemeExt
         Container2D<T> entireGrid,
         LayoutObjectContainer<T> entireContainer,
         Container2D<T> clusterGrid,
-        ILayoutObject<T> cluster, 
-        LayoutObject<T> obj, 
+        ILayoutObject<T> cluster,
+        LayoutObject<T> obj,
         bool clusterByVolume)
         where T : IGridType
     {
@@ -65,8 +65,12 @@ public static class IClusteringThemeExt
             {
                 var tmp = new MultiMap<T>();
                 tmp.PutAll(obj.GetGrid());
+                tmp.PutAll(clusterGrid);
+                tmp.ToLog(Logs.LevelGen, "Starting cluster grid");
+                tmp = new MultiMap<T>();
+                tmp.PutAll(obj.GetGrid());
                 tmp.PutAll(entireGrid);
-                tmp.ToLog(Logs.LevelGen, "Starting placement");
+                tmp.ToLog(Logs.LevelGen, "Starting entire grid");
             }
             #endregion
             while (shiftQueue.Count > 0)
@@ -83,62 +87,81 @@ public static class IClusteringThemeExt
                 #endregion
                 // Test if pass
                 List<Point> intersectPoints = new List<Point>();
-                List<Point> clusterIntersectPoints = new List<Point>();
+                bool overlappingSomething = false;
+                bool intersectsCluster = false;
                 HashSet<LayoutObject<T>> intersectingObjs = null;
                 if (objGrid.DrawAll((arr, x, y) =>
-                {
+                { // Draw on moving object to detect intersection pts
                     if (GridTypeEnum.EdgeType(arr[x, y].GetGridType()))
                     {
-                        GridType otherType = entireGrid[x + curShift.x, y + curShift.y].GetGridType();
-                        if (otherType == GridType.NULL) return true;
-                        intersectPoints.Add(new Point(x, y));
-                        GridType clusterType = entireGrid[x + curShift.x, y + curShift.y].GetGridType();
-                        if (clusterType != GridType.NULL)
+                        GridType type = clusterGrid[x + curShift.x, y + curShift.y].GetGridType();
+                        if (type == GridType.NULL)
                         {
-                            clusterIntersectPoints.Add(new Point(x, y));
+                            type = entireGrid[x + curShift.x, y + curShift.y].GetGridType();
+                            if (type == GridType.NULL) return true;
                         }
-                        return GridTypeEnum.EdgeType(otherType);
+                        else
+                        {
+                            intersectsCluster = true;
+                        }
+                        // Touching something
+                        if (GridTypeEnum.EdgeType(type))
+                        {
+                            intersectPoints.Add(new Point(x, y));
+                        }
+                        else
+                        { // If not touching edge
+                            overlappingSomething = true;
+                            // If touching middle of cluster, not a good spots
+                            if (intersectsCluster) return false;
+                        }
+                        return true;
                     }
                     else
                     {
+                        // If center of moving object touching anything on grid, bad spot
                         return !entireGrid.Contains(x + curShift.x, y + curShift.y);
                     }
                 })
                     && intersectPoints.Count > 0)
-                { // Passed test
+                { // Found intersection points, and didnt overlap
+                    if (!intersectsCluster) continue;
                     // queue surrounding points
                     visited.DrawAround(curShift.x, curShift.y, true, Draw.Not(Draw.EqualTo(true)).IfThen(Draw.AddTo<bool>(shiftQueue).And(Draw.SetTo(true))));
 
-                    double multiplier;
-                    if (clusterByVolume)
+                    if (!overlappingSomething)
                     {
-                        multiplier = Math.Pow(intersectPoints.Count, 3);
-                    }
-                    else
-                    {
-                        intersectingObjs = new HashSet<LayoutObject<T>>();
-                        foreach (Point intersect in intersectPoints)
+                        double multiplier;
+                        if (clusterByVolume)
                         {
-                            LayoutObject<T> intersectObj;
-                            if (!clusterByVolume && entireContainer.GetObjAt(intersect.x + curShift.x, intersect.y + curShift.y, out intersectObj))
+                            multiplier = Math.Pow(intersectPoints.Count, 3);
+                        }
+                        else
+                        {
+                            intersectingObjs = new HashSet<LayoutObject<T>>();
+                            foreach (Point intersect in intersectPoints)
                             {
-                                intersectingObjs.Add(intersectObj);
+                                LayoutObject<T> intersectObj;
+                                if (!clusterByVolume && entireContainer.GetObjAt(intersect.x + curShift.x, intersect.y + curShift.y, out intersectObj))
+                                {
+                                    intersectingObjs.Add(intersectObj);
+                                }
                             }
+                            multiplier = Math.Pow(intersectingObjs.Count, 5);
                         }
-                        multiplier = Math.Pow(intersectingObjs.Count, 5);
-                    }
-                    shiftOptions.Add(new ClusterInfo() { Shift = curShift, Intersects = intersectPoints }, multiplier);
-                    #region Debug
-                    if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        BigBoss.Debug.w(Logs.LevelGen, "passed with " + intersectPoints.Count);
-                        if (!clusterByVolume)
+                        shiftOptions.Add(new ClusterInfo() { Shift = curShift, Intersects = intersectPoints }, multiplier);
+                        #region Debug
+                        if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                         {
-                            BigBoss.Debug.w(Logs.LevelGen, "intersected number of objs: " + intersectingObjs.Count);
+                            BigBoss.Debug.w(Logs.LevelGen, "passed with " + intersectPoints.Count);
+                            if (!clusterByVolume)
+                            {
+                                BigBoss.Debug.w(Logs.LevelGen, "intersected number of objs: " + intersectingObjs.Count);
+                            }
+                            BigBoss.Debug.w(Logs.LevelGen, "Mult " + multiplier);
                         }
-                        BigBoss.Debug.w(Logs.LevelGen, "Mult " + multiplier);
+                        #endregion
                     }
-                    #endregion
                 }
             }
         }
@@ -189,7 +212,7 @@ public static class IClusteringThemeExt
             BigBoss.Debug.printHeader("Cluster Around");
         }
         #endregion
-        ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions(cluster.GetGrid(), cluster, obj, true);
+        ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions(gen.Layout.Grids, gen.Layout.AllContainer, cluster.GetGrid(), cluster, obj, true);
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
         Container2D<GenSpace> clusterGrid = cluster.GetGrid();
