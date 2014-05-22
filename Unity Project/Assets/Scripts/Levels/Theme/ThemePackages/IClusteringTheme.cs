@@ -219,7 +219,7 @@ public static class IClusteringThemeExt
         var placed = new List<Value2D<GenSpace>>(0);
         while (shiftOptions.Take(gen.Rand, out info))
         {
-            clusterGrid.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
+            gen.Layout.Grids.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
