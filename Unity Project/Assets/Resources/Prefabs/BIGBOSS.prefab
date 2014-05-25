@@ -1533,7 +1533,7 @@ GameObject:
   - 114: {fileID: 11400120}
   - 54: {fileID: 5400002}
   m_Layer: 0
-  m_Name: BIGBOSS 2
+  m_Name: BIGBOSS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2072,7 +2072,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100268
 GameObject:
   m_ObjectHideFlags: 1
@@ -2091,7 +2091,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100270
 GameObject:
   m_ObjectHideFlags: 1
@@ -2540,7 +2540,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 533.333374, y: 400, z: 0}
+  m_LocalPosition: {x: 583.987427, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400244}
@@ -2553,7 +2553,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -533.333374, y: 400, z: 0}
+  m_LocalPosition: {x: -583.987427, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400256}
@@ -2565,7 +2565,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -533.333374, y: -400, z: 0}
+  m_LocalPosition: {x: -583.987427, y: -400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400328}
@@ -2578,7 +2578,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 533.333374, y: -400, z: 0}
+  m_LocalPosition: {x: 583.987427, y: -400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400310}
@@ -5029,11 +5029,11 @@ MonoBehaviour:
   mInvert: 0
   mFlip: 0
   mFillCenter: 1
-  centerType: 1
-  leftType: 1
-  rightType: 1
-  bottomType: 1
-  topType: 1
+  centerType: 0
+  leftType: 0
+  rightType: 0
+  bottomType: 0
+  topType: 0
 --- !u!114 &11400028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6964,7 +6964,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100268}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
@@ -7154,7 +7154,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100264}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
@@ -8496,7 +8496,7 @@ MonoBehaviour:
   tweenTarget: {fileID: 100268}
   hover: {r: .600000024, g: 1, b: .200000003, a: 1}
   pressed: {r: .5, g: .5, b: .5, a: 1}
-  disabledColor: {r: .5, g: .5, b: .5, a: 1}
+  disabledColor: {r: .5, g: .5, b: .5, a: 0}
   duration: .200000003
   dragHighlight: 0
   hoverSprite: 
@@ -8522,7 +8522,7 @@ MonoBehaviour:
   tweenTarget: {fileID: 100264}
   hover: {r: .600000024, g: 1, b: .200000003, a: 1}
   pressed: {r: .5, g: .5, b: .5, a: 1}
-  disabledColor: {r: .5, g: .5, b: .5, a: 1}
+  disabledColor: {r: .5, g: .5, b: .5, a: 0}
   duration: .200000003
   dragHighlight: 0
   hoverSprite: 
@@ -9617,7 +9617,7 @@ SphereCollider:
   m_GameObject: {fileID: 100264}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 25
   m_Center: {x: 0, y: 0, z: -.5}
@@ -9629,7 +9629,7 @@ SphereCollider:
   m_GameObject: {fileID: 100268}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 25
   m_Center: {x: 0, y: 0, z: -.5}
