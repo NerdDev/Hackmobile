@@ -12,7 +12,7 @@ public class CancelSpellButton : GUIButton
     {
         OnSingleClick = new Action(() =>
         {
-            BigBoss.Gooey.CancelSpell();
+            BigBoss.Gooey.CancelSpell(true);
         });
     }
 }

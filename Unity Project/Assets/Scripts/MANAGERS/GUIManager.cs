@@ -301,12 +301,13 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    internal void CancelSpell()
+    internal void CancelSpell(bool toggleCancel)
     {
         BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
         BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = false;
         currentSpell = null;
         spellMenu.ToggleCastButton(false);
+        if (toggleCancel) spellMenu.ToggleCancelButton(false);
         foreach (IAffectable target in spellTargets)
         {
             if (target is NPC)
@@ -326,7 +327,7 @@ public class GUIManager : MonoBehaviour, IManager
         {
             BigBoss.Player.CastSpell(currentSpell, spellTargets.ToArray());
         }
-        CancelSpell();
+        CancelSpell(false);
     }
 
     public void Target(IAffectable target)

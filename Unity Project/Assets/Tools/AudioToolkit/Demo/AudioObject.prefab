@@ -5,7 +5,7 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 3
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400002}
@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1002 &100001
 EditorExtensionImpl:
   serializedVersion: 6
@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!1002 &400001
@@ -102,25 +103,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 366085030, guid: 6c3fe97f7c7cf7840845cfee747751ac, type: 3}
+  m_Script: {fileID: 11500000, guid: d8cd7e379c2ccc242af04f0746d2d65b, type: 1}
   m_Name: 
-  AudioObjectPrefab: {fileID: 100000}
-  UsePooledAudioObjects: 1
-  PlayWithZeroVolume: 0
-  musicCrossFadeTime: 0
-  AudioCategories: []
-  musicPlaylist: []
-  loopPlaylist: 0
-  shufflePlaylist: 0
-  crossfadePlaylist: 0
-  delayBetweenPlaylistTracks: 1
-  _audioDisabled: 0
-  _volume: 1
-  _currentInspectorSelection:
-    currentCategoryIndex: -1
-    currentItemIndex: -1
-    currentSubitemIndex: -1
-    currentPlaylistIndex: 0
+--- !u!1002 &11400001
+EditorExtensionImpl:
+  serializedVersion: 6
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -129,8 +116,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -158209426, guid: 6c3fe97f7c7cf7840845cfee747751ac, type: 3}
+  m_Script: {fileID: 11500000, guid: afc3135f9b5f7b5478b3a0645904bd2c, type: 1}
   m_Name: 
+  maxPoolSize: 10
+  preloadCount: 0
+  doNotDestroyOnLoad: 0
+  sendAwakeStartOnDestroyMessage: 1
 --- !u!1002 &11400003
 EditorExtensionImpl:
   serializedVersion: 6

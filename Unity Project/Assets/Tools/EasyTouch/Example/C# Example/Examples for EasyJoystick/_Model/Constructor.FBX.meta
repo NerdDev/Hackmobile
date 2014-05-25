@@ -56,10 +56,10 @@ ModelImporter:
     100100: Bip001 Spine
     100102: Bip001 Spine1
     100104: construction_worker
-    100106: helmet_bone
-    100108: hip_adjustment_bone_left
-    100110: hip_adjustment_bone_right
-    100112: //RootNode
+    100106: //RootNode
+    100108: helmet_bone
+    100110: hip_adjustment_bone_left
+    100112: hip_adjustment_bone_right
     100114: wrench
     400000: Bip001
     400002: Bip001 Head
@@ -114,19 +114,19 @@ ModelImporter:
     400100: Bip001 Spine
     400102: Bip001 Spine1
     400104: construction_worker
-    400106: helmet_bone
-    400108: hip_adjustment_bone_left
-    400110: hip_adjustment_bone_right
-    400112: //RootNode
+    400106: //RootNode
+    400108: helmet_bone
+    400110: hip_adjustment_bone_left
+    400112: hip_adjustment_bone_right
     400114: wrench
     2300000: wrench
     3300000: wrench
     4300000: construction_worker
     4300002: wrench
-    7400020: idle
-    7400022: run
-    7400024: walk
-    7400026: jump_pose
+    7400012: idle
+    7400014: run
+    7400016: walk
+    7400018: jump_pose
     11100000: //RootNode
     13700000: construction_worker
   materials:
