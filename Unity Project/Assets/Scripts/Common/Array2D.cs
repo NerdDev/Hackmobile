@@ -136,7 +136,7 @@ public class Array2D<T> : Container2D<T>
         }
     }
 
-    public override bool DrawAll(DrawAction<T> call)
+    public override bool DrawAll(DrawAction<T> call, Container2D<T> on)
     {
         for (int y = 0; y < arr.GetLength(0); y++)
         {
@@ -144,7 +144,7 @@ public class Array2D<T> : Container2D<T>
             {
                 if (present[y, x])
                 {
-                    if (!call(this, x, y)) return false;
+                    if (!call(on, x, y)) return false;
                 }
             }
         }

@@ -24,20 +24,17 @@ public static class IClusteringThemeExt
     public const int SHIFT_RANGE = 10; //Max not inclusive
 
     public static ProbabilityPool<ClusterInfo> GenerateClusterOptions<T>(
-        Container2D<T> clusterGrid,
-        LayoutObjectContainer<T> cluster,
+        LayoutObject<T> cluster,
         LayoutObject<T> obj,
         bool clusterByVolume)
         where T : IGridType
     {
-        return GenerateClusterOptions(clusterGrid, cluster, clusterGrid, cluster, obj, clusterByVolume);
+        return GenerateClusterOptions(cluster, cluster, obj, clusterByVolume);
     }
 
     public static ProbabilityPool<ClusterInfo> GenerateClusterOptions<T>(
-        Container2D<T> entireGrid,
-        LayoutObjectContainer<T> entireContainer,
-        Container2D<T> clusterGrid,
-        ILayoutObject<T> cluster,
+        LayoutObject<T> entireContainer,
+        LayoutObject<T> cluster,
         LayoutObject<T> obj,
         bool clusterByVolume)
         where T : IGridType
@@ -49,7 +46,7 @@ public static class IClusteringThemeExt
         }
         #endregion
         ProbabilityList<ClusterInfo> shiftOptions = new ProbabilityList<ClusterInfo>();
-        List<LayoutObject<T>> items = cluster.Flatten();
+        List<LayoutObject<T>> items = new List<LayoutObject<T>>(cluster.Flatten(LayoutObjectType.Room));
         if (items.Count != 0)
         {
             obj.ShiftP = new Point(items[0].ShiftP);
@@ -59,17 +56,16 @@ public static class IClusteringThemeExt
             visited[0, 0] = true;
             Queue<Point> shiftQueue = new Queue<Point>();
             shiftQueue.Enqueue(new Point());
-            Container2D<T> objGrid = obj.GetGrid();
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 var tmp = new MultiMap<T>();
-                tmp.PutAll(obj.GetGrid());
-                tmp.PutAll(clusterGrid);
+                tmp.PutAll(cluster);
+                tmp.PutAll(obj);
                 tmp.ToLog(Logs.LevelGen, "Starting cluster grid");
                 tmp = new MultiMap<T>();
-                tmp.PutAll(obj.GetGrid());
-                tmp.PutAll(entireGrid);
+                tmp.PutAll(entireContainer);
+                tmp.PutAll(obj);
                 tmp.ToLog(Logs.LevelGen, "Starting entire grid");
             }
             #endregion
@@ -80,8 +76,8 @@ public static class IClusteringThemeExt
                 if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
                 {
                     var tmpMap = new MultiMap<T>();
-                    tmpMap.PutAll(entireGrid);
-                    tmpMap.PutAll(objGrid, curShift);
+                    tmpMap.PutAll(entireContainer);
+                    tmpMap.PutAll(obj, curShift);
                     tmpMap.ToLog(Logs.LevelGen, "Analyzing at shift " + curShift);
                 }
                 #endregion
@@ -178,14 +174,14 @@ public static class IClusteringThemeExt
         return shiftOptions;
     }
 
-    public static bool PlaceOrClusterAround<T>(this T theme, LevelGenerator gen, LayoutObjectContainer<GenSpace> clusterGroup, LayoutObject<GenSpace> obj)
+    public static bool PlaceOrClusterAround<T>(this T theme, LevelGenerator gen, LayoutObject<GenSpace> clusterGroup, LayoutObject<GenSpace> obj)
         where T : Theme, IClusteringTheme
     {
-        if (clusterGroup.Objects.Count == 0 || gen.Rand.Percent(theme.ClusterSplitPercentProperty))
+        if (clusterGroup.Child || gen.Rand.Percent(theme.ClusterSplitPercentProperty))
         {
             if (PlaceRoom(theme, gen, clusterGroup, obj))
             {
-                LayoutObjectContainer<GenSpace> cluster = new LayoutObjectContainer<GenSpace>();
+                LayoutObject<GenSpace> cluster = new LayoutObject<GenSpace>(LayoutObjectType.Cluster);
                 cluster.Objects.Add(obj);
                 clusterGroup.Objects.Add(cluster);
                 return true;
@@ -193,7 +189,7 @@ public static class IClusteringThemeExt
         }
         else
         {
-            LayoutObjectContainer<GenSpace> layoutObj = (LayoutObjectContainer<GenSpace>)clusterGroup.Objects.Random(gen.Rand);
+            LayoutObject<GenSpace> layoutObj = (LayoutObject<GenSpace>)clusterGroup.Objects.Random(gen.Rand);
             if (ClusterAround(theme, gen, layoutObj, obj))
             {
                 layoutObj.Objects.Add(obj);
@@ -203,7 +199,7 @@ public static class IClusteringThemeExt
         return false;
     }
 
-    public static bool ClusterAround<T>(this T theme, LevelGenerator gen, LayoutObjectContainer<GenSpace> cluster, LayoutObject<GenSpace> obj)
+    public static bool ClusterAround<T>(this T theme, LevelGenerator gen, LayoutObject<GenSpace> cluster, LayoutObject<GenSpace> obj)
         where T : Theme, IClusteringTheme
     {
         #region Debug
@@ -212,7 +208,7 @@ public static class IClusteringThemeExt
             BigBoss.Debug.printHeader("Cluster Around");
         }
         #endregion
-        ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions(gen.Layout.Grids, gen.Layout.AllContainer, cluster.GetGrid(), cluster, obj, true);
+        ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions(gen.Layout, cluster, obj, true);
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
         Container2D<GenSpace> clusterGrid = cluster.GetGrid();
@@ -275,7 +271,7 @@ public static class IClusteringThemeExt
         return placed.Count != 0;
     }
 
-    public static bool PlaceRoom<T>(this T theme, LevelGenerator gen, LayoutObjectContainer<GenSpace> area, LayoutObject<GenSpace> obj)
+    public static bool PlaceRoom<T>(this T theme, LevelGenerator gen, LayoutObject<GenSpace> area, LayoutObject<GenSpace> obj)
         where T : Theme, IClusteringTheme
     {
         #region DEBUG
@@ -284,11 +280,10 @@ public static class IClusteringThemeExt
             BigBoss.Debug.printHeader(Logs.LevelGen, "Place Rooms");
         }
         #endregion
-        if (area.Objects.Count != 0)
+        LayoutObject<GenSpace> startRoom;
+        if (area.RandomChild(gen.Rand, out startRoom))
         {
             // Find room it will start from
-            int roomNum = gen.Rand.Next(area.Objects.Count);
-            ILayoutObject<GenSpace> startRoom = area.Objects[roomNum];
             obj.CenterOn(startRoom);
             // Find where it will shift away
             Point shiftMagn = LevelGenerator.GenerateShiftMagnitude(SHIFT_RANGE, gen.Rand);
@@ -296,11 +291,11 @@ public static class IClusteringThemeExt
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.w(Logs.LevelGen, "Placing obj: " + obj);
-                BigBoss.Debug.w(Logs.LevelGen, "Picked starting obj number: " + roomNum);
+                startRoom.ToLog(Logs.LevelGen, "Starting on this");
                 BigBoss.Debug.w(Logs.LevelGen, "Shift: " + shiftMagn);
             }
             #endregion
-            obj.ShiftOutside(area.Objects, shiftMagn);
+            obj.ShiftOutside(area, shiftMagn);
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

@@ -56,7 +56,7 @@ public class LevelGenerator
         #endregion
         Log("Areas", true, GenerateAreas);
         GenerateComponents();
-        Log("Confirm Connection", true, ConfirmConnection);
+        //Log("Confirm Connection", true, ConfirmConnection);
         //Log("Place Stairs", true, PlaceStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
@@ -113,7 +113,7 @@ public class LevelGenerator
         }
         #endregion
 
-        LayoutObjectContainer<GridTypeObj> areaCont = new LayoutObjectContainer<GridTypeObj>();
+        LayoutObject<GridTypeObj> areaCont = new LayoutObject<GridTypeObj>();
         GridTypeObj floor = new GridTypeObj() { Type = GridType.Floor };
         GridTypeObj wall = new GridTypeObj() { Type = GridType.Wall };
 

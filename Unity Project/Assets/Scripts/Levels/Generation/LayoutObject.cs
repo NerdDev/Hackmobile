@@ -3,72 +3,59 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
+public class LayoutObject<T> : Container2D<T>
     where T : IGridType
 {
-    public Point ShiftP;
-    readonly HashSet<LayoutObject<T>> _connectedTo = new HashSet<LayoutObject<T>>();
     private static int _nextId = 0;
-    public virtual Container2D<T> Grids { get; set; }
-    public override Bounding Bounding
-    {
-        get
-        {
-            Bounding bound = Grids.Bounding;
-            AdjustBounding(bound, true);
-            return bound;
-        }
-    }
     public int Id { get; protected set; }
-    string _name;
-    public LayoutObject<T> Object { get { return this; } }
+    public LayoutObjectType Type { get; protected set; }
+    readonly HashSet<LayoutObject<T>> _connectedTo = new HashSet<LayoutObject<T>>();
+    protected Container2D<T> grids = new MultiMap<T>();
+    public override Bounding Bounding { get { return grids.Bounding; } }
+    protected List<LayoutObject<T>> children = new List<LayoutObject<T>>(0);
+    public bool Child { get { return children.Count == 0; } }
+    public int ChildCount { get { return children.Count; } }
+    public event Action<LayoutObject<T>, int, int> OnShifted;
+    public event Action<int, int, T> OnModifiedSpace;
 
-    public LayoutObject(String name)
+    public LayoutObject(LayoutObjectType type)
     {
-        _name = name;
+        this.Type = type;
         Id = _nextId++;
-        ShiftP = new Point();
-        Grids = new MultiMap<T>();
     }
 
     public override T this[int x, int y]
     {
         get
         {
-            return Grids[x - ShiftP.x, y - ShiftP.y];
+            return grids[x, y];
         }
         set
         {
-            Grids[x - ShiftP.x, y - ShiftP.y] = value;
+            grids[x, y] = value;
+            if (OnModifiedSpace != null)
+            {
+                OnModifiedSpace(x, y, value);
+            }
         }
     }
 
     public override void Shift(int x, int y)
     {
-        ShiftP.x += x;
-        ShiftP.y += y;
-    }
-
-    #region Bounds
-    public Bounding GetBounding(bool shifted)
-    {
-        Bounding bound = Grids.Bounding;
-        AdjustBounding(bound, true);
-        return bound;
-    }
-
-    protected void AdjustBounding(Bounding bound, bool toExternal)
-    {
-        if (toExternal)
+        grids.Shift(x, y);
+        if (OnShifted != null)
         {
-            bound.Shift(ShiftP);
-        }
-        else
-        {
-            bound.Shift(ShiftP.Invert());
+            OnShifted(this, x, y);
         }
     }
-    #endregion Bounds
+
+    public void AddChild(LayoutObject<T> rhs)
+    {
+        children.Add(rhs);
+        PutAll(rhs);
+        rhs.OnModifiedSpace += (x, y, t) => this[x, y] = t;
+        rhs.OnShifted += (l, x, y) => { throw new NotImplementedException(); };
+    }
 
     public Container2D<T> GetConnectedGrid()
     {
@@ -81,7 +68,9 @@ public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
         List<LayoutObject<T>> connected = ConnectedToAll();
         var arrOut = new MultiMap<T>();
         foreach (var obj in connected)
-            arrOut.PutAll(obj.Grids, obj.ShiftP);
+        {
+            arrOut.PutAll(obj.grids);
+        }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
         {
@@ -104,9 +93,14 @@ public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
         }
     }
 
+    public bool RandomChild(System.Random rand, out LayoutObject<T> rhs)
+    {
+        return children.Random(rand, out rhs);
+    }
+
     public virtual bool ContainsPoint(Point pt)
     {
-        return Grids.Contains(pt - ShiftP);
+        return grids.Contains(pt);
     }
 
     public List<LayoutObject<T>> ConnectedToAll()
@@ -212,7 +206,7 @@ public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
     #region Printing
     public override string ToString()
     {
-        return _name + " " + Id;
+        return Type + " " + Id;
     }
 
     protected string printContent()
@@ -227,7 +221,7 @@ public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
 
     protected virtual List<string> ToRowStrings()
     {
-        return Grids.ToRowStrings(Grids.Bounding.Shift(ShiftP));
+        return grids.ToRowStrings();
     }
 
     public virtual void ToLog(Logs log, params String[] customContent)
@@ -239,7 +233,7 @@ public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
             {
                 BigBoss.Debug.w(log, s);
             }
-            Bounding bounds = GetBounding(true);
+            Bounding bounds = Bounding;
             foreach (string s in ToRowStrings(bounds))
             {
                 BigBoss.Debug.w(log, s);
@@ -257,17 +251,12 @@ public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
     }
     #endregion Printing
 
-    protected bool Equals(LayoutObject<T> other)
-    {
-        return Id == other.Id;
-    }
-
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((LayoutObject<T>)obj);
+        LayoutObject<T> rhs = obj as LayoutObject<T>;
+        if (rhs == null) return false;
+        return this.Id == rhs.Id;
     }
 
     public override int GetHashCode()
@@ -287,84 +276,67 @@ public class LayoutObject<T> : Container2D<T>, ILayoutObject<T>
 
     public override IEnumerator<Value2D<T>> GetEnumerator()
     {
-        foreach (var val in Grids)
-        {
-            val.x += ShiftP.x;
-            val.y += ShiftP.y;
-            yield return val;
-        }
+        return grids.GetEnumerator();
     }
 
     public override IEnumerable<T> GetEnumerateValues()
     {
-        return Grids.GetEnumerateValues();
+        return grids.GetEnumerateValues();
     }
 
     #region Container2D
     public override bool TryGetValue(int x, int y, out T val)
     {
-        return Grids.TryGetValue(x - ShiftP.x, y - ShiftP.y, out val);
+        return grids.TryGetValue(x, y, out val);
     }
 
-    public override int Count
-    {
-        get { return Grids.Count; }
-    }
+    public override int Count { get { return grids.Count; } }
 
-    public override Array2D<T> Array
-    {
-        get 
-        {
-            Point tmp = new Point(ShiftP);
-            Grids.Shift(ShiftP);
-            var arr = Grids.Array;
-            Grids.Shift(-tmp);
-            return arr;
-        }
-    }
+    public override Array2D<T> Array { get { return grids.Array; } }
 
     public override bool Contains(int x, int y)
     {
-        return Grids.Contains(x - ShiftP.x, y - ShiftP.y);
+        return grids.Contains(x, y);
     }
 
     public override bool InRange(int x, int y)
     {
-        return Grids.Contains(x - ShiftP.x, y - ShiftP.y);
-    }
-
-    public override bool DrawAll(DrawAction<T> call)
-    {
-        return Grids.DrawAll(call);
+        return grids.InRange(x, y);
     }
 
     public override void Clear()
     {
-        Grids.Clear();
+        grids.Clear();
     }
 
     public override Array2DRaw<T> RawArray(out Point shift)
     {
-        var ret = Grids.RawArray(out shift);
-        shift += ShiftP;
-        return ret;
+        return grids.RawArray(out shift);
     }
 
     public override bool Remove(int x, int y)
     {
-        return Grids.Remove(x - ShiftP.x, y - ShiftP.y);
+        return grids.Remove(x, y);
     }
     #endregion
 
-    public Container2D<T> GetGrid()
+    public IEnumerable<LayoutObject<T>> Flatten(LayoutObjectType type)
     {
-        var map = new MultiMap<T>();
-        map.PutAll(Grids, ShiftP);
-        return map;
+        if (Type == type)
+        {
+            yield return this;
+        }
+        foreach (LayoutObject<T> obj in children)
+        {
+            foreach (var target in obj.Flatten(type))
+            {
+                yield return target;
+            }
+        }
     }
 
-    public List<LayoutObject<T>> Flatten()
+    public override bool DrawAll(DrawAction<T> call, Container2D<T> on)
     {
-        return new List<LayoutObject<T>>(new[] { this });
+        grids.DrawAll(call, on);
     }
 }

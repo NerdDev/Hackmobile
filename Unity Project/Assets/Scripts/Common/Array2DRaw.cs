@@ -91,7 +91,7 @@ public class Array2DRaw<T> : Container2D<T>
         }
     }
 
-    public override bool DrawAll(DrawAction<T> call)
+    public override bool DrawAll(DrawAction<T> call, Container2D<T> rhs)
     {
         throw new NotImplementedException();
     }

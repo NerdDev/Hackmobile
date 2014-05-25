@@ -229,13 +229,13 @@ public class MultiMap<T> : Container2D<T>
         }
     }
 
-    public override bool DrawAll(DrawAction<T> call)
+    public override bool DrawAll(DrawAction<T> call, Container2D<T> on)
     {
         foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
         {
             foreach (KeyValuePair<int, T> val in row.Value)
             {
-                if (!call(this, val.Key, row.Key)) return false;
+                if (!call(on, val.Key, row.Key)) return false;
             }
         }
         return true;

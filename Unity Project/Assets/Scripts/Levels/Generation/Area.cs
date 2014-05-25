@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LevelGen
 {
-    public class Area : LayoutObjectContainer<GenSpace>
+    public class Area : LayoutObject<GenSpace>
     {
         public ThemeSet Set;
         public int NumRooms;
@@ -14,6 +14,7 @@ namespace LevelGen
         private int id;
 
         public Area(int num)
+            : base(LayoutObjectType.Area)
         {
             this.id = num;
         }

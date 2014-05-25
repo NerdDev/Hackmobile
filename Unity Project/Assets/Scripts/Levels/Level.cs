@@ -25,7 +25,7 @@ public class Level : Container2D<GridSpace>
 
     public void LoadRoomMaps(LevelLayout layout)
     {
-        foreach (LayoutObject<GenSpace> room in layout.RoomContainer.Objects)
+        foreach (LayoutObject<GenSpace> room in layout.Object)
         {
             var roomMap = new MultiMap<GridSpace>();
             RoomMaps.Add(roomMap);
@@ -99,9 +99,9 @@ public class Level : Container2D<GridSpace>
         return map.InRange(x, y);
     }
 
-    public override bool DrawAll(DrawAction<GridSpace> call)
+    public override bool DrawAll(DrawAction<GridSpace> call, Container2D<GridSpace> rhs)
     {
-        return map.DrawAll(call);
+        return map.DrawAll(call, rhs);
     }
 
     public override void Clear()
