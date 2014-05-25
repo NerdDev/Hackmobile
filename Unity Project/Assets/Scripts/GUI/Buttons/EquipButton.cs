@@ -15,12 +15,11 @@ public class EquipButton : ItemButton
                 {
                     BigBoss.Player.Inventory.Add(i);
                     BigBoss.Player.GridSpace.Remove(i);
-                    BigBoss.Gooey.OpenGroundGUI();
+                    BigBoss.Gooey.ground.Open();
                 }
                 BigBoss.Player.equipItem(i);
-                BigBoss.Gooey.OpenInventoryGUI();
-                BigBoss.Gooey.OpenItemMenu(i);
-                BigBoss.Gooey.OpenItemActionsMenu(i);
+                BigBoss.Gooey.inventory.Open();
+                BigBoss.Gooey.itemMenu.Open(i);
             });
         }
         else
@@ -31,9 +30,8 @@ public class EquipButton : ItemButton
                 if (i != null)
                 {
                     BigBoss.Player.unequipItem(i);
-                    BigBoss.Gooey.OpenInventoryGUI();
-                    BigBoss.Gooey.OpenItemMenu(i);
-                    BigBoss.Gooey.OpenItemActionsMenu(i);
+                    BigBoss.Gooey.inventory.Open();
+                    BigBoss.Gooey.itemMenu.Open(i);
                 }
             });
         }

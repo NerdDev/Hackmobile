@@ -699,6 +699,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400092}
+  - 95: {fileID: 9500000}
   m_Layer: 0
   m_Name: HairB
   m_TagString: Untagged
@@ -1269,6 +1270,20 @@ Transform:
   - {fileID: 400090}
   - {fileID: 400088}
   m_Father: {fileID: 0}
+--- !u!95 &9500000
+Animator:
+  serializedVersion: 2
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100092}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: c76eaf4aa490a2c4e97b95e62fbaac33, type: 3}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 1
+  m_ApplyRootMotion: 1
+  m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -1293,7 +1308,7 @@ SkinnedMeshRenderer:
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
-  m_Mesh: {fileID: 4300000, guid: ed0e87b9c04b3bf409ba914b444d9077, type: 3}
+  m_Mesh: {fileID: 4300000, guid: c76eaf4aa490a2c4e97b95e62fbaac33, type: 3}
   m_Bones:
   - {fileID: 400056}
   m_BlendShapeWeights: []

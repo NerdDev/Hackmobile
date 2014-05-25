@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 /*   
  * As long as this isn't an MMO, this Player class should be able to hold most if not all of player information.
@@ -36,13 +37,13 @@ public class Player : NPC
     public override void addToInventory(Item item, int count)
     {
         base.addToInventory(item, count);
-        BigBoss.Gooey.OpenInventoryGUI();
+        BigBoss.Gooey.inventory.Open();
     }
 
     public override void removeFromInventory(Item item, int count)
     {
         base.removeFromInventory(item, count);
-        BigBoss.Gooey.OpenInventoryGUI();
+        BigBoss.Gooey.inventory.Open();
     }
     #endregion
 
@@ -53,7 +54,7 @@ public class Player : NPC
         if (BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT])
         {
             BigBoss.Gooey.displayInventory = !BigBoss.Gooey.displayInventory;
-            BigBoss.Gooey.OpenInventoryGUI();
+            BigBoss.Gooey.inventory.Open();
         }
     }
     #endregion
@@ -62,6 +63,11 @@ public class Player : NPC
     {
         PlayerStats.Load(this, NPCFlags.HUMAN);
         CalcStats();
+        List<Spell> spells = KnownSpells.Values.ToList();
+        for (int i = 0; i < spells.Count; i++)
+        {
+            BigBoss.Gooey.spellMenu.Set(spells[i], i);
+        }
 
         BigBoss.Gooey.UpdateMaxPower(this.Stats.MaxPower);
         BigBoss.Gooey.UpdatePowerBar(this.Stats.MaxPower);

@@ -1,12 +1,12 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
 
-[AddComponentMenu("NGUI/Examples/Drag and Drop Item")]
-public class DragDropItem : MonoBehaviour
+[AddComponentMenu("NGUI/Examples/Drag and Drop Item (Example)")]
+public class ExampleDragDropItem : UIDragDropItem
 {
 	/// <summary>
 	/// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
@@ -14,97 +14,34 @@ public class DragDropItem : MonoBehaviour
 
 	public GameObject prefab;
 
-	Transform mTrans;
-	bool mIsDragging = false;
-	Transform mParent;
-
 	/// <summary>
-	/// Update the table, if there is one.
+	/// Drop a 3D game object onto the surface.
 	/// </summary>
 
-	void UpdateTable ()
+	protected override void OnDragDropRelease (GameObject surface)
 	{
-		UITable table = NGUITools.FindInParents<UITable>(gameObject);
-		if (table != null) table.repositionNow = true;
-	}
-
-	/// <summary>
-	/// Drop the dragged object.
-	/// </summary>
-
-	void Drop ()
-	{
-		// Is there a droppable container?
-		Collider col = UICamera.lastHit.collider;
-		DragDropContainer container = (col != null) ? col.gameObject.GetComponent<DragDropContainer>() : null;
-
-		if (container != null)
+		if (surface != null)
 		{
-			// Container found -- parent this object to the container
-			mTrans.parent = container.transform;
+			ExampleDragDropSurface dds = surface.GetComponent<ExampleDragDropSurface>();
 
-			Vector3 pos = mTrans.localPosition;
-			pos.z = 0f;
-			mTrans.localPosition = pos;
-		}
-		else
-		{
-			// No valid container under the mouse -- revert the item's parent
-			mTrans.parent = mParent;
-		}
-
-		// Notify the table of this change
-		UpdateTable();
-
-		// Make all widgets update their parents
-		NGUITools.MarkParentAsChanged(gameObject);
-	}
-
-	/// <summary>
-	/// Cache the transform.
-	/// </summary>
-
-	void Awake () { mTrans = transform; }
-
-	/// <summary>
-	/// Start the drag event and perform the dragging.
-	/// </summary>
-
-	void OnDrag (Vector2 delta)
-	{
-		if (enabled && UICamera.currentTouchID > -2)
-		{
-			if (!mIsDragging)
+			if (dds != null)
 			{
-				mIsDragging = true;
-				mParent = mTrans.parent;
-				mTrans.parent = DragDropRoot.root;
+				GameObject child = NGUITools.AddChild(dds.gameObject, prefab);
+				child.transform.localScale = dds.transform.localScale;
+
+				Transform trans = child.transform;
+				trans.position = UICamera.lastHit.point;
+
+				if (dds.rotatePlacedObject)
+				{
+					trans.rotation = Quaternion.LookRotation(UICamera.lastHit.normal) * Quaternion.Euler(90f, 0f, 0f);
+				}
 				
-				Vector3 pos = mTrans.localPosition;
-				pos.z = 0f;
-				mTrans.localPosition = pos;
-
-				NGUITools.MarkParentAsChanged(gameObject);
-			}
-			else
-			{
-				mTrans.localPosition += (Vector3)delta;
+				// Destroy this icon as it's no longer needed
+				NGUITools.Destroy(gameObject);
+				return;
 			}
 		}
-	}
-
-	/// <summary>
-	/// Start or stop the drag operation.
-	/// </summary>
-
-	void OnPress (bool isPressed)
-	{
-		if (enabled)
-		{
-			mIsDragging = false;
-			Collider col = collider;
-			if (col != null) col.enabled = !isPressed;
-			if (!isPressed) Drop();
-		}
+		base.OnDragDropRelease(surface);
 	}
 }

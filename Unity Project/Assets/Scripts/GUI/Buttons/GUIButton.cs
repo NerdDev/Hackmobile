@@ -27,8 +27,6 @@ public class GUIButton : UIButton
         }
     }
 
-    public UIDragPanelContents UIDragPanel;
-
     internal System.Object refObject;
 
     private Action _OnClick;
@@ -37,7 +35,7 @@ public class GUIButton : UIButton
         get { if (_OnClick == null) _OnClick = new Action(() => { }); return _OnClick; }
         set { _OnClick = value; }
     }
-    void OnClick()
+    protected override void OnClick()
     {
         OnSingleClick();
     }
@@ -48,7 +46,7 @@ public class GUIButton : UIButton
         get { if (_OnDoubleClick == null) _OnDoubleClick = new Action(() => { }); return _OnDoubleClick; }
         set { _OnDoubleClick = value; }
     }
-    void OnDoubleClick()
+    protected void OnDoubleClick()
     {
         On2Clicks();
     }
@@ -59,7 +57,7 @@ public class GUIButton : UIButton
         get { if (_OnPress == null) _OnPress = new Action<bool>((b) => { }); return _OnPress; }
         set { _OnPress = value; }
     }
-    public override void OnPress(bool onPress)
+    protected override void OnPress(bool onPress)
     {
         if (usePress)
         {
@@ -68,7 +66,7 @@ public class GUIButton : UIButton
         }
     }
 
-    public override void OnHover(bool isOver)
+    protected override void OnHover(bool isOver)
     {
         if (useHover)
         {
@@ -76,9 +74,14 @@ public class GUIButton : UIButton
         }
     }
 
+    public override void Initialize()
+    {
+        base.Initialize();
+    }
+
     public void Fix()
     {
-        this.label.MakePixelPerfect();
+        //this.label.MakePixelPerfect();
         this.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
         this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
     }

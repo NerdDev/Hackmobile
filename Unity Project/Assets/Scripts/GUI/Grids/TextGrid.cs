@@ -12,7 +12,6 @@ public class TextGrid : ScrollingGrid
     void Awake()
     {
         GridPanel = GetComponentInChildren<UIPanel>();
-        DragPanel = GetComponentInChildren<UIDraggablePanel>();
         ScrollPanel = GetComponentInChildren<UIScrollBar>();
 
         Grid = GetComponentInChildren<KGrid>();
@@ -65,5 +64,19 @@ public class TextGrid : ScrollingGrid
         GridPanel.transform.localPosition = Vector3.zero;
         Grid.Reposition();
         GridPanel.transform.localPosition = Vector3.zero;
+    }
+
+    public override void Clear()
+    {
+        foreach (GUIButton g in labels)
+        {
+            g.gameObject.SetActive(false);
+        }
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        Reposition();
     }
 }

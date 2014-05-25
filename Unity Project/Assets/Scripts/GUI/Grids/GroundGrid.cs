@@ -28,14 +28,12 @@ public class GroundGrid : ScrollingGrid
                 }
             }
             CreateCloseLabel();
-            this.ResetPosition();
             this.Reposition();
         }
         else
         {
             this.Clear();
-            BigBoss.Gooey.CloseItemMenu();
-            BigBoss.Gooey.CloseItemActionsMenu();
+            BigBoss.Gooey.itemMenu.Close();
         }
     }
 
@@ -53,7 +51,7 @@ public class GroundGrid : ScrollingGrid
             if ((itemButton.refObject as Item).Count > 0)
             {
                 displayItem = true;
-                BigBoss.Gooey.OpenItemMenu(itemButton.refObject as Item);
+                BigBoss.Gooey.itemMenu.Open(itemButton.refObject as Item);
             }
         });
     }
@@ -65,10 +63,9 @@ public class GroundGrid : ScrollingGrid
         {
             BigBoss.Gooey.category = "";
             BigBoss.Gooey.categoryDisplay = false;
-            BigBoss.Gooey.CloseGroundMenu();
+            BigBoss.Gooey.ground.Close();
             BigBoss.Gooey.displayItem = false;
-            BigBoss.Gooey.CloseItemActionsMenu();
-            BigBoss.Gooey.CloseItemMenu();
+            BigBoss.Gooey.itemMenu.Close();
         });
     }
 }

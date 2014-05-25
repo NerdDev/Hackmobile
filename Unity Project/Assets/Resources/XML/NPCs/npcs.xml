@@ -424,23 +424,6 @@
 			<heads>1</heads>
 			<!-- body is implicitly assumed -->
 		</bodyparts>
-		<spells>
-			<spell>
-				<name>Fireball</name>
-				<range>5</range>
-				<targeter>
-					<type>TargetedObjects</type>
-					<effect>
-						<type>FireBallVisual</type>
-						<speed>2</speed>
-					</effect>
-					<effect>
-						<type>DamageFire</type>
-						<strength>10</strength>
-					</effect>
-				</targeter>
-			</spell>
-		</spells>
 		<startingitems>
 			<entry>
 				<item>sword1</item>

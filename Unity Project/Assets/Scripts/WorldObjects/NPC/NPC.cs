@@ -733,6 +733,7 @@ public class NPC : Affectable
         {
             spell.Activate(this, targets);
             AdjustPower(-spell.cost);
+            if (this is Player) BigBoss.Gooey.spellMenu.ToggleCancelButton(false);
         }), BigBoss.Time.spellCost, true, false);
     }
 
@@ -1063,14 +1064,14 @@ public class NPC : Affectable
         }
         else if (BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT])
         {
-            if (this.DistanceToTarget(BigBoss.Player) > BigBoss.Gooey.GetCurrentSpellRange())
-            {
-                CreateTextMessage(this.Name + " is too far away to cast this spell!");
-            }
-            else
-            {
+            //if (this.DistanceToTarget(BigBoss.Player) > BigBoss.Gooey.GetCurrentSpellRange())
+            //{
+            //    CreateTextMessage(this.Name + " is too far away to cast this spell!");
+            //}
+            //else
+            //{
                 BigBoss.Gooey.Target(this);
-            }
+            //}
         }
     }
     #endregion

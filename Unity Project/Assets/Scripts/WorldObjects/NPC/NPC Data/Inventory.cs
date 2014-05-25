@@ -5,6 +5,15 @@ public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
 {
     int weight = 0;
 
+    internal bool hasGUIUpdates = false;
+    internal InventoryGrid invGrid = null;
+
+    private void UpdateGUI()
+    {
+        if (hasGUIUpdates && invGrid != null)
+            invGrid.Initialize();
+    }
+
     public void Add(Item i)
     {
         InventoryCategory ic;
@@ -15,6 +24,7 @@ public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
         }
         ic.Add(i);
         weight += i.stats.Weight;
+        UpdateGUI();
     }
 
     public bool Remove(Item i)
@@ -28,6 +38,7 @@ public class Inventory : Dictionary<string, InventoryCategory>, IXmlParsable
             }
             if (cate.Count == 0) this.Remove(cate.id);
         }
+        UpdateGUI();
         return false;
     }
 

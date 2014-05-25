@@ -20,7 +20,7 @@ public class GUIManager : MonoBehaviour, IManager
     private Queue<TextPop> textPopList = new Queue<TextPop>();
 
     internal ItemChest currentChest;
-    internal string currentSpell;
+    internal Spell currentSpell;
     internal GUIButton selectedButton;
 
     internal bool categoryDisplay = false;
@@ -39,14 +39,10 @@ public class GUIManager : MonoBehaviour, IManager
     #region Publicly populated variables from scene
     public InventoryMenu inventory;
     public ItemMenu itemMenu;
-
+    public SpellMenu spellMenu;
     public GroundMenu ground;
+    public TextMenu text;
 
-    public ScrollingGrid InventoryGrid;
-    public ScrollingGrid ItemActionsGrid;
-    public ScrollingGrid GroundItemsGrid;
-    public ScrollingGrid ItemInfoGrid;
-    public ScrollingGrid SpellCastGrid;
     public TextGrid ChatGrid;
     public GUIProgressBar HealthBar;
     public GUIProgressBar ManaBar;
@@ -124,28 +120,6 @@ public class GUIManager : MonoBehaviour, IManager
         });
     }
 
-    public void OpenSpellGUI()
-    {
-        //RegenSpellGUI(SpellCastGrid);
-    }
-
-    public void OpenInventoryGUI()
-    {
-        inventory.Display();
-    }
-
-    public void OpenGroundGUI(ItemChest chest)
-    {
-        displayInventory = true;
-        //ground.Display(chest);
-    }
-
-    public void OpenGroundGUI()
-    {
-        displayInventory = true;
-        //ground.Display(ground.chest);
-    }
-
     public void DisplayLoading()
     {
         LoadImage.enabled = true;
@@ -170,30 +144,6 @@ public class GUIManager : MonoBehaviour, IManager
     {
         BigBoss.Player.dropItem(i, ground.chest.Location);
     }
-
-    /*
-    public void OpenInventoryUI()
-    {
-        //Calling tween pos script on panel object
-        invPanelTweenPos.duration = .75f;
-        invPanelTweenPos.from = new Vector3(inventoryPanel.transform.localPosition.x, inventoryPanel.transform.localPosition.y, 0);//wrap these up into variables
-        invPanelTweenPos.to = new Vector3(160f, inventoryPanel.transform.localPosition.y, 0);//wrap these up into variables
-        invPanelTweenPos.Reset();
-        invPanelTweenPos.Play(true);
-        isInventoryOpen = true;
-    }
-
-    public void CloseInventoryUI()
-    {
-        //Calling tween pos script on panel object
-        invPanelTweenPos.duration = .35f;
-        invPanelTweenPos.from = new Vector3(inventoryPanel.transform.localPosition.x, inventoryPanel.transform.localPosition.y, 0);//wrap these up into variables
-        invPanelTweenPos.to = new Vector3(600, inventoryPanel.transform.localPosition.y, 0);//wrap these up into variables
-        invPanelTweenPos.Reset();
-        invPanelTweenPos.Play(true);
-        isInventoryOpen = false;
-    }
-    */
 
     #region Misc Graphical
 
@@ -277,11 +227,10 @@ public class GUIManager : MonoBehaviour, IManager
 
     public void CreateTextMessage(string message, Color col)
     {
-        /*
         GameObject button = Instantiate(LabelPrefab) as GameObject;
         GUIButton label = button.GetComponent<GUIButton>();
         label.Text = message;
-        label.UIDragPanel.draggablePanel = ChatGrid.DragPanel;
+        //label.UIDragPanel.draggablePanel = ChatGrid.DragPanel;
         ChatGrid.AddLabel(label);
         try
         {
@@ -293,7 +242,6 @@ public class GUIManager : MonoBehaviour, IManager
             Debug.Log(e.Source);
             Debug.Log(e.StackTrace);
         }
-         */
     }
 
     public void CreateTextPop(Vector3 worldPosition, string message, Color col)
@@ -335,70 +283,50 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    internal void RegenSpellGUI(ScrollingGrid grid)
+    internal void SetToSpellCasting(Spell spell)
     {
-        if (displaySpells)
+        Debug.Log("Setting spellcasting mode to: " + spell.ToString());
+        if (BigBoss.Player.Stats.CurrentPower > 0)
         {
-            grid.gameObject.SetActive(true);
-            grid.Clear();
-            foreach (string key in BigBoss.Player.KnownSpells.Keys)
-            {
-                GUIButton spellButton = CreateObjectButton(key, grid, key);
-                spellButton.OnSingleClick = new Action(() =>
-                {
-                    currentSpell = spellButton.refObject as string;
-                    if (BigBoss.Player.Stats.CurrentPower > GetCurrentSpellCost())
-                    {
-                        BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = false;
-                        BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = true;
-                        spellButton.defaultColor = spellButton.hover;
-                        selectedButton = spellButton;
-                        spellButton.UpdateColor(true, true);
-                    }
-                    else
-                    {
-                        CreateTextPop(BigBoss.PlayerInfo.transform.position, "You do not have enough power to cast " + currentSpell + "!");
-                        currentSpell = null;
-                    }
-                });
-            }
-            GUIButton cancelSpellButton = CreateButton(grid, "Cancel Spell");
-            cancelSpellButton.OnSingleClick = new Action(() =>
-                {
-                    BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
-                    BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = false;
-                    currentSpell = null;
-                    selectedButton.defaultColor = cancelSpellButton.defaultColor;
-                    selectedButton.UpdateColor(true, true);
-
-                });
-            GUIButton castSpellButton = CreateButton(grid, "Cast Spell");
-            castSpellButton.OnSingleClick = new Action(() =>
-            {
-                BigBoss.Player.CastSpell(currentSpell, spellTargets.ToArray());
-                BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
-                BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = false;
-                foreach (IAffectable target in spellTargets)
-                {
-                    if (target is NPC)
-                    {
-                        foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
-                        {
-                            block.renderer.sharedMaterial = NormalShaderGridspace;
-                        }
-                    }
-                }
-                spellTargets.Clear();
-                currentSpell = null;
-                selectedButton.defaultColor = cancelSpellButton.defaultColor;
-                selectedButton.UpdateColor(true, true);
-            });
-            grid.Reposition();
+            currentSpell = spell;
+            BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = false;
+            BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = true;
+            spellMenu.ToggleCastButton(true);
+            spellMenu.ToggleCancelButton(true);
         }
         else
         {
-            grid.Clear();
+            CreateTextPop(BigBoss.PlayerInfo.transform.position, "You do not have enough power to cast " + currentSpell + "!");
+            currentSpell = null;
         }
+    }
+
+    internal void CancelSpell()
+    {
+        BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
+        BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = false;
+        currentSpell = null;
+        spellMenu.ToggleCastButton(false);
+        foreach (IAffectable target in spellTargets)
+        {
+            if (target is NPC)
+            {
+                foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
+                {
+                    block.renderer.sharedMaterial = NormalShaderGridspace;
+                }
+            }
+        }
+        spellTargets.Clear();
+    }
+
+    internal void CastSpell()
+    {
+        if (currentSpell != null)
+        {
+            BigBoss.Player.CastSpell(currentSpell, spellTargets.ToArray());
+        }
+        CancelSpell();
     }
 
     public void Target(IAffectable target)
@@ -437,24 +365,6 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    public int GetCurrentSpellRange()
-    {
-        if (BigBoss.Player.KnownSpells.ContainsKey(currentSpell))
-        {
-            return BigBoss.Player.KnownSpells[currentSpell].range;
-        }
-        return 0;
-    }
-
-    public int GetCurrentSpellCost()
-    {
-        if (BigBoss.Player.KnownSpells.ContainsKey(currentSpell))
-        {
-            return BigBoss.Player.KnownSpells[currentSpell].cost;
-        }
-        return 0;
-    }
-
     GUIButton CreateButton(string buttonName = "Button", string buttonText = null)
     {
         GameObject button = Instantiate(ButtonPrefab) as GameObject;
@@ -469,7 +379,7 @@ public class GUIManager : MonoBehaviour, IManager
     {
         if (buttonText == null) buttonText = buttonName;
         GUIButton button = CreateButton(buttonName, buttonText);
-        button.UIDragPanel.draggablePanel = grid.DragPanel;
+       // button.UIDragPanel.draggablePanel = grid.DragPanel;
         grid.AddButton(button);
         return button.GetComponent<GUIButton>();
     }
@@ -481,31 +391,6 @@ public class GUIManager : MonoBehaviour, IManager
         return button;
     }
 
-    public void OpenItemMenu(Item item)
-    {
-        itemMenu.Display(item);
-    }
-
-    public void CloseItemMenu()
-    {
-        itemMenu.Clear();
-    }
-
-    public void CloseGroundMenu()
-    {
-        //itemMenu.Clear();
-    }
-
-    public void OpenItemActionsMenu(Item item)
-    {
-        //itemActionsMenu.Display(item);
-    }
-
-    public void CloseItemActionsMenu()
-    {
-        //itemActionsMenu.Clear();
-    }
-
     internal void CheckChestDistance()
     {
         if (currentChest != null)
@@ -513,7 +398,7 @@ public class GUIManager : MonoBehaviour, IManager
             if (!BigBoss.Gooey.currentChest.CheckDistance())
             {
                 BigBoss.Gooey.currentChest = null;
-                BigBoss.Gooey.OpenGroundGUI(null);
+                BigBoss.Gooey.ground.Close();
             }
         }
     }

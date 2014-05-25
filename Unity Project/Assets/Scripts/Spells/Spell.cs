@@ -5,6 +5,7 @@ using System.Linq;
 public class Spell : IXmlParsable
 {
     protected SpellCastInfo info;
+    public string Icon = "";
     public int range = 0;
     public int cost = 0;
     protected SpellCastInfo CastInfo
@@ -48,6 +49,7 @@ public class Spell : IXmlParsable
     {
         range = spell.SelectInt("range");
         cost = spell.SelectInt("cost");
+        Icon = spell.SelectString("icon", "");
         // If no targeter specified, assume self
         AddAspect(new Self(), GetEffects(spell.SelectList("effect")));
 

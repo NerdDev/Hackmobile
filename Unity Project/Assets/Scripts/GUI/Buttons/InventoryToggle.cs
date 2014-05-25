@@ -17,6 +17,7 @@ public class InventoryToggle : MonoBehaviour
 
     void OnClick()
     {
+        /*
         bool newState = invMenu.gameObject.activeSelf;
 
         if (!newState)
@@ -27,6 +28,15 @@ public class InventoryToggle : MonoBehaviour
         {
             NGUITools.SetActive(invMenu.gameObject, false);
             NGUITools.SetActive(itemMenu.gameObject, false);
+        }
+         */
+        if (BigBoss.Gooey.inventory.isActive)
+        {
+            BigBoss.Gooey.inventory.Close();
+        }
+        else
+        {
+            BigBoss.Gooey.inventory.Open();
         }
     }
 }

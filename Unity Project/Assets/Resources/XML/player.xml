@@ -38,6 +38,7 @@
 		</bodyparts>
 		<spells>
 			<spell name="Firebolt">
+				<icon>Crystal Ball_02</icon>	
 				<range>5</range>
 				<targeter type="TargetedObjects">
 					<effect type="TargetedObject">
@@ -55,6 +56,7 @@
 			</spell>
 			<spell>
 				<name>Poison</name>
+				<icon>fireball-acid-1</icon>
 				<range>5</range>
 				<cost>30</cost>
 				<targeter>
@@ -68,6 +70,7 @@
 			</spell>
 			<spell>
 				<name>Levitate</name>
+				<icon>protect-eerie-3</icon>
 				<range>2</range>
 				<cost>5</cost>
 				<targeter>
@@ -81,6 +84,7 @@
 			</spell>
 			<spell>
 				<name>Invisibility</name>
+				<icon>protect-blue-3</icon>
 				<range>4</range>
 				<cost>5</cost>
 				<targeter>

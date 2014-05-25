@@ -8,9 +8,11 @@ class CircleLabel : UILabel
 {
     public List<GameObject> sprites;
 
+    public float radii = 80f;
+
     void Start()
     {
-        PlaceInCircle(sprites, transform.localPosition, 70f);
+        PlaceInCircle(sprites, transform.localPosition, radii);
     }
 
     public void PlaceInCircle(List<GameObject> objs, Vector3 center, float radius)

@@ -11,4 +11,9 @@ public class GroundMenu : GUIMenu
         this.chest = chest;
         base.Display();
     }
+
+    public void Open(ItemChest chest)
+    {
+        Display(chest);
+    }
 }

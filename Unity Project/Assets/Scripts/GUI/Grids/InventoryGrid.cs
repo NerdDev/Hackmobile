@@ -8,16 +8,24 @@ public class InventoryGrid : ScrollingGrid
     string category = "";
     bool displayItem;
 
+    internal Inventory inv;
+    void Start()
+    {
+        inv = BigBoss.Player.Inventory;
+        inv.hasGUIUpdates = true;
+        inv.invGrid = this;
+    }
+
     public override void Initialize()
     {
         base.Initialize();
-        if (this.parent.displayMenu)
+        if (this.parent.displayMenu && inv != null)
         {
             this.gameObject.SetActive(true);
             this.Clear();
             if (!categoryDisplay)
             {
-                foreach (InventoryCategory ic in BigBoss.Player.Inventory.Values)
+                foreach (InventoryCategory ic in inv.Values)
                 {
                     CreateCategoryButton(ic);
                 }
@@ -25,14 +33,19 @@ public class InventoryGrid : ScrollingGrid
             else
             {
                 InventoryCategory ic;
-                if (BigBoss.Player.Inventory.TryGetValue(category, out ic))
+                if (inv.TryGetValue(category, out ic))
                 {
                     foreach (Item item in ic.Values)
                     {
                         CreateItemButton(item);
                     }
+                    CreateBackLabel();
                 }
-                CreateBackLabel();
+                else
+                {
+                    Close();
+                    return;
+                }
             }
             this.Reposition();
         }
@@ -46,6 +59,15 @@ public class InventoryGrid : ScrollingGrid
     {
         base.Clear();
         //BigBoss.Gooey.CloseItemMenu();
+    }
+
+    public void Close()
+    {
+        category = "";
+        categoryDisplay = false;
+        displayItem = false;
+        Initialize();
+        BigBoss.Gooey.itemMenu.Close();
     }
 
     void CreateCategoryButton(InventoryCategory ic)
@@ -73,7 +95,7 @@ public class InventoryGrid : ScrollingGrid
             if ((itemButton.refObject as Item).Count > 0)
             {
                 displayItem = true;
-                BigBoss.Gooey.OpenItemMenu(itemButton.refObject as Item);
+                BigBoss.Gooey.itemMenu.Open(itemButton.refObject as Item);
             }
         });
     }
@@ -83,11 +105,7 @@ public class InventoryGrid : ScrollingGrid
         GUIButton button = BigBoss.Gooey.CreateButton(this, "BackButton", "Back");
         button.OnSingleClick = new Action(() =>
         {
-            category = "";
-            categoryDisplay = false;
-            Initialize();
-            displayItem = false;
-            BigBoss.Gooey.CloseItemMenu();
+            Close();
         });
     }
 }

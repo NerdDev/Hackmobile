@@ -12,10 +12,9 @@ public class DropPickUpButton : ItemButton
             OnSingleClick = new Action(() =>
             {
                 BigBoss.Gooey.pickUpItem(i);
-                BigBoss.Gooey.OpenGroundGUI();
-                BigBoss.Gooey.OpenInventoryGUI();
-                BigBoss.Gooey.OpenItemMenu(i);
-                BigBoss.Gooey.OpenItemActionsMenu(i);
+                BigBoss.Gooey.ground.Open();
+                BigBoss.Gooey.inventory.Open();
+                BigBoss.Gooey.itemMenu.Open(i);
             });
         }
         else
@@ -24,10 +23,9 @@ public class DropPickUpButton : ItemButton
             OnSingleClick = new Action(() =>
             {
                 BigBoss.Gooey.dropItem(i);
-                BigBoss.Gooey.OpenGroundGUI();
-                BigBoss.Gooey.OpenInventoryGUI();
-                BigBoss.Gooey.OpenItemMenu(i);
-                BigBoss.Gooey.OpenItemActionsMenu(i);
+                BigBoss.Gooey.ground.Open();
+                BigBoss.Gooey.inventory.Open();
+                BigBoss.Gooey.itemMenu.Open(i);
             });
         }
     }

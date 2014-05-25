@@ -12,9 +12,8 @@ public class EatItemButton : ItemButton
             {
                 this.isEnabled = true;
                 BigBoss.Player.eatItem(i);
-                BigBoss.Gooey.OpenInventoryGUI();
-                BigBoss.Gooey.OpenItemMenu(i);
-                BigBoss.Gooey.OpenItemActionsMenu(i);
+                BigBoss.Gooey.inventory.Open();
+                BigBoss.Gooey.itemMenu.Open(i);
             }
             else
             {

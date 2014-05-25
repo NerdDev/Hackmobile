@@ -105,8 +105,8 @@ public class KGrid : GUIElement
             }
         }
 
-        UIDraggablePanel drag = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
-        if (drag != null) drag.UpdateScrollbars(true);
+        //UIDraggablePanel drag = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
+        //if (drag != null) drag.UpdateScrollbars(true);
     }
 
     public void AddButton(GUIButton button)

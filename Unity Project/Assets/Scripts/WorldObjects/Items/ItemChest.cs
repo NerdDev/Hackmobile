@@ -33,7 +33,7 @@ public class ItemChest : MonoBehaviour
     {
         if (CheckDistance())
         {
-            BigBoss.Gooey.OpenGroundGUI(this);
+            BigBoss.Gooey.ground.Open(this);
         }
     }
 

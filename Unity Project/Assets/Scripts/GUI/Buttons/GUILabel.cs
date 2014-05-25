@@ -24,33 +24,12 @@ public class GUILabel : UIButton
         }
     }
 
-    public UIDragPanelContents UIDragPanel;
-
-    public override void OnHover(bool isOver)
+    protected override void OnHover(bool isOver)
     {
-        //base.OnHover(isOver);
     }
 
-    public override void OnPress(bool isPressed)
+    protected override void OnPress(bool isPressed)
     {
-        //base.OnPress(isPressed);
-    }
-
-    void OnClick()
-    {
-        BigBoss.Gooey.DisplayChatGrid = !BigBoss.Gooey.DisplayChatGrid;
-        if (BigBoss.Gooey.DisplayChatGrid)
-        {
-            BigBoss.Gooey.ChatGrid.GridPanel.clipRange = new Vector4(50, -400, 500, 800);
-            BigBoss.Gooey.ChatGrid.displayLimit = 20;
-            BigBoss.Gooey.ChatGrid.repositionNow = true;
-        }
-        else
-        {
-            BigBoss.Gooey.ChatGrid.GridPanel.clipRange = new Vector4(50, -75, 500, 140);
-            BigBoss.Gooey.ChatGrid.displayLimit = 5;
-            BigBoss.Gooey.ChatGrid.repositionNow = true;
-        }
     }
 
     public void Fix()

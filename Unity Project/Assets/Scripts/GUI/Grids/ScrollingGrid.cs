@@ -5,7 +5,6 @@ using UnityEngine;
 public class ScrollingGrid : GUIElement
 {
     public UIPanel GridPanel;
-    public UIDraggablePanel DragPanel;
     public UIScrollBar ScrollPanel;
     public KGrid Grid;
     public bool InitiallyActive = false;
@@ -13,7 +12,6 @@ public class ScrollingGrid : GUIElement
     void Awake()
     {
         GridPanel = GetComponentInChildren<UIPanel>();
-        DragPanel = GetComponentInChildren<UIDraggablePanel>();
         ScrollPanel = GetComponentInChildren<UIScrollBar>();
 
         Grid = GetComponentInChildren<KGrid>();
@@ -32,11 +30,6 @@ public class ScrollingGrid : GUIElement
     public virtual void Reposition()
     {
         this.Grid.Reposition();
-    }
-
-    public void ResetPosition()
-    {
-        this.DragPanel.ResetPosition();
     }
 
     public void AddButton(GUIButton button)

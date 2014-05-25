@@ -8,7 +8,7 @@ public class OpenInventoryButton : GUIButton
         base.Initialize();
         OnSingleClick = new Action(() =>
         {
-            BigBoss.Gooey.OpenInventoryGUI();
+            BigBoss.Gooey.inventory.Open();
         });
     }
 }

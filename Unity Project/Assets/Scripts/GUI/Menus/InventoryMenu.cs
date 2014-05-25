@@ -4,5 +4,9 @@ using UnityEngine;
 
 public class InventoryMenu : GUIMenu
 {
-    private bool inv = false;
+    public override void Close()
+    {
+        base.Close();
+        if (BigBoss.Gooey.itemMenu.isActive) BigBoss.Gooey.itemMenu.Close();
+    }
 }

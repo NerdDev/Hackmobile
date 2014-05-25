@@ -204,7 +204,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400026}
-  - 95: {fileID: 9500000}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -379,20 +378,6 @@ Transform:
   - {fileID: 400024}
   - {fileID: 400022}
   m_Father: {fileID: 0}
---- !u!95 &9500000
-Animator:
-  serializedVersion: 2
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100026}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 4cace073f356106459c6adad7fe0085c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 1
-  m_ApplyRootMotion: 1
-  m_AnimatePhysics: 0
-  m_HasTransformHierarchy: 1
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -405,7 +390,7 @@ SkinnedMeshRenderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 2f26df555d971cf4abfa54bb711012de, type: 2}
+  - {fileID: 2100000, guid: ecaa359bd3f86d64a9769bf8170c7988, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0

@@ -28,9 +28,12 @@ public class Registerable<T> where T : new()
     public void Register(object obj, Action<T, T> action)
     {
         events.Add(obj, action);
-        foreach (Action<T, T> act in events.Values)
+        if (item != null)
         {
-            act(new T(), item);
+            foreach (Action<T, T> act in events.Values)
+            {
+                act(new T(), item);
+            }
         }
     }
 
@@ -42,5 +45,15 @@ public class Registerable<T> where T : new()
     public void Unregister(object obj)
     {
         events.Remove(obj);
+    }
+
+    public void UnregisterAll()
+    {
+        events.Clear();
+    }
+
+    public bool AreObjectsRegistered()
+    {
+        return events.Keys.Count == 0;
     }
 }
