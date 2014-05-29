@@ -39,12 +39,13 @@
 		<spells>
 			<spell name="Firebolt">
 				<icon>Crystal Ball_02</icon>	
-				<range>5</range>
+				<range>10</range>
+				<cost>20</cost>
 				<targeter type="TargetedObjects">
 					<effect type="TargetedObject">
-						<speed>2</speed>
-						<startvisual>FX/Fireball</startvisual>
-						<finishvisual>FX/FireballExplosion</finishvisual>
+						<speed>5</speed>
+						<startvisual>FX/FT_MagicEffects_volume02/_Prefab/Projectile03</startvisual>
+						<finishvisual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</finishvisual>
 					</effect>
 					<effect type="DamageFire">
 						<strength>
@@ -54,15 +55,15 @@
 					</effect>
 				</targeter>
 			</spell>
-			<spell>
-				<name>Poison</name>
+			<spell name="Poison">
 				<icon>fireball-acid-1</icon>
-				<range>5</range>
+				<range>8</range>
 				<cost>30</cost>
-				<targeter>
-					<type>TargetedObjects</type>
-					<effect>
-						<type>PoisonDamageEffect</type>
+				<targeter type="TargetedObjects">
+					<effect type="OnObject">
+						<finishvisual>FX/DynamicElements_Effects/DarknessEffects/DeathExplosion</finishvisual>\
+					</effect>
+					<effect type="PoisonDamageEffect">
 						<strength>4</strength>
 						<turns>5</turns>
 					</effect>

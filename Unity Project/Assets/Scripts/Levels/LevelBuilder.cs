@@ -83,7 +83,7 @@ public class LevelBuilder : MonoBehaviour
         blocks.Add(obj);
         combineCounter++;
 
-        if (combineCounter > 20)
+        if (combineCounter > 40)
         {
             Combine();
             blocks.Clear();

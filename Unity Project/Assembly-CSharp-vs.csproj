@@ -501,6 +501,7 @@
      <Compile Include="Assets\Tools\Fog of War\FoW\FOWRenderers.cs" />
      <Compile Include="Assets\Tools\Fog of War\FoW\FOWRevealer.cs" />
      <Compile Include="Assets\Tools\Fog of War\FoW\FOWSystem.cs" />
+     <Compile Include="Assets\Tools\Fog of War\FoW\FOWVisibility.cs" />
      <Compile Include="Assets\Tools\MeshBaker\Examples\BakeTexturesAtRuntime\BakeTexturesAtRuntime.cs" />
      <Compile Include="Assets\Tools\MeshBaker\Examples\SceneDynamicAddDelete\MB_DynamicAddDeleteExample.cs" />
      <Compile Include="Assets\Tools\MeshBaker\Examples\SceneRuntimeExample\MB_Example.cs" />

@@ -7,11 +7,27 @@ public struct Damage : IXmlParsable
 {
     public int min;
     public int max;
+    public int median;
+
+    public Damage(int min, int max, int median)
+    {
+        this.min = min;
+        this.max = max;
+        this.median = median;
+    }
 
     public Damage(int min, int max)
     {
         this.min = min;
         this.max = max;
+        median = 0;
+    }
+
+    public Damage(int median)
+    {
+        this.min = 0;
+        this.max = 0;
+        this.median = median;
     }
 
     public void SetMin(int min)
@@ -27,7 +43,14 @@ public struct Damage : IXmlParsable
     public int GetDamage()
     {
         //damage calc?
-        return (min + (int) (UnityEngine.Random.value * (max - min)));
+        if (min == 0 && max == 1 && median != 0)
+        {
+            return median;
+        }
+        else
+        {
+            return (min + (int)(UnityEngine.Random.value * (max - min)));
+        }
     }
 
     public void ParseXML(XMLNode x)

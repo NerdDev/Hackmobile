@@ -1530,7 +1530,6 @@ GameObject:
   - 4: {fileID: 400194}
   - 114: {fileID: 11400124}
   - 114: {fileID: 11400122}
-  - 114: {fileID: 11400120}
   - 54: {fileID: 5400002}
   m_Layer: 0
   m_Name: BIGBOSS
@@ -6507,43 +6506,6 @@ MonoBehaviour:
   GUICam: {fileID: 2000002}
   HeroCam: {fileID: 2000000}
   fow: {fileID: 11400090}
---- !u!114 &11400120
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1374685535, guid: f22c2bae7d3934637aeece17197d22ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cruncherTargets:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  cmc:
-    removeTJunctions: 1
-    removeTJunctionsThreshold: .100000001
-    joinVertices: 1
-    joinVerticesThreshold: 9.99999975e-05
-    joinUvs: 0
-    joinUvsThreshold: 9.99999975e-05
-    joinNormals: 0
-    joinNormalsThreshold: 60
-    recalculateNormals: 0
 --- !u!114 &11400122
 MonoBehaviour:
   m_ObjectHideFlags: 1

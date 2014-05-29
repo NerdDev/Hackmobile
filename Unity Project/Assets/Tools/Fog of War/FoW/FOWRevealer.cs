@@ -14,10 +14,18 @@ public class FOWRevealer : MonoBehaviour
     Transform mTrans;
 
     /// <summary>
-    /// Radius of the area being revealed. Everything below X is always revealed. Everything up to Y may or may not be revealed.
+    /// Radius of the area being revealed. Everything below X is always revealed. Everything up to Y 
+    /// is revealed based upon LOS calculations.
     /// </summary>
 
     public Vector2 range = new Vector2(2f, 30f);
+
+    /// <summary>
+    /// The fade range used  to lerp Color calculations between two competing objects. Before this range,
+    /// the main factor of the visible area is set to white. After this range, it fades away the coloring
+    /// to imitate a natural shadow and blends with any other visible buffer areas.
+    /// </summary>
+    public float fadeRange = 15f;
 
     /// <summary>
     /// Radius of the area being occluded.
@@ -39,6 +47,18 @@ public class FOWRevealer : MonoBehaviour
     /// </summary>
 
     public bool isActive = true;
+
+    /// <summary>
+    /// What type of buffer this revealer builds into. The Baked buffer builds into the permanent layer 'underneath'
+    /// the dynamic layer. Use the Baked layer for stationary objects and the Dynamic buffer for moving objects.
+    /// </summary>
+    public FOWSystem.Buffer Buffer = FOWSystem.Buffer.BAKED;
+
+    /// <summary>
+    /// Whether this uses a special set of calculations that are based around visible and viewed areas that other objects
+    /// display into separately.
+    /// </summary>
+    public bool Special = false;
 
     FOWSystem.Revealer mRevealer;
 
@@ -70,7 +90,9 @@ public class FOWRevealer : MonoBehaviour
             mRevealer.outer = range.y;
             mRevealer.los = lineOfSightCheck;
             mRevealer.revDist = RevealDistance;
+            mRevealer.buffer = Buffer;
             mRevealer.isActive = true;
+            mRevealer.Special = Special;
         }
         else
         {

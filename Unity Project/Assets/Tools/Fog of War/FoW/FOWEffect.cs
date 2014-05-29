@@ -86,8 +86,8 @@ public class FOWEffect : MonoBehaviour
 		//Transform t = mFog.transform;
 		//float x = t.position.x - mFog.worldSize * 0.5f;
 		//float z = t.position.z - mFog.worldSize * 0.5f;
-        float x = -256f + mFog.HeightOffsetX / 4;
-        float z = -256f + mFog.HeightOffsetY / 4;
+        float x = mFog.lowerRange.x + mFog.HeightOffsetX / 4;
+        float z = mFog.lowerRange.z + mFog.HeightOffsetY / 4;
 
 		if (mMat == null)
 		{
@@ -112,7 +112,6 @@ public class FOWEffect : MonoBehaviour
 				camPos.w = 1f;
 			}
 		}
-
 		Vector4 p = new Vector4(-x * invScale, -z * invScale, invScale, mFog.blendFactor);
 		mMat.SetColor("_Unexplored", unexploredColor);
 		mMat.SetColor("_Explored", exploredColor);

@@ -26,6 +26,12 @@ public class FOWSystem : MonoBehaviour
         EveryUpdate,
     }
 
+    public enum Buffer
+    {
+        BAKED,
+        DYNAMIC,
+    }
+
     public class Revealer
     {
         public bool isActive = false;
@@ -33,11 +39,14 @@ public class FOWSystem : MonoBehaviour
         public Vector3 pos = Vector3.zero;
         public float inner = 0f;
         public float outer = 0f;
+        public float fade = 0f;
         public bool[] cachedBuffer;
         public int cachedSize = 0;
         public int cachedX = 0;
         public int cachedY = 0;
         public float revDist = 55;
+        public Buffer buffer = Buffer.BAKED;
+        public bool Special = false;
     }
 
     public enum State
@@ -69,6 +78,7 @@ public class FOWSystem : MonoBehaviour
     protected Color32[] mBuffer0;
     protected Color32[] mBuffer1;
     protected Color32[] mBuffer2;
+    protected Color32[] mBuffer3;
 
     // Two textures -- we'll be blending between them in the shader
     protected Texture2D mTexture0;
@@ -211,6 +221,7 @@ public class FOWSystem : MonoBehaviour
         mBuffer0 = new Color32[size];
         mBuffer1 = new Color32[size];
         mBuffer2 = new Color32[size];
+        mBuffer3 = new Color32[size];
 
         // Create the height grid
         //CreateGrid();
@@ -397,6 +408,18 @@ public class FOWSystem : MonoBehaviour
         return Mathf.Clamp(val, 0, 255);
     }
 
+    public Color32[] GetBuffer(Buffer buffer)
+    {
+        switch (buffer)
+        {
+            case Buffer.BAKED:
+                return mBuffer3;
+            case Buffer.DYNAMIC:
+                return mBuffer1;
+        }
+        return mBuffer1;
+    }
+
     /// <summary>
     /// Create the heightmap grid using the default technique (raycasting).
     /// </summary>
@@ -436,7 +459,7 @@ public class FOWSystem : MonoBehaviour
         }
     }
 
-    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 4, float raycastRadius = .1f)
+    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 4, float raycastRadius = 0f)
     {
         bool useSphereCast = raycastRadius > 0f;
 
@@ -587,6 +610,8 @@ public class FOWSystem : MonoBehaviour
 
         int radius = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
 
+        Color32[] mBuffer = GetBuffer(r.buffer);
+
         for (int y = ymin; y < ymax; ++y)
         {
             if (y > -1 && y < textureSize)
@@ -602,7 +627,7 @@ public class FOWSystem : MonoBehaviour
                         int dist = xd * xd + yd * yd;
 
                         // Reveal this pixel
-                        if (dist < radius) mBuffer1[x + yw].r = 255;
+                        if (dist < radius) mBuffer[x + yw].r = 255;
                     }
                 }
             }
@@ -630,10 +655,13 @@ public class FOWSystem : MonoBehaviour
         cy = Mathf.Clamp(cy, 0, textureSize - 1);
 
         int minRange = Mathf.RoundToInt(r.inner * r.inner * worldToTex * worldToTex);
+        int fadeRange;
         int maxRange = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
         int gh = WorldToGridHeight(r.pos.y);
         int variance = Mathf.RoundToInt(Mathf.Clamp01(margin / (heightRange.y - heightRange.x)) * 255);
         Color32 white = new Color32(255, 255, 255, 255);
+
+        Color32[] mBuffer = GetBuffer(r.buffer);
 
         for (int y = ymin; y < ymax; ++y)
         {
@@ -648,24 +676,74 @@ public class FOWSystem : MonoBehaviour
                         int dist = xd * xd + yd * yd;
                         int index = x + y * textureSize;
 
-                        if (dist < minRange || (cx == x && cy == y))
+                        if (!r.Special)
                         {
-                            mBuffer1[index] = white;
-                        }
-                        else if (dist < maxRange)
-                        {
-                            Vector2 v = new Vector2(xd, yd);
-                            v.Normalize();
-                            v *= r.inner;
-
-                            int sx = cx + Mathf.RoundToInt(v.x);
-                            int sy = cy + Mathf.RoundToInt(v.y);
-
-                            if (sx > -1 && sx < textureSize &&
-                                sy > -1 && sy < textureSize &&
-                                IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                            if (dist < minRange || (cx == x && cy == y))
                             {
-                                mBuffer1[index] = white;
+                                mBuffer[index] = white;
+                            }
+                            else if (dist < maxRange)
+                            {
+                                Vector2 v = new Vector2(xd, yd);
+                                v.Normalize();
+                                v *= r.inner;
+
+                                int sx = cx + Mathf.RoundToInt(v.x);
+                                int sy = cy + Mathf.RoundToInt(v.y);
+
+                                if (sx > -1 && sx < textureSize &&
+                                    sy > -1 && sy < textureSize &&
+                                    IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                                {
+                                    white.r = (byte)Mathf.Clamp(255 - (int)Math.Sqrt(dist) * 7, 0, 255);
+                                    mBuffer[index] = white;
+                                    white.r = 255;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (cx == x && cy == y)
+                            {
+                                mBuffer[index] = white;
+                            }
+                            else if (dist < minRange)
+                            {
+                                Vector2 v = new Vector2(xd, yd);
+                                v.Normalize();
+                                v *= r.inner;
+
+                                int sx = cx + Mathf.RoundToInt(v.x);
+                                int sy = cy + Mathf.RoundToInt(v.y);
+
+                                if (sx > -1 && sx < textureSize &&
+                                    sy > -1 && sy < textureSize &&
+                                    IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                                {
+
+                                    white.r = (byte)Mathf.Clamp((255 - (int)Math.Sqrt(dist) * 9) + mBuffer3[index].r, 0, 255);
+                                    //white.r += mBuffer3[index].r;
+                                    mBuffer[index] = white;
+                                    white.r = 255;
+                                }
+                            }
+                            else if (dist < maxRange)
+                            {
+                                Vector2 v = new Vector2(xd, yd);
+                                v.Normalize();
+                                v *= r.inner;
+
+                                int sx = cx + Mathf.RoundToInt(v.x);
+                                int sy = cy + Mathf.RoundToInt(v.y);
+
+                                if (sx > -1 && sx < textureSize &&
+                                    sy > -1 && sy < textureSize &&
+                                    IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                                {
+                                    //white.r = (byte)Mathf.Clamp(255 - (int)Math.Sqrt(dist) * 7, 0, 255);
+                                    mBuffer[index] = mBuffer3[index];
+                                    //white.r = 255;
+                                }
                             }
                         }
                     }
@@ -673,6 +751,7 @@ public class FOWSystem : MonoBehaviour
             }
         }
     }
+
 
     /// <summary>
     /// Reveal the map using a cached result.
@@ -683,6 +762,7 @@ public class FOWSystem : MonoBehaviour
         if (r.cachedBuffer == null) RevealIntoCache(r, worldToTex);
 
         Color32 white = new Color32(255, 255, 255, 255);
+        Color32[] mBuffer = GetBuffer(r.buffer);
 
         for (int y = r.cachedY, ymax = r.cachedY + r.cachedSize; y < ymax; ++y)
         {
@@ -699,7 +779,7 @@ public class FOWSystem : MonoBehaviour
 
                         if (r.cachedBuffer[cachedIndex])
                         {
-                            mBuffer1[x + by] = white;
+                            mBuffer[x + by] = white;
                         }
                     }
                 }
@@ -849,7 +929,7 @@ public class FOWSystem : MonoBehaviour
 
                 if (c.g < c.r)
                 {
-                    c.g = c.r;
+                    //c.g = c.r;
                     mBuffer1[index] = c;
                 }
             }
@@ -938,6 +1018,16 @@ public class FOWSystem : MonoBehaviour
     public bool IsVis(Point pos)
     {
         return IsVis(pos.x, pos.y);
+    }
+
+    public bool DistanceToPlayer(Vector3 pos)
+    {
+        if (BigBoss.PlayerInfo == null) return false;
+        if (Vector3.Distance(pos, BigBoss.PlayerInfo.transform.position) < 12)
+        {
+            return true;
+        }
+        return false;
     }
 
     //these are called often, so I am keeping two versions
