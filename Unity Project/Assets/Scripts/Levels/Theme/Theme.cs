@@ -227,47 +227,53 @@ public abstract class Theme : ThemeOption, IInitializable
     protected bool ApplyMod<T>(RoomSpec spec, ProbabilityPool<T> mods)
         where T : RoomModifier
     {
-        mods.BeginTaking();
-        T mod;
-        while (mods.Take(spec.Random, out mod))
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            #region DEBUG
-            float stepTime = 0;
-            if (BigBoss.Debug.logging(Logs.LevelGenMain))
-            {
-                BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
-            }
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                stepTime = Time.realtimeSinceStartup;
-                BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
-            }
-            #endregion
-            Container2D<GenSpace> backupGrid = new MultiMap<GenSpace>(spec.Grids);
-            if (mod.Modify(spec))
+            mods.ToLog(BigBoss.Debug.Get(Logs.LevelGen), "Mod choices");
+        }
+        #endregion
+        using (new ProbabilityTakeReverter<T>(mods))
+        {
+            T mod;
+            while (mods.Take(spec.Random, out mod))
             {
                 #region DEBUG
+                float stepTime = 0;
+                if (BigBoss.Debug.logging(Logs.LevelGenMain))
+                {
+                    BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
+                }
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {
-                    spec.Grids.ToLog(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+                    stepTime = Time.realtimeSinceStartup;
+                    BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
                 }
                 #endregion
-                mods.EndTaking();
-                return true;
-            }
-            else
-            {
-                spec.Grids.Clear();
-                spec.Grids.PutAll(backupGrid);
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
+                Container2D<GenSpace> backupGrid = new MultiMap<GenSpace>(spec.Grids);
+                if (mod.Modify(spec))
                 {
-                    spec.Grids.ToLog(Logs.LevelGen, "Couldn't apply mod.  Processing " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        spec.Grids.ToLog(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+                    }
+                    #endregion
+                    return true;
                 }
-                #endregion
+                else
+                {
+                    spec.Grids.Clear();
+                    spec.Grids.PutAll(backupGrid);
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        spec.Grids.ToLog(Logs.LevelGen, "Couldn't apply mod.  Processing " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+                    }
+                    #endregion
+                }
             }
         }
-        mods.EndTaking();
         return false;
     }
 

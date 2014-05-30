@@ -151,6 +151,7 @@
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityItem.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityList.cs" />
      <Compile Include="Assets\Scripts\Common\Probability\ProbabilityPool.cs" />
+     <Compile Include="Assets\Scripts\Common\Probability\ProbabilityTakeReverter.cs" />
      <Compile Include="Assets\Scripts\Common\ReferenceEqualityComparer.cs" />
      <Compile Include="Assets\Scripts\Common\Rotation.cs" />
      <Compile Include="Assets\Scripts\Common\StringStream.cs" />

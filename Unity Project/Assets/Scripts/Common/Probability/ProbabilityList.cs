@@ -7,7 +7,6 @@ public class ProbabilityList<T> : ProbabilityPool<T>
 {
     private bool _takingMode = false;
     private HashSet<int> _taken;
-    private int _lastTaken = -1;
     protected List<ProbContainer> itemList = new List<ProbContainer>();
     protected double max;
     protected double uniqueTmpMax;
@@ -97,12 +96,15 @@ public class ProbabilityList<T> : ProbabilityPool<T>
             BigBoss.Debug.w(log, "Percent - Alotted - Item");
             foreach (ProbContainer cont in itemList)
             {
-                double percent = cont.Multiplier / max * 100;
-                if (percent < 0.000000000000000000001)
+                if (!cont.Skip)
                 {
-                    percent = 0d;
+                    double percent = cont.Multiplier / Max * 100;
+                    if (percent < 0.000000000000000000001)
+                    {
+                        percent = 0d;
+                    }
+                    BigBoss.Debug.w(log, percent + "% - " + cont.Multiplier + " - " + cont.Item);
                 }
-                BigBoss.Debug.w(log, percent + "% - " + cont.Multiplier + " - " + cont.Item);
             }
             BigBoss.Debug.printFooter(log, "Probability List - " + name);
         }
@@ -124,13 +126,9 @@ public class ProbabilityList<T> : ProbabilityPool<T>
                     {
                         if (_takingMode)
                         {
-                            if (_lastTaken != -1)
-                            {
-                                _taken.Add(_lastTaken);
-                            }
-                            _lastTaken = resultIndex;
+                            _taken.Add(resultIndex);
                         }
-                        SetToSkip(cont);
+                        SetToSkip(cont, true);
                     }
                     item = cont.Item;
                     return true;
@@ -142,10 +140,17 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         return false;
     }
 
-    protected void SetToSkip(ProbContainer cont)
+    protected void SetToSkip(ProbContainer cont, bool skip)
     {
-        cont.Skip = true;
-        uniqueTmpMax -= cont.Multiplier;
+        cont.Skip = skip;
+        if (skip)
+        {
+            uniqueTmpMax -= cont.Multiplier;
+        }
+        else
+        {
+            uniqueTmpMax += cont.Multiplier;
+        }
         Fresh = false;
     }
 
@@ -241,16 +246,11 @@ public class ProbabilityList<T> : ProbabilityPool<T>
         _takingMode = false;
         foreach (int index in _taken)
         {
-            itemList[index].Skip = false;
-        }
-        if (_lastTaken != -1)
-        {
-            if (!itemList[_lastTaken].Unique)
+            if (!itemList[index].Unique)
             {
-                itemList[_lastTaken].Skip = false;
+                SetToSkip(itemList[index], false);
             }
         }
-        _lastTaken = -1;
         _taken = null;
     }
 

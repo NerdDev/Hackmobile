@@ -115,7 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Logging: 1
   ActiveLogs: 00000000020000000100000005000000
-  ActiveFlags: 00000000070000000800000002000000
+  ActiveFlags: 000000000700000008000000
 --- !u!1 &16695338
 GameObject:
   m_ObjectHideFlags: 0
@@ -3795,7 +3795,7 @@ MonoBehaviour:
   - Multiplier: 1
     Set: {fileID: 11400000, guid: 5bdffb19ccbc4284fa6b27e20b0d1809, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: 15
+  Seed: -1
   UseInitialTheme: 1
   InitialTheme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
 --- !u!1 &1064103705
@@ -4699,7 +4699,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ActiveFlags.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400040, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: m_LocalPosition.x
@@ -5268,7 +5268,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400080, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: Seed
-      value: 15
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 11400024, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: SpawnLevel
@@ -5293,7 +5293,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ActiveFlags.Array.data[3]
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: d2f95a1aa2c0f2248b2718682e0f7d04, type: 2}
       propertyPath: ActiveFlags.Array.data[4]
