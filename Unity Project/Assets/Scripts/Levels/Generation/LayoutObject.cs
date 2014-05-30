@@ -98,6 +98,11 @@ public class LayoutObject<T> : Container2D<T>
         return children.Random(rand, out rhs);
     }
 
+    public List<LayoutObject<T>> GetChildren()
+    {
+        return new List<LayoutObject<T>>(children);
+    }
+
     public virtual bool ContainsPoint(Point pt)
     {
         return grids.Contains(pt);

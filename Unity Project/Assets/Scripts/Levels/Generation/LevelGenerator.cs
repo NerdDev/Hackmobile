@@ -129,7 +129,8 @@ public class LevelGenerator
                 StrokeAction = Draw.SetTo(wall)
             });
 
-            ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions<GridTypeObj>(areaCont, areaObj, false);
+            ProbabilityPool<ClusterInfo> shiftOptions;
+            IClusteringThemeExt.GenerateClusterOptions<GridTypeObj>(areaCont, areaObj, false, out shiftOptions);
             ClusterInfo info;
             Point shift;
             if (shiftOptions.Get(Rand, out info))

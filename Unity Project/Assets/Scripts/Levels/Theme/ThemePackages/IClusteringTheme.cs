@@ -23,20 +23,22 @@ public static class IClusteringThemeExt
     // Amount to shift rooms
     public const int SHIFT_RANGE = 10; //Max not inclusive
 
-    public static ProbabilityPool<ClusterInfo> GenerateClusterOptions<T>(
+    public static bool GenerateClusterOptions<T>(
         LayoutObject<T> cluster,
         LayoutObject<T> obj,
-        bool clusterByVolume)
+        bool clusterByVolume,
+        out ProbabilityPool<ClusterInfo> shiftOptions)
         where T : IGridType
     {
-        return GenerateClusterOptions(cluster, cluster, obj, clusterByVolume);
+        return GenerateClusterOptions(cluster, cluster, obj, clusterByVolume, out shiftOptions);
     }
 
-    public static ProbabilityPool<ClusterInfo> GenerateClusterOptions<T>(
+    public static bool GenerateClusterOptions<T>(
         LayoutObject<T> entireContainer,
         LayoutObject<T> cluster,
         LayoutObject<T> obj,
-        bool clusterByVolume)
+        bool clusterByVolume,
+        out ProbabilityPool<ClusterInfo> shiftOptions)
         where T : IGridType
     {
         #region Debug
@@ -45,18 +47,17 @@ public static class IClusteringThemeExt
             BigBoss.Debug.printHeader("Generate Cluster Options");
         }
         #endregion
-        ProbabilityList<ClusterInfo> shiftOptions = new ProbabilityList<ClusterInfo>();
+        shiftOptions = new ProbabilityList<ClusterInfo>();
         List<LayoutObject<T>> items = new List<LayoutObject<T>>(cluster.Flatten(LayoutObjectType.Room));
         if (items.Count != 0)
         {
             Point shift = obj.GetCenterShiftOn(items[0]);
             shift = obj.GetShiftOutside(cluster, new Point(1, 0), shift, false);
             shift.x -= 1; // Shift to overlapping slightly
-            obj.Shift(shift);
             MultiMap<bool> visited = new MultiMap<bool>();
             visited[0, 0] = true;
             Queue<Point> shiftQueue = new Queue<Point>();
-            shiftQueue.Enqueue(new Point());
+            shiftQueue.Enqueue(shift);
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -66,7 +67,7 @@ public static class IClusteringThemeExt
                 tmp.ToLog(Logs.LevelGen, "Starting cluster grid");
                 tmp = new MultiMap<T>();
                 tmp.PutAll(entireContainer);
-                tmp.PutAll(obj);
+                tmp.PutAll(obj, shift);
                 tmp.ToLog(Logs.LevelGen, "Starting entire grid");
             }
             #endregion
@@ -174,7 +175,7 @@ public static class IClusteringThemeExt
             BigBoss.Debug.printFooter("Generate Cluster Options");
         }
         #endregion
-        return shiftOptions;
+        return shiftOptions.Count > 0;
     }
 
     public static bool PlaceOrClusterAround<T>(this T theme, LevelGenerator gen, LayoutObject<GenSpace> clusterGroup, LayoutObject<GenSpace> obj)
@@ -192,11 +193,15 @@ public static class IClusteringThemeExt
         }
         else
         {
-            LayoutObject<GenSpace> layoutObj;
-            if (clusterGroup.RandomChild(gen.Rand, out layoutObj) && ClusterAround(theme, gen, layoutObj, obj))
+            List<LayoutObject<GenSpace>> clusterObjs = clusterGroup.GetChildren();
+            while (clusterObjs.Count > 0)
             {
-                layoutObj.AddChild(obj);
-                return true;
+                LayoutObject<GenSpace> clusterObj = clusterObjs.RandomTake(gen.Rand);
+                if (ClusterAround(theme, gen, clusterObj, obj))
+                {
+                    clusterObj.AddChild(obj);
+                    return true;
+                }
             }
         }
         return false;
@@ -211,7 +216,18 @@ public static class IClusteringThemeExt
             BigBoss.Debug.printHeader("Cluster Around");
         }
         #endregion
-        ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions(gen.Layout, cluster, obj, true);
+        ProbabilityPool<ClusterInfo> shiftOptions;
+        if (!IClusteringThemeExt.GenerateClusterOptions(gen.Layout, cluster, obj, true, out shiftOptions))
+        {
+            #region Debug
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.printFooter("Cluster Around");
+            }
+            #endregion
+            return false;
+        }
+
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
         var placed = new List<Value2D<GenSpace>>(0);
