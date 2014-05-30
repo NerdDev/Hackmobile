@@ -113,37 +113,44 @@ public class LevelGenerator
         }
         #endregion
 
-        LayoutObject<GridTypeObj> areaCont = new LayoutObject<GridTypeObj>();
         GridTypeObj floor = new GridTypeObj() { Type = GridType.Floor };
         GridTypeObj wall = new GridTypeObj() { Type = GridType.Wall };
+
+        LayoutObject<GridTypeObj> areaCont = new LayoutObject<GridTypeObj>(LayoutObjectType.Layout);
 
         for (int i = 0; i < numAreas; i++)
         {
             ThemeSet set = ThemeSetOptions.Get(Rand);
 
-            LayoutObject<GridTypeObj> areaObj = new LayoutObject<GridTypeObj>("Area " + i);
+            LayoutObject<GridTypeObj> areaObj = new LayoutObject<GridTypeObj>(LayoutObjectType.Area);
             areaObj.DrawCircle(0, 0, (int)Math.Round(set.AvgRadius / areaRadiusShrink), new StrokedAction<GridTypeObj>()
             {
                 UnitAction = Draw.SetTo(floor),
                 StrokeAction = Draw.SetTo(wall)
             });
 
-            ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions<GridTypeObj>(areaCont.GetGrid(), areaCont, areaObj, false);
+            ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions<GridTypeObj>(areaCont, areaObj, false);
             ClusterInfo info;
+            Point shift;
             if (shiftOptions.Get(Rand, out info))
             {
                 areaObj.Shift(info.Shift);
+                shift = info.Shift;
+            }
+            else
+            {
+                shift = new Point();
             }
 
             Area area = new Area(i)
             {
                 Set = set,
                 NumRooms = Rand.NextNormalDist(set.MinRooms, set.MaxRooms),
-                Center = areaObj.ShiftP
+                Center = shift
             };
             Areas.Add(area);
-            Layout.AllContainer.Objects.Add(area);
-            areaCont.Objects.Add(areaObj);
+            Layout.AddChild(area);
+            areaCont.AddChild(areaObj);
 
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -192,17 +199,21 @@ public class LevelGenerator
 
     protected void GenerateArea(Area a)
     {
-        LayoutObject<GenSpace> room = new LayoutObject<GenSpace>("Room");
+        LayoutObject<GenSpace> room = new LayoutObject<GenSpace>(LayoutObjectType.Room);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             NewLog(a + " Room " + (a.NumRoomsGenerated + 1));
         }
         #endregion
+        if (room.Id == 4)
+        {
+            int wer = 23;
+            wer++;
+        }
         Theme t = a.Set.GetTheme(Rand);
         t.GenerateRoom(this, a, room);
-        Layout.RoomContainer.Objects.Add(room);
-        Layout.PutAll(room);
+        a.AddChild(room);
         a.NumRoomsGenerated++;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -222,9 +233,8 @@ public class LevelGenerator
         }
         #endregion
         DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor());
-        var layoutCopy = Layout.GetGrid().Array;
-        List<LayoutObject<GenSpace>> rooms = new List<LayoutObject<GenSpace>>(Layout.RoomContainer.Objects.Cast<LayoutObject<GenSpace>>());
-        var runningConnected = Container2D<GenSpace>.CreateArrayFromBounds(layoutCopy);
+        List<LayoutObject<GenSpace>> rooms = new List<LayoutObject<GenSpace>>(Layout.Flatten(LayoutObjectType.Room));
+        var runningConnected = new MultiMap<GenSpace>();
         // Create initial queue and visited
         var startingRoom = rooms.Take();
         startingRoom.GetConnectedGrid().DrawAll(Draw.AddTo(runningConnected));
@@ -246,7 +256,7 @@ public class LevelGenerator
             Value2D<GenSpace> startPoint;
             Value2D<GenSpace> endPoint;
             LayoutObject<GenSpace> hit;
-            if (!FindNextPathPoints(layoutCopy, runningConnected, out hit, passTest, queue, visited, out startPoint, out endPoint))
+            if (!FindNextPathPoints(Layout, runningConnected, out hit, passTest, queue, visited, out startPoint, out endPoint))
             {
                 throw new ArgumentException("Cannot find path to fail room");
             }
@@ -254,18 +264,20 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                layoutCopy.SetTo(startPoint, GridType.INTERNAL_RESERVED_CUR, InitialTheme);
-                layoutCopy.ToLog(Logs.LevelGen, "Largest after putting blocked");
+                var tmp = new MultiMap<GenSpace>();
+                tmp.PutAll(Layout);
+                tmp.SetTo(startPoint, GridType.INTERNAL_RESERVED_CUR, InitialTheme);
+                tmp.ToLog(Logs.LevelGen, "Largest after putting blocked");
                 BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
             }
             #endregion
             var hitConnected = hit.GetConnectedGrid();
-            var stack = layoutCopy.DrawJumpTowardsSearch(
+            var stack = Layout.DrawJumpTowardsSearch(
                 startPoint.x,
                 startPoint.y,
                 3,
                 5,
-                Draw.IsType<GenSpace>(GridType.NULL).And(Draw.Inside<GenSpace>(layoutCopy.Bounding.Expand(5))),
+                Draw.IsType<GenSpace>(GridType.NULL).And(Draw.Inside<GenSpace>(Layout.Bounding.Expand(5))),
                 passTest.And(Draw.PointContainedIn(hitConnected)),
                 Rand,
                 endPoint,
@@ -282,23 +294,23 @@ public class LevelGenerator
                 path.Simplify();
                 Point first = path.FirstEnd;
                 Point second = path.SecondEnd;
-                LayoutObject<GenSpace> leaf1, leaf2;
                 LayoutObject<GenSpace> pathObj = path.Bake(InitialTheme);
-                Layout.AllContainer.ConnectTo(first, pathObj, first, out leaf1, out pathObj);
-                Layout.AllContainer.ConnectTo(second, pathObj, second, out leaf2, out pathObj);
-                if (leaf1[first].Type == GridType.Wall)
+                Layout.ConnectTo(pathObj, first.x, first.y);
+                Layout.ConnectTo(pathObj, second.x, second.y);
+                GenSpace space;
+                if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
                 {
-                    InitialTheme.PlaceDoor(leaf1, first.x, first.y, Rand);
+                    InitialTheme.PlaceDoor(Layout, first.x, first.y, Rand);
                 }
-                if (leaf2[second].Type == GridType.Wall)
+                if (!Layout.TryGetValue(second, out space) || space.Type == GridType.Wall)
                 {
-                    InitialTheme.PlaceDoor(leaf2, second.x, second.y, Rand);
+                    InitialTheme.PlaceDoor(Layout, second.x, second.y, Rand);
                 }
                 // Expand path
                 foreach (var p in path)
                 {
-                    layoutCopy.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, InitialTheme).And(Draw.SetTo(GridType.Floor, InitialTheme))));
-                    layoutCopy.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
+                    Layout.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, InitialTheme).And(Draw.SetTo(GridType.Floor, InitialTheme))));
+                    Layout.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
                     {
                         if (!arr.IsType(x, y, GridType.NULL)) return false;
                         return arr.Cornered(x, y, Draw.IsType<GenSpace>(GridType.Floor));
@@ -307,7 +319,6 @@ public class LevelGenerator
                 // Mark path on layout object
                 foreach (var v in pathObj)
                 {
-                    layoutCopy[v] = v.val;
                     runningConnected.Put(v);
                     if (!visited[v])
                     {
@@ -369,7 +380,7 @@ public class LevelGenerator
             startPoint = null;
             return false;
         }
-        if (!Layout.AllContainer.GetObjAt(endPoint.x, endPoint.y, out hit))
+        if (!Layout.GetObjAt(endPoint.x, endPoint.y, out hit))
         {
             startPoint = null;
             return false;
@@ -411,7 +422,7 @@ public class LevelGenerator
             }
             return true;
         }));
-        obj.Grids.PutAll(tmp);
+        obj.PutAll(tmp);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -422,69 +433,69 @@ public class LevelGenerator
     }
     #endregion
 
-    protected bool PlaceMissingStair(bool up, Bounding otherStair, out Boxing placed)
-    {
-        Container2D<GenSpace> layout = Layout;
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, "Placing missing stair");
-            BigBoss.Debug.w(Logs.LevelGen, "Up: " + up + ", other stair " + otherStair);
-        }
-        #endregion
-        foreach (LayoutObject<GenSpace> obj in Layout.RoomContainer.Objects.Randomize(Rand))
-        {
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                obj.ToLog("Trying in.");
-            }
-            #endregion
-            if (otherStair != null)
-            {
-                if (otherStair.GetCenter().Distance(obj.Bounding.GetCenter()) < MinStairDist)
-                {
-                    #region DEBUG
-                    if (BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        BigBoss.Debug.w(Logs.LevelGen, "Skipping due to distance to other stair.");
-                    }
-                    #endregion
-                    continue;
-                }
-            }
-            StairElement stair = InitialTheme.Stair.SmartElement.Get(Rand) as StairElement;
+    //protected bool PlaceMissingStair(bool up, Bounding otherStair, out Boxing placed)
+    //{
+    //    Container2D<GenSpace> layout = Layout;
+    //    #region Debug
+    //    if (BigBoss.Debug.logging(Logs.LevelGen))
+    //    {
+    //        BigBoss.Debug.printHeader(Logs.LevelGen, "Placing missing stair");
+    //        BigBoss.Debug.w(Logs.LevelGen, "Up: " + up + ", other stair " + otherStair);
+    //    }
+    //    #endregion
+    //    foreach (LayoutObject<GenSpace> obj in Layout.RoomContainer.Objects.Randomize(Rand))
+    //    {
+    //        #region DEBUG
+    //        if (BigBoss.Debug.logging(Logs.LevelGen))
+    //        {
+    //            obj.ToLog("Trying in.");
+    //        }
+    //        #endregion
+    //        if (otherStair != null)
+    //        {
+    //            if (otherStair.GetCenter().Distance(obj.Bounding.GetCenter()) < MinStairDist)
+    //            {
+    //                #region DEBUG
+    //                if (BigBoss.Debug.logging(Logs.LevelGen))
+    //                {
+    //                    BigBoss.Debug.w(Logs.LevelGen, "Skipping due to distance to other stair.");
+    //                }
+    //                #endregion
+    //                continue;
+    //            }
+    //        }
+    //        StairElement stair = InitialTheme.Stair.SmartElement.Get(Rand) as StairElement;
 
-            if (!stair.Place(layout, obj, InitialTheme, Rand, out placed))
-            {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    BigBoss.Debug.w(Logs.LevelGen, "No options.");
-                }
-                #endregion
-                continue;
-            }
-            obj.DrawRect(placed, Draw.SetTo(up ? GridType.StairUp : GridType.StairDown, InitialTheme).And(Draw.MergeIn(stair, InitialTheme)));
-            #region Debug
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                obj.ToLog(Logs.LevelGen, "Placed stairs");
-                Layout.ToLog(Logs.LevelGen, "Layout");
-                BigBoss.Debug.printFooter("Placing Missing Stair");
-            }
-            #endregion
-            return true;
-        }
-        placed = null;
-        #region Debug
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter("Placing Missing Stair");
-        }
-        #endregion
-        return false;
-    }
+    //        if (!stair.Place(layout, obj, InitialTheme, Rand, out placed))
+    //        {
+    //            #region DEBUG
+    //            if (BigBoss.Debug.logging(Logs.LevelGen))
+    //            {
+    //                BigBoss.Debug.w(Logs.LevelGen, "No options.");
+    //            }
+    //            #endregion
+    //            continue;
+    //        }
+    //        obj.DrawRect(placed, Draw.SetTo(up ? GridType.StairUp : GridType.StairDown, InitialTheme).And(Draw.MergeIn(stair, InitialTheme)));
+    //        #region Debug
+    //        if (BigBoss.Debug.logging(Logs.LevelGen))
+    //        {
+    //            obj.ToLog(Logs.LevelGen, "Placed stairs");
+    //            Layout.ToLog(Logs.LevelGen, "Layout");
+    //            BigBoss.Debug.printFooter("Placing Missing Stair");
+    //        }
+    //        #endregion
+    //        return true;
+    //    }
+    //    placed = null;
+    //    #region Debug
+    //    if (BigBoss.Debug.logging(Logs.LevelGen))
+    //    {
+    //        BigBoss.Debug.printFooter("Placing Missing Stair");
+    //    }
+    //    #endregion
+    //    return false;
+    //}
 
     public static Point GenerateShiftMagnitude(int mag, System.Random rand)
     {

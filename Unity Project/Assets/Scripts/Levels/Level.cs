@@ -25,16 +25,14 @@ public class Level : Container2D<GridSpace>
 
     public void LoadRoomMaps(LevelLayout layout)
     {
-        foreach (LayoutObject<GenSpace> room in layout.Object)
+        foreach (LayoutObject<GenSpace> room in layout.Flatten(LayoutObjectType.Room))
         {
             var roomMap = new MultiMap<GridSpace>();
             RoomMaps.Add(roomMap);
-            foreach (Value2D<GenSpace> floor in room.Grids)
+            foreach (Value2D<GenSpace> floor in room)
             {
-                int x = floor.x + room.ShiftP.x;
-                int y = floor.y = room.ShiftP.y;
-                roomMap[x, y] = map[x, y];
-                roomMapping[x, y] = roomMap;
+                roomMap[floor] = map[floor];
+                roomMapping[floor] = roomMap;
             }
         }
     }

@@ -180,33 +180,174 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         Shift(p.x, p.y);
     }
 
-    public bool Intersects(Container2D<T> rhs)
+    #region Intersecting
+    public bool Intersects(Container2D<T> rhs, out Point at)
     {
         Bounding bounds = Bounding;
         Bounding rhsBounds = rhs.Bounding;
         Bounding intersect = bounds.IntersectBounds(rhsBounds);
-        if (!intersect.IsValid()) return false;
-
-        foreach (Value2D<T> val in this)
+        if (!intersect.IsValid())
         {
-            if (rhs.Contains(val)) return true;
+            at = null;
+            return false;
         }
+
+        Container2D<T> largest, smallest;
+        if (this.Count >= rhs.Count)
+        {
+            largest = this;
+            smallest = rhs;
+        }
+        else
+        {
+            largest = rhs;
+            smallest = this;
+        }
+
+        foreach (Value2D<T> val in smallest)
+        {
+            if (largest.Contains(val.x, val.y))
+            {
+                at = new Point(val.x, val.y);
+                return true;
+            }
+        }
+        at = null;
         return false;
     }
 
-    public bool Intersects(IEnumerable<Container2D<T>> options, out Container2D<T> intersect)
+    public bool Intersects(Container2D<T> rhs, int shiftX, int shiftY, out Point at, Point hint = null)
+    {
+        // Check hint first
+        if (hint != null && rhs.Contains(hint))
+        {
+            at = hint;
+            return true;
+        }
+
+        // Check bounding
+        Bounding bounds = this.Bounding;
+        bounds.Shift(shiftX, shiftY);
+        Bounding rhsBounds = rhs.Bounding;
+        Bounding intersect = bounds.IntersectBounds(rhsBounds);
+        if (!intersect.IsValid())
+        {
+            at = null;
+            return false;
+        }
+
+        // Brute force
+        Container2D<T> largest, smallest;
+        if (this.Count >= rhs.Count)
+        {
+            shiftX *= -1;
+            shiftY *= -1;
+            largest = this;
+            smallest = rhs;
+        }
+        else
+        {
+            largest = rhs;
+            smallest = this;
+        }
+
+        foreach (Value2D<T> val in smallest)
+        {
+            if (largest.Contains(val.x + shiftX, val.y + shiftY))
+            {
+                at = new Point(val.x + shiftX, val.y + shiftY);
+                return true;
+            }
+        }
+        at = null;
+        return false;
+    }
+
+    public bool Intersects(IEnumerable<Container2D<T>> options, int shiftX, int shiftY, out Point at, out Container2D<T> intersect)
     {
         foreach (Container2D<T> c in options)
         {
-            if (Intersects(c))
+            if (Intersects(c, shiftX, shiftY, out at))
             {
                 intersect = c;
                 return true;
             }
         }
         intersect = null;
+        at = null;
         return false;
     }
+
+    public Point GetShiftOutside(Container2D<T> rhs, Point dir, Point totalShift = null, bool rough = true)
+    {
+        Point reducBase = dir.Reduce();
+        Point reduc = new Point(reducBase);
+        if (totalShift == null)
+        {
+            totalShift = new Point();
+        }
+        else
+        {
+            totalShift = new Point(totalShift);
+        }
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Shift Outside " + this.ToString());
+            BigBoss.Debug.w(Logs.LevelGen, "Shifting outside of " + rhs.ToString());
+            BigBoss.Debug.w(Logs.LevelGen, "Shift " + dir + "   Reduc shift: " + reduc);
+            BigBoss.Debug.w(Logs.LevelGen, "Bounds: " + this.Bounding + "  RHS bounds: " + rhs.Bounding);
+            var tmp = new MultiMap<T>();
+            tmp.PutAll(rhs);
+            tmp.PutAll(this, totalShift);
+            tmp.ToLog(Logs.LevelGen, "Before shifting");
+        }
+        #endregion
+        Point hint = null, at;
+        while (this.Intersects(rhs, totalShift.x, totalShift.y, out at, hint))
+        {
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                BigBoss.Debug.w(Logs.LevelGen, "Intersected at " + at);
+            }
+            #endregion
+            if (rough)
+            {
+                totalShift.Shift(reduc);
+                at.Shift(reduc);
+            }
+            else
+            {
+                int xShift, yShift;
+                reduc.Take(out xShift, out yShift);
+                totalShift.Shift(xShift, yShift);
+                if (reduc.isZero())
+                {
+                    reduc = new Point(reducBase);
+                }
+                at.Shift(xShift, yShift);
+            }
+            hint = at;
+            #region DEBUG
+            if (BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps) && BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                var tmp = new MultiMap<T>();
+                tmp.PutAll(rhs);
+                tmp.PutAll(this, totalShift);
+                tmp.ToLog(Logs.LevelGen, "After shifting");
+            }
+            #endregion
+        }
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Shift Outside " + this.ToString());
+        }
+        #endregion
+        return totalShift;
+    }
+    #endregion
 
     #region Logging
     public virtual List<string> ToRowStrings(Bounding bounds = null)

@@ -257,7 +257,8 @@ public abstract class Theme : ThemeOption, IInitializable
             }
             else
             {
-                spec.Grids = backupGrid;
+                spec.Grids.Clear();
+                spec.Grids.PutAll(backupGrid);
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {

@@ -90,7 +90,7 @@ public class Path : IEnumerable<Value2D<GenSpace>>
 
     public LayoutObject<GenSpace> Bake(Theme theme)
     {
-        LayoutObject<GenSpace> obj = new LayoutObject<GenSpace>("Path");
+        LayoutObject<GenSpace> obj = new LayoutObject<GenSpace>(LayoutObjectType.Path);
         foreach (var v in PathPrint(List.Cast<Point>()))
         {
             obj.SetTo(v, v.val, theme);

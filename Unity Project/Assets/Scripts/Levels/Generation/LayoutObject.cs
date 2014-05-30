@@ -337,6 +337,45 @@ public class LayoutObject<T> : Container2D<T>
 
     public override bool DrawAll(DrawAction<T> call, Container2D<T> on)
     {
-        grids.DrawAll(call, on);
+        return grids.DrawAll(call, on);
+    }
+
+    public bool GetObjAt(int x, int y, out LayoutObject<T> obj)
+    {
+        if (!grids.Contains(x, y))
+        {
+            obj = null;
+            return false;
+        }
+        foreach (var child in children)
+        {
+            if (child.GetObjAt(x, y, out obj))
+            {
+                return true;
+            }
+        }
+        obj = this;
+        return true;
+    }
+
+    public void ConnectTo(LayoutObject<T> rhs, int x, int y)
+    {
+        if (!grids.Contains(x, y)) return;
+        _connectedTo.Add(rhs);
+        foreach (var child in children)
+        {
+            ConnectTo(rhs, x, y);
+        }
+    }
+
+    public override void Rotate(Rotation rotate)
+    {
+        grids.Rotate(rotate);
+    }
+
+    public Point GetCenterShiftOn(LayoutObject<T> rhs)
+    {
+        Point rhsCenter = rhs.Bounding.GetCenter();
+        return rhsCenter - Bounding.GetCenter();
     }
 }

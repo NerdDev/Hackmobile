@@ -49,9 +49,10 @@ public static class IClusteringThemeExt
         List<LayoutObject<T>> items = new List<LayoutObject<T>>(cluster.Flatten(LayoutObjectType.Room));
         if (items.Count != 0)
         {
-            obj.ShiftP = new Point(items[0].ShiftP);
-            obj.ShiftOutside(cluster, new Point(1, 0), null, false, false);
-            obj.Shift(-1, 0); // Shift to overlapping slightly
+            Point shift = obj.GetCenterShiftOn(items[0]);
+            shift = obj.GetShiftOutside(cluster, new Point(1, 0), shift, false);
+            shift.x -= 1; // Shift to overlapping slightly
+            obj.Shift(shift);
             MultiMap<bool> visited = new MultiMap<bool>();
             visited[0, 0] = true;
             Queue<Point> shiftQueue = new Queue<Point>();
@@ -86,22 +87,24 @@ public static class IClusteringThemeExt
                 bool overlappingSomething = false;
                 bool intersectsCluster = false;
                 HashSet<LayoutObject<T>> intersectingObjs = null;
-                if (objGrid.DrawAll((arr, x, y) =>
+                if (obj.DrawAll((arr, x, y) =>
                 { // Draw on moving object to detect intersection pts
                     if (GridTypeEnum.EdgeType(arr[x, y].GetGridType()))
                     {
-                        GridType type = clusterGrid[x + curShift.x, y + curShift.y].GetGridType();
-                        if (type == GridType.NULL)
+                        T space;
+                        if (!cluster.TryGetValue(x + curShift.x, y + curShift.y, out space) || space.Type == GridType.NULL)
                         {
-                            type = entireGrid[x + curShift.x, y + curShift.y].GetGridType();
-                            if (type == GridType.NULL) return true;
+                            if (!entireContainer.TryGetValue(x + curShift.x, y + curShift.y, out space) || space.Type == GridType.NULL)
+                            {
+                                return true;
+                            }
                         }
                         else
                         {
                             intersectsCluster = true;
                         }
                         // Touching something
-                        if (GridTypeEnum.EdgeType(type))
+                        if (GridTypeEnum.EdgeType(space.Type))
                         {
                             intersectPoints.Add(new Point(x, y));
                         }
@@ -116,7 +119,7 @@ public static class IClusteringThemeExt
                     else
                     {
                         // If center of moving object touching anything on grid, bad spot
-                        return !entireGrid.Contains(x + curShift.x, y + curShift.y);
+                        return !entireContainer.Contains(x + curShift.x, y + curShift.y);
                     }
                 })
                     && intersectPoints.Count > 0)
@@ -182,17 +185,17 @@ public static class IClusteringThemeExt
             if (PlaceRoom(theme, gen, clusterGroup, obj))
             {
                 LayoutObject<GenSpace> cluster = new LayoutObject<GenSpace>(LayoutObjectType.Cluster);
-                cluster.Objects.Add(obj);
-                clusterGroup.Objects.Add(cluster);
+                cluster.AddChild(obj);
+                clusterGroup.AddChild(cluster);
                 return true;
             }
         }
         else
         {
-            LayoutObject<GenSpace> layoutObj = (LayoutObject<GenSpace>)clusterGroup.Objects.Random(gen.Rand);
-            if (ClusterAround(theme, gen, layoutObj, obj))
+            LayoutObject<GenSpace> layoutObj;
+            if (clusterGroup.RandomChild(gen.Rand, out layoutObj) && ClusterAround(theme, gen, layoutObj, obj))
             {
-                layoutObj.Objects.Add(obj);
+                layoutObj.AddChild(obj);
                 return true;
             }
         }
@@ -211,23 +214,22 @@ public static class IClusteringThemeExt
         ProbabilityPool<ClusterInfo> shiftOptions = IClusteringThemeExt.GenerateClusterOptions(gen.Layout, cluster, obj, true);
         List<Point> clusterDoorOptions = new List<Point>();
         ClusterInfo info;
-        Container2D<GenSpace> clusterGrid = cluster.GetGrid();
         var placed = new List<Value2D<GenSpace>>(0);
         while (shiftOptions.Take(gen.Rand, out info))
         {
-            gen.Layout.Grids.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
+            gen.Layout.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.w(Logs.LevelGen, "selected " + info.Shift);
                 var tmpMap = new MultiMap<GenSpace>();
-                clusterGrid.DrawAll(Draw.CopyTo(tmpMap));
-                obj.GetGrid().DrawAll(Draw.CopyTo(tmpMap, info.Shift));
+                cluster.DrawAll(Draw.CopyTo(tmpMap));
+                obj.DrawAll(Draw.CopyTo(tmpMap, info.Shift));
                 tmpMap.DrawPoints(info.Intersects, Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, theme).Shift(info.Shift));
                 tmpMap.ToLog(Logs.LevelGen, "Intersect Points");
                 tmpMap = new MultiMap<GenSpace>();
-                clusterGrid.DrawAll(Draw.CopyTo(tmpMap));
-                obj.GetGrid().DrawAll(Draw.CopyTo(tmpMap, info.Shift));
+                cluster.DrawAll(Draw.CopyTo(tmpMap));
+                obj.DrawAll(Draw.CopyTo(tmpMap, info.Shift));
                 tmpMap.DrawPoints(clusterDoorOptions, Draw.SetTo(GridType.Door, theme));
                 tmpMap.ToLog(Logs.LevelGen, "Cluster door options");
             }
@@ -262,9 +264,10 @@ public static class IClusteringThemeExt
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             var tmpMap = new MultiMap<GenSpace>();
-            tmpMap.PutAll(clusterGrid);
-            tmpMap.PutAll(obj.GetGrid());
-            tmpMap.ToLog(Logs.LevelGen, "Final setup " + info.Shift);
+            tmpMap.PutAll(cluster);
+            tmpMap.PutAll(obj);
+            string extra = info != null ? info.Shift.ToString() : string.Empty;
+            tmpMap.ToLog(Logs.LevelGen, "Final setup " + extra);
             BigBoss.Debug.printFooter("Cluster Around");
         }
         #endregion
@@ -283,8 +286,6 @@ public static class IClusteringThemeExt
         LayoutObject<GenSpace> startRoom;
         if (area.RandomChild(gen.Rand, out startRoom))
         {
-            // Find room it will start from
-            obj.CenterOn(startRoom);
             // Find where it will shift away
             Point shiftMagn = LevelGenerator.GenerateShiftMagnitude(SHIFT_RANGE, gen.Rand);
             #region DEBUG
@@ -295,7 +296,10 @@ public static class IClusteringThemeExt
                 BigBoss.Debug.w(Logs.LevelGen, "Shift: " + shiftMagn);
             }
             #endregion
-            obj.ShiftOutside(area, shiftMagn);
+            // Find room it will start from
+            Point shift = obj.GetCenterShiftOn(startRoom);
+            shift = obj.GetShiftOutside(area, shiftMagn, shift);
+            obj.Shift(shift);
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))

@@ -4,7 +4,7 @@ using System.Collections;
 public class RoomSpec 
 {
     public LayoutObject<GenSpace> Room { get; protected set; }
-    public Container2D<GenSpace> Grids { get { return Room.Grids; } set { Room.Grids = value; } }
+    public Container2D<GenSpace> Grids { get { return Room; } }
     public int Depth { get; protected set; }
     public Theme Theme { get; protected set; }
     public RoomModCollection RoomModifiers;
