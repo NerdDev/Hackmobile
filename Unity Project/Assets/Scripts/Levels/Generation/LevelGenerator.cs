@@ -206,7 +206,7 @@ public class LevelGenerator
             NewLog(a + " Room " + (a.NumRoomsGenerated + 1));
         }
         #endregion
-        if (room.Id == 4)
+        if (room.Id == 11)
         {
             int wer = 23;
             wer++;
