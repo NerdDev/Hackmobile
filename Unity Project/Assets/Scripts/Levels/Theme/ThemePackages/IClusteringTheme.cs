@@ -86,23 +86,27 @@ public static class IClusteringThemeExt
                 // Test if pass
                 List<Point> intersectPoints = new List<Point>();
                 bool overlappingSomething = false;
-                bool intersectsCluster = false;
+                bool intersectedCluster = false;
                 HashSet<LayoutObject<T>> intersectingObjs = null;
                 if (obj.DrawAll((arr, x, y) =>
                 { // Draw on moving object to detect intersection pts
                     if (GridTypeEnum.EdgeType(arr[x, y].GetGridType()))
                     {
+                        bool intersectsCluster;
                         T space;
                         if (!cluster.TryGetValue(x + curShift.x, y + curShift.y, out space) || space.Type == GridType.NULL)
                         {
                             if (!entireContainer.TryGetValue(x + curShift.x, y + curShift.y, out space) || space.Type == GridType.NULL)
                             {
+                                // Not intersecting anything, move on.
                                 return true;
                             }
+                            intersectsCluster = false;
                         }
                         else
                         {
                             intersectsCluster = true;
+                            intersectedCluster = true;
                         }
                         // Touching something
                         if (GridTypeEnum.EdgeType(space.Type))
@@ -119,13 +123,13 @@ public static class IClusteringThemeExt
                     }
                     else
                     {
-                        // If center of moving object touching anything on grid, bad spot
-                        return !entireContainer.Contains(x + curShift.x, y + curShift.y);
+                        // If center of moving object touching cluster, bad spot
+                        return !cluster.Contains(x + curShift.x, y + curShift.y);
                     }
                 })
                     && intersectPoints.Count > 0)
                 { // Found intersection points, and didnt overlap
-                    if (!intersectsCluster) continue;
+                    if (!intersectedCluster) continue;
                     // queue surrounding points
                     visited.DrawAround(curShift.x, curShift.y, true, Draw.Not(Draw.EqualTo(true)).IfThen(Draw.AddTo<bool>(shiftQueue).And(Draw.SetTo(true))));
 
