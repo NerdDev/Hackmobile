@@ -57,7 +57,7 @@ public class LevelGenerator
         #endregion
         Log("Areas", true, GenerateAreas);
         GenerateComponents();
-        //Log("Confirm Connection", true, ConfirmConnection);
+        Log("Confirm Connection", true, ConfirmConnection);
         //Log("Place Stairs", true, PlaceStairs);
         #region DEBUG
         if (BigBoss.Debug.logging())
@@ -234,7 +234,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
-        DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor());
+        DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor(true));
         List<LayoutObject<GenSpace>> rooms = new List<LayoutObject<GenSpace>>(Layout.Flatten(LayoutObjectType.Room));
         var runningConnected = new MultiMap<GenSpace>();
         // Create initial queue and visited
@@ -302,11 +302,11 @@ public class LevelGenerator
                 GenSpace space;
                 if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
                 {
-                    InitialTheme.PlaceDoor(Layout, first.x, first.y, Rand);
+                    InitialTheme.PlaceDoor(Layout, first.x, first.y, Rand, true);
                 }
                 if (!Layout.TryGetValue(second, out space) || space.Type == GridType.Wall)
                 {
-                    InitialTheme.PlaceDoor(Layout, second.x, second.y, Rand);
+                    InitialTheme.PlaceDoor(Layout, second.x, second.y, Rand, true);
                 }
                 // Expand path
                 foreach (var p in path)

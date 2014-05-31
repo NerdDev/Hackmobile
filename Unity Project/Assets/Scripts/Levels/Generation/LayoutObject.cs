@@ -369,7 +369,7 @@ public class LayoutObject<T> : Container2D<T>
         _connectedTo.Add(rhs);
         foreach (var child in children)
         {
-            ConnectTo(rhs, x, y);
+            child.ConnectTo(rhs, x, y);
         }
     }
 

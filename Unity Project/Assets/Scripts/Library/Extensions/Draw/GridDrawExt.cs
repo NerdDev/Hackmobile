@@ -7,7 +7,7 @@ public static class GridTypeDrawExt
 {
     public static void DrawPotentialDoors(this Container2D<GenSpace> arr, DrawAction<GenSpace> action)
     {
-        DrawAction<GenSpace> check = Draw.CanDrawDoor();
+        DrawAction<GenSpace> check = Draw.CanDrawDoor(true);
         arr.DrawAll(new DrawAction<GenSpace>((arr2, x, y) =>
             {
                 if (check(arr2, x, y))
@@ -18,7 +18,7 @@ public static class GridTypeDrawExt
 
     public static void DrawPotentialDoors(this Container2D<GenSpace> arr, StrokedAction<GenSpace> action)
     {
-        DrawAction<GenSpace> check = Draw.CanDrawDoor();
+        DrawAction<GenSpace> check = Draw.CanDrawDoor(true);
         StrokedAction<GenSpace> findDoors = new StrokedAction<GenSpace>();
         if (action.StrokeAction != null)
         {

@@ -50,7 +50,7 @@ public abstract class Theme : ThemeOption, IInitializable
 
     #region Door Placement
     public static ProbabilityList<int> DoorRatioPicker;
-    public List<Value2D<GenSpace>> PlaceSomeDoors(Container2D<GenSpace> arr, IEnumerable<Point> points, System.Random rand, int desiredWallToDoorRatio = -1, bool expandDoors = true)
+    public List<Value2D<GenSpace>> PlaceSomeDoors(Container2D<GenSpace> arr, IEnumerable<Point> points, System.Random rand, bool external, int desiredWallToDoorRatio = -1, bool expandDoors = true)
     {
         if (desiredWallToDoorRatio < 0)
         {
@@ -58,7 +58,7 @@ public abstract class Theme : ThemeOption, IInitializable
         }
         var acceptablePoints = new MultiMap<GenSpace>();
         Counter numPoints = new Counter();
-        DrawAction<GenSpace> call = Draw.Count<GenSpace>(numPoints).And(Draw.CanDrawDoor().IfThen(Draw.AddTo(acceptablePoints)));
+        DrawAction<GenSpace> call = Draw.Count<GenSpace>(numPoints).And(Draw.CanDrawDoor(external).IfThen(Draw.AddTo(acceptablePoints)));
         arr.DrawPoints(points, call);
         if (DoorRatioPicker == null)
         {
@@ -97,7 +97,7 @@ public abstract class Theme : ThemeOption, IInitializable
             if (expandDoors)
             {
                 notAllowed.Remove(picked);
-                PlaceDoor(arr, picked.x, picked.y, rand, additionalTest);
+                PlaceDoor(arr, picked.x, picked.y, rand, external, additionalTest);
                 notAllowed[picked] = null;
             }
             else
@@ -108,9 +108,9 @@ public abstract class Theme : ThemeOption, IInitializable
         return pickedPts;
     }
 
-    public void PlaceDoor(Container2D<GenSpace> cont, int x, int y, System.Random rand, DrawAction<GenSpace> additionalTest = null)
+    public void PlaceDoor(Container2D<GenSpace> cont, int x, int y, System.Random rand, bool considerNulls, DrawAction<GenSpace> additionalTest = null)
     {
-        DrawAction<GenSpace> test = Draw.CanDrawDoor();
+        DrawAction<GenSpace> test = Draw.CanDrawDoor(considerNulls);
         if (additionalTest != null)
         {
             test = test.And(additionalTest);

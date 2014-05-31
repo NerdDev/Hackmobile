@@ -458,16 +458,29 @@ public static class Draw
     }
 
     #region GridType
-    public static DrawAction<GenSpace> CanDrawDoor()
+    public static DrawAction<GenSpace> CanDrawDoor(bool considerNulls)
     {
         return new DrawAction<GenSpace>((arr, x, y) =>
         {
             GenSpace space;
             if (!arr.TryGetValue(x, y, out space)) return false;
             if (space.GetGridType() != GridType.Wall) return false;
-            // Include null to work with levelgen placement
-            if (arr.AlternatesSides(x, y, Draw.IsType<GenSpace>(GridType.NULL).Or(Draw.Walkable<GenSpace>()))) return true;
-            if (arr.HasAround(x, y, false, Draw.Walkable<GenSpace>()) && arr.HasAround(x, y, false, Draw.IsType<GenSpace>(GridType.NULL))) return true;
+            // Does not have another door around
+            if (arr.HasAround(x, y, false, Draw.IsType<GenSpace>(GridType.Door))) return false;
+            // Alternates between walkable and not then good to go
+            var test = Draw.Walkable<GenSpace>();
+            if (considerNulls)
+            {
+                test = Draw.Or(test, Draw.IsType<GenSpace>(GridType.NULL));
+            }
+            if (arr.AlternatesSides(x, y, test)) return true;
+            // If considering nulls, and has at least one walkable and null around then good to go
+            if (considerNulls
+                && arr.HasAround(x, y, false, Draw.Walkable<GenSpace>()) 
+                && arr.HasAround(x, y, false, Draw.IsType<GenSpace>(GridType.NULL)))
+            {
+                return true;
+            }
             return false;
         });
     }

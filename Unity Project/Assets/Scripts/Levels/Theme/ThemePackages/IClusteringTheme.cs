@@ -237,7 +237,7 @@ public static class IClusteringThemeExt
         var placed = new List<Value2D<GenSpace>>(0);
         while (shiftOptions.Take(gen.Rand, out info))
         {
-            gen.Layout.DrawPoints(info.Intersects, Draw.CanDrawDoor().IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
+            gen.Layout.DrawPoints(info.Intersects, Draw.CanDrawDoor(true).IfThen(Draw.AddTo<GenSpace>(clusterDoorOptions)).Shift(info.Shift));
             #region Debug
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -257,7 +257,7 @@ public static class IClusteringThemeExt
             if (clusterDoorOptions.Count > 0)
             { // Cluster side has door options
                 obj.Shift(info.Shift.x, info.Shift.y);
-                placed = theme.PlaceSomeDoors(obj, clusterDoorOptions, gen.Rand);
+                placed = theme.PlaceSomeDoors(obj, clusterDoorOptions, gen.Rand, true);
                 if (placed.Count != 0)
                 { // Placed a door
                     foreach (Point p in placed)
