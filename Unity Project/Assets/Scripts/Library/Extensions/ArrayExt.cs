@@ -15,6 +15,12 @@ public static class ArrayExt
                 if ((bool)b) return 'X';
                 else return ' ';
             });
+        Converters.Add(typeof(char), (c) =>
+            {
+                char ch = (char)c;
+                if (ch == ((char)0)) return ' ';
+                return (char)c;
+            });
     }
 
     public static Bounding GetBounds<T>(this T[,] arr)

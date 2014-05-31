@@ -59,7 +59,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     public abstract Bounding Bounding { get; }
     public int Width { get { return Bounding.Width; } }
     public int Height { get { return Bounding.Height; } }
-    public Point Center { get { return Bounding.GetCenter(); } }
+    public virtual Point Center { get { return Bounding.GetCenter(); } }
     public abstract Array2D<T> Array { get; }
     public abstract bool Contains(int x, int y);
     public bool Contains(Point val)
@@ -220,6 +220,12 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         }
         at = null;
         return false;
+    }
+
+    public bool Intersects(Container2D<T> rhs, int shiftX, int shiftY)
+    {
+        Point at;
+        return Intersects(rhs, shiftX, shiftY, out at);
     }
 
     public bool Intersects(Container2D<T> rhs, int shiftX, int shiftY, out Point at, Point hint = null)

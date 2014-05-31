@@ -10,7 +10,8 @@ namespace LevelGen
         public ThemeSet Set;
         public int NumRooms;
         public int NumRoomsGenerated;
-        public Point Center;
+        public Point CenterPt;
+        public override Point Center { get { return CenterPt; } }
         private int id;
 
         public Area(int num)

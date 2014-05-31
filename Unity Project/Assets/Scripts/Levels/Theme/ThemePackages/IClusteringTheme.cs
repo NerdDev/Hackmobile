@@ -294,7 +294,7 @@ public static class IClusteringThemeExt
         return placed.Count != 0;
     }
 
-    public static bool PlaceRoom<T>(this T theme, LevelGenerator gen, LayoutObject<GenSpace> area, LayoutObject<GenSpace> obj)
+    public static bool PlaceRoom<T>(this T theme, LevelGenerator gen, LayoutObject<GenSpace> area, LayoutObject<GenSpace> obj, Point defaultPt = null)
         where T : Theme, IClusteringTheme
     {
         #region DEBUG
@@ -307,6 +307,7 @@ public static class IClusteringThemeExt
         List<LayoutObject<GenSpace>> children = area.GetChildren();
         if (children.Count == 0)
         {
+            obj.Shift(area.Center);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -333,13 +334,16 @@ public static class IClusteringThemeExt
                 // Find room it will start from
                 Point shift = obj.GetCenterShiftOn(startRoom);
                 shift = obj.GetShiftOutside(area, shiftMagn, shift);
-                if (!obj.Intersects(gen.Layout))
+                if (!obj.Intersects(gen.Layout, shift.x, shift.y))
                 {
                     obj.Shift(shift);
                     #region DEBUG
                     if (BigBoss.Debug.logging(Logs.LevelGen))
                     {
-                        area.ToLog(Logs.LevelGen, "Layout after placing room at: " + obj.Bounding);
+                        MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                        tmp.PutAll(gen.Layout);
+                        tmp.PutAll(obj);
+                        tmp.ToLog(Logs.LevelGen, "Layout after placing room at: " + obj.Bounding);
                         BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
                     }
                     #endregion
@@ -348,6 +352,16 @@ public static class IClusteringThemeExt
                 else
                 { // Hit some other area
                     shiftMagn.Rotate(Rotation.ClockWise);
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                        tmp.PutAll(gen.Layout);
+                        tmp.PutAll(obj, shift);
+                        tmp.ToLog(Logs.LevelGen, "Failed to place room at: " + obj.Bounding);
+                        BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
+                    }
+                    #endregion
                 }
             }
         }

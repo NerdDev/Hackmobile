@@ -34,6 +34,7 @@ public class LevelGenerator
     public const int desiredWallToDoorRatio = 10;
 
     private const double areaRadiusShrink = 5;
+    private const double areaSquishFactor = 2;
     #endregion
 
     public Theme InitialTheme;
@@ -63,6 +64,13 @@ public class LevelGenerator
         {
             BigBoss.Debug.w(Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
             Layout.ToLog(Logs.LevelGenMain);
+            MultiMap<char> tmp = new MultiMap<char>();
+            int c = 128;
+            foreach (Area area in Areas)
+            {
+                area.DrawAll(Draw.SetTo<GenSpace, char>(tmp, (char)(c++)));
+            }
+            tmp.ToLog(Logs.LevelGenMain, "Area Coverage");
             BigBoss.Debug.printFooter(Logs.LevelGenMain, "Generating Level: " + Depth);
         }
         #endregion
@@ -137,6 +145,8 @@ public class LevelGenerator
             {
                 areaObj.Shift(info.Shift);
                 shift = info.Shift;
+                shift.x = (int)(shift.x * areaRadiusShrink / areaSquishFactor);
+                shift.y = (int)(shift.y * areaRadiusShrink / areaSquishFactor);
             }
             else
             {
@@ -147,7 +157,7 @@ public class LevelGenerator
             {
                 Set = set,
                 NumRooms = Rand.NextNormalDist(set.MinRooms, set.MaxRooms),
-                Center = shift
+                CenterPt = shift
             };
             Areas.Add(area);
             Layout.AddChild(area);
@@ -156,19 +166,8 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(Logs.LevelGen, "Area center at " + area.Center + ", using set " + set + ", with " + area.NumRooms + " rooms.");
+                BigBoss.Debug.w(Logs.LevelGen, "Area center at " + area.CenterPt + ", using set " + set + ", with " + area.NumRooms + " rooms.");
                 areaCont.ToLog(Logs.LevelGen);
-                //MultiMap<GridType> tmp = new MultiMap<GridType>();
-                //foreach (Area a in Areas)
-                //{
-                //    tmp.DrawCircle(a.Center.x, a.Center.y, (int)Math.Round(a.Set.AvgRadius / areaRadiusShrink), new StrokedAction<GridType>()
-                //    {
-                //        UnitAction = Draw.SetTo(GridType.Floor),
-                //        StrokeAction = Draw.SetTo(GridType.Wall)
-                //    });
-                //    tmp[a.Center] = GridType.INTERNAL_MARKER_1;
-                //}
-                //tmp.ToLog(BigBoss.Debug.Get(Logs.LevelGen));
             }
             #endregion
         }
@@ -176,6 +175,12 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
+            MultiMap<GridTypeObj> tmp = new MultiMap<GridTypeObj>();
+            foreach (Area a in Areas)
+            {
+                tmp[a.CenterPt] = new GridTypeObj() { Type = GridType.INTERNAL_MARKER_1 };
+            }
+            tmp.ToLog(Logs.LevelGen, "Area Centers Expanded");
             BigBoss.Debug.printFooter(Logs.LevelGen, "Generate Areas");
         }
         #endregion

@@ -258,7 +258,12 @@ public class MultiMap<T> : Container2D<T>
     public override void Shift(int x, int y)
     {
         if (x == 0)
-        { // Just vertical
+        { 
+            if (y == 0)
+            { // Nothing to do
+                return;
+            }
+            // Just vertical
             Dictionary<int, Dictionary<int, T>> multimapRhs = new Dictionary<int, Dictionary<int, T>>();
             foreach (KeyValuePair<int, Dictionary<int, T>> row in multimap)
             {
