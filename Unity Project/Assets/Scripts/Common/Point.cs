@@ -123,6 +123,37 @@ public class Point
         this.y -= y;
     }
 
+    public void Rotate(Rotation rotation)
+    {
+        int tmpx;
+        switch (rotation)
+        {
+            case Rotation.ClockWise:
+                tmpx = x;
+                x = y;
+                y = -tmpx;
+                break;
+            case Rotation.CounterClockWise:
+                tmpx = x;
+                x = -y;
+                y = tmpx;
+                break;
+            case Rotation.OneEighty:
+                x *= -1;
+                y *= -1;
+                break;
+            case Rotation.MirrorVert:
+                y *= -1;
+                break;
+            case Rotation.MirrorHoriz:
+                x *= -1;
+                break;
+            case Rotation.None:
+            default:
+                break;
+        }
+    }
+
     public override bool Equals(object obj)
     {
         Point rhs = obj as Point;

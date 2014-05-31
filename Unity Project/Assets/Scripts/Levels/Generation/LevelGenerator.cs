@@ -10,8 +10,8 @@ public class LevelGenerator
 
     #region GlobalGenVariables
     // Number of areas
-    public const int minAreas = 1;
-    public const int maxAreas = 2;
+    public const int minAreas = 2;
+    public const int maxAreas = 3;
 
     // Number of Rooms
     public static int minRooms { get { return 8; } }
@@ -122,7 +122,7 @@ public class LevelGenerator
         {
             ThemeSet set = ThemeSetOptions.Get(Rand);
 
-            LayoutObject<GridTypeObj> areaObj = new LayoutObject<GridTypeObj>(LayoutObjectType.Area);
+            LayoutObject<GridTypeObj> areaObj = new LayoutObject<GridTypeObj>(LayoutObjectType.Room);
             areaObj.DrawCircle(0, 0, (int)Math.Round(set.AvgRadius / areaRadiusShrink), new StrokedAction<GridTypeObj>()
             {
                 UnitAction = Draw.SetTo(floor),
@@ -157,6 +157,18 @@ public class LevelGenerator
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
                 BigBoss.Debug.w(Logs.LevelGen, "Area center at " + area.Center + ", using set " + set + ", with " + area.NumRooms + " rooms.");
+                areaCont.ToLog(Logs.LevelGen);
+                //MultiMap<GridType> tmp = new MultiMap<GridType>();
+                //foreach (Area a in Areas)
+                //{
+                //    tmp.DrawCircle(a.Center.x, a.Center.y, (int)Math.Round(a.Set.AvgRadius / areaRadiusShrink), new StrokedAction<GridType>()
+                //    {
+                //        UnitAction = Draw.SetTo(GridType.Floor),
+                //        StrokeAction = Draw.SetTo(GridType.Wall)
+                //    });
+                //    tmp[a.Center] = GridType.INTERNAL_MARKER_1;
+                //}
+                //tmp.ToLog(BigBoss.Debug.Get(Logs.LevelGen));
             }
             #endregion
         }
@@ -164,17 +176,6 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            MultiMap<GridType> tmp = new MultiMap<GridType>();
-            foreach (Area area in Areas)
-            {
-                tmp.DrawCircle(area.Center.x, area.Center.y, (int)Math.Round(area.Set.AvgRadius / areaRadiusShrink), new StrokedAction<GridType>()
-                {
-                    UnitAction = Draw.SetTo(GridType.Floor),
-                    StrokeAction = Draw.SetTo(GridType.Wall)
-                });
-                tmp[area.Center] = GridType.INTERNAL_MARKER_1;
-            }
-            tmp.ToLog(BigBoss.Debug.Get(Logs.LevelGen));
             BigBoss.Debug.printFooter(Logs.LevelGen, "Generate Areas");
         }
         #endregion

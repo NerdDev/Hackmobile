@@ -304,30 +304,60 @@ public static class IClusteringThemeExt
         }
         #endregion
         LayoutObject<GenSpace> startRoom;
-        if (area.RandomChild(gen.Rand, out startRoom))
+        List<LayoutObject<GenSpace>> children = area.GetChildren();
+        if (children.Count == 0)
         {
-            // Find where it will shift away
-            Point shiftMagn = LevelGenerator.GenerateShiftMagnitude(SHIFT_RANGE, gen.Rand);
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                BigBoss.Debug.w(Logs.LevelGen, "Placing obj: " + obj);
-                startRoom.ToLog(Logs.LevelGen, "Starting on this");
-                BigBoss.Debug.w(Logs.LevelGen, "Shift: " + shiftMagn);
+                BigBoss.Debug.w("First room to place");
+                BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
             }
             #endregion
-            // Find room it will start from
-            Point shift = obj.GetCenterShiftOn(startRoom);
-            shift = obj.GetShiftOutside(area, shiftMagn, shift);
-            obj.Shift(shift);
+            return true;
+        }
+        while (children.RandomTake(gen.Rand, out startRoom))
+        {
+            // Find where it will shift away
+            Point shiftMagn = LevelGenerator.GenerateShiftMagnitude(SHIFT_RANGE, gen.Rand);
+            for (int i = 0; i < 4; i++)
+            {
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    BigBoss.Debug.w(Logs.LevelGen, "Placing obj: " + obj);
+                    startRoom.ToLog(Logs.LevelGen, "Starting on this");
+                    BigBoss.Debug.w(Logs.LevelGen, "Shift: " + shiftMagn);
+                }
+                #endregion
+                // Find room it will start from
+                Point shift = obj.GetCenterShiftOn(startRoom);
+                shift = obj.GetShiftOutside(area, shiftMagn, shift);
+                if (!obj.Intersects(gen.Layout))
+                {
+                    obj.Shift(shift);
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        area.ToLog(Logs.LevelGen, "Layout after placing room at: " + obj.Bounding);
+                        BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
+                    }
+                    #endregion
+                    return true;
+                }
+                else
+                { // Hit some other area
+                    shiftMagn.Rotate(Rotation.ClockWise);
+                }
+            }
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            area.ToLog(Logs.LevelGen, "Layout after placing room at: " + obj.Bounding);
+            BigBoss.Debug.w("Failed to place room");
             BigBoss.Debug.printFooter(Logs.LevelGen, "Place Rooms");
         }
         #endregion
-        return true;
+        return false;
     }
 }

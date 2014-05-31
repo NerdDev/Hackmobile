@@ -181,6 +181,12 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     }
 
     #region Intersecting
+    public bool Intersects(Container2D<T> rhs)
+    {
+        Point at;
+        return Intersects(rhs, out at);
+    }
+
     public bool Intersects(Container2D<T> rhs, out Point at)
     {
         Bounding bounds = Bounding;

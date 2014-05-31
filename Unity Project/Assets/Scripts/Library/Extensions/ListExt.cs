@@ -25,10 +25,22 @@ namespace System.Collections.Generic
 
         public static T RandomTake<T>(this List<T> list, System.Random rand)
         {
-            int r = rand.Next(list.Count);
-            T item = list[r];
-            list.RemoveAt(r);
+            T item;
+            RandomTake(list, rand, out item);
             return item;
+        }
+
+        public static bool RandomTake<T>(this List<T> list, System.Random rand, out T item)
+        {
+            if (list.Count == 0)
+            {
+                item = default(T);
+                return false;
+            }
+            int r = rand.Next(list.Count);
+            item = list[r];
+            list.RemoveAt(r);
+            return true;
         }
 
         public static bool Random<T>(this List<T> list, System.Random rand, out T item)
