@@ -80,19 +80,6 @@ public class LayoutObject<T> : Container2D<T>
         return arrOut;
     }
 
-    public void Connect(LayoutObject<T> obj)
-    {
-        if (obj != null)
-        {
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                BigBoss.Debug.w(Logs.LevelGen, "Connecting " + ToString() + " to " + obj.ToString());
-            }
-            _connectedTo.Add(obj);
-            obj._connectedTo.Add(this);
-        }
-    }
-
     public bool RandomChild(System.Random rand, out LayoutObject<T> rhs)
     {
         return children.Random(rand, out rhs);
@@ -110,8 +97,20 @@ public class LayoutObject<T> : Container2D<T>
 
     public List<LayoutObject<T>> ConnectedToAll()
     {
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Connected To All: " + this);
+        }
+        #endregion
         var connected = new List<LayoutObject<T>>();
         ConnectedToRecursive(connected);
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen) && BigBoss.Debug.Flag(DebugManager.DebugFlag.FineSteps))
+        {
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Connected To All: " + this);
+        }
+        #endregion
         return connected;
     }
 
@@ -340,6 +339,28 @@ public class LayoutObject<T> : Container2D<T>
         }
     }
 
+    public IEnumerable<LayoutObject<T>> IterateAllChildren()
+    {
+        foreach (LayoutObject<T> child in children)
+        {
+            yield return child;
+            foreach (LayoutObject<T> subChild in child.IterateAllChildren())
+            {
+                yield return subChild;
+            }
+        }
+    }
+
+    public void PrintChildrenTree(Log log)
+    {
+        log.printHeader(this.ToString());
+        foreach (var child in children)
+        {
+            child.PrintChildrenTree(log);
+        }
+        log.printFooter(this.ToString());
+    }
+
     public override bool DrawAll(DrawAction<T> call, Container2D<T> on)
     {
         return grids.DrawAll(call, on);
@@ -365,6 +386,10 @@ public class LayoutObject<T> : Container2D<T>
 
     public void ConnectTo(LayoutObject<T> rhs, int x, int y)
     {
+        if (rhs == null)
+        {
+            throw new ArgumentException();
+        }
         if (!grids.Contains(x, y)) return;
         _connectedTo.Add(rhs);
         foreach (var child in children)

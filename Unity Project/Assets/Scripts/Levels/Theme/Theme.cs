@@ -176,6 +176,7 @@ public abstract class Theme : ThemeOption, IInitializable
         }
         #endregion
         this.ChooseAllSmartObjects(gen.Rand);
+        RoomMods.Freshen();
         RoomSpec spec = new RoomSpec(room, gen.Depth, this, gen.Rand);
         // Base Mod
         if (!ApplyMod(spec, spec.RoomModifiers.BaseMods))

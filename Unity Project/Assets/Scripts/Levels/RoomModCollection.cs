@@ -99,5 +99,14 @@ public class RoomModCollection
             throw new ArgumentException("Cannot inherit directly from RoomModifier");
         }
     }
+
+    public void Freshen()
+    {
+        BaseMods.Freshen();
+        DefiningMods.Freshen();
+        HeavyMods.Freshen();
+        FillMods.Freshen();
+        FinalMods.Freshen();
+    }
 }
 

@@ -24,7 +24,7 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme
         // Defining
         RoomMods.AddMod(new BlankDefiningRoomMod(), 1);
         // Flex
-        RoomMods.AddMod(new MassTombRoom(), 1, true);
+        RoomMods.AddMod(new MassTombRoom(), 0.35d, true);
         RoomMods.AddMod(new GiantPillarMod(), 1);
         RoomMods.AddMod(new HiddenRoomMod(), .5);
         RoomMods.AddMod(new PillarMod(), 1);

@@ -10,8 +10,8 @@ public class LevelGenerator
 
     #region GlobalGenVariables
     // Number of areas
-    public const int minAreas = 2;
-    public const int maxAreas = 3;
+    public const int minAreas = 1;
+    public const int maxAreas = 2;
 
     // Number of Rooms
     public static int minRooms { get { return 8; } }
@@ -210,16 +210,20 @@ public class LevelGenerator
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
-            NewLog(a + " Room " + (a.NumRoomsGenerated + 1));
+            NewLog(a + " " + room);
         }
         #endregion
         Theme t = a.Set.GetTheme(Rand);
         t.GenerateRoom(this, a, room);
-        a.AddChild(room);
         a.NumRoomsGenerated++;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
+            Layout.PrintChildrenTree(BigBoss.Debug.Get(Logs.LevelGen));
+            //foreach (var child in Layout.IterateAllChildren())
+            //{
+            //    child.ToLog(Logs.LevelGen, "Summary");
+            //}
             Layout.ToLog(Logs.LevelGen, "After generating Room " + a.NumRoomsGenerated);
         }
         #endregion
@@ -239,7 +243,13 @@ public class LevelGenerator
         var runningConnected = new MultiMap<GenSpace>();
         // Create initial queue and visited
         var startingRoom = rooms.Take();
-        startingRoom.GetConnectedGrid().DrawAll(Draw.AddTo(runningConnected));
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            startingRoom.ToLog(Logs.LevelGen, "Starting room");
+        }
+        #endregion
+        runningConnected.PutAll(startingRoom.GetConnectedGrid());
         Container2D<bool> visited;
         Queue<Value2D<GenSpace>> queue;
         ConstructBFS(startingRoom, out queue, out visited);

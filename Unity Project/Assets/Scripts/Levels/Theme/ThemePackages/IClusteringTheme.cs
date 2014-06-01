@@ -263,8 +263,8 @@ public static class IClusteringThemeExt
                     foreach (Point p in placed)
                     {
                         LayoutObject<GenSpace> clusterObj;
-                        cluster.GetObjAt(p.x, p.y, out clusterObj);
-                        obj.Connect(clusterObj);
+                        gen.Layout.GetObjAt(p.x, p.y, out clusterObj);
+                        obj.ConnectTo(clusterObj, p.x, p.y);
                     }
                     break;
                 }
