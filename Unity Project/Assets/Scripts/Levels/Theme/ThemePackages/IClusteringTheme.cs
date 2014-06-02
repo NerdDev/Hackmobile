@@ -262,9 +262,10 @@ public static class IClusteringThemeExt
                 { // Placed a door
                     foreach (Point p in placed)
                     {
-                        LayoutObject<GenSpace> clusterObj;
-                        gen.Layout.GetObjAt(p.x, p.y, out clusterObj);
-                        obj.ConnectTo(clusterObj, p.x, p.y);
+                        foreach (var room in obj.ConnectToRoomsAt(gen.Layout, p.x, p.y))
+                        {
+                            room.Remove(p);
+                        }
                     }
                     break;
                 }

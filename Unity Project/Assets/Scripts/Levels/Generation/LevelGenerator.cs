@@ -224,7 +224,9 @@ public class LevelGenerator
             //{
             //    child.ToLog(Logs.LevelGen, "Summary");
             //}
-            Layout.ToLog(Logs.LevelGen, "After generating Room " + a.NumRoomsGenerated);
+            room.ToLog(Logs.LevelGen, "Room generated");
+            room.GetConnectedGrid().ToLog("Connected rooms");
+            Layout.ToLog(Logs.LevelGen, "Layout after generating Room " + a.NumRoomsGenerated);
         }
         #endregion
     }
@@ -307,8 +309,8 @@ public class LevelGenerator
                 Point first = path.FirstEnd;
                 Point second = path.SecondEnd;
                 LayoutObject<GenSpace> pathObj = path.Bake(InitialTheme);
-                Layout.ConnectTo(pathObj, first.x, first.y);
-                Layout.ConnectTo(pathObj, second.x, second.y);
+                pathObj.ConnectToRoomsAt(Layout, first.x, first.y);
+                pathObj.ConnectToRoomsAt(Layout, second.x, second.y);
                 GenSpace space;
                 if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
                 {

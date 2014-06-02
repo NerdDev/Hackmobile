@@ -392,7 +392,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         ToLog(BigBoss.Debug.LastLog, customContent);
     }
 
-    public void ToLog(Logs logs, params string[] customContent)
+    public virtual void ToLog(Logs logs, params string[] customContent)
     {
         ToLog(BigBoss.Debug.Get(logs), customContent);
     }

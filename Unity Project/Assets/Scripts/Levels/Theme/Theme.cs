@@ -155,7 +155,7 @@ public abstract class Theme : ThemeOption, IInitializable
         }
 
         ThemeElement door = doorElement.Get(rand);
-        cont.DrawLineExpanding(x, y, dir, count / 2, Draw.MergeIn(door, this, GridType.Door, false).And(Draw.Around(false, Draw.IsNull<GenSpace>().IfThen(Draw.SetTo(GridType.Floor, this)))));
+        cont.DrawLineExpanding(x, y, dir, count / 2, Draw.MergeIn(door, this, GridType.Door, false));
     }
     #endregion
 

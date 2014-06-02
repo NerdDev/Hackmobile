@@ -228,7 +228,7 @@ public class LayoutObject<T> : Container2D<T>
         return grids.ToRowStrings();
     }
 
-    public virtual void ToLog(Logs log, params String[] customContent)
+    public override void ToLog(Logs log, params String[] customContent)
     {
         if (BigBoss.Debug.logging(log))
         {
@@ -384,18 +384,45 @@ public class LayoutObject<T> : Container2D<T>
         return true;
     }
 
-    public void ConnectTo(LayoutObject<T> rhs, int x, int y)
+    public IEnumerable<LayoutObject<T>> ConnectToRoomsAt(LayoutObject<T> rhs, int x, int y)
+    {
+        foreach (var room in rhs.GetObjsAt(x, y, LayoutObjectType.Room))
+        {
+            this.ConnectTo(room);
+            yield return room;
+        }
+    }
+
+    public IEnumerable<LayoutObject<T>> GetObjsAt(int x, int y, LayoutObjectType type)
+    {
+        if (grids.Contains(x, y))
+        {
+            foreach (var child in children)
+            {
+                if (child.Type == type)
+                {
+                    yield return child;
+                }
+                foreach (var recursive in child.GetObjsAt(x, y, type))
+                {
+                    yield return recursive;
+                }
+            }
+        }
+    }
+
+    public void ConnectTo(LayoutObject<T> rhs)
     {
         if (rhs == null)
         {
             throw new ArgumentException();
         }
-        if (!grids.Contains(x, y)) return;
-        _connectedTo.Add(rhs);
-        foreach (var child in children)
+        if (this.Equals(rhs))
         {
-            child.ConnectTo(rhs, x, y);
+            return;
         }
+        _connectedTo.Add(rhs);
+        rhs._connectedTo.Add(this);
     }
 
     public override void Rotate(Rotation rotate)
