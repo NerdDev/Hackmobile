@@ -314,11 +314,11 @@ public class LevelGenerator
                 GenSpace space;
                 if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
                 {
-                    InitialTheme.PlaceDoor(Layout, first.x, first.y, Rand, true);
+                    Layout.PlaceDoor(first.x, first.y, Rand, true);
                 }
                 if (!Layout.TryGetValue(second, out space) || space.Type == GridType.Wall)
                 {
-                    InitialTheme.PlaceDoor(Layout, second.x, second.y, Rand, true);
+                    Layout.PlaceDoor(second.x, second.y, Rand, true);
                 }
                 // Expand path
                 foreach (var p in path)

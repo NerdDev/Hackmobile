@@ -436,3 +436,112 @@ public class LayoutObject<T> : Container2D<T>
         return rhsCenter - Bounding.GetCenter();
     }
 }
+
+public static class LayoutObjectExt
+{
+    #region Door Placement
+    public static ProbabilityList<int> DoorRatioPicker;
+    public static List<Value2D<GenSpace>> PlaceSomeDoors(this LayoutObject<GenSpace> arr, IEnumerable<Point> points, System.Random rand, bool external, int desiredWallToDoorRatio = -1)
+    {
+        if (desiredWallToDoorRatio < 0)
+        {
+            desiredWallToDoorRatio = LevelGenerator.desiredWallToDoorRatio;
+        }
+        var acceptablePoints = new MultiMap<GenSpace>();
+        Counter numPoints = new Counter();
+        DrawAction<GenSpace> call = Draw.Count<GenSpace>(numPoints).And(Draw.CanDrawDoor(external).IfThen(Draw.AddTo(acceptablePoints)));
+        arr.DrawPoints(points, call);
+        if (DoorRatioPicker == null)
+        {
+            DoorRatioPicker = new ProbabilityList<int>();
+            DoorRatioPicker.Add(-2, .25);
+            DoorRatioPicker.Add(-1, .5);
+            DoorRatioPicker.Add(0, 1);
+            DoorRatioPicker.Add(1, .5);
+            DoorRatioPicker.Add(2, .25);
+        }
+        int numDoors = numPoints / desiredWallToDoorRatio;
+        numDoors += DoorRatioPicker.Get(rand);
+        if (numDoors <= 0)
+        {
+            numDoors = 1;
+        }
+        List<Value2D<GenSpace>> pickedPts = acceptablePoints.GetRandom(rand, numDoors, 1);
+        DrawAction<GenSpace> additionalTest = null;
+        MultiMap<GenSpace> notAllowed = null;
+        MultiMap<GenSpace> allowed = new MultiMap<GenSpace>();
+        foreach (Point p in points)
+        {
+            allowed[p] = null;
+        }
+        notAllowed = new MultiMap<GenSpace>();
+        foreach (var v in pickedPts)
+        {
+            notAllowed[v] = null;
+        }
+        additionalTest = Draw.PointContainedIn(allowed).And(Draw.Not(Draw.HasAround(false, Draw.PointContainedIn(notAllowed))));
+        foreach (Point picked in pickedPts)
+        {
+            notAllowed.Remove(picked);
+            PlaceDoor(arr, picked.x, picked.y, rand, external, additionalTest);
+            notAllowed[picked] = null;
+        }
+        return pickedPts;
+    }
+
+    public static bool PlaceDoor(this LayoutObject<GenSpace> cont, int x, int y, System.Random rand, bool considerNulls, DrawAction<GenSpace> additionalTest = null)
+    {
+        DrawAction<GenSpace> test = Draw.CanDrawDoor(considerNulls);
+        if (additionalTest != null)
+        {
+            test = test.And(additionalTest);
+        }
+
+        // Count largest option
+        Counter horiz = new Counter();
+        cont.DrawLineExpanding(x, y, GridDirection.HORIZ, 5, test.And(Draw.Count<GenSpace>(horiz)));
+        Counter vert = new Counter();
+        cont.DrawLineExpanding(x, y, GridDirection.VERT, 5, test.And(Draw.Count<GenSpace>(vert)));
+
+        // Find largest
+        GridDirection dir;
+        int count;
+        if (horiz.Count < vert || (horiz == vert && rand.NextBool()))
+        {
+            count = vert;
+            dir = GridDirection.VERT;
+        }
+        else
+        {
+            count = horiz;
+            dir = GridDirection.HORIZ;
+        }
+        count = Math.Max(count, 1);
+
+        // Pick random size
+        for (; count > 1; count--)
+        {
+            if (rand.NextBool())
+            {
+                break;
+            }
+        }
+
+        // Pick door
+        GenSpace space;
+        if (cont.TryGetValue(x, y, out space))
+        {
+            SmartThemeElement doorElement;
+            while (!space.Theme.Door.Select(rand, count, 1, out doorElement) && count > 1)
+            {
+                count--;
+            }
+
+            ThemeElement door = doorElement.Get(rand);
+            cont.DrawLineExpanding(x, y, dir, count / 2, Draw.MergeIn(door, space.Theme, GridType.Door, false));
+            return true;
+        }
+        return false;
+    }
+    #endregion
+}

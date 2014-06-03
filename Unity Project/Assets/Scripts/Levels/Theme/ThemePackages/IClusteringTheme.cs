@@ -257,7 +257,7 @@ public static class IClusteringThemeExt
             if (clusterDoorOptions.Count > 0)
             { // Cluster side has door options
                 obj.Shift(info.Shift.x, info.Shift.y);
-                placed = theme.PlaceSomeDoors(obj, clusterDoorOptions, gen.Rand, true);
+                placed = obj.PlaceSomeDoors(clusterDoorOptions, gen.Rand, true);
                 if (placed.Count != 0)
                 { // Placed a door
                     foreach (Point p in placed)
