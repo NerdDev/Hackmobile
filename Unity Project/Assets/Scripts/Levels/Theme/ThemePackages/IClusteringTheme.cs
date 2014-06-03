@@ -262,7 +262,7 @@ public static class IClusteringThemeExt
                 { // Placed a door
                     foreach (Point p in placed)
                     {
-                        foreach (var room in obj.ConnectToRoomsAt(gen.Layout, p.x, p.y))
+                        foreach (var room in obj.ConnectToChildrenAt(gen.Layout, p.x, p.y))
                         {
                             room.Remove(p);
                         }

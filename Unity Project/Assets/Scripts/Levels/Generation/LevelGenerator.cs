@@ -242,7 +242,7 @@ public class LevelGenerator
         #endregion
         DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor(true));
         List<LayoutObject<GenSpace>> rooms = new List<LayoutObject<GenSpace>>(Layout.Flatten(LayoutObjectType.Room));
-        var runningConnected = new MultiMap<GenSpace>();
+        LayoutObject<GenSpace> runningConnected = new LayoutObject<GenSpace>(LayoutObjectType.Layout);
         // Create initial queue and visited
         var startingRoom = rooms.Take();
         #region DEBUG
@@ -251,7 +251,10 @@ public class LevelGenerator
             startingRoom.ToLog(Logs.LevelGen, "Starting room");
         }
         #endregion
-        runningConnected.PutAll(startingRoom.GetConnectedGrid());
+        foreach (var connected in startingRoom.ConnectedToAll())
+        {
+            runningConnected.AddChild(connected);
+        }
         Container2D<bool> visited;
         Queue<Value2D<GenSpace>> queue;
         ConstructBFS(startingRoom, out queue, out visited);
@@ -263,8 +266,8 @@ public class LevelGenerator
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
-                runningConnected.ToLog(Logs.LevelGen, "Source Setup");
-                fail.ToLog(Logs.LevelGen, "Failed to connect to this");
+                runningConnected.ToLogNumberRooms(BigBoss.Debug.Get(Logs.LevelGen), "Source Setup");
+                fail.ToLogNumberRooms(BigBoss.Debug.Get(Logs.LevelGen), "Failed to connect to this");
             }
             #endregion
             Value2D<GenSpace> startPoint;
@@ -299,18 +302,27 @@ public class LevelGenerator
             var path = new Path(stack);
             if (path.Valid)
             {
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    path.Bake(null).ToLog(Logs.LevelGen, "Connecting Path");
-                }
-                #endregion
                 path.Simplify();
                 Point first = path.FirstEnd;
                 Point second = path.SecondEnd;
                 LayoutObject<GenSpace> pathObj = path.Bake(InitialTheme);
-                pathObj.ConnectToRoomsAt(Layout, first.x, first.y);
-                pathObj.ConnectToRoomsAt(Layout, second.x, second.y);
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    pathObj.ToLog(Logs.LevelGen, "Connecting Path");
+                }
+                #endregion
+                if (pathObj.Id == 26)
+                {
+                    int wer = 23;
+                    wer++;
+                }
+                if (pathObj.ConnectToChildrenAt(Layout, first.x, first.y).Count() == 0
+                    || pathObj.ConnectToChildrenAt(Layout, second.x, second.y).Count() == 0)
+                {
+                    throw new ArgumentException("Cannot connect at path ends.");
+                }
+                ;
                 GenSpace space;
                 if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
                 {
@@ -333,7 +345,7 @@ public class LevelGenerator
                 // Mark path on layout object
                 foreach (var v in pathObj)
                 {
-                    runningConnected.Put(v);
+                    runningConnected.AddChild(pathObj);
                     if (!visited[v])
                     {
                         queue.Enqueue(v);
@@ -341,7 +353,10 @@ public class LevelGenerator
                     visited[v] = true;
                 }
                 Layout.PutAll(pathObj);
-                hitConnected.DrawAll(Draw.AddTo(runningConnected));
+                foreach (var child in hit.ConnectedToAll())
+                {
+                    runningConnected.AddChild(child);
+                }
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
                 {

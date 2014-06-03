@@ -246,12 +246,34 @@ public class LayoutObject<T> : Container2D<T>
         }
     }
 
-    public virtual void ToLog(Logs log)
+    public override void ToLog(Logs log)
     {
         if (BigBoss.Debug.logging(log))
         {
             ToLog(log, new String[0]);
         }
+    }
+
+    public void ToLogNumberRooms(Log log, params string[] customContent)
+    {
+        MultiMap<char> tmp = new MultiMap<char>();
+        foreach (var room in IterateAllChildren())
+        {
+            char c = (char)((room.Id + 33) % 93);
+            foreach (var v in room)
+            {
+                tmp[v] = c;
+            }
+            Point center = room.Bounding.GetCenter();
+            string number = room.Id.ToString();
+            center.x -= number.Length / 2;
+            foreach (char c1 in number)
+            {
+                tmp[center] = c1;
+                center.x++;
+            }
+        }
+        tmp.ToLog(log, customContent);
     }
     #endregion Printing
 
@@ -341,9 +363,12 @@ public class LayoutObject<T> : Container2D<T>
 
     public IEnumerable<LayoutObject<T>> IterateAllChildren()
     {
+        if (Child)
+        {
+            yield return this;
+        }
         foreach (LayoutObject<T> child in children)
         {
-            yield return child;
             foreach (LayoutObject<T> subChild in child.IterateAllChildren())
             {
                 yield return subChild;
@@ -384,9 +409,9 @@ public class LayoutObject<T> : Container2D<T>
         return true;
     }
 
-    public IEnumerable<LayoutObject<T>> ConnectToRoomsAt(LayoutObject<T> rhs, int x, int y)
+    public IEnumerable<LayoutObject<T>> ConnectToChildrenAt(LayoutObject<T> rhs, int x, int y)
     {
-        foreach (var room in rhs.GetObjsAt(x, y, LayoutObjectType.Room))
+        foreach (var room in rhs.GetChildrenAt(x, y))
         {
             this.ConnectTo(room);
             yield return room;
@@ -406,6 +431,27 @@ public class LayoutObject<T> : Container2D<T>
                 foreach (var recursive in child.GetObjsAt(x, y, type))
                 {
                     yield return recursive;
+                }
+            }
+        }
+    }
+
+    public IEnumerable<LayoutObject<T>> GetChildrenAt(int x, int y)
+    {
+        if (grids.Contains(x, y))
+        {
+            foreach (var child in children)
+            {
+                if (child.Child)
+                {
+                    yield return child;
+                }
+                else
+                {
+                    foreach (var recursive in child.GetChildrenAt(x, y))
+                    {
+                        yield return recursive;
+                    }
                 }
             }
         }
