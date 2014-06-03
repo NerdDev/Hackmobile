@@ -220,10 +220,6 @@ public class LevelGenerator
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
             Layout.PrintChildrenTree(BigBoss.Debug.Get(Logs.LevelGen));
-            //foreach (var child in Layout.IterateAllChildren())
-            //{
-            //    child.ToLog(Logs.LevelGen, "Summary");
-            //}
             room.ToLog(Logs.LevelGen, "Room generated");
             room.GetConnectedGrid().ToLog("Connected rooms");
             Layout.ToLog(Logs.LevelGen, "Layout after generating Room " + a.NumRoomsGenerated);
@@ -240,7 +236,7 @@ public class LevelGenerator
             BigBoss.Debug.printHeader(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
-        DrawAction<GenSpace> passTest = Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor(true));
+        DrawAction<GenSpace> passTest = Draw.And(Draw.ContainedIn<GenSpace>(Path.PathTypes).Or(Draw.CanDrawDoor(true)), Draw.HasAround(true, Draw.IsType<GenSpace>(GridType.NULL)));
         List<LayoutObject<GenSpace>> rooms = new List<LayoutObject<GenSpace>>(Layout.Flatten(LayoutObjectType.Room));
         LayoutObject<GenSpace> runningConnected = new LayoutObject<GenSpace>(LayoutObjectType.Layout);
         // Create initial queue and visited
@@ -262,6 +258,7 @@ public class LevelGenerator
         LayoutObject<GenSpace> fail;
         while (!startingRoom.ConnectedTo(rooms, out fail))
         {
+            // Draw Path
             // Find start points
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -312,17 +309,11 @@ public class LevelGenerator
                     pathObj.ToLog(Logs.LevelGen, "Connecting Path");
                 }
                 #endregion
-                if (pathObj.Id == 26)
-                {
-                    int wer = 23;
-                    wer++;
-                }
                 if (pathObj.ConnectToChildrenAt(Layout, first.x, first.y).Count() == 0
                     || pathObj.ConnectToChildrenAt(Layout, second.x, second.y).Count() == 0)
                 {
                     throw new ArgumentException("Cannot connect at path ends.");
                 }
-                ;
                 GenSpace space;
                 if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
                 {

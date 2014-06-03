@@ -337,6 +337,7 @@ public static class IClusteringThemeExt
                 shift = obj.GetShiftOutside(area, shiftMagn, shift);
                 if (!obj.Intersects(gen.Layout, shift.x, shift.y))
                 {
+                    shift.Shift(shiftMagn);
                     obj.Shift(shift);
                     #region DEBUG
                     if (BigBoss.Debug.logging(Logs.LevelGen))
