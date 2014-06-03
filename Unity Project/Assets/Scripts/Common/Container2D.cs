@@ -198,28 +198,8 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             return false;
         }
 
-        Container2D<T> largest, smallest;
-        if (this.Count >= rhs.Count)
-        {
-            largest = this;
-            smallest = rhs;
-        }
-        else
-        {
-            largest = rhs;
-            smallest = this;
-        }
-
-        foreach (Value2D<T> val in smallest)
-        {
-            if (largest.Contains(val.x, val.y))
-            {
-                at = new Point(val.x, val.y);
-                return true;
-            }
-        }
-        at = null;
-        return false;
+        at = new Point();
+        return !DrawRect(intersect, Draw.And(Draw.PointContainedIn<T>(this), Draw.PointContainedIn<T>(rhs)).IfThen(Draw.Set<T>(at).And(Draw.Stop<T>())));
     }
 
     public bool Intersects(Container2D<T> rhs, int shiftX, int shiftY)
@@ -248,31 +228,8 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             return false;
         }
 
-        // Brute force
-        Container2D<T> largest, smallest;
-        if (this.Count >= rhs.Count)
-        {
-            shiftX *= -1;
-            shiftY *= -1;
-            largest = this;
-            smallest = rhs;
-        }
-        else
-        {
-            largest = rhs;
-            smallest = this;
-        }
-
-        foreach (Value2D<T> val in smallest)
-        {
-            if (largest.Contains(val.x + shiftX, val.y + shiftY))
-            {
-                at = new Point(val.x + shiftX, val.y + shiftY);
-                return true;
-            }
-        }
-        at = null;
-        return false;
+        at = new Point();
+        return !this.DrawRect(intersect, Draw.And(Draw.PointContainedIn(rhs), Draw.PointContainedIn(this).Shift(-shiftX, -shiftY)).IfThen(Draw.Set<T>(at).And(Draw.Stop<T>())));
     }
 
     public bool Intersects(IEnumerable<Container2D<T>> options, int shiftX, int shiftY, out Point at, out Container2D<T> intersect)
