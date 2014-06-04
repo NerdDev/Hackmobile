@@ -557,7 +557,7 @@ public static class LayoutObjectExt
         foreach (var picked in pickedPts)
         {
             notAllowed.Remove(picked);
-            if (PlaceDoor(cont, picked.x, picked.y, rand, external, additionalTest))
+            if (PlaceDoor(cont, referenceCont, picked.x, picked.y, rand, external, additionalTest))
             {
                 ret.Add(picked);
             }
