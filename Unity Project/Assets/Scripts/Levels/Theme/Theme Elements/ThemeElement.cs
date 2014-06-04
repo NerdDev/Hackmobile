@@ -7,7 +7,7 @@ using UnityEngine;
 public class ThemeElement : FOWRenderers
 {
     public GameObject GO { get { return gameObject; } }
-    public ThemeQualitySet Set;
+    public ThemeQualitySet Set { get; set; }
     public int GridWidth { get { return Set.GridWidth; } }
     public int GridLength { get { return Set.GridLength; } }
     public string PrintChar { get { return Set.PrintChar; } }

@@ -1,12 +1,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.Linq;
 
-public class TrapRoomMod : FillRoomMod
+public class SpikeTrapRoomMod : FillRoomMod
 {
     public override bool Unique { get { return true; } }
     protected static ProbabilityList<int> treasureSizeList = new ProbabilityList<int>();
-    static TrapRoomMod()
+    static SpikeTrapRoomMod()
     {
         treasureSizeList.Add(0, .25, false);
         treasureSizeList.Add(1, .5, false);
@@ -16,12 +18,7 @@ public class TrapRoomMod : FillRoomMod
 
     protected override bool ModifyInternal(RoomSpec spec)
     {
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printHeader(Logs.LevelGen, ToString());
-        }
-        #endregion
+        ISpikeTrapTheme spikeTheme = EnsureThemeImplements<ISpikeTrapTheme>(spec);
         Counter floorSpace;
         RandomPicker<GenSpace> picker;
         spec.Grids.DrawAll(Draw.EmptyAndFloor<GenSpace>().IfThen(Draw.Count<GenSpace>(out floorSpace).And(Draw.PickRandom(out picker))));
@@ -59,16 +56,7 @@ public class TrapRoomMod : FillRoomMod
         #endregion
 
         List<Value2D<GenSpace>> trapList = picker.Pick(spec.Random, trapsInRoom, 0, true);
-        foreach (Value2D<GenSpace> val in trapList)
-        {
-            spec.Grids.SetTo(val, GridType.Trap, spec.Theme);
-        }
-        #region DEBUG
-        if (BigBoss.Debug.logging(Logs.LevelGen))
-        {
-            BigBoss.Debug.printFooter(Logs.LevelGen, ToString());
-        }
-        #endregion
+        PlaceDoodads(spec, spikeTheme.GetSpikeTraps(), trapList.Cast<Point>());
         return true;
     }
 }

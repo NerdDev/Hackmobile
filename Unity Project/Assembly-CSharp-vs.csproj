@@ -182,7 +182,7 @@
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\FillRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\HiddenRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\PillarMod.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\TrapRoomMod.cs" />
+     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\SpikeTrapRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Final Mods\FinalRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Heavy Mods\GiantPillarMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Heavy Mods\HeavyRoomMod.cs" />
@@ -204,6 +204,7 @@
      <Compile Include="Assets\Scripts\Levels\RoomModTester.cs" />
      <Compile Include="Assets\Scripts\Levels\TestLevelSetup.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\IPillarTheme.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\ISpikeTrapTheme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Smart Theme Elements\SmartThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\DoorElement.cs" />

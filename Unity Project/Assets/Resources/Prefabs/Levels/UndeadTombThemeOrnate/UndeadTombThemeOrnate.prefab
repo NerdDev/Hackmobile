@@ -72,10 +72,17 @@ MonoBehaviour:
       Item: {fileID: 11400000, guid: f353a1325679d524b9b9233007d0ec8f, type: 2}
     - Multiplier: 1
       Item: {fileID: 11400000, guid: a9599c1780bcdb14da4d13a9c54af8e1, type: 2}
+  SpikeTraps:
+    Elements:
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: cb51ba905d611fc499846e77070673db, type: 2}
+    - Multiplier: 1
+      Item: {fileID: 11400000, guid: a50354b7f38293446aeff090dd37c220, type: 2}
   Tombs:
     Elements:
     - Multiplier: 1
       Item: {fileID: 11400000, guid: be60f9543ac77014ba9e59df9a34b560, type: 2}
+  ClusterSplitPercent: .25
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -35,4 +35,23 @@ abstract public class RoomModifier : IProbabilityItem
     {
         return GetType().GetHashCode();
     }
+
+    public void PlaceDoodads(RoomSpec spec, ThemeElementBundle doodad, IEnumerable<Point> points)
+    {
+        SmartThemeElement smart;
+        doodad.Select(spec.Random, 1, 1, out smart, false);
+        foreach (Point p in points)
+        {
+            GenDeploy deploy = new GenDeploy(smart.Get(spec.Random));
+            spec.Grids.MergeIn(p.x, p.y, deploy, spec.Theme, GridType.Trap);
+        }
+    }
+
+    public T EnsureThemeImplements<T>(RoomSpec spec)
+        where T : class
+    {
+        T castTheme = spec.Theme as T;
+        if (castTheme == null) throw new ArgumentException("Theme must be " + typeof(T).Name);
+        return castTheme;
+    }
 }

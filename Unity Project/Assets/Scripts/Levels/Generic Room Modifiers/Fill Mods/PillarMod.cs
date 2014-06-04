@@ -19,8 +19,7 @@ public class PillarMod : FillRoomMod
 
     protected override bool ModifyInternal(RoomSpec spec)
     {
-        IPillarTheme pillarTheme = spec.Theme as IPillarTheme;
-        if (pillarTheme == null) throw new ArgumentException("Theme must be IPillarTheme");
+        IPillarTheme pillarTheme = EnsureThemeImplements<IPillarTheme>(spec);
         Bounding bounds = spec.Grids.Bounding;
         int spacingX = spacingOptions.Get(spec.Random);
         int spacingY = spec.Random.Percent(differingSpacingChance) ? spacingOptions.Get(spec.Random) : spacingX;

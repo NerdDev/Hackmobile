@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme
+public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrapTheme
 {
     public ThemeElementBundle Pillars;
+    public ThemeElementBundle SpikeTraps;
     public ThemeElementBundle Tombs;
     public double ClusterSplitPercent = .25d;
     public double ClusterSplitPercentProperty { get { return ClusterSplitPercent; } }
@@ -29,13 +30,18 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme
         RoomMods.AddMod(new HiddenRoomMod(), .5);
         RoomMods.AddMod(new PillarMod(), 1);
         RoomMods.AddMod(new SplitterMod(), 1);
-        RoomMods.AddMod(new TrapRoomMod(), .2d);
+        RoomMods.AddMod(new SpikeTrapRoomMod(), .2d);
         RoomMods.AddMod(new TreasureRoomMod(), .3d);
     }
 
     public ThemeElementBundle GetPillars()
     {
         return Pillars;
+    }
+
+    public ThemeElementBundle GetSpikeTraps()
+    {
+        return SpikeTraps;
     }
 
     public override bool GenerateRoom(LevelGenerator gen, Area a, LayoutObject<GenSpace> room)
