@@ -409,13 +409,17 @@ public class LayoutObject<T> : Container2D<T>
         return true;
     }
 
-    public IEnumerable<LayoutObject<T>> ConnectToChildrenAt(LayoutObject<T> rhs, int x, int y)
+    public List<LayoutObject<T>> ConnectToChildrenAt(LayoutObject<T> rhs, int x, int y)
     {
+        List<LayoutObject<T>> ret = new List<LayoutObject<T>>();
         foreach (var room in rhs.GetChildrenAt(x, y))
         {
-            this.ConnectTo(room);
-            yield return room;
+            if (this.ConnectTo(room))
+            {
+                ret.Add(room);
+            }
         }
+        return ret;
     }
 
     public IEnumerable<LayoutObject<T>> GetObjsAt(int x, int y, LayoutObjectType type)
@@ -436,28 +440,30 @@ public class LayoutObject<T> : Container2D<T>
         }
     }
 
-    public IEnumerable<LayoutObject<T>> GetChildrenAt(int x, int y)
+    public List<LayoutObject<T>> GetChildrenAt(int x, int y)
     {
+        List<LayoutObject<T>> ret = new List<LayoutObject<T>>();
         if (grids.Contains(x, y))
         {
             foreach (var child in children)
             {
                 if (child.Child)
                 {
-                    yield return child;
+                    if (child.Contains(x, y))
+                    {
+                        ret.Add(child);
+                    }
                 }
                 else
                 {
-                    foreach (var recursive in child.GetChildrenAt(x, y))
-                    {
-                        yield return recursive;
-                    }
+                    ret.AddRange(child.GetChildrenAt(x, y));
                 }
             }
         }
+        return ret;
     }
 
-    public void ConnectTo(LayoutObject<T> rhs)
+    public bool ConnectTo(LayoutObject<T> rhs)
     {
         if (rhs == null)
         {
@@ -465,10 +471,11 @@ public class LayoutObject<T> : Container2D<T>
         }
         if (this.Equals(rhs))
         {
-            return;
+            return false;
         }
         _connectedTo.Add(rhs);
         rhs._connectedTo.Add(this);
+        return true;
     }
 
     public override void Rotate(Rotation rotate)
@@ -513,6 +520,10 @@ public static class LayoutObjectExt
         Counter numPoints = new Counter();
         DrawAction<GenSpace> call = Draw.Count<GenSpace>(numPoints).And(Draw.CanDrawDoor(external).IfThen(Draw.AddTo(acceptablePoints)));
         referenceCont.DrawPoints(points, call);
+        if (acceptablePoints.Count == 0)
+        {
+            return new List<Value2D<GenSpace>>(0);
+        }
         if (DoorRatioPicker == null)
         {
             DoorRatioPicker = new ProbabilityList<int>();

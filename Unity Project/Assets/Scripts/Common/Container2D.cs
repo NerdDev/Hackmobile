@@ -181,6 +181,20 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
     }
 
     #region Intersecting
+    public List<Value2D<T>> IntersectPoints(Container2D<T> rhs)
+    {
+        Bounding bounds = Bounding;
+        Bounding rhsBounds = rhs.Bounding;
+        Bounding intersect = bounds.IntersectBounds(rhsBounds);
+        if (intersect.IsValid())
+        {
+            List<Value2D<T>> ret = new List<Value2D<T>>();
+            DrawRect(intersect, Draw.And(Draw.PointContainedIn<T>(this), Draw.PointContainedIn<T>(rhs)).IfThen(Draw.AddTo(ret)));
+            return ret;
+        }
+        return new List<Value2D<T>>(0);
+    }
+
     public bool Intersects(Container2D<T> rhs)
     {
         Point at;

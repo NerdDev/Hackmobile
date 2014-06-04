@@ -37,7 +37,7 @@ public class LevelGenerator
     private const double areaSquishFactor = 2;
     #endregion
 
-    public Theme InitialTheme;
+    public Theme DebugTheme;
     public ProbabilityPool<ThemeSet> ThemeSetOptions;
     public System.Random Rand;
     public int Depth;
@@ -256,10 +256,14 @@ public class LevelGenerator
         ConstructBFS(startingRoom, out queue, out visited);
         visited = visited.Array;
         LayoutObject<GenSpace> fail;
+        int count = 1000;
         while (!startingRoom.ConnectedTo(rooms, out fail))
         {
-            // Draw Path
-            // Find start points
+            if (0 == count--)
+            {
+                throw new ArgumentException("Infinite loop connecting rooms.");
+            }
+
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.LevelGen))
             {
@@ -267,98 +271,109 @@ public class LevelGenerator
                 fail.ToLogNumberRooms(BigBoss.Debug.Get(Logs.LevelGen), "Failed to connect to this");
             }
             #endregion
-            Value2D<GenSpace> startPoint;
-            Value2D<GenSpace> endPoint;
+
             LayoutObject<GenSpace> hit;
-            if (!FindNextPathPoints(Layout, runningConnected, out hit, passTest, queue, visited, out startPoint, out endPoint))
+            if (ConnectViaDoor(runningConnected, fail))
             {
-                throw new ArgumentException("Cannot find path to fail room");
-            }
-            // Connect
-            #region DEBUG
-            if (BigBoss.Debug.logging(Logs.LevelGen))
-            {
-                var tmp = new MultiMap<GenSpace>();
-                tmp.PutAll(Layout);
-                tmp.SetTo(startPoint, GridType.INTERNAL_RESERVED_CUR, InitialTheme);
-                tmp.ToLog(Logs.LevelGen, "Largest after putting blocked");
-                BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
-            }
-            #endregion
-            var hitConnected = hit.GetConnectedGrid();
-            var stack = Layout.DrawJumpTowardsSearch(
-                startPoint.x,
-                startPoint.y,
-                3,
-                5,
-                Draw.IsType<GenSpace>(GridType.NULL).And(Draw.Inside<GenSpace>(Layout.Bounding.Expand(5))),
-                passTest.And(Draw.PointContainedIn(hitConnected)),
-                Rand,
-                endPoint,
-                true);
-            var path = new Path(stack);
-            if (path.Valid)
-            {
-                path.Simplify();
-                Point first = path.FirstEnd;
-                Point second = path.SecondEnd;
-                LayoutObject<GenSpace> pathObj = path.Bake(InitialTheme);
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    pathObj.ToLog(Logs.LevelGen, "Connecting Path");
-                }
-                #endregion
-                if (pathObj.ConnectToChildrenAt(Layout, first.x, first.y).Count() == 0
-                    || pathObj.ConnectToChildrenAt(Layout, second.x, second.y).Count() == 0)
-                {
-                    throw new ArgumentException("Cannot connect at path ends.");
-                }
-                GenSpace space;
-                if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
-                {
-                    Layout.PlaceDoor(first.x, first.y, Rand, true);
-                }
-                if (!Layout.TryGetValue(second, out space) || space.Type == GridType.Wall)
-                {
-                    Layout.PlaceDoor(second.x, second.y, Rand, true);
-                }
-                // Expand path
-                foreach (var p in path)
-                {
-                    Layout.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, InitialTheme).And(Draw.SetTo(GridType.Floor, InitialTheme))));
-                    Layout.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
-                    {
-                        if (!arr.IsType(x, y, GridType.NULL)) return false;
-                        return arr.Cornered(x, y, Draw.IsType<GenSpace>(GridType.Floor));
-                    }).IfThen(Draw.SetTo(pathObj, GridType.Floor, InitialTheme)));
-                }
-                // Mark path on layout object
-                foreach (var v in pathObj)
-                {
-                    runningConnected.AddChild(pathObj);
-                    if (!visited[v])
-                    {
-                        queue.Enqueue(v);
-                    }
-                    visited[v] = true;
-                }
-                Layout.PutAll(pathObj);
-                foreach (var child in hit.ConnectedToAll())
-                {
-                    runningConnected.AddChild(child);
-                }
-                #region DEBUG
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    Layout.ToLog(Logs.LevelGen, "Final Connection");
-                }
-                #endregion
+                hit = fail;
             }
             else
             {
-                throw new ArgumentException("Cannot create path to hit room");
+                // Draw Path
+                // Find start points
+                Value2D<GenSpace> startPoint;
+                Value2D<GenSpace> endPoint;
+                if (!FindNextPathPoints(Layout, runningConnected, out hit, passTest, queue, visited, out startPoint, out endPoint))
+                {
+                    throw new ArgumentException("Cannot find path to fail room");
+                }
+                // Connect
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    var tmp = new MultiMap<GenSpace>();
+                    tmp.PutAll(Layout);
+                    tmp.SetTo(startPoint, GridType.INTERNAL_RESERVED_CUR, DebugTheme);
+                    tmp.ToLog(Logs.LevelGen, "Largest after putting blocked");
+                    BigBoss.Debug.w(Logs.LevelGen, "Start Point:" + startPoint);
+                }
+                #endregion
+                var hitConnected = hit.GetConnectedGrid();
+                var stack = Layout.DrawJumpTowardsSearch(
+                    startPoint.x,
+                    startPoint.y,
+                    3,
+                    5,
+                    Draw.IsType<GenSpace>(GridType.NULL).And(Draw.Inside<GenSpace>(Layout.Bounding.Expand(5))),
+                    passTest.And(Draw.PointContainedIn(hitConnected)),
+                    Rand,
+                    endPoint,
+                    true);
+                var path = new Path(stack);
+                if (path.Valid)
+                {
+                    path.Simplify();
+                    Point first = path.FirstEnd;
+                    Point second = path.SecondEnd;
+                    LayoutObject<GenSpace> pathObj = path.Bake(DebugTheme);
+                    #region DEBUG
+                    if (BigBoss.Debug.logging(Logs.LevelGen))
+                    {
+                        pathObj.ToLog(Logs.LevelGen, "Connecting Path");
+                    }
+                    #endregion
+                    if (pathObj.ConnectToChildrenAt(Layout, first.x, first.y).Count() == 0
+                        || pathObj.ConnectToChildrenAt(Layout, second.x, second.y).Count() == 0)
+                    {
+                        throw new ArgumentException("Cannot connect at path ends.");
+                    }
+                    GenSpace space;
+                    if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
+                    {
+                        Layout.PlaceDoor(first.x, first.y, Rand, true);
+                    }
+                    if (!Layout.TryGetValue(second, out space) || space.Type == GridType.Wall)
+                    {
+                        Layout.PlaceDoor(second.x, second.y, Rand, true);
+                    }
+                    // Expand path
+                    foreach (var p in path)
+                    {
+                        Layout.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, DebugTheme).And(Draw.SetTo(GridType.Floor, DebugTheme))));
+                        Layout.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
+                        {
+                            if (!arr.IsType(x, y, GridType.NULL)) return false;
+                            return arr.Cornered(x, y, Draw.IsType<GenSpace>(GridType.Floor));
+                        }).IfThen(Draw.SetTo(pathObj, GridType.Floor, DebugTheme)));
+                    }
+                    // Mark path on layout object
+                    foreach (var v in pathObj)
+                    {
+                        runningConnected.AddChild(pathObj);
+                        if (!visited[v])
+                        {
+                            queue.Enqueue(v);
+                        }
+                        visited[v] = true;
+                    }
+                    Layout.PutAll(pathObj);
+                }
+                else
+                {
+                    throw new ArgumentException("Cannot create path to hit room");
+                }
             }
+
+            foreach (var child in hit.ConnectedToAll())
+            {
+                runningConnected.AddChild(child);
+            }
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                Layout.ToLog(Logs.LevelGen, "Final Connection");
+            }
+            #endregion
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -366,6 +381,44 @@ public class LevelGenerator
             BigBoss.Debug.printFooter(Logs.LevelGen, "Confirm Connections");
         }
         #endregion
+    }
+
+    protected bool ConnectViaDoor(LayoutObject<GenSpace> runningConnected, LayoutObject<GenSpace> fail)
+    {
+        var failConnectedGrid = fail.GetConnectedGrid();
+        List<Value2D<GenSpace>> intersects = runningConnected.IntersectPoints(failConnectedGrid);
+        if (intersects.Count != 0)
+        { // Try just making a door
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                MultiMap<GenSpace> tmp = new MultiMap<GenSpace>();
+                tmp.PutAll(runningConnected);
+                tmp.PutAll(failConnectedGrid);
+                tmp.DrawPoints(intersects.Cast<Point>(), Draw.SetTo(GridType.INTERNAL_RESERVED_CUR, DebugTheme));
+                tmp.ToLog(Logs.LevelGen, "Intersects");
+            }
+            #endregion
+            var placedDoors = fail.PlaceSomeDoors(Layout, intersects.Cast<Point>(), Rand, false);
+            if (placedDoors.Count > 0)
+            {
+                foreach (var door in placedDoors)
+                {
+                    foreach (var room in fail.ConnectToChildrenAt(Layout, door.x, door.y))
+                    {
+                        room.Remove(door);
+                    }
+                }
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.LevelGen))
+                {
+                    fail.ToLog(Logs.LevelGen, "With placed doors");
+                }
+                #endregion
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void ConstructBFS(LayoutObject<GenSpace> obj,

@@ -147,7 +147,7 @@ public class LevelManager : MonoBehaviour, IManager
     {
         themeSets.Freshen();
         LevelGenerator gen = new LevelGenerator();
-        gen.InitialTheme = startingTheme;
+        gen.DebugTheme = startingTheme;
         gen.ThemeSetOptions = themeSets;
         gen.Depth = depth;
         gen.Rand = new System.Random(seed);
