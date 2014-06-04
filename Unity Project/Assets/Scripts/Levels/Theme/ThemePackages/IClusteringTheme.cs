@@ -185,15 +185,13 @@ public static class IClusteringThemeExt
     public static bool PlaceOrClusterAround<T>(this T theme, LevelGenerator gen, LayoutObject<GenSpace> clusterGroup, LayoutObject<GenSpace> obj)
         where T : Theme, IClusteringTheme
     {
-        if (clusterGroup.Child || gen.Rand.Percent(theme.ClusterSplitPercentProperty))
-        {
-            if (PlaceRoom(theme, gen, clusterGroup, obj))
-            {
-                LayoutObject<GenSpace> cluster = new LayoutObject<GenSpace>(LayoutObjectType.Cluster);
-                cluster.AddChild(obj);
-                clusterGroup.AddChild(cluster);
-                return true;
-            }
+        if ((clusterGroup.Child || gen.Rand.Percent(theme.ClusterSplitPercentProperty))
+            && PlaceRoom(theme, gen, clusterGroup, obj))
+        { // Placed new cluster
+            LayoutObject<GenSpace> cluster = new LayoutObject<GenSpace>(LayoutObjectType.Cluster);
+            cluster.AddChild(obj);
+            clusterGroup.AddChild(cluster);
+            return true;
         }
         else
         {
@@ -338,10 +336,9 @@ public static class IClusteringThemeExt
                 #endregion
                 // Find room it will start from
                 Point shift = obj.GetCenterShiftOn(startRoom);
-                shift = obj.GetShiftOutside(area, shiftMagn, shift);
+                shift = obj.GetShiftOutside(area, shiftMagn, shift, true, true);
                 if (!obj.Intersects(gen.Layout, shift.x, shift.y))
                 {
-                    shift.Shift(shiftMagn);
                     obj.Shift(shift);
                     #region DEBUG
                     if (BigBoss.Debug.logging(Logs.LevelGen))

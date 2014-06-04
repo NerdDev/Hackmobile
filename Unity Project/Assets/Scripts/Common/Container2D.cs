@@ -261,7 +261,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return false;
     }
 
-    public Point GetShiftOutside(Container2D<T> rhs, Point dir, Point totalShift = null, bool rough = true)
+    public Point GetShiftOutside(Container2D<T> rhs, Point dir, Point totalShift = null, bool rough = true, bool finalShift = false)
     {
         Point reducBase = dir.Reduce();
         Point reduc = new Point(reducBase);
@@ -321,6 +321,10 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
                 tmp.ToLog(Logs.LevelGen, "After shifting");
             }
             #endregion
+        }
+        if (finalShift)
+        {
+            totalShift += dir;
         }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
