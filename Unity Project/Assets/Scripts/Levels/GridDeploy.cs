@@ -8,7 +8,7 @@ public class GridDeploy : ITransform
 {
     public GameObject GO { get { return Element.GO; } }
     public ThemeElement Element;
-    public bool Static { get { return !Element.Dynamic; } }
+    public bool Static { get { return !Element.CanMove; } }
     public float XRotation { get; set; }
     public float YRotation { get; set; }
     public float ZRotation { get; set; }

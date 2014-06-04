@@ -29,7 +29,7 @@ public class ThemeElement : FOWRenderers
         }
     }
     public bool Walkable;
-    public bool Dynamic;
+    public bool CanMove;
 
     public virtual void PreDeployTweaks(ThemeElementSpec spec)
     {

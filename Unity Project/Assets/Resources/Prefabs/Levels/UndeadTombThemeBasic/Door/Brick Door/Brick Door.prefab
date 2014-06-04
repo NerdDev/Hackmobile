@@ -252,11 +252,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c941e9cc65c7dd4aa7b2390dc3dcd4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 1
-  GridLength: 1
   Walkable: 1
-  PrintChar: 
-  Dynamic: 1
+  CanMove: 1
   DiagonalExtensions: {fileID: 11400000, guid: c1aef6099106fb24b90a108ea4310f29, type: 2}
 --- !u!1001 &100100000
 Prefab:
