@@ -276,6 +276,11 @@ public class LevelGenerator
             if (ConnectViaDoor(runningConnected, fail))
             {
                 hit = fail;
+                Queue<Value2D<GenSpace>> hitQueue;
+                Container2D<bool> hitVisited;
+                ConstructBFS(fail, out hitQueue, out hitVisited);
+                queue.Enqueue(hitQueue);
+                visited.PutAll(hitVisited);
             }
             else
             {
@@ -406,7 +411,11 @@ public class LevelGenerator
                 {
                     foreach (var room in fail.ConnectToChildrenAt(Layout, door.x, door.y))
                     {
-                        room.Remove(door);
+                        GenSpace otherSpace;
+                        if (room.TryGetValue(door, out otherSpace))
+                        {
+                            otherSpace.Type = GridType.Door;
+                        }
                     }
                 }
                 #region DEBUG

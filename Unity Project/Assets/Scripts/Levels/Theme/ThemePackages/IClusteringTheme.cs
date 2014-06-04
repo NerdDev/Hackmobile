@@ -264,7 +264,11 @@ public static class IClusteringThemeExt
                     {
                         foreach (var room in obj.ConnectToChildrenAt(gen.Layout, p.x, p.y))
                         {
-                            room.Remove(p);
+                            GenSpace otherSpace;
+                            if (room.TryGetValue(p, out otherSpace))
+                            {
+                                otherSpace.Type = GridType.Door;
+                            }
                         }
                     }
                     break;

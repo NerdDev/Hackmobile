@@ -553,13 +553,17 @@ public static class LayoutObjectExt
             notAllowed[v] = null;
         }
         additionalTest = Draw.PointContainedIn(allowed).And(Draw.Not(Draw.HasAround(false, Draw.PointContainedIn(notAllowed))));
-        foreach (Point picked in pickedPts)
+        List<Value2D<GenSpace>> ret = new List<Value2D<GenSpace>>(pickedPts.Count);
+        foreach (var picked in pickedPts)
         {
             notAllowed.Remove(picked);
-            PlaceDoor(cont, picked.x, picked.y, rand, external, additionalTest);
+            if (PlaceDoor(cont, picked.x, picked.y, rand, external, additionalTest))
+            {
+                ret.Add(picked);
+            }
             notAllowed[picked] = null;
         }
-        return pickedPts;
+        return ret;
     }
 
     public static bool PlaceDoor(

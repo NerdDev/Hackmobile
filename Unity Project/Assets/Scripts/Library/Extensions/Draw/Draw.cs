@@ -748,6 +748,8 @@ public static class Draw
             {
                 space.Type = type;
             }
+            // Keep to trigger events
+            arr[x, y] = space;
         }
         space.AddDeploy(deploy, x, y);
     }
