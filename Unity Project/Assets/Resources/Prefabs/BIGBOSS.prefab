@@ -567,7 +567,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 400070}
   - 114: {fileID: 11400078}
-  - 143: {fileID: 14300000}
+  - 54: {fileID: 5400018}
+  - 136: {fileID: 13600000}
+  - 65: {fileID: 6500014}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2869,7 +2871,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .550000012, z: 0}
+  m_LocalPosition: {x: 0, y: 1.89999998, z: 0}
   m_LocalScale: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
   m_Children: []
   m_Father: {fileID: 400070}
@@ -2880,7 +2882,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400068}
@@ -4530,6 +4532,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!54 &5400018
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100070}
+  serializedVersion: 2
+  m_Mass: 150
+  m_Drag: 10
+  m_AngularDrag: 10
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -4614,6 +4631,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 150, y: 40, z: 0}
   m_Center: {x: 0, y: 0, z: -.5}
+--- !u!65 &6500014
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100070}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: .5, y: 2.0999999, z: .5}
+  m_Center: {x: 0, y: 1.04999995, z: 0}
 --- !u!65 &6500016
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -4644,7 +4673,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: d811f5f5e06b2c648a4f365a5ef9fb94, type: 3}
   m_Controller: {fileID: 9100000, guid: 6fdc5f377e274184f958accccb00be8f, type: 2}
   m_CullingMode: 1
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
 --- !u!108 &10800000
@@ -4658,7 +4687,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: .764705896, b: .490196079, a: 1}
   m_Intensity: 1.79999995
-  m_Range: 18
+  m_Range: 30
   m_SpotAngle: 30
   m_CookieSize: 1.20000005
   m_Shadows:
@@ -5362,8 +5391,8 @@ MonoBehaviour:
   MaxCameraDistance: 10
   Level: 0
   PlacePlayerManually: 0
-  PlacePlayerX: -40
-  PlacePlayerY: 6
+  PlacePlayerX: -17
+  PlacePlayerY: -16
 --- !u!114 &11400052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5543,7 +5572,7 @@ MonoBehaviour:
   TransparencyOffset: 1.5
   TransparencyLayers:
     serializedVersion: 2
-    m_Bits: 36864
+    m_Bits: 0
   yDeg: 60
   currentDistance: 0
   currentRotation: {x: 0, y: 0, z: 0, w: 0}
@@ -5743,10 +5772,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d896faa75ea396d4baf03f14a79a912d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: {x: 0, y: 15}
+  range: {x: 9, y: 16}
+  fadeRange: 1
   RevealDistance: 512
   lineOfSightCheck: 2
   isActive: 1
+  Buffer: 1
+  Special: 1
+  LinearMultiplier: 1
+  ExpMultiplier: .660000026
 --- !u!114 &11400078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5776,7 +5810,7 @@ MonoBehaviour:
   TestTheme: {fileID: 0}
   Theme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: 14
+  Seed: 8
 --- !u!114 &11400082
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5948,24 +5982,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff305e18ad52574498a55f1e786a069c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridDistance: 32
-  HeightOffsetX: 0
-  HeightOffsetY: 0
+  GridDistance: 16
   lowerRange: {x: -256, y: 0, z: -256}
+  HeightMapSize: 4096
   mOrigin: {x: 0, y: 0, z: 0}
-  worldSize: 96
+  mState: 0
+  worldSize: 48
   textureSize: 384
   updateFrequency: .125
   textureBlendTime: .400000006
   blurIterations: 3
-  heightRange: {x: -5, y: 10}
+  heightRange: {x: -2, y: 8}
   raycastMask:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 20480
   raycastRadius: 0
-  margin: .300000012
+  margin: 0
   debug: 0
   reCreateGrid: 0
+  UpdatePos: 0
 --- !u!114 &11400092
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9691,6 +9726,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 25
   m_Center: {x: 0, y: 0, z: -.5}
+--- !u!136 &13600000
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100070}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: .400000006
+  m_Height: 2.03999996
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -9936,20 +9984,6 @@ SkinnedMeshRenderer:
     m_Center: {x: .00643476844, y: 6.55651093e-07, z: .401810259}
     m_Extent: {x: .105948143, y: .65863651, z: .468937784}
   m_DirtyAABB: 0
---- !u!143 &14300000
-CharacterController:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100070}
-  serializedVersion: 2
-  m_Height: 1.89999998
-  m_Radius: .400000006
-  m_SlopeLimit: 0
-  m_StepOffset: 0
-  m_SkinWidth: .0500000007
-  m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

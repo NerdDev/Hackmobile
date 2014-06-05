@@ -179,6 +179,11 @@ public class Player : NPC
     {
     }
 
+    public void RotatePlayer(Quaternion rotation)
+    {
+        rigidbody.MoveRotation(rotation);
+    }
+
     public void MovePlayer(Vector2 magnitude)
     {
         if (velocity > .1f) distanceMoved += Time.deltaTime;

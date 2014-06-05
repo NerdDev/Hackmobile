@@ -193,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instantiated: 0
   Set:
     Elements:
     - Multiplier: 1
@@ -201,6 +202,9 @@ MonoBehaviour:
     - Multiplier: .400000006
       Unique: 0
       Item: {fileID: 11400000}
+    - Multiplier: .400000006
+      Unique: 0
+      Item: {fileID: 11400000, guid: 8e622590c59f7eb43ba9f571f34b6dde, type: 2}
   Walkable: 0
   Dynamic: 0
   PlaceFloor: 1

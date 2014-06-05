@@ -84,6 +84,7 @@ public class NPC : Affectable
 
     internal Animator animator;
     internal CharacterController controller;
+    internal Rigidbody rigidbody;
     internal Seeker seeker;
     internal float velocity;
 
@@ -113,6 +114,7 @@ public class NPC : Affectable
         Equipment.AddAnimator(animator);
         controller = GO.GetComponent<CharacterController>();
         seeker = GO.GetComponent<Seeker>();
+        rigidbody = GO.GetComponent<Rigidbody>();
         fow = GO.GetComponent<FOWRenderers>();
         revealer = GO.GetComponentInChildren<FOWRevealer>();
     }
@@ -453,7 +455,17 @@ public class NPC : Affectable
             NPC n = obj as NPC;
             if (!this.CanSeeInvisible() && n.IsInvisible()) return false;
         }
-        return !Physics.Linecast(this.EyeSightPosition, obj.CanSeePosition);
+        RaycastHit info;
+        bool hit = !Physics.Linecast(this.EyeSightPosition, obj.CanSeePosition, out info);
+        if (info.collider != null)
+        {
+            WOWrapper wrapper = info.collider.gameObject.GetComponent<WOWrapper>();
+            if (wrapper != null)
+            {
+                return ReferenceEquals(wrapper.WO, obj);
+            }
+        }
+        return false;
     }
     #endregion
 
@@ -543,6 +555,8 @@ public class NPC : Affectable
     internal void MoveForward() //only for NPC's
     {
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
+
+        
         bool gridInstantiated = GridSpace.Blocks != null;
         if (!gridInstantiated) //grid is not instantiated, so reset the placement check
         {
@@ -553,33 +567,26 @@ public class NPC : Affectable
             PlaceNPC();
             NPCPlaced = true; //npc is placed, so set the check - until it's not instantiated under it again, it will not replace the NPC
         }
-
-        if (controller.isGrounded || !gridInstantiated) //if either the controller is grounded or the grid is not instantiated, gravity = 0
+        
+        if (DistanceToTarget(BigBoss.Player) > 20) //if either the controller is grounded or the grid is not instantiated, gravity = 0
         {
-            gravity = 0;
+            rigidbody.useGravity = false;
         }
         else //gravity is by default normal speed
         {
-            gravity -= 9.81f * Time.deltaTime;
+            rigidbody.useGravity = true;
         }
-        gravity = Mathf.Clamp(gravity, -20, 20); //clamp gravity so the values don't go too high
-        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z); //move in the xz + gravity direction
-        controller.Move(newMove * NPCSpeed * Time.deltaTime); //move the controller
+        
+
+        Vector3 newMove = new Vector3(moveDir.x, 0, moveDir.z); //move in the xz + gravity direction
+        rigidbody.velocity = newMove * NPCSpeed; //move the controller
     }
 
     internal void MoveForward(float speed) //only for player, because he has variable movement
     {
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
-        if (controller.isGrounded)
-        {
-            gravity = 0;
-        }
-        else
-        {
-            gravity -= 9.81f * Time.deltaTime;
-        }
-        Vector3 newMove = new Vector3(moveDir.x, gravity, moveDir.z);
-        controller.Move(newMove * speed * Time.deltaTime);
+        Vector3 newMove = new Vector3(moveDir.x, 0, moveDir.z);
+        rigidbody.velocity = newMove * speed * 2;
     }
 
     protected bool checkVerticalPosition(Vector3 playPos, Vector3 curPos)
@@ -600,7 +607,7 @@ public class NPC : Affectable
         RaycastHit hit;
         if (Physics.Raycast(new Ray(pos, Vector3.down), out hit, 10f))
         {
-            GO.transform.position = new Vector3(pos.x, pos.y - hit.distance + .05f, pos.z);
+            //GO.transform.position = new Vector3(pos.x, pos.y - hit.distance + .05f, pos.z);
             return true;
         }
         else
@@ -616,7 +623,9 @@ public class NPC : Affectable
         Vector3 heading = new Vector3(target.x - GO.transform.position.x, 0f, target.z - GO.transform.position.z);
         Quaternion lerp = Quaternion.LookRotation(heading);
         Quaternion toRot = Quaternion.Lerp(GO.transform.rotation, lerp, 3 * NPCSpeed * Time.deltaTime);
-        GO.transform.rotation = toRot;
+        //rigidbody.MoveRotation(toRot);
+        target.y = 0;
+        rigidbody.MoveRotation(Quaternion.LookRotation(target - GO.transform.position));
     }
 
     void OnPathComplete(PFPath p)
@@ -647,18 +656,18 @@ public class NPC : Affectable
     internal virtual void SetAttackAnimation(GameObject target)
     {
         float testVal = UnityEngine.Random.value;
-        GO.transform.LookAt(target.transform);
+        rigidbody.MoveRotation(Quaternion.LookRotation(target.transform.position - GO.transform.position));
         if (testVal < .333)
         {
-            animator.Play(Equipment.WeaponAnims.Attack1);
+            animator.CrossFade(Equipment.WeaponAnims.Attack1, .1f);
         }
         else if (testVal < .666)
         {
-            animator.Play(Equipment.WeaponAnims.Attack2);
+            animator.CrossFade(Equipment.WeaponAnims.Attack2, .1f);
         }
         else
         {
-            animator.Play(Equipment.WeaponAnims.Attack3);
+            animator.CrossFade(Equipment.WeaponAnims.Attack3, .1f);
         }
     }
     #endregion

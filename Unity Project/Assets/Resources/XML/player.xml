@@ -42,16 +42,22 @@
 				<range>10</range>
 				<cost>20</cost>
 				<targeter type="TargetedObjects">
-					<effect type="TargetedObject">
+					<effect type="TargetedCollision">
 						<speed>5</speed>
-						<startvisual>FX/FT_MagicEffects_volume02/_Prefab/Projectile03</startvisual>
-						<finishvisual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</finishvisual>
-					</effect>
-					<effect type="DamageFire">
-						<strength>
-							<min>6</min>
-							<max>12</max>
-						</strength>
+						<visual>FX/FT_MagicEffects_volume02/_Prefab/Projectile03</visual>
+						<OnCollision>
+							<targeter type="TargetedObjects">
+								<effect type="DamageFire">
+									<strength>
+										<min>6</min>
+										<max>12</max>
+									</strength>
+								</effect>
+								<effect type="OnObject">
+									<visual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</visual>
+								</effect>
+							</targeter>
+						</OnCollision>
 					</effect>
 				</targeter>
 			</spell>
@@ -61,7 +67,7 @@
 				<cost>30</cost>
 				<targeter type="TargetedObjects">
 					<effect type="OnObject">
-						<finishvisual>FX/DynamicElements_Effects/DarknessEffects/DeathExplosion</finishvisual>\
+						<finishvisual>FX/DynamicElements_Effects/DarknessEffects/DeathExplosion</finishvisual>
 					</effect>
 					<effect type="PoisonDamageEffect">
 						<strength>4</strength>

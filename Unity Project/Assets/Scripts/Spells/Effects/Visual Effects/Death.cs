@@ -12,7 +12,7 @@ public class Death : EffectInstance
     {
         n.JustUnregister();
         n.GO.GetComponent<Collider>().enabled = false;
-        n.animator.Play(deathState);
+        n.animator.CrossFade(deathState, .1f);
         n.GO.AddComponent<TimedAction>().init(speed, new Action(() => { n.JustDestroy(); }));
     }
 

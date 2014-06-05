@@ -50,12 +50,12 @@ public class TimeManager : MonoBehaviour, IManager
     #endregion
     #region Action Costs
     public int regularMoveCost = 1;
-    public int attackCost = 60;
-    public int eatItemCost = 20;
-    public int useItemCost = 20;
-    public int equipItemCost = 20;
-    public int spellCost = 60;
-    public int pickDropItemCost = 10;
+    public int attackCost = 15;
+    public int eatItemCost = 12;
+    public int useItemCost = 12;
+    public int equipItemCost = 12;
+    public int spellCost = 15;
+    public int pickDropItemCost = 6;
 
 
     public float TimeInterval;

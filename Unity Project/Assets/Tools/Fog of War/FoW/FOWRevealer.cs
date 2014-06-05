@@ -60,6 +60,19 @@ public class FOWRevealer : MonoBehaviour
     /// </summary>
     public bool Special = false;
 
+    /// <summary>
+    /// This is the linear multiplier to the fade of lights for shadowing.
+    /// </summary>
+    public float LinearMultiplier = 1f;
+
+    /// <summary>
+    /// This is the exponential on the fade of lighting for shadows. The lower the exponential, the slower
+    /// the fade rate is as it extends out (pixel values subtracted is based on dist ^ exp). The higher 
+    /// the exponential, the faster the fade as it progresse further in distance. Small values change
+    /// the results dramatically.
+    /// </summary>
+    public float ExpMultiplier = .66f;
+
     FOWSystem.Revealer mRevealer;
 
     void Awake()
@@ -92,6 +105,9 @@ public class FOWRevealer : MonoBehaviour
             mRevealer.revDist = RevealDistance;
             mRevealer.buffer = Buffer;
             mRevealer.isActive = true;
+            mRevealer.fade = fadeRange;
+            mRevealer.LinearMultiplier = LinearMultiplier;
+            mRevealer.ExpMultiplier = ExpMultiplier;
             mRevealer.Special = Special;
         }
         else

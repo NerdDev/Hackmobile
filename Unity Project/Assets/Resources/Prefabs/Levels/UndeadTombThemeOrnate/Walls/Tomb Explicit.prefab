@@ -98,7 +98,7 @@ MonoBehaviour:
     - Multiplier: .400000006
       Unique: 0
       Item: {fileID: 11400000, guid: c243cc20f74214e47b67fa68783a1b53, type: 2}
-    - Multiplier: .25
+    - Multiplier: .300000012
       Unique: 0
       Item: {fileID: 11400000, guid: 8e622590c59f7eb43ba9f571f34b6dde, type: 2}
   TWall:

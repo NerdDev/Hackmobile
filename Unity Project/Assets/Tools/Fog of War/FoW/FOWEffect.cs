@@ -86,8 +86,11 @@ public class FOWEffect : MonoBehaviour
 		//Transform t = mFog.transform;
 		//float x = t.position.x - mFog.worldSize * 0.5f;
 		//float z = t.position.z - mFog.worldSize * 0.5f;
-        float x = mFog.lowerRange.x + mFog.HeightOffsetX / 4;
-        float z = mFog.lowerRange.z + mFog.HeightOffsetY / 4;
+        //float texToWorld = (float)mFog.textureSize / mFog.worldSize;
+        float worldToTex = (float)mFog.worldSize / mFog.textureSize;
+
+        float x = mFog.lowerRange.x + mFog.ShaderOffsetX * worldToTex;
+        float z = mFog.lowerRange.z + mFog.ShaderOffsetY * worldToTex;
 
 		if (mMat == null)
 		{

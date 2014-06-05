@@ -712,7 +712,7 @@ A grid graph will update that area and a small margin around it equal to \link P
         {
             Int3 pos = (Int3)matrix.MultiplyPoint3x4(new Vector3(x + 0.5F, 0, z + 0.5F));
             node.position = pos;
-            
+
             RaycastHit hit;
             bool walkable = true;
             node.position = (Int3)collision.CheckHeight((Vector3)node.position, out hit, out walkable);
@@ -752,7 +752,7 @@ A grid graph will update that area and a small margin around it equal to \link P
                 node.walkable = collision.Check((Vector3)node.position);
             else
                 node.walkable = walkable;
-            
+
             node.Bit15 = node.walkable;
             //Equal to (node as GridNode).WalkableErosion = node.walkable, but this is faster
         }

@@ -264,11 +264,13 @@
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\Death.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\GolemDeath.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveTowards.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveTowardsCollision.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\OnObject.cs" />
-     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TargetedObject.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TargetedCollision.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedAction.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedDestruction.cs" />
-     <Compile Include="Assets\Scripts\Spells\Mono Effects\FireWall.cs" />
+     <Compile Include="Assets\Scripts\Spells\Mono Effects\CollisionTrigger.cs" />
+     <Compile Include="Assets\Scripts\Spells\Mono Effects\FireballAnimationSlow.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellAspect.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellCastInfo.cs" />
@@ -732,12 +734,12 @@
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Text (SoftClip).shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\ColorCorrectionCurves.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Standard\DiffuseSpecMap.shader" />
-     <None Include="Assets\Resources\FX\DynamicElements_Effects\ScaleParticles.txt" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Bump\Reflect-BumpedSpecular.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\NFAA.shader" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Dynamic Font (AlphaClip).shader" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Mobile\Standard\Mobile-DiffuseSpecMap.shader" />
+     <None Include="Assets\Resources\FX\ShurikenMagic\Shaders\SM_TransparentRim.shader" />
      <None Include="Assets\Tools\EasyTouch\Readme_first.txt" />
      <None Include="Assets\Resources\XML\Items\bodyparts.xml" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarLocal.shader" />
@@ -828,6 +830,7 @@
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\ColorCorrectionCurvesSimple.shader" />
      <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderYUV.shader" />
+     <None Include="Assets\Resources\FX\DynamicElements_Effects\ScaleParticles.txt" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarBumpedLocalRim.shader" />
      <None Include="Assets\Resources\FX\DynamicElements_Effects\readme.txt" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\GlowEffectDownsample.shader" />
@@ -940,7 +943,6 @@
      <None Include="Assets\Plugins\PathologicalGames\readme.txt" />
      <None Include="Assets\Resources\XML\titles.xml" />
      <None Include="Assets\Tools\Voxeland\Shaders\Grass.shader" />
-     <None Include="Assets\Resources\FX\ShurikenMagic\Shaders\SM_TransparentRim.shader" />
      <None Include="Assets\Tools\AStar\Readme_upgrading.txt" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarBumpedLocal.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendForBloom.shader" />
