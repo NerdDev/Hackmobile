@@ -7,25 +7,10 @@ using LevelGen;
 
 public class LevelGenerator
 {
-
     #region GlobalGenVariables
     // Number of areas
     public const int minAreas = 1;
     public const int maxAreas = 2;
-
-    // Number of Rooms
-    public static int minRooms { get { return 8; } }
-    public static int maxRooms { get { return 16; } } //Max not inclusive
-
-    // Number of doors per room
-    public static int doorsMin { get { return 1; } }
-    public static int doorsMax { get { return 5; } } //Max not inclusive
-    public static int minDoorSpacing { get { return 1; } }
-
-    // Cluster probabilities
-    public static int minRoomClusters { get { return 2; } }
-    public static int maxRoomClusters { get { return 5; } }
-    public static int clusterProbability { get { return 90; } }
 
     // Stairs
     public const float MinStairDist = 30;
