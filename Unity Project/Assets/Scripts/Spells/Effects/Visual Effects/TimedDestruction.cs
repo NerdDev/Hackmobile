@@ -7,7 +7,7 @@ class TimedDestruction : MonoBehaviour
 {
     float startTime;
     float finishTime;
-    public float TimeTillDestruction = 500;
+    public float TimeTillDestruction = 5000;
 
     public void init(float time)
     {

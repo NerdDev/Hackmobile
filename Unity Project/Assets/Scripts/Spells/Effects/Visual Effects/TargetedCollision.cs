@@ -30,7 +30,7 @@ public class TargetedCollision : EffectInstance
 
         if (!Mathf.Approximately(TimedDestruction, 0)) //has a timed portion to it?
         {
-            obj.AddComponent<TimedDestruction>().init(TimedDestruction);
+            obj.AddMissingComponent<TimedDestruction>().init(TimedDestruction);
         }
 
         if (TimedTurns > 0)
@@ -41,16 +41,16 @@ public class TargetedCollision : EffectInstance
         if (OnCollision != null) //any collision based spell on the object?
         {
             CollisionTrigger col = obj.AddComponent<CollisionTrigger>();
-            col.effect = OnCollision;
-            col.caster = caster;
             col.isActive = true;
+            col.spell = OnCollision;
+            col.caster = caster;
         }
     }
 
     protected override void ParseParams(XMLNode x)
     {
         speed = x.SelectInt("speed");
-        TimedDestruction = x.SelectFloat("destructiontime", 0f);
+        TimedDestruction = x.SelectFloat("destructiontime", 0);
         TimedTurns = x.SelectInt("turntime", 0);
         visual = x.SelectString("visual");
         OnCollision = x.Select<Spell>("OnCollision");

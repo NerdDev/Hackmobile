@@ -40,7 +40,7 @@
 			<spell name="Firebolt">
 				<icon>Crystal Ball_02</icon>	
 				<range>10</range>
-				<cost>20</cost>
+				<cost>0</cost>
 				<targeter type="TargetedObjects">
 					<effect type="TargetedCollision">
 						<speed>5</speed>
@@ -53,7 +53,7 @@
 										<max>12</max>
 									</strength>
 								</effect>
-								<effect type="OnObject">
+								<effect type="TargetedCollision">
 									<visual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</visual>
 								</effect>
 							</targeter>
@@ -61,6 +61,7 @@
 					</effect>
 				</targeter>
 			</spell>
+			
 			<spell name="Poison">
 				<icon>fireball-acid-1</icon>
 				<range>8</range>

@@ -157,7 +157,6 @@ public class TimeManager : MonoBehaviour, IManager
 
     public void runUpdate<T>(T obj) where T : PassesTurns
     {
-        //The object must lower it's own base points
         if (obj.IsActive)
         {
             obj.UpdateTurn();

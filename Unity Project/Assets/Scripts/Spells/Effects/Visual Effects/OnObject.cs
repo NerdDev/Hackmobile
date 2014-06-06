@@ -16,7 +16,7 @@ public class OnObject : EffectInstance
         if (OnCollision != null)
         {
             CollisionTrigger col = go.AddComponent<CollisionTrigger>();
-            col.effect = OnCollision;
+            col.spell = OnCollision;
             col.caster = caster;
             col.isActive = true;
         }

@@ -20,10 +20,10 @@ class MoveTowardsCollision : MonoBehaviour
 
         c = gameObject.GetComponent<CharacterController>();
 
-        CollisionTrigger col = this.gameObject.AddComponent<CollisionTrigger>();
-        col.effect = OnCollision;
-        col.caster = caster;
-        col.isActive = true;
+        //CollisionTrigger col = this.gameObject.AddComponent<CollisionTrigger>();
+        //col.spell = OnCollision;
+        //col.caster = caster;
+        //col.isActive = true;
 
         StartCoroutine(move());
     }
