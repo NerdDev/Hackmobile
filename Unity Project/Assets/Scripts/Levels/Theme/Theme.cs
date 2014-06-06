@@ -171,4 +171,9 @@ public abstract class Theme : ThemeOption, IInitializable
     {
         return room.Bounding.IsValid();
     }
+
+    public override string ToString()
+    {
+        return name;
+    }
 }

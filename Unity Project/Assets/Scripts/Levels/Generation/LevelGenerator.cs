@@ -8,10 +8,6 @@ using LevelGen;
 public class LevelGenerator
 {
     #region GlobalGenVariables
-    // Number of areas
-    public const int minAreas = 1;
-    public const int maxAreas = 2;
-
     // Stairs
     public const float MinStairDist = 30;
 
@@ -49,13 +45,33 @@ public class LevelGenerator
         {
             BigBoss.Debug.w(Logs.LevelGenMain, "Generate Level took: " + (Time.realtimeSinceStartup - startTime));
             Layout.ToLog(Logs.LevelGenMain);
+            // Print areas
             MultiMap<char> tmp = new MultiMap<char>();
-            int c = 128;
+            char c = (char)33;
             foreach (Area area in Areas)
             {
-                area.DrawAll(Draw.SetTo<GenSpace, char>(tmp, (char)(c++)));
+                area.DrawAll(Draw.SetTo<GenSpace, char>(tmp, c++));
             }
             tmp.ToLog(Logs.LevelGenMain, "Area Coverage");
+            // Print themes
+            tmp = new MultiMap<char>();
+            c = (char)33;
+            Dictionary<Theme, char> themeSet = new Dictionary<Theme, char>();
+            foreach (var v in Layout)
+            {
+                char c2;
+                if (!themeSet.TryGetValue(v.val.Theme, out c2))
+                {
+                    c2 = c++;
+                    themeSet[v.val.Theme] = c2;
+                }
+                tmp[v] = c2;
+            }
+            foreach (var pair in themeSet)
+            {
+                BigBoss.Debug.w(Logs.LevelGenMain, pair.Key.ToString() + ": " + pair.Value);
+            }
+            tmp.ToLog(Logs.LevelGenMain, "Theme Coverage");
             BigBoss.Debug.printFooter(Logs.LevelGenMain, "Generating Level: " + Depth);
         }
         #endregion
@@ -97,7 +113,7 @@ public class LevelGenerator
 
     protected void GenerateAreas()
     {
-        int numAreas = Rand.NextNormalDist(minAreas, maxAreas);
+        int numAreas = Rand.NextNormalDist(BigBoss.Levels.MinAreas, BigBoss.Levels.MaxAreas);
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -277,6 +293,7 @@ public class LevelGenerator
                 {
                     throw new ArgumentException("Cannot find path to fail room");
                 }
+                Theme pathTheme = Rand.NextBool() ? startPoint.val.Theme : endPoint.val.Theme;
                 // Connect
                 #region DEBUG
                 if (BigBoss.Debug.logging(Logs.LevelGen))
@@ -305,7 +322,7 @@ public class LevelGenerator
                     path.Simplify();
                     Point first = path.FirstEnd;
                     Point second = path.SecondEnd;
-                    LayoutObject<GenSpace> pathObj = path.Bake(DebugTheme);
+                    LayoutObject<GenSpace> pathObj = path.Bake(pathTheme);
                     #region DEBUG
                     if (BigBoss.Debug.logging(Logs.LevelGen))
                     {
@@ -329,12 +346,12 @@ public class LevelGenerator
                     // Expand path
                     foreach (var p in path)
                     {
-                        Layout.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, DebugTheme).And(Draw.SetTo(GridType.Floor, DebugTheme))));
+                        Layout.DrawAround(p.x, p.y, false, Draw.IsType<GenSpace>(GridType.NULL).IfThen(Draw.SetTo(pathObj, GridType.Floor, pathTheme).And(Draw.SetTo(GridType.Floor, pathTheme))));
                         Layout.DrawCorners(p.x, p.y, new DrawAction<GenSpace>((arr, x, y) =>
                         {
                             if (!arr.IsType(x, y, GridType.NULL)) return false;
                             return arr.Cornered(x, y, Draw.IsType<GenSpace>(GridType.Floor));
-                        }).IfThen(Draw.SetTo(pathObj, GridType.Floor, DebugTheme)));
+                        }).IfThen(Draw.SetTo(pathObj, GridType.Floor, pathTheme)));
                     }
                     // Mark path on layout object
                     foreach (var v in pathObj)

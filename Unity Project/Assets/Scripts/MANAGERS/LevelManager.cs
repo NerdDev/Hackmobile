@@ -14,6 +14,9 @@ public class LevelManager : MonoBehaviour, IManager
     public int Seed = -1;
     public bool UseInitialTheme;
     public Theme InitialTheme;
+    // Number of areas
+    public int MinAreas = 1;
+    public int MaxAreas = 2;
 
     [Serializable]
     public class PrefabProbabilityContainer
