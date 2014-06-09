@@ -19,6 +19,7 @@ public class FOWVisibility : MonoBehaviour
     Transform mTrans;
     Light[] mLights;
     FOWRevealer[] mRevealers;
+    float updateTime = 0f;
     float mNextUpdate = 0f;
     bool mIsVisible = true;
     bool mUpdate = true;
@@ -40,24 +41,30 @@ public class FOWVisibility : MonoBehaviour
         mLights = GetComponentsInChildren<Light>();
         mRevealers = GetComponentsInChildren<FOWRevealer>();
         mUpdate = true;
-        mNextUpdate = .01f;
     }
 
     void Start()
     {
         mTrans = transform;
-        mNextUpdate = 0.2f + (UnityEngine.Random.value + UnityEngine.Random.value) * .05f;
-        //wfs = new WaitForSeconds(mNextUpdate);
+        updateTime = 0.2f + (UnityEngine.Random.value + UnityEngine.Random.value) * .05f;
         mLights = GetComponentsInChildren<Light>();
         mRevealers = GetComponentsInChildren<FOWRevealer>();
     }
 
+    void Update()
+    {
+        float curTime = Time.time;
+        if (curTime > mNextUpdate)
+        {
+            UpdateNow();
+            mNextUpdate = curTime + updateTime;
+        }
+    }
+
     void OnEnable()
     {
-        //StartCoroutine(UpdateRendering());
-
-        float mFirstUpdate = UnityEngine.Random.value * .1f;
-        InvokeRepeating("UpdateNow", mFirstUpdate, mNextUpdate);
+        //float mFirstUpdate = UnityEngine.Random.value * .1f;
+        //InvokeRepeating("UpdateNow", mFirstUpdate, updateTime);
     }
 
     void OnDisable()

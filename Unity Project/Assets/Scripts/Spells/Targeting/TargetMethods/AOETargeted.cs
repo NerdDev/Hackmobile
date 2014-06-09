@@ -8,10 +8,10 @@ using System.Text;
  */
 public class AOETargeted : AOELocation
 {
-    public override HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override HashSet<IAffectable> GetAffectableTargets(SpellCastInfo castInfo)
     {
         // Force spaces to be derived and then call AOE location's code
         castInfo.TargetSpaces = null;
-        return base.GetTargets(castInfo);
+        return base.GetAffectableTargets(castInfo);
     }
 }

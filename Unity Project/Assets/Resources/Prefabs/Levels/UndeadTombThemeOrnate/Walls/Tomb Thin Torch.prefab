@@ -381,7 +381,7 @@ MonoBehaviour:
     - Multiplier: .400000006
       Unique: 0
       Item: {fileID: 11400000, guid: c243cc20f74214e47b67fa68783a1b53, type: 2}
-    - Multiplier: .400000006
+    - Multiplier: .300000012
       Unique: 0
       Item: {fileID: 11400000}
   Walkable: 0
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81640a4950aebcc439c6a95f7540f060, type: 3}
   m_Name: 
@@ -412,7 +412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: {x: 0, y: 6}
   fadeRange: 15
-  RevealDistance: 20
+  RevealDistance: 3
   lineOfSightCheck: 2
   isActive: 1
   Buffer: 0

@@ -23,7 +23,7 @@ public class TypeManager : MonoBehaviour, IManager
         Harvest<EffectInstance>();
         Harvest<RoomModifier>();
         Harvest<AIDecision>();
-        Harvest<ITargeter>();
+        Harvest<Targeter>();
         #if UNITY_EDITOR
         Harvest<TestLevelSetup>();
         #endif

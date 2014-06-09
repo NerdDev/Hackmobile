@@ -33,6 +33,8 @@ public class GUIManager : MonoBehaviour, IManager
     public Material NormalShaderGridspace;
     public Material GlowShaderGridSpace;
 
+    public SpellCastInfo info;
+    internal HashSet<GridSpace> gridTargets = new HashSet<GridSpace>();
     internal HashSet<IAffectable> spellTargets = new HashSet<IAffectable>();
     #endregion
 
@@ -283,12 +285,20 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
+    GridSpace[] TargetGrids;
+    IAffectable[] TargetAffectables;
+
     internal void SetToSpellCasting(Spell spell)
     {
         Debug.Log("Setting spellcasting mode to: " + spell.ToString());
         if (BigBoss.Player.Stats.CurrentPower > 0)
         {
             currentSpell = spell;
+            info = currentSpell.GetCastInfoPrototype(BigBoss.Player);
+
+            TargetGrids = info.TargetSpaces;
+            TargetAffectables = info.TargetObjects;
+
             BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = false;
             BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = true;
             spellMenu.ToggleCastButton(true);
@@ -308,6 +318,12 @@ public class GUIManager : MonoBehaviour, IManager
         currentSpell = null;
         spellMenu.ToggleCastButton(false);
         if (toggleCancel) spellMenu.ToggleCancelButton(false);
+        ResetTargets();
+        spellTargets.Clear();
+    }
+
+    private void ResetTargets()
+    {
         foreach (IAffectable target in spellTargets)
         {
             if (target is NPC)
@@ -318,7 +334,14 @@ public class GUIManager : MonoBehaviour, IManager
                 }
             }
         }
-        spellTargets.Clear();
+
+        foreach (GridSpace target in TargetGrids)
+        {
+            foreach (GameObject block in target.Blocks)
+            {
+                block.renderer.sharedMaterial = NormalShaderGridspace;
+            }
+        }
     }
 
     internal void CastSpell()
@@ -380,7 +403,7 @@ public class GUIManager : MonoBehaviour, IManager
     {
         if (buttonText == null) buttonText = buttonName;
         GUIButton button = CreateButton(buttonName, buttonText);
-       // button.UIDragPanel.draggablePanel = grid.DragPanel;
+        // button.UIDragPanel.draggablePanel = grid.DragPanel;
         grid.AddButton(button);
         return button.GetComponent<GUIButton>();
     }

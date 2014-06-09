@@ -6,11 +6,11 @@ using System.Text;
 /*
  * Targeter meant to target only selected objects
  */
-public class TargetedObjects : ITargeter
+public class TargetedObjects : Targeter
 {
     public TargetingStyle Style { get { return TargetingStyle.TargetObject; } }
     public byte MaxTargets { get; set; }
-    public HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override HashSet<IAffectable> GetAffectableTargets(SpellCastInfo castInfo)
     {
         return new HashSet<IAffectable>(castInfo.TargetObjects);
     }
@@ -20,6 +20,6 @@ public class TargetedObjects : ITargeter
         int hash = 5;
         hash += Style.GetHashCode() * 13;
         hash += MaxTargets.GetHashCode() * 3;
-        return hash;
+        return base.GetHash() + hash;
     }
 }

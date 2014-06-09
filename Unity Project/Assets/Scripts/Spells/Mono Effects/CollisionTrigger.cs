@@ -12,44 +12,26 @@ public class CollisionTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!isActive) return;
-        Debug.Log("Collision occurred.");
-        Debug.Log(other.gameObject.name);
-        NPCInstance wrapper = other.gameObject.GetComponent<NPCInstance>();
-        if (wrapper != null)
-        {
-            if (wrapper.WO is IAffectable)
-            {
-                IAffectable target = wrapper.WO as IAffectable;
-                if (target == caster) return;
-                spell.Activate(caster, target);
-                Destroy(this.gameObject);
-            }
-        }
+        GameObject GO = other.gameObject;
+        Activate(GO);
     }
 
     void OnCollisionEnter(Collision other)
     {
-        if (!isActive) return;
-        Debug.Log("1Collision occurred.");
-        Debug.Log(other.gameObject.name);
-        NPCInstance wrapper = other.gameObject.GetComponent<NPCInstance>();
-        if (wrapper != null)
-        {
-            if (wrapper.WO is IAffectable)
-            {
-                IAffectable target = wrapper.WO as IAffectable;
-                if (target == caster) return;
-                spell.Activate(caster, target);
-                Destroy(this.gameObject);
-            }
-        }
+        GameObject GO = other.gameObject;
+        Activate(GO);
     }
 
     void OnTriggerStay(Collider other)
     {
+        GameObject GO = other.gameObject;
+        Activate(GO);
+    }
+
+    private void Activate(GameObject GO)
+    {
         if (!isActive) return;
-        NPCInstance wrapper = other.gameObject.GetComponent<NPCInstance>();
+        NPCInstance wrapper = GO.GetComponent<NPCInstance>();
         if (wrapper != null)
         {
             if (wrapper.WO is IAffectable)

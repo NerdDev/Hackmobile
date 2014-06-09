@@ -489,6 +489,7 @@ public class NPC : Affectable
         }
     }
 
+    Vector3 priorpos;
     public virtual void GetMovement() //only for NPC's
     {
         if (!canMove) return;
@@ -502,8 +503,10 @@ public class NPC : Affectable
         //Direction to the next waypoint
 
         Vector3 dir = BackSearchWaypoints();
+        priorpos = GO.transform.position;
         LookTowards(dir); //orient towards it
         MoveForward(); //move forward
+        FOWSystem.instance.ModifyGrid(GO.transform.position, 0, 6, 0);
         velocity = NPCSpeed; //sets animation velocity
 
         float sqrDist = (dir - GO.transform.position).sqrMagnitude;
@@ -740,6 +743,7 @@ public class NPC : Affectable
     {
         Do(new Action(() =>
         {
+            Debug.Log("activating spell: " + spell.Icon);
             spell.Activate(this, targets);
             AdjustPower(-spell.cost);
             if (this is Player) BigBoss.Gooey.spellMenu.ToggleCancelButton(false);

@@ -398,43 +398,39 @@ public class FOWSystem : MonoBehaviour
     /// Determine if the specified point is visible or not using line-of-sight checks.
     /// </summary>
 
-    bool IsVisible(int sx, int sy, int fx, int fy, float outer, int sightHeight, int variance)
+    bool IsVisible(int startX, int startY, int finishX, int finishY, int sightHeight)
     {
-        int dx = Mathf.Abs(fx - sx);
-        int dy = Mathf.Abs(fy - sy);
-        int ax = sx < fx ? 1 : -1;
-        int ay = sy < fy ? 1 : -1;
-        int dir = dx - dy;
+        int initialDistX = Mathf.Abs(finishX - startX);
+        int initialDistY = Mathf.Abs(finishY - startY);
+        int incrementX = startX < finishX ? 1 : -1;
+        int incrementY = startY < finishY ? 1 : -1;
+        int dir = initialDistX - initialDistY;
 
-        float sh = sightHeight;
-        float fh = mHeights[fx + BufferOffsetX, fy + BufferOffsetY];
+        finishX += BufferOffsetX;
+        finishY += BufferOffsetY;
+        startX += BufferOffsetX;
+        startY += BufferOffsetY;
+        int finishHeight = mHeights[finishX, finishY];
 
-        float invDist = 1f / outer;
-        float lerpFactor = 0f;
-
-        for (; ; )
+        while (true)
         {
-            if (sx == fx && sy == fy) return true;
-
-            int xd = fx - sx;
-            int yd = fy - sy;
+            if (startX == finishX && startY == finishY) return true;
 
             // If the sampled height is higher than expected, then the point must be obscured
-            lerpFactor = invDist * Mathf.Sqrt(xd * xd + yd * yd);
-            if (mHeights[sx + BufferOffsetX, sy + BufferOffsetY] > Mathf.Lerp(fh, sh, lerpFactor)) return false;
+            if (mHeights[startX, startY] > sightHeight) return false;
 
             int dir2 = dir << 1;
 
-            if (dir2 > -dy)
+            if (dir2 > -initialDistY)
             {
-                dir -= dy;
-                sx += ax;
+                dir -= initialDistY;
+                startX += incrementX;
             }
 
-            if (dir2 < dx)
+            if (dir2 < initialDistX)
             {
-                dir += dx;
-                sy += ay;
+                dir += initialDistX;
+                startY += incrementY;
             }
         }
     }
@@ -766,7 +762,6 @@ public class FOWSystem : MonoBehaviour
         int fadeRange = Mathf.RoundToInt(r.fade * r.fade * worldToTex * worldToTex);
         int maxRange = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
         int gh = WorldToGridHeight(r.pos.y);
-        int variance = Mathf.RoundToInt(Mathf.Clamp01(margin / (heightRange.y - heightRange.x)) * 255);
         Color32 white = new Color32(255, 255, 255, 255);
 
         Color32[] mBuffer = GetBuffer(r.buffer);
@@ -786,54 +781,28 @@ public class FOWSystem : MonoBehaviour
 
                         if (!r.Special)
                         {
-                            //if (dist < minRange || (cx == x && cy == y))
-                            //{
-                            //    mBuffer[index] = white;
-                            //}
                             if (dist < maxRange)
                             {
-                                Vector2 v = new Vector2(0, 0);
-                                //v.Normalize();
-                                //v *= 0;
-
-                                int sx = cx + Mathf.RoundToInt(v.x);
-                                int sy = cy + Mathf.RoundToInt(v.y);
-
-                                if (sx > -1 && sx < textureSize &&
-                                    sy > -1 && sy < textureSize &&
-                                    IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                                if (cx > -1 && cx < textureSize &&
+                                    cy > -1 && cy < textureSize &&
+                                    IsVisible(cx, cy, x, y, gh))
                                 {
                                     if (dist > 0)
                                     {
-                                        white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(dist, r.ExpMultiplier)), 0, 255);
+                                        white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(dist, r.ExpMultiplier) + mBuffer3[index].r), 0, 255);
                                     }
                                     mBuffer[index] = white;
                                     white.r = 255;
-                                }
-                                else
-                                {
-                                    mBuffer[index] = Color.black;
                                 }
                             }
                         }
                         else
                         {
-                            //if (cx == x && cy == y)`
-                            //{
-                            //    mBuffer[index] = white;
-                            //}
                             if (dist < minRange)
                             {
-                                Vector2 v = new Vector2(0, 0);
-                                //v.Normalize();
-                                //v *= r.inner;
-
-                                int sx = cx + Mathf.RoundToInt(v.x);
-                                int sy = cy + Mathf.RoundToInt(v.y);
-
-                                if (sx > -1 && sx < textureSize &&
-                                    sy > -1 && sy < textureSize &&
-                                    IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                                if (cx > -1 && cx < textureSize &&
+                                    cy > -1 && cy < textureSize &&
+                                    IsVisible(cx, cy, x, y, gh))
                                 {
                                     if (dist > fadeRange)
                                     {
@@ -846,16 +815,9 @@ public class FOWSystem : MonoBehaviour
                             }
                             else if (dist < maxRange)
                             {
-                                Vector2 v = new Vector2(0, 0);
-                                //v.Normalize();
-                                //v *= r.inner;
-
-                                int sx = cx + Mathf.RoundToInt(v.x);
-                                int sy = cy + Mathf.RoundToInt(v.y);
-
-                                if (sx > -1 && sx < textureSize &&
-                                    sy > -1 && sy < textureSize &&
-                                    IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                                if (cx > -1 && cx < textureSize &&
+                                    cy > -1 && cy < textureSize &&
+                                    IsVisible(cx, cy, x, y, gh))
                                 {
                                     mBuffer[index] = mBuffer3[index];
                                 }
@@ -964,7 +926,7 @@ public class FOWSystem : MonoBehaviour
 
                             if (sx > -1 && sx < textureSize &&
                                 sy > -1 && sy < textureSize &&
-                                IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                                IsVisible(sx, sy, x, y, gh))
                             {
                                 r.cachedBuffer[(x - xmin) + (y - ymin) * size] = true;
                             }
@@ -1139,7 +1101,7 @@ public class FOWSystem : MonoBehaviour
     public bool DistanceToPlayer(Vector3 pos)
     {
         if (BigBoss.PlayerInfo == null) return false;
-        if (Vector3.Distance(pos, BigBoss.PlayerInfo.transform.position) < 12)
+        if (Vector3.Distance(pos, BigBoss.PlayerInfo.transform.position) < 20)
         {
             return true;
         }

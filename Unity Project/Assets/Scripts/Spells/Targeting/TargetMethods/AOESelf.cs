@@ -8,10 +8,10 @@ using System.Text;
  */
 public class AOESelf : AOETargeted
 {
-    public override HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override HashSet<IAffectable> GetAffectableTargets(SpellCastInfo castInfo)
     {
         // Confirm target is caster
         castInfo.TargetObject = castInfo.Caster;
-        return base.GetTargets(castInfo);
+        return base.GetAffectableTargets(castInfo);
     }
 }

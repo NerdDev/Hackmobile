@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public class SpellCastInfo
 {
@@ -9,16 +10,16 @@ public class SpellCastInfo
     {
         Caster = caster;
     }
-    public SpellCastInfo(List<SpellAspect> aspects)
+    public SpellCastInfo(List<Targeter> aspects)
     {
         int numLoc = 0;
         int numObj = 0;
         aspects.ForEach(aspect =>
         {
-            if (aspect.Targeter.Style == TargetingStyle.TargetLocation)
-                numLoc = Math.Max(numLoc, aspect.Targeter.MaxTargets);
-            if (aspect.Targeter.Style == TargetingStyle.TargetObject)
-                numObj = Math.Max(numObj, aspect.Targeter.MaxTargets);
+            if (aspect.Style == TargetingStyle.TargetLocation)
+                numLoc = Math.Max(numLoc, aspect.MaxTargets);
+            if (aspect.Style == TargetingStyle.TargetObject)
+                numObj = Math.Max(numObj, aspect.MaxTargets);
         });
         // GridSpace targets overlap with objects
         numLoc -= numObj;

@@ -13,11 +13,11 @@ public class Spell : IXmlParsable
         get
         {
             if (info == null)
-                info = new SpellCastInfo(aspects);
+                info = new SpellCastInfo(targeters);
             return info;
         }
     }
-    protected List<SpellAspect> aspects = new List<SpellAspect>();
+    protected List<Targeter> targeters = new List<Targeter>();
 
     public void Activate(IAffectable caster)
     {
@@ -36,8 +36,10 @@ public class Spell : IXmlParsable
 
     public void Activate(SpellCastInfo castInfo)
     {
-        foreach (SpellAspect aspect in aspects)
-            aspect.Activate(castInfo);
+        foreach (Targeter targeter in targeters)
+        {
+            targeter.Activate(castInfo);
+        }
     }
 
     public SpellCastInfo GetCastInfoPrototype(IAffectable caster)
@@ -50,40 +52,26 @@ public class Spell : IXmlParsable
         range = spell.SelectInt("range");
         cost = spell.SelectInt("cost");
         Icon = spell.SelectString("icon", "");
+
         // If no targeter specified, assume self
-        AddAspect(new Self(), GetEffects(spell.SelectList("effect")));
+        Self self = new Self();
+        self.ParseXML(spell);
+        targeters.Add(self);
 
         foreach (XMLNode targeter in spell.SelectList("targeter"))
         {
             string targeterType = targeter.SelectString("type");
-            AddAspect(BigBoss.Types.Instantiate<ITargeter>(targeterType), GetEffects(targeter.SelectList("effect")));
+            Targeter t = BigBoss.Types.Instantiate<Targeter>(targeterType);
+            t.ParseXML(targeter);
+            targeters.Add(t);
         }
     }
 
-    protected void AddAspect(ITargeter targeter, List<EffectInstance> effects)
+    protected void AddAspect(Targeter targeter, List<EffectInstance> effects)
     {
         if (effects.Count == 0 || targeter == null)
             return;
-        aspects.Add(new SpellAspect() { Targeter = targeter, Effects = effects });
-    }
-
-    protected List<EffectInstance> GetEffects(IEnumerable<XMLNode> effects)
-    {
-        List<EffectInstance> ret = new List<EffectInstance>();
-        foreach (XMLNode effect in effects)
-        {
-            string type = effect.SelectString("type");
-            EffectInstance instance;
-            if (BigBoss.Types.TryInstantiate(type, out instance))
-            {
-                instance.ParseXML(effect);
-                instance.Name = type;
-                ret.Add(instance);
-            }
-            else if (BigBoss.Debug.logging(Logs.XML))
-                BigBoss.Debug.log(Logs.XML, "Effect didn't exist: " + type + " on node " + effect);
-        }
-        return ret;
+        targeters.Add(new Targeter() { Effects = effects });
     }
     
     public int GetHash()
@@ -91,7 +79,7 @@ public class Spell : IXmlParsable
         int hash = 5;
         hash += range.GetHashCode() * 3;
         hash += cost.GetHashCode() * 4;
-        foreach (SpellAspect aspect in aspects)
+        foreach (Targeter aspect in targeters)
         {
             hash += aspect.GetHash();
         }

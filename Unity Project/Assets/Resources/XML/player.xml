@@ -45,7 +45,7 @@
 					<effect type="TargetedCollision">
 						<speed>5</speed>
 						<visual>FX/FT_MagicEffects_volume02/_Prefab/Projectile03</visual>
-						<OnCollision>
+						<spell name="OnCollision">
 							<targeter type="TargetedObjects">
 								<effect type="DamageFire">
 									<strength>
@@ -57,8 +57,30 @@
 									<visual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</visual>
 								</effect>
 							</targeter>
-						</OnCollision>
+						</spell>
 					</effect>
+				</targeter>
+			</spell>
+			
+			<spell name="Fire Wall">
+				<icon>Essence_03</icon>    
+				<range>12</range>
+				<cost>5</cost>
+				<targeter type="WallTargeter" Turns="300">
+					<visual>FX/MagicalFx2/Prefabs/Examples/Zones/MagicalFx2_FireZone 1</visual>
+					<width>3</width>
+					<!-- Any other custom targeter parameters -->
+					<spell name="OnCollision">
+						<effect type="DamageFire">
+							<strength>
+								<min>6</min>
+								<max>12</max>
+							</strength>
+						</effect>
+						<effect type="TargetedCollision">
+							<visual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</visual>
+						</effect>
+					</spell>
 				</targeter>
 			</spell>
 			
@@ -72,33 +94,6 @@
 					</effect>
 					<effect type="PoisonDamageEffect">
 						<strength>4</strength>
-						<turns>5</turns>
-					</effect>
-				</targeter>
-			</spell>
-			<spell>
-				<name>Levitate</name>
-				<icon>protect-eerie-3</icon>
-				<range>2</range>
-				<cost>5</cost>
-				<targeter>
-					<type>TargetedObjects</type>
-					<effect>
-						<type>Levitation</type>
-						<strength>.4</strength>
-						<turns>5</turns>
-					</effect>
-				</targeter>
-			</spell>
-			<spell>
-				<name>Invisibility</name>
-				<icon>protect-blue-3</icon>
-				<range>4</range>
-				<cost>5</cost>
-				<targeter>
-					<type>TargetedObjects</type>
-					<effect>
-						<type>Invisibility</type>
 						<turns>5</turns>
 					</effect>
 				</targeter>
