@@ -21,21 +21,27 @@ public class GUIManager : MonoBehaviour, IManager
 
     internal ItemChest currentChest;
     internal Spell currentSpell;
-    internal GUIButton selectedButton;
 
     internal bool categoryDisplay = false;
     internal bool displayItem = false;
     internal string category = "";
     public bool displayInventory;
-    public bool displaySpells;
     internal bool DisplayChatGrid = false;
 
     public Material NormalShaderGridspace;
     public Material GlowShaderGridSpace;
 
     public SpellCastInfo info;
-    internal HashSet<GridSpace> gridTargets = new HashSet<GridSpace>();
-    internal HashSet<IAffectable> spellTargets = new HashSet<IAffectable>();
+
+    List<TargetSpace> TargetSpaces = new List<TargetSpace>();
+    int TargetSpaceCount;
+    internal class TargetSpace
+    {
+        public Vector3 loc;
+        public GameObject point;
+    }
+    List<IAffectable> TargetAffectables = new List<IAffectable>();
+    int TargetAffectableCount;
     #endregion
 
     #region Publicly populated variables from scene
@@ -73,6 +79,9 @@ public class GUIManager : MonoBehaviour, IManager
     public Camera HeroCam;
 
     public FOWSystem fow;
+
+    public GameObject PointPrefab;
+    public LayerMask MaskForGUI;
     #endregion
 
     void Start()
@@ -82,6 +91,43 @@ public class GUIManager : MonoBehaviour, IManager
 
     void Update()
     {
+        if (BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT])
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit hitInfo = new RaycastHit();
+
+                Camera[] allCams = Camera.allCameras;
+                bool hitCamera = false;
+                for (int i = 0; i < allCams.Length; i++)
+                {
+                    if (allCams[i] == Camera.main) continue;
+                    if (Physics.Raycast(allCams[i].ScreenPointToRay(Input.mousePosition), 10f, MaskForGUI))
+                    {
+                        hitCamera = true;
+                        break;
+                    }
+                }
+                if (!hitCamera)
+                {
+                    bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
+                    if (hit)
+                    {
+                        if (hitInfo.collider.gameObject.GetComponent<NPCInstance>() == null)
+                        {
+                            if (TargetSpaces.Count < TargetSpaceCount)
+                            {
+                                Debug.Log("Adding to targets");
+                                Vector3 loc = hitInfo.point;
+                                GameObject go = GameObject.Instantiate(PointPrefab, loc, Quaternion.identity) as GameObject;
+                                TargetSpaces.Add(new TargetSpace() { point = go, loc = loc });
+                                ResetNPCTarget();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void Initialize()
@@ -285,9 +331,6 @@ public class GUIManager : MonoBehaviour, IManager
         }
     }
 
-    GridSpace[] TargetGrids;
-    IAffectable[] TargetAffectables;
-
     internal void SetToSpellCasting(Spell spell)
     {
         Debug.Log("Setting spellcasting mode to: " + spell.ToString());
@@ -295,9 +338,23 @@ public class GUIManager : MonoBehaviour, IManager
         {
             currentSpell = spell;
             info = currentSpell.GetCastInfoPrototype(BigBoss.Player);
+            if (info.TargetLocations != null && info.TargetLocations.Length > 0)
+            {
+                TargetSpaceCount = info.TargetLocations.Length;
+            }
+            else
+            {
+                TargetSpaceCount = 0;
+            }
 
-            TargetGrids = info.TargetSpaces;
-            TargetAffectables = info.TargetObjects;
+            if (info.TargetObjects != null && info.TargetObjects.Length > 0)
+            {
+                TargetAffectableCount = info.TargetObjects.Length;
+            }
+            else
+            {
+                TargetAffectableCount = TargetSpaceCount;
+            }
 
             BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = false;
             BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT] = true;
@@ -319,43 +376,75 @@ public class GUIManager : MonoBehaviour, IManager
         spellMenu.ToggleCastButton(false);
         if (toggleCancel) spellMenu.ToggleCancelButton(false);
         ResetTargets();
-        spellTargets.Clear();
     }
 
     private void ResetTargets()
     {
-        foreach (IAffectable target in spellTargets)
+        ResetNPCTarget();
+        ResetLocationTargets();
+    }
+
+    private void ResetLocationTargets()
+    {
+        if (TargetSpaces != null)
         {
-            if (target is NPC)
+            for (int i = 0; i < TargetSpaces.Count; i++)
             {
-                foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
+                if (TargetSpaces[i] == null) continue;
+                if (TargetSpaces[i].point == null) continue;
+                Destroy(TargetSpaces[i].point);
+            }
+        }
+        TargetSpaces.Clear();
+    }
+
+    private void ResetNPCTarget()
+    {
+        if (TargetAffectables != null)
+        {
+            for (int i = 0; i < TargetAffectables.Count; i++)
+            {
+                if (TargetAffectables[i] is NPC)
                 {
-                    block.renderer.sharedMaterial = NormalShaderGridspace;
+                    foreach (GameObject block in ((NPC)TargetAffectables[i]).GridSpace.Blocks)
+                    {
+                        block.renderer.sharedMaterial = NormalShaderGridspace;
+                    }
                 }
             }
         }
-
-        foreach (GridSpace target in TargetGrids)
-        {
-            foreach (GameObject block in target.Blocks)
-            {
-                block.renderer.sharedMaterial = NormalShaderGridspace;
-            }
-        }
+        TargetAffectables.Clear();
     }
 
     internal void CastSpell()
     {
         if (currentSpell != null)
         {
-            BigBoss.Player.CastSpell(currentSpell, spellTargets.ToArray());
+            if (Math.Min(TargetAffectables.Count, TargetAffectableCount) > 0)
+            {
+                IAffectable[] targets = new IAffectable[Math.Min(TargetAffectables.Count, TargetAffectableCount)];
+                for (int i = 0; i < Math.Min(TargetAffectables.Count, TargetAffectableCount); i++)
+                {
+                    targets[i] = TargetAffectables[i];
+                }
+                BigBoss.Player.CastSpell(currentSpell, targets);
+            }
+            else
+            {
+                Vector3[] arr = new Vector3[Math.Min(TargetSpaces.Count, TargetSpaceCount)];
+                for (int i = 0; i < Math.Min(TargetSpaces.Count, TargetSpaceCount); i++)
+                {
+                    arr[i] = TargetSpaces[i].loc;
+                }
+                BigBoss.Player.CastSpell(currentSpell, arr);
+            }
         }
         CancelSpell(false);
     }
 
     public void Target(IAffectable target)
     {
-        if (spellTargets.Contains(target))
+        if (TargetAffectables.Contains(target))
         {
             RemoveTarget(target);
         }
@@ -367,7 +456,7 @@ public class GUIManager : MonoBehaviour, IManager
 
     internal void RemoveTarget(IAffectable target)
     {
-        spellTargets.Remove(target);
+        TargetAffectables.Remove(target);
         if (target is NPC)
         {
             foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
@@ -379,7 +468,7 @@ public class GUIManager : MonoBehaviour, IManager
 
     internal void AddTarget(IAffectable target)
     {
-        spellTargets.Add(target);
+        TargetAffectables.Add(target);
         if (target is NPC)
         {
             foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
@@ -387,6 +476,7 @@ public class GUIManager : MonoBehaviour, IManager
                 block.renderer.sharedMaterial = GlowShaderGridSpace;
             }
         }
+        ResetLocationTargets();
     }
 
     GUIButton CreateButton(string buttonName = "Button", string buttonText = null)

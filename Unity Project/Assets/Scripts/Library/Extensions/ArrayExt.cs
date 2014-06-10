@@ -33,6 +33,7 @@ public static class ArrayExt
     {
         foreach (T t in arr)
         {
+            if (t == null) continue;
             if (t.Equals(val))
             {
                 return true;

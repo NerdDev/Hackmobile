@@ -8,8 +8,8 @@ public class Targeter : IXmlParsable
 {
     public Targeter() { }
 
-    internal TargetingStyle Style { get; set; }
-    internal byte MaxTargets { get; set; }
+    public virtual TargetingStyle Style { get; set; }
+    public virtual byte MaxTargets { get; set; }
 
     public List<EffectInstance> Effects;
 
@@ -21,6 +21,11 @@ public class Targeter : IXmlParsable
     public virtual HashSet<GridSpace> GetGridTargets(SpellCastInfo castInfo)
     {
         return new HashSet<GridSpace>();
+    }
+
+    public virtual HashSet<Vector3> GetLocationTargets(SpellCastInfo castInfo)
+    {
+        return new HashSet<Vector3>();
     }
 
     public virtual void Activate(IAffectable caster)

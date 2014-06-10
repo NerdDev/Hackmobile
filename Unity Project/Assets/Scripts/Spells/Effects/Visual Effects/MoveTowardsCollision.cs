@@ -9,21 +9,16 @@ class MoveTowardsCollision : MonoBehaviour
     Vector3 targetVector;
     float speed;
     float TimeTillDestruct = 7.5f;
-    CharacterController c;
+    Rigidbody r;
 
-    public void initialize(GameObject target, float speed, Spell OnCollision, IAffectable caster)
+    public void initialize(GameObject target, float speed, IAffectable caster)
     {
         this.target = target;
         targetVector = target.transform.position;
         this.speed = speed;
         TimeTillDestruct += Time.time;
 
-        c = gameObject.GetComponent<CharacterController>();
-
-        //CollisionTrigger col = this.gameObject.AddComponent<CollisionTrigger>();
-        //col.spell = OnCollision;
-        //col.caster = caster;
-        //col.isActive = true;
+        r = gameObject.GetComponent<Rigidbody>();
 
         StartCoroutine(move());
     }
@@ -37,7 +32,11 @@ class MoveTowardsCollision : MonoBehaviour
             if (target != null) { targetVector = target.transform.position; }
             if (!curLoc.checkXYPosition(targetVector) && curTime < TimeTillDestruct)
             {
-                c.MoveStepWise(targetVector, speed);
+                r.MoveStepWise(targetVector, speed);
+            }
+            else
+            {
+                r.velocity = Vector3.zero;
             }
             yield return null;
         }

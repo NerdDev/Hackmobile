@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class Spell : IXmlParsable
 {
@@ -24,14 +25,14 @@ public class Spell : IXmlParsable
         Activate(new SpellCastInfo(caster));
     }
 
-    public void Activate(IAffectable caster, params GridSpace[] space)
-    {
-        Activate(new SpellCastInfo(caster) { TargetSpaces = space });
-    }
-
     public void Activate(IAffectable caster, params IAffectable[] targets)
     {
         Activate(new SpellCastInfo(caster) { TargetObjects = targets });
+    }
+
+    public void Activate(IAffectable caster, params Vector3[] locations)
+    {
+        Activate(new SpellCastInfo(caster) { TargetLocations = locations });
     }
 
     public void Activate(SpellCastInfo castInfo)
@@ -47,14 +48,14 @@ public class Spell : IXmlParsable
         return new SpellCastInfo(caster, CastInfo);
     }
 
-    public void ParseXML(XMLNode spell)
+    public void ParseXML<T>(XMLNode spell) where T : Targeter, new()
     {
-        range = spell.SelectInt("range");
-        cost = spell.SelectInt("cost");
+        range = spell.SelectInt("range", int.MaxValue);
+        cost = spell.SelectInt("cost", 0);
         Icon = spell.SelectString("icon", "");
 
-        // If no targeter specified, assume self
-        Self self = new Self();
+        // If no targeter specified, assume T
+        T self = new T();
         self.ParseXML(spell);
         targeters.Add(self);
 
@@ -65,6 +66,11 @@ public class Spell : IXmlParsable
             t.ParseXML(targeter);
             targeters.Add(t);
         }
+    }
+
+    public void ParseXML(XMLNode spell)
+    {
+        ParseXML<Self>(spell);
     }
 
     protected void AddAspect(Targeter targeter, List<EffectInstance> effects)

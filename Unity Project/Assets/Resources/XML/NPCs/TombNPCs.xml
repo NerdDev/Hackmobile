@@ -121,22 +121,6 @@
       <size>medium</size>
     </attributes>
     <spells>
-      <spell name="Fireball">
-        <range>5</range>
-        <targeter type="TargetedObjects">
-          <effect type="TargetedObject">
-            <speed>2</speed>
-            <startvisual>FX/Fireball</startvisual>
-            <finishvisual>FX/FireballExplosion</finishvisual>
-          </effect>
-          <effect type="DamageFire">
-            <strength>
-              <min>6</min>
-              <max>12</max>
-            </strength>
-          </effect>
-        </targeter>
-      </spell>
     </spells>
     <equipslots>
       <equiptype type="HAND">

@@ -280,6 +280,20 @@ public class XMLNode : IEnumerable<XMLNode>
         return defaultVal;
     }
 
+    public Spell SelectSpell<T>(string toParse) where T : Targeter, new()
+    {
+        XMLNode xnode = Select(toParse);
+
+        Spell spell = new Spell();
+        if (xnode != null)
+        {
+            spell.ParseXML<TargetedObjects>(xnode);
+            return spell;
+        }
+
+        return spell;
+    }
+
     public T Select<T>(string nodeName) where T : IXmlParsable, new()
     {
         return Select(nodeName, new T());

@@ -271,6 +271,7 @@
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedDestruction.cs" />
      <Compile Include="Assets\Scripts\Spells\Mono Effects\CollisionTrigger.cs" />
      <Compile Include="Assets\Scripts\Spells\Mono Effects\FireballAnimationSlow.cs" />
+     <Compile Include="Assets\Scripts\Spells\Mono Effects\TimedCollisionTrigger.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellAspect.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellCastInfo.cs" />

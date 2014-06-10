@@ -12,9 +12,9 @@ public class AOELocation : AOE
     {
         Container2D<GridSpace> level = BigBoss.Levels.Level.Array;
         var targetSpaces = new HashSet<GridSpace>();
-        foreach (GridSpace point in castInfo.TargetSpaces)
-            level.DrawCircle(point.X, point.Y, Radius, Draw.AddTo(targetSpaces));
-        castInfo.TargetSpaces = targetSpaces.ToArray();
+        //foreach (GridSpace point in castInfo.TargetSpaces)
+        //    level.DrawCircle(point.X, point.Y, Radius, Draw.AddTo(targetSpaces));
+        //castInfo.TargetSpaces = targetSpaces.ToArray();
         return base.GetAffectableTargets(castInfo);
     }
 }

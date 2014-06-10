@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 /*
  * Targeter meant to target every object in given spaces
@@ -9,19 +10,12 @@ using System.Text;
 
 public class TargetedLocations : Targeter
 {
-    public TargetingStyle Style { get { return TargetingStyle.TargetLocation; } }
+    public TargetingStyle Style { get { return TargetingStyle.TargetGrid; } }
     public byte MaxTargets { get; set; }
-    public virtual HashSet<IAffectable> GetAffectableTargets(SpellCastInfo castInfo)
+
+    public virtual HashSet<Vector3> GetLocationTargets(SpellCastInfo castInfo)
     {
-        var ret = new HashSet<IAffectable>();
-        foreach (GridSpace space in castInfo.TargetSpaces)
-            foreach (WorldObject obj in space.GetContained())
-            {
-                var item = obj as IAffectable;
-                if (item != null)
-                    ret.Add(item);
-            }
-        return ret;
+        return new HashSet<Vector3>(castInfo.TargetLocations);
     }
 
     public int GetHash()

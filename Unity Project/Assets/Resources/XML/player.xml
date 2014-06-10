@@ -41,23 +41,22 @@
 				<icon>Crystal Ball_02</icon>	
 				<range>10</range>
 				<cost>0</cost>
-				<targeter type="TargetedObjects">
+				<targeter type="TargetedObjects" maxtargets="1">
+					<maxtargets>1</maxtargets>
 					<effect type="TargetedCollision">
 						<speed>5</speed>
 						<visual>FX/FT_MagicEffects_volume02/_Prefab/Projectile03</visual>
-						<spell name="OnCollision">
-							<targeter type="TargetedObjects">
-								<effect type="DamageFire">
-									<strength>
-										<min>6</min>
-										<max>12</max>
-									</strength>
-								</effect>
-								<effect type="TargetedCollision">
-									<visual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</visual>
-								</effect>
-							</targeter>
-						</spell>
+						<OnCollision>
+							<effect type="DamageFire">
+								<strength>
+									<min>6</min>
+									<max>12</max>
+								</strength>
+							</effect>
+							<effect type="TargetedCollision">
+								<visual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</visual>
+							</effect>
+						</OnCollision>
 					</effect>
 				</targeter>
 			</spell>
@@ -66,21 +65,20 @@
 				<icon>Essence_03</icon>    
 				<range>12</range>
 				<cost>5</cost>
-				<targeter type="WallTargeter" Turns="300">
+				<targeter type="WallTargeter" Turns="300" Rate="15" Width="2" maxtargets="1">
 					<visual>FX/MagicalFx2/Prefabs/Examples/Zones/MagicalFx2_FireZone 1</visual>
-					<width>3</width>
 					<!-- Any other custom targeter parameters -->
-					<spell name="OnCollision">
+					<OnCollision>
 						<effect type="DamageFire">
 							<strength>
-								<min>6</min>
-								<max>12</max>
+								<min>1</min>
+								<max>2</max>
 							</strength>
 						</effect>
 						<effect type="TargetedCollision">
-							<visual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</visual>
+							<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Fire</visual>
 						</effect>
-					</spell>
+					</OnCollision>
 				</targeter>
 			</spell>
 			
@@ -90,7 +88,7 @@
 				<cost>30</cost>
 				<targeter type="TargetedObjects">
 					<effect type="OnObject">
-						<finishvisual>FX/DynamicElements_Effects/DarknessEffects/DeathExplosion</finishvisual>
+						<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Dark</visual>
 					</effect>
 					<effect type="PoisonDamageEffect">
 						<strength>4</strength>

@@ -9,39 +9,43 @@ using UnityEngine;
  */
 public class WallTargeter : Targeter
 {
-    public TargetingStyle Style { get { return TargetingStyle.TargetLocation; } }
-    public byte MaxTargets { get { return 1; } set { } }
+    public override TargetingStyle Style { get { return TargetingStyle.TargetLocation; } }
+    public override byte MaxTargets { get { return 1; } set { } }
 
     // Unique WallTargeter Variables
     protected string visual;
     protected Spell OnCollision;
     protected int Width;
+    protected int turns;
+    protected int rate;
 
     public override void Activate(SpellCastInfo castInfo)
     {
-        Debug.Log(visual);
-        Debug.Log(Width);
-        Debug.Log(OnCollision.Dump());
-        HashSet<GridSpace> spaces = GetGridTargets(castInfo);
-        foreach (GridSpace space in spaces)
+        HashSet<Vector3> spaces = GetLocationTargets(castInfo);
+        foreach (Vector3 space in spaces)
         {
-            Quaternion rotationTowardsCaster = Quaternion.FromToRotation(castInfo.Caster.Self.GO.transform.position, space.Blocks[0].transform.position);
-            GameObject go = GameObject.Instantiate(Resources.Load(visual), space.Blocks[0].transform.position, rotationTowardsCaster) as GameObject;
-            go.transform.localScale = new Vector3(.5f, Width, .5f);
+            Quaternion rotationTowardsCaster = Quaternion.LookRotation(castInfo.Caster.Self.GO.transform.position - space);
+            Vector3 euler = rotationTowardsCaster.eulerAngles;
+            euler.x -= 90;
+            rotationTowardsCaster = Quaternion.Euler(euler);
 
-            CollisionTrigger col = go.AddComponent<CollisionTrigger>();
-            col.caster = castInfo.Caster;
-            col.spell = OnCollision;
-            col.isActive = true;
+            Vector3 pos = space;
+            pos.y += 1;
+
+            GameObject go = GameObject.Instantiate(Resources.Load(visual), pos, rotationTowardsCaster) as GameObject;
+            go.transform.localScale = new Vector3(Width, .5f, .5f);
+
+            TimedCollisionTrigger col = go.AddComponent<TimedCollisionTrigger>();
+            col.Init(OnCollision, castInfo.Caster, turns, rate, true, false);
         }
     }
 
-    public override HashSet<GridSpace> GetGridTargets(SpellCastInfo castInfo)
+    public override HashSet<Vector3> GetLocationTargets(SpellCastInfo castInfo)
     {
-        return new HashSet<GridSpace>(castInfo.TargetSpaces);
+        return new HashSet<Vector3>(castInfo.TargetLocations);
     }
 
-    public int GetHash()
+    public override int GetHash()
     {
         int hash = 5;
         hash += Style.GetHashCode() * 13;
@@ -52,8 +56,10 @@ public class WallTargeter : Targeter
     public override void ParseXML(XMLNode x)
     {
         base.ParseXML(x);
+        turns = x.SelectInt("turns");
+        rate = x.SelectInt("rate");
         visual = x.SelectString("visual");
         Width = x.SelectInt("width");
-        OnCollision = x.Select<Spell>("spell");
+        OnCollision = x.SelectSpell<TargetedObjects>("OnCollision");
     }
 }

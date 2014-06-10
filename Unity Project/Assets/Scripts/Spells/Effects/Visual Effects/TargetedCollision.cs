@@ -21,7 +21,7 @@ public class TargetedCollision : EffectInstance
         {
             obj = GameObject.Instantiate(Resources.Load(visual), pos, Quaternion.identity) as GameObject;
             MoveTowardsCollision script = obj.AddComponent<MoveTowardsCollision>();
-            script.initialize(n.GO, speed, OnCollision, this.caster);
+            script.initialize(n.GO, speed, this.caster);
         }
         else //stick it on the target
         {
@@ -41,18 +41,18 @@ public class TargetedCollision : EffectInstance
         if (OnCollision != null) //any collision based spell on the object?
         {
             CollisionTrigger col = obj.AddComponent<CollisionTrigger>();
-            col.isActive = true;
-            col.spell = OnCollision;
-            col.caster = caster;
+            col.Init(OnCollision, caster);
         }
     }
 
     protected override void ParseParams(XMLNode x)
     {
-        speed = x.SelectInt("speed");
+        speed = x.SelectInt("speed", 0);
         TimedDestruction = x.SelectFloat("destructiontime", 0);
         TimedTurns = x.SelectInt("turntime", 0);
         visual = x.SelectString("visual");
-        OnCollision = x.Select<Spell>("OnCollision");
+
+        /* Specialized parse */
+        OnCollision = x.SelectSpell<TargetedObjects>("OnCollision");
     }
 }

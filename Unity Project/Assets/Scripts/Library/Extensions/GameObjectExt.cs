@@ -94,4 +94,12 @@ public static class GameObjectExt
         Quaternion toRot = Quaternion.LookRotation(heading);
         obj.transform.rotation = toRot;
     }
+
+    public static void MoveStepWise(this Rigidbody obj, Vector3 target, float speed)
+    {
+        Vector3 heading = new Vector3(target.x - obj.transform.position.x, 0f, target.z - obj.transform.position.z);
+        obj.velocity = (heading.normalized * speed);
+        Quaternion toRot = Quaternion.LookRotation(heading);
+        obj.MoveRotation(toRot);
+    }
 }

@@ -734,17 +734,28 @@ public class NPC : Affectable
         }), BigBoss.Time.attackCost, false, true);
     }
 
-    public virtual void CastSpell(string spell, params IAffectable[] targets)
+    public virtual void CastSpell(string spell, params IAffectable[] target)
     {
-        CastSpell(KnownSpells[spell], targets);
+        CastSpell(KnownSpells[spell], target);
     }
 
-    public virtual void CastSpell(Spell spell, params IAffectable[] targets)
+    public virtual void CastSpell(Spell spell, params IAffectable[] target)
+    {
+        CastSpell(spell, target, null);
+    }
+
+    public virtual void CastSpell(Spell spell, params Vector3[] targets)
+    {
+        CastSpell(spell, null, targets);
+    }
+
+    protected virtual void CastSpell(Spell spell, IAffectable[] target, Vector3[] vectors)
     {
         Do(new Action(() =>
         {
             Debug.Log("activating spell: " + spell.Icon);
-            spell.Activate(this, targets);
+            if (target != null) spell.Activate(this, target);
+            if (target == null && vectors != null) spell.Activate(this, vectors);
             AdjustPower(-spell.cost);
             if (this is Player) BigBoss.Gooey.spellMenu.ToggleCancelButton(false);
         }), BigBoss.Time.spellCost, true, false);

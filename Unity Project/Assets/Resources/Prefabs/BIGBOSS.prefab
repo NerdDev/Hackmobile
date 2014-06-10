@@ -2540,7 +2540,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 533.333374, y: 400, z: 0}
+  m_LocalPosition: {x: 844.884521, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400244}
@@ -2553,7 +2553,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -533.333374, y: 400, z: 0}
+  m_LocalPosition: {x: -844.884521, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400256}
@@ -2565,7 +2565,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -533.333374, y: -400, z: 0}
+  m_LocalPosition: {x: -844.884521, y: -400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400328}
@@ -2578,7 +2578,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 533.333374, y: -400, z: 0}
+  m_LocalPosition: {x: 844.884521, y: -400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400310}
@@ -4538,10 +4538,10 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100070}
   serializedVersion: 2
-  m_Mass: 1.00000001e-07
+  m_Mass: 3
   m_Drag: 10
   m_AngularDrag: 10
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -4987,7 +4987,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   mAtlas: {fileID: 11400000, guid: a230508e33d569b4f9adfa7ee42954c0, type: 2}
-  mSpriteName: fireball-red-2
+  mSpriteName: Essence_03
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -6500,7 +6500,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayInventory: 0
-  displaySpells: 1
   NormalShaderGridspace: {fileID: 2100000, guid: 36ba0ff8c6cd1744abf53be1b6f8fa2f,
     type: 2}
   GlowShaderGridSpace: {fileID: 2100000, guid: bfc38c088bf27b2409a70ffe5df807ed, type: 2}
@@ -6528,6 +6527,10 @@ MonoBehaviour:
   GUICam: {fileID: 2000002}
   HeroCam: {fileID: 2000000}
   fow: {fileID: 11400090}
+  PointPrefab: {fileID: 100000, guid: e2e1038daac87c74e82de2cbc35b5ad9, type: 2}
+  MaskForGUI:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &11400122
 MonoBehaviour:
   m_ObjectHideFlags: 1

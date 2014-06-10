@@ -10,6 +10,12 @@ public class CollisionTrigger : MonoBehaviour
     public IAffectable caster;
     public bool isActive = false;
 
+    public void Init(Spell OnCollision, IAffectable caster)
+    {
+        spell = OnCollision;
+        this.caster = caster;
+        isActive = true;
+    }
     void OnTriggerEnter(Collider other)
     {
         GameObject GO = other.gameObject;
@@ -39,8 +45,14 @@ public class CollisionTrigger : MonoBehaviour
                 IAffectable target = wrapper.WO as IAffectable;
                 if (target == caster) return;
                 spell.Activate(caster, target);
-                Destroy(this.gameObject);
+                Destroy();
             }
         }
+    }
+
+    public void Destroy()
+    {
+        Destroy(this.gameObject);
+        Destroy(this);
     }
 }
