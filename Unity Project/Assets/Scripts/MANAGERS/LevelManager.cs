@@ -121,7 +121,6 @@ public class LevelManager : MonoBehaviour, IManager
     {
         Deploy(level);
         Level = level;
-        Builder.Combine();
         AstarPath.active.Scan();
     }
 
@@ -131,7 +130,7 @@ public class LevelManager : MonoBehaviour, IManager
         foreach (GridSpace val in level.GetEnumerateValues())
         {
             val.WrapObjects(false);
-            val.SetActive(false);
+            val.DestroyGridSpace();
         }
     }
 
@@ -140,7 +139,7 @@ public class LevelManager : MonoBehaviour, IManager
         BigBoss.Debug.w(Logs.LevelGenMain, "Deploying " + level);
         foreach (GridSpace space in level.GetEnumerateValues())
         {
-            space.SetActive(true);
+            //space.SetActive(true); //no need, it's deployed separately
             space.WrapObjects(true);
         }
         BigBoss.Debug.w(Logs.LevelGenMain, "Deployed " + level);

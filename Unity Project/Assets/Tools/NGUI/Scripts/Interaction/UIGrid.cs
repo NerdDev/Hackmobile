@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2013 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -11,114 +11,218 @@ using System.Collections.Generic;
 /// If you want the cells to automatically set their scale based on the dimensions of their content, take a look at UITable.
 /// </summary>
 
-[ExecuteInEditMode]
 [AddComponentMenu("NGUI/Interaction/Grid")]
-public class UIGrid : MonoBehaviour
+public class UIGrid : UIWidgetContainer
 {
-    public enum Arrangement
-    {
-        Horizontal,
-        Vertical,
-    }
+	public delegate void OnReposition ();
 
-    public Arrangement arrangement = Arrangement.Horizontal;
-    public int maxPerLine = 0;
-    public float cellWidth = 200f;
-    public float cellHeight = 200f;
-    public bool repositionNow = false;
-    public bool sorted = false;
-    public bool hideInactive = true;
+	public enum Arrangement
+	{
+		Horizontal,
+		Vertical,
+	}
 
-    public bool useList = true;
-    public List<Transform> gridObjects = new List<Transform>();
+	public enum Sorting
+	{
+		None,
+		Alphabetic,
+		Horizontal,
+		Vertical,
+		Custom,
+	}
 
-    bool mStarted = false;
+	/// <summary>
+	/// Type of arrangement -- vertical or horizontal.
+	/// </summary>
 
-    void Start()
-    {
-        mStarted = true;
-        Reposition();
-    }
+	public Arrangement arrangement = Arrangement.Horizontal;
 
-    void Update()
-    {
-        if (repositionNow)
-        {
-            repositionNow = false;
-            Reposition();
-        }
-    }
+	/// <summary>
+	/// How to sort the grid's elements.
+	/// </summary>
 
-    static public int SortByName(Transform a, Transform b) { return string.Compare(a.name, b.name); }
+	public Sorting sorting = Sorting.None;
 
-    /// <summary>
-    /// Recalculate the position of all elements within the grid, sorting them alphabetically if necessary.
-    /// </summary>
+	/// <summary>
+	/// Maximum children per line.
+	/// If the arrangement is horizontal, this denotes the number of columns.
+	/// If the arrangement is vertical, this stands for the number of rows.
+	/// </summary>
 
-    public void Reposition()
-    {
-        if (!mStarted)
-        {
-            repositionNow = true;
-            return;
-        }
+	public int maxPerLine = 0;
 
-        Transform myTrans = transform;
+	/// <summary>
+	/// The width of each of the cells.
+	/// </summary>
 
-        int x = 0;
-        int y = 0;
+	public float cellWidth = 200f;
 
-        if (sorted)
-        {
-            List<Transform> list = new List<Transform>();
+	/// <summary>
+	/// The height of each of the cells.
+	/// </summary>
 
-            for (int i = 0; i < myTrans.childCount; ++i)
-            {
-                Transform t = myTrans.GetChild(i);
-                if (t && (!hideInactive || NGUITools.GetActive(t.gameObject))) list.Add(t);
-            }
-            list.Sort(SortByName);
+	public float cellHeight = 200f;
 
-            for (int i = 0, imax = list.Count; i < imax; ++i)
-            {
-                Transform t = list[i];
+	/// <summary>
+	/// Whether the grid will smoothly animate its children into the correct place.
+	/// </summary>
 
-                if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
+	public bool animateSmoothly = false;
 
-                float depth = t.localPosition.z;
-                t.localPosition = (arrangement == Arrangement.Horizontal) ?
-                    new Vector3(cellWidth * x, -cellHeight * y, depth) :
-                    new Vector3(cellWidth * y, -cellHeight * x, depth);
+	/// <summary>
+	/// Whether to ignore the disabled children or to treat them as being present.
+	/// </summary>
 
-                if (++x >= maxPerLine && maxPerLine > 0)
-                {
-                    x = 0;
-                    ++y;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < myTrans.childCount; ++i)
-            {
-                Transform t = myTrans.GetChild(i);
+	public bool hideInactive = true;
 
-                if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
+	/// <summary>
+	/// Whether the parent container will be notified of the grid's changes.
+	/// </summary>
 
-                float depth = t.localPosition.z;
-                t.localPosition = (arrangement == Arrangement.Horizontal) ?
-                    new Vector3(cellWidth * x, -cellHeight * y, depth) :
-                    new Vector3(cellWidth * y, -cellHeight * x, depth);
+	public bool keepWithinPanel = false;
 
-                if (++x >= maxPerLine && maxPerLine > 0)
-                {
-                    x = 0;
-                    ++y;
-                }
-            }
-        }
+	/// <summary>
+	/// Callback triggered when the grid repositions its contents.
+	/// </summary>
 
-        UIDraggablePanel drag = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
-        if (drag != null) drag.UpdateScrollbars(true);
-    }
+	public OnReposition onReposition;
+
+	// Use the 'sorting' property instead
+	[HideInInspector][SerializeField] bool sorted = false;
+
+	protected bool mReposition = false;
+	protected UIPanel mPanel;
+	protected bool mInitDone = false;
+
+	/// <summary>
+	/// Reposition the children on the next Update().
+	/// </summary>
+
+	public bool repositionNow { set { if (value) { mReposition = true; enabled = true; } } }
+
+	protected virtual void Init ()
+	{
+		mInitDone = true;
+		mPanel = NGUITools.FindInParents<UIPanel>(gameObject);
+	}
+
+	protected virtual void Start ()
+	{
+		if (!mInitDone) Init();
+		bool smooth = animateSmoothly;
+		animateSmoothly = false;
+		Reposition();
+		animateSmoothly = smooth;
+		enabled = false;
+	}
+
+	protected virtual void Update ()
+	{
+		if (mReposition) Reposition();
+		enabled = false;
+	}
+
+	static public int SortByName (Transform a, Transform b) { return string.Compare(a.name, b.name); }
+	static public int SortHorizontal (Transform a, Transform b) { return a.localPosition.x.CompareTo(b.localPosition.x); }
+	static public int SortVertical (Transform a, Transform b) { return b.localPosition.y.CompareTo(a.localPosition.y); }
+
+	/// <summary>
+	/// Want your own custom sorting logic? Override this function.
+	/// </summary>
+
+	protected virtual void Sort (List<Transform> list) { list.Sort(SortByName); }
+
+	/// <summary>
+	/// Recalculate the position of all elements within the grid, sorting them alphabetically if necessary.
+	/// </summary>
+
+	[ContextMenu("Execute")]
+	public virtual void Reposition ()
+	{
+		if (Application.isPlaying && !mInitDone && NGUITools.GetActive(this))
+		{
+			mReposition = true;
+			return;
+		}
+
+		if (!mInitDone) Init();
+
+		mReposition = false;
+		Transform myTrans = transform;
+
+		int x = 0;
+		int y = 0;
+
+		if (sorting != Sorting.None || sorted)
+		{
+			List<Transform> list = new List<Transform>();
+
+			for (int i = 0; i < myTrans.childCount; ++i)
+			{
+				Transform t = myTrans.GetChild(i);
+				if (t && (!hideInactive || NGUITools.GetActive(t.gameObject))) list.Add(t);
+			}
+
+			if (sorting == Sorting.Alphabetic) list.Sort(SortByName);
+			else if (sorting == Sorting.Horizontal) list.Sort(SortHorizontal);
+			else if (sorting == Sorting.Vertical) list.Sort(SortVertical);
+			else Sort(list);
+
+			for (int i = 0, imax = list.Count; i < imax; ++i)
+			{
+				Transform t = list[i];
+
+				if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
+
+				float depth = t.localPosition.z;
+				Vector3 pos = (arrangement == Arrangement.Horizontal) ?
+					new Vector3(cellWidth * x, -cellHeight * y, depth) :
+					new Vector3(cellWidth * y, -cellHeight * x, depth);
+
+				if (animateSmoothly && Application.isPlaying)
+				{
+					SpringPosition.Begin(t.gameObject, pos, 15f).updateScrollView = true;
+				}
+				else t.localPosition = pos;
+
+				if (++x >= maxPerLine && maxPerLine > 0)
+				{
+					x = 0;
+					++y;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < myTrans.childCount; ++i)
+			{
+				Transform t = myTrans.GetChild(i);
+
+				if (!NGUITools.GetActive(t.gameObject) && hideInactive) continue;
+
+				float depth = t.localPosition.z;
+				Vector3 pos = (arrangement == Arrangement.Horizontal) ?
+					new Vector3(cellWidth * x, -cellHeight * y, depth) :
+					new Vector3(cellWidth * y, -cellHeight * x, depth);
+
+				if (animateSmoothly && Application.isPlaying)
+				{
+					SpringPosition.Begin(t.gameObject, pos, 15f).updateScrollView = true;
+				}
+				else t.localPosition = pos;
+
+				if (++x >= maxPerLine && maxPerLine > 0)
+				{
+					x = 0;
+					++y;
+				}
+			}
+		}
+
+		if (keepWithinPanel && mPanel != null)
+			mPanel.ConstrainTargetToBounds(myTrans, true);
+
+		if (onReposition != null)
+			onReposition();
+	}
 }

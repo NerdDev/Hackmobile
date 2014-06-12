@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class NPCInstance : WOWrapper
 {
+    //display values
     public bool DestroyThisNPC = false;
+    public int TurnPoints;
 
     void Start()
     {
@@ -23,7 +25,6 @@ public class NPCInstance : WOWrapper
             WO.Destroy();
         }
     }
-    public float TimeToMove;
     void FixedUpdate()
     {
         if (WO != null)

@@ -14,9 +14,17 @@ using System.Collections.Generic;
 public class FOWSystem : MonoBehaviour
 {
     public int GridDistance;
-    public int HeightOffsetX = 512;
-    public int HeightOffsetY = 256;
+    internal int ShaderOffsetX = 512;
+    internal int ShaderOffsetY = 256;
+
+    internal int BufferOffsetX = 512; //for second thread only
+    internal int BufferOffsetY = 256; //for second thread only
+
+    internal int PositionOffsetX = 512;
+    internal int PositionOffsetY = 256;
+
     public Vector3 lowerRange = new Vector3(-256f, 0f, -256f);
+    public int HeightMapSize = 2048;
 
 
     public enum LOSChecks
@@ -26,6 +34,12 @@ public class FOWSystem : MonoBehaviour
         EveryUpdate,
     }
 
+    public enum Buffer
+    {
+        BAKED,
+        DYNAMIC,
+    }
+
     public class Revealer
     {
         public bool isActive = false;
@@ -33,11 +47,16 @@ public class FOWSystem : MonoBehaviour
         public Vector3 pos = Vector3.zero;
         public float inner = 0f;
         public float outer = 0f;
+        public float fade = 0f;
         public bool[] cachedBuffer;
         public int cachedSize = 0;
         public int cachedX = 0;
         public int cachedY = 0;
         public float revDist = 55;
+        public float LinearMultiplier = 1f;
+        public float ExpMultiplier = .66f;
+        public Buffer buffer = Buffer.BAKED;
+        public bool Special = false;
     }
 
     public enum State
@@ -65,10 +84,15 @@ public class FOWSystem : MonoBehaviour
     // Revealers that have been removed since last update
     static BetterList<Revealer> mRemoved = new BetterList<Revealer>();
 
+    // Revealers that are using the special set of calculations. Not thread-safe (only accessed on secondary thread).
+    static BetterList<Revealer> specialRevs = new BetterList<Revealer>();
+
     // Color buffers -- prepared on the worker thread.
-    protected Color32[] mBuffer0;
-    protected Color32[] mBuffer1;
-    protected Color32[] mBuffer2;
+    protected Color32[] mBuffer0; //Main color buffer, the one updated to the screen.
+    protected Color32[] mBuffer1; //Main buffer for dynamic objects (which is updated to the 0 buffer).
+    protected Color32[] mBuffer2; //Blur buffer.
+    protected Color32[] mBuffer3; //Secondary buffer for layered objects, updated into the 1 buffer.
+    protected Color32[] mBuffer4;
 
     // Two textures -- we'll be blending between them in the shader
     protected Texture2D mTexture0;
@@ -79,7 +103,7 @@ public class FOWSystem : MonoBehaviour
     protected float mNextUpdate = 0f;
     protected float mPosUpdate = 0f;
     protected int mScreenHeight = 0;
-    protected State mState = State.Blending;
+    public State mState = State.Blending;
 
     Thread mThread;
 
@@ -202,21 +226,23 @@ public class FOWSystem : MonoBehaviour
     void Start()
     {
         mTrans = transform;
-        mHeights = new int[2048, 2048];
+        mHeights = new int[HeightMapSize, HeightMapSize];
         mSize = new Vector3(worldSize, heightRange.y - heightRange.x, worldSize);
 
-        mOrigin = new Vector3(-64f, 0, -64f);
+        mOrigin = new Vector3(0, 0, 0);
 
         int size = textureSize * textureSize;
         mBuffer0 = new Color32[size];
         mBuffer1 = new Color32[size];
         mBuffer2 = new Color32[size];
+        mBuffer3 = new Color32[size];
+        mBuffer4 = new Color32[size];
 
         // Create the height grid
         //CreateGrid();
 
         // Update the fog of war's visibility so that it's updated right away
-        UpdateBuffer();
+        UpdateBuffer(false);
         UpdateTexture();
         mNextUpdate = Time.time + updateFrequency;
 
@@ -228,8 +254,8 @@ public class FOWSystem : MonoBehaviour
     public void TestThis()
     {
         //mOrigin += new Vector3(128f, 0f, 128f);
-        HeightOffsetX += 512;
-        HeightOffsetY += 512;
+        BufferOffsetX += 512;
+        BufferOffsetY += 512;
     }
 
     /// <summary>
@@ -249,7 +275,7 @@ public class FOWSystem : MonoBehaviour
     /// <summary>
     /// Is it time to update the visibility? If so, flip the switch.
     /// </summary>
-
+    public bool UpdatePos = false;
     void Update()
     {
         float time = Time.time;
@@ -271,11 +297,21 @@ public class FOWSystem : MonoBehaviour
         {
             UpdateTexture();
         }
+
+        if (UpdatePos)
+        {
+            UpdatePosition(BigBoss.Player.GridSpace, true);
+            UpdatePos = false;
+        }
     }
 
     int priorX;
     int priorY;
+    int curX;
+    int curY;
     bool firstSet = false;
+    bool bufferNeedsSet = false;
+    bool useProfiler = false;
     public void UpdatePosition(GridSpace grid, bool force)
     {
         int x = grid.X;
@@ -285,24 +321,32 @@ public class FOWSystem : MonoBehaviour
         {
             if (Math.Abs(priorX - x) < GridDistance && Math.Abs(priorY - y) < GridDistance) return;
         }
-
-        SetPosition(new Vector3(grid.X, 0f, grid.Y));
+        curX = priorX;
+        curY = priorY;
+        SetPosition(grid.X, grid.Y);
         priorX = x;
         priorY = y;
-        mState = State.Blending;
+        bufferNeedsSet = true;
+        //UpdateBuffer(true);
+        mState = State.NeedUpdate;
     }
 
-    public void SetPosition(Vector3 pos)
+    public void SetPosition(int x, int y)
     {
+        Vector3 pos = new Vector3(x, 0f, y);
         mOrigin = pos;
         mOrigin.x -= worldSize * 0.5f;
         mOrigin.z -= worldSize * 0.5f;
 
-        HeightOffsetX = Mathf.RoundToInt((pos.x - lowerRange.x) * 4 - textureSize / 2);
-        HeightOffsetY = Mathf.RoundToInt((pos.z - lowerRange.z) * 4 - textureSize / 2);
+        float worldToTex = (float)textureSize / worldSize;
+        int pOffsetX = PositionOffsetX;
+        int pOffsetY = PositionOffsetY;
 
-        HeightOffsetX = Mathf.Clamp(HeightOffsetX, 0, 2048);
-        HeightOffsetY = Mathf.Clamp(HeightOffsetY, 0, 2048);
+        PositionOffsetX = Mathf.RoundToInt((pos.x - lowerRange.x) * worldToTex - textureSize / 2);
+        PositionOffsetY = Mathf.RoundToInt((pos.z - lowerRange.z) * worldToTex - textureSize / 2);
+
+        PositionOffsetX = Mathf.Clamp(PositionOffsetX, 0, HeightMapSize);
+        PositionOffsetY = Mathf.Clamp(PositionOffsetY, 0, HeightMapSize);
     }
 
     float mElapsed = 0f;
@@ -320,11 +364,19 @@ public class FOWSystem : MonoBehaviour
             {
                 sw.Reset();
                 sw.Start();
-                UpdateBuffer();
+                UpdateBuffer(false);
                 sw.Stop();
                 if (debug) Debug.Log(sw.ElapsedMilliseconds);
                 mElapsed = 0.001f * (float)sw.ElapsedMilliseconds;
-                mState = State.UpdateTexture0;
+                if (bufferNeedsSet)
+                {
+                    bufferNeedsSet = false;
+                    UpdateBuffer(true);
+                }
+                else
+                {
+                    mState = State.UpdateTexture0;
+                }
             }
             Thread.Sleep(1);
         }
@@ -346,43 +398,39 @@ public class FOWSystem : MonoBehaviour
     /// Determine if the specified point is visible or not using line-of-sight checks.
     /// </summary>
 
-    bool IsVisible(int sx, int sy, int fx, int fy, float outer, int sightHeight, int variance)
+    bool IsVisible(int startX, int startY, int finishX, int finishY, int sightHeight)
     {
-        int dx = Mathf.Abs(fx - sx);
-        int dy = Mathf.Abs(fy - sy);
-        int ax = sx < fx ? 1 : -1;
-        int ay = sy < fy ? 1 : -1;
-        int dir = dx - dy;
+        int initialDistX = Mathf.Abs(finishX - startX);
+        int initialDistY = Mathf.Abs(finishY - startY);
+        int incrementX = startX < finishX ? 1 : -1;
+        int incrementY = startY < finishY ? 1 : -1;
+        int dir = initialDistX - initialDistY;
 
-        float sh = sightHeight;
-        float fh = mHeights[fx + HeightOffsetX, fy + HeightOffsetY];
+        finishX += BufferOffsetX;
+        finishY += BufferOffsetY;
+        startX += BufferOffsetX;
+        startY += BufferOffsetY;
+        int finishHeight = mHeights[finishX, finishY];
 
-        float invDist = 1f / outer;
-        float lerpFactor = 0f;
-
-        for (; ; )
+        while (true)
         {
-            if (sx == fx && sy == fy) return true;
-
-            int xd = fx - sx;
-            int yd = fy - sy;
+            if (startX == finishX && startY == finishY) return true;
 
             // If the sampled height is higher than expected, then the point must be obscured
-            lerpFactor = invDist * Mathf.Sqrt(xd * xd + yd * yd);
-            if (mHeights[sx + HeightOffsetX, sy + HeightOffsetY] > Mathf.Lerp(fh, sh, lerpFactor) + variance) return false;
+            if (mHeights[startX, startY] > sightHeight) return false;
 
             int dir2 = dir << 1;
 
-            if (dir2 > -dy)
+            if (dir2 > -initialDistY)
             {
-                dir -= dy;
-                sx += ax;
+                dir -= initialDistY;
+                startX += incrementX;
             }
 
-            if (dir2 < dx)
+            if (dir2 < initialDistX)
             {
-                dir += dx;
-                sy += ay;
+                dir += initialDistX;
+                startY += incrementY;
             }
         }
     }
@@ -395,6 +443,18 @@ public class FOWSystem : MonoBehaviour
     {
         int val = Mathf.RoundToInt(height / mSize.y * 255f);
         return Mathf.Clamp(val, 0, 255);
+    }
+
+    public Color32[] GetBuffer(Buffer buffer)
+    {
+        switch (buffer)
+        {
+            case Buffer.BAKED:
+                return mBuffer3;
+            case Buffer.DYNAMIC:
+                return mBuffer1;
+        }
+        return mBuffer1;
     }
 
     /// <summary>
@@ -436,7 +496,7 @@ public class FOWSystem : MonoBehaviour
         }
     }
 
-    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 4, float raycastRadius = .1f)
+    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 6, float raycastRadius = 0)
     {
         bool useSphereCast = raycastRadius > 0f;
 
@@ -445,26 +505,24 @@ public class FOWSystem : MonoBehaviour
         pos.y += mSize.y;
 
         // For conversion from world coordinates to texture coordinates
-        float texToWorld = (float)512 / 2048;
+        float texToWorld = (float)worldSize / textureSize;
+        float worldToTex = (float)textureSize / worldSize;
 
         // Coordinates we'll be dealing with
-        int xmin = Mathf.RoundToInt((pos.x * 4 - steps));
-        int ymin = Mathf.RoundToInt((pos.z * 4 - steps));
-        int xmax = Mathf.RoundToInt((pos.x * 4 + steps));
-        int ymax = Mathf.RoundToInt((pos.z * 4 + steps));
-
-        //Debug.Log("x: [" + xmin + ", " + xmax + "]");
-        //Debug.Log("y: [" + ymin + ", " + ymax + "]");
+        int xmin = Mathf.RoundToInt((pos.x * worldToTex - steps));
+        int ymin = Mathf.RoundToInt((pos.z * worldToTex - steps));
+        int xmax = Mathf.RoundToInt((pos.x * worldToTex + steps));
+        int ymax = Mathf.RoundToInt((pos.z * worldToTex + steps));
 
         for (int y = ymin; y < ymax; y++)
         {
-            if (y > -1 && y < 2048)
+            if (y > -1 && y < HeightMapSize)
             {
                 pos.z = lowerRange.z + y * texToWorld;
 
                 for (int x = xmin; x < xmax; x++)
                 {
-                    if (x > -1 && x < 2048)
+                    if (x > -1 && x < HeightMapSize)
                     {
                         pos.x = lowerRange.x + x * texToWorld;
 
@@ -474,21 +532,17 @@ public class FOWSystem : MonoBehaviour
                             if (Physics.SphereCast(new Ray(pos, Vector3.down), raycastRadius, out hit, mSize.y, raycastMask))
                             {
                                 mHeights[x, y] = WorldToGridHeight(pos.y - hit.distance - raycastRadius) + extraHeight;
-                                //Debug.Log("mHeights: [" + x + ", " + y + "]");
-                                //Debug.Log("position: " + pos);
                                 continue;
                             }
                         }
                         else if (Physics.Raycast(new Ray(pos, Vector3.down), out hit, mSize.y, raycastMask))
                         {
                             mHeights[x, y] = WorldToGridHeight(pos.y - hit.distance) + extraHeight;
-                            //Debug.Log("mHeights: [" + x + ", " + y + "]");
                             continue;
                         }
                         else
                         {
                             mHeights[x, y] = 0;
-                            //Debug.Log("mHeights: [" + x + ", " + y + "]");
                         }
                     }
                 }
@@ -499,9 +553,13 @@ public class FOWSystem : MonoBehaviour
     /// <summary>
     /// Update the fog of war's visibility.
     /// </summary>
-
-    void UpdateBuffer()
+    float factor;
+    void UpdateBuffer(bool shifted)
     {
+        // Update the buffer offsets for the height map
+        BufferOffsetX = PositionOffsetX;
+        BufferOffsetY = PositionOffsetY;
+
         // Add all items scheduled to be added
         if (mAdded.size > 0)
         {
@@ -532,43 +590,105 @@ public class FOWSystem : MonoBehaviour
 
         // Use the texture blend time, thus estimating the time this update will finish
         // Doing so helps avoid visible changes in blending caused by the blended result being X milliseconds behind.
-        float factor = (textureBlendTime > 0f) ? Mathf.Clamp01(mBlendFactor + mElapsed / textureBlendTime) : 1f;
-
-        // Clear the buffer's red channel (channel used for current visibility -- it's updated right after)
-        for (int i = 0, imax = mBuffer0.Length; i < imax; ++i)
-        {
-            mBuffer0[i] = Color32.Lerp(mBuffer0[i], mBuffer1[i], factor);
-            mBuffer1[i].r = 0;
-        }
+        factor = (textureBlendTime > 0f) ? Mathf.Clamp01(mBlendFactor + mElapsed / textureBlendTime) : 1f;
 
         // For conversion from world coordinates to texture coordinates
-        float worldToTex = (float)4;
+        float worldToTex = (float)textureSize / worldSize;
+
+        // Clear the buffer's red channel (channel used for current visibility -- it's updated right after)
+        if (bufferNeedsSet)
+        {
+            for (int y = 0; y < textureSize; ++y)
+            {
+                for (int x = 0; x < textureSize; ++x)
+                {
+                    int i = x + y * textureSize;
+
+                    int diffX = priorX - curX;
+                    int diffY = priorY - curY;
+
+                    diffX = Mathf.RoundToInt(diffX * worldToTex);
+                    diffY = Mathf.RoundToInt(diffY * worldToTex);
+
+                    int xi = x + diffX;
+                    int yi = y + diffY;
+
+                    if (xi > -1 && xi < textureSize && yi > -1 && yi < textureSize)
+                    {
+                        int priorIndex = xi + yi * textureSize;
+
+                        mBuffer0[i] = Color32.Lerp(mBuffer0[i], mBuffer1[priorIndex], factor);
+                        mBuffer1[priorIndex].r = 0;
+                        mBuffer3[priorIndex].r = 0;
+                    }
+                }
+            }
+        }
+        else if (shifted)
+        {
+            for (int i = 0, imax = mBuffer0.Length; i < imax; ++i)
+            {
+                mBuffer0[i] = Color32.Lerp(mBuffer0[i], mBuffer1[i], factor);
+                mBuffer1[i].r = 0;
+                mBuffer3[i].r = 0;
+                mBuffer4[i].r = 0;
+            }
+        }
+        else
+        {
+            for (int i = 0, imax = mBuffer0.Length; i < imax; ++i)
+            {
+                mBuffer0[i] = Color32.Lerp(mBuffer0[i], mBuffer1[i], factor);
+                mBuffer1[i].r = 0;
+                mBuffer3[i].r = 0;
+            }
+        }
 
         // Update the visibility buffer, one revealer at a time
+        //if (!bufferNeedsSet)
         for (int i = 0; i < mRevealers.size; ++i)
         {
             Revealer rev = mRevealers[i];
             if (!rev.isActive) continue;
-
-            if (rev.los == LOSChecks.None)
+            if (rev.Special) //skip any of the special ones
             {
-                RevealUsingRadius(rev, worldToTex);
+                specialRevs.Add(rev);
+                continue;
             }
-            else if (rev.los == LOSChecks.OnlyOnce)
-            {
-                RevealUsingCache(rev, worldToTex);
-            }
-            else
-            {
-                RevealUsingLOS(rev, worldToTex);
-            }
+            Reveal(worldToTex, rev);
         }
+
+        // Update the special revealers afterwards
+        //if (!bufferNeedsSet)
+        for (int i = 0; i < specialRevs.size; ++i)
+        {
+            Revealer rev = specialRevs[i];
+            if (!rev.isActive) continue;
+            Reveal(worldToTex, rev);
+        }
+        specialRevs.Clear();
 
         // Blur the final visibility data
         for (int i = 0; i < blurIterations; ++i) BlurVisibility();
 
         // Reveal the map based on what's currently visible
-        RevealMap();
+        //RevealMap(); //unused now that explored/unexplored areas are not differentiated, that's stored in the green channel
+    }
+
+    private void Reveal(float worldToTex, Revealer rev)
+    {
+        if (rev.los == LOSChecks.None)
+        {
+            RevealUsingRadius(rev, worldToTex); //doesn't have shadows
+        }
+        else if (rev.los == LOSChecks.OnlyOnce)
+        {
+            RevealUsingCache(rev, worldToTex); //currently not accurate to fog shadows
+        }
+        else
+        {
+            RevealUsingLOS(rev, worldToTex);
+        }
     }
 
     /// <summary>
@@ -594,6 +714,8 @@ public class FOWSystem : MonoBehaviour
 
         int radius = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
 
+        Color32[] mBuffer = GetBuffer(r.buffer);
+
         for (int y = ymin; y < ymax; ++y)
         {
             if (y > -1 && y < textureSize)
@@ -609,7 +731,7 @@ public class FOWSystem : MonoBehaviour
                         int dist = xd * xd + yd * yd;
 
                         // Reveal this pixel
-                        if (dist < radius) mBuffer1[x + yw].r = 255;
+                        if (dist < radius) mBuffer[x + yw].r = 255;
                     }
                 }
             }
@@ -637,10 +759,12 @@ public class FOWSystem : MonoBehaviour
         cy = Mathf.Clamp(cy, 0, textureSize - 1);
 
         int minRange = Mathf.RoundToInt(r.inner * r.inner * worldToTex * worldToTex);
+        int fadeRange = Mathf.RoundToInt(r.fade * r.fade * worldToTex * worldToTex);
         int maxRange = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
         int gh = WorldToGridHeight(r.pos.y);
-        int variance = Mathf.RoundToInt(Mathf.Clamp01(margin / (heightRange.y - heightRange.x)) * 255);
         Color32 white = new Color32(255, 255, 255, 255);
+
+        Color32[] mBuffer = GetBuffer(r.buffer);
 
         for (int y = ymin; y < ymax; ++y)
         {
@@ -655,24 +779,48 @@ public class FOWSystem : MonoBehaviour
                         int dist = xd * xd + yd * yd;
                         int index = x + y * textureSize;
 
-                        if (dist < minRange || (cx == x && cy == y))
+                        if (!r.Special)
                         {
-                            mBuffer1[index] = white;
-                        }
-                        else if (dist < maxRange)
-                        {
-                            Vector2 v = new Vector2(xd, yd);
-                            v.Normalize();
-                            v *= r.inner;
-
-                            int sx = cx + Mathf.RoundToInt(v.x);
-                            int sy = cy + Mathf.RoundToInt(v.y);
-
-                            if (sx > -1 && sx < textureSize &&
-                                sy > -1 && sy < textureSize &&
-                                IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                            if (dist < maxRange)
                             {
-                                mBuffer1[index] = white;
+                                if (cx > -1 && cx < textureSize &&
+                                    cy > -1 && cy < textureSize &&
+                                    IsVisible(cx, cy, x, y, gh))
+                                {
+                                    if (dist > 0)
+                                    {
+                                        white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(dist, r.ExpMultiplier) + mBuffer3[index].r), 0, 255);
+                                    }
+                                    mBuffer[index] = white;
+                                    white.r = 255;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (dist < minRange)
+                            {
+                                if (cx > -1 && cx < textureSize &&
+                                    cy > -1 && cy < textureSize &&
+                                    IsVisible(cx, cy, x, y, gh))
+                                {
+                                    if (dist > fadeRange)
+                                    {
+                                        int distFromFade = dist - fadeRange;
+                                        white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(distFromFade, r.ExpMultiplier) + mBuffer3[index].r), 0, 255);
+                                    }
+                                    mBuffer[index] = white;
+                                    white.r = 255;
+                                }
+                            }
+                            else if (dist < maxRange)
+                            {
+                                if (cx > -1 && cx < textureSize &&
+                                    cy > -1 && cy < textureSize &&
+                                    IsVisible(cx, cy, x, y, gh))
+                                {
+                                    mBuffer[index] = mBuffer3[index];
+                                }
                             }
                         }
                     }
@@ -690,6 +838,7 @@ public class FOWSystem : MonoBehaviour
         if (r.cachedBuffer == null) RevealIntoCache(r, worldToTex);
 
         Color32 white = new Color32(255, 255, 255, 255);
+        Color32[] mBuffer = GetBuffer(r.buffer);
 
         for (int y = r.cachedY, ymax = r.cachedY + r.cachedSize; y < ymax; ++y)
         {
@@ -706,7 +855,7 @@ public class FOWSystem : MonoBehaviour
 
                         if (r.cachedBuffer[cachedIndex])
                         {
-                            mBuffer1[x + by] = white;
+                            mBuffer[x + by] = white;
                         }
                     }
                 }
@@ -777,7 +926,7 @@ public class FOWSystem : MonoBehaviour
 
                             if (sx > -1 && sx < textureSize &&
                                 sy > -1 && sy < textureSize &&
-                                IsVisible(sx, sy, x, y, Mathf.Sqrt(dist), gh, variance))
+                                IsVisible(sx, sy, x, y, gh))
                             {
                                 r.cachedBuffer[(x - xmin) + (y - ymin) * size] = true;
                             }
@@ -894,8 +1043,8 @@ public class FOWSystem : MonoBehaviour
             // Texture updates are spread between two frames to make it even less noticeable when they get updated
             mTexture0.SetPixels32(mBuffer0);
             mTexture0.Apply();
-            mState = State.UpdateTexture1;
             mBlendFactor = 0f;
+            mState = State.UpdateTexture1;
         }
         else if (mState == State.UpdateTexture1)
         {
@@ -903,6 +1052,8 @@ public class FOWSystem : MonoBehaviour
             mTexture1.Apply();
             mState = State.Blending;
         }
+        ShaderOffsetX = BufferOffsetX;
+        ShaderOffsetY = BufferOffsetY;
     }
 
     /// <summary>
@@ -939,9 +1090,47 @@ public class FOWSystem : MonoBehaviour
 
     public bool IsVis(Vector3 pos)
     {
+        return IsVis(pos.x, pos.z);
+    }
+
+    public bool IsVis(Point pos)
+    {
+        return IsVis(pos.x, pos.y);
+    }
+
+    public bool DistanceToPlayer(Vector3 pos)
+    {
+        if (BigBoss.PlayerInfo == null) return false;
+        if (Vector3.Distance(pos, BigBoss.PlayerInfo.transform.position) < 20)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    //these are called often, so I am keeping two versions
+    public bool IsVis(int x, int y)
+    {
         foreach (Revealer r in mRevealers)
         {
-            float circleRadii = (pos.x - r.pos.x) * (pos.x - r.pos.x) + (pos.z - r.pos.z) * (pos.z - r.pos.z);
+            float xr = x - r.pos.x;
+            float yr = y - r.pos.z;
+            float circleRadii = xr * xr + yr * yr;
+            if (circleRadii < r.revDist)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsVis(float x, float y)
+    {
+        foreach (Revealer r in mRevealers)
+        {
+            float xr = x - r.pos.x;
+            float yr = y - r.pos.z;
+            float circleRadii = xr * xr + yr * yr;
             if (circleRadii < r.revDist)
             {
                 return true;
@@ -966,16 +1155,5 @@ public class FOWSystem : MonoBehaviour
         cx = Mathf.Clamp(cx, 0, textureSize - 1);
         cy = Mathf.Clamp(cy, 0, textureSize - 1);
         return mBuffer0[cx + cy * textureSize].g > 0;
-    }
-
-    /// <summary>
-    /// Re-create the height-map grid post-level-generation.
-    /// </summary>
-
-    public void ReCreateGrid()
-    {
-        CreateGrid();
-        UpdateBuffer();
-        UpdateTexture();
     }
 }

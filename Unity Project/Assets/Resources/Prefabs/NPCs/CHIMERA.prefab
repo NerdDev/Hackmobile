@@ -13,6 +13,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
   - 143: {fileID: 14300000}
+  - 114: {fileID: 11400006}
   m_Layer: 11
   m_Name: CHIMERA
   m_TagString: Untagged
@@ -2338,7 +2339,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 6c2bdd955c66a894da0729ec0882567c, type: 3}
   m_Controller: {fileID: 9100000, guid: c94e5bdd83d4f5947a4fdf71dc38e8c1, type: 2}
   m_CullingMode: 1
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
 --- !u!114 &11400000
@@ -2352,6 +2353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instantiated: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2401,6 +2403,27 @@ MonoBehaviour:
   bezierTangentLength: .400000006
   offset: .200000003
   factor: .100000001
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cd1b586c1c1e4b59a720186aab044a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delta: 1
+  responability: .5
+  resType: 1
+  radius: .5
+  maxSpeedScale: 1.5
+  samples: []
+  sampleScale: 1
+  circleScale: .5
+  circlePoint: .5
+  drawGizmos: 0
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

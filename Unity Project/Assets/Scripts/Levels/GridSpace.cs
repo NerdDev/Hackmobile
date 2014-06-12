@@ -7,7 +7,7 @@ public class GridSpace : IGridSpace
     public GridType Type { get; set; }
     public Theme Theme { get; set; }
     public List<GridDeploy> Deploys;
-    public int ThemeElementCount 
+    public int ThemeElementCount
     {
         get
         {
@@ -34,6 +34,8 @@ public class GridSpace : IGridSpace
     internal Inventory inventory = new Inventory();
     internal ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
+    public bool Instantiated = false;
+    public bool BlocksCreated = false;
 
     public GridSpace(Level level, GridType type, int x, int y)
     {
@@ -205,6 +207,14 @@ public class GridSpace : IGridSpace
             foreach (GameObject block in Blocks)
             {
                 block.SetActive(on);
+                if (on)
+                {
+                    FOWRenderers renderer = block.GetComponent<FOWRenderers>();
+                    if (renderer != null)
+                    {
+                        renderer.OnEnable();
+                    }
+                }
             }
         }
     }
@@ -223,6 +233,31 @@ public class GridSpace : IGridSpace
         {
             wo.IsActive = wrap;
             wo.Wrap(wrap);
+        }
+    }
+
+    public void Instantiate()
+    {
+        if (!Instantiated && FOWSystem.instance.IsVis(X, Y))
+        {
+            BigBoss.Levels.Builder.Instantiate(this);
+            Instantiated = true;
+        }
+    }
+
+    public void DestroyGridSpace()
+    {
+        if (Instantiated && BlocksCreated)
+        {
+            //SetActive(false);
+            foreach (GameObject block in Blocks)
+            {
+                GameObject.Destroy(block);
+                //block.SetActive(false);
+                BigBoss.Levels.Builder.Remove(block);
+            }
+            BlocksCreated = false;
+            Instantiated = false;
         }
     }
 

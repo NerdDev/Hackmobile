@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 400000}
   - 95: {fileID: 9500000}
   - 114: {fileID: 11400000}
-  - 114: {fileID: 11400004}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400008}
   - 143: {fileID: 14300000}
@@ -45,7 +44,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400004}
   - 137: {fileID: 13700000}
-  - 114: {fileID: 11400002}
   m_Layer: 11
   m_Name: STANDARD_WOLF
   m_TagString: Untagged
@@ -11461,7 +11459,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: f122f6fd67d1c6044b707e3805726238, type: 3}
   m_Controller: {fileID: 9100000, guid: a3a870e454c74b341aa2543b2661824e, type: 2}
   m_CullingMode: 1
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
 --- !u!114 &11400000
@@ -11475,53 +11473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -584772145, guid: f22c2bae7d3934637aeece17197d22ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputMeshes:
-  - mesh: {fileID: 4300000, guid: 2c2bd3d067467cd4280c1f645dda39e2, type: 3}
-    materials:
-    - {fileID: 2100000, guid: 992bf6f098e1bf042bd1cd4cc427b66d, type: 2}
-  outputMesh: {fileID: 4300000}
-  outputRenderer: {fileID: 13700000}
-  quality: .511799991
-  quantity: 1512
-  inputVerticeCount: 1999
-  inputTriangleIndexCount: 7830
-  outputVerticeCount: 1225
-  outputTriangleIndexCount: 4536
-  skinnedMeshRenderer: {fileID: 13700000}
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1374685535, guid: f22c2bae7d3934637aeece17197d22ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cruncherTargets:
-  - {fileID: 11400002}
-  cmc:
-    removeTJunctions: 1
-    removeTJunctionsThreshold: .100000001
-    joinVertices: 1
-    joinVerticesThreshold: 9.99999975e-05
-    joinUvs: 0
-    joinUvsThreshold: 9.99999975e-05
-    joinNormals: 0
-    joinNormalsThreshold: 60
-    recalculateNormals: 1
+  instantiated: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1

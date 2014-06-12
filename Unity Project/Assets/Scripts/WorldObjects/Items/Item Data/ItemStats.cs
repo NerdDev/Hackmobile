@@ -22,6 +22,7 @@ public class ItemStats : IXmlParsable
     }
 
     public EquipType EquipType { get; set; }
+    public bool Hidden { get; set; }
     public int NumberOfSlots { get; set; }
     public Damage damage { get; set; }
 
@@ -32,16 +33,19 @@ public class ItemStats : IXmlParsable
         Nutrition = x.SelectInt("nutrition");
         damage = x.Select<Damage>("damage");
         EquipType = x.SelectEnum<EquipType>("equiptype");
+        Hidden = x.SelectBool("hidden", false);
         NumberOfSlots = x.SelectInt("slots", 1);
     }
 
     public int GetHash()
     {
         int hash = 5;
+        hash += damage.GetHash() * 21;
         hash += Weight.GetHashCode() * 3;
         hash += Nutrition.GetHashCode() * 5;
         hash += Cost.GetHashCode() * 11;
         hash += EquipType.GetHashCode() * 17;
+        hash += Hidden.GetHashCode() * 23;
         hash += NumberOfSlots.GetHashCode() * 13;
         return hash;
     }

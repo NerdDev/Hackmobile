@@ -20,23 +20,41 @@ public class KCTesting : MonoBehaviour
         BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT] = true;
 
         //adds some items to the Player to test with
-        Item ii = BigBoss.Objects.Items.Instantiate("Infiltrator's Sword");
-        BigBoss.Player.addToInventory(ii);
+        EquipItemToPlayer("NoseA");
+        EquipItemToPlayer("EarsA");
+        EquipItemToPlayer("HairC");
+        EquipItemToPlayer("BootsDefault");
+        EquipItemToPlayer("Body");
 
-        Item food = BigBoss.Objects.Items.Instantiate("Spoiled Bread");
-        BigBoss.Player.addToInventory(food, 5);
+        GiveItemToPlayer("Leather Armor");
+        GiveItemToPlayer("Leather Skirt");
+        GiveItemToPlayer("Leather Boots");
+        GiveItemToPlayer("Elven Armor");
+        GiveItemToPlayer("Elven Skirt");
+        GiveItemToPlayer("Elven Boots");
+        GiveItemToPlayer("Elven Helmet");
+        GiveItemToPlayer("Mage's Legs");
+        GiveItemToPlayer("Mage's Boots");
+        GiveItemToPlayer("Mage's Outfit");
 
-        Item potion = BigBoss.Objects.Items.Instantiate("Health Potion");
-        BigBoss.Player.addToInventory(potion, 3);
+        GiveItemToPlayer("Spoiled Bread");
+        GiveItemToPlayer("Health Potion");
+        GiveItemToPlayer("Cure Poison");
+        GiveItemToPlayer("Levitation Potion");
+        GiveItemToPlayer("Blinding Potion");
+    }
 
-        Item potion3 = BigBoss.Objects.Items.Instantiate("Cure Poison");
-        BigBoss.Player.addToInventory(potion3, 3);
+    private void GiveItemToPlayer(string item)
+    {
+        Item i = BigBoss.Objects.Items.Instantiate(item);
+        BigBoss.Player.addToInventory(i);
+    }
 
-        Item potion4 = BigBoss.Objects.Items.Instantiate("Levitation Potion");
-        BigBoss.Player.addToInventory(potion4, 3);
-
-        Item potion5 = BigBoss.Objects.Items.Instantiate("Blinding Potion");
-        BigBoss.Player.addToInventory(potion5, 3);
+    private void EquipItemToPlayer(string item)
+    {
+        Item i = BigBoss.Objects.Items.Instantiate(item);
+        BigBoss.Player.addToInventory(i);
+        BigBoss.Player.equipItem(i);
     }
 }
 

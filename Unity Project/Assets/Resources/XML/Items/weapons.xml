@@ -11,9 +11,9 @@
 					<max>16</max>
 				</damage>
 			</stats>
-			<prefab>SwordInf</prefab>
+			<prefab>InfSword</prefab>
 		</weapon>
-		<weapon name="sword2">
+		<weapon name="Bow">
 			<stats>
 				<weight>15</weight>
 				<cost>20</cost>
@@ -24,7 +24,7 @@
 					<max>16</max>
 				</damage>
 			</stats>
-			<prefab>SwordInf</prefab>
+			<prefab>Bow</prefab>
 		</weapon>
 		<weapon name="sword3">
 			<stats>

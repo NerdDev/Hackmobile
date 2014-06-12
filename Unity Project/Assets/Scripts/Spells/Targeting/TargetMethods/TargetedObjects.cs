@@ -6,20 +6,26 @@ using System.Text;
 /*
  * Targeter meant to target only selected objects
  */
-public class TargetedObjects : ITargeter
+public class TargetedObjects : Targeter
 {
-    public TargetingStyle Style { get { return TargetingStyle.TargetObject; } }
-    public byte MaxTargets { get; set; }
-    public HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override TargetingStyle Style { get { return TargetingStyle.TargetObject; } }
+    public override byte MaxTargets { get { return 1; } set { } }
+    public override HashSet<IAffectable> GetAffectableTargets(SpellCastInfo castInfo)
     {
-        return new HashSet<IAffectable>(castInfo.TargetObjects);
+        HashSet<IAffectable> set = new HashSet<IAffectable>(castInfo.TargetObjects);
+        return set;
     }
 
-    public int GetHash()
+    public override int GetHash()
     {
         int hash = 5;
         hash += Style.GetHashCode() * 13;
         hash += MaxTargets.GetHashCode() * 3;
-        return hash;
+        return base.GetHash() + hash;
+    }
+
+    public override void ParseXML(XMLNode x)
+    {
+        base.ParseXML(x);
     }
 }

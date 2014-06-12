@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class Spell : IXmlParsable
 {
     protected SpellCastInfo info;
+    public string Icon = "";
     public int range = 0;
     public int cost = 0;
     protected SpellCastInfo CastInfo
@@ -12,20 +14,15 @@ public class Spell : IXmlParsable
         get
         {
             if (info == null)
-                info = new SpellCastInfo(aspects);
+                info = new SpellCastInfo(targeters);
             return info;
         }
     }
-    protected List<SpellAspect> aspects = new List<SpellAspect>();
+    protected List<Targeter> targeters = new List<Targeter>();
 
     public void Activate(IAffectable caster)
     {
         Activate(new SpellCastInfo(caster));
-    }
-
-    public void Activate(IAffectable caster, params GridSpace[] space)
-    {
-        Activate(new SpellCastInfo(caster) { TargetSpaces = space });
     }
 
     public void Activate(IAffectable caster, params IAffectable[] targets)
@@ -33,10 +30,17 @@ public class Spell : IXmlParsable
         Activate(new SpellCastInfo(caster) { TargetObjects = targets });
     }
 
+    public void Activate(IAffectable caster, params Vector3[] locations)
+    {
+        Activate(new SpellCastInfo(caster) { TargetLocations = locations });
+    }
+
     public void Activate(SpellCastInfo castInfo)
     {
-        foreach (SpellAspect aspect in aspects)
-            aspect.Activate(castInfo);
+        foreach (Targeter targeter in targeters)
+        {
+            targeter.Activate(castInfo);
+        }
     }
 
     public SpellCastInfo GetCastInfoPrototype(IAffectable caster)
@@ -44,44 +48,36 @@ public class Spell : IXmlParsable
         return new SpellCastInfo(caster, CastInfo);
     }
 
-    public void ParseXML(XMLNode spell)
+    public void ParseXML<T>(XMLNode spell) where T : Targeter, new()
     {
-        range = spell.SelectInt("range");
-        cost = spell.SelectInt("cost");
-        // If no targeter specified, assume self
-        AddAspect(new Self(), GetEffects(spell.SelectList("effect")));
+        range = spell.SelectInt("range", int.MaxValue);
+        cost = spell.SelectInt("cost", 0);
+        Icon = spell.SelectString("icon", "");
+
+        // If no targeter specified, assume T
+        T self = new T();
+        self.ParseXML(spell);
+        targeters.Add(self);
 
         foreach (XMLNode targeter in spell.SelectList("targeter"))
         {
             string targeterType = targeter.SelectString("type");
-            AddAspect(BigBoss.Types.Instantiate<ITargeter>(targeterType), GetEffects(targeter.SelectList("effect")));
+            Targeter t = BigBoss.Types.Instantiate<Targeter>(targeterType);
+            t.ParseXML(targeter);
+            targeters.Add(t);
         }
     }
 
-    protected void AddAspect(ITargeter targeter, List<EffectInstance> effects)
+    public void ParseXML(XMLNode spell)
+    {
+        ParseXML<Self>(spell);
+    }
+
+    protected void AddAspect(Targeter targeter, List<EffectInstance> effects)
     {
         if (effects.Count == 0 || targeter == null)
             return;
-        aspects.Add(new SpellAspect() { Targeter = targeter, Effects = effects });
-    }
-
-    protected List<EffectInstance> GetEffects(IEnumerable<XMLNode> effects)
-    {
-        List<EffectInstance> ret = new List<EffectInstance>();
-        foreach (XMLNode effect in effects)
-        {
-            string type = effect.SelectString("type");
-            EffectInstance instance;
-            if (BigBoss.Types.TryInstantiate(type, out instance))
-            {
-                instance.ParseXML(effect);
-                instance.Name = type;
-                ret.Add(instance);
-            }
-            else if (BigBoss.Debug.logging(Logs.XML))
-                BigBoss.Debug.log(Logs.XML, "Effect didn't exist: " + type + " on node " + effect);
-        }
-        return ret;
+        targeters.Add(new Targeter() { Effects = effects });
     }
     
     public int GetHash()
@@ -89,7 +85,7 @@ public class Spell : IXmlParsable
         int hash = 5;
         hash += range.GetHashCode() * 3;
         hash += cost.GetHashCode() * 4;
-        foreach (SpellAspect aspect in aspects)
+        foreach (Targeter aspect in targeters)
         {
             hash += aspect.GetHash();
         }

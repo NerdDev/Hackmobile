@@ -8,13 +8,13 @@ using System.Text;
  */
 public class AOELocation : AOE
 {
-    public override HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override HashSet<IAffectable> GetAffectableTargets(SpellCastInfo castInfo)
     {
         Container2D<GridSpace> level = BigBoss.Levels.Level.Array;
         var targetSpaces = new HashSet<GridSpace>();
-        foreach (GridSpace point in castInfo.TargetSpaces)
-            level.DrawCircle(point.X, point.Y, Radius, Draw.AddTo(targetSpaces));
-        castInfo.TargetSpaces = targetSpaces.ToArray();
-        return base.GetTargets(castInfo);
+        //foreach (GridSpace point in castInfo.TargetSpaces)
+        //    level.DrawCircle(point.X, point.Y, Radius, Draw.AddTo(targetSpaces));
+        //castInfo.TargetSpaces = targetSpaces.ToArray();
+        return base.GetAffectableTargets(castInfo);
     }
 }

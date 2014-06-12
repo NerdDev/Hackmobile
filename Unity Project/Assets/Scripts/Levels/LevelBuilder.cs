@@ -10,6 +10,7 @@ public class LevelBuilder : MonoBehaviour
     private static GameObject dynamicHolder;
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
+    private HashSet<GameObject> blocks = new HashSet<GameObject>();
 
     public static void Initialize()
     {
@@ -26,49 +27,67 @@ public class LevelBuilder : MonoBehaviour
     public void Instantiate(GridSpace space)
     {
         if (space == null || space.Deploys == null) return;
-        space.Blocks = new List<GameObject>(space.Deploys.Count);
-        for (int i = 0; i < space.Deploys.Count; i++)
+        if (space.BlocksCreated) //if instantiate is called and the blocks are created, just enable them
         {
-            GridDeploy deploy = space.Deploys[i];
-            if (deploy == null) continue;
-            Transform t = deploy.GO.transform;
-            GameObject obj = Instantiate(
-                deploy.GO,
-                new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
-                , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
-            if (deploy.Static)
-            {
-                obj.transform.parent = staticHolder.transform;
-            }
-            else
-            {
-                obj.transform.parent = dynamicHolder.transform;
-            }
-            obj.transform.localScale = new Vector3(
-                deploy.XScale * obj.transform.localScale.x,
-                deploy.YScale * obj.transform.localScale.y,
-                deploy.ZScale * obj.transform.localScale.z);
-            space.Blocks.Add(obj);
+            space.SetActive(true);
+            return;
         }
-
-        //fog of war
-        Vector3 pos = new Vector3(space.X, 0f, space.Y);
-        int height = 0;
-        if (space.Type == GridType.Wall) height = 0;
-        BigBoss.Gooey.RecreateFOW(pos, height);
-
-        //combination, GC
-        combineCounter++;
-        garbageCollectorCounter++;
-        if (garbageCollectorCounter > 300)
+        else //else create the blocks
         {
-            System.GC.Collect();
+            space.Blocks = new List<GameObject>(space.Deploys.Count);
+            for (int i = 0; i < space.Deploys.Count; i++)
+            {
+                GridDeploy deploy = space.Deploys[i];
+                if (deploy == null) continue;
+                Transform t = deploy.GO.transform;
+                GameObject obj = Instantiate(
+                    deploy.GO,
+                    new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
+                    , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
+                if (deploy.Static)
+                {
+                    obj.transform.parent = staticHolder.transform;
+                }
+                else
+                {
+                    obj.transform.parent = dynamicHolder.transform;
+                }
+                obj.transform.localScale = new Vector3(
+                    deploy.XScale * obj.transform.localScale.x,
+                    deploy.YScale * obj.transform.localScale.y,
+                    deploy.ZScale * obj.transform.localScale.z);
+                space.Blocks.Add(obj);
+                CombineBlock(obj);
+            }
+        }
+        space.BlocksCreated = true; //space has created blocks
+        //update fog of war
+        Vector3 pos = new Vector3(space.X, 0f, space.Y);
+        BigBoss.Gooey.RecreateFOW(pos, 0);
+
+        //GarbageCollect(); //not currently used now
+    }
+
+    private void GarbageCollect()
+    {
+        garbageCollectorCounter++;
+        if (garbageCollectorCounter > 75)
+        {
+            System.GC.Collect(0);
             garbageCollectorCounter = 0;
         }
-        if (combineCounter > 20)
+    }
+
+    private void CombineBlock(GameObject obj)
+    {
+        blocks.Add(obj);
+        combineCounter++;
+
+        if (combineCounter > 40)
         {
-            combineCounter = 0;
             Combine();
+            blocks.Clear();
+            combineCounter = 0;
         }
     }
 
@@ -179,8 +198,13 @@ public class LevelBuilder : MonoBehaviour
         return true;
     }
 
+    public void Remove(GameObject obj)
+    {
+        blocks.Remove(obj);
+    }
+
     public void Combine()
     {
-        StaticBatchingUtility.Combine(staticHolder);
+        StaticBatchingUtility.Combine(blocks.ToArray(), staticHolder);
     }
 }

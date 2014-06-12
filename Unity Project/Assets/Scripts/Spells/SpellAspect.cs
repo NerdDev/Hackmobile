@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+//unused
 public class SpellAspect
 {
-    public ITargeter Targeter;
+    public Targeter Targeter;
     public List<EffectInstance> Effects;
 
     public void Activate(SpellCastInfo castInfo)
     {
-        foreach (IAffectable target in Targeter.GetTargets(castInfo))
+        foreach (IAffectable target in Targeter.GetAffectableTargets(castInfo))
             foreach (EffectInstance effect in Effects)
                 target.ApplyEffect(castInfo.Caster, effect); //effect.ActivateOnObject(target);
     }

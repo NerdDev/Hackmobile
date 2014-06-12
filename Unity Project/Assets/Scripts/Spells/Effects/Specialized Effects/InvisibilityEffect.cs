@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class Invisibility : EffectInstance
 {
-    Dictionary<Renderer, Shader[]> originalShaders = new Dictionary<Renderer,Shader[]>();
-    Dictionary<Renderer, Color[]> originalColors = new Dictionary<Renderer,Color[]>();
+    Dictionary<Renderer, Shader[]> originalShaders = new Dictionary<Renderer, Shader[]>();
+    Dictionary<Renderer, Color[]> originalColors = new Dictionary<Renderer, Color[]>();
+    bool isInvisible;
 
     public override void Init(NPC n)
     {
@@ -16,6 +17,21 @@ public class Invisibility : EffectInstance
             //--npc
             //disable rendering on object
             //wispy object displayed in place of NPC?
+            ToggleInvisibility(n);
+        }
+        else
+        {
+            //--player
+            //apply shader to player, NPC's should check for invisibility in their AI functions, not here
+            EnableInvisibility(n, .4f);
+        }
+    }
+
+    private void EnableInvisibility(NPC n, float alpha)
+    {
+        if (!isInvisible)
+        {
+            isInvisible = true;
             GameObject npcObj = n.GO;
             foreach (Renderer r in npcObj.GetComponentsInChildren<Renderer>())
             {
@@ -30,27 +46,47 @@ public class Invisibility : EffectInstance
                     originalColors[r][i] = materials[i].color;
                     temp = originalColors[r][i];
                     temp = materials[i].color;
-                    temp.a = .3f;
+                    temp.a = alpha;
                     materials[i].color = temp;
                 }
             }
-        }
-        else
-        {
-            //--player
-            //apply shader to player, NPC's should check for invisibility in their AI functions, not here
         }
     }
 
     public override void Apply(NPC n)
     {
         //check if Player has SeeInvisible and enable rendering if so, disable if otherwise
+        if (n.IsNotAFreaking<Player>())
+        {
+            ToggleInvisibility(n);
+        }
+    }
+
+    private void ToggleInvisibility(NPC n)
+    {
+        if (BigBoss.Player.CanSeeInvisible())
+        {
+            DisableInvisibility(n);
+        }
+        else
+        {
+            EnableInvisibility(n, .1f);
+        }
     }
 
     public override void Remove(NPC n)
     {
-        if (n.IsNotAFreaking<Player>())
+        //--player
+        //apply shader to player, NPC's should check for invisibility in their AI functions, not here
+        //either way disable this dang thing
+        DisableInvisibility(n);
+    }
+
+    private void DisableInvisibility(NPC n)
+    {
+        if (isInvisible)
         {
+            isInvisible = false;
             GameObject npcObj = n.GO;
             foreach (Renderer r in npcObj.GetComponentsInChildren<Renderer>())
             {
@@ -61,11 +97,6 @@ public class Invisibility : EffectInstance
                     materials[i].color = originalColors[r][i];
                 }
             }
-        }
-        else
-        {
-            //--player
-            //apply shader to player, NPC's should check for invisibility in their AI functions, not here
         }
     }
 

@@ -1,0 +1,76 @@
+<items>
+	<bodyparts>
+		<bodypart name="Body">
+			<stats>
+				<equiptype>BODY</equiptype>
+			</stats>
+			<flags>
+				<flag name="default" />
+			</flags>
+			<prefab>Body</prefab>
+		</bodypart>
+		<bodypart name="HairB">
+			<stats>
+				<equiptype>HAIR</equiptype>
+			</stats>
+			<flags>
+				<flag name="default" />
+			</flags>
+			<prefab>HairB</prefab>
+		</bodypart>
+		<bodypart name="HairC">
+			<stats>
+				<equiptype>HAIR</equiptype>
+			</stats>
+			<flags>
+				<flag name="default" />
+			</flags>
+			<prefab>HairC</prefab>
+		</bodypart>
+		<bodypart name="NoseA">
+			<stats>
+				<equiptype>NOSE</equiptype>
+			</stats>
+			<flags>
+				<flag name="default" />
+			</flags>
+			<prefab>NoseA</prefab>
+		</bodypart>
+		<bodypart name="NoseB">
+			<stats>
+				<equiptype>NOSE</equiptype>
+			</stats>
+			<flags>
+				<flag name="default" />
+			</flags>
+			<prefab>NoseB</prefab>
+		</bodypart>
+		<bodypart name="EarsA">
+			<stats>
+				<equiptype>EARS</equiptype>
+			</stats>
+			<flags>
+				<flag name="default" />
+			</flags>
+			<prefab>EarsA</prefab>
+		</bodypart>
+		<bodypart name="EarsB">
+			<stats>
+				<equiptype>EARS</equiptype>
+			</stats>
+			<flags>
+				<flag name="default" />
+			</flags>
+			<prefab>EarsB</prefab>
+		</bodypart>
+		<bodypart name="BootsDefault">
+			<stats>
+				<equiptype>FEET</equiptype>
+			</stats>
+			<flags>
+				<flag name="default" />
+			</flags>
+			<prefab>BootsDefault</prefab>
+		</bodypart>
+	</bodyparts>
+ </items>

@@ -1,0 +1,74 @@
+<items>
+	<Armors>
+		<armor name="Leather Armor">
+			<stats>
+				<weight>15</weight>
+				<equiptype>BODY</equiptype>
+			</stats>
+			<prefab>LeatherChest</prefab>
+		</armor>
+		<armor name="Leather Skirt">
+			<stats>
+				<weight>15</weight>
+				<equiptype>LEGS</equiptype>
+			</stats>
+			<prefab>LeatherLegs</prefab>
+		</armor>
+		<armor name="Leather Boots">
+			<stats>
+				<weight>15</weight>
+				<equiptype>FEET</equiptype>
+			</stats>
+			<prefab>LeatherBoots</prefab>
+		</armor>
+		<armor name="Elven Armor">
+			<stats>
+				<weight>15</weight>
+				<equiptype>BODY</equiptype>
+			</stats>
+			<prefab>ElvenChest</prefab>
+		</armor>
+		<armor name="Elven Skirt">
+			<stats>
+				<weight>15</weight>
+				<equiptype>LEGS</equiptype>
+			</stats>
+			<prefab>ElvenLegs</prefab>
+		</armor>
+		<armor name="Elven Boots">
+			<stats>
+				<weight>15</weight>
+				<equiptype>FEET</equiptype>
+			</stats>
+			<prefab>ElvenBoots</prefab>
+		</armor>
+		<armor name="Elven Helmet">
+			<stats>
+				<weight>15</weight>
+				<equiptype>HAIR</equiptype>
+			</stats>
+			<prefab>ElvenHelmet</prefab>
+		</armor>
+		<armor name="Mage's Outfit">
+			<stats>
+				<weight>15</weight>
+				<equiptype>BODY</equiptype>
+			</stats>
+			<prefab>MageChest</prefab>
+		</armor>
+		<armor name="Mage's Legs">
+			<stats>
+				<weight>15</weight>
+				<equiptype>LEGS</equiptype>
+			</stats>
+			<prefab>MageLegs</prefab>
+		</armor>
+		<armor name="Mage's Boots">
+			<stats>
+				<weight>15</weight>
+				<equiptype>FEET</equiptype>
+			</stats>
+			<prefab>MageBoots</prefab>
+		</armor>
+	</Armors>
+ </items>

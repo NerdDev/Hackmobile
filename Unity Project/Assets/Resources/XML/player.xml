@@ -38,55 +38,95 @@
 		</bodyparts>
 		<spells>
 			<spell name="Firebolt">
-				<range>5</range>
-				<targeter type="TargetedObjects">
-					<effect type="TargetedObject">
-						<speed>2</speed>
-						<startvisual>FX/Fireball</startvisual>
-						<finishvisual>FX/FireballExplosion</finishvisual>
-					</effect>
-					<effect type="DamageFire">
-						<strength>
-							<min>6</min>
-							<max>12</max>
-						</strength>
+				<icon>Crystal Ball_02</icon>	
+				<range>10</range>
+				<cost>0</cost>
+				<targeter type="TargetedObjects" maxtargets="1">
+					<maxtargets>1</maxtargets>
+					<effect type="TargetedCollision">
+						<speed>5</speed>
+						<visual>FX/FT_MagicEffects_volume02/_Prefab/Projectile03</visual>
+						<OnCollision>
+							<effect type="DamageFire">
+								<strength>
+									<min>6</min>
+									<max>12</max>
+								</strength>
+							</effect>
+							<effect type="TargetedCollision">
+								<visual>FX/FT_MagicEffects_volume01/Effects/FireBall_OneShot</visual>
+							</effect>
+						</OnCollision>
 					</effect>
 				</targeter>
 			</spell>
-			<spell>
-				<name>Poison</name>
-				<range>5</range>
+			
+			<spell name="Fire Wall">
+				<icon>Essence_03</icon>    
+				<range>12</range>
+				<cost>5</cost>
+				<targeter type="WallTargeter" Turns="300" Rate="15" sx="2" sy=".5" sz=".5" rx="-90" py="1" maxtargets="1">
+					<visual>FX/MagicalFx2/Prefabs/Examples/Zones/MagicalFx2_FireZone 1</visual>
+					<!-- Any other custom targeter parameters -->
+					<OnCollision>
+						<effect type="DamageFire">
+							<strength>
+								<min>1</min>
+								<max>2</max>
+							</strength>
+						</effect>
+						<effect type="TargetedCollision">
+							<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Fire</visual>
+						</effect>
+					</OnCollision>
+				</targeter>
+			</spell>
+			
+			<spell name="Poison2">
+				<icon>fireball-acid-1</icon>
+				<range>8</range>
 				<cost>30</cost>
-				<targeter>
-					<type>TargetedObjects</type>
-					<effect>
-						<type>PoisonDamageEffect</type>
+				<targeter type="TargetedObjects">
+					<effect type="TargetedCollision">
+						<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Dark</visual>
+					</effect>
+					<effect type="PoisonDamageEffect">
 						<strength>4</strength>
 						<turns>5</turns>
 					</effect>
 				</targeter>
 			</spell>
-			<spell>
-				<name>Levitate</name>
-				<range>2</range>
+			<spell name="Disintegration Field">
+				<icon>Essence_03</icon>    
+				<range>12</range>
 				<cost>5</cost>
-				<targeter>
-					<type>TargetedObjects</type>
-					<effect>
-						<type>Levitation</type>
-						<strength>.4</strength>
-						<turns>5</turns>
-					</effect>
+				<targeter type="WallTargeter" Turns="150" Rate="20" maxtargets="1" py="1">
+					<visual>FX/MagicalFx2/Prefabs/Examples/Zones/MagicalFx2_ZoneA</visual>
+					<!-- Any other custom targeter parameters -->
+					<OnCollision>
+						<effect type="DamageFire">
+							<strength>
+								<min>1</min>
+								<max>2</max>
+							</strength>
+						</effect>
+						<effect type="TargetedCollision">
+							<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Dark</visual>
+						</effect>
+					</OnCollision>
 				</targeter>
 			</spell>
-			<spell>
-				<name>Invisibility</name>
-				<range>4</range>
-				<cost>5</cost>
-				<targeter>
-					<type>TargetedObjects</type>
-					<effect>
-						<type>Invisibility</type>
+			
+			<spell name="Poison">
+				<icon>fireball-acid-1</icon>
+				<range>8</range>
+				<cost>30</cost>
+				<targeter type="TargetedObjects">
+					<effect type="TargetedCollision">
+						<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Dark</visual>
+					</effect>
+					<effect type="PoisonDamageEffect">
+						<strength>4</strength>
 						<turns>5</turns>
 					</effect>
 				</targeter>

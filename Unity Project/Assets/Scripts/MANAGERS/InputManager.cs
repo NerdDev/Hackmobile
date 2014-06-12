@@ -16,9 +16,7 @@ public class InputManager : MonoBehaviour, IManager
     #endregion
 
     #region Mouse variables:
-    public float horizontalMouseSensitivity;
     public float horizontalMouseAxis;//Number spit out by Unity's Input.GetAxis
-    public float verticalMouseSensitivity;
     public float verticalMouseAxis;//Number spit out by Unity's Input.GetAxis
     #endregion
 
@@ -70,6 +68,9 @@ public class InputManager : MonoBehaviour, IManager
     #region TOUCH
 
     public JoystickCamera Rotation_Camera;
+    public float MovementTolerance = 0.0f;
+    public float ZoomTolerance = 0.6f;
+    public float RotateTolerance = 0.0f;
     internal bool touchMovement;
 
     public void CheckForTouchInput()
@@ -79,15 +80,15 @@ public class InputManager : MonoBehaviour, IManager
             Application.LoadLevel(Application.loadedLevelName);
             BigBoss.Starter.Start();
         }
-        if (joystickLeft.JoystickAxis.x != 0 || joystickLeft.JoystickAxis.y != 0)
+        if (Math.Abs(joystickLeft.JoystickAxis.x) > MovementTolerance || Math.Abs(joystickLeft.JoystickAxis.y) > MovementTolerance)
         {
             touchMove();
         }
-        if (joystickRight.JoystickValue.x != 0)
+        if ((Math.Abs(joystickRight.JoystickValue.x) > RotateTolerance))
         {
             Rotation_Camera.Rotate(joystickRight.JoystickAxis.x, 0f);
         }
-        if (Math.Abs(joystickRight.JoystickValue.y) > 0.4)
+        if (Math.Abs(joystickRight.JoystickValue.y) > ZoomTolerance)
         {
             Rotation_Camera.zoom(joystickRight.JoystickAxis.y);
         }
@@ -104,8 +105,7 @@ public class InputManager : MonoBehaviour, IManager
         Quaternion lookRotFinal = Quaternion.LookRotation(tar); //calc'ing our look vector
         Vector3 euler = lookRotFinal.eulerAngles;
         euler = new Vector3(euler.x, euler.y + Rotation_Camera.xDeg, euler.z);
-        BigBoss.PlayerInfo.transform.rotation = Quaternion.Euler(euler);
-        BigBoss.PlayerInfo.GetComponent<CharacterController>().transform.rotation = Quaternion.Euler(euler);
+        BigBoss.Player.RotatePlayer(Quaternion.Euler(euler));
         BigBoss.Player.MovePlayer(joystickLeft.JoystickAxis);
     }
 
@@ -174,7 +174,6 @@ public class InputManager : MonoBehaviour, IManager
         }
     }
     #endregion
-
 
     long inputVal;
     bool disabledInput;

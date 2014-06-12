@@ -6,6 +6,7 @@ using System.Text;
 public enum TargetingStyle
 {
     Self,
+    TargetGrid,
+    TargetObject,
     TargetLocation,
-    TargetObject
 }

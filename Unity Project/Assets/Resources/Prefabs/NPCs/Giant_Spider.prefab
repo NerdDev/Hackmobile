@@ -21451,7 +21451,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 145733e614aa93143972c86f9bfdce3a, type: 3}
   m_Controller: {fileID: 9100000, guid: 6654b1dbc942a4b42a2fa999d36df180, type: 2}
   m_CullingMode: 1
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
 --- !u!114 &11400000
@@ -21465,6 +21465,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff2f2b64195e1f41aa5ee8668ca28aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instantiated: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21573,7 +21574,7 @@ SkinnedMeshRenderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 77a6e888a87bf7e44881aa6e6c60447e, type: 2}
+  - {fileID: 2100000, guid: 56da11620a020264d88304d6c3b5fb8b, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0

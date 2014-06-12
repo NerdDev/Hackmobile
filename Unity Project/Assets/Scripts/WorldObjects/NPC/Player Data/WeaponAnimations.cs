@@ -25,4 +25,13 @@ public class WeaponAnimations : MonoBehaviour
         }
         return DefaultAnims;
     }
+
+    public void CopyInto(WeaponAnimations animations)
+    {
+        Attack1 = animations.Attack1;
+        Attack2 = animations.Attack2;
+        Attack3 = animations.Attack3;
+        Idle = animations.Idle;
+        Move = animations.Move;
+    }
 }

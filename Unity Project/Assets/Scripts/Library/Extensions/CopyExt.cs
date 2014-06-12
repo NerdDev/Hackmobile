@@ -83,7 +83,7 @@ namespace System
 
         private static object CopyDictionary(Object originalObject, IDictionary<Object, Object> visited, Type typeToReflect)
         {
-            var dict = Activator.CreateInstance(typeToReflect);
+            var dict = Activator.CreateInstance(typeToReflect, true);
             Type[] types = GetDictionaryTypes(typeToReflect);
 
             MethodInfo GetItem = typeToReflect.GetMethod("get_Item", new Type[] { types[0] });

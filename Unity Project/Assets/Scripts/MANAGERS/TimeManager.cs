@@ -50,12 +50,12 @@ public class TimeManager : MonoBehaviour, IManager
     #endregion
     #region Action Costs
     public int regularMoveCost = 1;
-    public int attackCost = 60;
-    public int eatItemCost = 20;
-    public int useItemCost = 20;
-    public int equipItemCost = 20;
-    public int spellCost = 60;
-    public int pickDropItemCost = 10;
+    public int attackCost = 15;
+    public int eatItemCost = 12;
+    public int useItemCost = 12;
+    public int equipItemCost = 12;
+    public int spellCost = 15;
+    public int pickDropItemCost = 6;
 
 
     public float TimeInterval;
@@ -109,34 +109,36 @@ public class TimeManager : MonoBehaviour, IManager
     {
         CurrentTurn++;
         //Justin's hot: // Thx brah
-        if (CurrentTurn % 5 == 0)
-            runGroupUpdate();
+        //if (CurrentTurn % 5 == 0)
+        runGroupUpdate();
     }
 
     #endregion
 
     #region Objects to Update
     public HashSet<PassesTurns> TotalObjectList = new HashSet<PassesTurns>();
+    HashSet<PassesTurns>[] objects = new HashSet<PassesTurns>[30];
     internal Queue<PassesTurns> updateList = new Queue<PassesTurns>();
+    TurnHolder holder = new TurnHolder();
 
-    public void RegisterToUpdateList<T>(T obj) where T : PassesTurns
+    public void Register<T>(T obj) where T : PassesTurns
     {
-        //TotalObjectList.Add(obj);
+        if (obj.Rate == 0) obj.Rate = 60;
+        holder.Add(obj);
     }
 
-    public void RemoveFromUpdateList<T>(T obj) where T : PassesTurns
+    public void Remove<T>(T obj) where T : PassesTurns
     {
-        //TotalObjectList.Remove(obj);
+        holder.Remove(obj);
     }
 
     public void runGroupUpdate()
     {
-        foreach (PassesTurns obj in TotalObjectList)
+        IEnumerable objects = holder.Retrieve();
+        if (objects == null) return;
+        foreach (PassesTurns obj in objects)
         {
-            if (obj.IsActive)
-            {
-                updateList.Enqueue(obj);
-            }
+            updateList.Enqueue(obj);
         }
     }
 
@@ -147,14 +149,7 @@ public class TimeManager : MonoBehaviour, IManager
             if (updateList.Count > 0)
             {
                 PassesTurns obj = updateList.Dequeue();
-                if (TotalObjectList.Contains(obj))
-                {
-                    runUpdate(obj);
-                }
-            }
-            else
-            {
-                //BigBoss.PlayerInput.allowTouchInput = true;
+                runUpdate(obj);
             }
             yield return null;
         }
@@ -162,8 +157,14 @@ public class TimeManager : MonoBehaviour, IManager
 
     public void runUpdate<T>(T obj) where T : PassesTurns
     {
-        //The object must lower it's own base points
-        obj.UpdateTurn();
+        if (obj.IsActive)
+        {
+            obj.UpdateTurn();
+        }
+        if (obj.IsActive)
+        {
+            Register(obj);
+        }
     }
     #endregion
 }

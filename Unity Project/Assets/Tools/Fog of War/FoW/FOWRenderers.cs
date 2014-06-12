@@ -10,12 +10,13 @@ using UnityEngine;
 public class FOWRenderers : MonoBehaviour
 {
     Transform mTrans;
-    Renderer[] mRenderers;
+    //Renderer[] mRenderers;
     float mNextUpdate = 0f;
     bool mIsVisible = true;
     bool mUpdate = true;
-    private bool instantiated = false;
+    public bool instantiated = false;
     private WaitForSeconds wfs;
+    GridSpace gridSpace;
 
     /// <summary>
     /// Whether the renderers are currently visible or not.
@@ -23,108 +24,56 @@ public class FOWRenderers : MonoBehaviour
 
     public bool isVisible { get { return mIsVisible; } }
 
-    /// <summary>
-    /// Rebuild the list of renderers and immediately update their visibility state.
-    /// </summary>
-
-    public void Rebuild()
-    {
-        mRenderers = GetComponentsInChildren<Renderer>();
-        mUpdate = true;
-        mNextUpdate = .01f;
-    }
-
     void Start()
     {
         mTrans = transform;
-        mNextUpdate = 0.2f + (UnityEngine.Random.value + UnityEngine.Random.value) * .05f;
-        wfs = new WaitForSeconds(mNextUpdate);
-        mRenderers = GetComponentsInChildren<Renderer>();
+        mNextUpdate = 0.2f + (UnityEngine.Random.value + UnityEngine.Random.value) * .2f;
+        //wfs = new WaitForSeconds(mNextUpdate);
+        gridSpace = BigBoss.Levels.Level[mTrans.position.x.ToInt(), mTrans.position.z.ToInt()];
     }
 
-    void OnEnable()
+    public void OnEnable()
     {
-        StartCoroutine(UpdateRendering());
-    }
-
-    void UpdateNow()
-    {
-        //mNextUpdate = Time.time + 0.075f + Random.value * 0.05f;
-
-        if (FOWSystem.instance == null)
-        {
-            enabled = false;
-            return;
-        }
-
-        if (mUpdate) mRenderers = GetComponentsInChildren<Renderer>();
-
-        bool visible = FOWSystem.instance.IsVisible(mTrans.position);
-
-        if (mUpdate || mIsVisible != visible)
-        {
-            mUpdate = false;
-            mIsVisible = visible;
-
-            for (int i = 0, imax = mRenderers.Length; i < imax; ++i)
-            {
-                Renderer ren = mRenderers[i];
-
-                if (ren)
-                {
-                    ren.enabled = mIsVisible;
-                }
-                else
-                {
-                    mUpdate = true;
-                    mNextUpdate = Time.time;
-                }
-            }
-        }
-    }
-
-    IEnumerator UpdateRendering()
-    {
+        instantiated = false;
         float mFirstUpdate = UnityEngine.Random.value * .1f;
-        yield return new WaitForSeconds(mFirstUpdate);
-        while (enabled)
+        InvokeRepeating("UpdateRendering", mFirstUpdate, mNextUpdate);
+    }
+
+    void UpdateRendering()
+    {
+        if (enabled)
         {
-            bool visible = IsVisible();
-            if (mUpdate || mIsVisible != visible)
+            mIsVisible = IsVisible();
+            if (!mIsVisible)
             {
-                mUpdate = false;
-                mIsVisible = visible;
-
-                for (int i = 0, imax = mRenderers.Length; i < imax; ++i)
-                {
-                    Renderer ren = mRenderers[i];
-
-                    if (ren)
-                    {
-                        ren.enabled = mIsVisible;
-                    }
-                    else
-                    {
-                        Rebuild();
-                    }
-                }
+                gridSpace.DestroyGridSpace();
             }
-            if (visible && !instantiated)
+            else if (!instantiated)
             {
                 Vector3 pos = gameObject.transform.position;
-                BigBoss.Levels.Level.Array.DrawAround(pos.x.ToInt(), pos.z.ToInt(), true, (arr, x, y) =>
-                {
-                    GridSpace grid = arr[x, y];
-                    if (grid != null && grid.Blocks == null)
-                    {
-                        BigBoss.Levels.Builder.Instantiate(grid);
-                    };
-                    return true;
-                });
+                DrawGridsAround(pos);
+                
                 instantiated = true;
             }
-            yield return wfs;
+            // yield return wfs;
         }
+        else
+        {
+            CancelInvoke("UpdateRendering");
+        }
+    }
+
+    void DrawGridsAround(Vector3 pos)
+    {
+        StartCoroutine(BigBoss.Levels.Level.Array.DrawAroundCoroutine(pos.x.ToInt(), pos.z.ToInt(), true, (arr, x, y) =>
+        {
+            GridSpace grid = arr[x, y];
+            if (grid != null)
+            {
+                grid.Instantiate();
+            };
+            return true;
+        }));
     }
 
     bool IsVisible()

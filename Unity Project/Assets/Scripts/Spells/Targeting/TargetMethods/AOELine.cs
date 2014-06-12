@@ -11,9 +11,9 @@ public class AOELine : AOE
 {
     public bool IncludeCaster;
     public bool IncludeEndPoint;
-    public override HashSet<IAffectable> GetTargets(SpellCastInfo castInfo)
+    public override HashSet<IAffectable> GetAffectableTargets(SpellCastInfo castInfo)
     {
         // Logic to draw line in any direction
-        return base.GetTargets(castInfo);
+        return base.GetAffectableTargets(castInfo);
     }
 }

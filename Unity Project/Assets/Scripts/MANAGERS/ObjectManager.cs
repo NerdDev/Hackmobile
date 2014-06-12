@@ -17,11 +17,10 @@ public class ObjectManager : MonoBehaviour, IManager
 
     internal Dictionary<string, Spell> PlayerSpells = new Dictionary<string, Spell>();
 
-    private Dictionary<string, GameObject> LoadedObjects = new Dictionary<string, GameObject>();
+    internal Dictionary<string, GameObject> LoadedObjects = new Dictionary<string, GameObject>();
 
     public ObjectManager()
     {
-
     }
 
     public void Initialize()
@@ -123,6 +122,16 @@ public class ObjectManager : MonoBehaviour, IManager
             LoadedObjects.Add(prefab, Resources.Load(prefab) as GameObject);
         }
         return Instantiate(LoadedObjects[prefab]) as GameObject;
+    }
+
+    public GameObject Proto(WorldObject obj)
+    {
+        string prefab = obj.Prefab;
+        if (!LoadedObjects.ContainsKey(prefab))
+        {
+            LoadedObjects.Add(prefab, Resources.Load(prefab) as GameObject);
+        }
+        return LoadedObjects[prefab] as GameObject;
     }
 
     public void ResetObj(WorldObject obj)

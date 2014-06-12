@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-public class AppliedEffects : SortedDictionary<string, EffectInstance>, IXmlParsable, IAffectable
+public class AppliedEffects : Dictionary<string, EffectInstance>, IXmlParsable, IAffectable
 {
     IAffectable owner;
     WorldObject IAffectable.Self { get { return owner.Self; } }
+
+    AppliedEffects() { } //used for copy extension
 
     public AppliedEffects(IAffectable owner)
     {
@@ -38,8 +40,7 @@ public class AppliedEffects : SortedDictionary<string, EffectInstance>, IXmlPars
     {
         if (this.ContainsKey(effect))
         {
-            BigBoss.Time.RemoveFromUpdateList(this[effect]);
-            this[effect].IsActive = false;
+            BigBoss.Time.Remove(this[effect]);
             this.Remove(effect);
         }
         else
