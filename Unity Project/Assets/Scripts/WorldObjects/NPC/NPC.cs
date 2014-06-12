@@ -182,6 +182,12 @@ public class NPC : Affectable
         }
     }
 
+    public virtual void Interrupt(int cost)
+    {
+        this.action = null;
+        Do(new Action(() => { }), cost, false, false);
+    }
+
     internal class ActionToDo
     {
         public Action action;
@@ -502,11 +508,31 @@ public class NPC : Affectable
         }
         //Direction to the next waypoint
 
+        bool gridInstantiated = GridSpace.Blocks != null;
+        if (!gridInstantiated) //grid is not instantiated, so reset the placement check
+        {
+            NPCPlaced = false;
+        }
+        else if (!NPCPlaced) //if NPC is not placed and grid IS instantiated, place it
+        {
+            PlaceNPC();
+            NPCPlaced = true; //npc is placed, so set the check - until it's not instantiated under it again, it will not replace the NPC
+        }
+
+        if (DistanceToTarget(BigBoss.Player) > 20) //if either the controller is grounded or the grid is not instantiated, gravity = 0
+        {
+            rigidbody.useGravity = false;
+        }
+        else //gravity is by default normal speed
+        {
+            rigidbody.useGravity = true;
+        }
+
         Vector3 dir = BackSearchWaypoints();
-        priorpos = GO.transform.position;
         LookTowards(dir); //orient towards it
         MoveForward(); //move forward
-        FOWSystem.instance.ModifyGrid(GO.transform.position, 0, 6, 0);
+        //rigidbody.MoveStepWise(dir, NPCSpeed);
+        //FOWSystem.instance.ModifyGrid(GO.transform.position, 0, 6, 0);
         velocity = NPCSpeed; //sets animation velocity
 
         float sqrDist = (dir - GO.transform.position).sqrMagnitude;
@@ -608,9 +634,9 @@ public class NPC : Affectable
         Vector3 pos = GridSpace.Blocks[0].transform.position;
         pos.y += 5;
         RaycastHit hit;
-        if (Physics.Raycast(new Ray(pos, Vector3.down), out hit, 10f))
+        if (Physics.Raycast(new Ray(pos, Vector3.down), out hit, 10f, LayerMask.NameToLayer("Floor")))
         {
-            //GO.transform.position = new Vector3(pos.x, pos.y - hit.distance + .05f, pos.z);
+            GO.transform.position = new Vector3(pos.x, pos.y - hit.distance, pos.z);
             return true;
         }
         else
@@ -625,10 +651,11 @@ public class NPC : Affectable
     {
         Vector3 heading = new Vector3(target.x - GO.transform.position.x, 0f, target.z - GO.transform.position.z);
         Quaternion lerp = Quaternion.LookRotation(heading);
-        Quaternion toRot = Quaternion.Lerp(GO.transform.rotation, lerp, 3 * NPCSpeed * Time.deltaTime);
-        //rigidbody.MoveRotation(toRot);
+        Quaternion toRot = Quaternion.Lerp(GO.transform.rotation, lerp, 12 * NPCSpeed * Time.deltaTime);
+        rigidbody.MoveRotation(toRot);
         target.y = 0;
-        rigidbody.MoveRotation(Quaternion.LookRotation(target - GO.transform.position));
+        //rigidbody.rotation = Quaternion.LookRotation(heading);
+        //rigidbody.MoveRotation(Quaternion.LookRotation(heading));
     }
 
     void OnPathComplete(PFPath p)

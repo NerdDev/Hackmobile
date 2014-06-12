@@ -2505,7 +2505,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 400, z: 0}
+  m_LocalPosition: {x: -.626959324, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400108}
@@ -2540,7 +2540,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 844.884521, y: 400, z: 0}
+  m_LocalPosition: {x: 667.71167, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400244}
@@ -2553,7 +2553,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -844.884521, y: 400, z: 0}
+  m_LocalPosition: {x: -667.71167, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400256}
@@ -2565,7 +2565,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -844.884521, y: -400, z: 0}
+  m_LocalPosition: {x: -667.71167, y: -400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400328}
@@ -2578,7 +2578,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 844.884521, y: -400, z: 0}
+  m_LocalPosition: {x: 667.71167, y: -400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400310}
@@ -2767,7 +2767,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100050}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -400, z: 0}
+  m_LocalPosition: {x: -.626959324, y: -400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400108}
@@ -5894,7 +5894,7 @@ MonoBehaviour:
   equipItemCost: 12
   spellCost: 30
   pickDropItemCost: 8
-  TimeInterval: .0350000001
+  TimeInterval: .0329999998
   CapOnTurnPoints: 0
 --- !u!114 &11400088
 MonoBehaviour:
@@ -6522,12 +6522,13 @@ MonoBehaviour:
   cookie: {fileID: 2800000, guid: b9d67bb2d8a6eb443841d394648d8e0a, type: 3}
   LoadImage: {fileID: 13100000}
   InvisibilityShader: {fileID: 31, guid: 0000000000000000f000000000000000, type: 3}
+  OutliningShader: {fileID: 4800000, guid: 997f38e1aaf2fed41afe21fff536ebfc, type: 3}
   TransparentShader: {fileID: 4800000, guid: e54b0daae218c1d4096822c3de26c457, type: 3}
   InvisibleObject: {fileID: 100000, guid: 3878e4a462c1d624097fb6db33bb777d, type: 2}
   GUICam: {fileID: 2000002}
   HeroCam: {fileID: 2000000}
   fow: {fileID: 11400090}
-  PointPrefab: {fileID: 100000, guid: e2e1038daac87c74e82de2cbc35b5ad9, type: 2}
+  PointPrefab: {fileID: 100004, guid: 520afb2c651d46544b23f5b5db6ec9a6, type: 2}
   MaskForGUI:
     serializedVersion: 2
     m_Bits: 256

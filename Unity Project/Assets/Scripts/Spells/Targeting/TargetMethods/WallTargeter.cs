@@ -15,7 +15,10 @@ public class WallTargeter : Targeter
     // Unique WallTargeter Variables
     protected string visual;
     protected Spell OnCollision;
-    protected int Width;
+    protected Vector3 Size;
+    protected Vector3 Rotation;
+    protected Vector3 Position;
+    protected bool RotateTowardsCaster;
     protected int turns;
     protected int rate;
 
@@ -24,16 +27,26 @@ public class WallTargeter : Targeter
         HashSet<Vector3> spaces = GetLocationTargets(castInfo);
         foreach (Vector3 space in spaces)
         {
-            Quaternion rotationTowardsCaster = Quaternion.LookRotation(castInfo.Caster.Self.GO.transform.position - space);
-            Vector3 euler = rotationTowardsCaster.eulerAngles;
-            euler.x -= 90;
-            rotationTowardsCaster = Quaternion.Euler(euler);
+            Quaternion rotationTowardsCaster = Quaternion.identity;
+            if (RotateTowardsCaster)
+            {
+                rotationTowardsCaster = Quaternion.LookRotation(castInfo.Caster.Self.GO.transform.position - space);
+                Vector3 euler = rotationTowardsCaster.eulerAngles;
+                euler += Rotation;
+                rotationTowardsCaster = Quaternion.Euler(euler);
+            }
+            else
+            {
+                Vector3 euler = rotationTowardsCaster.eulerAngles;
+                euler += Rotation;
+                rotationTowardsCaster = Quaternion.Euler(euler);
+            }
 
             Vector3 pos = space;
-            pos.y += 1;
+            pos += Position;
 
             GameObject go = GameObject.Instantiate(Resources.Load(visual), pos, rotationTowardsCaster) as GameObject;
-            go.transform.localScale = new Vector3(Width, .5f, .5f);
+            go.transform.localScale = Size;
 
             TimedCollisionTrigger col = go.AddComponent<TimedCollisionTrigger>();
             col.Init(OnCollision, castInfo.Caster, turns, rate, true, false);
@@ -59,7 +72,15 @@ public class WallTargeter : Targeter
         turns = x.SelectInt("turns");
         rate = x.SelectInt("rate");
         visual = x.SelectString("visual");
-        Width = x.SelectInt("width");
+        Size.x = x.SelectFloat("sx", 1);
+        Size.y = x.SelectFloat("sy", 1);
+        Size.z = x.SelectFloat("sz", 1);
+        Rotation.x = x.SelectFloat("rx", 0);
+        Rotation.y = x.SelectFloat("ry", 0);
+        Rotation.z = x.SelectFloat("rz", 0);
+        Position.x = x.SelectFloat("px", 0);
+        Position.y = x.SelectFloat("py", 0);
+        Position.z = x.SelectFloat("pz", 0);
         OnCollision = x.SelectSpell<TargetedObjects>("OnCollision");
     }
 }

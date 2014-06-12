@@ -42,6 +42,8 @@ public class GUIManager : MonoBehaviour, IManager
     }
     List<IAffectable> TargetAffectables = new List<IAffectable>();
     int TargetAffectableCount;
+    Dictionary<Renderer, Shader[]> originalShaders = new Dictionary<Renderer, Shader[]>();
+    HashSet<NPC> Outlining = new HashSet<NPC>();
     #endregion
 
     #region Publicly populated variables from scene
@@ -71,6 +73,7 @@ public class GUIManager : MonoBehaviour, IManager
     public GUITexture LoadImage;
 
     public Shader InvisibilityShader;
+    public Shader OutliningShader;
     public Shader TransparentShader;
     public GameObject InvisibleObject;
 
@@ -95,29 +98,19 @@ public class GUIManager : MonoBehaviour, IManager
         {
             if (Input.GetMouseButtonDown(0))
             {
-                RaycastHit hitInfo = new RaycastHit();
-
-                Camera[] allCams = Camera.allCameras;
-                bool hitCamera = false;
-                for (int i = 0; i < allCams.Length; i++)
-                {
-                    if (allCams[i] == Camera.main) continue;
-                    if (Physics.Raycast(allCams[i].ScreenPointToRay(Input.mousePosition), 10f, MaskForGUI))
-                    {
-                        hitCamera = true;
-                        break;
-                    }
-                }
+                bool hitCamera = true;
+                if (UICamera.hoveredObject == null) hitCamera = false;
                 if (!hitCamera)
                 {
+                    RaycastHit hitInfo = new RaycastHit();
                     bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
                     if (hit)
                     {
-                        if (hitInfo.collider.gameObject.GetComponent<NPCInstance>() == null)
+                        GameObject gObj = hitInfo.collider.gameObject;
+                        if (gObj.layer == LayerMask.NameToLayer("Floor") && FOWSystem.instance.IsVisible(hitInfo.point))
                         {
                             if (TargetSpaces.Count < TargetSpaceCount)
                             {
-                                Debug.Log("Adding to targets");
                                 Vector3 loc = hitInfo.point;
                                 GameObject go = GameObject.Instantiate(PointPrefab, loc, Quaternion.identity) as GameObject;
                                 TargetSpaces.Add(new TargetSpace() { point = go, loc = loc });
@@ -400,16 +393,15 @@ public class GUIManager : MonoBehaviour, IManager
 
     private void ResetNPCTarget()
     {
-        if (TargetAffectables != null)
+        foreach (IAffectable ia in TargetAffectables)
         {
-            for (int i = 0; i < TargetAffectables.Count; i++)
+            if (ia is NPC)
             {
-                if (TargetAffectables[i] is NPC)
+                NPC n = ia as NPC;
+                if (Outlining.Contains(n))
                 {
-                    foreach (GameObject block in ((NPC)TargetAffectables[i]).GridSpace.Blocks)
-                    {
-                        block.renderer.sharedMaterial = NormalShaderGridspace;
-                    }
+                    ToggleHighlightOff(n);
+                    Outlining.Remove(n);
                 }
             }
         }
@@ -459,9 +451,11 @@ public class GUIManager : MonoBehaviour, IManager
         TargetAffectables.Remove(target);
         if (target is NPC)
         {
-            foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
+            NPC n = target as NPC;
+            if (Outlining.Contains(n))
             {
-                block.renderer.sharedMaterial = NormalShaderGridspace;
+                ToggleHighlightOff(n);
+                Outlining.Remove(n);
             }
         }
     }
@@ -471,12 +465,43 @@ public class GUIManager : MonoBehaviour, IManager
         TargetAffectables.Add(target);
         if (target is NPC)
         {
-            foreach (GameObject block in ((NPC)target).GridSpace.Blocks)
+            NPC n = target as NPC;
+            if (!Outlining.Contains(n))
             {
-                block.renderer.sharedMaterial = GlowShaderGridSpace;
+                ToggleHighlightOn(n);
+                Outlining.Add(n);
             }
         }
         ResetLocationTargets();
+    }
+    
+    private void ToggleHighlightOn(NPC n)
+    {
+        GameObject npcObj = n.GO;
+        foreach (Renderer r in npcObj.GetComponentsInChildren<Renderer>())
+        {
+            Material[] materials = r.materials;
+            originalShaders.Add(r, new Shader[materials.Length]);
+            for (int i = 0; i < materials.Length; i++)
+            {
+                originalShaders[r][i] = materials[i].shader;
+                materials[i].shader = BigBoss.Gooey.OutliningShader;
+            }
+        }
+    }
+
+    private void ToggleHighlightOff(NPC n)
+    {
+        GameObject npcObj = n.GO;
+        foreach (Renderer r in npcObj.GetComponentsInChildren<Renderer>())
+        {
+            Material[] materials = r.materials;
+            for (int i = 0; i < materials.Length; i++)
+            {
+                materials[i].shader = originalShaders[r][i];
+            }
+            originalShaders.Remove(r);
+        }
     }
 
     GUIButton CreateButton(string buttonName = "Button", string buttonText = null)

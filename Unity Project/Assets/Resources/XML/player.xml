@@ -65,7 +65,7 @@
 				<icon>Essence_03</icon>    
 				<range>12</range>
 				<cost>5</cost>
-				<targeter type="WallTargeter" Turns="300" Rate="15" Width="2" maxtargets="1">
+				<targeter type="WallTargeter" Turns="300" Rate="15" sx="2" sy=".5" sz=".5" rx="-90" py="1" maxtargets="1">
 					<visual>FX/MagicalFx2/Prefabs/Examples/Zones/MagicalFx2_FireZone 1</visual>
 					<!-- Any other custom targeter parameters -->
 					<OnCollision>
@@ -82,12 +82,47 @@
 				</targeter>
 			</spell>
 			
+			<spell name="Poison2">
+				<icon>fireball-acid-1</icon>
+				<range>8</range>
+				<cost>30</cost>
+				<targeter type="TargetedObjects">
+					<effect type="TargetedCollision">
+						<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Dark</visual>
+					</effect>
+					<effect type="PoisonDamageEffect">
+						<strength>4</strength>
+						<turns>5</turns>
+					</effect>
+				</targeter>
+			</spell>
+			<spell name="Disintegration Field">
+				<icon>Essence_03</icon>    
+				<range>12</range>
+				<cost>5</cost>
+				<targeter type="WallTargeter" Turns="150" Rate="20" maxtargets="1" py="1">
+					<visual>FX/MagicalFx2/Prefabs/Examples/Zones/MagicalFx2_ZoneA</visual>
+					<!-- Any other custom targeter parameters -->
+					<OnCollision>
+						<effect type="DamageFire">
+							<strength>
+								<min>1</min>
+								<max>2</max>
+							</strength>
+						</effect>
+						<effect type="TargetedCollision">
+							<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Dark</visual>
+						</effect>
+					</OnCollision>
+				</targeter>
+			</spell>
+			
 			<spell name="Poison">
 				<icon>fireball-acid-1</icon>
 				<range>8</range>
 				<cost>30</cost>
 				<targeter type="TargetedObjects">
-					<effect type="OnObject">
+					<effect type="TargetedCollision">
 						<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Dark</visual>
 					</effect>
 					<effect type="PoisonDamageEffect">

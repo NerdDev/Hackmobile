@@ -242,6 +242,7 @@
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageCold.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageFire.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\Damage\DamageShock.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\InterruptEffect.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\InvisibilityEffect.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\LevitationEffect.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\NutritionEffect.cs" />
@@ -271,6 +272,7 @@
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\TimedDestruction.cs" />
      <Compile Include="Assets\Scripts\Spells\Mono Effects\CollisionTrigger.cs" />
      <Compile Include="Assets\Scripts\Spells\Mono Effects\FireballAnimationSlow.cs" />
+     <Compile Include="Assets\Scripts\Spells\Mono Effects\ParticleResizer.cs" />
      <Compile Include="Assets\Scripts\Spells\Mono Effects\TimedCollisionTrigger.cs" />
      <Compile Include="Assets\Scripts\Spells\Spell.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellAspect.cs" />
@@ -734,6 +736,7 @@
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\TessellationMapEdgeLength\AlphaTest-Reflect-TessellationMapEdgeLengthSpecular.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SunShaftsComposite.shader" />
      <None Include="Assets\Tools\NGUI\Resources\Shaders\Unlit - Text (SoftClip).shader" />
+     <None Include="Assets\Resources\Prefabs\UI\BumpedDiffuseSilh.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\ColorCorrectionCurves.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Standard\DiffuseSpecMap.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Bump\Reflect-BumpedSpecular.shader" />
@@ -786,7 +789,7 @@
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Skin\SkinShading.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Mobile\Bump\Mobile-Bumped.shader" />
      <None Include="Assets\Tools\ShaderForge\Example Assets\Shaders\VertexAnimation.shader" />
-     <None Include="Assets\Resources\GUI\SpriteMask.shader" />
+     <None Include="Assets\Resources\Prefabs\UI\SpriteMask.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Bump\Reflect-BumpedSpecularEmissive.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Standard\Reflect-DiffuseSpecular.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\TessellationPhong\Reflect-TessellationPhongSpecMap-Ramp.shader" />
@@ -831,7 +834,6 @@
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\ColorCorrectionCurvesSimple.shader" />
      <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderYUV.shader" />
-     <None Include="Assets\Resources\FX\DynamicElements_Effects\ScaleParticles.txt" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarBumpedLocalRim.shader" />
      <None Include="Assets\Resources\FX\DynamicElements_Effects\readme.txt" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\GlowEffectDownsample.shader" />
@@ -903,6 +905,7 @@
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\VignettingShader.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\Standard\Reflect-DiffuseEmissive.shader" />
      <None Include="Assets\Plugins\JsonFx\License.txt" />
+     <None Include="Assets\Resources\Prefabs\UI\DiffuseSilh.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\Tonemapper.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BrightPassFilter.shader" />
      <None Include="Assets\Tools\AdvancedSurfaceShaders\Shaders\TessellationMapEdgeLength\Reflect-TessellationMapEdgeLengthSpecular.shader" />
