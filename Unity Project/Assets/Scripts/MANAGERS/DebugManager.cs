@@ -18,7 +18,17 @@ public class DebugManager : MonoBehaviour, IManager
 
     #region Editor Properties
     public bool Logging = false;
-    public Logs[] ActiveLogs = new Logs[] { Logs.Main, Logs.LevelGenMain, Logs.NPCs, Logs.XML, Logs.TypeHarvest, Logs.Items, Logs.Pathfinding };
+    public Logs[] ActiveLogs = new Logs[]
+    {
+        Logs.Main, 
+        Logs.LevelGenMain,
+        Logs.NPCs, 
+        Logs.XML, 
+        Logs.TypeHarvest, 
+        Logs.Items, 
+        Logs.Pathfinding,
+        Logs.Spawning
+    };
     public DebugFlag[] ActiveFlags = new DebugFlag[] { DebugFlag.GlobalLogging };
     #endregion
 
@@ -55,6 +65,8 @@ public class DebugManager : MonoBehaviour, IManager
         putName(Logs.Main, "=== Main ===");
         putPath(Logs.LevelGen, "LevelGen/");
         putName(Logs.LevelGen, "LevelGenTmp");
+        putPath(Logs.Spawning, "Spawning/");
+        putName(Logs.Spawning, "SpawningTmp");
         putPath(Logs.LevelGenMain, "LevelGen/");
         putName(Logs.LevelGenMain, "Level Gen Main");
         putPath(Logs.NPCs, "NPCs/");
@@ -356,6 +368,7 @@ public enum Logs
     XML,
     TypeHarvest,
     Pathfinding,
+    Spawning
 };
 
 #region LogClass

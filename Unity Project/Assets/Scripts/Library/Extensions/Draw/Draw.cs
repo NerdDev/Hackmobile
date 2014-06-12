@@ -248,10 +248,19 @@ public static class Draw
     public static DrawAction<T> AddTo<T>(ICollection<T> t)
     {
         return (arr, x, y) =>
-            {
-                t.Add(arr[x, y]);
-                return true;
-            };
+        {
+            t.Add(arr[x, y]);
+            return true;
+        };
+    }
+
+    public static DrawAction<T> AddTo<T, A>(Container2D<A> to, Container2D<A> from)
+    {
+        return (arr, x, y) =>
+        {
+            to[x, y] = from[x, y];
+            return true;
+        };
     }
 
     public static DrawAction<T> AddTo<T>(ICollection<Value2D<T>> t)

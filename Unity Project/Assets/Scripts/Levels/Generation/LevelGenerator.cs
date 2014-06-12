@@ -214,7 +214,7 @@ public class LevelGenerator
             NewLog(a + " " + room);
         }
         #endregion
-        Theme t = a.Set.GetTheme(Rand);
+        Theme t = GetTheme(a);
         t.GenerateRoom(this, a, room);
         a.NumRoomsGenerated++;
         #region DEBUG
@@ -226,6 +226,28 @@ public class LevelGenerator
             Layout.ToLog(Logs.LevelGen, "Layout after generating Room " + a.NumRoomsGenerated);
         }
         #endregion
+    }
+
+    protected Theme GetTheme(Area a)
+    {
+        Theme t = a.Set.GetTheme(Rand);
+        Theme picked;
+        if (!a.PickedPrototypes.TryGetValue(t, out picked))
+        {
+            picked = t;
+            int numThemeMods = Rand.NextNormalDist(picked.MinThemeMods, picked.MaxThemeMods);
+            for (int i = 0; i < numThemeMods; i++)
+            {
+                ThemeMod mod;
+                if (!picked.ThemeMods.Get(Rand, out mod))
+                {
+                    break;
+                }
+                mod.ModTheme(picked);
+            }
+            a.PickedPrototypes[picked] = picked;
+        }
+        return picked;
     }
 
     #region Confirm Connection / Pathing

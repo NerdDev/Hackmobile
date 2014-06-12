@@ -8,6 +8,7 @@ namespace LevelGen
     public class Area : LayoutObject<GenSpace>
     {
         public ThemeSet Set;
+        public Dictionary<Theme, Theme> PickedPrototypes = new Dictionary<Theme, Theme>(ReferenceEqualityComparer<Theme>.Instance);
         public int NumRooms;
         public int NumRoomsGenerated;
         public Point CenterPt;

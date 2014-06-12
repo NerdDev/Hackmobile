@@ -14,7 +14,6 @@ public class Player : NPC
     #region General Player Info:
     private string playerTitle;//student, apprentice, grunt, practitioner, etc. etc.
     public string PlayerTitle { get { return playerTitle; } set { playerTitle = value; } }
-    public PlayerProfessions PlayerChosenProfession;
     //Stored in the stats class
     public ushort Level { get { return Stats.Level; } }
     #endregion
@@ -61,7 +60,7 @@ public class Player : NPC
 
     public override void Init()
     {
-        PlayerStats.Load(this, NPCFlags.HUMAN);
+        PlayerStats.Load(this, NPCRace.HUMAN);
         CalcStats();
         List<Spell> spells = KnownSpells.Values.ToList();
         for (int i = 0; i < spells.Count; i++)

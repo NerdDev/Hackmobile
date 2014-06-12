@@ -22,15 +22,15 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         return Instantiate(GetPrototype(str));
     }
 
-    public W InstantiateAndWrap(string str, GridSpace g, out T wrapper)
+    public bool InstantiateAndWrap(string str, GridSpace g, out T wrapper, out W obj)
     {
-        return InstantiateAndWrap(GetPrototype(str), g, out wrapper);
+        return InstantiateAndWrap(GetPrototype(str), g, out wrapper, out obj);
     }
 
-    public W InstantiateAndWrap(string str, GridSpace g)
+    public bool InstantiateAndWrap(string str, GridSpace g, out W obj)
     {
         T wrapper;
-        return InstantiateAndWrap(GetPrototype(str), g, out wrapper);
+        return InstantiateAndWrap(GetPrototype(str), g, out wrapper, out obj);
     }
 
     public W InstantiateRandom()
@@ -38,30 +38,28 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         return Instantiate(prototypes.Values.Randomize(Probability.Rand).First());
     }
 
-    public W InstantiateAndWrapRandom(GridSpace g)
+    public bool InstantiateAndWrapRandom(GridSpace g, out W obj)
     {
         T wrapper;
-        return InstantiateAndWrapRandom(g, out wrapper);
+        return InstantiateAndWrapRandom(g, out wrapper, out obj);
     }
 
-    public W InstantiateAndWrapRandom(GridSpace g, out T wrapper)
+    public bool InstantiateAndWrapRandom(GridSpace g, out T wrapper, out W obj)
     {
-        W obj = InstantiateRandom();
-        wrapper = Wrap(obj, g);
-        return obj;
+        obj = InstantiateRandom();
+        return Wrap(obj, g, out wrapper);
     }
 
-    public W InstantiateAndWrap(W proto, GridSpace g, out T wrapper)
+    public bool InstantiateAndWrap(W proto, GridSpace g, out T wrapper, out W obj)
     {
-        W obj = Instantiate(proto);
-        wrapper = Wrap(obj, g);
-        return obj;
+        obj = Instantiate(proto);
+        return Wrap(obj, g, out wrapper);
     }
 
-    public W InstantiateAndWrap(W proto, GridSpace g)
+    public bool InstantiateAndWrap(W proto, GridSpace g, out W obj)
     {
         T wrapper;
-        return InstantiateAndWrap(proto, g, out wrapper);
+        return InstantiateAndWrap(proto, g, out wrapper, out obj);
     }
 
     public W Instantiate(W proto)
@@ -75,13 +73,18 @@ public class WODictionary<W, T> : ObjectDictionary<W> where W : WorldObject, new
         return newWorldObject;
     }
 
-    public T Wrap(W obj, GridSpace g)
+    public bool Wrap(W obj, GridSpace g, out T wrapper)
     {
-        GameObject gameObject = spawner.Instantiate(obj, g.X, g.Y);
-        T wrapper = gameObject.AddComponent<T>();
+        GameObject gameObject;
+        if (!spawner.Instantiate(obj, g.X, g.Y, out gameObject))
+        {
+            wrapper = null;
+            return false;
+        }
+        wrapper = gameObject.AddComponent<T>();
         wrapper.SetTo(obj);
         obj.Init();
-        return wrapper;
+        return true;
     }
 
     public T Wrap(W obj, Transform parent)

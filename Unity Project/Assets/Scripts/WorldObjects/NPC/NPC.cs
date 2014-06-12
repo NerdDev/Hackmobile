@@ -250,7 +250,12 @@ public class NPC : Affectable
 
     public override void Wrap()
     {
-        this.Instance = BigBoss.Objects.NPCs.Wrap(this, GridSpace);
+        NPCInstance wrap;
+        if (!BigBoss.Objects.NPCs.Wrap(this, GridSpace, out wrap))
+        {
+            throw new ArgumentException("Cannot wrap NPC");
+        }
+        this.Instance = wrap;
     }
 
     #region Stats

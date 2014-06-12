@@ -6,14 +6,14 @@ public class PlayerStats
     // All this will need refactoring later
     //
 
-    public static void Load(Player player, NPCFlags race)
+    public static void Load(Player player, NPCRace race)
     {
         LoadBasicStats(player);
         LoadStatModRole(player);
         LoadStatModRace(player, race);
     }
 
-    private static void LoadStatModRace(Player player, NPCFlags race)
+    private static void LoadStatModRace(Player player, NPCRace race)
     {
         //do nothing atm
     }
@@ -47,7 +47,6 @@ public class PlayerStats
         flags[NPCFlags.NO_RANDOM_SPAWN] = true;
         player.Flags = flags;
 
-        player.PlayerTitle = BigBoss.Objects.PlayerProfessions.getTitle(player.PlayerChosenProfession, player.Stats.Level);
         player.IsActive = true;
 
         Equipment equipment = new Equipment();

@@ -10,7 +10,7 @@ public class LevelButton : GUIButton
         base.Initialize();
         OnSingleClick = new Action(() =>
         {
-            BigBoss.Levels.SetCurLevel(up);
+            //BigBoss.Levels.SetCurLevel(up);
         });
     }
 }

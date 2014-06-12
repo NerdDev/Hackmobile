@@ -32,6 +32,11 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
         RoomMods.AddMod(new SplitterMod(), 1);
         RoomMods.AddMod(new SpikeTrapRoomMod(), .2d);
         RoomMods.AddMod(new TreasureRoomMod(), .3d);
+
+        /*
+         * Spawn Mods
+         */
+        SpawnMods.RoomMods.Add(new SpawnNPCs());
     }
 
     public ThemeElementBundle GetPillars()

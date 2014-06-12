@@ -11,7 +11,6 @@ public class ObjectManager : MonoBehaviour, IManager
     public NPCDictionary<NPC, NPCInstance> NPCs { get; protected set; }
     public ItemDictionary Items { get; protected set; }
     public Dictionary<string, string> Strings { get; protected set; }
-    public ProfessionTitles PlayerProfessions { get; protected set; }
     public ObjectDictionary<MaterialType> Materials { get; protected set; }
 	public ObjectDictionary<LeveledItemList> LeveledItems { get; protected set; }
 
@@ -29,7 +28,6 @@ public class ObjectManager : MonoBehaviour, IManager
         NPCs = new NPCDictionary<NPC, NPCInstance>();
         Items = new ItemDictionary();
         Materials = new ObjectDictionary<MaterialType>();
-        PlayerProfessions = new ProfessionTitles();
         Strings = new Dictionary<string, string>();
 		LeveledItems = new ObjectDictionary<LeveledItemList> ();
 
@@ -82,9 +80,6 @@ public class ObjectManager : MonoBehaviour, IManager
             case "STRINGS":
                 ParseStrings(root);
                 break;
-            case "TITLES":
-                PlayerProfessions.ParseXML(root);
-                break;
             case "LEVELEDITEMS":
 				LeveledItems.Parse (root);
 				break;
@@ -109,9 +104,16 @@ public class ObjectManager : MonoBehaviour, IManager
     #endregion
 
     // Used by WODictionaries to instantiate their WorldObjects, since they cannot
-    public GameObject Instantiate(WorldObject obj, int x, int y)
+    public bool Instantiate(WorldObject obj, int x, int y, out GameObject go)
     {
-        return Instantiate(Resources.Load(obj.Prefab), new Vector3(x, 0, y), Quaternion.identity) as GameObject;
+        var prefab = Resources.Load(obj.Prefab);
+        if (prefab == null)
+        {
+            go = null;
+            return false;
+        }
+        go = Instantiate(prefab, new Vector3(x, 0, y), Quaternion.identity) as GameObject;
+        return go != null;
     }
 
     public GameObject Instantiate(WorldObject obj)

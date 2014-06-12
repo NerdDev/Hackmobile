@@ -5,6 +5,7 @@ using System.Text;
 
 public class Affectable : WorldObject, IAffectable
 {
+    [Copyable]
     protected AppliedEffects Effects;
     public WorldObject Self { get { return this; } }
 
@@ -15,11 +16,6 @@ public class Affectable : WorldObject, IAffectable
     }
 
     #region IAffectable
-    //public void ApplyEffect(EffectInstance effect)
-    //{
-    //    Effects.ApplyEffect(effect);
-    //}
-
     public void ApplyEffect(IAffectable caster, EffectInstance effect)
     {
         Effects.ApplyEffect(caster, effect);

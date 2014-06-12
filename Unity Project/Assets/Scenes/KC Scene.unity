@@ -2338,7 +2338,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
   mFont: {fileID: 0}
   mText: 
   mFontSize: 16
@@ -3922,10 +3922,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a481f2cbcee4164e8575888c6e5e653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestTheme: {fileID: 0}
-  Theme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
+  TestTheme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
+  ThemeSets:
+  - Multiplier: 1
+    Set: {fileID: 11400000, guid: 54fcd5e6ddce2bc4a9331a86f7babf4d, type: 2}
+  - Multiplier: .600000024
+    Set: {fileID: 11400000, guid: 5bdffb19ccbc4284fa6b27e20b0d1809, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
   Seed: 8
+  UseInitialTheme: 0
+  InitialTheme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
+  MinAreas: 1
+  MaxAreas: 2
 --- !u!1 &819013925
 GameObject:
   m_ObjectHideFlags: 0
@@ -5958,6 +5966,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: ThemeSets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 400194, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6494,6 +6506,38 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100186, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: ThemeSets.Array.data[0].Multiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: ThemeSets.Array.data[1].Multiplier
+      value: .600000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: ThemeSets.Array.data[0].Set
+      value: 
+      objectReference: {fileID: 11400000, guid: 54fcd5e6ddce2bc4a9331a86f7babf4d,
+        type: 2}
+    - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: ThemeSets.Array.data[1].Set
+      value: 
+      objectReference: {fileID: 11400000, guid: 5bdffb19ccbc4284fa6b27e20b0d1809,
+        type: 2}
+    - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: TestTheme
+      value: 
+      objectReference: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526,
+        type: 2}
+    - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: InitialTheme
+      value: 
+      objectReference: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
   m_RootGameObject: {fileID: 2091229112}
@@ -10084,7 +10128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2014899410
 Transform:
   m_ObjectHideFlags: 0
@@ -10480,7 +10524,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3004
+  startingRenderQueue: 3000
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}

@@ -8,7 +8,7 @@ public interface IGridType
     GridType Type { get; set; }
 }
 
-public interface IGridSpace :  IGridType
+public interface IGridSpace : IGridType
 {
     Theme Theme { get; set; }
     int X { get; }

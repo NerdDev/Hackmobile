@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class ReferenceEqualityComparer : EqualityComparer<Object>
+public class ReferenceEqualityComparer<T> : EqualityComparer<T>
 {
-    public static ReferenceEqualityComparer Instance = new ReferenceEqualityComparer();
+    public static ReferenceEqualityComparer<T> Instance = new ReferenceEqualityComparer<T>();
 
     private ReferenceEqualityComparer()
     {
 
     }
 
-    public override bool Equals(object x, object y)
+    public override bool Equals(T x, T y)
     {
         return ReferenceEquals(x, y);
     }
-    public override int GetHashCode(object obj)
+    public override int GetHashCode(T obj)
     {
         if (obj == null) return 0;
         return obj.GetHashCode();

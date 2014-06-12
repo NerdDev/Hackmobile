@@ -13,9 +13,20 @@ public abstract class Theme : ThemeOption, IInitializable
     public ThemeElementBundle Stair;
     public ThemeElementBundle Chest;
     #endregion
-    public RoomModCollection RoomMods { get; protected set; }
+    [Copyable]
+    private RoomModCollection roomMods;
+    public RoomModCollection RoomMods { get { return roomMods; } }
+    [Copyable]
+    private SpawnModCollection spawnMods;
+    public SpawnModCollection SpawnMods { get { return spawnMods; } }
+    [Copyable]
     public SpawnKeywords[] Keywords;
+    [Copyable]
     public GenericFlags<SpawnKeywords> KeywordFlags;
+    [Copyable]
+    public ProbabilityPool<ThemeMod> ThemeMods;
+    public int MinThemeMods;
+    public int MaxThemeMods;
     public double AverageRoomRadius;
     public override double AvgRoomRadius
     {
@@ -31,13 +42,15 @@ public abstract class Theme : ThemeOption, IInitializable
 
     public virtual void Init()
     {
-        RoomMods = new RoomModCollection();
+        roomMods = new RoomModCollection();
+        spawnMods = new SpawnModCollection();
         KeywordFlags = new GenericFlags<SpawnKeywords>(Keywords);
+        ThemeMods = ProbabilityPool<ThemeMod>.Create();
     }
 
     public override Theme GetTheme(System.Random rand)
     {
-        return this;
+        return this.Copy();
     }
 
     public void ChooseAllSmartObjects(System.Random rand)

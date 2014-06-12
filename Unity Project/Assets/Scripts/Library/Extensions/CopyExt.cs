@@ -20,7 +20,7 @@ namespace System
 
         public static Object Copy(this Object originalObject)
         {
-            Object o = InternalCopy(originalObject, new Dictionary<Object, Object>(ReferenceEqualityComparer.Instance));
+            Object o = InternalCopy(originalObject, new Dictionary<Object, Object>(ReferenceEqualityComparer<Object>.Instance));
             return o;
         }
         private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)

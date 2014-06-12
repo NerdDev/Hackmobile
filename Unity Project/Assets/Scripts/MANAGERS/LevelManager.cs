@@ -114,6 +114,7 @@ public class LevelManager : MonoBehaviour, IManager
         #endregion
         DeployLevel(level);
         Level = level;
+        BigBoss.DungeonMaster.PopulateLevel(Level);
         Level.PlacePlayer();
     }
 
@@ -139,7 +140,6 @@ public class LevelManager : MonoBehaviour, IManager
         BigBoss.Debug.w(Logs.LevelGenMain, "Deploying " + level);
         foreach (GridSpace space in level.GetEnumerateValues())
         {
-            //space.SetActive(true); //no need, it's deployed separately
             space.WrapObjects(true);
         }
         BigBoss.Debug.w(Logs.LevelGenMain, "Deployed " + level);
@@ -163,8 +163,7 @@ public class LevelManager : MonoBehaviour, IManager
         LevelGenerator.ConfirmEdges(layout);
         Level level = new Level();
         MultiMap<GridSpace> spaces = Builder.GeneratePrototypes(level, layout);
-        level.UnderlyingContainer = spaces;
-        level.LoadRoomMaps(layout);
+        level.CopyUsing(layout, spaces);
         level.Random = rand;
         return level;
     }

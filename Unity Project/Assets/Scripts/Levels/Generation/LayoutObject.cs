@@ -2,11 +2,11 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class LayoutObject<T> : Container2D<T>
     where T : IGridType
 {
-    private static int _nextId = 0;
     public int Id { get; protected set; }
     public LayoutObjectType Type { get; protected set; }
     readonly HashSet<LayoutObject<T>> _connectedTo = new HashSet<LayoutObject<T>>();
@@ -17,11 +17,24 @@ public class LayoutObject<T> : Container2D<T>
     public int ChildCount { get { return children.Count; } }
     public event Action<LayoutObject<T>, int, int> OnShifted;
     public event Action<int, int, T> OnModifiedSpace;
+    private Theme theme;
+    public Theme Theme 
+    { 
+        get 
+        { 
+            if (theme == null)
+            {
+                theme = GetProminantTheme();
+            }
+            return theme; 
+        }
+        set { theme = value; }
+    }
 
     public LayoutObject(LayoutObjectType type)
     {
         this.Type = type;
-        Id = _nextId++;
+        Id = LayoutObjectExt.NextID(type);
     }
 
     public override T this[int x, int y]
@@ -48,7 +61,20 @@ public class LayoutObject<T> : Container2D<T>
             OnShifted(this, x, y);
         }
     }
+    
+    public void CopyUsing<D>(LayoutObject<D> layout, Container2D<T> from)
+        where D : IGridType
+    {
+        layout.DrawAll(Draw.AddTo<D, T>(this, from));
+        foreach (var child in layout.children)
+        {
+            LayoutObject<T> copyChild = new LayoutObject<T>(child.Type);
+            copyChild.CopyUsing(child, from);
+            this.AddChild(copyChild);
+        }
+    }
 
+    #region Connection / Child
     public void AddChild(LayoutObject<T> rhs)
     {
         children.Add(rhs);
@@ -206,6 +232,7 @@ public class LayoutObject<T> : Container2D<T>
         }
         return false;
     }
+    #endregion
 
     #region Printing
     public override string ToString()
@@ -282,12 +309,12 @@ public class LayoutObject<T> : Container2D<T>
         if (ReferenceEquals(this, obj)) return true;
         LayoutObject<T> rhs = obj as LayoutObject<T>;
         if (rhs == null) return false;
-        return this.Id == rhs.Id;
+        return this.Id == rhs.Id && this.Type == rhs.Type;
     }
 
     public override int GetHashCode()
     {
-        return Id;
+        return Id.GetHashCode();
     }
 
     public static bool operator ==(LayoutObject<T> left, LayoutObject<T> right)
@@ -488,10 +515,45 @@ public class LayoutObject<T> : Container2D<T>
         Point rhsCenter = rhs.Bounding.GetCenter();
         return rhsCenter - Bounding.GetCenter();
     }
+
+    public Theme GetProminantTheme()
+    {
+        Dictionary<Theme, int> themeCount = new Dictionary<Theme,int>();
+        foreach (var v in grids)
+        {
+            IGridSpace space = v.val as IGridSpace;
+            if (space == null) continue;
+            int count;
+            if (!themeCount.TryGetValue(space.Theme, out count))
+            {
+                count = 0;
+            }
+            themeCount[space.Theme] = count;
+        }
+        if (themeCount.Count == 0) return null;
+        return themeCount.OrderByDescending(x => x.Value).First().Key;
+    }
 }
 
 public static class LayoutObjectExt
 {
+    private static Dictionary<LayoutObjectType, int> nextIds = new Dictionary<LayoutObjectType, int>();
+
+    static LayoutObjectExt()
+    {
+        foreach (LayoutObjectType type in Enum.GetValues(typeof(LayoutObjectType)))
+        {
+            nextIds[type] = 0;
+        }
+    }
+
+    public static int NextID(LayoutObjectType type)
+    {
+        int id = nextIds[type];
+        nextIds[type] = id + 1;
+        return id;
+    }
+
     #region Door Placement
     public static ProbabilityList<int> DoorRatioPicker;
     public static List<Value2D<GenSpace>> PlaceSomeDoors(

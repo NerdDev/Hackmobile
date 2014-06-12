@@ -25,10 +25,15 @@ public class RoomModCollection
     }
     public int MinFlexMods = 3;
     public int MaxFlexMods = 6;
+    [Copyable]
     public ProbabilityPool<BaseRoomMod> BaseMods = ProbabilityPool<BaseRoomMod>.Create();
+    [Copyable]
     public ProbabilityPool<DefiningRoomMod> DefiningMods = ProbabilityPool<DefiningRoomMod>.Create();
+    [Copyable]
     public ProbabilityPool<HeavyRoomMod> HeavyMods = ProbabilityPool<HeavyRoomMod>.Create();
+    [Copyable]
     public ProbabilityPool<FillRoomMod> FillMods = ProbabilityPool<FillRoomMod>.Create();
+    [Copyable]
     public ProbabilityPool<FinalRoomMod> FinalMods = ProbabilityPool<FinalRoomMod>.Create();
 
     public RoomModCollection()

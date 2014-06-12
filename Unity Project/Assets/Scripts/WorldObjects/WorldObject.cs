@@ -23,7 +23,7 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
             {
                 _grid.Remove(this);
                 if (!System.Object.ReferenceEquals(_grid.Level, value.Level))
-                { // Transitioning to a new level.
+                { // Transitioning to a new level
                     _grid.Level.WorldObjects.Remove(this);
                 }
             }
