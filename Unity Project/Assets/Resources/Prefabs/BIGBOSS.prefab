@@ -5795,9 +5795,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TestTheme: {fileID: 0}
-  Theme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
+  ThemeSets: []
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
   Seed: 8
+  UseInitialTheme: 0
+  InitialTheme: {fileID: 0}
+  MinAreas: 1
+  MaxAreas: 2
 --- !u!114 &11400082
 MonoBehaviour:
   m_ObjectHideFlags: 1

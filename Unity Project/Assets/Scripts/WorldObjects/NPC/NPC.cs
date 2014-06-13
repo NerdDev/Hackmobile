@@ -177,7 +177,10 @@ public class NPC : Affectable
         {
             velocity = 0;
         }
-        animator.SetFloat("runSpeed", velocity);
+        if (animator != null)
+        {
+            animator.SetFloat("runSpeed", velocity);
+        }
     }
 
     public virtual void Do(Action action, int cost, bool interuptible, bool actOnStart)

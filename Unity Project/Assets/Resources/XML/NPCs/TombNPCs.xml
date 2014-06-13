@@ -45,9 +45,9 @@
 
   <npc name="Ghoul">
     <prefab>Ghoul</prefab>
-    <flags>
+    <race>
       <flag name="Undead" />
-    </flags>
+    </race>
     <spawnkeywords>
       <keyword name="tomb" />
     </spawnkeywords>
@@ -99,9 +99,9 @@
 
   <npc name="Mummy">
     <prefab>Mummy</prefab>
-    <flags>
+    <race>
       <flag name="Undead" />
-    </flags>
+    </race>
     <spawnkeywords>
       <keyword name="tomb" />
     </spawnkeywords>
@@ -149,7 +149,47 @@
     <AI>
       <AIDecision name="AIAggro" />
       <AIDecision name="AIWander" />
-      <AIDecision name="AIEatCorpse" />
+    </AI>
+  </npc>
+
+  <npc name="Tomb Wisp Spirit">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>Tomb Wisp</prefab>
+    <role></role>
+    <race></race>
+    <flags>
+      <flag name="Untargetable" />
+      <flag name="Invincible" />
+    </flags>
+    <spawnkeywords>
+      <keyword name="tomb_Wisp" />
+    </spawnkeywords>
+    <properties>
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+    </inventory>
+    <bodyparts>
+    </bodyparts>
+    <OnDeath>
+    </OnDeath>
+    <AI>
+      <AIDecision name="AICircularWander" />
+      <AIDecision name="AIWander" />
     </AI>
   </npc>
 </npcs>
