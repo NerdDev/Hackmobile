@@ -37,6 +37,13 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
          * Spawn Mods
          */
         SpawnMods.RoomMods.Add(new SpawnNPCs());
+
+        /*
+         * Theme Mods
+         */
+        MinThemeMods = 1;
+        MaxThemeMods = 1;
+        ThemeMods.Add(new WispSpiritThemeMod());
     }
 
     public ThemeElementBundle GetPillars()

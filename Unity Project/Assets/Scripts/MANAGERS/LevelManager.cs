@@ -161,7 +161,10 @@ public class LevelManager : MonoBehaviour, IManager
     Level GenerateFromLayout(LevelLayout layout, System.Random rand)
     {
         LevelGenerator.ConfirmEdges(layout);
-        Level level = new Level();
+        Level level = new Level()
+        {
+            RoomsByTheme = layout.RoomsByTheme
+        };
         MultiMap<GridSpace> spaces = Builder.GeneratePrototypes(level, layout);
         level.CopyUsing(layout, spaces);
         level.Random = rand;

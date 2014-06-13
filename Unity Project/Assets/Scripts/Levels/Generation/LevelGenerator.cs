@@ -191,6 +191,7 @@ public class LevelGenerator
     {
         int maxRooms = Areas.Max(a => a.NumRooms);
         var areasTmp = new List<Area>(Areas.Randomize(Rand));
+        Dictionary<Theme, List<LayoutObject<GenSpace>>> roomsByTheme = new Dictionary<Theme, List<LayoutObject<GenSpace>>>();
         for (int i = 1; i <= maxRooms; i++)
         {
             foreach (Area a in areasTmp)
@@ -199,13 +200,21 @@ public class LevelGenerator
                 int div = maxRooms / a.NumRooms;
                 if (i % div == div - 1)
                 {
-                    GenerateArea(a);
+                    var room = GenerateArea(a);
+                    List<LayoutObject<GenSpace>> list;
+                    if (!roomsByTheme.TryGetValue(room.Theme, out list))
+                    {
+                        list = new List<LayoutObject<GenSpace>>();
+                        roomsByTheme[room.Theme] = list;
+                    }
+                    list.Add(room);
                 }
             }
         }
+        Layout.RoomsByTheme = roomsByTheme;
     }
 
-    protected void GenerateArea(Area a)
+    protected LayoutObject<GenSpace> GenerateArea(Area a)
     {
         LayoutObject<GenSpace> room = new LayoutObject<GenSpace>(LayoutObjectType.Room);
         #region DEBUG
@@ -217,6 +226,7 @@ public class LevelGenerator
         Theme t = GetTheme(a);
         t.GenerateRoom(this, a, room);
         a.NumRoomsGenerated++;
+        room.Theme = t;
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -226,16 +236,23 @@ public class LevelGenerator
             Layout.ToLog(Logs.LevelGen, "Layout after generating Room " + a.NumRoomsGenerated);
         }
         #endregion
+        return room;
     }
 
     protected Theme GetTheme(Area a)
     {
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.printHeader(Logs.LevelGen, "Get Theme");
+        }
+        #endregion
         Theme t = a.Set.GetTheme(Rand);
         Theme picked;
         if (!a.PickedPrototypes.TryGetValue(t, out picked))
         {
-            picked = t;
-            int numThemeMods = Rand.NextNormalDist(picked.MinThemeMods, picked.MaxThemeMods);
+            picked = t.Copy();
+            int numThemeMods = Rand.NextNormalDist(picked.MinThemeMods, picked.MaxThemeMods + 1);
             for (int i = 0; i < numThemeMods; i++)
             {
                 ThemeMod mod;
@@ -245,8 +262,15 @@ public class LevelGenerator
                 }
                 mod.ModTheme(picked);
             }
-            a.PickedPrototypes[picked] = picked;
+            a.PickedPrototypes[t] = picked;
         }
+        #region DEBUG
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            BigBoss.Debug.w(Logs.LevelGen, "Picked theme: " + t);
+            BigBoss.Debug.printFooter(Logs.LevelGen, "Get Theme");
+        }
+        #endregion
         return picked;
     }
 
@@ -351,10 +375,26 @@ public class LevelGenerator
                         pathObj.ToLog(Logs.LevelGen, "Connecting Path");
                     }
                     #endregion
-                    if (pathObj.ConnectToChildrenAt(Layout, first.x, first.y).Count() == 0
-                        || pathObj.ConnectToChildrenAt(Layout, second.x, second.y).Count() == 0)
+                    if (pathObj.ConnectToChildrenAt(Layout, first.x, first.y).Count() == 0)
                     {
-                        throw new ArgumentException("Cannot connect at path ends.");
+                        #region DEBUG
+                        if (BigBoss.Debug.logging(Logs.LevelGen))
+                        {
+                            BigBoss.Debug.w(Logs.LevelGen, "Cannot connect at path ends: " + first.x + ", " + first.y);
+                        }
+                        #endregion
+                        pathObj.ConnectToChildrenAt(Layout, first.x, first.y);
+                        throw new ArgumentException("Cannot connect at path ends: " + first.x + ", " + first.y);
+                    }
+                    if (pathObj.ConnectToChildrenAt(Layout, second.x, second.y).Count() == 0)
+                    {
+                        #region DEBUG
+                        if (BigBoss.Debug.logging(Logs.LevelGen))
+                        {
+                            BigBoss.Debug.w(Logs.LevelGen, "Cannot connect at path ends: " + second.x + ", " + second.y);
+                        }
+                        #endregion
+                        throw new ArgumentException("Cannot connect at path ends: " + second.x + ", " + second.y);
                     }
                     GenSpace space;
                     if (!Layout.TryGetValue(first, out space) || space.Type == GridType.Wall)
@@ -385,7 +425,7 @@ public class LevelGenerator
                         }
                         visited[v] = true;
                     }
-                    Layout.PutAll(pathObj);
+                    Layout.AddChild(pathObj);
                 }
                 else
                 {

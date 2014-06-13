@@ -27,6 +27,8 @@ public abstract class Theme : ThemeOption, IInitializable
     public ProbabilityPool<ThemeMod> ThemeMods;
     public int MinThemeMods;
     public int MaxThemeMods;
+    public int MinAreaMods = 1;
+    public int MaxAreaMods = 1;
     public double AverageRoomRadius;
     public override double AvgRoomRadius
     {
@@ -50,7 +52,7 @@ public abstract class Theme : ThemeOption, IInitializable
 
     public override Theme GetTheme(System.Random rand)
     {
-        return this.Copy();
+        return this;
     }
 
     public void ChooseAllSmartObjects(System.Random rand)
@@ -62,7 +64,7 @@ public abstract class Theme : ThemeOption, IInitializable
     }
 
     public abstract bool GenerateRoom(LevelGenerator gen, Area a, LayoutObject<GenSpace> room);
-    
+
     protected LayoutObject<GenSpace> ModRoom(LevelGenerator gen, Area a, LayoutObject<GenSpace> room)
     {
         #region DEBUG

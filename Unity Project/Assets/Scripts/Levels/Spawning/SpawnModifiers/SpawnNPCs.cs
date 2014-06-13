@@ -8,6 +8,7 @@ public class SpawnNPCs : SpawnMod
 {
     public double SpawnRatio = .01d;
     public double Variance = .25d;
+    public SpawnKeywords[] CustomKeywords;
 
     public override bool Modify(SpawnSpec spec)
     {
@@ -37,7 +38,16 @@ public class SpawnNPCs : SpawnMod
             Value2D<GridSpace> space;
             if (!spec.Spawnable.GetRandom(spec.Random, out space)) return false;
             NPC npc;
-            if (!BigBoss.DungeonMaster.SpawnNPC(space.val, out npc, space.val.Theme.Keywords))
+            SpawnKeywords[] keywords;
+            if (CustomKeywords != null)
+            {
+                keywords = CustomKeywords;
+            }
+            else
+            {
+                keywords = space.val.Theme.Keywords;
+            }
+            if (!BigBoss.DungeonMaster.SpawnNPC(space.val, out npc, keywords))
             {
                 #region DEBUG
                 if (BigBoss.Debug.logging())

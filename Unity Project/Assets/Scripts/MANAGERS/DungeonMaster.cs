@@ -34,12 +34,13 @@ public class DungeonMaster : MonoBehaviour, IManager
     void ForcePopulateLevel(Level l)
     {
         l.Populated = true;
+        // Spawn room spawn mods
         foreach (LayoutObject<GridSpace> room in l.Flatten(LayoutObjectType.Room))
         {
             #region DEBUG
             if (BigBoss.Debug.logging(Logs.Spawning))
             {
-                BigBoss.Debug.CreateNewLog(Logs.Spawning, "Spawn Level" + l.Id + "/" + room + " - " + name);
+                BigBoss.Debug.CreateNewLog(Logs.Spawning, "Spawn Level" + l.Id + "/" + room);
             }
             #endregion
             SpawnSpec spec = new SpawnSpec(l.Random, room);
@@ -51,7 +52,61 @@ public class DungeonMaster : MonoBehaviour, IManager
             }
             #endregion
             var roomSpawnMod = room.Theme.SpawnMods.RoomMods.Get(l.Random);
-            roomSpawnMod.Modify(spec);
+            try
+            {
+                roomSpawnMod.Modify(spec);
+            }
+            catch (Exception ex)
+            {
+                BigBoss.Debug.w(Logs.Spawning, "Error spawning room spawn mod " + ex);
+                BigBoss.Debug.w(Logs.Main, "Error spawning room spawn mod " + ex);
+            }
+        }
+        // Spawn area spawn mods
+        int numAreas = 0;
+        foreach (var pair in l.RoomsByTheme)
+        {
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.Spawning))
+            {
+                BigBoss.Debug.CreateNewLog(Logs.Spawning, "Spawn Level" + l.Id + "/Area Spawn " + numAreas++);
+            }
+            #endregion
+            var theme = pair.Key;
+            var rooms = pair.Value;
+            int numAreaSpawnMods = l.Random.NextNormalDist(theme.MinAreaMods, theme.MaxAreaMods);
+            theme.SpawnMods.AreaMods.BeginTaking();
+            for (int i = 0 ; i < numAreaSpawnMods ; i++)
+            {
+                SpawnMod mod;
+                if (!theme.SpawnMods.AreaMods.Get(l.Random, out mod))
+                {
+                    break;
+                }
+                MultiMap<GridSpace> cont = new MultiMap<GridSpace>();
+                foreach (var room in rooms)
+                {
+                    room.DrawAll(Draw.AddTo<GenSpace, GridSpace>(cont, l));
+                }
+                SpawnSpec areaSpec = new SpawnSpec(l.Random, cont);
+                #region DEBUG
+                if (BigBoss.Debug.logging(Logs.Spawning))
+                {
+                    areaSpec.Container.ToLog(Logs.Spawning, "Area spawning in");
+                    areaSpec.Spawnable.ToLog(Logs.Spawning, "Spawnable Spaces");
+                }
+                #endregion
+                try
+                {
+                    mod.Modify(areaSpec);
+                } 
+                catch (Exception ex)
+                {
+                    BigBoss.Debug.w(Logs.Spawning, "Error spawning area spawn mod " + ex);
+                    BigBoss.Debug.w(Logs.Main, "Error spawning area spawn mod " + ex);
+                }
+            }
+            theme.SpawnMods.AreaMods.EndTaking();
         }
     }
 

@@ -8,6 +8,7 @@ public class Level : LayoutObject<GridSpace>
     public bool Populated;
     public System.Random Random;
     public HashSet<WorldObject> WorldObjects = new HashSet<WorldObject>();
+    public Dictionary<Theme, List<LayoutObject<GenSpace>>> RoomsByTheme;
 
     public Level()
         : base(LayoutObjectType.Layout)

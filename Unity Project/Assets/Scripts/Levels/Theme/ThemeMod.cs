@@ -8,3 +8,9 @@ public abstract class ThemeMod
     public abstract void ModTheme(Theme theme);
 }
 
+public class EmptyThemeMod : ThemeMod
+{
+    public override void ModTheme(Theme theme)
+    {
+    }
+}
