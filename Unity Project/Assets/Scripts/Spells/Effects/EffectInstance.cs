@@ -102,6 +102,7 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
      */
     private void Init()
     {
+        UnityEngine.Debug.Log("initing!");
         Init(target);
         if (target is NPC)
         {

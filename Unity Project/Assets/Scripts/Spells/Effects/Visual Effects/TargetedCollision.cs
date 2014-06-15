@@ -16,7 +16,6 @@ public class TargetedCollision : EffectInstance
     {
         Vector3 vector = this.caster.Self.GO.transform.position;
         Vector3 pos = new Vector3(vector.x, vector.y + .5f, vector.z);
-
         if (speed != 0) //moving object?
         {
             obj = GameObject.Instantiate(Resources.Load(visual), pos, Quaternion.identity) as GameObject;

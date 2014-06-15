@@ -49,7 +49,6 @@ public class NPC : Affectable
     public Item NaturalWeapon { get; set; }
     public Spell OnDeath { get; set; }
 
-    public SkinnedMeshRenderer mainMesh;
     // Temporary arbitrary offset
     public Vector3 EyeSightPosition
     {

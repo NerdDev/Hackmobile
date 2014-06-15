@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class AppliedEffects : Dictionary<string, EffectInstance>, IXmlParsable, IAffectable
 {
+    [Copyable]
     IAffectable owner;
     WorldObject IAffectable.Self { get { return owner.Self; } }
 
@@ -32,6 +33,7 @@ public class AppliedEffects : Dictionary<string, EffectInstance>, IXmlParsable, 
         }
         else
         {
+            UnityEngine.Debug.Log(effect.Name);
             effect.ActivateOnObject(caster, owner);
         }
     }

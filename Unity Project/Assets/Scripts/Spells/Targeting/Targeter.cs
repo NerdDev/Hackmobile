@@ -20,6 +20,7 @@ public class Targeter : IXmlParsable
 
     public virtual HashSet<GridSpace> GetGridTargets(SpellCastInfo castInfo)
     {
+
         return new HashSet<GridSpace>();
     }
 
