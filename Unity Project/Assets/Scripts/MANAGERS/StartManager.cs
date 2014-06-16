@@ -14,7 +14,8 @@ public class StartManager : MonoBehaviour, IManager
     public Color AmbientTestingColor = Color.gray;
     public float RevealDistance = 300;
     public float MaxCameraDistance = 10;
-    public LevelOptions Level;
+    public bool UseTestLevel;
+    public TestLevelSetup TestLevel;
     public bool PlacePlayerManually = false;
     public int PlacePlayerX = 0;
     public int PlacePlayerY = 0;
@@ -43,32 +44,20 @@ public class StartManager : MonoBehaviour, IManager
     {
         BigBoss.Gooey.DisplayLoading();
         yield return new WaitForSeconds(.01f); //used to force the game to enter the next frame and render the load screen
-        switch (Level)
+        if (!UseTestLevel)
         {
-            case LevelOptions.NORMAL:
-                BigBoss.Levels.SetFirstLevel();
-                if (PlacePlayerManually)
-                {
-                    BigBoss.Levels.Level.PlacePlayer(PlacePlayerX, PlacePlayerY);
-                }
-                break;
-            case LevelOptions.NONE:
-                break;
-            default:
-                TestLevelSetup setup;
-                if (BigBoss.Types.TryInstantiate(Level.ToString(), out setup))
-                {
-                    BigBoss.Levels.LoadTestLevel(setup.Create(), new System.Random());
-                    setup.Spawn(BigBoss.Levels.Level);
-                    BigBoss.Levels.Level.PlacePlayer(setup.StartX, setup.StartY);
-                }
-                else
-                {
-                    throw new ArgumentException("Could not find test level " + Level);
-                }
-                break;
+            BigBoss.Levels.SetFirstLevel();
+            if (PlacePlayerManually)
+            {
+                BigBoss.Levels.Level.PlacePlayer(PlacePlayerX, PlacePlayerY);
+            }
         }
-        
+        else
+        {
+            BigBoss.Levels.LoadTestLevel(TestLevel.Create(), new System.Random());
+            TestLevel.Spawn(BigBoss.Levels.Level);
+            BigBoss.Levels.Level.PlacePlayer(TestLevel.StartX, TestLevel.StartY);
+        }
 
         // Temp (will move eventually)
         BigBoss.PlayerInfo.Rendering(true);

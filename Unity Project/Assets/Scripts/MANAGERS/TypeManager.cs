@@ -25,7 +25,6 @@ public class TypeManager : MonoBehaviour, IManager
         Harvest<AIDecision>();
         Harvest<Targeter>();
         #if UNITY_EDITOR
-        Harvest<TestLevelSetup>();
         #endif
     }
 
