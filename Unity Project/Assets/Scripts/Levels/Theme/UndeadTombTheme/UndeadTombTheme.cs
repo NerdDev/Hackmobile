@@ -43,7 +43,7 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
          */
         MinThemeMods = 1;
         MaxThemeMods = 1;
-        ThemeMods.Add(new WispSpiritThemeMod());
+        //ThemeMods.Add(new WispSpiritThemeMod());
     }
 
     public ThemeElementBundle GetPillars()

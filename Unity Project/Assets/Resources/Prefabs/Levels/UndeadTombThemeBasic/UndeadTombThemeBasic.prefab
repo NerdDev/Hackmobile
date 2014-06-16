@@ -61,8 +61,10 @@ MonoBehaviour:
     - Multiplier: 1
       Item: {fileID: 11400000, guid: 76f4b9464e81a35429e0dc4787f0a2fc, type: 2}
   Keywords: 00000000
-  MinThemeMods: 0
-  MaxThemeMods: 0
+  MinThemeMods: 1
+  MaxThemeMods: 1
+  MinAreaMods: 1
+  MaxAreaMods: 1
   AverageRoomRadius: 8
   Pillars:
     Elements:
@@ -77,9 +79,7 @@ MonoBehaviour:
   SpikeTraps:
     Elements:
     - Multiplier: 1
-      Item: {fileID: 11400000, guid: cb51ba905d611fc499846e77070673db, type: 2}
-    - Multiplier: 1
-      Item: {fileID: 11400000, guid: a50354b7f38293446aeff090dd37c220, type: 2}
+      Item: {fileID: 11400000, guid: a5fe377c914f69e4ea39e61c4b197954, type: 2}
   Tombs:
     Elements:
     - Multiplier: 1

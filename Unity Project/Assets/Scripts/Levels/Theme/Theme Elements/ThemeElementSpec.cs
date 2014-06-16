@@ -8,6 +8,8 @@ public class ThemeElementSpec : IEnumerable<Value2D<GenSpace>>
     public GridType Type;
     public Theme Theme;
     public GenDeploy GenDeploy;
+    public int DeployWidth { get { return GenDeploy.Element.GridWidth; } }
+    public int DeployLength { get { return GenDeploy.Element.GridLength; } }
     public GenSpace GenSpace;
     public GridSpace Space;
     public Container2D<GenSpace> GenGrid;
@@ -32,6 +34,16 @@ public class ThemeElementSpec : IEnumerable<Value2D<GenSpace>>
             }
             return _bounding;
         }
+    }
+
+    public void AddAdditional(ThemeElement element)
+    {
+        AddAdditional(element, DeployX, DeployY);
+    }
+
+    public void AddAdditional(GenDeploy deploy)
+    {
+        AddAdditional(deploy, DeployX, DeployY);
     }
 
     public void AddAdditional(GenDeploy deploy, int x, int y)
