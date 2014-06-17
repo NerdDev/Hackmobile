@@ -81,14 +81,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 585095db6a113b0408c2d8fe87674a11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instantiated: 0
-  Set:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400002}
   Walkable: 0
-  Dynamic: 0
+  CanMove: 0
   PlaceFloor: 1
   ThinWall:
     Elements:
@@ -98,9 +92,6 @@ MonoBehaviour:
     - Multiplier: .400000006
       Unique: 0
       Item: {fileID: 11400000, guid: c243cc20f74214e47b67fa68783a1b53, type: 2}
-    - Multiplier: .300000012
-      Unique: 0
-      Item: {fileID: 11400000, guid: 8e622590c59f7eb43ba9f571f34b6dde, type: 2}
   TWall:
     Elements:
     - Multiplier: 1
@@ -160,7 +151,7 @@ MonoBehaviour:
     Elements:
     - Multiplier: 1
       Unique: 0
-      Item: {fileID: 11400000, guid: bb0b62ed0dd66774fb8633418d7b88f6, type: 2}
+      Item: {fileID: 11400000, guid: d68907527bab83d46b89126f7f877590, type: 2}
   DiagonalWedgeWall:
     Elements:
     - Multiplier: 1
