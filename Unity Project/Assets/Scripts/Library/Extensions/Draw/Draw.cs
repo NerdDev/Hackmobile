@@ -774,7 +774,7 @@ public static class Draw
                 {
                     foreach (var deploy in space.Deploys)
                     {
-                        if (elem.Equals(deploy.Element))
+                        if (elem.Equals(deploy.OriginalElement))
                         {
                             return true;
                         }

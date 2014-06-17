@@ -5,6 +5,7 @@ using System.Text;
 
 public class GenDeploy : ITransform, IEnumerable<Value2D<GenSpace>>
 {
+    public ThemeElement OriginalElement { get; protected set; }
     public ThemeElement Element;
     public MultiMap<GenSpace> Spaces;
     public float XRotation { get; set; }
@@ -21,6 +22,7 @@ public class GenDeploy : ITransform, IEnumerable<Value2D<GenSpace>>
     
     public GenDeploy(ThemeElement element)
     {
+        OriginalElement = element;
         Element = element;
         Spaces = new MultiMap<GenSpace>();
         XScale = 1F;

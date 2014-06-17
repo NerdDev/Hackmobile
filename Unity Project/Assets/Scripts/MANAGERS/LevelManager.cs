@@ -113,7 +113,6 @@ public class LevelManager : MonoBehaviour, IManager
         }
         #endregion
         DeployLevel(level);
-        Level = level;
         BigBoss.DungeonMaster.PopulateLevel(Level);
         Level.PlacePlayer();
     }
