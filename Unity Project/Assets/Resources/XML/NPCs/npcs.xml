@@ -1,501 +1,491 @@
 <npcs>
-	<npc name="Giant Spider">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Giant_Spider</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Chimera">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>CHIMERA</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Deinolithe">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>deinolithe</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Hydra">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Hydra</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Manticora">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Manticora</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Orc">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Orc</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Troll">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Troll</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Wyvern">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Wyvern</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Dragon">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>mountain_dragon</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<startingitems>
-			<entry>
-				<item>sword1</item>
-				<probability>2</probability>
-				<count>1</count>
-				<level>2</level>
-			</entry>
-			<entry>
-				<item>Health Potion</item>
-				<probability>1</probability>
-				<count>2</count>
-				<level>1</level>
-			</entry>
-			<entry>
-				<item>Cure Poison</item>
-				<probability>.5</probability>
-				<count>1</count>
-				<level>4</level>
-			</entry>
-		</startingitems>
-		<OnDeath>
-			<effect type="Death">
-				<speed>2</speed>
-			</effect>
-		</OnDeath>
-	</npc>
-	<npc name="Golem">
-		<model> </model>
-		<modeltexture> </modeltexture>
-		<prefab>Golem</prefab>
-		<role>Mage</role>
-		<race>Undead</race>
-		<flags>
-			<flag name="nopoly" />
-			<flag name="custom_death" />
-		</flags>
-		<properties>
-			<!-- none -->
-		</properties>
-		<spawnkeywords>
-		</spawnkeywords>
-		<stats>
-			<maxhealth>25</maxhealth>
-			<maxpower>75</maxpower>
-			<level>2</level>
-		</stats>
-		<attributes>
-			<charisma>3</charisma>
-			<constitution>22</constitution>
-			<wisdom>15</wisdom>
-			<dexterity>7</dexterity>
-			<intelligence>17</intelligence>
-			<strength>4</strength>
-			<difficulty>2</difficulty>
-			<size>medium</size>
-		</attributes>
-		<inventory>
-			<item>
-				<itemname>axe2</itemname>
-				<chance>100</chance>
-				<number>1</number>
-			</item>
-		</inventory>
-		<bodyparts>
-			<arms>2</arms>
-			<legs>2</legs>
-			<heads>1</heads>
-			<!-- body is implicitly assumed -->
-		</bodyparts>
-		<OnDeath>
-			<effect type="GolemDeath">
-			</effect>
-		</OnDeath>
-	</npc>
+  <npc name="Giant Spider">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>Giant_Spider</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Chimera">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>CHIMERA</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Deinolithe">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>deinolithe</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Hydra">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>Hydra</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Manticora">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>Manticora</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Orc">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>Orc</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Troll">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>Troll</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Wyvern">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>Wyvern</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Dragon">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>mountain_dragon</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <startingitems>
+      <entry>
+        <item>sword1</item>
+        <probability>2</probability>
+        <count>1</count>
+        <level>2</level>
+      </entry>
+      <entry>
+        <item>Health Potion</item>
+        <probability>1</probability>
+        <count>2</count>
+        <level>1</level>
+      </entry>
+      <entry>
+        <item>Cure Poison</item>
+        <probability>.5</probability>
+        <count>1</count>
+        <level>4</level>
+      </entry>
+    </startingitems>
+    <OnDeath>
+      <effect type="Death">
+        <speed>2</speed>
+      </effect>
+    </OnDeath>
+  </npc>
+  <npc name="Golem">
+    <model> </model>
+    <modeltexture> </modeltexture>
+    <prefab>Golem</prefab>
+    <role>Mage</role>
+    <race>Undead</race>
+    <flags>
+      <flag name="custom_death" />
+    </flags>
+    <properties>
+      <!-- none -->
+    </properties>
+    <spawnkeywords>
+    </spawnkeywords>
+    <stats>
+      <maxhealth>25</maxhealth>
+      <maxpower>75</maxpower>
+      <level>2</level>
+    </stats>
+    <attributes>
+      <charisma>3</charisma>
+      <constitution>22</constitution>
+      <wisdom>15</wisdom>
+      <dexterity>7</dexterity>
+      <intelligence>17</intelligence>
+      <strength>4</strength>
+      <difficulty>2</difficulty>
+      <size>medium</size>
+    </attributes>
+    <inventory>
+      <item>
+        <itemname>axe2</itemname>
+        <chance>100</chance>
+        <number>1</number>
+      </item>
+    </inventory>
+    <bodyparts>
+      <arms>2</arms>
+      <legs>2</legs>
+      <heads>1</heads>
+      <!-- body is implicitly assumed -->
+    </bodyparts>
+    <OnDeath>
+      <effect type="GolemDeath">
+      </effect>
+    </OnDeath>
+  </npc>
 </npcs>

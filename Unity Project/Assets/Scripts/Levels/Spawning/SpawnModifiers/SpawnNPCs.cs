@@ -52,8 +52,8 @@ public class SpawnNPCs : SpawnMod
                 #region DEBUG
                 if (BigBoss.Debug.logging())
                 {
-                    BigBoss.Debug.w(Logs.Main, "Failed to spawn NPC with keywords: " + space.val.Theme.Keywords);
-                    BigBoss.Debug.w(Logs.Spawning, "Failed to spawn NPC with keywords: " + space.val.Theme.Keywords);
+                    BigBoss.Debug.w(Logs.Main, "Failed to spawn NPC with keywords: " + keywords);
+                    BigBoss.Debug.w(Logs.Spawning, "Failed to spawn NPC with keywords: " + keywords);
                 }
                 #endregion
             }

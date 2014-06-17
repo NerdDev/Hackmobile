@@ -21,9 +21,9 @@ public class Stats : IXmlParsable
 
     public void ParseXML(XMLNode x)
     {
-        MaxHealth = x.SelectInt("maxhealth");
+        MaxHealth = x.SelectInt("maxhealth", 1);
         MaxPower = x.SelectInt("maxpower");
-        Level = x.SelectUShort("level");
+        Level = x.SelectUShort("level", 1);
         initialize();
     }
 
