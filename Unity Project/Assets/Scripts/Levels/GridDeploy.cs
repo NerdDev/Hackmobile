@@ -18,6 +18,9 @@ public class GridDeploy : ITransform
     public float XScale { get; set; }
     public float YScale { get; set; }
     public float ZScale { get; set; }
+    public bool DelayDeployment;
+    public Axis[] ColliderPlacementQueue;
+    public ColliderDeploy ColliderDeploy;
 
     public GridDeploy(GenDeploy genDeploy)
     {
@@ -26,3 +29,9 @@ public class GridDeploy : ITransform
     }
 }
 
+public enum ColliderDeploy
+{
+    Destroy,
+    UseForOtherPlacements,
+    Keep
+}

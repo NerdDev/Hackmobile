@@ -19,16 +19,6 @@ public class GridSpace : IGridSpace
     public Level Level { get; protected set; }
     public int X { get; protected set; }
     public int Y { get; protected set; }
-    public WorldObject RandomContainedObj
-    {
-        get
-        {
-            List<WorldObject> tmp = new List<WorldObject>();
-            tmp.AddRange(_freeObjects);
-            tmp.AddRange(_blockingObjects);
-            return tmp.Random(Probability.Rand);
-        }
-    }
     private List<WorldObject> _freeObjects;
     private List<WorldObject> _blockingObjects;
     internal Inventory inventory = new Inventory();

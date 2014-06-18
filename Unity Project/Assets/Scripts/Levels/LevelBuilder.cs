@@ -37,47 +37,79 @@ public class LevelBuilder : MonoBehaviour
             GameObject staticSpaceHolder = null;
             GameObject dynamicSpaceHolder = null;
             space.Blocks = new List<GameObject>(space.Deploys.Count);
+            List<GridDeploy> delayed = new List<GridDeploy>(space.Deploys.Count);
             for (int i = 0; i < space.Deploys.Count; i++)
             {
                 GridDeploy deploy = space.Deploys[i];
                 if (deploy == null) continue;
-                Transform t = deploy.GO.transform;
-                GameObject obj = Instantiate(
-                    deploy.GO,
-                    new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
-                    , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
-                if (deploy.Static)
+                if (deploy.DelayDeployment)
                 {
-                    if (staticSpaceHolder == null)
-                    {
-                        staticSpaceHolder = new GameObject(space.X + "," + space.Y);
-                        staticSpaceHolder.transform.parent = staticHolder.transform;
-                    }
-                    obj.transform.parent = staticSpaceHolder.transform;
+                    delayed.Add(deploy);
+                    continue;
                 }
-                else
-                {
-                    if (dynamicSpaceHolder == null)
-                    {
-                        dynamicSpaceHolder = new GameObject(space.X + "," + space.Y);
-                        dynamicSpaceHolder.transform.parent = dynamicHolder.transform;
-                    }
-                    obj.transform.parent = dynamicSpaceHolder.transform;
-                }
-                obj.transform.localScale = new Vector3(
-                    deploy.XScale * obj.transform.localScale.x,
-                    deploy.YScale * obj.transform.localScale.y,
-                    deploy.ZScale * obj.transform.localScale.z);
-                space.Blocks.Add(obj);
-                CombineBlock(obj);
+                GenerateDeploy(space, deploy, staticSpaceHolder, dynamicSpaceHolder);
             }
+            // Generate delayed
+            for (int i = 0; i < delayed.Count; i++)
+            {
+                GridDeploy deploy = space.Deploys[i];
+                GenerateDeploy(space, deploy, staticSpaceHolder, dynamicSpaceHolder);
+            }
+            space.Deploys = null; // Clear deployed deploys
+            space.BlocksCreated = true; //space has created blocks
         }
-        space.BlocksCreated = true; //space has created blocks
         //update fog of war
         Vector3 pos = new Vector3(space.X, 0f, space.Y);
         BigBoss.Gooey.RecreateFOW(pos, 0);
 
-        //GarbageCollect(); //not currently used now
+    }
+
+    protected void GenerateDeploy(GridSpace space, GridDeploy deploy, GameObject staticSpaceHolder, GameObject dynamicSpaceHolder)
+    {
+        Transform t = deploy.GO.transform;
+        GameObject obj = Instantiate(
+            deploy.GO,
+            new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
+            , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
+        if (deploy.Static)
+        {
+            if (staticSpaceHolder == null)
+            {
+                staticSpaceHolder = new GameObject(space.X + "," + space.Y);
+                staticSpaceHolder.transform.parent = staticHolder.transform;
+            }
+            obj.transform.parent = staticSpaceHolder.transform;
+        }
+        else
+        {
+            if (dynamicSpaceHolder == null)
+            {
+                dynamicSpaceHolder = new GameObject(space.X + "," + space.Y);
+                dynamicSpaceHolder.transform.parent = dynamicHolder.transform;
+            }
+            obj.transform.parent = dynamicSpaceHolder.transform;
+        }
+        obj.transform.localScale = new Vector3(
+            deploy.XScale * obj.transform.localScale.x,
+            deploy.YScale * obj.transform.localScale.y,
+            deploy.ZScale * obj.transform.localScale.z);
+        if (deploy.ColliderPlacementQueue != null
+            && deploy.ColliderPlacementQueue.Length > 0)
+        {
+            ColliderEventScript script = obj.AddComponent<ColliderEventScript>();
+            for (int i = 0; i < deploy.ColliderPlacementQueue.Length; i++)
+            {
+                Axis dir = deploy.ColliderPlacementQueue[i];
+                ShiftIntoPlace(obj, dir, script);
+            }
+            Destroy(script);
+        }
+        space.Blocks.Add(obj);
+        CombineBlock(obj);
+    }
+
+    protected void ShiftIntoPlace(GameObject obj, Axis dir, ColliderEventScript script)
+    {
     }
 
     private void GarbageCollect()
