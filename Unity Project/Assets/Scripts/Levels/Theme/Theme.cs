@@ -87,11 +87,6 @@ public abstract class Theme : ThemeOption, IInitializable
         {
             throw new ArgumentException("Could not apply base mod");
         }
-        // Definining Mod
-        if (spec.RoomModifiers.AllowDefiningMod)
-        {
-            ApplyMod(spec, spec.RoomModifiers.DefiningMods);
-        }
         // Flex Mods
         int numFlex = gen.Rand.Next(spec.RoomModifiers.MinFlexMods, spec.RoomModifiers.MaxFlexMods);
         int numHeavy = (int)Math.Round((numFlex / 3d) + (numFlex / 3d * gen.Rand.NextDouble()));
@@ -112,8 +107,11 @@ public abstract class Theme : ThemeOption, IInitializable
                 break;
             }
         }
-        // Final Mods
-        ApplyMod(spec, spec.RoomModifiers.FinalMods);
+        // Decoration Mods
+        foreach (RoomModifier mod in spec.RoomModifiers.DecorationMods)
+        {
+            ApplyMod(spec, mod);
+        }
         #region DEBUG
         if (BigBoss.Debug.logging(Logs.LevelGen))
         {
@@ -143,41 +141,51 @@ public abstract class Theme : ThemeOption, IInitializable
             T mod;
             while (mods.Take(spec.Random, out mod))
             {
-                #region DEBUG
-                float stepTime = 0;
-                if (BigBoss.Debug.logging(Logs.LevelGenMain))
+                if (ApplyMod(spec, mod))
                 {
-                    BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
-                }
-                if (BigBoss.Debug.logging(Logs.LevelGen))
-                {
-                    stepTime = Time.realtimeSinceStartup;
-                    BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
-                }
-                #endregion
-                Container2D<GenSpace> backupGrid = new MultiMap<GenSpace>(spec.Grids);
-                if (mod.Modify(spec))
-                {
-                    #region DEBUG
-                    if (BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        spec.Grids.ToLog(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
-                    }
-                    #endregion
                     return true;
                 }
-                else
-                {
-                    spec.Grids.Clear();
-                    spec.Grids.PutAll(backupGrid);
-                    #region DEBUG
-                    if (BigBoss.Debug.logging(Logs.LevelGen))
-                    {
-                        spec.Grids.ToLog(Logs.LevelGen, "Couldn't apply mod.  Processing " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
-                    }
-                    #endregion
-                }
             }
+        }
+        return false;
+    }
+
+    protected bool ApplyMod<T>(RoomSpec spec, T mod)
+        where T : RoomModifier
+    {
+        #region DEBUG
+        float stepTime = 0;
+        if (BigBoss.Debug.logging(Logs.LevelGenMain))
+        {
+            BigBoss.Debug.w(Logs.LevelGenMain, "   Applying: " + mod);
+        }
+        if (BigBoss.Debug.logging(Logs.LevelGen))
+        {
+            stepTime = Time.realtimeSinceStartup;
+            BigBoss.Debug.w(Logs.LevelGen, "Applying: " + mod);
+        }
+        #endregion
+        Container2D<GenSpace> backupGrid = new MultiMap<GenSpace>(spec.Grids);
+        if (mod.Modify(spec))
+        {
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                spec.Grids.ToLog(Logs.LevelGen, "Applying " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+            }
+            #endregion
+            return true;
+        }
+        else
+        {
+            spec.Grids.Clear();
+            spec.Grids.PutAll(backupGrid);
+            #region DEBUG
+            if (BigBoss.Debug.logging(Logs.LevelGen))
+            {
+                spec.Grids.ToLog(Logs.LevelGen, "Couldn't apply mod.  Processing " + mod + " took " + (Time.realtimeSinceStartup - stepTime) + " seconds.");
+            }
+            #endregion
         }
         return false;
     }

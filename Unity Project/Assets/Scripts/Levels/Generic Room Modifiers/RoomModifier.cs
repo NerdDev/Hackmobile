@@ -3,10 +3,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum RoomModifierType
+{
+    Base,
+    Heavy,
+    Fill, 
+    Decoration
+}
+
 abstract public class RoomModifier : IProbabilityItem
 {
     public virtual double Multiplier { get { return 1; } }
     public virtual bool Unique { get { return false; } }
+    public abstract RoomModifierType Type { get; }
 
     public RoomModifier()
     {
