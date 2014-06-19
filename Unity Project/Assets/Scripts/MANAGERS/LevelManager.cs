@@ -132,6 +132,7 @@ public class LevelManager : MonoBehaviour, IManager
             val.WrapObjects(false);
             val.DestroyGridSpace();
         }
+        BigBoss.Levels.Builder.Clear();
     }
 
     void Deploy(Level level)

@@ -11,6 +11,7 @@ public class LevelBuilder : MonoBehaviour
     private int combineCounter = 0;
     private int garbageCollectorCounter = 0;
     private HashSet<GameObject> blocks = new HashSet<GameObject>();
+    private MultiMap<List<DelayedLevelDeploy>> delayedDeployEvents = new MultiMap<List<DelayedLevelDeploy>>();
 
     public static void Initialize()
     {
@@ -37,31 +38,80 @@ public class LevelBuilder : MonoBehaviour
             GameObject staticSpaceHolder = null;
             GameObject dynamicSpaceHolder = null;
             space.Blocks = new List<GameObject>(space.Deploys.Count);
-            List<GridDeploy> delayed = new List<GridDeploy>(space.Deploys.Count);
             for (int i = 0; i < space.Deploys.Count; i++)
             {
                 GridDeploy deploy = space.Deploys[i];
                 if (deploy == null) continue;
                 if (deploy.DelayDeployment)
                 {
-                    delayed.Add(deploy);
-                    continue;
+                    if (SetUpDeplayedDeployment(space, deploy, staticSpaceHolder, dynamicSpaceHolder))
+                    {
+                        continue;
+                    }
                 }
-                GenerateDeploy(space, deploy, staticSpaceHolder, dynamicSpaceHolder);
-            }
-            // Generate delayed
-            for (int i = 0; i < delayed.Count; i++)
-            {
-                GridDeploy deploy = space.Deploys[i];
                 GenerateDeploy(space, deploy, staticSpaceHolder, dynamicSpaceHolder);
             }
             space.Deploys = null; // Clear deployed deploys
             space.BlocksCreated = true; //space has created blocks
+            FireDelayedDeploy(space);
         }
         //update fog of war
         Vector3 pos = new Vector3(space.X, 0f, space.Y);
         BigBoss.Gooey.RecreateFOW(pos, 0);
+    }
 
+    protected bool SetUpDeplayedDeployment(GridSpace space, GridDeploy deploy,  GameObject staticSpaceHolder, GameObject dynamicSpaceHolder)
+    {
+        DelayedLevelDeploy delayedDeploy = null;
+        space.Level.DrawAround(space.X, space.Y, false, (arr, x, y) =>
+        {
+            GridSpace around;
+            if (arr.TryGetValue(x, y, out around))
+            {
+                if (!space.BlocksCreated)
+                {
+                    if (delayedDeploy == null)
+                    {
+                        delayedDeploy = new DelayedLevelDeploy(staticSpaceHolder, dynamicSpaceHolder);
+                    }
+                    delayedDeploy.Counter++;
+                    delayedDeploy.DelayedDeploys.Add(deploy);
+                    List<DelayedLevelDeploy> deployList;
+                    if (!delayedDeployEvents.TryGetValue(x, y, out deployList))
+                    {
+                        deployList = new List<DelayedLevelDeploy>();
+                        delayedDeployEvents[x, y] = deployList;
+                    }
+                    deployList.Add(delayedDeploy);
+                }
+            }
+            return true;
+        });
+        return delayedDeploy != null;
+    }
+
+    protected void FireDelayedDeploy(GridSpace space)
+    {
+        List<DelayedLevelDeploy> list;
+        if (delayedDeployEvents.TryGetValue(space, out list))
+        {
+            foreach (var delayedDeploy in list)
+            {
+                delayedDeploy.Counter--;
+                if (delayedDeploy.Counter == 0)
+                {
+                    foreach (var deploy in delayedDeploy.DelayedDeploys)
+                    {
+                        GenerateDeploy(space, deploy, delayedDeploy.staticSpaceHolder, delayedDeploy.dynamicSpaceHolder);
+                    }
+                    list.Remove(delayedDeploy);
+                }
+            }
+            if (list.Count == 0)
+            {
+                delayedDeployEvents.Remove(space);
+            }
+        }
     }
 
     protected void GenerateDeploy(GridSpace space, GridDeploy deploy, GameObject staticSpaceHolder, GameObject dynamicSpaceHolder)
@@ -120,6 +170,11 @@ public class LevelBuilder : MonoBehaviour
             System.GC.Collect(0);
             garbageCollectorCounter = 0;
         }
+    }
+
+    public void Clear()
+    {
+        // ToDo
     }
 
     private void CombineBlock(GameObject obj)
@@ -240,11 +295,6 @@ public class LevelBuilder : MonoBehaviour
         GenDeploy deploy = new GenDeploy(element.Get(rand));
         space.AddDeploy(deploy, 0, 0);
         return true;
-    }
-
-    public void Remove(GameObject obj)
-    {
-        blocks.Remove(obj);
     }
 
     public void Combine()
