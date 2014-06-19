@@ -28,7 +28,7 @@ public class ThemeElement : FOWRenderers
             return _bounds;
         }
     }
-    public bool Walkable;
+    public bool Walkable = true;
     public bool CanMove;
 
     public virtual void PreDeployTweaks(ThemeElementSpec spec)

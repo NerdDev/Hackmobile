@@ -22,8 +22,6 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
         RoomMods.AddMod(new SquareRoom(), 1d);
         RoomMods.AddMod(new TRoomMod(), 1d);
         //RoomMods.AddMod(new GrandTombRoom(), 0.5d, true);
-        // Defining
-        RoomMods.AddMod(new BlankDefiningRoomMod(), 1);
         // Flex
         RoomMods.AddMod(new MassTombRoom(), 0.35d, true);
         RoomMods.AddMod(new GiantPillarMod(), 1);
@@ -43,7 +41,7 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
          */
         MinThemeMods = 1;
         MaxThemeMods = 1;
-        ThemeMods.Add(new WispSpiritThemeMod());
+        //ThemeMods.Add(new WispSpiritThemeMod());
     }
 
     public ThemeElementBundle GetPillars()

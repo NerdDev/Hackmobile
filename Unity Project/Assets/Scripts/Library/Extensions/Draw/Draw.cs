@@ -762,6 +762,28 @@ public static class Draw
         }
         space.AddDeploy(deploy, x, y);
     }
+
+    public static DrawAction<GenSpace> ContainsThemeElement(ThemeElement elem)
+    {
+        return (arr, x, y) =>
+        {
+            GenSpace space;
+            if (arr.TryGetValue(x, y, out space))
+            {
+                if (space.Deploys != null)
+                {
+                    foreach (var deploy in space.Deploys)
+                    {
+                        if (elem.Equals(deploy.OriginalElement))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        };
+    }
     #endregion
 }
 

@@ -630,7 +630,8 @@ MonoBehaviour:
   AmbientTestingColor: {r: .5, g: .5, b: .5, a: 1}
   RevealDistance: 300
   MaxCameraDistance: 10
-  Level: 0
+  UseTestLevel: 0
+  TestLevel: {fileID: 11400000, guid: 73dcbffacca4caf4cad5a629a52d9637, type: 2}
   PlacePlayerManually: 0
   PlacePlayerX: -17
   PlacePlayerY: -16
@@ -6003,6 +6004,15 @@ MonoBehaviour:
   isScanning: 1
   showGraphs: 1
   lastUniqueAreaIndex: 0
+    - target: {fileID: 11400050, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: TestLevel
+      value: 
+      objectReference: {fileID: 11400000, guid: 73dcbffacca4caf4cad5a629a52d9637,
+        type: 2}
+    - target: {fileID: 11400050, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: UseTestLevel
+      value: 0
+      objectReference: {fileID: 0}
 --- !u!1 &1348668700
 GameObject:
   m_ObjectHideFlags: 0

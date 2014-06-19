@@ -5,36 +5,16 @@ using System.Text;
 
 public class RoomModCollection
 {
-    private bool _allowDefiningMod = true;
-    public bool AllowDefiningMod
-    {
-        get
-        {
-            return _allowDefiningMod && DefiningMods.Count > 0;
-        }
-        set { _allowDefiningMod = value; }
-    }
-    private bool _allowFinalMod = true;
-    public bool AllowFinalMod
-    {
-        get
-        {
-            return _allowFinalMod && FinalMods.Count > 0;
-        }
-        set { _allowFinalMod = value; }
-    }
     public int MinFlexMods = 3;
     public int MaxFlexMods = 6;
     [Copyable]
     public ProbabilityPool<BaseRoomMod> BaseMods = ProbabilityPool<BaseRoomMod>.Create();
     [Copyable]
-    public ProbabilityPool<DefiningRoomMod> DefiningMods = ProbabilityPool<DefiningRoomMod>.Create();
+    public ProbabilityPool<RoomModifier> HeavyMods = ProbabilityPool<RoomModifier>.Create();
     [Copyable]
-    public ProbabilityPool<HeavyRoomMod> HeavyMods = ProbabilityPool<HeavyRoomMod>.Create();
+    public ProbabilityPool<RoomModifier> FillMods = ProbabilityPool<RoomModifier>.Create();
     [Copyable]
-    public ProbabilityPool<FillRoomMod> FillMods = ProbabilityPool<FillRoomMod>.Create();
-    [Copyable]
-    public ProbabilityPool<FinalRoomMod> FinalMods = ProbabilityPool<FinalRoomMod>.Create();
+    public List<RoomModifier> DecorationMods = new List<RoomModifier>();
 
     public RoomModCollection()
     {
@@ -43,75 +23,56 @@ public class RoomModCollection
     public RoomModCollection(RoomModCollection rhs)
     {
         BaseMods.AddAll(rhs.BaseMods);
-        DefiningMods.AddAll(rhs.DefiningMods);
         HeavyMods.AddAll(rhs.HeavyMods);
         FillMods.AddAll(rhs.FillMods);
-        FinalMods.AddAll(rhs.FinalMods);
+        DecorationMods.AddRange(rhs.DecorationMods);
     }
 
     public void AddMod(RoomModifier mod, double multiplier, bool unique = false)
     {
-        if (mod is BaseRoomMod)
+        switch (mod.Type)
         {
-            BaseMods.Add((BaseRoomMod)mod, multiplier, unique || mod.Unique);
-        }
-        else if (mod is DefiningRoomMod)
-        {
-            DefiningMods.Add((DefiningRoomMod)mod, multiplier, unique || mod.Unique);
-        }
-        else if (mod is HeavyRoomMod)
-        {
-            HeavyMods.Add((HeavyRoomMod)mod, multiplier, unique || mod.Unique);
-        }
-        else if (mod is FillRoomMod)
-        {
-            FillMods.Add((FillRoomMod)mod, multiplier, unique || mod.Unique);
-        }
-        else if (mod is FinalRoomMod)
-        {
-            FinalMods.Add((FinalRoomMod)mod, multiplier, unique || mod.Unique);
-        }
-        else
-        {
-            throw new ArgumentException("Cannot inherit directly from RoomModifier");
+            case RoomModifierType.Base:
+                BaseMods.Add((BaseRoomMod)mod, multiplier, unique || mod.Unique);
+                break;
+            case RoomModifierType.Heavy:
+                HeavyMods.Add(mod, multiplier, unique || mod.Unique);
+                break;
+            case RoomModifierType.Fill:
+                FillMods.Add(mod, multiplier, unique || mod.Unique);
+                break;
+            case RoomModifierType.Decoration:
+            default:
+                DecorationMods.Add(mod);
+                break;
         }
     }
 
     public void RemoveMod(RoomModifier mod, bool all = true)
     {
-        if (mod is BaseRoomMod)
+        switch (mod.Type)
         {
-            BaseMods.Remove((BaseRoomMod)mod, all);
-        }
-        else if (mod is DefiningRoomMod)
-        {
-            DefiningMods.Remove((DefiningRoomMod)mod, all);
-        }
-        else if (mod is HeavyRoomMod)
-        {
-            HeavyMods.Remove((HeavyRoomMod)mod, all);
-        }
-        else if (mod is FillRoomMod)
-        {
-            FillMods.Remove((FillRoomMod)mod, all);
-        }
-        else if (mod is FinalRoomMod)
-        {
-            FinalMods.Remove((FinalRoomMod)mod, all);
-        }
-        else
-        {
-            throw new ArgumentException("Cannot inherit directly from RoomModifier");
+            case RoomModifierType.Base:
+                BaseMods.Remove((BaseRoomMod)mod, all);
+                break;
+            case RoomModifierType.Heavy:
+                HeavyMods.Remove(mod, all);
+                break;
+            case RoomModifierType.Fill:
+                FillMods.Remove(mod, all);
+                break;
+            case RoomModifierType.Decoration:
+            default:
+                DecorationMods.Remove(mod);
+                break;
         }
     }
 
     public void Freshen()
     {
         BaseMods.Freshen();
-        DefiningMods.Freshen();
         HeavyMods.Freshen();
         FillMods.Freshen();
-        FinalMods.Freshen();
     }
 }
 

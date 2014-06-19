@@ -64,6 +64,11 @@ namespace System
             return (float)rand.NextDouble();
         }
 
+        public static float NextRotationDegree(this System.Random rand)
+        {
+            return (float)(rand.NextDouble() * 360);
+        }
+
         public static Rotation NextRotation(this System.Random rand)
         {
             switch (rand.Next(4))

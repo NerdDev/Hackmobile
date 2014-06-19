@@ -34,6 +34,8 @@ public class LevelBuilder : MonoBehaviour
         }
         else //else create the blocks
         {
+            GameObject staticSpaceHolder = null;
+            GameObject dynamicSpaceHolder = null;
             space.Blocks = new List<GameObject>(space.Deploys.Count);
             for (int i = 0; i < space.Deploys.Count; i++)
             {
@@ -46,11 +48,21 @@ public class LevelBuilder : MonoBehaviour
                     , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
                 if (deploy.Static)
                 {
-                    obj.transform.parent = staticHolder.transform;
+                    if (staticSpaceHolder == null)
+                    {
+                        staticSpaceHolder = new GameObject(space.X + "," + space.Y);
+                        staticSpaceHolder.transform.parent = staticHolder.transform;
+                    }
+                    obj.transform.parent = staticSpaceHolder.transform;
                 }
                 else
                 {
-                    obj.transform.parent = dynamicHolder.transform;
+                    if (dynamicSpaceHolder == null)
+                    {
+                        dynamicSpaceHolder = new GameObject(space.X + "," + space.Y);
+                        dynamicSpaceHolder.transform.parent = dynamicHolder.transform;
+                    }
+                    obj.transform.parent = dynamicSpaceHolder.transform;
                 }
                 obj.transform.localScale = new Vector3(
                     deploy.XScale * obj.transform.localScale.x,

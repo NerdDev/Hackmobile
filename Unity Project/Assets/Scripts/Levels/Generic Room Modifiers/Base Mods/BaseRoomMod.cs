@@ -5,6 +5,11 @@ using System.Text;
 
 public abstract class BaseRoomMod : RoomModifier
 {
+    public override RoomModifierType Type
+    {
+        get { return RoomModifierType.Base; }
+    }
+
     public BaseRoomMod()
     {
     }
