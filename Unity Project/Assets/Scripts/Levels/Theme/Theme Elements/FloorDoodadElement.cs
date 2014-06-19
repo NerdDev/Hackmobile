@@ -8,7 +8,6 @@ public class FloorDoodadElement : ThemeElement
     public override void PreDeployTweaks(ThemeElementSpec spec)
     {
         CenterAndRotateDoodad(spec);
-        //PlaceFloors(spec);
     }
 }
 

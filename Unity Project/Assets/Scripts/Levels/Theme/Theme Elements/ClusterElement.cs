@@ -70,7 +70,6 @@ public class ClusterElement : ThemeElement
             topLeft.YRotation = spec.Random.NextRotationDegree();
             spec.AddAdditional(topLeft);
         }
-        PlaceFloors(spec);
     }
 }
 
