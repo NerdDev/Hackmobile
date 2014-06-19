@@ -413,11 +413,6 @@ public class FOWSystem : MonoBehaviour
         int incrementY = startY < finishY ? 1 : -1;
         int dir = initialDistX - initialDistY;
 
-        //finishX += BufferOffsetX;
-        //finishY += BufferOffsetY;
-        //startX += BufferOffsetX;
-        //startY += BufferOffsetY;
-
         int sx = startX;
         int sy = startY;
 
@@ -447,6 +442,113 @@ public class FOWSystem : MonoBehaviour
                     mBuffer1[index] = white;
                     white.r = 255;
                     mBuffer4[index] = true;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else
+            {
+                break;
+            }
+
+            /*
+             * Move to next set of directions
+             */
+            int dir2 = dir << 1;
+
+            if (dir2 > -initialDistY)
+            {
+                dir -= initialDistY;
+                startX += incrementX;
+            }
+
+            if (dir2 < initialDistX)
+            {
+                dir += initialDistX;
+                startY += incrementY;
+            }
+        }
+    }
+
+    void IsVisibleSecondary(Revealer r, int startX, int startY, int finishX, int finishY, int sightHeight, float worldToTex)
+    {
+        int minRange = Mathf.RoundToInt(r.inner * r.inner * worldToTex * worldToTex);
+        int fadeRange = Mathf.RoundToInt(r.fade * r.fade * worldToTex * worldToTex);
+        int maxRange = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
+        int mainRange = Mathf.RoundToInt(Main.outer * Main.outer * worldToTex * worldToTex);
+        Color32 white = new Color32(255, 255, 255, 255);
+
+        Vector3 mainPos = Main.pos - mOrigin;
+        int mCX = Mathf.RoundToInt(mainPos.x * worldToTex);
+        int mCY = Mathf.RoundToInt(mainPos.z * worldToTex);
+        mCX = Mathf.Clamp(mCX, 0, textureSize - 1);
+        mCY = Mathf.Clamp(mCY, 0, textureSize - 1);
+
+        int initialDistX = Mathf.Abs(finishX - startX);
+        int initialDistY = Mathf.Abs(finishY - startY);
+        int incrementX = startX < finishX ? 1 : -1;
+        int incrementY = startY < finishY ? 1 : -1;
+        int dir = initialDistX - initialDistY;
+
+        int sx = startX;
+        int sy = startY;
+
+        bool finished = false;
+        while (!finished)
+        {
+            if (startX > -1 && startX < textureSize &&
+                    startY > -1 && startY < textureSize) //if within bounds
+            {
+                if (startX == finishX && startY == finishY)
+                {
+                    finished = true;
+                }
+                // If the sampled height is higher than expected, then the point must be obscured
+                if (mHeights[(startX + BufferOffsetX), (startY + BufferOffsetY)] <= sightHeight)
+                {
+                    int xdistToMain = startX - mCX; //distance in X to player (main) at this point
+                    int yDistToMain = startY - mCY; //distance in Y to player (main) at this point
+                    int distToMain = xdistToMain * xdistToMain + yDistToMain * yDistToMain; //squared distance to player (main)
+
+                    if (distToMain < mainRange)
+                    {
+                        int xdist = startX - sx; //distance in X at this point
+                        int ydist = startY - sy; //distance in Y at this point
+                        int dist = xdist * xdist + ydist * ydist; //squared distance
+                        int index = startX + startY * textureSize; //index access for texture
+
+                        if (mBuffer1[index].r < 255)
+                        {
+                            
+                            if (!mBuffer4[index])
+                            {
+                                if (mCX <= -1 || mCX >= textureSize ||
+                                        mCY <= -1 || mCY >= textureSize)
+                                {
+                                    mBuffer3[index] = false;
+                                }
+                                else
+                                {
+                                    mBuffer3[index] = IsVisible(startX, startY, mCX, mCY, sightHeight);
+                                }
+                                mBuffer4[index] = true;
+                            }
+                             
+                            if (mBuffer3[index])
+                            {
+                                if (dist > fadeRange)
+                                {
+                                    int distFromFade = dist - fadeRange;
+                                    white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(distFromFade, r.ExpMultiplier) + mBuffer1[index].r), 0, 255);
+                                }
+                                mBuffer1[index] = white;
+                                white.r = 255;
+                                mBuffer4[index] = true;
+                            }
+                        }
+                    }
                 }
                 else
                 {
@@ -803,93 +905,35 @@ public class FOWSystem : MonoBehaviour
     {
         // Position relative to the fog of war
         Vector3 pos = r.pos - mOrigin;
-        Vector3 mainPos = Main.pos - mOrigin;
 
-        // Coordinates we'll be dealing with
-        int xmin = Mathf.RoundToInt((pos.x - r.outer) * worldToTex);
-        int ymin = Mathf.RoundToInt((pos.z - r.outer) * worldToTex);
-        int xmax = Mathf.RoundToInt((pos.x + r.outer) * worldToTex);
-        int ymax = Mathf.RoundToInt((pos.z + r.outer) * worldToTex);
-
-        int mCX;
-        int mCY;
-
-        int cx;
-        int cy;
-
-        mCX = Mathf.RoundToInt(mainPos.x * worldToTex);
-        mCY = Mathf.RoundToInt(mainPos.z * worldToTex);
-
-        mCX = Mathf.Clamp(mCX, 0, textureSize - 1);
-        mCY = Mathf.Clamp(mCY, 0, textureSize - 1);
-
-        cx = Mathf.RoundToInt(pos.x * worldToTex);
-        cy = Mathf.RoundToInt(pos.z * worldToTex);
-
+        int cx = Mathf.RoundToInt(pos.x * worldToTex);
+        int cy = Mathf.RoundToInt(pos.z * worldToTex);
         cx = Mathf.Clamp(cx, 0, textureSize - 1);
         cy = Mathf.Clamp(cy, 0, textureSize - 1);
 
-        int minRange = Mathf.RoundToInt(r.inner * r.inner * worldToTex * worldToTex);
-        int fadeRange = Mathf.RoundToInt(r.fade * r.fade * worldToTex * worldToTex);
-        int maxRange = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
-        int mainRange = Mathf.RoundToInt(Main.outer * Main.outer * worldToTex * worldToTex);
-
         int gh = WorldToGridHeight(r.pos.y);
-        Color32 white = new Color32(255, 255, 255, 255);
 
-        Color32[] mBuffer = GetBuffer(r.buffer);
-
-        for (int y = ymin; y < ymax; ++y)
+        int x = Mathf.RoundToInt(r.inner * worldToTex), y = 0;
+        int radiusError = 1 - x;
+        while (x >= y)
         {
-            if (y > -1 && y < textureSize)
+            IsVisibleSecondary(r, cx, cy, x + cx, y + cy, gh, worldToTex);
+            IsVisibleSecondary(r, cx, cy, y + cx, x + cy, gh, worldToTex);
+            IsVisibleSecondary(r, cx, cy, -x + cx, y + cy, gh, worldToTex);
+            IsVisibleSecondary(r, cx, cy, -y + cx, x + cy, gh, worldToTex);
+            IsVisibleSecondary(r, cx, cy, -x + cx, -y + cy, gh, worldToTex);
+            IsVisibleSecondary(r, cx, cy, -y + cx, -x + cy, gh, worldToTex);
+            IsVisibleSecondary(r, cx, cy, x + cx, -y + cy, gh, worldToTex);
+            IsVisibleSecondary(r, cx, cy, y + cx, -x + cy, gh, worldToTex);
+            y++;
+            if (radiusError < 0)
             {
-                for (int x = xmin; x < xmax; ++x)
-                {
-                    if (x > -1 && x < textureSize)
-                    {
-                        int index = x + y * textureSize;
-
-                        int xd = x - mCX;
-                        int yd = y - mCY;
-                        int dist = xd * xd + yd * yd;
-
-                        xd = x - cx;
-                        yd = y - cy;
-                        int dist2 = xd * xd + yd * yd;
-
-                        if (dist < mainRange && dist2 < maxRange)
-                        {
-                            if (mBuffer1[index].r == 255) continue;
-                            if (!mBuffer4[index])
-                            {
-                                if (mCX <= -1 || mCX >= textureSize ||
-                                    mCY <= -1 || mCY >= textureSize)
-                                {
-                                    mBuffer3[index] = false;
-                                }
-                                else if (!IsVisible(mCX, mCY, x, y, gh))
-                                {
-                                    mBuffer3[index] = false;
-                                }
-                                mBuffer4[index] = true;
-                            }
-                            if (!mBuffer3[index]) continue;
-
-                            if (cx > -1 && cx < textureSize &&
-                                cy > -1 && cy < textureSize &&
-                                IsVisible(cx, cy, x, y, gh))
-                            {
-                                if (dist > fadeRange)
-                                {
-                                    int distFromFade = dist - fadeRange;
-                                    white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(distFromFade, r.ExpMultiplier) + mBuffer1[index].r), 0, 255);
-                                }
-                                mBuffer1[index] = white;
-                                white.r = 255;
-                            }
-                        }
-                    }
-                }
+                radiusError += 2 * y + 1;
+            }
+            else
+            {
+                x--;
+                radiusError += 2 * (y - x + 1);
             }
         }
     }
