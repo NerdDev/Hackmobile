@@ -149,7 +149,7 @@ public class LevelBuilder : MonoBehaviour
             ColliderEventScript script = obj.AddComponent<ColliderEventScript>();
             for (int i = 0; i < deploy.ColliderPlacementQueue.Length; i++)
             {
-                Axis dir = deploy.ColliderPlacementQueue[i];
+                AxisDirection dir = deploy.ColliderPlacementQueue[i];
                 ShiftIntoPlace(obj, dir, script);
             }
             Destroy(script);
@@ -158,7 +158,7 @@ public class LevelBuilder : MonoBehaviour
         CombineBlock(obj);
     }
 
-    protected void ShiftIntoPlace(GameObject obj, Axis dir, ColliderEventScript script)
+    protected void ShiftIntoPlace(GameObject obj, AxisDirection dir, ColliderEventScript script)
     {
     }
 
@@ -201,10 +201,7 @@ public class LevelBuilder : MonoBehaviour
         };
         foreach (Value2D<GenSpace> gen in spec.GenGrid)
         {
-            if (gen.val.Deploys == null)
-            {
-                HandleEmptyDeploy(gen.val, spec.Random);
-            }
+            HandleGridTypeDeploy(gen.val, spec.Random);
             GridSpace space;
             if (!ret.TryGetValue(gen, out space))
             {
@@ -264,9 +261,12 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
-    protected bool HandleEmptyDeploy(GenSpace space, System.Random rand)
+    protected bool HandleGridTypeDeploy(GenSpace space, System.Random rand)
     {
-        space.Deploys = new List<GenDeploy>(1);
+        if (space.Deploys == null)
+        {
+            space.Deploys = new List<GenDeploy>(1);
+        }
         SmartThemeElement element;
         switch (space.Type)
         {

@@ -19,6 +19,9 @@ public class GenDeploy : ITransform, IEnumerable<Value2D<GenSpace>>
     public float ZScale { get; set; }
     public bool Deployed = false;
     public Point OriginPt;
+    public bool DelayDeployment;
+    public AxisDirection[] ColliderPlacementQueue;
+    public ColliderDeploy ColliderDeploy;
     
     public GenDeploy(ThemeElement element)
     {

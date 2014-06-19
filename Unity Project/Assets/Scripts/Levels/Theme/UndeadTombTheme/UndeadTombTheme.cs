@@ -10,6 +10,7 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
     public ThemeElementBundle Pillars;
     public ThemeElementBundle SpikeTraps;
     public ThemeElementBundle Tombs;
+    public ThemeElementBundle Mushrooms;
     public double ClusterSplitPercent = .25d;
     public double ClusterSplitPercentProperty { get { return ClusterSplitPercent; } }
 
@@ -22,6 +23,7 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
         RoomMods.AddMod(new SquareRoom(), 1d);
         RoomMods.AddMod(new TRoomMod(), 1d);
         //RoomMods.AddMod(new GrandTombRoom(), 0.5d, true);
+
         // Flex
         RoomMods.AddMod(new MassTombRoom(), 0.35d, true);
         RoomMods.AddMod(new GiantPillarMod(), 1);
@@ -30,6 +32,8 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
         RoomMods.AddMod(new SplitterMod(), 1);
         RoomMods.AddMod(new SpikeTrapRoomMod(), .2d);
         RoomMods.AddMod(new TreasureRoomMod(), .3d);
+
+        //RoomMods.AddMod(new )
 
         /*
          * Spawn Mods

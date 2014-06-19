@@ -8,6 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
+  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: MushroomSara3
   m_TagString: Untagged
@@ -84,6 +85,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_Mesh: {fileID: 4300000, guid: 866744b6ef198cb43977b8cae996ac99, type: 3}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6843438ce9c8dae4a8e190ab3da1a6bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instantiated: 0
+  Walkable: 1
+  CanMove: 0
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1

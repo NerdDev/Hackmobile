@@ -10,3 +10,13 @@ public enum Axis
     Z
 }
 
+public enum AxisDirection
+{
+    X,
+    XNeg,
+    Y,
+    YNeg,
+    Z,
+    ZNeg
+}
+
