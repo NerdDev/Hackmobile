@@ -136,13 +136,10 @@
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\RectangularRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\SquareRoom.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Base Mods\TRoomMod.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Defining Mods\BlankDefiningRoomMod.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Defining Mods\DefiningRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\FillRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\HiddenRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\PillarMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Fill Mods\SpikeTrapRoomMod.cs" />
-     <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Final Mods\FinalRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Heavy Mods\GiantPillarMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Heavy Mods\HeavyRoomMod.cs" />
      <Compile Include="Assets\Scripts\Levels\Generic Room Modifiers\Heavy Mods\SplitterMod.cs" />
@@ -159,7 +156,6 @@
      <Compile Include="Assets\Scripts\Levels\ITransform.cs" />
      <Compile Include="Assets\Scripts\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Levels\LevelBuilder.cs" />
-     <Compile Include="Assets\Scripts\Levels\LevelOptions.cs" />
      <Compile Include="Assets\Scripts\Levels\RoomModTester.cs" />
      <Compile Include="Assets\Scripts\Levels\Spawning\SpawnModCollection.cs" />
      <Compile Include="Assets\Scripts\Levels\Spawning\SpawnModifier.cs" />
@@ -170,6 +166,7 @@
      <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\ISpikeTrapTheme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Smart Theme Elements\SmartThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ClusterElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\DoorElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\FloorDoodadElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\FloorElement.cs" />
@@ -389,6 +386,7 @@
      <Compile Include="Assets\Scripts\Testing\AITests\PassiveHordeTest.cs" />
      <Compile Include="Assets\Scripts\Testing\JustinTests.cs" />
      <Compile Include="Assets\Scripts\Testing\KCTesting.cs" />
+     <Compile Include="Assets\Scripts\Testing\LevelLayoutTests\SpikeClusterTest.cs" />
      <Compile Include="Assets\Scripts\Testing\NormalDistTest.cs" />
      <Compile Include="Assets\Scripts\Testing\ProbabilityTesting.cs" />
      <Compile Include="Assets\Scripts\WorldObjects\Affectable.cs" />
