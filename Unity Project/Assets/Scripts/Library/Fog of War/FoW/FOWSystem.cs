@@ -400,6 +400,83 @@ public class FOWSystem : MonoBehaviour
     /// Determine if the specified point is visible or not using line-of-sight checks.
     /// </summary>
 
+    void IsVisibleMain(Revealer r, int startX, int startY, int finishX, int finishY, int sightHeight, float worldToTex)
+    {
+        int minRange = Mathf.RoundToInt(r.inner * r.inner * worldToTex * worldToTex);
+        int fadeRange = Mathf.RoundToInt(r.fade * r.fade * worldToTex * worldToTex);
+        int maxRange = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
+        Color32 white = new Color32(255, 255, 255, 255);
+
+        int initialDistX = Mathf.Abs(finishX - startX);
+        int initialDistY = Mathf.Abs(finishY - startY);
+        int incrementX = startX < finishX ? 1 : -1;
+        int incrementY = startY < finishY ? 1 : -1;
+        int dir = initialDistX - initialDistY;
+
+        //finishX += BufferOffsetX;
+        //finishY += BufferOffsetY;
+        //startX += BufferOffsetX;
+        //startY += BufferOffsetY;
+
+        int sx = startX;
+        int sy = startY;
+
+        bool finished = false;
+        while (!finished)
+        {
+            if (startX > -1 && startX < textureSize &&
+                    startY > -1 && startY < textureSize) //if within bounds
+            {
+                if (startX == finishX && startY == finishY)
+                {
+                    finished = true;
+                }
+                // If the sampled height is higher than expected, then the point must be obscured
+                if (mHeights[(startX + BufferOffsetX), (startY + BufferOffsetY)] <= sightHeight)
+                {
+                    int xdist = startX - sx; //distance in X at this point
+                    int ydist = startY - sy; //distance in Y at this point
+                    int dist = xdist * xdist + ydist * ydist; //squared distance
+                    int index = startX + startY * textureSize; //index access for texture
+
+                    if (dist > fadeRange)
+                    {
+                        int distFromFade = dist - fadeRange;
+                        white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(distFromFade, r.ExpMultiplier) + mBuffer1[index].r), 0, 255);
+                    }
+                    mBuffer1[index] = white;
+                    white.r = 255;
+                    mBuffer4[index] = true;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else
+            {
+                break;
+            }
+
+            /*
+             * Move to next set of directions
+             */
+            int dir2 = dir << 1;
+
+            if (dir2 > -initialDistY)
+            {
+                dir -= initialDistY;
+                startX += incrementX;
+            }
+
+            if (dir2 < initialDistX)
+            {
+                dir += initialDistX;
+                startY += incrementY;
+            }
+        }
+    }
+
     bool IsVisible(int startX, int startY, int finishX, int finishY, int sightHeight)
     {
         int initialDistX = Mathf.Abs(finishX - startX);
@@ -822,63 +899,35 @@ public class FOWSystem : MonoBehaviour
         // Position relative to the fog of war
         Vector3 pos = r.pos - mOrigin;
 
-        // Coordinates we'll be dealing with
-        int xmin = Mathf.RoundToInt((pos.x - r.inner) * worldToTex);
-        int ymin = Mathf.RoundToInt((pos.z - r.inner) * worldToTex);
-        int xmax = Mathf.RoundToInt((pos.x + r.inner) * worldToTex);
-        int ymax = Mathf.RoundToInt((pos.z + r.inner) * worldToTex);
-
         int cx = Mathf.RoundToInt(pos.x * worldToTex);
         int cy = Mathf.RoundToInt(pos.z * worldToTex);
 
         cx = Mathf.Clamp(cx, 0, textureSize - 1);
         cy = Mathf.Clamp(cy, 0, textureSize - 1);
 
-        int minRange = Mathf.RoundToInt(r.inner * r.inner * worldToTex * worldToTex);
-        int fadeRange = Mathf.RoundToInt(r.fade * r.fade * worldToTex * worldToTex);
-        int maxRange = Mathf.RoundToInt(r.outer * r.outer * worldToTex * worldToTex);
-
         int gh = WorldToGridHeight(r.pos.y);
-        Color32 white = new Color32(255, 255, 255, 255);
 
-        Color32[] mBuffer = GetBuffer(r.buffer);
-
-        for (int y = ymin; y < ymax; ++y)
+        int x = Mathf.RoundToInt(r.inner * worldToTex), y = 0;
+        int radiusError = 1 - x;
+        while (x >= y)
         {
-            if (y > -1 && y < textureSize)
+            IsVisibleMain(r, cx, cy, x + cx, y + cy, gh, worldToTex);
+            IsVisibleMain(r, cx, cy, y + cx, x + cy, gh, worldToTex);
+            IsVisibleMain(r, cx, cy, -x + cx, y + cy, gh, worldToTex);
+            IsVisibleMain(r, cx, cy, -y + cx, x + cy, gh, worldToTex);
+            IsVisibleMain(r, cx, cy, -x + cx, -y + cy, gh, worldToTex);
+            IsVisibleMain(r, cx, cy, -y + cx, -x + cy, gh, worldToTex);
+            IsVisibleMain(r, cx, cy, x + cx, -y + cy, gh, worldToTex);
+            IsVisibleMain(r, cx, cy, y + cx, -x + cy, gh, worldToTex);
+            y++;
+            if (radiusError < 0)
             {
-                for (int x = xmin; x < xmax; ++x)
-                {
-                    if (x > -1 && x < textureSize)
-                    {
-                        int xd = x - cx;
-                        int yd = y - cy;
-                        int dist = xd * xd + yd * yd;
-                        int index = x + y * textureSize;
-
-                        if (dist < minRange)
-                        {
-                            if (cx > -1 && cx < textureSize &&
-                                cy > -1 && cy < textureSize &&
-                                IsVisible(cx, cy, x, y, gh))
-                            {
-                                if (dist > fadeRange)
-                                {
-                                    int distFromFade = dist - fadeRange;
-                                    white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(distFromFade, r.ExpMultiplier) + mBuffer1[index].r), 0, 255);
-                                }
-                                mBuffer1[index] = white;
-                                white.r = 255;
-                                mBuffer4[index] = true;
-                            }
-                            else
-                            {
-                                mBuffer3[index] = false;
-                                mBuffer4[index] = true;
-                            }
-                        }
-                    }
-                }
+                radiusError += 2 * y + 1;
+            }
+            else
+            {
+                x--;
+                radiusError += 2 * (y - x + 1);
             }
         }
     }
