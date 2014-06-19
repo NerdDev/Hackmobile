@@ -178,13 +178,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: {x: 6, y: 6}
-  fadeRange: 15
+  fadeRange: 1
   RevealDistance: 3
   lineOfSightCheck: 2
   isActive: 1
   Buffer: 0
   Special: 0
-  LinearMultiplier: 4
+  LinearMultiplier: 2
   ExpMultiplier: .519999981
 --- !u!114 &11400004
 MonoBehaviour:

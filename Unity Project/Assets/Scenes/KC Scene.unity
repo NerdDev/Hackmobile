@@ -1284,6 +1284,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 10800000, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
+      propertyPath: m_Range
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
   m_RootGameObject: {fileID: 2091229112}
@@ -5322,7 +5326,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: .764705896, b: .490196079, a: 1}
   m_Intensity: 1.79999995
-  m_Range: 30
+  m_Range: 12
   m_SpotAngle: 30
   m_CookieSize: 1.20000005
   m_Shadows:
