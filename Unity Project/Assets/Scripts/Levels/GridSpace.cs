@@ -244,6 +244,8 @@ public class GridSpace : IGridSpace
             {
                 GameObject.Destroy(block);
                 //block.SetActive(false);
+                // Remove so static batching doesn't flip out
+                BigBoss.Levels.Builder.Remove(block);
             }
             BlocksCreated = false;
             Instantiated = false;

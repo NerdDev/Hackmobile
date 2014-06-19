@@ -297,6 +297,11 @@ public class LevelBuilder : MonoBehaviour
         return true;
     }
 
+    public void Remove(GameObject obj)
+    {
+        blocks.Remove(obj);
+    }
+
     public void Combine()
     {
         StaticBatchingUtility.Combine(blocks.ToArray(), staticHolder);
