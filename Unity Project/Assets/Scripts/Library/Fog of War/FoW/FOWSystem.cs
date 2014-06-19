@@ -417,8 +417,11 @@ public class FOWSystem : MonoBehaviour
         int sy = startY;
 
         bool finished = false;
+        bool last = false;
         while (!finished)
         {
+            if (last) finished = true;
+
             if (startX > -1 && startX < textureSize &&
                     startY > -1 && startY < textureSize) //if within bounds
             {
@@ -427,25 +430,24 @@ public class FOWSystem : MonoBehaviour
                     finished = true;
                 }
                 // If the sampled height is higher than expected, then the point must be obscured
-                if (mHeights[(startX + BufferOffsetX), (startY + BufferOffsetY)] <= sightHeight)
-                {
-                    int xdist = startX - sx; //distance in X at this point
-                    int ydist = startY - sy; //distance in Y at this point
-                    int dist = xdist * xdist + ydist * ydist; //squared distance
-                    int index = startX + startY * textureSize; //index access for texture
 
-                    if (dist > fadeRange)
-                    {
-                        int distFromFade = dist - fadeRange;
-                        white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(distFromFade, r.ExpMultiplier) + mBuffer1[index].r), 0, 255);
-                    }
-                    mBuffer1[index] = white;
-                    white.r = 255;
-                    mBuffer4[index] = true;
-                }
-                else
+                int xdist = startX - sx; //distance in X at this point
+                int ydist = startY - sy; //distance in Y at this point
+                int dist = xdist * xdist + ydist * ydist; //squared distance
+                int index = startX + startY * textureSize; //index access for texture
+
+                if (dist > fadeRange)
                 {
-                    break;
+                    int distFromFade = dist - fadeRange;
+                    white.r = (byte)Mathf.Clamp((int)(255 - r.LinearMultiplier * Math.Pow(distFromFade, r.ExpMultiplier) + mBuffer1[index].r), 0, 255);
+                }
+                mBuffer1[index] = white;
+                white.r = 255;
+                mBuffer4[index] = true;
+
+                if (mHeights[(startX + BufferOffsetX), (startY + BufferOffsetY)] > sightHeight)
+                {
+                    last = true;
                 }
             }
             else
@@ -521,7 +523,7 @@ public class FOWSystem : MonoBehaviour
 
                         if (mBuffer1[index].r < 255)
                         {
-                            
+
                             if (!mBuffer4[index])
                             {
                                 if (mCX <= -1 || mCX >= textureSize ||
@@ -535,7 +537,7 @@ public class FOWSystem : MonoBehaviour
                                 }
                                 mBuffer4[index] = true;
                             }
-                             
+
                             if (mBuffer3[index])
                             {
                                 if (dist > fadeRange)

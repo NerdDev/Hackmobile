@@ -5766,8 +5766,8 @@ MonoBehaviour:
   isActive: 1
   Buffer: 1
   Special: 1
-  LinearMultiplier: 1
-  ExpMultiplier: .660000026
+  LinearMultiplier: 2
+  ExpMultiplier: .564999998
 --- !u!114 &11400078
 MonoBehaviour:
   m_ObjectHideFlags: 1
