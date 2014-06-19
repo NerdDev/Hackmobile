@@ -78,7 +78,7 @@ public class FOWRevealer : MonoBehaviour
     void Awake()
     {
         mTrans = transform;
-        mRevealer = FOWSystem.CreateRevealer();
+        mRevealer = FOWSystem.CreateRevealer(Special);
     }
 
     void OnDisable()

@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d896faa75ea396d4baf03f14a79a912d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: {x: 0, y: 6}
+  range: {x: 6, y: 6}
   fadeRange: 15
   RevealDistance: 3
   lineOfSightCheck: 2
