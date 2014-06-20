@@ -630,7 +630,7 @@ MonoBehaviour:
   AmbientTestingColor: {r: .5, g: .5, b: .5, a: 1}
   RevealDistance: 300
   MaxCameraDistance: 10
-  UseTestLevel: 0
+  UseTestLevel: 1
   TestLevel: {fileID: 11400000, guid: bfa206dc08d2b9045b66284c20676f83, type: 2}
   PlacePlayerManually: 0
   PlacePlayerX: -17
@@ -6546,7 +6546,7 @@ Prefab:
         type: 2}
     - target: {fileID: 11400050, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
       propertyPath: UseTestLevel
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
       propertyPath: Seed

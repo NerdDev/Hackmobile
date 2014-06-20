@@ -38,18 +38,27 @@ public class LevelBuilder : MonoBehaviour
             GameObject staticSpaceHolder = null;
             GameObject dynamicSpaceHolder = null;
             space.Blocks = new List<GameObject>(space.Deploys.Count);
+            List<GridDeploy> delayed = new List<GridDeploy>(space.Deploys.Count);
             for (int i = 0; i < space.Deploys.Count; i++)
             {
                 GridDeploy deploy = space.Deploys[i];
                 if (deploy == null) continue;
                 if (deploy.DelayDeployment)
                 {
-                    if (SetUpDeplayedDeployment(space, deploy, staticSpaceHolder, dynamicSpaceHolder))
-                    {
-                        continue;
-                    }
+                    delayed.Add(deploy);
+                    continue;
                 }
                 GenerateDeploy(space, deploy, staticSpaceHolder, dynamicSpaceHolder);
+            }
+            if (delayed.Count > 0)
+            {
+                if (!SetUpDeplayedDeployment(space, delayed, staticSpaceHolder, dynamicSpaceHolder))
+                {
+                    foreach (GridDeploy deploy in delayed)
+                    {
+                        GenerateDeploy(space, deploy, staticSpaceHolder, dynamicSpaceHolder);
+                    }
+                }
             }
             space.Deploys = null; // Clear deployed deploys
             space.BlocksCreated = true; //space has created blocks
@@ -60,7 +69,7 @@ public class LevelBuilder : MonoBehaviour
         BigBoss.Gooey.RecreateFOW(pos, 0);
     }
 
-    protected bool SetUpDeplayedDeployment(GridSpace space, GridDeploy deploy,  GameObject staticSpaceHolder, GameObject dynamicSpaceHolder)
+    protected bool SetUpDeplayedDeployment(GridSpace space, List<GridDeploy> deploys,  GameObject staticSpaceHolder, GameObject dynamicSpaceHolder)
     {
         DelayedLevelDeploy delayedDeploy = null;
         space.Level.DrawAround(space.X, space.Y, false, (arr, x, y) =>
@@ -72,10 +81,10 @@ public class LevelBuilder : MonoBehaviour
                 {
                     if (delayedDeploy == null)
                     {
-                        delayedDeploy = new DelayedLevelDeploy(staticSpaceHolder, dynamicSpaceHolder);
+                        delayedDeploy = new DelayedLevelDeploy(space, staticSpaceHolder, dynamicSpaceHolder);
+                        delayedDeploy.DelayedDeploys.AddRange(deploys);
                     }
                     delayedDeploy.Counter++;
-                    delayedDeploy.DelayedDeploys.Add(deploy);
                     List<DelayedLevelDeploy> deployList;
                     if (!delayedDeployEvents.TryGetValue(x, y, out deployList))
                     {
@@ -102,7 +111,7 @@ public class LevelBuilder : MonoBehaviour
                 {
                     foreach (var deploy in delayedDeploy.DelayedDeploys)
                     {
-                        GenerateDeploy(space, deploy, delayedDeploy.staticSpaceHolder, delayedDeploy.dynamicSpaceHolder);
+                        GenerateDeploy(delayedDeploy.space, deploy, delayedDeploy.staticSpaceHolder, delayedDeploy.dynamicSpaceHolder);
                     }
                     list.Remove(delayedDeploy);
                 }
@@ -116,6 +125,11 @@ public class LevelBuilder : MonoBehaviour
 
     protected void GenerateDeploy(GridSpace space, GridDeploy deploy, GameObject staticSpaceHolder, GameObject dynamicSpaceHolder)
     {
+        if (deploy.GO.name.Contains("Mushroom"))
+        {
+            int wer = 23;
+            wer++;
+        }
         Transform t = deploy.GO.transform;
         GameObject obj = Instantiate(
             deploy.GO,
