@@ -64,7 +64,6 @@ public class LevelBuilder : MonoBehaviour
             space.BlocksCreated = true; //space has created blocks
             FireDelayedDeploy(space);
         }
-        //update fog of war
         Vector3 pos = new Vector3(space.X, 0f, space.Y);
         BigBoss.Gooey.RecreateFOW(pos, 0);
     }
@@ -125,11 +124,6 @@ public class LevelBuilder : MonoBehaviour
 
     protected void GenerateDeploy(GridSpace space, GridDeploy deploy, GameObject staticSpaceHolder, GameObject dynamicSpaceHolder)
     {
-        if (deploy.GO.name.Contains("Mushroom"))
-        {
-            int wer = 23;
-            wer++;
-        }
         Transform t = deploy.GO.transform;
         GameObject obj = Instantiate(
             deploy.GO,
@@ -170,6 +164,14 @@ public class LevelBuilder : MonoBehaviour
         }
         space.Blocks.Add(obj);
         CombineBlock(obj);
+        if (deploy.ColliderDeploy == ColliderDeploy.Destroy)
+        {
+            Collider[] colliders = obj.GetComponentsInChildren<Collider>(false);
+            foreach (var collider in colliders)
+            {
+                Destroy(collider);
+            }
+        }
     }
 
     protected void ShiftIntoPlace(GameObject obj, AxisDirection dir, ColliderEventScript script)

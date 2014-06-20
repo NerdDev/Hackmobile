@@ -34,6 +34,6 @@ public class GridDeploy : ITransform
 
 public enum ColliderDeploy
 {
-    Destroy,
-    Keep
+    Keep,
+    Destroy
 }
