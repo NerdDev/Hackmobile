@@ -11,12 +11,13 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using UnityEditor;
+using DigitalOpus.MB.Core;
 
 [CustomEditor(typeof(MB2_MultiMeshBaker))]
 public class MB2_MultiMeshBakerEditor : Editor {
 	MB2_MeshBakerEditorInternal mbe = new MB2_MeshBakerEditorInternal();
 	[MenuItem("GameObject/Create Other/Mesh Baker/Multi-mesh And Material Baker")]
-	public static void CreateNewMeshBaker(){
+	public static GameObject CreateNewMeshBaker(){
 		MB2_MultiMeshBaker[] mbs = (MB2_MultiMeshBaker[]) Editor.FindObjectsOfType(typeof(MB2_MultiMeshBaker));
     	Regex regex = new Regex(@"(\d+)$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 		int largest = 0;
@@ -36,10 +37,11 @@ public class MB2_MultiMeshBakerEditor : Editor {
 		nmb.transform.position = Vector3.zero;
 		nmb.AddComponent<MB2_TextureBaker>();
 		nmb.AddComponent<MB2_MultiMeshBaker>();
+		return nmb;
 	}
 	
 	public override void OnInspectorGUI(){
-		mbe.OnInspectorGUI((MB2_MeshBakerCommon) target);
+		mbe.OnInspectorGUI((MB2_MeshBakerCommon) target, typeof(MB_MeshBakerEditorWindow));
 	}
 }
 

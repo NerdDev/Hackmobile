@@ -44,4 +44,20 @@ public class MB_EditorUtil
 		}
 		return rect;
 	}
+
+	public static void RegisterUndo(UnityEngine.Object o, string s){
+#if UNITY_4_3 || UNITY_4_3_0
+			Undo.RecordObject(o,s);
+#else
+			Undo.RegisterUndo(o, s);
+#endif
+	}
+
+	public static void SetInspectorLabelWidth(float width){
+#if UNITY_4_3 || UNITY_4_3_0
+		EditorGUIUtility.labelWidth = width;
+#else
+		EditorGUIUtility.LookLikeControls(width);
+#endif
+	}
 }

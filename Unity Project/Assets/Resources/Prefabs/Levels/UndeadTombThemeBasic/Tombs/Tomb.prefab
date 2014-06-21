@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
-  - 111: {fileID: 11100000}
   - 114: {fileID: 11400000}
   - 65: {fileID: 6500000}
   m_Layer: 0
@@ -71,20 +70,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.43327522, y: .839241982, z: 1.39437485}
   m_Center: {x: 0, y: .39758122, z: 0}
---- !u!111 &11100000
-Animation:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 0}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -97,13 +82,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instantiated: 0
-  Set:
-    Elements:
-    - Multiplier: 1
-      Unique: 0
-      Item: {fileID: 11400000}
   Walkable: 0
-  Dynamic: 0
+  CanMove: 0
   TombTop:
   - {fileID: 11400000, guid: c05e1b50c2dab374a811dc86015aad5a, type: 2}
 --- !u!1001 &100100000

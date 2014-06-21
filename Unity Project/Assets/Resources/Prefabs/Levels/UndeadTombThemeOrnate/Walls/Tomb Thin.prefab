@@ -28,7 +28,7 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   m_Layer: 12
-  m_Name: Mesh
+  m_Name: Brick Wall Thin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 70fbe0dc17a628247b24390db65b0eea, type: 2}
+  - {fileID: 2100000, guid: 6cb0cd18bf58f4444ba49d54d494cf94, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -95,7 +95,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: .400000006, y: 3, z: 1}
+  m_Size: {x: .200000003, y: 3, z: 1}
   m_Center: {x: 0, y: 1.49000001, z: 0}
 --- !u!114 &11400002
 MonoBehaviour:
@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecca796b20107b544af4f7829117cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instantiated: 0
   Walkable: 0
   CanMove: 0
   PlaceFloor: 1

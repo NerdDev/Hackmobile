@@ -4674,7 +4674,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: .764705896, b: .490196079, a: 1}
   m_Intensity: 1.79999995
-  m_Range: 30
+  m_Range: 12
   m_SpotAngle: 30
   m_CookieSize: 1.20000005
   m_Shadows:
@@ -5376,7 +5376,8 @@ MonoBehaviour:
   AmbientTestingColor: {r: .5, g: .5, b: .5, a: 1}
   RevealDistance: 300
   MaxCameraDistance: 10
-  Level: 0
+  UseTestLevel: 0
+  TestLevel: {fileID: 0}
   PlacePlayerManually: 0
   PlacePlayerX: -17
   PlacePlayerY: -16
@@ -5801,7 +5802,7 @@ MonoBehaviour:
   - Multiplier: .600000024
     Set: {fileID: 11400000, guid: 5bdffb19ccbc4284fa6b27e20b0d1809, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: 5
+  Seed: 8
   UseInitialTheme: 0
   InitialTheme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
   MinAreas: 1
@@ -5984,9 +5985,9 @@ MonoBehaviour:
   mState: 0
   worldSize: 48
   textureSize: 384
-  updateFrequency: .125
-  textureBlendTime: .400000006
-  blurIterations: 3
+  updateFrequency: .0700000003
+  textureBlendTime: .200000003
+  blurIterations: 1
   heightRange: {x: -2, y: 20}
   raycastMask:
     serializedVersion: 2

@@ -8,11 +8,7 @@ using System.Collections.Specialized;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
-#if UNITY_EDITOR
-	using UnityEditor;
-#endif 
-
+using DigitalOpus.MB.Core;
 
 /// <summary>
 /// Component that is an endless mesh. You don't need to worry about the 65k limit when adding meshes. It is like a List of combined meshes. Internally it manages
@@ -24,7 +20,7 @@ using System.Text;
 /// This class is a Component. It must be added to a GameObject to use it. It is a wrapper for MB2_MultiMeshCombiner which contains the same functionality but is not a component
 /// so it can be instantiated like a normal class.
 /// </summary>
-public class MB2_MultiMeshBaker : MB2_MeshBakerCommon {	
+public class MB2_MultiMeshBaker : MB2_MeshBakerCommon {
 		
 	[HideInInspector] public MB2_MultiMeshCombiner meshCombiner = new MB2_MultiMeshCombiner();
 	
@@ -36,6 +32,11 @@ public class MB2_MultiMeshBaker : MB2_MeshBakerCommon {
 		_update_MB2_MeshCombiner();
 		meshCombiner.DestroyMesh();
 	}
+
+	public override void DestroyMeshEditor(MB2_EditorMethodsInterface editorMethods){
+		_update_MB2_MeshCombiner();
+		meshCombiner.DestroyMeshEditor(editorMethods);
+	}	
 	
 	//todo could use this
 //	public void BuildSceneMeshObject(){
@@ -45,6 +46,14 @@ public class MB2_MultiMeshBaker : MB2_MeshBakerCommon {
 //		_update_MB2_MeshCombiner();
 ////		meshCombiner.BuildSceneMeshObject();
 //	}
+
+	public override int GetNumObjectsInCombined(){
+		return meshCombiner.GetNumObjectsInCombined();	
+	}
+	
+	public override int GetNumVerticesFor(GameObject go){
+		return meshCombiner.GetNumVerticesFor(go);
+	}
 	
 	public override Mesh AddDeleteGameObjects(GameObject[] gos, GameObject[] deleteGOs, bool disableRendererInSource, bool fixOutOfBoundUVs){
 		if (resultSceneObject == null){
@@ -54,12 +63,24 @@ public class MB2_MultiMeshBaker : MB2_MeshBakerCommon {
 		Mesh mesh = meshCombiner.AddDeleteGameObjects(gos,deleteGOs,disableRendererInSource,fixOutOfBoundUVs);		
 		return mesh;
 	}
-	public override bool CombinedMeshContains(GameObject go){return meshCombiner.CombinedMeshContains(go);}
-	public override void UpdateGameObjects(GameObject[] gos, bool recalcBounds = true){
+	
+	public override Mesh AddDeleteGameObjectsByID(GameObject[] gos, int[] deleteGOs, bool disableRendererInSource, bool fixOutOfBoundUVs){
+		if (resultSceneObject == null){
+			resultSceneObject = new GameObject("CombinedMesh-" + name);	
+		}
 		_update_MB2_MeshCombiner();
-		meshCombiner.UpdateGameObjects(gos,recalcBounds);
+		Mesh mesh = meshCombiner.AddDeleteGameObjectsByID(gos,deleteGOs,disableRendererInSource,fixOutOfBoundUVs);		
+		return mesh;
+	}	
+	
+	public override bool CombinedMeshContains(GameObject go){return meshCombiner.CombinedMeshContains(go);}
+	public override void UpdateGameObjects(GameObject[] gos, bool recalcBounds = true, bool updateVertices = true, bool updateNormals = true, bool updateTangents = true,
+									    bool updateUV = false, bool updateUV1 = false, bool updateUV2 = false,
+										bool updateColors = false, bool updateSkinningInfo = false){
+		_update_MB2_MeshCombiner();
+		meshCombiner.UpdateGameObjects(gos,recalcBounds, updateVertices, updateNormals, updateTangents, updateUV, updateUV1, updateUV2, updateColors, updateSkinningInfo);
 	}
-	public override void Apply(){
+	public override void Apply(MB2_MeshCombiner.GenerateUV2Delegate uv2GenerationMethod=null){
 		_update_MB2_MeshCombiner();
 		meshCombiner.Apply();
 	}
@@ -72,40 +93,22 @@ public class MB2_MultiMeshBaker : MB2_MeshBakerCommon {
 					  bool colors,
 					  bool uv1,
 					  bool uv2,
-					  bool bones=false){
+					  bool bones=false,
+					  MB2_MeshCombiner.GenerateUV2Delegate uv2GenerationMethod=null){
 		_update_MB2_MeshCombiner();
 		meshCombiner.Apply(triangles,vertices,normals,tangents,uvs,colors,uv1,uv2,bones);
 	}
 
-	/*
 	public void UpdateSkinnedMeshApproximateBounds(){
-		if (outputOption == MB2_OutputOptions.bakeMeshAssetsInPlace){
-			Debug.LogWarning("Can't UpdateSkinnedMeshApproximateBounds when output type is bakeMeshAssetsInPlace");
-			return;
-		}
-		if (resultSceneObject == null){
-			Debug.LogWarning("Result Scene Object does not exist. No point in calling UpdateSkinnedMeshApproximateBounds.");
-			return;			
-		}
-		SkinnedMeshRenderer smr = resultSceneObject.GetComponentInChildren<SkinnedMeshRenderer>();	
-		if (smr == null){
-			Debug.LogWarning("No SkinnedMeshRenderer on result scene object.");
-			return;			
-		}
 		meshCombiner.UpdateSkinnedMeshApproximateBounds();
 	}
-	*/	
-	
-	public override void SaveMeshsToAssetDatabase(string folderPath,string newFileNameBase){
-		meshCombiner.SaveMeshsToAssetDatabase(folderPath, newFileNameBase);
+
+	public void UpdateSkinnedMeshApproximateBoundsFromBones(){
+		meshCombiner.UpdateSkinnedMeshApproximateBoundsFromBones();
 	}
-	
-	public override void RebuildPrefab(){
-		if (renderType == MB_RenderType.skinnedMeshRenderer){
-			Debug.LogWarning("Prefab will not be updated for skinned mesh. This is because all bones need to be included in the prefab for it to be usefull.");	
-		} else {
-			meshCombiner.RebuildPrefab(resultPrefab);
-		}
+
+	public void UpdateSkinnedMeshApproximateBoundsFromBounds(){
+		meshCombiner.UpdateSkinnedMeshApproximateBoundsFromBounds();
 	}
 	
 	void _update_MB2_MeshCombiner(){

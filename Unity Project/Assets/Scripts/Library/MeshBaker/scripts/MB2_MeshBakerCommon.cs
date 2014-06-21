@@ -8,47 +8,23 @@ using System.Collections.Specialized;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DigitalOpus.MB.Core;
 
-#if UNITY_EDITOR
-	using UnityEditor;
-#endif 
-
-public delegate void ProgressUpdateDelegate(string msg, float progress);
 
 /// <summary>
 /// Maps a list of source materials to a combined material. Included in MB2_TextureBakeResults
 /// </summary>
-[System.Serializable]
-public class MB_MultiMaterial{
-	public Material combinedMaterial;
-	public List<Material> sourceMaterials = new List<Material>();
-}
 
-public enum MB_RenderType{
-	meshRenderer,
-	skinnedMeshRenderer
-}
-
-public enum MB2_OutputOptions{
-	bakeIntoSceneObject,
-	bakeMeshAssetsInPlace,
-	bakeIntoPrefab
-}
-
-public enum MB2_LightmapOptions{
-	preserve_current_lightmapping,
-	ignore_UV2,
-	copy_UV2_unchanged,
-	generate_new_UV2_layout
-}
 
 /// <summary>
 /// Abstract root of the mesh combining classes
 /// </summary>
 public abstract class MB2_MeshBakerCommon : MB2_MeshBakerRoot {	
-	
+
 	public List<GameObject> objsToMesh;	
 	public bool useObjsToMeshFromTexBaker = true;
+
+	public string bakeAssetsInPlaceFolderPath;	
 	
 	[HideInInspector] public GameObject resultPrefab;
 	[HideInInspector] public GameObject resultSceneObject;
@@ -58,7 +34,7 @@ public abstract class MB2_MeshBakerCommon : MB2_MeshBakerRoot {
 	
 	[HideInInspector] public MB2_LightmapOptions lightmapOption = MB2_LightmapOptions.ignore_UV2; //todo can't change after we have started adding
 	
-	[HideInInspector] public bool doNorm = true;
+	public bool doNorm = true;
 	[HideInInspector] public bool doTan = true;
 	[HideInInspector] public bool doCol = false;	
 	[HideInInspector] public bool doUV = true;
@@ -90,7 +66,13 @@ public abstract class MB2_MeshBakerCommon : MB2_MeshBakerRoot {
 ///  Clears and desroys the mesh. Clears mesh related data.
 /// </summary>	
 	public abstract void DestroyMesh();
+	
+	public abstract void DestroyMeshEditor(MB2_EditorMethodsInterface editorMethods);
 
+	public abstract int GetNumObjectsInCombined();
+	
+	public abstract int GetNumVerticesFor(GameObject go);
+	
 	public Mesh AddDeleteGameObjects(GameObject[] gos, GameObject[] deleteGOs){
 		if (textureBakeResults == null){
 			Debug.LogError("Material Bake Results is not set.");
@@ -133,6 +115,29 @@ public abstract class MB2_MeshBakerCommon : MB2_MeshBakerRoot {
 /// </summary>
 	public abstract Mesh AddDeleteGameObjects(GameObject[] gos, GameObject[] deleteGOs, bool disableRendererInSource, bool fixOutOfBoundUVs);
 
+	
+	public Mesh AddDeleteGameObjectsByID(GameObject[] gos, int[] deleteGOinstanceIDs){
+		if (textureBakeResults == null){
+			Debug.LogError("Material Bake Results is not set.");
+			return null;
+		}
+		return AddDeleteGameObjectsByID(gos,deleteGOinstanceIDs,true,textureBakeResults.fixOutOfBoundsUVs);
+	}
+	
+	public Mesh AddDeleteGameObjectsByID(GameObject[] gos, int[] deleteGOinstanceIDs, bool disableRendererInSource){		
+		if (textureBakeResults == null){
+			Debug.LogError("Material Bake Results is not set.");
+			return null;
+		}
+		return AddDeleteGameObjectsByID(gos,deleteGOinstanceIDs,disableRendererInSource,textureBakeResults.fixOutOfBoundsUVs);
+	}
+	
+	/// <summary>
+	/// This is the best version to use for deleting game objects since the source GameObjects may have been destroyed
+	/// Internaly Mesh Baker only stores the instanceID for Game Objects, so objects can be removed after they have been destroyed
+	/// </summary>
+	public abstract Mesh AddDeleteGameObjectsByID(GameObject[] gos, int[] deleteGOinstanceIDs, bool disableRendererInSource, bool fixOutOfBoundUVs);	
+	
 /// <summary>
 /// Returns true if go is in the combined mesh.	
 /// </summary>	
@@ -141,12 +146,14 @@ public abstract class MB2_MeshBakerCommon : MB2_MeshBakerRoot {
 /// <summary>
 /// Updates vertices, normals and tangents from gos of an object in the combined mesh. Use this if an object has moved, rotated, been scaled or been deformed. It can’t be used if the number of vertices has changed. You need to call Apply to see the changes.	
 /// </summary>
-	public abstract void UpdateGameObjects(GameObject[] gos, bool recalcBounds = true);
+	public abstract void UpdateGameObjects(GameObject[] gos, bool recalcBounds = true, bool updateVertices = true, bool updateNormals = true, bool updateTangents = true,
+									    bool updateUV = false, bool updateUV1 = false, bool updateUV2 = false,
+										bool updateColors = false, bool updateSkinningInfo = false);
 
 /// <summary>
 /// Apply changes to the mesh. All channels set in this instance will be set in the combined mesh.
 /// </summary>
-	public abstract void Apply();
+	public abstract void Apply(MB2_MeshCombiner.GenerateUV2Delegate uv2GenerationFunction=null);
 
 /// <summary>	
 /// Applys the changes to flagged properties of the mesh. This method is slow, and should only be called once per frame. The speed is directly proportional to the number of flags that are true. Only apply necessary properties.	
@@ -159,9 +166,7 @@ public abstract class MB2_MeshBakerCommon : MB2_MeshBakerRoot {
 					  bool colors,
 					  bool uv1,
 					  bool uv2,
-					  bool bones=false);
+					  bool bones=false,
+					  MB2_MeshCombiner.GenerateUV2Delegate uv2GenerationFunction=null);
 	
-	public abstract void SaveMeshsToAssetDatabase(string folderPath,string newFileNameBase);
-	
-	public abstract void RebuildPrefab();
 }

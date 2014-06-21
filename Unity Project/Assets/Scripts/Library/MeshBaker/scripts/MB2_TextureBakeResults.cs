@@ -1,6 +1,24 @@
 using UnityEngine;
+using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+
+/// <summary>
+/// Used internally during the material baking process
+/// </summary>
+[Serializable]
+public class MB_AtlasesAndRects{
+	public Texture2D[] atlases;
+	public Dictionary<Material,Rect> mat2rect_map;
+	public string[] texPropertyNames;
+}
+
+[System.Serializable]
+public class MB_MultiMaterial{
+	public Material combinedMaterial;
+	public List<Material> sourceMaterials = new List<Material>();
+}
 
 /// <summary>
 /// This class stores the results from an MB2_TextureBaker when materials are combined into atlases. It stores
@@ -30,5 +48,27 @@ public class MB2_TextureBakeResults : ScriptableObject {
 			}
 		}
 		return mat2rect_map;		
+	}
+	
+	public string GetDescription(){
+		StringBuilder sb = new StringBuilder();
+		sb.Append("Shaders:\n");
+		HashSet<Shader> shaders = new HashSet<Shader>();
+		if (materials != null){
+			for (int i = 0; i < materials.Length; i++){
+				shaders.Add(materials[i].shader);	
+			}
+		}
+		
+		foreach(Shader m in shaders){
+			sb.Append("  ").Append(m.name).AppendLine();
+		}
+		sb.Append("Materials:\n");
+		if (materials != null){
+			for (int i = 0; i < materials.Length; i++){
+				sb.Append("  ").Append(materials[i].name).AppendLine();
+			}
+		}
+		return sb.ToString();
 	}
 }
