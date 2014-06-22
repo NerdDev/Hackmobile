@@ -8,5 +8,6 @@ public enum NPCFlags
     POLY, //player can turn into one of these
     NO_RANDOM_SPAWN, // Won't be picked if a random NPC should be spawned
     UNTARGETABLE,
-    INVINCIBLE
+    INVINCIBLE,
+    UNKILLABLE,
 }

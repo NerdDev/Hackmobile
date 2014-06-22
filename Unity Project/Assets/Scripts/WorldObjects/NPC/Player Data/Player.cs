@@ -61,6 +61,7 @@ public class Player : NPC
     public override void Init()
     {
         PlayerStats.Load(this, NPCRace.HUMAN);
+        this.Flags[NPCFlags.UNKILLABLE] = true;
         CalcStats();
         List<Spell> spells = KnownSpells.Values.ToList();
         for (int i = 0; i < spells.Count; i++)

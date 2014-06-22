@@ -290,6 +290,7 @@ public class NPC : Affectable
     {
         if (amount <= 0) //if amount is < 0 it's damage
         {
+            if (this.Flags[NPCFlags.INVINCIBLE]) return false;
             amount = -amount; //flips it for below calculations to make sense as a subtraction of health
             if (Stats.CurrentHealth - amount > 0)
             {
@@ -299,8 +300,7 @@ public class NPC : Affectable
             }
             else
             {
-                this.killThisNPC(); //NPC is now dead!
-                return true;
+                return this.killThisNPC(); //NPC is now dead!
             }
         }
         //health is positive gain here, but gain is more than max health... so we cap it
@@ -529,7 +529,7 @@ public class NPC : Affectable
         }
         else if (!NPCPlaced) //if NPC is not placed and grid IS instantiated, place it
         {
-            PlaceNPC();
+            //PlaceNPC();
             NPCPlaced = true; //npc is placed, so set the check - until it's not instantiated under it again, it will not replace the NPC
         }
 
@@ -599,7 +599,7 @@ public class NPC : Affectable
     {
         Vector3 moveDir = GO.transform.TransformDirection(Vector3.forward);
 
-        
+
         bool gridInstantiated = GridSpace.Blocks != null;
         if (!gridInstantiated) //grid is not instantiated, so reset the placement check
         {
@@ -610,7 +610,7 @@ public class NPC : Affectable
             PlaceNPC();
             NPCPlaced = true; //npc is placed, so set the check - until it's not instantiated under it again, it will not replace the NPC
         }
-        
+
         if (DistanceToTarget(BigBoss.Player) > 20) //if either the controller is grounded or the grid is not instantiated, gravity = 0
         {
             rigidbody.useGravity = false;
@@ -619,7 +619,7 @@ public class NPC : Affectable
         {
             rigidbody.useGravity = true;
         }
-        
+
 
         Vector3 newMove = new Vector3(moveDir.x, 0, moveDir.z); //move in the xz + gravity direction
         rigidbody.velocity = newMove * NPCSpeed; //move the controller
@@ -817,37 +817,37 @@ public class NPC : Affectable
         return (new System.Random()).Next(0, Attributes.Strength);
     }
 
-    private void killThisNPC()
+    private bool killThisNPC()
     {
+        if (this.Flags[NPCFlags.INVINCIBLE]) return false;
+        if (this.Flags[NPCFlags.UNKILLABLE])
+        {
+            Stats.CurrentHealth = 1;
+            return false;
+        }
         //do all the calculations/etc here
         //drop the items here
         //etc etc
 
-        if (this.IsNotAFreaking<Player>())
+        CreateTextMessage(Name + " is dead!", Color.red);
+        Debug.Log(this.Name + " was killed!");
+        //time effects need cleared
+        List<Item> itemsToDrop = new List<Item>();
+        foreach (InventoryCategory ic in Inventory.Values)
         {
-            CreateTextMessage(Name + " is dead!", Color.red);
-            Debug.Log(this.Name + " was killed!");
-            //time effects need cleared
-            List<Item> itemsToDrop = new List<Item>();
-            foreach (InventoryCategory ic in Inventory.Values)
+            foreach (Item i in ic.Values)
             {
-                foreach (Item i in ic.Values)
-                {
-                    Debug.Log("Adding to drop list: " + i.Name);
-                    itemsToDrop.Add(i);
-                }
+                Debug.Log("Adding to drop list: " + i.Name);
+                itemsToDrop.Add(i);
             }
-            foreach (Item i in itemsToDrop)
-            {
-                Debug.Log("Dropping item: " + i.Name);
-                this.dropItem(i, GridSpace);
-            }
-            OnDeath.Activate(this);
         }
-        else
+        foreach (Item i in itemsToDrop)
         {
-            Debug.Log("Player is dead! Uhh, what do we do now?");
+            Debug.Log("Dropping item: " + i.Name);
+            this.dropItem(i, GridSpace);
         }
+        OnDeath.Activate(this);
+        return true;
     }
     #endregion
 
@@ -1117,6 +1117,8 @@ public class NPC : Affectable
     #region Touch Input
     public override void OnClick()
     {
+        if (this.Flags[NPCFlags.UNTARGETABLE]) return;
+        if (this.Flags[NPCFlags.INVINCIBLE]) return;
         if (BigBoss.PlayerInput.InputSetting[InputSettings.DEFAULT_INPUT])
         {
             if (this.IsNotAFreaking<Player>())
@@ -1129,14 +1131,7 @@ public class NPC : Affectable
         }
         else if (BigBoss.PlayerInput.InputSetting[InputSettings.SPELL_INPUT])
         {
-            //if (this.DistanceToTarget(BigBoss.Player) > BigBoss.Gooey.GetCurrentSpellRange())
-            //{
-            //    CreateTextMessage(this.Name + " is too far away to cast this spell!");
-            //}
-            //else
-            //{
-                BigBoss.Gooey.Target(this);
-            //}
+            BigBoss.Gooey.Target(this);
         }
     }
     #endregion
