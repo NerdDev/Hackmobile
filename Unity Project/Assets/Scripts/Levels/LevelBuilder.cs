@@ -154,13 +154,14 @@ public class LevelBuilder : MonoBehaviour
         if (deploy.ColliderPlacementQueue != null
             && deploy.ColliderPlacementQueue.Length > 0)
         {
-            ColliderEventScript script = obj.AddComponent<ColliderEventScript>();
+            Renderer render = obj.GetComponentInChildren<Renderer>();
+            Bounds bounds = render.bounds;
+            Vector3 extents = bounds.extents;
             for (int i = 0; i < deploy.ColliderPlacementQueue.Length; i++)
             {
                 AxisDirection dir = deploy.ColliderPlacementQueue[i];
-                ShiftIntoPlace(obj, dir, script);
+                ShiftIntoPlace(obj, deploy, dir, render, extents);
             }
-            Destroy(script);
         }
         space.Blocks.Add(obj);
         CombineBlock(obj);
@@ -174,8 +175,15 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
-    protected void ShiftIntoPlace(GameObject obj, AxisDirection dir, ColliderEventScript script)
+    protected bool ShiftIntoPlace(GameObject obj, GridDeploy deploy, AxisDirection dir, Renderer renderer, Vector3 extents)
     {
+        RaycastHit hit;
+        if (Physics.Raycast(obj.transform.position, dir.GetVector3(), out hit, 1F))
+        {
+            obj.transform.position = hit.point;
+            return true;
+        }
+        return false;
     }
 
     private void GarbageCollect()
