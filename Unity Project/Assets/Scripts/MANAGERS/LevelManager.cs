@@ -176,5 +176,10 @@ public class LevelManager : MonoBehaviour, IManager
         Level level = GenerateFromLayout(layout, rand);
         DeployLevel(level);
     }
+
+    public void Update()
+    {
+        Builder.InstantiateThings();
+    }
 }
 

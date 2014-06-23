@@ -8,6 +8,7 @@ public class LevelBuilder : MonoBehaviour
 {
     public static GameObject StaticHolder;
     public static GameObject DynamicHolder;
+    public Queue<GridSpace> InstantiationQueue = new Queue<GridSpace>();
 
     // Area batching
     public const int BatchRectRadius = 4;
@@ -172,6 +173,32 @@ public class LevelBuilder : MonoBehaviour
         GenDeploy deploy = new GenDeploy(element.Get(rand));
         space.AddDeploy(deploy, 0, 0);
         return true;
+    }
+
+    public void InstantiateThings()
+    {
+        while (InstantiationQueue.Count != 0)
+        {
+            GridSpace space = InstantiationQueue.Dequeue();
+            switch (space.InstantiationState)
+            {
+                case InstantiationState.WantsDestruction:
+                    foreach (GameObject block in space.Blocks)
+                    {
+                        GameObject.Destroy(block);
+                    }
+                    space.InstantiationState = InstantiationState.NotInstantiated;
+                    break;
+                case InstantiationState.WantsInstantiation:
+                    Instantiate(space);
+                    space.InstantiationState = InstantiationState.Instantiated;
+                    break;
+                case InstantiationState.NotInstantiated:
+                case InstantiationState.Instantiated:
+                default:
+                    continue;
+            }
+        }
     }
 }
 
