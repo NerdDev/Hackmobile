@@ -101,12 +101,6 @@ public class TimedCollisionTrigger : MonoBehaviour, PassesTurns
         set;
     }
 
-    public int TurnID
-    {
-        get;
-        set;
-    }
-
     public int Rate
     {
         get;

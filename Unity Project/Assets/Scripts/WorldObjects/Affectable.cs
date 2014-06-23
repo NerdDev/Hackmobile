@@ -21,14 +21,24 @@ public class Affectable : WorldObject, IAffectable
         Effects.ApplyEffect(caster, effect);
     }
 
-    public void RemoveEffect(string effect)
+    public bool RemoveEffect(EffectInstance inst)
     {
-        Effects.RemoveEffect(effect);
+        return Effects.RemoveEffect(inst);
     }
 
-    public void RemoveEffect<T>() where T : EffectInstance
+    public bool RemoveEffect(string effect)
     {
-        Effects.RemoveEffect<T>();
+        return Effects.RemoveEffect(effect);
+    }
+
+    public bool RemoveEffect(int id)
+    {
+        return Effects.RemoveEffect(id);
+    }
+
+    public bool RemoveEffect<T>() where T : EffectInstance
+    {
+        return Effects.RemoveEffect<T>();
     }
 
     public bool RemoveAnEffect<T>() where T : EffectInstance
@@ -41,9 +51,19 @@ public class Affectable : WorldObject, IAffectable
         return Effects.HasEffect<T>();
     }
 
+    public bool HasEffect(EffectInstance inst)
+    {
+        return Effects.HasEffect(inst);
+    }
+
     public bool HasEffect(string key)
     {
         return Effects.HasEffect(key);
+    }
+
+    public bool HasEffect(int id)
+    {
+        return Effects.HasEffect(id);
     }
     #endregion
 }

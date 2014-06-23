@@ -157,8 +157,6 @@ public class WorldObject : PassesTurns, IXmlParsable, INamed, ICopyable
 
     public virtual bool IsActive { get; set; }
 
-    public virtual int TurnID { get; set; }
-
     public virtual int Rate { get; set; }
     #endregion
 

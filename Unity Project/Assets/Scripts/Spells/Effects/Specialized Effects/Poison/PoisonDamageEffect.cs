@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class PoisonDamageEffect : PoisonEffect
 {
-    int strength;
+    [Copyable] int strength;
 
     public override void Apply(NPC n)
     {

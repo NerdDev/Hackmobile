@@ -6,10 +6,19 @@ using System.Text;
 
 public abstract class EffectInstance : PassesTurns, IXmlParsable
 {
-    public int TurnsToProcess { get; protected set; }
+    public enum StackType
+    {
+        Stacking,
+        Merging,
+    }
+
+    public StackType EffectType { get; set; }
+    public static int IDCount = 1;
+    [Copyable] public int TurnsToProcess { get; protected set; }
+    public int ID { get; set; }
     protected IAffectable target;
     protected IAffectable caster;
-    public string Name { get; set; }
+    [Copyable] public string Name { get; set; }
     private GenericFlags<EffectIntendedTarget> targetTypes = new GenericFlags<EffectIntendedTarget>();
 
     public EffectInstance()
@@ -57,9 +66,11 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
     //This initialize is called upon parsing the XML
     public void ParseXML(XMLNode x)
     {
+        ID = IDCount++;
         // Call this once at parsing
         InitTargetTypes();
         TurnsToProcess = x.SelectInt("turns");
+        this.EffectType = x.SelectEnum<StackType>("stacktype", EffectInstance.StackType.Stacking);
         this.IsActive = false;
         ParseParams(x);
     }
@@ -84,16 +95,17 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
     public EffectInstance NewInstance(IAffectable caster, IAffectable target = null)
     {
         EffectInstance instance = this.Copy<EffectInstance>();
+        instance.ID = IDCount++;
         instance.IsActive = true;
         instance.target = target;
         instance.caster = caster;
-        instance.initialize();
         return instance;
     }
 
     public EffectInstance ActivateOnObject(IAffectable caster, IAffectable o)
     {
         EffectInstance instance = NewInstance(caster, o);
+        instance.initialize();
         return instance;
     }
 
@@ -102,7 +114,6 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
      */
     private void Init()
     {
-        UnityEngine.Debug.Log("initing!");
         Init(target);
         if (target is NPC)
         {
@@ -217,7 +228,6 @@ public abstract class EffectInstance : PassesTurns, IXmlParsable
     }
 
     public bool IsActive { get; set; }
-    public int TurnID { get; set; }
     public int Rate { get; set; }
     #endregion
 
