@@ -249,12 +249,9 @@ public class GridSpace : IGridSpace
     {
         if (Instantiated && BlocksCreated)
         {
-            //SetActive(false);
             foreach (GameObject block in Blocks)
             {
                 GameObject.Destroy(block);
-                //block.SetActive(false);
-                BigBoss.Levels.Builder.Remove(block);
             }
             BlocksCreated = false;
             Instantiated = false;

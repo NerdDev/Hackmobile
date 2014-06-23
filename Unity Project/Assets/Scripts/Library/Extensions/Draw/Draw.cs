@@ -76,6 +76,14 @@ public static class Draw
         };
     }
 
+    public static DrawAction<T> PointContainedIn<T>()
+    {
+        return (arr, x, y) =>
+        {
+            return arr.Contains(x, y);
+        };
+    }
+
     public static DrawAction<T> Exists<T>()
     {
         return (arr, x, y) =>
@@ -405,6 +413,15 @@ public static class Draw
         picker = new RandomPicker<T>();
         DrawAction<T> f = picker.DrawingAction;
         return f;
+    }
+
+    public static DrawAction<T> Remove<T>()
+    {
+        return (arr, x, y) =>
+        {
+            arr.Remove(x, y);
+            return true;
+        };
     }
 
     public static DrawAction<T> Count<T>(out Counter counter)

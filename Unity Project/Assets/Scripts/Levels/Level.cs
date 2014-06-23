@@ -9,6 +9,7 @@ public class Level : LayoutObject<GridSpace>
     public System.Random Random;
     public HashSet<WorldObject> WorldObjects = new HashSet<WorldObject>();
     public Dictionary<Theme, List<LayoutObject<GenSpace>>> RoomsByTheme;
+    public Container2D<AreaBatchMapper> BatchMapper = new MultiMap<AreaBatchMapper>();
 
     public Level()
         : base(LayoutObjectType.Layout)

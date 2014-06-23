@@ -6,22 +6,20 @@ using System.Linq;
 
 public class LevelBuilder : MonoBehaviour
 {
-    private static GameObject staticHolder;
-    private static GameObject dynamicHolder;
-    private int combineCounter = 0;
-    private int garbageCollectorCounter = 0;
-    private HashSet<GameObject> blocks = new HashSet<GameObject>();
+    public static GameObject StaticHolder;
+    public static GameObject DynamicHolder;
+
+    // Area batching
+    public const int BatchRectRadius = 4;
+    public const int BatchRectDiameter = BatchRectRadius * 2;
 
     public static void Initialize()
     {
-        if (staticHolder == null)
-        {
-            staticHolder = new GameObject("Static Block Holder");
-            dynamicHolder = new GameObject("Dynamic Block Holder");
-            var gameObj = new GameObject("Block Holder");
-            staticHolder.transform.parent = dynamicHolder.transform;
-            dynamicHolder.transform.parent = staticHolder.transform;
-        }
+        StaticHolder = new GameObject("Static Block Holder");
+        DynamicHolder = new GameObject("Dynamic Block Holder");
+        var gameObj = new GameObject("Block Holder");
+        StaticHolder.transform.parent = DynamicHolder.transform;
+        DynamicHolder.transform.parent = StaticHolder.transform;
     }
 
     public void Instantiate(GridSpace space)
@@ -34,9 +32,13 @@ public class LevelBuilder : MonoBehaviour
         }
         else //else create the blocks
         {
-            GameObject staticSpaceHolder = null;
-            GameObject dynamicSpaceHolder = null;
             space.Blocks = new List<GameObject>(space.Deploys.Count);
+            AreaBatchMapper batch;
+            if (!space.Level.BatchMapper.TryGetValue(space, out batch))
+            {
+                batch = new AreaBatchMapper(space.Level, space);
+            }
+            batch.Counter--;
             for (int i = 0; i < space.Deploys.Count; i++)
             {
                 GridDeploy deploy = space.Deploys[i];
@@ -48,59 +50,30 @@ public class LevelBuilder : MonoBehaviour
                     , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
                 if (deploy.Static)
                 {
-                    if (staticSpaceHolder == null)
-                    {
-                        staticSpaceHolder = new GameObject(space.X + "," + space.Y);
-                        staticSpaceHolder.transform.parent = staticHolder.transform;
-                    }
-                    obj.transform.parent = staticSpaceHolder.transform;
+                    obj.transform.parent = batch.StaticSpaceHolder.transform;
                 }
                 else
                 {
-                    if (dynamicSpaceHolder == null)
-                    {
-                        dynamicSpaceHolder = new GameObject(space.X + "," + space.Y);
-                        dynamicSpaceHolder.transform.parent = dynamicHolder.transform;
-                    }
-                    obj.transform.parent = dynamicSpaceHolder.transform;
+                    obj.transform.parent = batch.DynamicSpaceHolder.transform;
                 }
                 obj.transform.localScale = new Vector3(
                     deploy.XScale * obj.transform.localScale.x,
                     deploy.YScale * obj.transform.localScale.y,
                     deploy.ZScale * obj.transform.localScale.z);
                 space.Blocks.Add(obj);
-                CombineBlock(obj);
+                batch.Absorb(obj);
             }
+            if (batch.Counter == 0)
+            {
+                batch.Combine(StaticHolder);
+            }
+            space.BlocksCreated = true; //space has created blocks
         }
-        space.BlocksCreated = true; //space has created blocks
         //update fog of war
         Vector3 pos = new Vector3(space.X, 0f, space.Y);
         BigBoss.Gooey.RecreateFOW(pos, 0);
 
         //GarbageCollect(); //not currently used now
-    }
-
-    private void GarbageCollect()
-    {
-        garbageCollectorCounter++;
-        if (garbageCollectorCounter > 75)
-        {
-            System.GC.Collect(0);
-            garbageCollectorCounter = 0;
-        }
-    }
-
-    private void CombineBlock(GameObject obj)
-    {
-        blocks.Add(obj);
-        combineCounter++;
-
-        if (combineCounter > 40)
-        {
-            Combine();
-            blocks.Clear();
-            combineCounter = 0;
-        }
     }
 
     public MultiMap<GridSpace> GeneratePrototypes(Level level, LevelLayout layout)
@@ -209,14 +182,80 @@ public class LevelBuilder : MonoBehaviour
         space.AddDeploy(deploy, 0, 0);
         return true;
     }
+}
 
-    public void Remove(GameObject obj)
+public class AreaBatchMapper
+{
+    private List<GameObject> objects = new List<GameObject>();
+    public Counter Counter;
+    int originX;
+    int originY;
+    Level level;
+    public GameObject StaticSpaceHolder;
+    public GameObject DynamicSpaceHolder;
+    public AreaBatchMapper (Level level, GridSpace space)
     {
-        blocks.Remove(obj);
+        originX = GetOrigin(space.X);
+        originY = GetOrigin(space.Y);
+        StaticSpaceHolder = new GameObject(originX + "," + originY);
+        StaticSpaceHolder.transform.parent = LevelBuilder.StaticHolder.transform;
+        DynamicSpaceHolder = new GameObject(originX + "," + originY);
+        DynamicSpaceHolder.transform.parent = LevelBuilder.DynamicHolder.transform;
+        this.level = level;
+        level.DrawRect(
+            originX, 
+            originX + LevelBuilder.BatchRectDiameter - 1, 
+            originY, 
+            originY + LevelBuilder.BatchRectDiameter - 1, 
+            Draw.PointContainedIn<GridSpace>().IfThen(Draw.Count<GridSpace>(out Counter).And((arr, x2, y2) =>
+            {
+                level.BatchMapper[x2, y2] = this;  
+                return true;
+            })));
+        //#region DEBUG
+        //if (BigBoss.Debug.logging())
+        //{
+        //    level.BatchMapper.ToLog(BigBoss.Debug.Get(Logs.Main), "Batch map for " + space.X + ", " + space.Y + " on origin " + originX + ", " + originY);
+        //}
+        //#endregion
     }
 
-    public void Combine()
+    public int GetOrigin(int i)
     {
-        StaticBatchingUtility.Combine(blocks.ToArray(), staticHolder);
+        if (i >= 0)
+        {
+            i /= LevelBuilder.BatchRectDiameter;
+            i *= LevelBuilder.BatchRectDiameter;
+        }
+        else
+        {
+            i++;
+            i /= LevelBuilder.BatchRectDiameter;
+            i *= LevelBuilder.BatchRectDiameter;
+            i -= LevelBuilder.BatchRectDiameter;
+        }
+        return i;
+    }
+
+    public void Absorb(GameObject obj)
+    {
+        objects.Add(obj);
+    }
+
+    public void Combine(GameObject holder)
+    {
+        StaticBatchingUtility.Combine(objects.ToArray(), holder);
+        level.BatchMapper.DrawRect(
+            originX,
+            originX + LevelBuilder.BatchRectDiameter - 1,
+            originY,
+            originY + LevelBuilder.BatchRectRadius - 1,
+            Draw.Remove<AreaBatchMapper>());
+        //#region DEBUG
+        //if (BigBoss.Debug.logging())
+        //{
+        //    level.BatchMapper.ToLog(BigBoss.Debug.Get(Logs.Main), "Removing origin " + originX + ", " + originY);
+        //}
+        //#endregion
     }
 }

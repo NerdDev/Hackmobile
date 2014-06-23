@@ -34,4 +34,16 @@ public class Counter
     {
         return Count.ToString();
     }
+
+    public static Counter operator --(Counter c)
+    {
+        c.Count--;
+        return c;
+    }
+
+    public static Counter operator ++(Counter c)
+    {
+        c.Count++;
+        return c;
+    }
 }
