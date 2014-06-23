@@ -35,7 +35,6 @@ public class GridSpace : IGridSpace
     internal ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
     public bool Instantiated = false;
-    public bool BlocksCreated = false;
 
     public GridSpace(Level level, GridType type, int x, int y)
     {
@@ -247,13 +246,12 @@ public class GridSpace : IGridSpace
 
     public void DestroyGridSpace()
     {
-        if (Instantiated && BlocksCreated)
+        if (Instantiated)
         {
             foreach (GameObject block in Blocks)
             {
                 GameObject.Destroy(block);
             }
-            BlocksCreated = false;
             Instantiated = false;
         }
     }

@@ -25,49 +25,40 @@ public class LevelBuilder : MonoBehaviour
     public void Instantiate(GridSpace space)
     {
         if (space == null || space.Deploys == null) return;
-        if (space.BlocksCreated) //if instantiate is called and the blocks are created, just enable them
+        space.Blocks = new List<GameObject>(space.Deploys.Count);
+        AreaBatchMapper batch;
+        if (!space.Level.BatchMapper.TryGetValue(space, out batch))
         {
-            space.SetActive(true);
-            return;
+            batch = new AreaBatchMapper(space.Level, space);
         }
-        else //else create the blocks
+        batch.Counter--;
+        for (int i = 0; i < space.Deploys.Count; i++)
         {
-            space.Blocks = new List<GameObject>(space.Deploys.Count);
-            AreaBatchMapper batch;
-            if (!space.Level.BatchMapper.TryGetValue(space, out batch))
+            GridDeploy deploy = space.Deploys[i];
+            if (deploy == null) continue;
+            Transform t = deploy.GO.transform;
+            GameObject obj = Instantiate(
+                deploy.GO,
+                new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
+                , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
+            if (deploy.Static)
             {
-                batch = new AreaBatchMapper(space.Level, space);
+                obj.transform.parent = batch.StaticSpaceHolder.transform;
             }
-            batch.Counter--;
-            for (int i = 0; i < space.Deploys.Count; i++)
+            else
             {
-                GridDeploy deploy = space.Deploys[i];
-                if (deploy == null) continue;
-                Transform t = deploy.GO.transform;
-                GameObject obj = Instantiate(
-                    deploy.GO,
-                    new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
-                    , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
-                if (deploy.Static)
-                {
-                    obj.transform.parent = batch.StaticSpaceHolder.transform;
-                }
-                else
-                {
-                    obj.transform.parent = batch.DynamicSpaceHolder.transform;
-                }
-                obj.transform.localScale = new Vector3(
-                    deploy.XScale * obj.transform.localScale.x,
-                    deploy.YScale * obj.transform.localScale.y,
-                    deploy.ZScale * obj.transform.localScale.z);
-                space.Blocks.Add(obj);
-                batch.Absorb(obj);
+                obj.transform.parent = batch.DynamicSpaceHolder.transform;
             }
-            if (batch.Counter == 0)
-            {
-                batch.Combine(StaticHolder);
-            }
-            space.BlocksCreated = true; //space has created blocks
+            obj.transform.localScale = new Vector3(
+                deploy.XScale * obj.transform.localScale.x,
+                deploy.YScale * obj.transform.localScale.y,
+                deploy.ZScale * obj.transform.localScale.z);
+            space.Blocks.Add(obj);
+            batch.Absorb(obj);
+        }
+        if (batch.Counter == 0)
+        {
+            batch.Combine(StaticHolder);
         }
         //update fog of war
         Vector3 pos = new Vector3(space.X, 0f, space.Y);
@@ -193,7 +184,7 @@ public class AreaBatchMapper
     Level level;
     public GameObject StaticSpaceHolder;
     public GameObject DynamicSpaceHolder;
-    public AreaBatchMapper (Level level, GridSpace space)
+    public AreaBatchMapper(Level level, GridSpace space)
     {
         originX = GetOrigin(space.X);
         originY = GetOrigin(space.Y);
@@ -203,13 +194,13 @@ public class AreaBatchMapper
         DynamicSpaceHolder.transform.parent = LevelBuilder.DynamicHolder.transform;
         this.level = level;
         level.DrawRect(
-            originX, 
-            originX + LevelBuilder.BatchRectDiameter - 1, 
-            originY, 
-            originY + LevelBuilder.BatchRectDiameter - 1, 
+            originX,
+            originX + LevelBuilder.BatchRectDiameter - 1,
+            originY,
+            originY + LevelBuilder.BatchRectDiameter - 1,
             Draw.PointContainedIn<GridSpace>().IfThen(Draw.Count<GridSpace>(out Counter).And((arr, x2, y2) =>
             {
-                level.BatchMapper[x2, y2] = this;  
+                level.BatchMapper[x2, y2] = this;
                 return true;
             })));
         //#region DEBUG
