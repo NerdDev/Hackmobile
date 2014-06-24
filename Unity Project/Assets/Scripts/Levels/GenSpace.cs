@@ -19,6 +19,11 @@ public class GenSpace : IGridSpace
     public List<GenDeploy> MainDeploys;
     public int X { get; protected set; }
     public int Y { get; protected set; }
+    public bool Walkable
+    {
+        get { return this.Walkable(); }
+    }
+
 
     public GenSpace(GridType type, Theme theme, int x, int y)
     {

@@ -35,6 +35,16 @@ public class GridSpace : IGridSpace
     internal ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
     public InstantiationState InstantiationState;
+    public bool? walkable;
+    public bool Walkable
+    {
+        get
+        {
+            if (walkable.HasValue) return walkable.Value;
+            walkable = this.Walkable();
+            return walkable.Value;
+        }
+    }
 
     public GridSpace(Level level, GridType type, int x, int y)
     {
@@ -295,6 +305,7 @@ public class GridSpace : IGridSpace
     {
         return "GridSpace (" + X + "," + Y + ")";
     }
+
 }
 
 public enum InstantiationState

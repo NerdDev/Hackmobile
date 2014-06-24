@@ -12,7 +12,8 @@ public interface IGridSpace : IGridType
 {
     Theme Theme { get; set; }
     int X { get; }
-    int Y { get; }
+    int Y { get; }    
+    bool Walkable { get; }
     int ThemeElementCount { get; }
     IEnumerable<ThemeElement> GetThemeElements();
 }
