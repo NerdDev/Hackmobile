@@ -267,10 +267,20 @@ public class GridSpace : IGridSpace
 
     public void DestroyGridSpace()
     {
-        if (InstantiationState > InstantiationState.WantsDestruction)
+        switch (InstantiationState)
         {
-            InstantiationState = global::InstantiationState.WantsDestruction;
-            BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
+            case InstantiationState.Disabled:
+            case InstantiationState.Instantiated:
+                InstantiationState = InstantiationState.WantsDestruction;
+                BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
+                break;
+            case InstantiationState.WantsInstantiation:
+                InstantiationState = InstantiationState.NotInstantiated;
+                break;
+            case InstantiationState.NotInstantiated:
+            case InstantiationState.WantsDestruction:
+            default:
+                break;
         }
     }
 
