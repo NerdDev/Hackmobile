@@ -34,8 +34,7 @@ public class GridSpace : IGridSpace
     internal Inventory inventory = new Inventory();
     internal ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
-    internal bool Instantiated = false;
-    internal bool BlocksCreated = false;
+    public InstantiationState InstantiationState;
 
     public GridSpace(Level level, GridType type, int x, int y)
     {
@@ -238,26 +237,19 @@ public class GridSpace : IGridSpace
 
     public void Instantiate()
     {
-        if (!Instantiated && FOWSystem.instance.IsVis(X, Y))
+        if (InstantiationState < InstantiationState.WantsInstantiation && FOWSystem.instance.IsVis(X, Y))
         {
-            BigBoss.Levels.Builder.Instantiate(this);
-            Instantiated = true;
+            InstantiationState = InstantiationState.WantsInstantiation;
+            BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
         }
     }
 
     public void DestroyGridSpace()
     {
-        if (Instantiated && BlocksCreated)
+        if (InstantiationState > InstantiationState.WantsDestruction)
         {
-            //SetActive(false);
-            foreach (GameObject block in Blocks)
-            {
-                GameObject.Destroy(block);
-                //block.SetActive(false);
-                BigBoss.Levels.Builder.Remove(block);
-            }
-            BlocksCreated = false;
-            Instantiated = false;
+            InstantiationState = global::InstantiationState.WantsDestruction;
+            BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
         }
     }
 
@@ -303,4 +295,12 @@ public class GridSpace : IGridSpace
     {
         return "GridSpace (" + X + "," + Y + ")";
     }
+}
+
+public enum InstantiationState
+{
+    NotInstantiated,
+    WantsDestruction,
+    WantsInstantiation,
+    Instantiated
 }

@@ -25,11 +25,11 @@ public class UndeadTombTheme : Theme, IPillarTheme, IClusteringTheme, ISpikeTrap
         // Flex
         RoomMods.AddMod(new MassTombRoom(), 0.35d, true);
         RoomMods.AddMod(new GiantPillarMod(), 1);
-        RoomMods.AddMod(new HiddenRoomMod(), .5);
+        //RoomMods.AddMod(new HiddenRoomMod(), .5);
         RoomMods.AddMod(new PillarMod(), 1);
         RoomMods.AddMod(new SplitterMod(), 1);
-        RoomMods.AddMod(new SpikeTrapRoomMod(), .2d);
-        RoomMods.AddMod(new TreasureRoomMod(), .3d);
+        RoomMods.AddMod(new SpikeTrapRoomMod(), .1d);
+        //RoomMods.AddMod(new TreasureRoomMod(), .15d);
 
         /*
          * Spawn Mods
