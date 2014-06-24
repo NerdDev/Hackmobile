@@ -6,7 +6,7 @@ SubstanceImporter:
   - serializedVersion: 10
     name: Bitmap2Material2
     prototypeName: Bitmap2Material2
-    shaderName: Mobile/Bumped Specular
+    shaderName: Parallax Specular
     inputs:
     - name: $time
       value:
@@ -514,11 +514,22 @@ SubstanceImporter:
             texture: {instanceID: 0}
             scale: {x: 1, y: 1}
             offset: {x: 0, y: 0}
+        data:
+          first:
+            name: _ParallaxMap
+          second:
+            texture: {instanceID: 0}
+            scale: {x: 1, y: 1}
+            offset: {x: 0, y: 0}
       floats:
         data:
           first:
             name: _Shininess
           second: .078125
+        data:
+          first:
+            name: _Parallax
+          second: .0384821407
       colors:
         data:
           first:
