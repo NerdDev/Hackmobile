@@ -105,6 +105,12 @@ public class LevelBuilder : MonoBehaviour
                 spec.GenDeploy = genDeploy;
                 Deploy(level, spec);
             }
+            space.Elements = new List<ThemeElement>(gen.val.Deploys.Count);
+            foreach (GenDeploy genDeploy in gen.val.Deploys)
+            {
+                space.Elements.Add(genDeploy.Element);
+            }
+
         }
         return ret;
     }
