@@ -247,10 +247,21 @@ public class GridSpace : IGridSpace
 
     public void Instantiate()
     {
-        if (InstantiationState < InstantiationState.WantsInstantiation && FOWSystem.Instance.IsInsideInstantiationRadius(X, Y))
+        if (InstantiationState <= InstantiationState.Disabled)
         {
-            InstantiationState = InstantiationState.WantsInstantiation;
-            BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
+            if (FOWSystem.Instance.IsInsideInstantiationRadius(X, Y))
+            {
+                if (InstantiationState <= InstantiationState.WantsDestruction)
+                {
+                    InstantiationState = InstantiationState.WantsInstantiation;
+                    BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
+                }
+                else
+                {
+                    this.SetActive(true);
+                    InstantiationState = InstantiationState.Instantiated;
+                }
+            }
         }
     }
 
@@ -309,9 +320,10 @@ public class GridSpace : IGridSpace
 }
 
 public enum InstantiationState
-{
+{ // Order matters
     NotInstantiated,
     WantsDestruction,
+    Disabled,
     WantsInstantiation,
     Instantiated
 }
