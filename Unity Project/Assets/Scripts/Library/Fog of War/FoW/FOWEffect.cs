@@ -70,7 +70,7 @@ public class FOWEffect : MonoBehaviour
 	{
 		if (mFog == null)
 		{
-			mFog = FOWSystem.instance;
+			mFog = FOWSystem.Instance;
 			if (mFog == null) mFog = FindObjectOfType(typeof(FOWSystem)) as FOWSystem;
 		}
 

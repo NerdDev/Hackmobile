@@ -78,6 +78,6 @@ public class FOWRenderers : MonoBehaviour
 
     bool IsVisible()
     {
-        return FOWSystem.instance.IsVis(gameObject.transform.position);
+        return FOWSystem.Instance.IsVis(gameObject.transform.position);
     }
 }

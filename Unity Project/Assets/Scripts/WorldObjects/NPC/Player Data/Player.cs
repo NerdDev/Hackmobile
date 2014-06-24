@@ -213,7 +213,7 @@ public class Player : NPC
             {
                 revealer.StartCoroutine(revealer.UpdateFogRadius(current.x, current.y));
             }
-            FOWSystem.instance.UpdatePosition(GridSpace, false);
+            FOWSystem.Instance.UpdatePosition(GridSpace, false);
             return true;
         }
         else
@@ -226,7 +226,7 @@ public class Player : NPC
     {
         GridSpace = grid;
         BigBoss.Gooey.CheckChestDistance();
-        FOWSystem.instance.UpdatePosition(GridSpace, true);
+        FOWSystem.Instance.UpdatePosition(GridSpace, true);
     }
 
     public override void FixedUpdate()

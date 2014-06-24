@@ -71,6 +71,7 @@ public class WallTargeter : Targeter
         base.ParseXML(x);
         turns = x.SelectInt("turns");
         rate = x.SelectInt("rate");
+        RotateTowardsCaster = x.SelectBool("RotateTowardsCaster", true);
         visual = x.SelectString("visual");
         Size.x = x.SelectFloat("sx", 1);
         Size.y = x.SelectFloat("sy", 1);

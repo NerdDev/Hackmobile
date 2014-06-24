@@ -35,6 +35,16 @@ public class GridSpace : IGridSpace
     internal ItemChest _chest;
     public bool Spawnable { get { return GetBlockingObjects().Count == 0 && Type == GridType.Floor; } }
     public InstantiationState InstantiationState;
+    public bool? walkable;
+    public bool Walkable
+    {
+        get
+        {
+            if (walkable.HasValue) return walkable.Value;
+            walkable = this.Walkable();
+            return walkable.Value;
+        }
+    }
 
     public GridSpace(Level level, GridType type, int x, int y)
     {
@@ -237,19 +247,40 @@ public class GridSpace : IGridSpace
 
     public void Instantiate()
     {
-        if (InstantiationState < InstantiationState.WantsInstantiation && FOWSystem.instance.IsVis(X, Y))
+        if (InstantiationState <= InstantiationState.Disabled)
         {
-            InstantiationState = InstantiationState.WantsInstantiation;
-            BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
+            if (FOWSystem.Instance.IsInsideInstantiationRadius(X, Y))
+            {
+                if (InstantiationState <= InstantiationState.WantsDestruction)
+                {
+                    InstantiationState = InstantiationState.WantsInstantiation;
+                    BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
+                }
+                else
+                {
+                    this.SetActive(true);
+                    InstantiationState = InstantiationState.Instantiated;
+                }
+            }
         }
     }
 
     public void DestroyGridSpace()
     {
-        if (InstantiationState > InstantiationState.WantsDestruction)
+        switch (InstantiationState)
         {
-            InstantiationState = global::InstantiationState.WantsDestruction;
-            BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
+            case InstantiationState.Disabled:
+            case InstantiationState.Instantiated:
+                InstantiationState = InstantiationState.WantsDestruction;
+                BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
+                break;
+            case InstantiationState.WantsInstantiation:
+                InstantiationState = InstantiationState.NotInstantiated;
+                break;
+            case InstantiationState.NotInstantiated:
+            case InstantiationState.WantsDestruction:
+            default:
+                break;
         }
     }
 
@@ -295,12 +326,14 @@ public class GridSpace : IGridSpace
     {
         return "GridSpace (" + X + "," + Y + ")";
     }
+
 }
 
 public enum InstantiationState
-{
+{ // Order matters
     NotInstantiated,
     WantsDestruction,
+    Disabled,
     WantsInstantiation,
     Instantiated
 }

@@ -464,6 +464,8 @@
      <Compile Include="Assets\Scripts\Spells\Effects\Specialized Effects\TelepathyEffect.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\Death.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\GolemDeath.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\LineCollision.cs" />
+     <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveInLineCollision.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveTowards.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\MoveTowardsCollision.cs" />
      <Compile Include="Assets\Scripts\Spells\Effects\Visual Effects\OnObject.cs" />

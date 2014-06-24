@@ -107,7 +107,7 @@ public class GUIManager : MonoBehaviour, IManager
                     if (hit)
                     {
                         GameObject gObj = hitInfo.collider.gameObject;
-                        if (gObj.layer == LayerMask.NameToLayer("Floor") && FOWSystem.instance.IsVisible(hitInfo.point))
+                        if (gObj.layer == LayerMask.NameToLayer("Floor") && FOWSystem.Instance.IsVisible(hitInfo.point))
                         {
                             if (TargetSpaces.Count < TargetSpaceCount)
                             {

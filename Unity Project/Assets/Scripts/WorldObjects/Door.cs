@@ -34,7 +34,7 @@ public class Door : MonoBehaviour
 
             transform.Rotate(Vector3.up, RotationAngle);
             transform.position += OpenPosition;
-            FOWSystem.instance.ModifyGrid(new Vector3(doorLoc.x, 0f, doorLoc.y), 100, 2, 0);
+            FOWSystem.Instance.ModifyGrid(new Vector3(doorLoc.x, 0f, doorLoc.y), 100, 2, 0);
         }
         else
         {
@@ -50,7 +50,7 @@ public class Door : MonoBehaviour
                     go.gameObject.layer = 0;
                 }
             }
-            FOWSystem.instance.ModifyGrid(new Vector3(doorLoc.x, 0f, doorLoc.y), 0, 2, 0);
+            FOWSystem.Instance.ModifyGrid(new Vector3(doorLoc.x, 0f, doorLoc.y), 0, 2, 0);
         }
     }
 }

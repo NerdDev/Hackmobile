@@ -1180,8 +1180,11 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             if (!stroke(this, centerX - x, centerY - y)) return false;
             if (!stroke(this, centerX + x, centerY + y)) return false;
             if (!stroke(this, centerX + x, centerY - y)) return false;
-            if (!this.DrawRow(centerX - y + 1, centerX + y - 1, centerY + x, action)) return false;
-            if (!this.DrawRow(centerX - y + 1, centerX + y - 1, centerY - x, action)) return false;
+            if (action.UnitAction != null)
+            {
+                if (!this.DrawRow(centerX - y + 1, centerX + y - 1, centerY + x, action)) return false;
+                if (!this.DrawRow(centerX - y + 1, centerX + y - 1, centerY - x, action)) return false;
+            }
             if (radiusError < 0)
             {
                 radiusError += (4 * x) + 6;
@@ -1190,7 +1193,7 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
             {
                 radiusError += 4 * (x - y) + 10;
                 // Draw rows from top/bottom only when y is about to change.
-                if (y != radius)
+                if (action.UnitAction != null && y != radius)
                 {
                     if (!this.DrawRow(centerX - lastYWidth, centerX + lastYWidth, centerY + y, action)) return false;
                     if (!this.DrawRow(centerX - lastYWidth, centerX + lastYWidth, centerY - y, action)) return false;

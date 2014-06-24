@@ -183,9 +183,17 @@ public class LevelBuilder : MonoBehaviour
             switch (space.InstantiationState)
             {
                 case InstantiationState.WantsDestruction:
-                    foreach (GameObject block in space.Blocks)
+                    if (space.Blocks != null)
                     {
-                        GameObject.Destroy(block);
+                        foreach (GameObject block in space.Blocks)
+                        {
+                            GameObject.Destroy(block);
+                        }
+                    }
+                    AreaBatchMapper batch;
+                    if (space.Level.BatchMapper.TryGetValue(space, out batch))
+                    {
+                        batch.Destroy();
                     }
                     space.InstantiationState = InstantiationState.NotInstantiated;
                     break;
@@ -230,12 +238,6 @@ public class AreaBatchMapper
                 level.BatchMapper[x2, y2] = this;
                 return true;
             })));
-        //#region DEBUG
-        //if (BigBoss.Debug.logging())
-        //{
-        //    level.BatchMapper.ToLog(BigBoss.Debug.Get(Logs.Main), "Batch map for " + space.X + ", " + space.Y + " on origin " + originX + ", " + originY);
-        //}
-        //#endregion
     }
 
     public int GetOrigin(int i)
@@ -263,17 +265,35 @@ public class AreaBatchMapper
     public void Combine(GameObject holder)
     {
         StaticBatchingUtility.Combine(objects.ToArray(), holder);
+        RemoveSelf();
+    }
+
+    public void RemoveSelf()
+    {
         level.BatchMapper.DrawRect(
             originX,
             originX + LevelBuilder.BatchRectDiameter - 1,
             originY,
             originY + LevelBuilder.BatchRectRadius - 1,
             Draw.Remove<AreaBatchMapper>());
-        //#region DEBUG
-        //if (BigBoss.Debug.logging())
-        //{
-        //    level.BatchMapper.ToLog(BigBoss.Debug.Get(Logs.Main), "Removing origin " + originX + ", " + originY);
-        //}
-        //#endregion
+    }
+
+    public void Destroy()
+    {
+        RemoveSelf();
+        level.DrawRect(
+            originX,
+            originX + LevelBuilder.BatchRectDiameter - 1,
+            originY,
+            originY + LevelBuilder.BatchRectRadius - 1,
+            new DrawAction<GridSpace>((arr, x, y) =>
+            {
+                GridSpace space;
+                if (arr.TryGetValue(x, y, out space))
+                {
+                    space.DestroyGridSpace();
+                }
+                return true;
+            }));
     }
 }
