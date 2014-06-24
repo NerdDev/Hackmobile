@@ -74,7 +74,7 @@ public class FOWVisibility : MonoBehaviour
 
     void UpdateNow()
     {
-        if (FOWSystem.instance == null)
+        if (FOWSystem.Instance == null)
         {
             enabled = false;
             return;
@@ -84,10 +84,10 @@ public class FOWVisibility : MonoBehaviour
         switch (visibilityType)
         {
             case Visibility.Distance:
-                visible = FOWSystem.instance.DistanceToPlayer(mTrans.position);
+                visible = FOWSystem.Instance.DistanceToPlayer(mTrans.position);
                 break;
             case Visibility.FogVisibility:
-                visible = FOWSystem.instance.IsVisible(mTrans.position);
+                visible = FOWSystem.Instance.IsVisible(mTrans.position);
                 break;
         }
 
@@ -125,6 +125,6 @@ public class FOWVisibility : MonoBehaviour
 
     bool IsVisible()
     {
-        return FOWSystem.instance.IsVis(gameObject.transform.position);
+        return FOWSystem.Instance.IsVis(gameObject.transform.position);
     }
 }

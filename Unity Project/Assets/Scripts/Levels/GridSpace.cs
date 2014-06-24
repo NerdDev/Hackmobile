@@ -247,7 +247,7 @@ public class GridSpace : IGridSpace
 
     public void Instantiate()
     {
-        if (InstantiationState < InstantiationState.WantsInstantiation && FOWSystem.instance.IsVis(X, Y))
+        if (InstantiationState < InstantiationState.WantsInstantiation && FOWSystem.Instance.IsInsideInstantiationRadius(X, Y))
         {
             InstantiationState = InstantiationState.WantsInstantiation;
             BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);

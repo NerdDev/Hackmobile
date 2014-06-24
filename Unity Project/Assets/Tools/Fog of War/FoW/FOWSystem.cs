@@ -67,7 +67,7 @@ public class FOWSystem : MonoBehaviour
         UpdateTexture1,
     }
 
-    static public FOWSystem instance;
+    static public FOWSystem Instance;
 
     // Height map used for visibility checks. Integers are used instead of floats as integer checks are significantly faster.
     protected int[,] mHeights;
@@ -217,7 +217,7 @@ public class FOWSystem : MonoBehaviour
     /// Set the instance.
     /// </summary>
 
-    void Awake() { instance = this; }
+    void Awake() { Instance = this; }
 
     /// <summary>
     /// Generate the height grid.
@@ -1095,7 +1095,7 @@ public class FOWSystem : MonoBehaviour
 
     public bool IsVis(Point pos)
     {
-        return IsVis(pos.x, pos.y);
+        return IsInsideInstantiationRadius(pos.x, pos.y);
     }
 
     public bool DistanceToPlayer(Vector3 pos)
@@ -1109,7 +1109,7 @@ public class FOWSystem : MonoBehaviour
     }
 
     //these are called often, so I am keeping two versions
-    public bool IsVis(int x, int y)
+    public bool IsInsideInstantiationRadius(int x, int y)
     {
         foreach (Revealer r in mRevealers)
         {
