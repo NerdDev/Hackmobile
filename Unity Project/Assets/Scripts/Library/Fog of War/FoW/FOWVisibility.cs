@@ -125,6 +125,6 @@ public class FOWVisibility : MonoBehaviour
 
     bool IsVisible()
     {
-        return FOWSystem.Instance.IsVis(gameObject.transform.position);
+        return FOWSystem.Instance.IsInsideDestructionRadius(gameObject.transform.position);
     }
 }

@@ -179,7 +179,7 @@ public class LevelManager : MonoBehaviour, IManager
 
     public void Update()
     {
-        Builder.InstantiateThings();
+        if (Time.frameCount % 3 == 0) Builder.InstantiateThings();
     }
 }
 

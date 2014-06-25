@@ -171,9 +171,9 @@ public class GUIManager : MonoBehaviour, IManager
         LoadImage.enabled = false;
     }
 
-    public void RecreateFOW(Vector3 pos, int height)
+    public void RecreateFOW(Vector3 pos, int height, FOWSystem.FogState state = FOWSystem.FogState.Both)
     {
-        fow.ModifyGrid(pos, height);
+        fow.ModifyGrid(pos, height, state);
     }
 
     public void pickUpItem(Item i)

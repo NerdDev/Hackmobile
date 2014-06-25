@@ -679,7 +679,19 @@ public class FOWSystem : MonoBehaviour
         }
     }
 
-    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 6, float raycastRadius = 0)
+    public enum FogState
+    {
+        Left,
+        Right,
+        Both,
+    }
+
+    public void ModifyGrid(Vector3 pos, int extraHeight, FogState state = FogState.Both)
+    {
+        ModifyGrid(pos, extraHeight, 4, state);
+    }
+
+    public void ModifyGrid(Vector3 pos, int extraHeight, int steps = 4, FogState state = FogState.Both, float raycastRadius = 0)
     {
         bool useSphereCast = raycastRadius > 0f;
 
@@ -691,11 +703,28 @@ public class FOWSystem : MonoBehaviour
         float texToWorld = (float)worldSize / textureSize;
         float worldToTex = (float)textureSize / worldSize;
 
+        int xmin, ymin, xmax, ymax;
         // Coordinates we'll be dealing with
-        int xmin = Mathf.RoundToInt((pos.x * worldToTex - steps));
-        int ymin = Mathf.RoundToInt((pos.z * worldToTex - steps));
-        int xmax = Mathf.RoundToInt((pos.x * worldToTex + steps));
-        int ymax = Mathf.RoundToInt((pos.z * worldToTex + steps));
+        if (state == FogState.Both || state == FogState.Left)
+        {
+            xmin = Mathf.RoundToInt((pos.x * worldToTex - steps));
+            ymin = Mathf.RoundToInt((pos.z * worldToTex - steps));
+        }
+        else
+        {
+            xmin = Mathf.RoundToInt((pos.x * worldToTex));
+            ymin = Mathf.RoundToInt((pos.z * worldToTex));
+        }
+        if (state == FogState.Both || state == FogState.Right)
+        {
+            xmax = Mathf.RoundToInt((pos.x * worldToTex + steps));
+            ymax = Mathf.RoundToInt((pos.z * worldToTex + steps));
+        }
+        else
+        {
+            xmax = Mathf.RoundToInt((pos.x * worldToTex));
+            ymax = Mathf.RoundToInt((pos.z * worldToTex));
+        }
 
         for (int y = ymin; y < ymax; y++)
         {
@@ -1237,12 +1266,12 @@ public class FOWSystem : MonoBehaviour
         return new int[] { cx, cy };
     }
 
-    public bool IsVis(Vector3 pos)
+    public bool IsInsideDestructionRadius(Vector3 pos)
     {
-        return IsVis(pos.x, pos.z);
+        return IsInsideDestructionRadius(pos.x, pos.z);
     }
 
-    public bool IsVis(Point pos)
+    public bool IsInsideInstantiationRadius(Point pos)
     {
         return IsInsideInstantiationRadius(pos.x, pos.y);
     }
@@ -1260,30 +1289,28 @@ public class FOWSystem : MonoBehaviour
     //these are called often, so I am keeping two versions
     public bool IsInsideInstantiationRadius(int x, int y)
     {
-        foreach (Revealer r in mRevealers)
+        Vector3 pos = BigBoss.PlayerInfo.transform.position;
+        float xr = x - pos.x;
+        float yr = y - pos.z;
+        float sqrDist = xr * xr + yr * yr;
+        float revDist = BigBoss.Player.revealer.RevealDistance;
+        if (sqrDist < revDist * revDist)
         {
-            float xr = x - r.pos.x;
-            float yr = y - r.pos.z;
-            float circleRadii = xr * xr + yr * yr;
-            if (circleRadii < r.revDist)
-            {
-                return true;
-            }
+            return true;
         }
         return false;
     }
 
-    public bool IsVis(float x, float y)
+    public bool IsInsideDestructionRadius(float x, float y)
     {
-        foreach (Revealer r in mRevealers)
+        Vector3 pos = BigBoss.PlayerInfo.transform.position;
+        float xr = x - pos.x;
+        float yr = y - pos.z;
+        float sqrDist = xr * xr + yr * yr;
+        float destDist = BigBoss.Player.revealer.RevealDistance + 12;
+        if (sqrDist < destDist * destDist)
         {
-            float xr = x - r.pos.x;
-            float yr = y - r.pos.z;
-            float circleRadii = xr * xr + yr * yr;
-            if (circleRadii < r.revDist)
-            {
-                return true;
-            }
+            return true;
         }
         return false;
     }

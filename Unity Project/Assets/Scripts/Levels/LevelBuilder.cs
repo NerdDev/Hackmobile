@@ -11,7 +11,7 @@ public class LevelBuilder : MonoBehaviour
     public Queue<GridSpace> InstantiationQueue = new Queue<GridSpace>();
 
     // Area batching
-    public const int BatchRectRadius = 6;
+    public const int BatchRectRadius = 4;
     public const int BatchRectDiameter = BatchRectRadius * 2;
 
     public static void Initialize()
@@ -26,6 +26,12 @@ public class LevelBuilder : MonoBehaviour
     public void Instantiate(GridSpace space)
     {
         if (space == null || space.Deploys == null) return;
+        if (space.InstantiationState == InstantiationState.Disabled)
+        {
+            space.SetActive(true);
+            space.InstantiationState = InstantiationState.Instantiated;
+            return;
+        }
         space.Blocks = new List<GameObject>(space.Deploys.Count);
         AreaBatchMapper batch;
         if (!space.Level.BatchMapper.TryGetValue(space, out batch))
@@ -62,8 +68,8 @@ public class LevelBuilder : MonoBehaviour
             batch.Combine(StaticHolder);
         }
         //update fog of war
-        Vector3 pos = new Vector3(space.X, 0f, space.Y);
-        BigBoss.Gooey.RecreateFOW(pos, 0);
+        space.InstantiationState = InstantiationState.WantsFogLeft;
+        InstantiationQueue.Enqueue(space);
 
         //GarbageCollect(); //not currently used now
     }
@@ -185,20 +191,22 @@ public class LevelBuilder : MonoBehaviour
                 case InstantiationState.WantsDestruction:
                     if (space.Blocks != null)
                     {
-                        foreach (GameObject block in space.Blocks)
-                        {
-                            GameObject.Destroy(block);
-                        }
+                        space.SetActive(false);
                     }
-                    AreaBatchMapper batch;
-                    if (space.Level.BatchMapper.TryGetValue(space, out batch))
-                    {
-                        batch.Destroy();
-                    }
-                    space.InstantiationState = InstantiationState.NotInstantiated;
+                    space.InstantiationState = InstantiationState.Disabled;
                     break;
                 case InstantiationState.WantsInstantiation:
                     Instantiate(space);
+                    break;
+                case InstantiationState.WantsFogLeft:
+                    Vector3 pos = new Vector3(space.X, 0f, space.Y);
+                    BigBoss.Gooey.RecreateFOW(pos, 0);
+                    space.InstantiationState = InstantiationState.WantsFogRight;
+                    InstantiationQueue.Enqueue(space);
+                    break;
+                case InstantiationState.WantsFogRight:
+                    Vector3 pos2 = new Vector3(space.X, 0f, space.Y);
+                    BigBoss.Gooey.RecreateFOW(pos2, 0);
                     space.InstantiationState = InstantiationState.Instantiated;
                     break;
                 case InstantiationState.NotInstantiated:

@@ -335,5 +335,7 @@ public enum InstantiationState
     WantsDestruction,
     Disabled,
     WantsInstantiation,
+    WantsFogLeft,
+    WantsFogRight,
     Instantiated
 }

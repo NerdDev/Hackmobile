@@ -79,7 +79,7 @@ fixed4 frag (Input i) : COLOR
 	float2 uv = pos.xz * _Params.z + _Params.xy;
 	half4 fog = lerp(tex2D(_FogTex0, uv), tex2D(_FogTex1, uv), _Params.w);
 	
-	return lerp(original * _Unexplored, original, fog.r);
+	return lerp(lerp(original * _Unexplored, original * _Explored, fog.g), original, fog.r);
 }
 ENDCG
 		}

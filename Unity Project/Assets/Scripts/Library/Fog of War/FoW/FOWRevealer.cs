@@ -129,12 +129,13 @@ public class FOWRevealer : MonoBehaviour
     }
 
     bool running = false;
+
     WaitForSeconds wfs = new WaitForSeconds(.1f);
-    public IEnumerator UpdateFogRadius(int x0, int y0)
+    public IEnumerator UpdateFogRadius(int x0, int y0, float revModifier = 1)
     {
         if (running) yield break;
         running = true;
-        int x = (int)Mathf.Sqrt(RevealDistance), y = 0;
+        int x = Mathf.RoundToInt(RevealDistance * revModifier), y = 0;
         int radiusError = 1 - x;
 
         while (x >= y)

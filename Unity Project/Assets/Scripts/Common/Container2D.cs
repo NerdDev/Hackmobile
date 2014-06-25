@@ -672,25 +672,25 @@ abstract public class Container2D<T> : IEnumerable<Value2D<T>>
         return true;
     }
 
-    public IEnumerator DrawAroundCoroutine(int x, int y, bool cornered, DrawAction<T> action)
+    public IEnumerator DrawAroundCoroutine(int x, int y, bool cornered, DrawAction<T> action, WaitForSeconds wfs = null)
     {
         if (!cornered)
         {
-            action(this, x, y + 1); yield return null;
-            action(this, x, y - 1); yield return null;
-            action(this, x + 1, y); yield return null;
-            action(this, x - 1, y); yield return null;
+            action(this, x, y + 1); yield return wfs;
+            action(this, x, y - 1); yield return wfs;
+            action(this, x + 1, y); yield return wfs;
+            action(this, x - 1, y); yield return wfs;
         }
         else
         {
-            action(this, x - 1, y - 1); yield return null; // Bottom left
-            action(this, x, y - 1); yield return null; // Bottom
-            action(this, x + 1, y - 1); yield return null; // Bottom right
-            action(this, x + 1, y); yield return null; // Right
-            action(this, x + 1, y + 1); yield return null; // Top Right
-            action(this, x, y + 1); yield return null; // Top
-            action(this, x - 1, y + 1); yield return null; // Top Left
-            action(this, x - 1, y); yield return null; // Left
+            action(this, x - 1, y - 1); yield return wfs; // Bottom left
+            action(this, x, y - 1); yield return wfs; // Bottom
+            action(this, x + 1, y - 1); yield return wfs; // Bottom right
+            action(this, x + 1, y); yield return wfs; // Right
+            action(this, x + 1, y + 1); yield return wfs; // Top Right
+            action(this, x, y + 1); yield return wfs; // Top
+            action(this, x - 1, y + 1); yield return wfs; // Top Left
+            action(this, x - 1, y); yield return wfs; // Left
         }
     }
 

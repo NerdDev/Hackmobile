@@ -15,7 +15,7 @@ public class FOWRenderers : MonoBehaviour
     bool mIsVisible = true;
     bool mUpdate = true;
     public bool instantiated = false;
-    private WaitForSeconds wfs;
+    private WaitForSeconds wfs = new WaitForSeconds(.1f);
     GridSpace gridSpace;
 
     /// <summary>
@@ -27,9 +27,10 @@ public class FOWRenderers : MonoBehaviour
     void Start()
     {
         mTrans = transform;
-        mNextUpdate = 0.2f + (UnityEngine.Random.value + UnityEngine.Random.value) * .2f;
+        mNextUpdate = 2f + (UnityEngine.Random.value + UnityEngine.Random.value);
         //wfs = new WaitForSeconds(mNextUpdate);
         gridSpace = BigBoss.Levels.Level[mTrans.position.x.ToInt(), mTrans.position.z.ToInt()];
+        OnEnable();
     }
 
     public void OnEnable()
@@ -52,10 +53,8 @@ public class FOWRenderers : MonoBehaviour
             {
                 Vector3 pos = gameObject.transform.position;
                 DrawGridsAround(pos);
-                
                 instantiated = true;
             }
-            // yield return wfs;
         }
         else
         {
@@ -73,11 +72,11 @@ public class FOWRenderers : MonoBehaviour
                 grid.Instantiate();
             };
             return true;
-        }));
+        }, wfs));
     }
 
     bool IsVisible()
     {
-        return FOWSystem.Instance.IsVis(gameObject.transform.position);
+        return FOWSystem.Instance.IsInsideDestructionRadius(gameObject.transform.position);
     }
 }
