@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEditor;
 
 public class LevelBuilder : MonoBehaviour
 {
@@ -48,6 +49,17 @@ public class LevelBuilder : MonoBehaviour
                 deploy.GO,
                 new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
                 , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
+            foreach (Renderer renderer in obj.GetComponentsInChildren<Renderer>())
+            {
+                Material material = renderer.material;
+                if (material == null) continue;
+                Material alternateMaterial;
+                string materialName = material.name.Substring(0, material.name.Length - 11); // Trim " (instance")
+                if (space.Theme.AlternateMaterialsMap.TryGetValue(materialName, out alternateMaterial))
+                {
+                    renderer.sharedMaterial = alternateMaterial;
+                }
+            }
             if (deploy.Static)
             {
                 obj.transform.parent = batch.StaticSpaceHolder.transform;
@@ -111,6 +123,12 @@ public class LevelBuilder : MonoBehaviour
                 spec.GenDeploy = genDeploy;
                 Deploy(level, spec);
             }
+            space.Elements = new List<ThemeElement>(gen.val.Deploys.Count);
+            foreach (GenDeploy genDeploy in gen.val.Deploys)
+            {
+                space.Elements.Add(genDeploy.Element);
+            }
+
         }
         return ret;
     }

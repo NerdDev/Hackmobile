@@ -661,7 +661,7 @@ A grid graph will update that area and a small margin around it equal to \link P
                 node.SetIndex(index);
 
                 node.position = pos;
-                node.walkable = GridTypeEnum.Walkable(val.Type);
+                node.walkable = val.Walkable;
                 if (node.walkable) node.penalty = 0;
                 node.Bit15 = node.walkable;
 

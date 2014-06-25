@@ -7,6 +7,7 @@ public class GridSpace : IGridSpace
     public GridType Type { get; set; }
     public Theme Theme { get; set; }
     public List<GridDeploy> Deploys;
+    public List<ThemeElement> Elements;
     public int ThemeElementCount
     {
         get
@@ -313,13 +314,7 @@ public class GridSpace : IGridSpace
 
     public IEnumerable<ThemeElement> GetThemeElements()
     {
-        if (Deploys != null)
-        {
-            foreach (var deploy in Deploys)
-            {
-                yield return deploy.Element;
-            }
-        }
+        return Elements;
     }
 
     public override string ToString()
