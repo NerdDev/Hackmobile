@@ -18,11 +18,22 @@ public class GridDeploy : ITransform
     public float XScale { get; set; }
     public float YScale { get; set; }
     public float ZScale { get; set; }
+    public bool DelayDeployment;
+    public AxisDirection[] ColliderPlacementQueue;
+    public ColliderDeploy ColliderDeploy;
 
     public GridDeploy(GenDeploy genDeploy)
     {
         this.Element = genDeploy.Element;
         ITransformExt.CopyFrom(this, genDeploy);
+        this.DelayDeployment = genDeploy.DelayDeployment;
+        this.ColliderPlacementQueue = genDeploy.ColliderPlacementQueue;
+        this.ColliderDeploy = genDeploy.ColliderDeploy;
     }
 }
 
+public enum ColliderDeploy
+{
+    Keep,
+    Destroy
+}

@@ -17,7 +17,6 @@ public class ChestElement : ThemeElement
         { // Place randomly in the middle
             PlaceRandomlyInside(spec.Random, spec.GenDeploy, _chestBuffer);
         }
-        PlaceFloors(spec);
     }
 }
 
