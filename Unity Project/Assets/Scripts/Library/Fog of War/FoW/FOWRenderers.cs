@@ -10,7 +10,7 @@ using UnityEngine;
 public class FOWRenderers : MonoBehaviour
 {
     Transform mTrans;
-    //Renderer[] mRenderers;
+    Renderer[] mRenderers;
     float mNextUpdate = 0f;
     bool mIsVisible = true;
     bool mUpdate = true;
@@ -23,11 +23,13 @@ public class FOWRenderers : MonoBehaviour
     /// </summary>
 
     public bool isVisible { get { return mIsVisible; } }
+    public bool los = true;
 
     void Start()
     {
         mTrans = transform;
         mNextUpdate = 2f + (UnityEngine.Random.value + UnityEngine.Random.value);
+        mRenderers = GetComponentsInChildren<Renderer>();
         //wfs = new WaitForSeconds(mNextUpdate);
         gridSpace = BigBoss.Levels.Level[mTrans.position.x.ToInt(), mTrans.position.z.ToInt()];
         OnEnable();
@@ -38,6 +40,16 @@ public class FOWRenderers : MonoBehaviour
         instantiated = false;
         float mFirstUpdate = UnityEngine.Random.value * .1f;
         InvokeRepeating("UpdateRendering", mFirstUpdate, mNextUpdate);
+    }
+
+    void OnBecameVisible()
+    {
+        //gameObject.AddMissingComponent<FOWVisibility>().enabled = true;
+    }
+
+    void OnBecameInvisible()
+    {
+        //gameObject.GetComponent<FOWVisibility>().enabled = false;
     }
 
     void UpdateRendering()

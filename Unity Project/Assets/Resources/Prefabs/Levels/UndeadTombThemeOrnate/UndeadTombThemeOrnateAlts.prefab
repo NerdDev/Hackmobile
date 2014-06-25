@@ -47,7 +47,7 @@ MonoBehaviour:
   - Multiplier: 1
     Item: {fileID: 2100000, guid: 8ebc76be731484742b14a2f199d2bdfa, type: 2}
   - Multiplier: 1
-    Item: {fileID: 2100000, guid: 70fbe0dc17a628247b24390db65b0eea, type: 2}
+    Item: {fileID: 2100000, guid: 45e7b2d2dded7c34cad298d5d3d8a7d4, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

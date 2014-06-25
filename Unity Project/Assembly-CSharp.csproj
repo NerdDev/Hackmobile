@@ -164,6 +164,7 @@
      <Compile Include="Assets\Scripts\Levels\TestLevelSetup.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\IPillarTheme.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Interfaces\ISpikeTrapTheme.cs" />
+     <Compile Include="Assets\Scripts\Levels\Theme\MaterialAlternates.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Smart Theme Elements\SmartThemeElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ChestElement.cs" />
      <Compile Include="Assets\Scripts\Levels\Theme\Theme Elements\ClusterElement.cs" />

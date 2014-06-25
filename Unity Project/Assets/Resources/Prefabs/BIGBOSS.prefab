@@ -4987,7 +4987,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   mAtlas: {fileID: 11400000, guid: a230508e33d569b4f9adfa7ee42954c0, type: 2}
-  mSpriteName: Essence_03
+  mSpriteName: fireball-acid-1
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -5643,7 +5643,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   mAtlas: {fileID: 11400000, guid: a230508e33d569b4f9adfa7ee42954c0, type: 2}
-  mSpriteName: heal-royal-2
+  mSpriteName: Essence_03
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -5762,7 +5762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: {x: 11, y: 18}
   fadeRange: 1
-  RevealDistance: 512
+  RevealDistance: 28
   lineOfSightCheck: 2
   isActive: 1
   Buffer: 1
@@ -5799,14 +5799,14 @@ MonoBehaviour:
   ThemeSets:
   - Multiplier: 1
     Set: {fileID: 11400000, guid: 54fcd5e6ddce2bc4a9331a86f7babf4d, type: 2}
-  - Multiplier: .600000024
+  - Multiplier: .100000001
     Set: {fileID: 11400000, guid: 5bdffb19ccbc4284fa6b27e20b0d1809, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: 8
+  Seed: 1
   UseInitialTheme: 0
   InitialTheme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
-  MinAreas: 1
-  MaxAreas: 2
+  MinAreas: 2
+  MaxAreas: 3
 --- !u!114 &11400082
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5985,10 +5985,10 @@ MonoBehaviour:
   mState: 0
   worldSize: 48
   textureSize: 384
-  updateFrequency: .0700000003
-  textureBlendTime: .200000003
+  updateFrequency: .100000001
+  textureBlendTime: .25
   blurIterations: 1
-  heightRange: {x: -2, y: 20}
+  heightRange: {x: -2, y: 8}
   raycastMask:
     serializedVersion: 2
     m_Bits: 20480
@@ -7589,7 +7589,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   mAtlas: {fileID: 11400000, guid: a230508e33d569b4f9adfa7ee42954c0, type: 2}
-  mSpriteName: heal-royal-2
+  mSpriteName: fireball-acid-1
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -7769,7 +7769,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   mAtlas: {fileID: 11400000, guid: a230508e33d569b4f9adfa7ee42954c0, type: 2}
-  mSpriteName: heal-royal-2
+  mSpriteName: Crystal Ball_02
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -8229,7 +8229,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   mAtlas: {fileID: 11400000, guid: a230508e33d569b4f9adfa7ee42954c0, type: 2}
-  mSpriteName: heal-royal-2
+  mSpriteName: Essence_03
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
