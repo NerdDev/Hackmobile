@@ -25,6 +25,9 @@ public abstract class Theme : ThemeOption, IInitializable
     public GenericFlags<SpawnKeywords> KeywordFlags;
     [Copyable]
     public ProbabilityPool<ThemeMod> ThemeMods;
+    [Copyable]
+    public MaterialAlternates[] AlternateMaterials;
+    public Dictionary<string, Material> AlternateMaterialsMap;
     public int MinThemeMods;
     public int MaxThemeMods;
     public int MinAreaMods = 1;
@@ -60,6 +63,11 @@ public abstract class Theme : ThemeOption, IInitializable
         foreach (ThemeElementBundle bundle in this.FindAllDerivedObjects<ThemeElementBundle>(false))
         {
             bundle.Select(rand);
+        }
+        AlternateMaterialsMap = new Dictionary<string, Material>();
+        foreach (MaterialAlternates alt in AlternateMaterials)
+        {
+            AlternateMaterialsMap[alt.Source.name] = alt.GetMaterial(rand);
         }
     }
 
@@ -109,7 +117,7 @@ public abstract class Theme : ThemeOption, IInitializable
         }
         // Decoration Mods
         foreach (RoomModifier mod in spec.RoomModifiers.DecorationMods)
-        {
+        { 
             ApplyMod(spec, mod);
         }
         #region DEBUG
