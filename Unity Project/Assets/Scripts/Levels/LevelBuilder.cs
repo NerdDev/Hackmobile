@@ -91,10 +91,7 @@ public class LevelBuilder : MonoBehaviour
         };
         foreach (Value2D<GenSpace> gen in spec.GenGrid)
         {
-            if (gen.val.Deploys == null)
-            {
-                HandleEmptyDeploy(gen.val, spec.Random);
-            }
+            HandleStandardDeploy(gen.val, spec.Random);
             GridSpace space;
             if (!ret.TryGetValue(gen, out space))
             {
@@ -160,23 +157,24 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
-    protected bool HandleEmptyDeploy(GenSpace space, System.Random rand)
+    protected bool HandleStandardDeploy(GenSpace space, System.Random rand)
     {
-        space.Deploys = new List<GenDeploy>(1);
+        if (space.Deploys == null)
+        {
+            space.Deploys = new List<GenDeploy>(1);
+        }
         SmartThemeElement element;
         switch (space.Type)
         {
             case GridType.Wall:
                 space.Theme.Wall.Select(rand, 1, 1, out element, false);
                 break;
-            case GridType.Door:
-                space.Theme.Door.Select(rand, 1, 1, out element, false);
-                break;
             case GridType.Chest:
                 space.Theme.Chest.Select(rand, 1, 1, out element, false);
                 break;
             case GridType.NULL:
                 return false;
+            case GridType.Door:
             case GridType.StairPlace:
             case GridType.Floor:
             case GridType.SmallLoot:
