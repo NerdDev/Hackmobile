@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using UnityEditor;
 
 public class LevelBuilder : MonoBehaviour
 {
@@ -12,7 +11,7 @@ public class LevelBuilder : MonoBehaviour
     public Queue<GridSpace> InstantiationQueue = new Queue<GridSpace>();
 
     // Area batching
-    public const int BatchRectRadius = 4;
+    public const int BatchRectRadius = 6;
     public const int BatchRectDiameter = BatchRectRadius * 2;
 
     public static void Initialize()
@@ -51,14 +50,14 @@ public class LevelBuilder : MonoBehaviour
                 , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
             foreach (Renderer renderer in obj.GetComponentsInChildren<Renderer>())
             {
-                Material material = renderer.material;
+                Material material = renderer.sharedMaterial;
                 if (material == null) continue;
                 Material alternateMaterial;
-                string materialName = material.name.Substring(0, material.name.Length - 11); // Trim " (instance")
-                if (space.Theme.AlternateMaterialsMap.TryGetValue(materialName, out alternateMaterial))
-                {
-                    renderer.sharedMaterial = alternateMaterial;
-                }
+                string materialName = material.name; //.Substring(0, material.name.Length - 11); // Trim " (instance")
+                //if (space.Theme.AlternateMaterialsMap.TryGetValue(materialName, out alternateMaterial))
+                //{
+                    //renderer.sharedMaterial = alternateMaterial;
+                //}
             }
             if (deploy.Static)
             {

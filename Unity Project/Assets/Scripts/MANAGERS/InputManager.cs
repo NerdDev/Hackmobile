@@ -32,9 +32,6 @@ public class InputManager : MonoBehaviour, IManager
     {
         centerPointInScreenSpace = new Vector2(Screen.width / 2, Screen.height / 2);
         EasyTouch.On_DoubleTap += EasyTouch_On_DoubleTap;
-#if !UNITY_EDITOR
-        allowMouseInput = false;
-#endif
     }
 
     #region Touch Input

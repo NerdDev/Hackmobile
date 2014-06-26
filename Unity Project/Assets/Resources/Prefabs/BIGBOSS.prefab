@@ -5802,11 +5802,11 @@ MonoBehaviour:
   - Multiplier: .100000001
     Set: {fileID: 11400000, guid: 5bdffb19ccbc4284fa6b27e20b0d1809, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: 1
+  Seed: 4
   UseInitialTheme: 0
   InitialTheme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
-  MinAreas: 2
-  MaxAreas: 3
+  MinAreas: 1
+  MaxAreas: 1
 --- !u!114 &11400082
 MonoBehaviour:
   m_ObjectHideFlags: 1
