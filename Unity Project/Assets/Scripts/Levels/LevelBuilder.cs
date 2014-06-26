@@ -71,7 +71,6 @@ public class LevelBuilder : MonoBehaviour
                     GenerateDeploy(deploy, space, batch);
                 }
             }
-            InstantiationQueue.Enqueue(space);
         }
         else
         {
@@ -302,6 +301,7 @@ public class LevelBuilder : MonoBehaviour
                     space.InstantiationState = InstantiationState.NotInstantiated;
                     break;
                 case InstantiationState.WantsInstantiation:
+                case InstantiationState.DelayedInstantiation:
                     Instantiate(space);
                     break;
                 case InstantiationState.NotInstantiated:

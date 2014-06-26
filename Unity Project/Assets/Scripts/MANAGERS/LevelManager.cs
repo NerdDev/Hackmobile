@@ -173,6 +173,7 @@ public class LevelManager : MonoBehaviour, IManager
     public void LoadTestLevel(LevelLayout layout, System.Random rand)
     {
         layout.Random = rand;
+        TestTheme.ChooseAllSmartObjects(rand);
         Level level = GenerateFromLayout(layout, rand);
         DeployLevel(level);
     }
