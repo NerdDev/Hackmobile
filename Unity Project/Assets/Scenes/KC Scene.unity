@@ -2339,7 +2339,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
   mFont: {fileID: 0}
   mText: 
   mFontSize: 16
@@ -3930,7 +3930,7 @@ MonoBehaviour:
   - Multiplier: .600000024
     Set: {fileID: 11400000, guid: 5bdffb19ccbc4284fa6b27e20b0d1809, type: 2}
   Builder: {fileID: 11400000, guid: f761513ec8f6f834692ca51228cf4e30, type: 2}
-  Seed: 7
+  Seed: 8
   UseInitialTheme: 0
   InitialTheme: {fileID: 11400002, guid: 46402c78fa91c73498442868ec021526, type: 2}
   MinAreas: 1
@@ -6550,7 +6550,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400080, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}
       propertyPath: Seed
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2450d75b99b78f148a45528bf525ae91, type: 2}

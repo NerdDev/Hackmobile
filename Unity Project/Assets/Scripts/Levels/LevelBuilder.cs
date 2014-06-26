@@ -10,6 +10,7 @@ public class LevelBuilder : MonoBehaviour
     public static GameObject StaticHolder;
     public static GameObject DynamicHolder;
     public Queue<GridSpace> InstantiationQueue = new Queue<GridSpace>();
+    private MultiMap<List<DelayedLevelDeploy>> delayedDeployEvents = new MultiMap<List<DelayedLevelDeploy>>();
 
     // Area batching
     public const int BatchRectRadius = 4;
@@ -33,51 +34,91 @@ public class LevelBuilder : MonoBehaviour
         {
             batch = new AreaBatchMapper(space.Level, space);
         }
-        batch.Counter--;
+        List<GridDeploy> delayed = new List<GridDeploy>(space.Deploys.Count);
         for (int i = 0; i < space.Deploys.Count; i++)
         {
             GridDeploy deploy = space.Deploys[i];
             if (deploy == null) continue;
-            Transform t = deploy.GO.transform;
-            GameObject obj = Instantiate(
-                deploy.GO,
-                new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
-                , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
-            foreach (Renderer renderer in obj.GetComponentsInChildren<Renderer>())
+            if (space.InstantiationState == InstantiationState.DelayedInstantiation)
             {
-                Material material = renderer.material;
-                if (material == null) continue;
-                Material alternateMaterial;
-                string materialName = material.name.Substring(0, material.name.Length - 11); // Trim " (instance")
-                if (space.Theme.AlternateMaterialsMap.TryGetValue(materialName, out alternateMaterial))
+                if (deploy.DelayDeployment)
                 {
-                    renderer.sharedMaterial = alternateMaterial;
+                    GenerateDeploy(deploy, space, batch);
                 }
-            }
-            if (deploy.Static)
-            {
-                obj.transform.parent = batch.StaticSpaceHolder.transform;
             }
             else
             {
-                obj.transform.parent = batch.DynamicSpaceHolder.transform;
+                if (deploy.DelayDeployment)
+                {
+                    delayed.Add(deploy);
+                }
+                else
+                {
+                    GenerateDeploy(deploy, space, batch);
+                }
             }
-            obj.transform.localScale = new Vector3(
-                deploy.XScale * obj.transform.localScale.x,
-                deploy.YScale * obj.transform.localScale.y,
-                deploy.ZScale * obj.transform.localScale.z);
-            space.Blocks.Add(obj);
-            batch.Absorb(obj);
         }
-        if (batch.Counter == 0)
+        if (space.InstantiationState != InstantiationState.DelayedInstantiation)
         {
-            batch.Combine(StaticHolder);
+            FireDelayedDeploy(space);
         }
-        //update fog of war
-        Vector3 pos = new Vector3(space.X, 0f, space.Y);
-        BigBoss.Gooey.RecreateFOW(pos, 0);
+        if (delayed.Count > 0)
+        {
+            if (!SetUpDeplayedDeployment(space))
+            {
+                foreach (GridDeploy deploy in delayed)
+                {
+                    GenerateDeploy(deploy, space, batch);
+                }
+            }
+            InstantiationQueue.Enqueue(space);
+        }
+        else
+        {
+            batch.Counter--;
+            if (batch.Counter == 0)
+            {
+                batch.Combine(StaticHolder);
+            }
+            //update fog of war
+            Vector3 pos = new Vector3(space.X, 0f, space.Y);
+            BigBoss.Gooey.RecreateFOW(pos, 0);
+            space.InstantiationState = InstantiationState.Instantiated;
+        }
+    }
 
-        //GarbageCollect(); //not currently used now
+    public void GenerateDeploy(GridDeploy deploy, GridSpace space, AreaBatchMapper batch)
+    {
+        Transform t = deploy.GO.transform;
+        GameObject obj = Instantiate(
+            deploy.GO,
+            new Vector3(space.X + t.position.x + deploy.X, t.position.y + deploy.Y, space.Y + t.position.z + deploy.Z)
+            , Quaternion.Euler(new Vector3(t.eulerAngles.x + deploy.XRotation, t.eulerAngles.y + deploy.YRotation, t.eulerAngles.z + deploy.ZRotation))) as GameObject;
+        foreach (Renderer renderer in obj.GetComponentsInChildren<Renderer>())
+        {
+            Material material = renderer.material;
+            if (material == null) continue;
+            Material alternateMaterial;
+            string materialName = material.name.Substring(0, material.name.Length - 11); // Trim " (instance")
+            if (space.Theme.AlternateMaterialsMap.TryGetValue(materialName, out alternateMaterial))
+            {
+                renderer.sharedMaterial = alternateMaterial;
+            }
+        }
+        if (deploy.Static)
+        {
+            obj.transform.parent = batch.StaticSpaceHolder.transform;
+        }
+        else
+        {
+            obj.transform.parent = batch.DynamicSpaceHolder.transform;
+        }
+        obj.transform.localScale = new Vector3(
+            deploy.XScale * obj.transform.localScale.x,
+            deploy.YScale * obj.transform.localScale.y,
+            deploy.ZScale * obj.transform.localScale.z);
+        space.Blocks.Add(obj);
+        batch.Absorb(obj);
     }
 
     public MultiMap<GridSpace> GeneratePrototypes(Level level, LevelLayout layout)
@@ -122,6 +163,56 @@ public class LevelBuilder : MonoBehaviour
 
         }
         return ret;
+    }
+
+    protected bool SetUpDeplayedDeployment(GridSpace space)
+    {
+        DelayedLevelDeploy delayedDeploy = null;
+        space.Level.DrawAround(space.X, space.Y, false, (arr, x, y) =>
+        {
+            GridSpace around;
+            if (arr.TryGetValue(x, y, out around))
+            {
+                if (space.InstantiationState < InstantiationState.DelayedInstantiation)
+                {
+                    if (delayedDeploy == null)
+                    {
+                        delayedDeploy = new DelayedLevelDeploy(space);
+                    }
+                    delayedDeploy.Counter++;
+                    List<DelayedLevelDeploy> deployList;
+                    if (!delayedDeployEvents.TryGetValue(x, y, out deployList))
+                    {
+                        deployList = new List<DelayedLevelDeploy>();
+                        delayedDeployEvents[x, y] = deployList;
+                    }
+                    deployList.Add(delayedDeploy);
+                }
+            }
+            return true;
+        });
+        return delayedDeploy != null;
+    }
+
+    protected void FireDelayedDeploy(GridSpace space)
+    {
+        List<DelayedLevelDeploy> list;
+        if (delayedDeployEvents.TryGetValue(space, out list))
+        {
+            foreach (var delayedDeploy in list)
+            {
+                delayedDeploy.Counter--;
+                if (delayedDeploy.Counter == 0)
+                {
+                    InstantiationQueue.Enqueue(delayedDeploy.space);
+                    list.Remove(delayedDeploy);
+                }
+            }
+            if (list.Count == 0)
+            {
+                delayedDeployEvents.Remove(space);
+            }
+        }
     }
 
     protected void Deploy(Level level, ThemeElementSpec spec)
@@ -212,7 +303,6 @@ public class LevelBuilder : MonoBehaviour
                     break;
                 case InstantiationState.WantsInstantiation:
                     Instantiate(space);
-                    space.InstantiationState = InstantiationState.Instantiated;
                     break;
                 case InstantiationState.NotInstantiated:
                 case InstantiationState.Instantiated:

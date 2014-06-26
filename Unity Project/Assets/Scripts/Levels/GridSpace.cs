@@ -257,7 +257,7 @@ public class GridSpace : IGridSpace
                     InstantiationState = InstantiationState.WantsInstantiation;
                     BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
                 }
-                else
+                else if (InstantiationState == InstantiationState.Disabled)
                 {
                     this.SetActive(true);
                     InstantiationState = InstantiationState.Instantiated;
@@ -272,6 +272,7 @@ public class GridSpace : IGridSpace
         {
             case InstantiationState.Disabled:
             case InstantiationState.Instantiated:
+            case InstantiationState.DelayedInstantiation:
                 InstantiationState = InstantiationState.WantsDestruction;
                 BigBoss.Levels.Builder.InstantiationQueue.Enqueue(this);
                 break;
@@ -330,5 +331,6 @@ public enum InstantiationState
     WantsDestruction,
     Disabled,
     WantsInstantiation,
+    DelayedInstantiation,
     Instantiated
 }
