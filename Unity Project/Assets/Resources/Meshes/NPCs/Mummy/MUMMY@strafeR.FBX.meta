@@ -1,0 +1,545 @@
+fileFormatVersion: 2
+guid: cf015c6c1aa1c3a42ab1dc192ff8e56c
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: MUMMY_ L Toe0
+    100002: MUMMY_ Head
+    100004: MUMMY_ L Finger12
+    100006: MUMMY_ L Finger11
+    100008: MUMMY_ L Finger1
+    100010: MUMMY_ L Finger0Nub
+    100012: MUMMY_ L Finger02
+    100014: MUMMY_ L Finger01
+    100016: MUMMY_ L Finger0
+    100018: MUMMY_ L Forearm
+    100020: MUMMY_ L UpperArm
+    100022: MUMMY_ L Clavicle
+    100024: //RootNode
+    100026: MUMMY_ Neck
+    100028: MUMMY_ Spine1
+    100030: MUMMY_ Spine
+    100032: MUMMY_ L Hand
+    100034: MUMMY_ R Hand
+    100036: MUMMY_ Pelvis
+    100038: MUMMY_
+    100040: MUMMY_ R Toe0Nub
+    100042: MUMMY_ L Toe0Nub
+    100044: MUMMY_ Queue de cheval 1Nub
+    100046: MUMMY_ Queue de cheval 1
+    100048: MUMMY_BANDAGE_ARM_R_nub
+    100050: MUMMY_BANDAGE_ARM_R_8
+    100052: MUMMY_BANDAGE_ARM_R_7)
+    100054: MUMMY_BANDAGE_ARM_R_6
+    100056: MUMMY_BANDAGE_ARM_R_5
+    100058: MUMMY_BANDAGE_ARM_R_4
+    100060: MUMMY_BANDAGE_ARM_R_3
+    100062: MUMMY_BANDAGE_ARM_R_2
+    100064: MUMMY_BANDAGE_ARM_R_1
+    100066: MUMMY_ R Finger4Nub
+    100068: MUMMY_ R Finger42
+    100070: MUMMY_ R Finger41
+    100072: MUMMY_ R Toe0
+    100074: MUMMY_ R Finger4
+    100076: MUMMY_ R Finger3Nub
+    100078: MUMMY_ R Finger32
+    100080: MUMMY_ R Finger31
+    100082: MUMMY_ R Finger3
+    100084: MUMMY_ R Finger2Nub
+    100086: MUMMY_ R Finger22
+    100088: MUMMY_ R Finger21
+    100090: MUMMY_ R Finger2
+    100092: MUMMY_ R Finger1Nub
+    100094: MUMMY_ R Finger12
+    100096: MUMMY_ R Finger11
+    100098: MUMMY_ R Finger1
+    100100: MUMMY_ R Finger0Nub
+    100102: MUMMY_ R Finger02
+    100104: MUMMY_ R Finger01
+    100106: MUMMY_ R Finger0
+    100108: MUMMY_ R Forearm
+    100110: MUMMY_ R UpperArm
+    100112: MUMMY_ R Clavicle
+    100114: MUMMY_BANDAGE_ARM_L_nub
+    100116: MUMMY_BANDAGE_ARM_L_8
+    100118: MUMMY_BANDAGE_ARM_L_7
+    100120: MUMMY_BANDAGE_ARM_L_6
+    100122: MUMMY_BANDAGE_ARM_L_5
+    100124: MUMMY_BANDAGE_ARM_L_4
+    100126: MUMMY_BANDAGE_ARM_L_3
+    100128: MUMMY_BANDAGE_ARM_L_2
+    100130: MUMMY_BANDAGE_ARM_L_1
+    100132: MUMMY_ L Finger4Nub
+    100134: MUMMY_ L Finger42
+    100136: MUMMY_ L Finger41
+    100138: MUMMY_ L Finger4
+    100140: MUMMY_ L Finger3Nub
+    100142: MUMMY_ L Finger32
+    100144: MUMMY_ L Finger31
+    100146: MUMMY_ L Finger3
+    100148: MUMMY_ L Finger2Nub
+    100150: MUMMY_ L Finger22
+    100152: MUMMY_ L Finger21
+    100154: MUMMY_ L Finger2
+    100156: MUMMY_ L Finger1Nub
+    100158: MUMMY_ L Foot
+    100160: MUMMY_ L Thigh
+    100162: MUMMY_ HeadNub
+    100164: MUMMY_ L Calf
+    100166: MUMMY_ R Thigh
+    100168: Factice001
+    100170: MUMMY_ R Calf
+    100172: Factice002
+    100174: MUMMY_ R Foot
+    400000: MUMMY_ L Toe0
+    400002: MUMMY_ Head
+    400004: MUMMY_ L Finger12
+    400006: MUMMY_ L Finger11
+    400008: MUMMY_ L Finger1
+    400010: MUMMY_ L Finger0Nub
+    400012: MUMMY_ L Finger02
+    400014: MUMMY_ L Finger01
+    400016: MUMMY_ L Finger0
+    400018: MUMMY_ L Forearm
+    400020: MUMMY_ L UpperArm
+    400022: MUMMY_ L Clavicle
+    400024: //RootNode
+    400026: MUMMY_ Neck
+    400028: MUMMY_ Spine1
+    400030: MUMMY_ Spine
+    400032: MUMMY_ L Hand
+    400034: MUMMY_ R Hand
+    400036: MUMMY_ Pelvis
+    400038: MUMMY_
+    400040: MUMMY_ R Toe0Nub
+    400042: MUMMY_ L Toe0Nub
+    400044: MUMMY_ Queue de cheval 1Nub
+    400046: MUMMY_ Queue de cheval 1
+    400048: MUMMY_BANDAGE_ARM_R_nub
+    400050: MUMMY_BANDAGE_ARM_R_8
+    400052: MUMMY_BANDAGE_ARM_R_7)
+    400054: MUMMY_BANDAGE_ARM_R_6
+    400056: MUMMY_BANDAGE_ARM_R_5
+    400058: MUMMY_BANDAGE_ARM_R_4
+    400060: MUMMY_BANDAGE_ARM_R_3
+    400062: MUMMY_BANDAGE_ARM_R_2
+    400064: MUMMY_BANDAGE_ARM_R_1
+    400066: MUMMY_ R Finger4Nub
+    400068: MUMMY_ R Finger42
+    400070: MUMMY_ R Finger41
+    400072: MUMMY_ R Toe0
+    400074: MUMMY_ R Finger4
+    400076: MUMMY_ R Finger3Nub
+    400078: MUMMY_ R Finger32
+    400080: MUMMY_ R Finger31
+    400082: MUMMY_ R Finger3
+    400084: MUMMY_ R Finger2Nub
+    400086: MUMMY_ R Finger22
+    400088: MUMMY_ R Finger21
+    400090: MUMMY_ R Finger2
+    400092: MUMMY_ R Finger1Nub
+    400094: MUMMY_ R Finger12
+    400096: MUMMY_ R Finger11
+    400098: MUMMY_ R Finger1
+    400100: MUMMY_ R Finger0Nub
+    400102: MUMMY_ R Finger02
+    400104: MUMMY_ R Finger01
+    400106: MUMMY_ R Finger0
+    400108: MUMMY_ R Forearm
+    400110: MUMMY_ R UpperArm
+    400112: MUMMY_ R Clavicle
+    400114: MUMMY_BANDAGE_ARM_L_nub
+    400116: MUMMY_BANDAGE_ARM_L_8
+    400118: MUMMY_BANDAGE_ARM_L_7
+    400120: MUMMY_BANDAGE_ARM_L_6
+    400122: MUMMY_BANDAGE_ARM_L_5
+    400124: MUMMY_BANDAGE_ARM_L_4
+    400126: MUMMY_BANDAGE_ARM_L_3
+    400128: MUMMY_BANDAGE_ARM_L_2
+    400130: MUMMY_BANDAGE_ARM_L_1
+    400132: MUMMY_ L Finger4Nub
+    400134: MUMMY_ L Finger42
+    400136: MUMMY_ L Finger41
+    400138: MUMMY_ L Finger4
+    400140: MUMMY_ L Finger3Nub
+    400142: MUMMY_ L Finger32
+    400144: MUMMY_ L Finger31
+    400146: MUMMY_ L Finger3
+    400148: MUMMY_ L Finger2Nub
+    400150: MUMMY_ L Finger22
+    400152: MUMMY_ L Finger21
+    400154: MUMMY_ L Finger2
+    400156: MUMMY_ L Finger1Nub
+    400158: MUMMY_ L Foot
+    400160: MUMMY_ L Thigh
+    400162: MUMMY_ HeadNub
+    400164: MUMMY_ L Calf
+    400166: MUMMY_ R Thigh
+    400168: Factice001
+    400170: MUMMY_ R Calf
+    400172: Factice002
+    400174: MUMMY_ R Foot
+    7400000: strafeR
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    animationCompression: 3
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: strafeR
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 25
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: MUMMY_
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ L Thigh
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ L Thigh/MUMMY_ L Calf
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ L Thigh/MUMMY_ L Calf/MUMMY_
+          L Foot
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ L Thigh/MUMMY_ L Calf/MUMMY_
+          L Foot/MUMMY_ L Toe0
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ L Thigh/MUMMY_ L Calf/MUMMY_
+          L Foot/MUMMY_ L Toe0/MUMMY_ L Toe0Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ R Thigh
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ R Thigh/MUMMY_ R Calf
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ R Thigh/MUMMY_ R Calf/MUMMY_
+          R Foot
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ R Thigh/MUMMY_ R Calf/MUMMY_
+          R Foot/MUMMY_ R Toe0
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ R Thigh/MUMMY_ R Calf/MUMMY_
+          R Foot/MUMMY_ R Toe0/MUMMY_ R Toe0Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ Head
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ Head/MUMMY_
+          HeadNub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ Head/MUMMY_
+          Queue de cheval 1
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ Head/MUMMY_
+          Queue de cheval 1/MUMMY_ Queue de cheval 1Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1/MUMMY_BANDAGE_ARM_L_2
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1/MUMMY_BANDAGE_ARM_L_2/MUMMY_BANDAGE_ARM_L_3
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1/MUMMY_BANDAGE_ARM_L_2/MUMMY_BANDAGE_ARM_L_3/MUMMY_BANDAGE_ARM_L_4
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1/MUMMY_BANDAGE_ARM_L_2/MUMMY_BANDAGE_ARM_L_3/MUMMY_BANDAGE_ARM_L_4/MUMMY_BANDAGE_ARM_L_5
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1/MUMMY_BANDAGE_ARM_L_2/MUMMY_BANDAGE_ARM_L_3/MUMMY_BANDAGE_ARM_L_4/MUMMY_BANDAGE_ARM_L_5/MUMMY_BANDAGE_ARM_L_6
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1/MUMMY_BANDAGE_ARM_L_2/MUMMY_BANDAGE_ARM_L_3/MUMMY_BANDAGE_ARM_L_4/MUMMY_BANDAGE_ARM_L_5/MUMMY_BANDAGE_ARM_L_6/MUMMY_BANDAGE_ARM_L_7
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1/MUMMY_BANDAGE_ARM_L_2/MUMMY_BANDAGE_ARM_L_3/MUMMY_BANDAGE_ARM_L_4/MUMMY_BANDAGE_ARM_L_5/MUMMY_BANDAGE_ARM_L_6/MUMMY_BANDAGE_ARM_L_7/MUMMY_BANDAGE_ARM_L_8
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/Factice002/MUMMY_BANDAGE_ARM_L_1/MUMMY_BANDAGE_ARM_L_2/MUMMY_BANDAGE_ARM_L_3/MUMMY_BANDAGE_ARM_L_4/MUMMY_BANDAGE_ARM_L_5/MUMMY_BANDAGE_ARM_L_6/MUMMY_BANDAGE_ARM_L_7/MUMMY_BANDAGE_ARM_L_8/MUMMY_BANDAGE_ARM_L_nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger0
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger0/MUMMY_
+          L Finger01
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger0/MUMMY_
+          L Finger01/MUMMY_ L Finger02
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger0/MUMMY_
+          L Finger01/MUMMY_ L Finger02/MUMMY_ L Finger0Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger1
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger1/MUMMY_
+          L Finger11
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger1/MUMMY_
+          L Finger11/MUMMY_ L Finger12
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger1/MUMMY_
+          L Finger11/MUMMY_ L Finger12/MUMMY_ L Finger1Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger2
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger2/MUMMY_
+          L Finger21
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger2/MUMMY_
+          L Finger21/MUMMY_ L Finger22
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger2/MUMMY_
+          L Finger21/MUMMY_ L Finger22/MUMMY_ L Finger2Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger3
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger3/MUMMY_
+          L Finger31
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger3/MUMMY_
+          L Finger31/MUMMY_ L Finger32
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger3/MUMMY_
+          L Finger31/MUMMY_ L Finger32/MUMMY_ L Finger3Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger4
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger4/MUMMY_
+          L Finger41
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger4/MUMMY_
+          L Finger41/MUMMY_ L Finger42
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ L
+          Clavicle/MUMMY_ L UpperArm/MUMMY_ L Forearm/MUMMY_ L Hand/MUMMY_ L Finger4/MUMMY_
+          L Finger41/MUMMY_ L Finger42/MUMMY_ L Finger4Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1/MUMMY_BANDAGE_ARM_R_2
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1/MUMMY_BANDAGE_ARM_R_2/MUMMY_BANDAGE_ARM_R_3
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1/MUMMY_BANDAGE_ARM_R_2/MUMMY_BANDAGE_ARM_R_3/MUMMY_BANDAGE_ARM_R_4
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1/MUMMY_BANDAGE_ARM_R_2/MUMMY_BANDAGE_ARM_R_3/MUMMY_BANDAGE_ARM_R_4/MUMMY_BANDAGE_ARM_R_5
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1/MUMMY_BANDAGE_ARM_R_2/MUMMY_BANDAGE_ARM_R_3/MUMMY_BANDAGE_ARM_R_4/MUMMY_BANDAGE_ARM_R_5/MUMMY_BANDAGE_ARM_R_6
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1/MUMMY_BANDAGE_ARM_R_2/MUMMY_BANDAGE_ARM_R_3/MUMMY_BANDAGE_ARM_R_4/MUMMY_BANDAGE_ARM_R_5/MUMMY_BANDAGE_ARM_R_6/MUMMY_BANDAGE_ARM_R_7)
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1/MUMMY_BANDAGE_ARM_R_2/MUMMY_BANDAGE_ARM_R_3/MUMMY_BANDAGE_ARM_R_4/MUMMY_BANDAGE_ARM_R_5/MUMMY_BANDAGE_ARM_R_6/MUMMY_BANDAGE_ARM_R_7)/MUMMY_BANDAGE_ARM_R_8
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/Factice001/MUMMY_BANDAGE_ARM_R_1/MUMMY_BANDAGE_ARM_R_2/MUMMY_BANDAGE_ARM_R_3/MUMMY_BANDAGE_ARM_R_4/MUMMY_BANDAGE_ARM_R_5/MUMMY_BANDAGE_ARM_R_6/MUMMY_BANDAGE_ARM_R_7)/MUMMY_BANDAGE_ARM_R_8/MUMMY_BANDAGE_ARM_R_nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger0
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger0/MUMMY_
+          R Finger01
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger0/MUMMY_
+          R Finger01/MUMMY_ R Finger02
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger0/MUMMY_
+          R Finger01/MUMMY_ R Finger02/MUMMY_ R Finger0Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger1
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger1/MUMMY_
+          R Finger11
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger1/MUMMY_
+          R Finger11/MUMMY_ R Finger12
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger1/MUMMY_
+          R Finger11/MUMMY_ R Finger12/MUMMY_ R Finger1Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger2
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger2/MUMMY_
+          R Finger21
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger2/MUMMY_
+          R Finger21/MUMMY_ R Finger22
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger2/MUMMY_
+          R Finger21/MUMMY_ R Finger22/MUMMY_ R Finger2Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger3
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger3/MUMMY_
+          R Finger31
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger3/MUMMY_
+          R Finger31/MUMMY_ R Finger32
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger3/MUMMY_
+          R Finger31/MUMMY_ R Finger32/MUMMY_ R Finger3Nub
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger4
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger4/MUMMY_
+          R Finger41
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger4/MUMMY_
+          R Finger41/MUMMY_ R Finger42
+        weight: 1
+      - path: MUMMY_/MUMMY_ Pelvis/MUMMY_ Spine/MUMMY_ Spine1/MUMMY_ Neck/MUMMY_ R
+          Clavicle/MUMMY_ R UpperArm/MUMMY_ R Forearm/MUMMY_ R Hand/MUMMY_ R Finger4/MUMMY_
+          R Finger41/MUMMY_ R Finger42/MUMMY_ R Finger4Nub
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: MUMMY
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 5c635f9020d7a884e998cc4bd8f5e1ef,
+    type: 3}
+  animationType: 2
+  userData: 

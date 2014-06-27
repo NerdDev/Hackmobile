@@ -1,0 +1,236 @@
+fileFormatVersion: 2
+guid: 972e681a0dd947f46b47753112a88b6b
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: MUMMY_ R Toe0
+    100002: MUMMY_ R Foot
+    100004: //RootNode
+    100006: MUMMY_ R Toe0Nub
+    100008: MUMMY_ L Toe0Nub
+    100010: MUMMY_ Queue de cheval 1Nub
+    100012: MUMMY_ Queue de cheval 1
+    100014: MUMMY_BANDAGE_ARM_R_nub
+    100016: MUMMY_BANDAGE_ARM_R_8
+    100018: MUMMY_BANDAGE_ARM_R_7)
+    100020: MUMMY_BANDAGE_ARM_R_6
+    100022: MUMMY_BANDAGE_ARM_R_5
+    100024: MUMMY_BANDAGE_ARM_R_4
+    100026: MUMMY_BANDAGE_ARM_R_3
+    100028: MUMMY_BANDAGE_ARM_R_2
+    100030: MUMMY_BANDAGE_ARM_R_1
+    100032: MUMMY_ R Finger4Nub
+    100034: MUMMY_ R Finger42
+    100036: MUMMY_ R Finger41
+    100038: MUMMY_ R Finger4
+    100040: MUMMY_ R Finger3Nub
+    100042: MUMMY_ R Finger32
+    100044: MUMMY_ R Finger31
+    100046: MUMMY_ R Finger3
+    100048: MUMMY_ R Finger2Nub
+    100050: MUMMY_ R Finger22
+    100052: MUMMY_ R Finger21
+    100054: MUMMY_ R Finger2
+    100056: MUMMY_ R Finger1Nub
+    100058: MUMMY_ R Finger12
+    100060: MUMMY_ R Finger11
+    100062: MUMMY_ R Finger1
+    100064: MUMMY_ R Finger0Nub
+    100066: MUMMY_ R Finger02
+    100068: MUMMY_ R Finger01
+    100070: MUMMY_ R Finger0
+    100072: MUMMY_ R Forearm
+    100074: MUMMY_ R UpperArm
+    100076: MUMMY_ R Clavicle
+    100078: MUMMY_BANDAGE_ARM_L_nub
+    100080: MUMMY_BANDAGE_ARM_L_8
+    100082: MUMMY_BANDAGE_ARM_L_7
+    100084: MUMMY_BANDAGE_ARM_L_6
+    100086: MUMMY_BANDAGE_ARM_L_5
+    100088: MUMMY_BANDAGE_ARM_L_4
+    100090: MUMMY_BANDAGE_ARM_L_3
+    100092: MUMMY_BANDAGE_ARM_L_2
+    100094: MUMMY_BANDAGE_ARM_L_1
+    100096: MUMMY_ L Finger4Nub
+    100098: MUMMY_ L Finger42
+    100100: MUMMY_ L Finger41
+    100102: MUMMY_ L Finger4
+    100104: MUMMY_ L Finger3Nub
+    100106: MUMMY_ L Finger32
+    100108: MUMMY_ L Finger31
+    100110: MUMMY_ L Finger3
+    100112: MUMMY_ L Finger2Nub
+    100114: MUMMY_ L Finger22
+    100116: MUMMY_ L Finger21
+    100118: MUMMY_ L Finger2
+    100120: MUMMY_ L Finger1Nub
+    100122: MUMMY_ L Finger12
+    100124: MUMMY_ L Finger11
+    100126: MUMMY_ L Finger1
+    100128: MUMMY_ L Finger0Nub
+    100130: MUMMY_ L Finger02
+    100132: MUMMY_ L Finger01
+    100134: MUMMY_ L Finger0
+    100136: MUMMY_ L Forearm
+    100138: MUMMY_ L UpperArm
+    100140: MUMMY_ L Clavicle
+    100142: MUMMY_ L Hand
+    100144: MUMMY_ Neck
+    100146: MUMMY_ Spine1
+    100148: MUMMY_ Spine
+    100150: MUMMY_ Pelvis
+    100152: MUMMY_
+    100154: Factice001
+    100156: MUMMY_ R Calf
+    100158: MUMMY_ R Thigh
+    100160: MUMMY_ R Hand
+    100162: MUMMY_ HeadNub
+    100164: MUMMY_ Head
+    100166: Factice002
+    100168: MUMMY_ L Toe0
+    100170: MUMMY_ L Foot
+    100172: MUMMY_ L Calf
+    100174: MUMMY_ L Thigh
+    400000: MUMMY_ R Toe0
+    400002: MUMMY_ R Foot
+    400004: //RootNode
+    400006: MUMMY_ R Toe0Nub
+    400008: MUMMY_ L Toe0Nub
+    400010: MUMMY_ Queue de cheval 1Nub
+    400012: MUMMY_ Queue de cheval 1
+    400014: MUMMY_BANDAGE_ARM_R_nub
+    400016: MUMMY_BANDAGE_ARM_R_8
+    400018: MUMMY_BANDAGE_ARM_R_7)
+    400020: MUMMY_BANDAGE_ARM_R_6
+    400022: MUMMY_BANDAGE_ARM_R_5
+    400024: MUMMY_BANDAGE_ARM_R_4
+    400026: MUMMY_BANDAGE_ARM_R_3
+    400028: MUMMY_BANDAGE_ARM_R_2
+    400030: MUMMY_BANDAGE_ARM_R_1
+    400032: MUMMY_ R Finger4Nub
+    400034: MUMMY_ R Finger42
+    400036: MUMMY_ R Finger41
+    400038: MUMMY_ R Finger4
+    400040: MUMMY_ R Finger3Nub
+    400042: MUMMY_ R Finger32
+    400044: MUMMY_ R Finger31
+    400046: MUMMY_ R Finger3
+    400048: MUMMY_ R Finger2Nub
+    400050: MUMMY_ R Finger22
+    400052: MUMMY_ R Finger21
+    400054: MUMMY_ R Finger2
+    400056: MUMMY_ R Finger1Nub
+    400058: MUMMY_ R Finger12
+    400060: MUMMY_ R Finger11
+    400062: MUMMY_ R Finger1
+    400064: MUMMY_ R Finger0Nub
+    400066: MUMMY_ R Finger02
+    400068: MUMMY_ R Finger01
+    400070: MUMMY_ R Finger0
+    400072: MUMMY_ R Forearm
+    400074: MUMMY_ R UpperArm
+    400076: MUMMY_ R Clavicle
+    400078: MUMMY_BANDAGE_ARM_L_nub
+    400080: MUMMY_BANDAGE_ARM_L_8
+    400082: MUMMY_BANDAGE_ARM_L_7
+    400084: MUMMY_BANDAGE_ARM_L_6
+    400086: MUMMY_BANDAGE_ARM_L_5
+    400088: MUMMY_BANDAGE_ARM_L_4
+    400090: MUMMY_BANDAGE_ARM_L_3
+    400092: MUMMY_BANDAGE_ARM_L_2
+    400094: MUMMY_BANDAGE_ARM_L_1
+    400096: MUMMY_ L Finger4Nub
+    400098: MUMMY_ L Finger42
+    400100: MUMMY_ L Finger41
+    400102: MUMMY_ L Finger4
+    400104: MUMMY_ L Finger3Nub
+    400106: MUMMY_ L Finger32
+    400108: MUMMY_ L Finger31
+    400110: MUMMY_ L Finger3
+    400112: MUMMY_ L Finger2Nub
+    400114: MUMMY_ L Finger22
+    400116: MUMMY_ L Finger21
+    400118: MUMMY_ L Finger2
+    400120: MUMMY_ L Finger1Nub
+    400122: MUMMY_ L Finger12
+    400124: MUMMY_ L Finger11
+    400126: MUMMY_ L Finger1
+    400128: MUMMY_ L Finger0Nub
+    400130: MUMMY_ L Finger02
+    400132: MUMMY_ L Finger01
+    400134: MUMMY_ L Finger0
+    400136: MUMMY_ L Forearm
+    400138: MUMMY_ L UpperArm
+    400140: MUMMY_ L Clavicle
+    400142: MUMMY_ L Hand
+    400144: MUMMY_ Neck
+    400146: MUMMY_ Spine1
+    400148: MUMMY_ Spine
+    400150: MUMMY_ Pelvis
+    400152: MUMMY_
+    400154: Factice001
+    400156: MUMMY_ R Calf
+    400158: MUMMY_ R Thigh
+    400160: MUMMY_ R Hand
+    400162: MUMMY_ HeadNub
+    400164: MUMMY_ Head
+    400166: Factice002
+    400168: MUMMY_ L Toe0
+    400170: MUMMY_ L Foot
+    400172: MUMMY_ L Calf
+    400174: MUMMY_ L Thigh
+    7400000: Take 001
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    animationCompression: 3
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: MUMMY
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 5c635f9020d7a884e998cc4bd8f5e1ef,
+    type: 3}
+  animationType: 2
+  userData: 
