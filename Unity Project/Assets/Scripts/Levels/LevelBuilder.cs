@@ -64,26 +64,26 @@ public class LevelBuilder : MonoBehaviour
         }
         if (delayed.Count > 0)
         {
-            if (!SetUpDeplayedDeployment(space))
+            if (SetUpDeplayedDeployment(space))
+            { // Delay deployment
+                space.InstantiationState = InstantiationState.DelayedInstantiation;
+                return;
+            }
+            // Didn't need delay, deploy anyway
+            foreach (GridDeploy deploy in delayed)
             {
-                foreach (GridDeploy deploy in delayed)
-                {
-                    GenerateDeploy(deploy, space, batch);
-                }
+                GenerateDeploy(deploy, space, batch);
             }
         }
-        else
+        batch.Counter--;
+        if (batch.Counter == 0)
         {
-            batch.Counter--;
-            if (batch.Counter == 0)
-            {
-                batch.Combine(StaticHolder);
-            }
-            //update fog of war
-            Vector3 pos = new Vector3(space.X, 0f, space.Y);
-            BigBoss.Gooey.RecreateFOW(pos, 0);
-            space.InstantiationState = InstantiationState.Instantiated;
+            batch.Combine(StaticHolder);
         }
+        //update fog of war
+        Vector3 pos = new Vector3(space.X, 0f, space.Y);
+        BigBoss.Gooey.RecreateFOW(pos, 0);
+        space.InstantiationState = InstantiationState.Instantiated;
     }
 
     public void GenerateDeploy(GridDeploy deploy, GridSpace space, AreaBatchMapper batch)
@@ -172,7 +172,7 @@ public class LevelBuilder : MonoBehaviour
             GridSpace around;
             if (arr.TryGetValue(x, y, out around))
             {
-                if (space.InstantiationState < InstantiationState.DelayedInstantiation)
+                if (around.InstantiationState < InstantiationState.DelayedInstantiation)
                 {
                     if (delayedDeploy == null)
                     {
@@ -198,14 +198,19 @@ public class LevelBuilder : MonoBehaviour
         List<DelayedLevelDeploy> list;
         if (delayedDeployEvents.TryGetValue(space, out list))
         {
+            List<DelayedLevelDeploy> deployed = new List<DelayedLevelDeploy>(list.Count);
             foreach (var delayedDeploy in list)
             {
                 delayedDeploy.Counter--;
                 if (delayedDeploy.Counter == 0)
                 {
                     InstantiationQueue.Enqueue(delayedDeploy.space);
-                    list.Remove(delayedDeploy);
+                    deployed.Add(delayedDeploy);
                 }
+            }
+            foreach (var delayedDeploy in deployed)
+            {
+                list.Remove(delayedDeploy);
             }
             if (list.Count == 0)
             {
