@@ -151,8 +151,8 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 70fbe0dc17a628247b24390db65b0eea, type: 2}
-  - {fileID: 2100000, guid: 70fbe0dc17a628247b24390db65b0eea, type: 2}
+  - {fileID: 2100000, guid: 6cb0cd18bf58f4444ba49d54d494cf94, type: 2}
+  - {fileID: 2100000, guid: 6cb0cd18bf58f4444ba49d54d494cf94, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instantiated: 0
+  los: 1
   Walkable: 1
   CanMove: 1
   DiagonalExtensions: {fileID: 11400000, guid: c1aef6099106fb24b90a108ea4310f29, type: 2}

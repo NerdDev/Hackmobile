@@ -42,10 +42,8 @@
 				<range>10</range>
 				<cost>0</cost>
 				<targeter type="TargetedObjects" maxtargets="1">
-					<maxtargets>1</maxtargets>
-					<effect type="TargetedCollision">
-						<speed>5</speed>
-						<visual>FX/FT_MagicEffects_volume02/_Prefab/Projectile03</visual>
+					<effect type="TargetedCollision" speed="5">
+						<visual>FX/FT_MagicEffects_volume02/_Prefab/Fireball</visual>
 						<OnCollision>
 							<effect type="DamageFire">
 								<strength>
@@ -58,6 +56,26 @@
 							</effect>
 						</OnCollision>
 					</effect>
+				</targeter>
+			</spell>
+			
+			<spell name="Fireline">
+				<icon>Crystal Ball_02</icon>	
+				<range>10</range>
+				<cost>0</cost>
+				<targeter type="LineTargeter" maxtargets="1" StopAtTarget="false" speed="3">
+					<visual>FX/FT_MagicEffects_volume02/_Prefab/ParticleBolt</visual>
+					<OnCollision>
+						<effect type="DamageFire">
+							<strength>
+								<min>6</min>
+								<max>12</max>
+							</strength>
+						</effect>
+						<effect type="TargetedCollision">
+							<visual>FX/FT_MagicEffect_vol3/_Prefab/HitFX_Dark</visual>
+						</effect>
+					</OnCollision>
 				</targeter>
 			</spell>
 			

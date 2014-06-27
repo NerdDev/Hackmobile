@@ -256,7 +256,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
-  m_Mesh: {fileID: 4300000, guid: cee5f0c3fb814b9468ab98b875fb56af, type: 3}
+  m_Mesh: {fileID: 4300000, guid: c90cde7c62eb3d841a3c8df66378817f, type: 3}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -316,6 +316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instantiated: 0
+  los: 1
   Walkable: 0
   CanMove: 0
   PlaceFloor: 1
@@ -330,7 +331,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81640a4950aebcc439c6a95f7540f060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visibilityType: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1

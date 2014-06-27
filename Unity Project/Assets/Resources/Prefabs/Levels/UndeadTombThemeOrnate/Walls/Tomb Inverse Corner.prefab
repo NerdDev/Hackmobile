@@ -167,7 +167,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
-  m_Mesh: {fileID: 4300000, guid: 6a104eb462c362744b528878bdd18c89, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 41f8b4306b0fe2e49901ee2aa7874c3d, type: 3}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -216,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instantiated: 0
+  los: 1
   Walkable: 0
   CanMove: 0
   PlaceFloor: 1

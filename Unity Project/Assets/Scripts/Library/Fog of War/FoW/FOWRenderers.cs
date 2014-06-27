@@ -42,16 +42,6 @@ public class FOWRenderers : MonoBehaviour
         InvokeRepeating("UpdateRendering", mFirstUpdate, mNextUpdate);
     }
 
-    void OnBecameVisible()
-    {
-        //gameObject.AddMissingComponent<FOWVisibility>().enabled = true;
-    }
-
-    void OnBecameInvisible()
-    {
-        //gameObject.GetComponent<FOWVisibility>().enabled = false;
-    }
-
     void UpdateRendering()
     {
         if (enabled)

@@ -180,7 +180,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 70fbe0dc17a628247b24390db65b0eea, type: 2}
+  - {fileID: 2100000, guid: 6cb0cd18bf58f4444ba49d54d494cf94, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -195,7 +195,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: 955b3b60d71448a44ab19fed0028403b, type: 3}
+  m_Mesh: {fileID: 4300000, guid: d46dccabe151c7d4594aeb683a2cc460, type: 3}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -256,6 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instantiated: 0
+  los: 1
   Walkable: 0
   CanMove: 0
   PlaceFloor: 1
