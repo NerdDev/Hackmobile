@@ -69,7 +69,7 @@ public class LevelBuilder : MonoBehaviour
                 space.InstantiationState = InstantiationState.DelayedInstantiation;
                 return;
             }
-            // Didn't need delay, deploy anyway
+            // Didn't need delay, deploy instead
             foreach (GridDeploy deploy in delayed)
             {
                 GenerateDeploy(deploy, space, batch);
@@ -116,6 +116,18 @@ public class LevelBuilder : MonoBehaviour
             deploy.XScale * obj.transform.localScale.x,
             deploy.YScale * obj.transform.localScale.y,
             deploy.ZScale * obj.transform.localScale.z);
+        if (deploy.ColliderPlacementQueue != null
+            && deploy.ColliderPlacementQueue.Length > 0)
+        {
+            Renderer render = obj.GetComponentInChildren<Renderer>();
+            Bounds bounds = render.bounds;
+            Vector3 extents = bounds.extents;
+            for (int i = 0; i < deploy.ColliderPlacementQueue.Length; i++)
+            {
+                AxisDirection dir = deploy.ColliderPlacementQueue[i];
+                ShiftIntoPlace(obj, deploy, dir, render, extents);
+            }
+        }
         space.Blocks.Add(obj);
         batch.Absorb(obj);
     }
@@ -315,6 +327,17 @@ public class LevelBuilder : MonoBehaviour
                     continue;
             }
         }
+    }
+
+    protected bool ShiftIntoPlace(GameObject obj, GridDeploy deploy, AxisDirection dir, Renderer renderer, Vector3 extents)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(obj.transform.position, dir.GetVector3(), out hit, 1F))
+        {
+            obj.transform.position = hit.point;
+            return true;
+        }
+        return false;
     }
 }
 
