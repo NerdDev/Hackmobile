@@ -20,7 +20,7 @@ public class GenDeploy : ITransform, IEnumerable<Value2D<GenSpace>>
     public bool Deployed = false;
     public Point OriginPt;
     public bool DelayDeployment;
-    public AxisDirection[] ColliderPlacementQueue;
+    public List<ShiftPlacementInstruction> ColliderPlacementQueue;
     public ColliderDeploy ColliderDeploy;
     
     public GenDeploy(ThemeElement element)
@@ -36,6 +36,15 @@ public class GenDeploy : ITransform, IEnumerable<Value2D<GenSpace>>
     public void AddSpace(GenSpace space, int x, int y)
     {
         space.AddDeploy(this, x, y);
+    }
+
+    public void AddShiftInstruction(ShiftPlacementInstruction instr)
+    {
+        if (ColliderPlacementQueue == null)
+        {
+            ColliderPlacementQueue = new List<ShiftPlacementInstruction>(3);
+        }
+        ColliderPlacementQueue.Add(instr);
     }
 
     public IEnumerator<Value2D<GenSpace>> GetEnumerator()

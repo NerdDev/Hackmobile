@@ -19,7 +19,7 @@ public class GridDeploy : ITransform
     public float YScale { get; set; }
     public float ZScale { get; set; }
     public bool DelayDeployment;
-    public AxisDirection[] ColliderPlacementQueue;
+    public List<ShiftPlacementInstruction> ColliderPlacementQueue;
     public ColliderDeploy ColliderDeploy;
 
     public GridDeploy(GenDeploy genDeploy)
