@@ -117,14 +117,13 @@ public class LevelBuilder : MonoBehaviour
             deploy.YScale * obj.transform.localScale.y,
             deploy.ZScale * obj.transform.localScale.z);
         if (deploy.ColliderPlacementQueue != null
-            && deploy.ColliderPlacementQueue.Length > 0)
+            && deploy.ColliderPlacementQueue.Count > 0)
         {
             Renderer render = obj.GetComponentInChildren<Renderer>();
             Bounds bounds = render.bounds;
             Vector3 extents = bounds.extents;
-            for (int i = 0; i < deploy.ColliderPlacementQueue.Length; i++)
+            foreach (ShiftPlacementInstruction dir in deploy.ColliderPlacementQueue)
             {
-                AxisDirection dir = deploy.ColliderPlacementQueue[i];
                 ShiftIntoPlace(obj, deploy, dir, render, extents);
             }
         }
@@ -329,10 +328,11 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
-    protected bool ShiftIntoPlace(GameObject obj, GridDeploy deploy, AxisDirection dir, Renderer renderer, Vector3 extents)
+    protected bool ShiftIntoPlace(GameObject obj, GridDeploy deploy, ShiftPlacementInstruction instr, Renderer renderer, Vector3 extents)
     {
         RaycastHit hit;
-        if (Physics.Raycast(obj.transform.position, dir.GetVector3(), out hit, 1F))
+        Vector3 dir = instr.Direction.GetVector3();
+        if (Physics.Raycast(obj.transform.position, dir, out hit, instr.LookLength))
         {
             obj.transform.position = hit.point;
             return true;
